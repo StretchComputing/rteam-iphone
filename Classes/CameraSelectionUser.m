@@ -29,7 +29,6 @@
 	
 	[self presentModalViewController:picker animated:YES];
 	
-	[picker release];
 	
 	
 	
@@ -61,7 +60,6 @@
     
 	NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
 	
-	[tmpView release];
 	
 	UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
 	
@@ -73,7 +71,6 @@
 	
 	UIGraphicsEndImageContext();
 	
-	[myThumbNail release];
 	
 	NSArray *views = [self.navigationController viewControllers];
 	
@@ -107,9 +104,5 @@
 }
 
 
--(void)dealloc{
-	
-	[super dealloc];
-}
 
 @end

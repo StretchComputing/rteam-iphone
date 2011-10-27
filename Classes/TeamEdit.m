@@ -79,10 +79,7 @@ loadingLabel, disconnect;
 	
 }
 -(void)getGameInfo{
-		
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	NSString *token = @"";
@@ -126,7 +123,7 @@ loadingLabel, disconnect;
 	}
 
 	[self performSelectorOnMainThread:@selector(doneGameInfo) withObject:nil waitUntilDone:NO];
-	[pool drain];
+
 	
 }
 
@@ -193,11 +190,6 @@ loadingLabel, disconnect;
 
 - (void)runRequest {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	NSString *twitterParam = @"";
@@ -256,7 +248,6 @@ loadingLabel, disconnect;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -342,7 +333,6 @@ loadingLabel, disconnect;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -380,11 +370,7 @@ loadingLabel, disconnect;
 
 -(void)removeTwitter{
 	
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -393,9 +379,7 @@ loadingLabel, disconnect;
 	NSDictionary *results = [ServerAPI updateTeam:mainDelegate.token :self.teamId :@"" :@"" :@"" :@"false" :@"" :[NSData data] :@""];
 	
 	NSString *status = [results valueForKey:@"status"];
-	
-	NSLog(@"Remove status: %@", status);
-	
+		
 	if ([status isEqualToString:@"100"]){
 		
 	
@@ -429,8 +413,6 @@ loadingLabel, disconnect;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
-
 	
 }
 
@@ -472,30 +454,6 @@ loadingLabel, disconnect;
 	loadingActivity = nil;
 	disconnect = nil;
 	[super viewDidUnload];
-}
-
-- (void)dealloc {
-	
-	[teamId release];
-	
-	[sportLabel release];
-	[description release];
-	[teamName release];
-	[errorLabel release];
-	[newTeamName release];
-	[activity release];
-	[changeSportButton release];
-	[saveChangesButton release];
-	[connectTwitterButton release];
-	[connectTwitterLabel release];
-	[twitterUrl release];
-	[disconnectTwitterButton release];
-	[errorString release];
-	[teamInfo release];
-	[loadingLabel release];
-	[loadingActivity release];
-	[disconnect release];
-    [super dealloc];
 }
 
 

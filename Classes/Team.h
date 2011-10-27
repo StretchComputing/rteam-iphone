@@ -10,7 +10,7 @@
 
 
 @interface Team : NSObject {
-
+    
 	NSString *name;
 	NSString *teamId;
 	NSString *userRole;  //The role of the current user for this team;
@@ -19,11 +19,11 @@
 	bool useTwitter;
 	
 }
-@property (nonatomic, retain) NSString *teamUrl;
+@property (nonatomic, strong) NSString *teamUrl;
 @property bool useTwitter;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *sport;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *sport;
 
 @end

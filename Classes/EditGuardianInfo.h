@@ -12,7 +12,7 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 
 @interface EditGuardianInfo : UIViewController <UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>  {
-
+    
 	NSArray *guardianArray;
 	
     PhoneNumberFormatter *myPhoneNumberFormatter;
@@ -68,39 +68,39 @@
 @property bool guard1SmsConfirmed;
 @property bool guard2SmsConfirmed;
 
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *initGuard1Phone;
-@property (nonatomic, retain) NSString *initGuard2Phone;
-@property (nonatomic, retain) NSMutableArray *phoneOnlyArray;
-@property (nonatomic, retain) UILabel *confirmedLabel;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *initGuard1Phone;
+@property (nonatomic, strong) NSString *initGuard2Phone;
+@property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
+@property (nonatomic, strong) UILabel *confirmedLabel;
 
 @property bool guard1Na;
 @property bool guard2Na;
 
-@property (nonatomic, retain) NSString *oneKey;
-@property (nonatomic, retain) NSString *twoKey;
+@property (nonatomic, strong) NSString *oneKey;
+@property (nonatomic, strong) NSString *twoKey;
 
-@property (nonatomic, retain) UITextField *onePhone;
-@property (nonatomic, retain) UITextField *twoPhone;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *memberId;
+@property (nonatomic, strong) UITextField *onePhone;
+@property (nonatomic, strong) UITextField *twoPhone;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *memberId;
 
-@property (nonatomic, retain) UITextField *oneFirstName;
-@property (nonatomic, retain) UITextField *oneLastName;
-@property (nonatomic, retain) UITextField *oneEmail;
-@property (nonatomic, retain) UITextField *twoFirstName;
-@property (nonatomic, retain) UITextField *twoLastName;
-@property (nonatomic, retain) UITextField *twoEmail;
+@property (nonatomic, strong) UITextField *oneFirstName;
+@property (nonatomic, strong) UITextField *oneLastName;
+@property (nonatomic, strong) UITextField *oneEmail;
+@property (nonatomic, strong) UITextField *twoFirstName;
+@property (nonatomic, strong) UITextField *twoLastName;
+@property (nonatomic, strong) UITextField *twoEmail;
 
-@property (nonatomic, retain) UILabel *errorLabel;
+@property (nonatomic, strong) UILabel *errorLabel;
 
-@property (nonatomic, retain) UIButton *saveChangesButton;
-@property (nonatomic, retain) UIButton *removeGuardiansButton;
+@property (nonatomic, strong) UIButton *saveChangesButton;
+@property (nonatomic, strong) UIButton *removeGuardiansButton;
 
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
 
-@property (nonatomic, retain) NSArray *guardianArray;
+@property (nonatomic, strong) NSArray *guardianArray;
 
 
 -(IBAction)removeGuardians;

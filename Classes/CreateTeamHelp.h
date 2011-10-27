@@ -12,12 +12,12 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 
 @interface CreateTeamHelp : UIViewController <ADBannerViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
-
+    
 	IBOutlet UIScrollView *scrollView;
 	
 	ADBannerView *myAd;
 	BOOL bannerIsVisible;
 }
 @property BOOL bannerIsVisible;
-@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @end

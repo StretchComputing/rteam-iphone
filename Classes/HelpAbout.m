@@ -38,19 +38,19 @@
 {      
 	MPMoviePlayerController* theMovie=[aNotification object];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:theMovie];
-	[theMovie release]; [[UIApplication sharedApplication]
-						 setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
+    [[UIApplication sharedApplication]
+     setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
 }
 
 /*
--(void)myMovieViewFinishedCallback1:(NSNotification*)aNotification {
-	MPMoviePlayerViewController* theMovieView=[aNotification object];
-	[self dismissMoviePlayerViewControllerAnimated];
-	[[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:theMovieView];
-	[theMovieView release];
-	[[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
-}
-*/
+ -(void)myMovieViewFinishedCallback1:(NSNotification*)aNotification {
+ MPMoviePlayerViewController* theMovieView=[aNotification object];
+ [self dismissMoviePlayerViewControllerAnimated];
+ [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:theMovieView];
+ [theMovieView release];
+ [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
+ }
+ */
 
 -(void)viewWillAppear:(BOOL)animated{
 	
@@ -66,10 +66,9 @@
     }else{
         UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
         [self.navigationItem setRightBarButtonItem:homeButton];
-        [homeButton release];
     }
 	
-
+    
 	
 } 
 
@@ -84,11 +83,11 @@
 
 -(void)playMovie{
 	self.displayLabel.text = @"";
-
+    
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"rTeamWelcomeFinal" ofType:@"m4v"];      
 	if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 3.2)
 	{
-		MPMoviePlayerViewController*tmpMoviePlayViewController=[[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]] retain];
+		MPMoviePlayerViewController*tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
 		if (tmpMoviePlayViewController) {
 			[self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
@@ -97,7 +96,7 @@
 		//[tmpMoviePlayViewController release];
 	}
 	else{
-		MPMoviePlayerController* theMovie=[[[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:path]] retain];
+		MPMoviePlayerController* theMovie=[[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieFinishedCallback:) name:MPMoviePlayerPlaybackDidFinishNotification object:theMovie];
 		[theMovie play];
 	}
@@ -105,7 +104,7 @@
 
 -(void)createTeamHelp{
 	self.displayLabel.text = @"";
-
+    
 	CreateTeamHelp *tmp = [[CreateTeamHelp alloc] init];
 	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
 	self.navigationItem.backBarButtonItem = temp;
@@ -115,7 +114,7 @@
 
 -(void)addMemberHelp{
 	self.displayLabel.text = @"";
-
+    
 	AddMemberHelp *tmp = [[AddMemberHelp alloc] init];
 	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
 	self.navigationItem.backBarButtonItem = temp;
@@ -125,7 +124,7 @@
 
 -(void)addEventHelp{
 	self.displayLabel.text = @"";
-
+    
 	AddEventHelp *tmp = [[AddEventHelp alloc] init];
 	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
 	self.navigationItem.backBarButtonItem = temp;
@@ -142,8 +141,8 @@
 	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
 	self.navigationItem.backBarButtonItem = temp;
 	[self.navigationController pushViewController:tmp animated:YES];
-	 
-
+    
+    
 }
 
 -(void)twitterHelp{
@@ -187,7 +186,7 @@
 		
         [self.view bringSubviewToFront:myAd];
         myAd.frame = CGRectMake(0.0, 0.0, myAd.frame.size.width, myAd.frame.size.height);
-
+        
 		//self.welcomeLabel.frame = CGRectMake(20, 53, 280, 38);
 		
 	}
@@ -201,7 +200,7 @@
 		self.bannerIsVisible = NO;
 		
 		//self.welcomeLabel.frame = CGRectMake(20, 25, 280, 38);
-
+        
 		
 	}
 	
@@ -211,7 +210,7 @@
 -(void)feedback{
 	
 	self.displayLabel.text = @"";
-
+    
 	if ([MFMailComposeViewController canSendMail]) {
 		
 		MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
@@ -220,16 +219,14 @@
 		[mailViewController setSubject:@"rTeam FeedBack"];
 		
 		[self presentModalViewController:mailViewController animated:YES];
-		[mailViewController release];
 		
 	}else {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-        [alert release];
 	}
-
-	 
-
+    
+    
+    
 }
 
 
@@ -258,7 +255,7 @@
 			displayString = @"Feedback send failed.";
 			break;
 	}
-
+    
 	if (![displayString isEqualToString:@""]) {
 		if (success) {
 			self.displayLabel.textColor = [UIColor colorWithRed:0.0 green:0.392 blue:0.0 alpha:1.0];
@@ -267,7 +264,7 @@
 		}
 		
 		self.displayLabel.text = displayString;
-
+        
 	}
 	
 	[self dismissModalViewControllerAnimated:YES];
@@ -280,7 +277,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -309,11 +305,5 @@
 
 -(void)dealloc{
     myAd.delegate = nil;
-	[scrollView release];
-	[feedbackButton release];
-	[myAd release];
-	[displayLabel release];
-	[welcomeLabel release];
-	[super dealloc];
 }
 @end

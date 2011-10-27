@@ -13,7 +13,7 @@
 @synthesize event, eventLabel, teamLabel, canceledLabel, scoreLabel, scoreUs, scoreThem, interval, teamName, eventType, eventDate;
 
 + (id)buttonWithFrame:(CGRect)frame {
-	return [[[self alloc] initWithFrame:frame] autorelease];
+	return [[self alloc] initWithFrame:frame];
 }
 
 
@@ -39,7 +39,7 @@
 		self.teamLabel.font = [UIFont fontWithName:@"Verdana-Bold" size:10];
 		self.teamLabel.textAlignment = UITextAlignmentCenter;
 		self.teamLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
-
+        
 		
 		[self addSubview:self.teamLabel];
 		[self bringSubviewToFront:self.teamLabel];
@@ -67,25 +67,13 @@
 		[self bringSubviewToFront:self.scoreLabel];
 		
 		
-		 
+        
 	}
 	
 	
 	return self;
 }
 
-- (void)dealloc {
-	[event release];
-	[eventLabel release];
-	[teamLabel release];
-	[canceledLabel release];
-    [scoreLabel release];
-    [scoreThem release];
-    [scoreUs release];
-    [interval release];
-    [teamName release];
-    [super dealloc];
-}
 
 
 @end

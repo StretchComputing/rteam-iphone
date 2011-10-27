@@ -102,9 +102,9 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc]
-				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FirstLevelCell] autorelease];
+		cell = [[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault
+                reuseIdentifier: FirstLevelCell];
 	}
 	
 	NSUInteger row = [indexPath row];
@@ -153,14 +153,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
-	[sport release];
-	[myTableView release];
-	[allMatches release];
-	[allSports release];
-	[errorMessage release];
-    [super dealloc];
-}
 
 
 @end

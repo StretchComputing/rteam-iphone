@@ -29,14 +29,14 @@
 @property bool fromHome;
 @property bool messageSuccess;
 @property int messageCount;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) NSString *startDate;
-@property (nonatomic, retain) NSString *endDate;
-@property (nonatomic, retain) NSString *timeZone;
-@property (nonatomic, retain) NSString *practiceId;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *description;
-@property (nonatomic, retain) NSString *latitude;
-@property (nonatomic, retain) NSString *longitude;
-@property (nonatomic, retain) NSString *location;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) NSString *startDate;
+@property (nonatomic, strong) NSString *endDate;
+@property (nonatomic, strong) NSString *timeZone;
+@property (nonatomic, strong) NSString *practiceId;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *description;
+@property (nonatomic, strong) NSString *latitude;
+@property (nonatomic, strong) NSString *longitude;
+@property (nonatomic, strong) NSString *location;
 @end

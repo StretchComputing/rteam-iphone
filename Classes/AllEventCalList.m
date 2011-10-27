@@ -12,10 +12,8 @@
 #import "GameAttendance.h"
 #import "Fans.h"
 #import "Gameday.h"
-#import "GameMessages.h"
 #import "GameTabs.h"
 #import "GameTabsNoCoord.h"
-#import "PracticeMessages.h"
 #import "PracticeTabs.h"
 #import "PracticeNotes.h"
 #import "PracticeAttendance.h"
@@ -23,15 +21,11 @@
 #import "Event.h"
 #import "EventTabs.h"
 #import "EventNotes.h"
-#import "EventMessages.h"
 #import "EventAttendance.h"
-#import "TeamActivity.h"
 #import "Home.h"
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
 #import "Vote.h"
-#import "GameChatter.h"
-#import "PracticeChatter.h"
 #import "ServerAPI.h"
 #import <EventKit/EventKit.h>
 
@@ -271,12 +265,10 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	
 	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Month" style:UIBarButtonItemStyleBordered target:self action:@selector(month)];
 	[self.navigationItem setLeftBarButtonItem:addButton];
-	[addButton release];
 	
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
 	
 	self.bottomBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 440, 320, 40)];
 	
@@ -296,7 +288,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	
 	NSArray *items1 = [NSArray arrayWithObjects:flexibleSpace, tmp, flexibleSpace, nil];
 	self.bottomBar.items = items1;
-	[tmp release];
 	
 	[self.navigationController.view addSubview:self.bottomBar];
 	//[self.superview bringSubviewToFront:self.bottomBar];
@@ -390,7 +381,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		NSDate *realEvent = [dateFormat dateFromString:stringEvent];
 		NSDate *realToday = [dateFormat dateFromString:stringToday];
 		
-        [dateFormat release];
 
 		if ([stringToday isEqualToString:stringEvent]) {
 			//Dates are equal, scroll to this section
@@ -460,7 +450,7 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		
 		frame.origin.x = 10;
@@ -470,7 +460,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		UILabel *gameLabel = [[UILabel alloc] initWithFrame:frame];
 		gameLabel.tag = gameTag;
 		[cell.contentView addSubview:gameLabel];
-		[gameLabel release];
 		
 		frame.origin.x = 80;
 		frame.origin.y = 12;
@@ -479,7 +468,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		UILabel *timeLabel = [[UILabel alloc] initWithFrame:frame];
 		timeLabel.tag = timeTag;
 		[cell.contentView addSubview:timeLabel];
-		[timeLabel release];
 		
 		
 		
@@ -490,7 +478,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		UILabel *teamLabel = [[UILabel alloc] initWithFrame:frame];
 		teamLabel.tag = teamTag;
 		[cell.contentView addSubview:teamLabel];
-		[teamLabel release];
 		
 		
 		frame.origin.x = 180;
@@ -500,7 +487,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		UILabel *vsLabel = [[UILabel alloc] initWithFrame:frame];
 		vsLabel.tag = vsTag;
 		[cell.contentView addSubview:vsLabel];
-		[vsLabel release];
 		
 		frame.origin.x = 180;
 		frame.origin.y = 37;
@@ -509,7 +495,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		UILabel *descLabel = [[UILabel alloc] initWithFrame:frame];
 		descLabel.tag = descTag;
 		[cell.contentView addSubview:descLabel];
-		[descLabel release];
 		
 		frame.origin.x = 10;
 		frame.origin.y = 30;
@@ -518,7 +503,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		UILabel *scoreLabel = [[UILabel alloc] initWithFrame:frame];
 		scoreLabel.tag = scoreTag;
 		[cell.contentView addSubview:scoreLabel];
-		[scoreLabel release];
 	
 		frame.origin.x = 0;
 		frame.origin.y = 0;
@@ -527,7 +511,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		UILabel *canceledLabel = [[UILabel alloc] initWithFrame:frame];
 		canceledLabel.tag = canceledTag;
 		[cell.contentView addSubview:canceledLabel];
-		[canceledLabel release];
 		
 		
 	}
@@ -604,8 +587,7 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		
 		
 		timelabel.text = startDateString;
-		[dateFormat release];
-		[format release];
+	
 		//retrieve the opponent
 		
 		vsLabel.text = [@"vs. " stringByAppendingString:theGame.opponent];
@@ -713,8 +695,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		
 		
 		timelabel.text = startDateString;
-		[dateFormat release];
-		[format release];
 		//retrieve the opponent
 		
 		vsLabel.text = [@"at " stringByAppendingString:theGame.location];
@@ -752,8 +732,6 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		
 		
 		timelabel.text = startDateString;
-		[dateFormat release];
-		[format release];
 		
 		//set the eventName (using the 'vsLabel')
 		//vsLabel.text = theGame.event
@@ -902,10 +880,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				//self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
 				self.canceledAction.delegate = self;
 				[self.canceledAction showInView:self.view];
-				[self.canceledAction release];
-				
-		
-				
+	
 				
 			}
 		}
@@ -934,7 +909,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 				self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
 				[self.canceledAction showInView:self.view];
-				[self.canceledAction release];
 				
 				
 			}
@@ -1003,7 +977,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 				self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
 				[self.canceledAction showInView:self.view];
-				[self.canceledAction release];
 				
 
 				
@@ -1078,14 +1051,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
       [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
       NSDate *formatedDate = [dateFormat dateFromString:date];
 	
-        [dateFormat release];
 	
 	  NSDateFormatter *format = [[NSDateFormatter alloc] init];
 	  [format setDateFormat:@" eee      MMM dd yyyy"];
 	
 	  NSString *startDateString = [format stringFromDate:formatedDate];
 	
-        [format release];
 	  return startDateString;
 	}else if ([[cellArray objectAtIndex:0] class] == [Practice class]){
 			
@@ -1098,12 +1069,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
 		NSDate *formatedDate = [dateFormat dateFromString:date];
 		
-		[dateFormat release];
 		NSDateFormatter *format = [[NSDateFormatter alloc] init];
 		[format setDateFormat:@" eee      MMM dd yyyy"];
 		
 		NSString *startDateString = [format stringFromDate:formatedDate];
-		[format release];
 		return startDateString;
 	}else if ([[cellArray objectAtIndex:0] class] == [Event class]){
 		
@@ -1115,13 +1084,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
 		[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
 		NSDate *formatedDate = [dateFormat dateFromString:date];
-		[dateFormat release];
 		
 		NSDateFormatter *format = [[NSDateFormatter alloc] init];
 		[format setDateFormat:@" eee      MMM dd yyyy"];
 		
 		NSString *startDateString = [format stringFromDate:formatedDate];
-		[format release];
 		return startDateString;
 	}
 	
@@ -1200,7 +1167,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -1237,9 +1203,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)runDelete{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	//Cancel Event
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1360,13 +1324,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
 -(void)activateEvent{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
@@ -1490,12 +1452,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		
 	}
-	
-	
-	
+
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -1526,25 +1485,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
--(void)dealloc{
-	
-	[events release];
-	[allGames release];
-	[allPractices release];
-	[allEvents release];
-	[dateArray release];
-	[bottomBar release];
-	[segmentedControl release];
-	[calendarList release];
-	[deleteActivity release];
-	[canceledAction release];
-	[gameIdCanceled release];
-	[practiceIdCanceled release];
-	[eventIdCanceled release];
-	
-	[super dealloc];
-	
-}
 
 @end
 

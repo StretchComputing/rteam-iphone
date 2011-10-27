@@ -13,7 +13,7 @@
 @synthesize teamId, teamName;
 
 + (id)buttonWithFrame:(CGRect)frame {
-	return [[[self alloc] initWithFrame:frame] autorelease];
+	return [[self alloc] initWithFrame:frame];
 }
 
 
@@ -49,11 +49,6 @@
     [self addSubview:self.teamName];
     [self bringSubviewToFront:self.teamName];
     
-}
-- (void)dealloc {
-	[teamName release];
-	[teamId release];
-    [super dealloc];
 }
 
 

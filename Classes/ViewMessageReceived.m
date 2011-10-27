@@ -8,10 +8,8 @@
 
 #import "ViewMessageReceived.h"
 #import "MyLineView.h"
-#import "SendMessage.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "MessagesTabs.h"
 #import "CurrentTeamTabs.h"
 #import "PracticeTabs.h"
 #import "GameTabs.h"
@@ -69,7 +67,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 	self.upDown.selectedSegmentIndex = -1;
 	[self.upDown addTarget:self action:@selector(segmentSelect:) forControlEvents:UIControlEventValueChanged];
 
-	UIBarButtonItem *tmp = [[[UIBarButtonItem alloc] initWithCustomView: self.upDown] autorelease];
+	UIBarButtonItem *tmp = [[UIBarButtonItem alloc] initWithCustomView: self.upDown];
 	[self.navigationItem setRightBarButtonItem:tmp];
 	
 	int msg = self.currentMessageNumber + 1;
@@ -98,7 +96,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
         self.displaySender.text = @"rTeam";
   
         removed = true;
-		NSMutableArray *items = [[self.myToolbar.items mutableCopy] autorelease];
+		NSMutableArray *items = [self.myToolbar.items mutableCopy];
 		[items removeObject: self.replyButton];
 		self.myToolbar.items = items;
 	}else {
@@ -109,7 +107,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 	if (!removed) {
         
         if ([self.userRole isEqualToString:@"fan"]){
-            NSMutableArray *items = [[self.myToolbar.items mutableCopy] autorelease];
+            NSMutableArray *items = [self.myToolbar.items mutableCopy];
             [items removeObject: self.replyButton];
             self.myToolbar.items = items;
 
@@ -120,9 +118,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 
 
 -(void)updateWasViewed{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
@@ -164,7 +160,6 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 	}
 
 	
-	[pool drain];
 	
 }
 
@@ -204,10 +199,9 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
                 
 				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
 				[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-				NSDate *tmpDate = [dateFormat dateFromString:newMessage.receivedDate];
+				NSDate *tmpDate = [dateFormat dateFromString:newMessage.createdDate];
 				[dateFormat setDateFormat:@"MMM dd, yyyy hh:mm aa"];
 				self.receivedDate = [dateFormat stringFromDate:tmpDate];
-				[dateFormat release];
 				
 				if (self.currentMessageNumber == 0) {
 					[self.upDown setEnabled:NO forSegmentAtIndex:0];
@@ -249,10 +243,9 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
                 
 				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
 				[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-				NSDate *tmpDate = [dateFormat dateFromString:newMessage.receivedDate];
+				NSDate *tmpDate = [dateFormat dateFromString:newMessage.createdDate];
 				[dateFormat setDateFormat:@"MMM dd, yyyy hh:mm aa"];
 				self.receivedDate = [dateFormat stringFromDate:tmpDate];
-				[dateFormat release];
 				
 				if (self.currentMessageNumber == ([self.messageArray count] - 1)) {
 					[self.upDown setEnabled:NO forSegmentAtIndex:1];
@@ -275,7 +268,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 
 -(void)reply{
 	
-	//SendMessage *tmp = [[SendMessage alloc] init];
+	/*SendMessage *tmp = [[SendMessage alloc] init];
 	
 	MessageReply *tmp = [[MessageReply alloc] init];
 	tmp.teamId = self.teamId;
@@ -305,14 +298,13 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 	NSDate *tmpDate = [dateFormat dateFromString:self.receivedDate];
 	[dateFormat setDateFormat:@"MM/dd"];
 	tmp.origMessageDate = [dateFormat stringFromDate:tmpDate];
-	[dateFormat release];
 	
 	
 		
 	[self.navigationController pushViewController:tmp animated:YES];
 	
 	
-	/*//SendMessage *tmp = [[SendMessage alloc] init];
+	///SendMessage *tmp = [[SendMessage alloc] init];
 	 
 	 MessageReply *tmp = [[MessageReply alloc] init];
 	 tmp.teamId = self.teamId;
@@ -367,12 +359,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 			
 			//Could be "MessageTabs", "GameTabs", "PracticeTabs", or "CurrentTeamTabs"
 			
-			if ([[temp objectAtIndex:num] class] == [MessagesTabs class]) {
-				MessagesTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 0;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
+			if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
 				CurrentTeamTabs *cont = [temp objectAtIndex:num];
 				cont.selectedIndex = 4;
 				[self.navigationController popToViewController:cont animated:YES];
@@ -437,7 +424,6 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -455,9 +441,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 
 
 -(void)getThreadInfo{
-    
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+ 
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	if (mainDelegate.token != nil){
@@ -507,7 +491,6 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 		
 	}
     
-    [pool drain];
 	
 }
 
@@ -548,39 +531,5 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 	
 }
 
--(void)dealloc{
-	
-	[subject release];
-	[body release];
-	[receivedDate release];
-	[displayDate release];
-	[displayBody release];
-	[displaySubject release];
-	[teamId release];
-	[eventId release];
-	[eventType release];
-	[threadId release];
-	[senderId release];
-	[senderName release];
-	[userRole release];
-	[replyButton release];
-	[myToolbar release];
-	[replyMessage release];
-	[viewMoreDetailButton release];
-	[confirmationsLabel release];
-	[confirmStatus release];
-	[individualReplies release];
-	[messageNumber release];
-	[messageArray release];
-	[upDown release];
-	[teamLabel release];
-	[teamName release];
-	[origTeamId release];
-	
-	[individualReplies release];
-	//[wasViewed release];
-	[super dealloc];
-	
-}
 
 @end

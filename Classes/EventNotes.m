@@ -77,10 +77,6 @@ startDateString, loading, errorString, dayString, timeString, eventNameString;
 }
 
 -(void)getPracticeInfo{
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -131,9 +127,6 @@ startDateString, loading, errorString, dayString, timeString, eventNameString;
 			
 			self.dayString = [format stringFromDate:formatStartDate];
 			self.timeString = [timeFormat stringFromDate:formatStartDate];
-			[timeFormat release];
-			[format release];
-			[dateFormat release];
 			
 			
 			
@@ -162,7 +155,6 @@ startDateString, loading, errorString, dayString, timeString, eventNameString;
 	}
 	
 
-	[pool drain];
 	[self performSelectorOnMainThread:@selector(finishedInfo) withObject:nil waitUntilDone:NO];
 }
 
@@ -235,34 +227,6 @@ startDateString, loading, errorString, dayString, timeString, eventNameString;
 
 	
 }
-
--(void)dealloc{
-	[eventId release];
-	[teamId release];
-	[opponent release];
-	[day release];
-	[time release];
-	[description release];
-	[locationManager release];
-	[errorLabel release];
-	[updateLocationButton release];
-	[viewMapButton release];
-	[eventNameLabel release];
-	[userRole release];
-	[editDone release];
-	[opponentString release];
-	[descriptionString release];
-	[startDateString release];
-	[latitude release];
-	[longitude release];
-	[loading release];
-	[errorString release];
-	[dayString release];
-	[timeString release];
-	[eventNameString release];
-	[super dealloc];
-}
-
 
 
 @end

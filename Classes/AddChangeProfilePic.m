@@ -73,9 +73,7 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 
 
 -(void)getImage{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	NSString *token = @"";
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -127,7 +125,6 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneImage) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -190,7 +187,6 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 	UIActionSheet *tmpSheet =  [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
 	tmpSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [tmpSheet showInView:self.view];
-    [tmpSheet release];
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -219,9 +215,7 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 		picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 		
 		[self presentModalViewController:picker animated:YES];
-		
-		[picker release];
-		
+				
 	} else {
 		
 		CameraSelectionUser *tmp = [[CameraSelectionUser alloc] init];
@@ -254,7 +248,6 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
     
 	NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
 	
-	[tmpView release];
 	
 	UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
 	
@@ -269,7 +262,6 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 	
 	self.imageData = UIImageJPEGRepresentation(newImage1, 1.0);
 	
-	[myThumbNail release];
 	
 	UIImage *tmpImage = [UIImage imageWithData:self.imageData];
 	
@@ -296,11 +288,7 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 
 
 -(void)updateImage{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -375,9 +363,7 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 	}
 	
 	
-	
-    [pool drain];
-	
+
 	[self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
 	
 }
@@ -417,22 +403,6 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 	
 }
 
--(void)dealloc{
-	
-	[removeButton release];
-	[addChangeButton release];
-	[profilePic release];
-	[titleLabel release];
-	[loadingImageLabel release];
-	[loadingImageActivity release];
-	[displayLabel release];
-	[imageString release];
-	[imageData release];
-	[selectedImage release];
-	[activity release];
-	[errorString release];
-	[super dealloc];
-	
-}
+
 
 @end

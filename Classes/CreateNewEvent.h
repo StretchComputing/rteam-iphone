@@ -10,7 +10,7 @@
 
 
 @interface CreateNewEvent : UIViewController {
-
+    
 	IBOutlet UISegmentedControl *selection;
 	NSString *teamId;
 	NSDate *eventDate;
@@ -26,18 +26,18 @@
 	IBOutlet UIButton *createMultipleButton;
 	IBOutlet UILabel *createSingleLabel;
 }
-@property (nonatomic, retain) UIButton *createMultipleButton;
-@property (nonatomic, retain) UILabel *createSingleLabel;
-@property (nonatomic, retain) UIButton *createButton;
-@property (nonatomic, retain) UILabel *error;
+@property (nonatomic, strong) UIButton *createMultipleButton;
+@property (nonatomic, strong) UILabel *createSingleLabel;
+@property (nonatomic, strong) UIButton *createButton;
+@property (nonatomic, strong) UILabel *error;
 @property bool teamListFailed;
 @property bool haveTeamList;
-@property (nonatomic, retain) NSArray *teamList;
-@property (nonatomic, retain) UISegmentedControl *selection;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSDate *eventDate;
-@property (nonatomic, retain) UIDatePicker *eventTime;
-@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, strong) NSArray *teamList;
+@property (nonatomic, strong) UISegmentedControl *selection;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSDate *eventDate;
+@property (nonatomic, strong) UIDatePicker *eventTime;
+@property (nonatomic, strong) UILabel *titleLabel;
 
 -(IBAction)create;
 -(IBAction)createMultiple;

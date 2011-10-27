@@ -20,11 +20,7 @@
 #import "NewMemberObject.h"
 #import "Players.h"
 #import "Fans.h"
-#import "SendMessage.h"
-#import "MessagesInbox.h"
 #import "EventList.h"
-#import "TeamMessages.h"
-#import "TeamActivity.h"
 #import "TeamHome.h"
 
 @implementation MyTeams
@@ -63,11 +59,9 @@ fromHome;
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
     
     UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(create)];
 	[self.navigationItem setLeftBarButtonItem:createButton];
-	[createButton release];
 	
 	
 }
@@ -155,12 +149,10 @@ fromHome;
 			NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Would you like to send them a text right now with information on how to sign up?";
 			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
 			[alert1 show];
-            [alert1 release];
 		}else {
 			NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Please notify them that they must send the text 'yes' to 'join@rteam.com' to sign up.";
 			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert1 show];
-            [alert1 release];
 		}
 		
 		
@@ -171,14 +163,12 @@ fromHome;
         NSString *tmp = @"Only User's with confirmed email addresses can add new team members.  To confirm your email, please click on the activation link in the email we sent you.";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
-        [alert release];
         
     }else if (self.displayError){
         self.displayError = false;
         NSString *tmp = @"Your team was created, but an error was encountered that prevented one or more of the members you entered from being added to this team.";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Member Add Failed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
-        [alert release];
         
         
     }
@@ -190,8 +180,7 @@ fromHome;
 
 
 -(void)getAllTeams{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -257,7 +246,6 @@ fromHome;
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -283,7 +271,6 @@ fromHome;
 	if (numTeams > 0) {
 		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(EditTable:)];
 		[self.tabBarController.navigationItem setLeftBarButtonItem:addButton];
-		[addButton release];
 	}
 	
 	[self.myTableView reloadData];
@@ -391,7 +378,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                             
 							[messageViewController setBody:bodyMessage];
 							[self presentModalViewController:messageViewController animated:YES];
-							[messageViewController release];
 							
 						}
 					}else {
@@ -468,9 +454,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc]
+		cell = [[UITableViewCell alloc]
 				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FirstLevelCell] autorelease];
+				 reuseIdentifier: FirstLevelCell];
 	}
 	
 	//Configure the cell
@@ -854,7 +840,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIActionSheet *deleteNow = [[UIActionSheet alloc] initWithTitle:@"Are you sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete Team" otherButtonTitles:nil];
     deleteNow.actionSheetStyle = UIActionSheetStyleDefault;
     [deleteNow showInView:self.tabBarController.view];
-    [deleteNow release];
 	
 }
 
@@ -991,11 +976,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)updateUserIcons{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -1047,10 +1028,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		
 	}
-	
-	
-	
-    [pool drain];
+
 	
 }
 
@@ -1108,29 +1086,4 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 	
-- (void)dealloc {
-	[header release];
-	[footer release];
-	[teams release];
-	[didRegister release];
-	[fanTeams release];
-	[memberTeams release];
-	[error release];
-	[homeTeamList release];
-	[createTeamButton release];
-	[joinTeamButton release];
-    myAd.delegate = nil;
-	[myAd release];
-	[alertOne release];
-	[alertTwo release];
-	[myTableView release];
-	[viewLine release];
-	[myAlertView release];
-	[phoneOnlyArray release];
-	[loadingLabel release];
-	[loadingActivity release];
-	[newlyCreatedTeam release];
-	[allTeamsArray release];
-	[super dealloc];
-}
 @end

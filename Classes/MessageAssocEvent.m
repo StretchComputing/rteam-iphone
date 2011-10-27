@@ -7,12 +7,10 @@
 //
 
 #import "MessageAssocEvent.h"
-#import "SendMessage.h"
 #import "Game.h"
 #import "Practice.h"
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
-#import "MessagesTabs.h"
 #import "CurrentTeamTabs.h"
 #import "Event.h"
 
@@ -25,16 +23,15 @@
 	self.title = @"Events";
 	
 	[self getAllEvents];
-
+    
 	
 	NSInteger numEvents = [self.events count];
 	
 	
 	//Header to be displayed if there are no players
 	UIView *headerView =
-	[[[UIView alloc]
-	  initWithFrame:CGRectMake(0, 0, 300, 75)]
-	 autorelease];
+	[[UIView alloc]
+     initWithFrame:CGRectMake(0, 0, 300, 75)];
 	
 	NSString *display = @"";
 	
@@ -43,8 +40,8 @@
 	}else {
 		display = @"Choose an event to associate your message with.";
 	}
-
-	UILabel *headerLabel =[[[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 40)] autorelease];
+    
+	UILabel *headerLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 40)];
 	headerLabel.text = display;
 	headerLabel.textColor = [UIColor blackColor];
 	headerLabel.font = [UIFont boldSystemFontOfSize:16];
@@ -56,8 +53,8 @@
 	headerView.backgroundColor = [UIColor whiteColor];
 	
 	self.tableView.tableHeaderView = headerView;
-
-
+    
+    
 }
 
 -(void)getAllEvents{
@@ -151,7 +148,6 @@
 		NSDate *formatedDate = [dateFormat dateFromString:date];
 		NSDate *todaysDate = [NSDate date];
 		
-        [dateFormat release];
 		if ([todaysDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
 			
 			[tmpArray addObject:tmpGame];
@@ -165,21 +161,20 @@
 		
 		if ([[practiceArray objectAtIndex:i] class] == [Practice class]) {
 			
-		Practice *tmpPractice = [practiceArray objectAtIndex:i];
-		
-		NSString *date = tmpPractice.startDate;
-		
-		NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-		[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-		NSDate *formatedDate = [dateFormat dateFromString:date];
-		NSDate *todaysDate = [NSDate date];
-		
-            [dateFormat release];
-		if ([todaysDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
-			
-			[tmpArray addObject:tmpPractice];
-			
-		}
+            Practice *tmpPractice = [practiceArray objectAtIndex:i];
+            
+            NSString *date = tmpPractice.startDate;
+            
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+            [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+            NSDate *formatedDate = [dateFormat dateFromString:date];
+            NSDate *todaysDate = [NSDate date];
+            
+            if ([todaysDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
+                
+                [tmpArray addObject:tmpPractice];
+                
+            }
 			
 		}else {
 			Event *tmpPractice = [practiceArray objectAtIndex:i];
@@ -191,14 +186,13 @@
 			NSDate *formatedDate = [dateFormat dateFromString:date];
 			NSDate *todaysDate = [NSDate date];
 			
-            [dateFormat release];
 			if ([todaysDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
 				
 				[tmpArray addObject:tmpPractice];
 				
 			}
 		}
-
+        
 		
 		
 	}
@@ -227,7 +221,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 10;
 		frame.origin.y = 5;
@@ -237,21 +231,18 @@
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 		
 		frame.size.height = 17;
 		frame.origin.y += 23;
 		UILabel *oppLabel = [[UILabel alloc] initWithFrame:frame];
 		oppLabel.tag = oppTag;
 		[cell.contentView addSubview:oppLabel];
-		[oppLabel release];
 		
 		frame.size.height = 15;
 		frame.origin.y += 18;
 		UILabel *descLabel = [[UILabel alloc] initWithFrame:frame];
 		descLabel.tag = descTag;
 		[cell.contentView addSubview:descLabel];
-		[descLabel release];
 	}
 	
 	UILabel *dateLabel = (UILabel *)[cell.contentView viewWithTag:dateTag];
@@ -292,7 +283,7 @@
 		descLabelText = [NSString stringWithFormat:@"at %@", tmp.location];
 		oppLabelText = tmp.eventName;
 	}
-
+    
 	
 	NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
@@ -317,9 +308,7 @@
 	NSString *startDateString = [format stringFromDate:formatedDate];
 	
 	dateLabel.text = startDateString;
-	[dateFormat release];
-	[format release];
-
+    
 	
 	if (isGame) {
 		oppLabel.text = [@"vs. " stringByAppendingString:oppLabelText];
@@ -362,7 +351,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		NSDate *formatedDate = [dateFormat dateFromString:tmp.startDate];
 		[dateFormat setDateFormat:@"MMM dd"];
 		date = [dateFormat stringFromDate:formatedDate];
-		[dateFormat release];
 		
 	}else if ([[self.events objectAtIndex:row] class] == [Practice class]) {
 		Practice *tmp = [self.events objectAtIndex:row];
@@ -374,7 +362,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		NSDate *formatedDate = [dateFormat dateFromString:tmp.startDate];
 		[dateFormat setDateFormat:@"MMM dd"];
 		date = [dateFormat stringFromDate:formatedDate];
-		[dateFormat release];
 	}else {
 		Event *tmp = [self.events objectAtIndex:row];
 		gpId = tmp.eventId;
@@ -385,39 +372,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		NSDate *formatedDate = [dateFormat dateFromString:tmp.startDate];
 		[dateFormat setDateFormat:@"MMM dd"];
 		date = [dateFormat stringFromDate:formatedDate];
-		[dateFormat release];
 	}
-
-
+    
+    
 	
 	NSArray *tempCont = [self.navigationController viewControllers];
 	int tempNum = [tempCont count];
 	tempNum = tempNum - 2;
-			
-		if ([[tempCont objectAtIndex:tempNum] class] == [MessagesTabs class]) {
-			MessagesTabs *cont = [tempCont objectAtIndex:tempNum];
-			cont.selectedIndex = 3;
 
-			NSArray *viewControllers = cont.viewControllers;
-			SendMessage *tmpSendMessage = [viewControllers objectAtIndex:3];
-			
-			tmpSendMessage.eventId = gpId;
-			tmpSendMessage.eventType = gameOrPractice;
-			tmpSendMessage.chosenEventDate = date;
-			
-			[self.navigationController popToViewController:cont animated:YES];
-		}
-		if ([[tempCont objectAtIndex:tempNum] class] == [SendMessage class]) {
-			
-			SendMessage *cont = [tempCont objectAtIndex:tempNum];
-			cont.eventId = gpId;
-			cont.eventType = gameOrPractice;
-			cont.chosenEventDate = date;
-			[self.navigationController popToViewController:cont animated:YES];
-			
-		}
 	
-
+    
 	
 	
 }
@@ -428,21 +392,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)viewDidUnload {
 	/*
-	events = nil;
-	teamId = nil;
-	error = nil;
+     events = nil;
+     teamId = nil;
+     error = nil;
 	 */
 	[super viewDidUnload];
 }
 
 
 
-- (void)dealloc {
-	[events release];
-	[teamId release];
-	[error release];
-	[super dealloc];
-}
 
 
 @end

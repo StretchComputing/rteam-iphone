@@ -37,12 +37,5 @@
 	
 }
 
--(void)dealloc{
-	
-	[url release];
-	[webView release];
-	[super dealloc];
-	
-}
 
 @end

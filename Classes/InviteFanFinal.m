@@ -129,7 +129,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
 	
 }
 
@@ -211,17 +210,13 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 }
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	NSMutableArray *tmpRoles = [[NSMutableArray alloc] init];
-	NSMutableArray *guardians = [[NSMutableArray alloc] init];
+	//NSMutableArray *guardians = [[NSMutableArray alloc] init];
 	
 	NSString *role = @"fan";
 
@@ -293,15 +288,13 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 	}
 	
     
-	[tmpRoles release];
-	[guardians release];	
+
 	[self performSelectorOnMainThread:
 	 @selector(didFinish)
 						   withObject:nil
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -349,7 +342,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 			NSString *tmp = @"Only User's with confirmed email addresses can invite fans.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}else {
 			self.error.text = self.errorString;
 		}
@@ -382,7 +374,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
     picker.peoplePickerDelegate = self;
 	
     [self presentModalViewController:picker animated:YES];
-    [picker release];
 }
 
 - (void)peoplePickerNavigationControllerDidCancel:
@@ -407,15 +398,15 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
     self.tmpMiniPhone = @"";
     self.tmpMiniFirstName = @"";
     
-    NSString* fName = (NSString *)ABRecordCopyValue(person,
+    NSString* fName = (__bridge NSString *)ABRecordCopyValue(person,
                                                     kABPersonFirstNameProperty);
 	
-	NSString *lName = (NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+	NSString *lName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
     
 	
 	ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
 	
-	NSArray *emailArray1 = (NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
+	NSArray *emailArray1 = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
 	NSString *emailAddress = @"";
 	if ([emailArray1 count] > 0) {
 		emailAddress = [emailArray1 objectAtIndex:0];
@@ -423,7 +414,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
         
         for(int i = 0; i < ABMultiValueGetCount(emails); i++)
         {
-            NSString *test = (NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
+            NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
             
             NSString *final = [self getType:test];
             
@@ -436,7 +427,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 	
 	ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
 	
-	NSArray *phoneArray = (NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
+	NSArray *phoneArray = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
 	NSString *phoneString = @"";
 	if ([phoneArray count] > 0) {
 		phoneString = [phoneArray objectAtIndex:0];
@@ -444,7 +435,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
         
         for(int i = 0; i < ABMultiValueGetCount(phone); i++)
         {
-            NSString *test = (NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
+            NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
             
             NSString *final = [self getType:test];
             
@@ -453,9 +444,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
         }
 	}
     
-	
-	[phoneArray release];
-    [emailArray1 release];
+
     
     if (fName == nil) {
         fName = @"";
@@ -567,7 +556,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
             if ([self.addContactWhere isEqualToString:@"member"]){
                 
                 [self.miniMultipleEmailAlert show];
-                [self.miniMultipleEmailAlert release];
                 
             }
             
@@ -587,7 +575,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
             if ([self.addContactWhere isEqualToString:@"member"]){
                 
                 [self.miniMultipleEmailAlert show];
-                [self.miniMultipleEmailAlert release];
                 
             }
             
@@ -607,7 +594,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
             if ([self.addContactWhere isEqualToString:@"member"]){
                 
                 [self.miniMultiplePhoneAlert show];
-                [self.miniMultiplePhoneAlert release];
                 
             }
             
@@ -624,9 +610,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
         
 		
 	}
-    
-	[fName release];
-	[lName release];
+
     
     
     [self dismissModalViewControllerAnimated:YES];
@@ -651,7 +635,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -733,7 +716,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 		NSString *tmp = @"You must add at least one member to submit.";
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Members Added." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-        [alert release];
 		
 	}else {
 		self.submitButton.enabled = YES;
@@ -756,8 +738,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 
 
 -(void)addMembers{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -795,7 +776,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
         
        		
 		[tmpMemberArray addObject:tmpDictionary];
-		[tmpDictionary release];
 		
 	}
 	
@@ -847,7 +827,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
     
 	
 	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
-	[pool drain];
+
 	
 }
 
@@ -905,12 +885,10 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
                         NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Would you like to send them a text right now with information on how to sign up?";
                         self.phoneTextAlert = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
                         [self.phoneTextAlert show];
-                        [self.phoneTextAlert release];
                     }else {
                         NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Please notify them that they must send the text 'yes' to 'join@rteam.com'.";
                         self.phoneTextAlert = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                         [self.phoneTextAlert show];
-                        [self.phoneTextAlert release];
                     }
                     
                     
@@ -920,7 +898,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
                     NSString *tmp = @"Fan Invite Successful!";
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
-                    [alert release];
                 }
 
 			}else{
@@ -945,13 +922,11 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 			NSString *tmp = @"Only User's with confirmed email addresses can add new team members.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}else {
             
 			NSString *tmp = self.errorString;
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add Fans Failed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}
 	}
     
@@ -1017,7 +992,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 		
 		[self.emailArray addObject:tmp];
 		
-		[tmp release];
 		
 		self.phoneText.text = @"";
 		self.emailText.text = @"";
@@ -1097,15 +1071,15 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 		
 		
 		if (isEmpty) {
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:EmptyCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:EmptyCell];
 			
 		}else {
             
             if (memberRow) {
-                cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:MemberCell] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MemberCell];
                 
             }else{
-                cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:GuardianCell] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:GuardianCell];
                 
             }
 			
@@ -1121,7 +1095,6 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 		
 		
 	}
@@ -1351,7 +1324,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             
                             [messageViewController setBody:bodyMessage];
                             [self presentModalViewController:messageViewController animated:YES];
-                            [messageViewController release];
                             
                         }
                     }else {
@@ -1408,7 +1380,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *tmp = displayString;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Send Text Status." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
-    [alert release];
 	
 	
 	
@@ -1476,70 +1447,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	[barItem release];
-	[helpScreen release];
-	[firstName release];
-	[lastName release];
-	[email release];
-	[roles release];
-	[teamId release];
-	[submitButton release];
-	[serverProcess release];
-	[error release];
-	[isCoordinator release];
-	[userRole release];
-	[closeButton release];
-	[sendEmailButton release];
-
-	[errorString release];
-	[firstNamePicked release];
-	[lastNamePicked release];
-	[phoneNumber release];
-	[addMultipleMembersButton release];
-	
-	[addViewBackground release];
-	[addView release];
-	
-	[closeMultipleButton release];
-	[saveButton release];
-	
-	[addNewButton release];
-	
-	[myTableView release];
-	[phoneOnlyArray release];
-	[miniBackgroundView release];
-	[miniForeGroundView release];
-	[nameText release];
-	[emailText release];
-	[phoneText release];
-	[miniErrorLabel release];
-	[miniCancelButton release];
-	[miniAddButton release];
-	[emailArray release];
-	[multipleActivity release];
-	[addContactButton release];
-    [multiplePhoneArray release];
-    [multipleEmailArray release];
-    [multiplePhoneAlert release];
-    [multipleEmailAlert release];
-    [tmpMiniEmail release];
-    [tmpMiniPhone release];
-    [tmpMiniFirstName release];
-    [tmpMiniLastName release];
-    [miniMultiple release];
-    [miniMultipleEmailAlert release];
-    [miniMultiplePhoneAlert release];
-  
-    [addContactWhere release];
-  
-    [multipleEmailArrayLabels release];
-    [multiplePhoneArrayLabels release];
-    [coordinatorSegment release];
-    [teamName release];
-    [phoneTextAlert release];
-	[super dealloc];
-	
-}
 
 @end

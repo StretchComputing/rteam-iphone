@@ -10,7 +10,7 @@
 
 
 @interface TeamEdit : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
-
+    
 	NSString *teamId;
 	NSString *newTeamName;
 	IBOutlet UILabel *sportLabel;
@@ -39,28 +39,28 @@
 	
 	UIActionSheet *disconnect;
 }
-@property (nonatomic, retain) UIActionSheet *disconnect;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSDictionary *teamInfo;
-@property (nonatomic, retain) UIButton *disconnectTwitterButton;
-@property (nonatomic, retain) NSString *twitterUrl;
+@property (nonatomic, strong) UIActionSheet *disconnect;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSDictionary *teamInfo;
+@property (nonatomic, strong) UIButton *disconnectTwitterButton;
+@property (nonatomic, strong) NSString *twitterUrl;
 @property bool updateTwitter;
 @property bool twitterUser;
-@property (nonatomic, retain) UIButton *connectTwitterButton;
-@property (nonatomic, retain) UILabel *connectTwitterLabel;
-@property (nonatomic, retain) NSString *newTeamName;
+@property (nonatomic, strong) UIButton *connectTwitterButton;
+@property (nonatomic, strong) UILabel *connectTwitterLabel;
+@property (nonatomic, strong, getter = theNewTeamName) NSString *newTeamName;
 @property bool saveSuccess;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) UILabel *sportLabel;
-@property (nonatomic, retain) UITextView *description;
-@property (nonatomic, retain) UITextField *teamName;
-@property (nonatomic, retain) UILabel *errorLabel;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) UILabel *sportLabel;
+@property (nonatomic, strong) UITextView *description;
+@property (nonatomic, strong) UITextField *teamName;
+@property (nonatomic, strong) UILabel *errorLabel;
 
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UIButton *changeSportButton;
-@property (nonatomic, retain) UIButton *saveChangesButton;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIButton *changeSportButton;
+@property (nonatomic, strong) UIButton *saveChangesButton;
 
 -(void)getGameInfo;
 -(IBAction)changeSport;

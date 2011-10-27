@@ -10,7 +10,7 @@
 
 
 @interface RecurringEventSelection : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
-
+    
 	IBOutlet UIButton *calendarButton;
 	IBOutlet UITableView *myTableView;
 	
@@ -23,13 +23,13 @@
 	IBOutlet UILabel *orLabel;
 	IBOutlet UITextView *calendarLabel;
 }
-@property (nonatomic, retain)  UILabel *orLabel;
-@property (nonatomic, retain)  UITextView *calendarLabel;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) UILabel *typeLabel;
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) UIButton *calendarButton;
-@property (nonatomic, retain) UITableView *myTableView;
+@property (nonatomic, strong)  UILabel *orLabel;
+@property (nonatomic, strong)  UITextView *calendarLabel;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) UILabel *typeLabel;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) UIButton *calendarButton;
+@property (nonatomic, strong) UITableView *myTableView;
 
 -(IBAction)calendar;
 @end

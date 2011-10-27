@@ -12,7 +12,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 
 @interface AddGuardian : UIViewController <UIActionSheetDelegate, ABPeoplePickerNavigationControllerDelegate> {
-
+    
     PhoneNumberFormatter *myPhoneNumberFormatter;
     int myTextFieldSemaphore1;
     int myTextFieldSemaphore2;
@@ -21,7 +21,7 @@
 	IBOutlet UITextField *oneLastName;
 	IBOutlet UITextField *oneEmail;
     IBOutlet UITextField *onePhone;
-
+    
 	IBOutlet UITextField *twoFirstName;
 	IBOutlet UITextField *twoLastName;
 	IBOutlet UITextField *twoEmail;
@@ -30,7 +30,7 @@
 	IBOutlet UILabel *errorLabel;
 	
 	IBOutlet UIButton *saveButton;
-
+    
 	NSString *guardianOneFirst;
 	NSString *guardianOneLast;
 	NSString *guardianOneEmail;
@@ -57,44 +57,44 @@
     NSMutableArray *multipleEmailArrayLabels;
     NSMutableArray *multiplePhoneArrayLabels;
 }
-@property (nonatomic, retain) NSMutableArray *multipleEmailArrayLabels;
-@property (nonatomic, retain) NSMutableArray *multiplePhoneArrayLabels;
-@property (nonatomic, retain) UIAlertView *multipleEmailAlert;
-@property (nonatomic, retain) UIAlertView *multiplePhoneAlert;
+@property (nonatomic, strong) NSMutableArray *multipleEmailArrayLabels;
+@property (nonatomic, strong) NSMutableArray *multiplePhoneArrayLabels;
+@property (nonatomic, strong) UIAlertView *multipleEmailAlert;
+@property (nonatomic, strong) UIAlertView *multiplePhoneAlert;
 
 @property bool twoAlerts;
-@property (nonatomic, retain) NSMutableArray *multipleEmailArray;
-@property (nonatomic, retain) NSMutableArray *multiplePhoneArray;
-@property (nonatomic, retain) NSString *currentGuardFirstName;
-@property (nonatomic, retain) NSString *currentGuardLastName;
-@property (nonatomic, retain) NSString *currentGuardEmail;
-@property (nonatomic, retain) NSString *currentGuardPhone;
+@property (nonatomic, strong) NSMutableArray *multipleEmailArray;
+@property (nonatomic, strong) NSMutableArray *multiplePhoneArray;
+@property (nonatomic, strong) NSString *currentGuardFirstName;
+@property (nonatomic, strong) NSString *currentGuardLastName;
+@property (nonatomic, strong) NSString *currentGuardEmail;
+@property (nonatomic, strong) NSString *currentGuardPhone;
 @property bool addContactGuard1;
-@property (nonatomic, retain) UIButton *removeGuardians;
+@property (nonatomic, strong) UIButton *removeGuardians;
 //Parent/Guardian
-@property (nonatomic, retain) NSString *guardianTwoPhone;
-@property (nonatomic, retain) NSString *guardianOnePhone;
-@property (nonatomic, retain) NSString *guardianOneFirst;
-@property (nonatomic, retain) NSString *guardianOneLast;
-@property (nonatomic, retain) NSString *guardianOneEmail;
-@property (nonatomic, retain) NSString *guardianTwoFirst;
-@property (nonatomic, retain) NSString *guardianTwoLast;
-@property (nonatomic, retain) NSString *guardianTwoEmail;
+@property (nonatomic, strong) NSString *guardianTwoPhone;
+@property (nonatomic, strong) NSString *guardianOnePhone;
+@property (nonatomic, strong) NSString *guardianOneFirst;
+@property (nonatomic, strong) NSString *guardianOneLast;
+@property (nonatomic, strong) NSString *guardianOneEmail;
+@property (nonatomic, strong) NSString *guardianTwoFirst;
+@property (nonatomic, strong) NSString *guardianTwoLast;
+@property (nonatomic, strong) NSString *guardianTwoEmail;
 
-@property (nonatomic, retain) UITextField *oneFirstName;
-@property (nonatomic, retain) UITextField *oneLastName;
-@property (nonatomic, retain) UITextField *oneEmail;
-@property (nonatomic, retain) UITextField *onePhone;
+@property (nonatomic, strong) UITextField *oneFirstName;
+@property (nonatomic, strong) UITextField *oneLastName;
+@property (nonatomic, strong) UITextField *oneEmail;
+@property (nonatomic, strong) UITextField *onePhone;
 
-@property (nonatomic, retain) UITextField *twoFirstName;
-@property (nonatomic, retain) UITextField *twoLastName;
-@property (nonatomic, retain) UITextField *twoEmail;
-@property (nonatomic, retain) UITextField *twoPhone;
+@property (nonatomic, strong) UITextField *twoFirstName;
+@property (nonatomic, strong) UITextField *twoLastName;
+@property (nonatomic, strong) UITextField *twoEmail;
+@property (nonatomic, strong) UITextField *twoPhone;
 
 
-@property (nonatomic, retain) UILabel *errorLabel;
+@property (nonatomic, strong) UILabel *errorLabel;
 
-@property (nonatomic, retain) UIButton *saveButton;
+@property (nonatomic, strong) UIButton *saveButton;
 
 -(IBAction)endText;
 -(IBAction)save;

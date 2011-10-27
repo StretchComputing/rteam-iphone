@@ -73,7 +73,7 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 	self.saveButton.enabled = NO;
 	self.useCurrentButton.enabled = NO;
 	
-	self.locationManager = [[[CLLocationManager alloc] init] autorelease];
+	self.locationManager = [[CLLocationManager alloc] init];
 	self.locationManager.delegate = self; // Tells the location manager to send updates to this object
 	[locationManager startUpdatingLocation];
 }
@@ -110,12 +110,7 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 }
 
 - (void)runRequest{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	
 	NSString *locationStr = @"";
 	NSString *paramLat = @"";
@@ -189,7 +184,6 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -235,7 +229,6 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -255,10 +248,7 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 }
 
 -(void)getAllGames{
-	
-	NSAutoreleasePool *pool;
-	pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	NSString *token = @"";
 	
@@ -311,7 +301,6 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 		
 	}
 	
-	[pool drain];
 
 }
 
@@ -338,23 +327,4 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 	
 }
 
--(void)dealloc{
-	[gameId release];
-	[teamId release];
-	[locationName release];
-	[action release];
-	[lat release];
-	[longt release];
-	[locationManager release];
-	[saveButton release];
-	[useCurrentButton release];
-	[errorMessage release];
-	[locationString release];
-	[errorString release];
-	[updateAllGames release];
-	[updateLat release];
-	[updateLong release];
-	[allGamesArray release];
-	[super dealloc];
-}
 @end

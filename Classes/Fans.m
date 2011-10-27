@@ -50,24 +50,23 @@ fanPics;
 	
 	//Header to be displayed if there are no players
 	UIView *headerView =
-	[[[UIView alloc]
-	  initWithFrame:CGRectMake(0, 0, 300, 75)]
-	 autorelease];
+	[[UIView alloc]
+	  initWithFrame:CGRectMake(0, 0, 300, 75)
+	 ];
 	
 	UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(0, 73, 320, 1)];
 	UIColor *color = [[UIColor alloc] initWithRed:0.86 green:0.86 blue:0.86 alpha:1.0];
 	line2.backgroundColor = color;
 	[headerView addSubview:line2];
-    [line2 release];
-	[color release];
+
 	
 	//Only display header if there are no teams
 	NSInteger numTeams = [fans count];
 	if (numTeams == 0) {
 		UILabel *headerLabel =
-		[[[UILabel alloc]
-		  initWithFrame:CGRectMake(10, 1, 320, 40)]
-		 autorelease];
+		[[UILabel alloc]
+		  initWithFrame:CGRectMake(10, 1, 320, 40)
+		 ];
 		headerLabel.text = NSLocalizedString(@"You currently have no fan contacts.", @"");
 		headerLabel.textColor = [UIColor blackColor];
 		headerLabel.textAlignment = UITextAlignmentCenter;
@@ -102,10 +101,6 @@ fanPics;
 
 
 -(void)getAllFans{
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	NSString *token = @"";
 	NSArray *playerArray = [NSArray array];
@@ -163,7 +158,6 @@ fanPics;
 		[self.fanPics addObject:@""];
 	}
 	
-	[pool drain];
 	
 	[self performSelectorOnMainThread:@selector(finishedFans) withObject:nil waitUntilDone:NO];
 
@@ -207,9 +201,9 @@ fanPics;
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc]
+		cell = [[UITableViewCell alloc]
 				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FirstLevelCell] autorelease];
+				 reuseIdentifier: FirstLevelCell];
 	}
 	
 	//Configure the cell
@@ -255,10 +249,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)getPicsFans {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -320,7 +311,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		
 	}
-    [pool drain];
 }
 
 - (void)didFinishFans{
@@ -347,21 +337,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
-- (void)dealloc {
-	[fans release];
-	[teamName release];
-	[teamId release];
-	[userRole release];
-	[currentIcon release];
-	[currentMemberId release];
-	[error release];
-	[fanActivity release];
-	[fanTable release];
-	[fanActivityLabel release];
-	[barActivity release];
-	[fanPics release];
-	[super dealloc];
-}
 
 
 @end

@@ -10,7 +10,7 @@
 
 
 @interface GameAttendance : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-
+    
 	NSArray *players;
 	NSString *teamId;
 	NSString *allSelector;
@@ -35,7 +35,7 @@
 	
 	NSString *successString;
 	bool successNoChoices;
-
+    
 	
 	IBOutlet UIActivityIndicatorView *attActivity;
 	IBOutlet UILabel *attActivityLabel;
@@ -45,34 +45,34 @@
     UIBarButtonItem *switchButton;
     IBOutlet UILabel *topLabel;
 }
-@property (nonatomic, retain) UILabel *topLabel;
-@property (nonatomic, retain) UITableView *playerTableViewPre;
+@property (nonatomic, strong) UILabel *topLabel;
+@property (nonatomic, strong) UITableView *playerTableViewPre;
 
-@property (nonatomic, retain) UIBarButtonItem *switchButton;
-@property (nonatomic, retain) UIActivityIndicatorView *barActivity;
+@property (nonatomic, strong) UIBarButtonItem *switchButton;
+@property (nonatomic, strong) UIActivityIndicatorView *barActivity;
 
-@property (nonatomic, retain) UILabel *attActivityLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *attActivity;
+@property (nonatomic, strong) UILabel *attActivityLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *attActivity;
 
 @property bool successNoChoices;
-@property (nonatomic, retain) NSString* successString;
-@property (nonatomic, retain) UITableView *playerTableView;
+@property (nonatomic, strong) NSString* successString;
+@property (nonatomic, strong) UITableView *playerTableView;
 @property bool saveSuccess;
 @property bool attendanceInfo;
-@property (nonatomic, retain) NSArray *players;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *allSelector;
-@property (nonatomic, retain) NSString *gameId;
-@property (nonatomic, retain) NSMutableArray *attMarker;
-@property (nonatomic, retain) NSMutableArray *attMarkerTemp;
+@property (nonatomic, strong) NSArray *players;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *allSelector;
+@property (nonatomic, strong) NSString *gameId;
+@property (nonatomic, strong) NSMutableArray *attMarker;
+@property (nonatomic, strong) NSMutableArray *attMarkerTemp;
 
 
-@property (nonatomic, retain) UIButton *saveAll;
-@property (nonatomic, retain) UIButton *select;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UILabel *successLabel;
-@property (nonatomic, retain) NSString *startDate;
-@property (nonatomic, retain) NSArray *attReport;
+@property (nonatomic, strong) UIButton *saveAll;
+@property (nonatomic, strong) UIButton *select;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UILabel *successLabel;
+@property (nonatomic, strong) NSString *startDate;
+@property (nonatomic, strong) NSArray *attReport;
 
 -(void)getAttendanceInfo;
 

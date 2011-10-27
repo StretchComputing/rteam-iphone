@@ -79,12 +79,10 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	NSString *tmpDate = @"10:00 AM";
 	NSDate *theDate = [tmp dateFromString:tmpDate];
 	self.timePicker.date = theDate;
-	[tmp release];
 
 	NSString *message = @"To add an Event, click a date on the calendar, then enter the Event time.  When you are done, click 'Create' in the upper right corner to create the Events.";
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Creating Events" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	self.createButton = [[UIBarButtonItem alloc] initWithTitle:@"Create" style:UIBarButtonItemStyleBordered target:self action:@selector(create)];
 	[self.navigationItem setRightBarButtonItem:self.createButton];
 	
@@ -92,7 +90,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	self.dateSelected = [NSDate date];
 	
 	
-	calendarView = [[[KLCalendarView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,  320.0f, 280) delegate:self] autorelease];
+	calendarView = [[KLCalendarView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,  320.0f, 280) delegate:self];
 	
 	[self.view addSubview:calendarView];
 	[self.view sendSubviewToBack:calendarView];
@@ -128,7 +126,8 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		tile = aTile;
 	}
 	else{
-	    [tile restoreBackgroundColor];
+	    //[tile restoreBackgroundColor];
+        [tile performSelector:@selector(restoreBackgroundColor)];
 		tile = aTile;
 	}
 	
@@ -160,7 +159,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	NSDate *todaysDate = [NSDate date];
     NSString *tempDateToday = [dateFormat stringFromDate:todaysDate];
 
-	[dateFormat release];
     
 	if ([todaysDate isEqualToDate:[todaysDate earlierDate:self.dateSelected]] || [tempDateToday isEqualToString:stringDate]) {
 		
@@ -183,7 +181,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 				NSDateFormatter *tmpFormat = [[NSDateFormatter alloc] init];
 				[tmpFormat setDateFormat:@"hh:mm aa"];
 				timeEventToday = [tmpFormat stringFromDate:tmpTime];
-				[tmpFormat release];
 				
 				break;
 			}
@@ -255,7 +252,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	NSString *dateTodayString = @"";
 	[tmpFormat setDateFormat:@"MM/dd"];
 	dateTodayString = [tmpFormat stringFromDate:self.dateSelected];
-	[tmpFormat release];
 	
 	if (self.isEventToday) {
 		//Replace the Time of the Event that is today with the new time;
@@ -278,7 +274,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		newObject.eventDate = tmpDate;
 		newObject.eventTime = tmpTime;
 		[self.allEvents replaceObjectAtIndex:eventIndex withObject:newObject];
-		[newObject release];
 		
 	}else {
 	
@@ -289,9 +284,9 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		
 		[self.allEvents addObject:tmp];
 		
-		[tmp release];
 		
-		[calendarView refreshViewWithPushDirection:nil];
+		//[calendarView refreshViewWithPushDirection:nil];
+        [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
 		
 	}
 
@@ -345,7 +340,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 			NSDateFormatter *tmp = [[NSDateFormatter alloc] init];
 			[tmp setDateFormat:@"MM/dd"];
 			todayTimeString = [tmp stringFromDate:self.dateSelected];
-			[tmp release];
 			break;
 		}
 	}
@@ -357,7 +351,8 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	self.addEventButton.hidden = NO;
 	self.eventLabel.text = [NSString stringWithFormat:@"No Event currently on %@", todayTimeString];
 	
-	[calendarView refreshViewWithPushDirection:nil];
+	//[calendarView refreshViewWithPushDirection:nil];
+    [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
 
 	
 }
@@ -404,7 +399,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 			[format setDateFormat:@"yyyy-MM-dd"];
 			
 			NSString *testDate = [format stringFromDate:tmpEventDate];
-			[format release];
 			
 	
 			
@@ -469,7 +463,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -489,10 +482,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 
 -(void)createGames{
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Create the new game
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -536,8 +526,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		
 		[tmpGameArray addObject:tmpGame1];
 		
-		[tmpGame release];
-		[tmpFormatter release];
 
 	}
 
@@ -584,7 +572,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 	
 	
 	
@@ -623,7 +610,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		NSString *message = @"Error creating events.  Please make sure you have a valid internet conneciton.";
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-        [alert release];
 		
 	}
 
@@ -632,11 +618,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 
 -(void)createPractices{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Create the new game
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -681,8 +663,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];		
 		[tmpGameArray addObject:tmpGame1];
 		
-		[tmpGame release];
-		[tmpFormatter release];
 		
 	}
 	
@@ -728,11 +708,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 						   withObject:nil
 						waitUntilDone:NO
 	 ];
-	
-    [pool drain];
-	
-	
-	
+
 }
 
 
@@ -768,7 +744,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		NSString *message = @"Error creating events.  Please make sure you have a valid internet conneciton.";
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-        [alert release];
 		
 	}
 	
@@ -779,10 +754,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 -(void)createEvents{
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	//Create the new game
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -829,8 +800,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		
 		[tmpGameArray addObject:tmpGame1];
 		
-		[tmpGame release];
-		[tmpFormatter release];
 		
 	}
 	
@@ -876,9 +845,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 						   withObject:nil
 						waitUntilDone:NO
 	 ];
-	
-    [pool drain];
-	
+    
 	
 	
 }
@@ -920,7 +887,6 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		NSString *message = @"Error creating events.  Please make sure you have a valid internet conneciton.";
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
 }
@@ -942,31 +908,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
 
-	[eventLabel release];
-	[allEvents release];
-	[eventType release];
-	[dateSelected release];
-	[error release];
-	[calendarView release];
-	[currentTile release];
-	[tile release];
-	
-	[eventTimeField release];
-	[removeEventButton release];
-	[timePicker release];
-	[cancelTimeButton release];
-	[okTimeButton release];
-	[explainPickerView release];
-	[explainPickerLabel release];
-	[teamId release];
-	[errorString release];
-	[errorLabel release];
-	[activity release];
-	[createButton release];
-    [super dealloc];
-}
 
 @end
 

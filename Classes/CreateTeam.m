@@ -22,10 +22,9 @@
 
 - (void)viewDidLoad {
 	self.title=@"New Team";
-
+    
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
 	
 	
 } 
@@ -40,9 +39,6 @@
 
 
 
-- (void)dealloc {
-	[super dealloc];
-}
 
 -(void)football{
 	NewTeam *tmp = [[NewTeam alloc] init];
@@ -55,21 +51,21 @@
 	NewTeam *tmp = [[NewTeam alloc] init];
 	tmp.from = @"Basketball";
     tmp.fromHome = self.fromHome;
-
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 -(void)baseball{
 	NewTeam *tmp = [[NewTeam alloc] init];
 	tmp.from = @"Baseball";
     tmp.fromHome = self.fromHome;
-
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 -(void)soccer{
 	NewTeam *tmp = [[NewTeam alloc] init];
 	tmp.from = @"Soccer";
     tmp.fromHome = self.fromHome;
-
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 
@@ -77,7 +73,7 @@
 	NewTeam *tmp = [[NewTeam alloc] init];
 	tmp.from = @"Hockey";
     tmp.fromHome = self.fromHome;
-
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 
@@ -85,7 +81,7 @@
 	NewTeam *tmp = [[NewTeam alloc] init];
 	tmp.from = @"Lacrosse";
     tmp.fromHome = self.fromHome;
-
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 
@@ -93,7 +89,7 @@
 	NewTeam *tmp = [[NewTeam alloc] init];
 	tmp.from = @"Tennis";
     tmp.fromHome = self.fromHome;
-
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 
@@ -101,14 +97,14 @@
 	NewTeam *tmp = [[NewTeam alloc] init];
 	tmp.from = @"Volleyball";
     tmp.fromHome = self.fromHome;
-
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 
 -(void)other{
 	NewOtherTeam *tmp = [[NewOtherTeam alloc] init];
     tmp.fromHome = self.fromHome;
-
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 
@@ -119,7 +115,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 

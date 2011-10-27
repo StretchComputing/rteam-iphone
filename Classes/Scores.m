@@ -37,7 +37,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
 	
 	//iAds
 	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
@@ -97,8 +96,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 }
 
 -(void)getGames{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	NSArray *tmpGames = [NSArray array];
 	NSString *token = @"";
@@ -147,13 +145,11 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 	
 	NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:NO];
 	[tmpGamesSort sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
-	[lastNameSorter release];
 	self.games = tmpGamesSort;
 	
 	
 	
 	[self performSelectorOnMainThread:@selector(doneGames) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)doneGames{
@@ -208,7 +204,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		
 		frame.origin.x = 10;
@@ -218,7 +214,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		UILabel *nameUsLabel = [[UILabel alloc] initWithFrame:frame];
 		nameUsLabel.tag = nameUsTag;
 		[cell.contentView addSubview:nameUsLabel];
-		[nameUsLabel release];
 		
 		frame.origin.x = 10;
 		frame.origin.y = 32;
@@ -227,7 +222,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		UILabel *nameThemLabel = [[UILabel alloc] initWithFrame:frame];
 		nameThemLabel.tag = nameThemTag;
 		[cell.contentView addSubview:nameThemLabel];
-		[nameThemLabel release];
 		
 		frame.origin.x = 190;
 		frame.origin.y = 18;
@@ -236,7 +230,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 		
 		
 		frame.origin.x = 34;
@@ -246,7 +239,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		UILabel *scoreUsLabel = [[UILabel alloc] initWithFrame:frame];
 		scoreUsLabel.tag = scoreUsTag;
 		[cell.contentView addSubview:scoreUsLabel];
-		[scoreUsLabel release];
 		
 		
 		frame.origin.x = 254;
@@ -256,7 +248,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		UILabel *scoreThemLabel = [[UILabel alloc] initWithFrame:frame];
 		scoreThemLabel.tag = scoreThemTag;
 		[cell.contentView addSubview:scoreThemLabel];
-		[scoreThemLabel release];
 		
 		frame.origin.x = 100;
 		frame.origin.y = 18;
@@ -265,7 +256,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		UILabel *intervalLabel = [[UILabel alloc] initWithFrame:frame];
 		intervalLabel.tag = intervalTag;
 		[cell.contentView addSubview:intervalLabel];
-		[intervalLabel release];
 		
 		frame.origin.x = 0;
 		frame.origin.y = 0;
@@ -274,7 +264,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		UILabel *canceledLabel = [[UILabel alloc] initWithFrame:frame];
 		canceledLabel.tag = canceledTag;
 		[cell.contentView addSubview:canceledLabel];
-		[canceledLabel release];
 		
 		
 	}
@@ -341,7 +330,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 	
 	NSString *dateText = [dateFormat stringFromDate:formatedDate];
 	
-	//[formatedDate release];
 	
 	if ([tmpGame.interval isEqualToString:@"0"] || [tmpGame.interval isEqualToString:@"-4"]) {
 		
@@ -453,7 +441,6 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		dateLabel.textColor = [UIColor blueColor];
 		dateLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
 		
-        [dateFormat release];
         
 		scoreUsLabel.text = tmpGame.scoreUs;
 		scoreUsLabel.textColor = [UIColor greenColor];
@@ -543,8 +530,8 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 			UIColor *tmpColor = [UIColor colorWithRed:0.96 green:0.96 blue:0.96 alpha:1.0];
 			cell.contentView.backgroundColor = tmpColor;
 			cell.accessoryView.backgroundColor = tmpColor;
-			
-			cell.backgroundView = [[[UIView alloc] init] autorelease]; 
+        
+			cell.backgroundView = [[UIView alloc] init]; 
 			cell.backgroundView.backgroundColor = tmpColor;
 		}
 	}
@@ -562,9 +549,9 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 		
 		if (cell == nil) {
-			cell = [[[UITableViewCell alloc]
+			cell = [[UITableViewCell alloc]
 					 initWithStyle:UITableViewCellStyleDefault
-					 reuseIdentifier: FirstLevelCell] autorelease];
+					 reuseIdentifier: FirstLevelCell];
 		}
 		
 		NSUInteger row = [indexPath row];
@@ -638,11 +625,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)getTeamList{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -701,9 +684,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 							waitUntilDone:NO
 		 ];
 		
-		
-		[pool drain];
-		
+				
 	}
 	
 	
@@ -737,7 +718,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		self.bottomBar.items = items2;
 	}
     
-    [flexibleSpace release];
     [self.teamTable reloadData];
 
 }
@@ -749,7 +729,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -830,26 +809,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
-- (void)dealloc {
-	[refreshActivity release];
-	[teamId release];
-	[bottomBar release];
-	[refreshButton release];
-	[filterButton release];
-	[table release];
-	[error release];
-	[games release];
-	[teamTable release];
-	[scroll release];
-	[sport release];
-	[teamName release];
-	[teamList release];
-	[loadingActivity release];
-	[loadingLabel release];
-	[cancelButton release];
-	[insideView release];
-    [super dealloc];
-}
 
 
 @end

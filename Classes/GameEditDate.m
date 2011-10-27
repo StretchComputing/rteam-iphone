@@ -53,7 +53,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -77,12 +76,5 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[gameDate release];
-	[gameDatePicker release];
-	[submitButton release];
-	[super dealloc];
-}
 
 @end

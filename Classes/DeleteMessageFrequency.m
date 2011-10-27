@@ -53,7 +53,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 10;
 		frame.origin.y = 10;
@@ -64,14 +64,12 @@
 		UILabel *cellLabel = [[UILabel alloc] initWithFrame:frame];
 		cellLabel.tag = cellTag;
 		[cell.contentView addSubview:cellLabel];
-		[cellLabel release];
 		
 		frame.origin.x = 125;
 		frame.size.width = 150;
 		UILabel *feedbackLabel = [[UILabel alloc] initWithFrame:frame];
 		feedbackLabel.tag = feedbackTag;
 		[cell.contentView addSubview:feedbackLabel];
-		[feedbackLabel release];
 		
 		
 		frame.size.height = 30;
@@ -81,7 +79,6 @@
 		UISegmentedControl *segControl = [[UISegmentedControl alloc] initWithFrame:frame];
 		segControl.tag = segTag;
 		[cell.contentView addSubview:segControl];
-		[segControl release];
 		
 		frame.size.height = 20;
 		frame.size.width = 20;
@@ -90,7 +87,6 @@
 		tmpView.image = [UIImage imageNamed:@"blueCheck.png"];
 		tmpView.tag = imageTag;
 		[cell.contentView addSubview:tmpView];
-		[tmpView release];
 		
 		
 	}
@@ -199,9 +195,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)getUserInfo{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	NSString *token = @"";
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -266,7 +260,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneUserInfo) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -286,10 +279,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)updateUserInfo{
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -344,7 +333,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	
-    [pool drain];
 	
 	[self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
 	
@@ -383,14 +371,4 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
--(void)dealloc{
-	
-	[myTableView release];
-	[activity release];
-	[selectedArray release];
-	[errorString release];
-	[displayLabel release];
-	[newValue release];
-	[super dealloc];
-}
 @end

@@ -15,9 +15,9 @@
 	IBOutlet UIDatePicker *practiceDatePicker;
 	IBOutlet UIButton *submitButton;
 }
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) NSDate* practiceDate;
-@property (nonatomic, retain) UIDatePicker *practiceDatePicker;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) NSDate* practiceDate;
+@property (nonatomic, strong) UIDatePicker *practiceDatePicker;
 
 
 -(IBAction)chooseDate;

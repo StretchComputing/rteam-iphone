@@ -12,13 +12,5 @@
 @implementation CalendarEventObject
 @synthesize eventType, eventDate, eventTime;
 
--(void)dealloc{
-	
-	[eventDate release];
-	[eventTime release];
-	[eventType release];
-	[super dealloc];
-	
-}
 
 @end

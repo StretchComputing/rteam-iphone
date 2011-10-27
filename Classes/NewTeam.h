@@ -15,7 +15,7 @@
 
 
 @interface NewTeam : UIViewController <UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, ABPeoplePickerNavigationControllerDelegate> {
-
+    
 	IBOutlet UITextField *teamName;
 	IBOutlet UILabel *errorLabel;
 	NSString *from;
@@ -73,7 +73,7 @@
     UIAlertView *miniMultiplePhoneAlert;
     
     bool twoAlerts;
-
+    
 	
     IBOutlet UIView *guardianBackground;
     IBOutlet UIButton *miniGuardAddButton;
@@ -109,84 +109,84 @@
     
     IBOutlet UISegmentedControl *coordinatorSegment;
 }
-@property (nonatomic, retain) UISegmentedControl *coordinatorSegment;
+@property (nonatomic, strong) UISegmentedControl *coordinatorSegment;
 
-@property (nonatomic, retain) NSMutableArray *multipleEmailArrayLabels;
-@property (nonatomic, retain) NSMutableArray *multiplePhoneArrayLabels;
+@property (nonatomic, strong) NSMutableArray *multipleEmailArrayLabels;
+@property (nonatomic, strong) NSMutableArray *multiplePhoneArrayLabels;
 
-@property (nonatomic, retain) NSString *currentGuardName;
-@property (nonatomic, retain) NSString *currentGuardEmail;
-@property (nonatomic, retain) NSString *currentGuardPhone;
+@property (nonatomic, strong) NSString *currentGuardName;
+@property (nonatomic, strong) NSString *currentGuardEmail;
+@property (nonatomic, strong) NSString *currentGuardPhone;
 
-@property (nonatomic, retain) NSString *addContactWhere;
+@property (nonatomic, strong) NSString *addContactWhere;
 
-@property (nonatomic, retain) UIAlertView *guard1EmailAlert;
-@property (nonatomic, retain) UIAlertView *guard1PhoneAlert;
-@property (nonatomic, retain) UIAlertView *guard2EmailAlert;
-@property (nonatomic, retain) UIAlertView *guard2PhoneAlert;
+@property (nonatomic, strong) UIAlertView *guard1EmailAlert;
+@property (nonatomic, strong) UIAlertView *guard1PhoneAlert;
+@property (nonatomic, strong) UIAlertView *guard2EmailAlert;
+@property (nonatomic, strong) UIAlertView *guard2PhoneAlert;
 
-@property (nonatomic, retain) UIButton *removeGuardiansButton;
+@property (nonatomic, strong) UIButton *removeGuardiansButton;
 
-@property (nonatomic, retain) UILabel *miniGuardErrorLabel;
+@property (nonatomic, strong) UILabel *miniGuardErrorLabel;
 @property int currentGuardianSelection;
-@property (nonatomic, retain) UIView *guardianBackground;
-@property (nonatomic, retain) UIButton *miniGuardAddButton;
-@property (nonatomic, retain) UIButton *miniGuardCancelButton;
+@property (nonatomic, strong) UIView *guardianBackground;
+@property (nonatomic, strong) UIButton *miniGuardAddButton;
+@property (nonatomic, strong) UIButton *miniGuardCancelButton;
 
-@property (nonatomic, retain) UITextField *oneName;
-@property (nonatomic, retain) UITextField *oneEmail;
-@property (nonatomic, retain) UITextField *onePhone;
+@property (nonatomic, strong) UITextField *oneName;
+@property (nonatomic, strong) UITextField *oneEmail;
+@property (nonatomic, strong) UITextField *onePhone;
 
-@property (nonatomic, retain) UITextField *twoName;
-@property (nonatomic, retain) UITextField *twoEmail;
-@property (nonatomic, retain) UITextField *twoPhone;
+@property (nonatomic, strong) UITextField *twoName;
+@property (nonatomic, strong) UITextField *twoEmail;
+@property (nonatomic, strong) UITextField *twoPhone;
 
 
 @property bool twoAlerts;
-@property (nonatomic, retain) NSMutableArray *multiplePhoneArray;
-@property (nonatomic, retain) NSMutableArray *multipleEmailArray;
+@property (nonatomic, strong) NSMutableArray *multiplePhoneArray;
+@property (nonatomic, strong) NSMutableArray *multipleEmailArray;
 
-@property (nonatomic, retain) NSString *tmpMiniEmail;
-@property (nonatomic, retain) NSString *tmpMiniPhone;
-@property (nonatomic, retain) NSString *tmpMiniFirstName;
-@property (nonatomic, retain) NSString *tmpMiniLastName;
-@property (nonatomic, retain) NSString *miniMultiple;
-@property (nonatomic, retain) UIAlertView *miniMultipleEmailAlert;
-@property (nonatomic, retain) UIAlertView *miniMultiplePhoneAlert;
+@property (nonatomic, strong) NSString *tmpMiniEmail;
+@property (nonatomic, strong) NSString *tmpMiniPhone;
+@property (nonatomic, strong) NSString *tmpMiniFirstName;
+@property (nonatomic, strong) NSString *tmpMiniLastName;
+@property (nonatomic, strong) NSString *miniMultiple;
+@property (nonatomic, strong) UIAlertView *miniMultipleEmailAlert;
+@property (nonatomic, strong) UIAlertView *miniMultiplePhoneAlert;
 
 @property bool fromHome;
 @property bool showedMemberAlert;
-@property (nonatomic, retain) UIAlertView *noMembers;
-@property (nonatomic, retain) NSMutableArray *phoneOnlyArray;
-@property (nonatomic, retain) UIView *miniBackgroundView;
-@property (nonatomic, retain) UIView *miniForeGroundView;
-@property (nonatomic, retain) UITextField *nameText;
-@property (nonatomic, retain) UITextField *emailText;
-@property (nonatomic, retain) UITextField *phoneText;
-@property (nonatomic, retain) UILabel *miniErrorLabel;
-@property (nonatomic, retain) UIButton *miniCancelButton;
-@property (nonatomic, retain) UIButton *miniAddButton;
+@property (nonatomic, strong) UIAlertView *noMembers;
+@property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
+@property (nonatomic, strong) UIView *miniBackgroundView;
+@property (nonatomic, strong) UIView *miniForeGroundView;
+@property (nonatomic, strong) UITextField *nameText;
+@property (nonatomic, strong) UITextField *emailText;
+@property (nonatomic, strong) UITextField *phoneText;
+@property (nonatomic, strong) UILabel *miniErrorLabel;
+@property (nonatomic, strong) UIButton *miniCancelButton;
+@property (nonatomic, strong) UIButton *miniAddButton;
 
-@property (nonatomic, retain) UITableView *myTableView;
-@property (nonatomic, retain) UIButton *addNewButton;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSMutableArray *emailArray;
-@property (nonatomic, retain) UIButton *closeButton;
-@property (nonatomic, retain) UIButton *saveButton;
+@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) UIButton *addNewButton;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSMutableArray *emailArray;
+@property (nonatomic, strong) UIButton *closeButton;
+@property (nonatomic, strong) UIButton *saveButton;
 
-@property (nonatomic, retain) UIView *addViewBackground;
-@property (nonatomic, retain) UIView *addView;
+@property (nonatomic, strong) UIView *addViewBackground;
+@property (nonatomic, strong) UIView *addView;
 
-@property (nonatomic, retain) UIButton *addButton;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSString *twitterUrl;
-@property (nonatomic, retain) UITextField *teamName;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) NSString *from;
-@property (nonatomic, retain) NSArray *oldTeams;
-@property (nonatomic, retain) UIActivityIndicatorView *serverProcess;
-@property (nonatomic, retain) UISegmentedControl *enableTwitter;
-@property (nonatomic, retain) UIButton *submitButton;
+@property (nonatomic, strong) UIButton *addButton;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSString *twitterUrl;
+@property (nonatomic, strong) UITextField *teamName;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) NSString *from;
+@property (nonatomic, strong) NSArray *oldTeams;
+@property (nonatomic, strong) UIActivityIndicatorView *serverProcess;
+@property (nonatomic, strong) UISegmentedControl *enableTwitter;
+@property (nonatomic, strong) UIButton *submitButton;
 @property bool createSuccess;
 @property bool other;
 

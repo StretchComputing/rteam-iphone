@@ -18,7 +18,6 @@
 #import "AllEventCalList.h"
 #import "AllEventsCalendar.h"
 #import "CurrentTeamTabs.h"
-#import "FastHappeningNow.h"
 
 @implementation PracticeEdit
 @synthesize activity, saveChanges, practiceOpponent, practiceDate, practiceDescription, opponent, stringDate, description, teamId, practiceId, 
@@ -67,7 +66,6 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 	
 	self.practiceDate.text = [@"Date: " stringByAppendingString:[dateFormat stringFromDate:self.practiceDateObject]];
 	
-	[dateFormat release];
 }
 
 
@@ -94,7 +92,6 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Team Alert" message:@"Notify your team of this update?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
-    [alert release];
 	
 	
 }
@@ -142,11 +139,7 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -162,7 +155,6 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 	
 	NSDictionary *response = [NSDictionary dictionary];
 	
-    [dateFormat release];
     
 	if (![token isEqualToString:@""]){	
 		
@@ -213,7 +205,6 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -262,7 +253,6 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -305,16 +295,13 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 	self.deleteActionSheet = [[UIActionSheet alloc] initWithTitle:@"'Delete' removes practice from schedule. 'Cancel' marks practice as cancelled." delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Delete Practice" otherButtonTitles:@"Cancel Practice", nil];
     self.deleteActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [self.deleteActionSheet showInView:self.view];
-    [self.deleteActionSheet release];
 	
 }
 
 
 -(void)removeEvent{
 	isCancel = false;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	//Delete Event
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
@@ -359,13 +346,11 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 	
 	
 	[self performSelectorOnMainThread:@selector(doneCancelDelete) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)cancelEvent{
 	isCancel = true;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Cancel Event
 	
@@ -410,7 +395,6 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneCancelDelete) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -450,11 +434,7 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 				CurrentTeamTabs *tmp = [viewControllers objectAtIndex:num - 3];
 				[self.navigationController popToViewController:tmp animated:NO];
 				
-			}else if ([FastHappeningNow class] == [[viewControllers objectAtIndex:num - 3] class]){
-                
-                FastHappeningNow *tmp = [viewControllers objectAtIndex:num - 3];
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else {
+			}else {
 				[self.navigationController dismissModalViewControllerAnimated:YES];
 				
 			}
@@ -499,22 +479,4 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 	
 }
 
--(void)dealloc{
-	
-	[activity release];
-	[saveChanges release];
-	[practiceOpponent release];
-	[practiceDate release];
-	[practiceDescription release];
-	[opponent release];
-	[stringDate release];
-	[description release];
-	[teamId release];
-	[practiceId release];
-	[practiceChangeDate release];
-	[practiceDateObject release];
-	[errorMessage release];
-	[errorString release];
-	[super dealloc];
-}
 @end

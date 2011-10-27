@@ -47,16 +47,5 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[nameLabel release];
-	[teamLabel release];
-	[photo release];
-	[backView release];
-	[nameString release];
-	[teamString release];
-	[super dealloc];
-	
-}
 
 @end

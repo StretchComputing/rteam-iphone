@@ -10,7 +10,7 @@
 
 
 @interface ViewMessageSent : UIViewController <UIActionSheetDelegate>{
-
+    
 	NSString *subject;
 	NSString *body;
 	NSString *createdDate;
@@ -19,7 +19,7 @@
 	NSString *eventId;
 	NSString *eventType;
 	NSString *threadId;
-		
+    
 	IBOutlet UILabel *displaySubject;
 	IBOutlet UILabel *displayDate;
 	IBOutlet UITextView *displayBody;
@@ -47,40 +47,40 @@
 	IBOutlet UILabel *errorLabel;
 	NSString *errorString;
 }
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) NSString *errorString;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) NSString *errorString;
 
-@property (nonatomic, retain) UIBarButtonItem *deleteButton;
+@property (nonatomic, strong) UIBarButtonItem *deleteButton;
 
-@property (nonatomic, retain) NSDictionary *messageInfo;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) NSString *origTeamId;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) UILabel *teamNameLabel;
+@property (nonatomic, strong) NSDictionary *messageInfo;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) NSString *origTeamId;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) UILabel *teamNameLabel;
 @property int currentMessageNumber;
-@property (nonatomic, retain) UISegmentedControl *upDown;
-@property (nonatomic, retain) NSArray *messageArray;
-@property (nonatomic, retain) UILabel *messageNumber;
+@property (nonatomic, strong) UISegmentedControl *upDown;
+@property (nonatomic, strong) NSArray *messageArray;
+@property (nonatomic, strong) UILabel *messageNumber;
 
 
-@property (nonatomic, retain) UIButton *viewMoreDetailButton;
-@property (nonatomic, retain) NSArray *individualReplies;
-@property (nonatomic, retain) NSString *threadId;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *eventId;
-@property (nonatomic, retain) NSString *eventType;
+@property (nonatomic, strong) UIButton *viewMoreDetailButton;
+@property (nonatomic, strong) NSArray *individualReplies;
+@property (nonatomic, strong) NSString *threadId;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *eventType;
 
-@property (nonatomic, retain) NSString *subject;
-@property (nonatomic, retain) NSString *body;
-@property (nonatomic, retain) NSString *createdDate;
+@property (nonatomic, strong) NSString *subject;
+@property (nonatomic, strong) NSString *body;
+@property (nonatomic, strong) NSString *createdDate;
 
-@property (nonatomic, retain) UILabel *displaySubject;
-@property (nonatomic, retain) UILabel *displayDate;
-@property (nonatomic, retain) UITextView *displayBody;
-@property (nonatomic, retain) UILabel *recipients;
-@property (nonatomic, retain) NSString *confirmString;
-@property (nonatomic, retain) UILabel *confirmStringLabel;
+@property (nonatomic, strong) UILabel *displaySubject;
+@property (nonatomic, strong) UILabel *displayDate;
+@property (nonatomic, strong) UITextView *displayBody;
+@property (nonatomic, strong) UILabel *recipients;
+@property (nonatomic, strong) NSString *confirmString;
+@property (nonatomic, strong) UILabel *confirmStringLabel;
 
 -(void)initMessageInfo;
 

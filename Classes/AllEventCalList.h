@@ -40,24 +40,24 @@
 	bool isCancel; //if not, then a delete
 }
 @property bool isCancel;
-@property (nonatomic, retain) NSString *gameIdCanceled;
-@property (nonatomic, retain) NSString *practiceIdCanceled;
-@property (nonatomic, retain) NSString *eventIdCanceled;
+@property (nonatomic, strong) NSString *gameIdCanceled;
+@property (nonatomic, strong) NSString *practiceIdCanceled;
+@property (nonatomic, strong) NSString *eventIdCanceled;
 
 @property int cancelSection;
-@property (nonatomic, retain) UIActivityIndicatorView *deleteActivity;
+@property (nonatomic, strong) UIActivityIndicatorView *deleteActivity;
 @property int cancelRow;
-@property (nonatomic, retain) UIActionSheet *canceledAction;
+@property (nonatomic, strong) UIActionSheet *canceledAction;
 @property bool scrolledOnce;
-@property (nonatomic, retain) UITableView *calendarList;
-@property (nonatomic, retain) NSMutableArray *dateArray;
+@property (nonatomic, strong) UITableView *calendarList;
+@property (nonatomic, strong) NSMutableArray *dateArray;
 @property int initialSegment;
-@property (nonatomic, retain) UISegmentedControl *segmentedControl;
-@property (nonatomic, retain) UIToolbar *bottomBar;
-@property (nonatomic, retain) NSArray *allGames;
-@property (nonatomic, retain) NSArray *allPractices;
-@property (nonatomic, retain) NSArray *allEvents;
-@property (nonatomic, retain) NSArray *events;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) UIToolbar *bottomBar;
+@property (nonatomic, strong) NSArray *allGames;
+@property (nonatomic, strong) NSArray *allPractices;
+@property (nonatomic, strong) NSArray *allEvents;
+@property (nonatomic, strong) NSArray *events;
 
 -(void)buildDateArray;
 -(NSString *)getDateForObject:(id)event;

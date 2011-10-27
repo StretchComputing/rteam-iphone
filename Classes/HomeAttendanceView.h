@@ -28,25 +28,25 @@
     IBOutlet UILabel *yesLabel;
     IBOutlet UILabel *noLabel;
     IBOutlet UILabel *noReplyLabel;
-
+    
 }
-@property (nonatomic, retain) UILabel *dateLabel;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *yesCount;
-@property (nonatomic, retain) NSString *noCount;
-@property (nonatomic, retain) NSString *noReplyCount;
-@property (nonatomic, retain) NSString *eventDate;
-@property (nonatomic, retain) NSString *eventType;
+@property (nonatomic, strong) UILabel *dateLabel;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *yesCount;
+@property (nonatomic, strong) NSString *noCount;
+@property (nonatomic, strong) NSString *noReplyCount;
+@property (nonatomic, strong) NSString *eventDate;
+@property (nonatomic, strong) NSString *eventType;
 
-@property (nonatomic, retain)  UILabel *teamLabel;
-@property (nonatomic, retain)  UILabel *yesLabel;
-@property (nonatomic, retain)  UILabel *noLabel;
-@property (nonatomic, retain)  UILabel *noReplyLabel;
+@property (nonatomic, strong)  UILabel *teamLabel;
+@property (nonatomic, strong)  UILabel *yesLabel;
+@property (nonatomic, strong)  UILabel *noLabel;
+@property (nonatomic, strong)  UILabel *noReplyLabel;
 
 
 @property int initY;
 @property bool isFullScreen;
-@property (nonatomic, retain) UIButton *fullScreenButton;
+@property (nonatomic, strong) UIButton *fullScreenButton;
 
 -(IBAction)fullScreen;
 -(void)setLabels;

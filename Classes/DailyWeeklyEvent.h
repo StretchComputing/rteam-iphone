@@ -10,7 +10,7 @@
 
 
 @interface DailyWeeklyEvent : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate> {
-
+    
 	NSString *frequency;
 	
 	IBOutlet UIDatePicker *timePicker;
@@ -50,32 +50,32 @@
 	
 	NSString *errorString;
 }
-@property (nonatomic, retain) UITextField *location;
+@property (nonatomic, strong) UITextField *location;
 
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) NSMutableArray *allEventsArray;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UILabel *dayLabel;
-@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSMutableArray *allEventsArray;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UILabel *dayLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
 
 @property bool isTime;
-@property (nonatomic, retain) NSString *currentDay;
+@property (nonatomic, strong) NSString *currentDay;
 @property bool isStart;
-@property (nonatomic, retain) UIButton *selectDateButton;
-@property (nonatomic, retain) UIDatePicker *startEndPicker;
-@property (nonatomic, retain) UIButton *okTimeButton;
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) UITextField *startDate;
-@property (nonatomic, retain) UITextField *endDate;
+@property (nonatomic, strong) UIButton *selectDateButton;
+@property (nonatomic, strong) UIDatePicker *startEndPicker;
+@property (nonatomic, strong) UIButton *okTimeButton;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) UITextField *startDate;
+@property (nonatomic, strong) UITextField *endDate;
 
-@property (nonatomic, retain) UITextField *timeField;
-@property (nonatomic, retain) UITextField *dayField;
-@property (nonatomic, retain) NSString *frequency;
-@property (nonatomic, retain) UIDatePicker *timePicker;
-@property (nonatomic, retain) UIPickerView *dayPicker;
+@property (nonatomic, strong) UITextField *timeField;
+@property (nonatomic, strong) UITextField *dayField;
+@property (nonatomic, strong) NSString *frequency;
+@property (nonatomic, strong) UIDatePicker *timePicker;
+@property (nonatomic, strong) UIPickerView *dayPicker;
 
 -(IBAction)dayBegin;
 -(IBAction)timeBegin;

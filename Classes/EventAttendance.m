@@ -74,10 +74,6 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 }
 
 -(void)getAttendanceInfo{
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	self.attMarkerTemp = [[NSMutableArray alloc] init];
 	
@@ -199,7 +195,6 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	
 	
 	
-	[pool drain];
 	[self performSelectorOnMainThread:@selector(finishedAttendance) withObject:nil waitUntilDone:NO];
 }
 
@@ -251,7 +246,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 5;
 		frame.origin.y = 5;
@@ -261,7 +256,6 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 	}
 	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -272,7 +266,6 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	attendance.frame = CGRectMake(175.0, 3.0, 140.0, 27.0);
 	attendance.tag = attTag;
 	[cell.contentView addSubview:attendance];
-	[attendance release];
 	
 	nameLabel.font = [UIFont fontWithName:@"Helvetica" size:16];
 	
@@ -355,10 +348,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 
 - (void)runRequest {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//self.players is the array of Player objects
 	//self.attMarker is the corresponding array of whether they were present or absent
@@ -388,7 +378,6 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 			[attendance addObject:attList];
 		}
 		
-		[attList release];
 		
 	}
 	
@@ -446,7 +435,6 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	}
 	
 	
-	[finalAttendance release];
 	
 	
 	[self performSelectorOnMainThread:
@@ -455,7 +443,6 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -510,28 +497,6 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 
 
 
-- (void)dealloc {
-	[players release];
-	[teamId release];
-	[allSelector release];
-	[eventId release];
-	[attMarker release];
-	[attMarkerTemp release];
-	[saveAll release];
-	[select release];
-	[activity release];
-	[successLabel release];
-	[startDate release];
-	[attReport release];
-	[playerTableView release];
-	[successString release];
-	[attActivity release];
-	[attActivityLabel release];
-	[barActivity release];
-	[lineView release];
-	[userRole release];
-	[super dealloc];
-}
 
 @end
 

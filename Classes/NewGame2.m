@@ -116,11 +116,7 @@
 }
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Create the new game
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -151,7 +147,6 @@
 
 	
 
-	[format release];
 	//get the current time zone
 	NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 	
@@ -221,7 +216,6 @@
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -283,7 +277,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -313,18 +306,5 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[serverProcess release];
-	[error release];
-	[submitButton release];
-	[teamId release];
-	[opponent release];
-	[duration release];
-	[description release];
-	[start release];
-	[errorString release];
-	[super dealloc];
-}
 
 @end

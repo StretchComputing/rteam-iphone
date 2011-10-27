@@ -9,7 +9,6 @@
 #import "SendPollOptions.h"
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
-#import "MessagesTabs.h"
 #import "GameTabs.h"
 #import "PracticeTabs.h"
 #import "CurrentTeamTabs.h"
@@ -65,11 +64,7 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -159,7 +154,6 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -174,22 +168,7 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 		int tempNum = [tempCont count];
 		tempNum = tempNum - 4;
 		
-		if ([self.origLoc isEqualToString:@"MessagesTabs"]) {
-			
-			if ([[tempCont objectAtIndex:tempNum] class] == [MessagesTabs class]) {
-				MessagesTabs *cont = [tempCont objectAtIndex:tempNum];
-				cont.selectedIndex = 1;
-				
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [MessagesTabs class]) {
-				MessagesTabs *cont = [tempCont objectAtIndex:tempNum-1];
-				cont.selectedIndex = 1;
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-		}
+		
 		
 		if ([self.origLoc isEqualToString:@"CurrentTeamTabs"]) {
 			
@@ -259,7 +238,6 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 			NSString *tmp = @"Only User's with confirmed email addresses can send polls.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}else {
 			self.errorMessage.text = self.errorString;
 			self.errorMessage.textColor = [UIColor redColor];
@@ -288,7 +266,6 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -332,30 +309,4 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 	
 }
 
--(void)dealloc{
-	
-	[action release];
-	[question release];
-	[errorMessage release];
-	[option1 release];
-	[option2 release];
-	[option3 release];
-	[option4 release];
-	[option5 release];
-	[submitButton release];
-	[questionText release];
-	[teamId release];
-	[eventId release];
-	[eventType release];
-	[origLoc release];
-	[userRole release];
-	[recipients release];
-	[displayResults release];
-	[errorString release];
-	[pollSubject release];
-
-	
-	[super dealloc];
-	
-}
 @end

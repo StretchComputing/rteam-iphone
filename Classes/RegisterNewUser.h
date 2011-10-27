@@ -60,36 +60,36 @@
 	
 }
 @property bool usingHardCarriers;
-@property (nonatomic, retain) NSArray *hardCarriers;
+@property (nonatomic, strong) NSArray *hardCarriers;
 @property bool didGetCarrierList;
 @property bool tryAgainText;
 @property bool sendingText;
-@property (nonatomic, retain) NSString *carrierCode;
-@property (nonatomic, retain) NSString *selectedCarrier;
-@property (nonatomic, retain) UIButton *selectCarrierButton;
-@property (nonatomic, retain) NSArray *carriers;
-@property (nonatomic, retain) UILabel *carrierLabel;
-@property (nonatomic, retain) UITextField *carrierText;
-@property (nonatomic, retain) UIPickerView *carrierPicker;
-@property (nonatomic, retain) UITextView *phoneExplain;
-@property (nonatomic, retain) UITextView *carrierExplain;
+@property (nonatomic, strong) NSString *carrierCode;
+@property (nonatomic, strong) NSString *selectedCarrier;
+@property (nonatomic, strong) UIButton *selectCarrierButton;
+@property (nonatomic, strong) NSArray *carriers;
+@property (nonatomic, strong) UILabel *carrierLabel;
+@property (nonatomic, strong) UITextField *carrierText;
+@property (nonatomic, strong) UIPickerView *carrierPicker;
+@property (nonatomic, strong) UITextView *phoneExplain;
+@property (nonatomic, strong) UITextView *carrierExplain;
 
-@property (nonatomic, retain) UITextField *phoneText;
+@property (nonatomic, strong) UITextField *phoneText;
 
-@property (nonatomic, retain) CLLocationManager *locationManager;
-@property (nonatomic, retain) NSString *updateLat;
-@property (nonatomic, retain) NSString *updateLong;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSString *firstString;
-@property (nonatomic, retain) NSString *lastString;
-@property (nonatomic, retain) UITextField *firstName;
-@property (nonatomic, retain) UITextField *lastName;
-@property (nonatomic, retain) UILabel *error;
-@property (nonatomic, retain) UIActivityIndicatorView *registering;
-@property (nonatomic, retain) UIButton *submitButton;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) NSString *updateLat;
+@property (nonatomic, strong) NSString *updateLong;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSString *firstString;
+@property (nonatomic, strong) NSString *lastString;
+@property (nonatomic, strong) UITextField *firstName;
+@property (nonatomic, strong) UITextField *lastName;
+@property (nonatomic, strong) UILabel *error;
+@property (nonatomic, strong) UIActivityIndicatorView *registering;
+@property (nonatomic, strong) UIButton *submitButton;
 
-@property (nonatomic, retain) NSString *email;
-@property (nonatomic, retain) NSString *password;
+@property (nonatomic, strong) NSString *email;
+@property (nonatomic, strong) NSString *password;
 
 @property bool createSuccess;
 

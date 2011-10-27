@@ -32,7 +32,7 @@
 	UISegmentedControl *segRosterFans;
 	
 	UIBarButtonItem *addButton;
-
+    
 	
 	IBOutlet UIActivityIndicatorView *memberActivity;
 	IBOutlet UILabel *memberActivityLabel;
@@ -42,35 +42,35 @@
 	
 	NSMutableArray *phoneOnlyArray;
 }
-@property (nonatomic, retain) NSMutableArray *phoneOnlyArray;
-@property (nonatomic,retain) NSMutableArray *tmpPlayerPics;
-@property (nonatomic,retain) NSMutableArray *tmpFanPics;
+@property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
+@property (nonatomic,strong) NSMutableArray *tmpPlayerPics;
+@property (nonatomic,strong) NSMutableArray *tmpFanPics;
 
-@property (nonatomic,retain) NSMutableArray *tmpPlayers;
-@property (nonatomic,retain) NSMutableArray *tmpFans;
-
-
-@property (nonatomic, retain) UITableView *memberTableView;
-
-@property (nonatomic, retain) UIActivityIndicatorView *barActivity;
-
-@property (nonatomic, retain) UILabel *memberActivityLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *memberActivity;
+@property (nonatomic,strong) NSMutableArray *tmpPlayers;
+@property (nonatomic,strong) NSMutableArray *tmpFans;
 
 
+@property (nonatomic, strong) UITableView *memberTableView;
 
-@property (nonatomic, retain) NSString *error;
-@property (nonatomic, retain) UIBarButtonItem *addButton;
-@property (nonatomic, retain) UISegmentedControl *segRosterFans;
+@property (nonatomic, strong) UIActivityIndicatorView *barActivity;
+
+@property (nonatomic, strong) UILabel *memberActivityLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *memberActivity;
+
+
+
+@property (nonatomic, strong) NSString *error;
+@property (nonatomic, strong) UIBarButtonItem *addButton;
+@property (nonatomic, strong) UISegmentedControl *segRosterFans;
 @property bool isFans;
-@property (nonatomic, retain) NSString *currentMemberId;
-@property (nonatomic, retain) NSMutableArray *players;
-@property (nonatomic, retain) NSMutableArray *fans;
-@property (nonatomic, retain) NSMutableArray *playerPics;
-@property (nonatomic, retain) NSMutableArray *fanPics;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *userRole;
+@property (nonatomic, strong) NSString *currentMemberId;
+@property (nonatomic, strong) NSMutableArray *players;
+@property (nonatomic, strong) NSMutableArray *fans;
+@property (nonatomic, strong) NSMutableArray *playerPics;
+@property (nonatomic, strong) NSMutableArray *fanPics;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *userRole;
 
 -(void)getListOfMembers;
 @end

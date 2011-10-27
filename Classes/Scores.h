@@ -13,7 +13,7 @@
 
 @interface Scores : UIViewController <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate,
 ADBannerViewDelegate> {
-
+    
 	NSString *teamId;
 	
 	IBOutlet UIScrollView *scroll;
@@ -41,28 +41,28 @@ ADBannerViewDelegate> {
 	IBOutlet UIButton *cancelButton;
 	
 	IBOutlet UIView *insideView;
-
+    
 	
 }
-@property (nonatomic, retain) UIView *insideView;
-@property (nonatomic, retain) UIButton *cancelButton;
-@property (nonatomic, retain) UIActivityIndicatorView *refreshActivity;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) UIView *insideView;
+@property (nonatomic, strong) UIButton *cancelButton;
+@property (nonatomic, strong) UIActivityIndicatorView *refreshActivity;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
 @property BOOL bannerIsVisible;
-@property (nonatomic, retain) NSString *sport;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSArray *teamList;
+@property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSArray *teamList;
 @property bool haveTeamList;
-@property (nonatomic, retain) UIScrollView  *scroll;
-@property (nonatomic, retain) UITableView *teamTable;
-@property (nonatomic, retain) NSString *error;
-@property (nonatomic, retain) UITableView *table;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) UIToolbar *bottomBar;
-@property (nonatomic, retain) UIBarButtonItem *filterButton;
-@property (nonatomic, retain) UIBarButtonItem *refreshButton;
-@property (nonatomic, retain) NSArray *games;
+@property (nonatomic, strong) UIScrollView  *scroll;
+@property (nonatomic, strong) UITableView *teamTable;
+@property (nonatomic, strong) NSString *error;
+@property (nonatomic, strong) UITableView *table;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) UIToolbar *bottomBar;
+@property (nonatomic, strong) UIBarButtonItem *filterButton;
+@property (nonatomic, strong) UIBarButtonItem *refreshButton;
+@property (nonatomic, strong) NSArray *games;
 
 -(void)getGames;
 -(IBAction)closeFilter;

@@ -16,28 +16,22 @@
 #import "Gameday.h"
 #import "GameTabs.h"
 #import "GameAttendance.h"
-#import "GameMessages.h"
 #import "GameEdit.h"
 #import "Practice.h"
 #import "PracticeTabs.h"
 #import "PracticeNotes.h"
 #import "PracticeAttendance.h"
 #import "PracticeEdit.h"
-#import "PracticeMessages.h"
 #import "GameTabsNoCoord.h"
 #import "NewGamePractice.h"
 #import "MapLocation.h"
 #import "Event.h"
 #import "EventTabs.h"
 #import "EventNotes.h"
-#import "EventMessages.h"
 #import "EventAttendance.h"
 #import "EventEdit.h"
-#import "TeamActivity.h"
 #import "Fans.h"
 #import "Vote.h"
-#import "GameChatter.h"
-#import "PracticeChatter.h"
 
 @implementation EventList
 @synthesize events, teamName, teamId, deleteRow, isPastGame, fromEdit, userRole, error, addButton, sport, barActivity, 
@@ -88,15 +82,13 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 	
 	//Header to be displayed if there are no players
 	UIView *headerView =
-	[[[UIView alloc]
-	  initWithFrame:CGRectMake(0, 0, 300, 75)]
-	 autorelease];
+	[[UIView alloc]
+	  initWithFrame:CGRectMake(0, 0, 300, 75)];
 	
 	UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(0, 74, 320, 1)];
 	UIColor *color = [[UIColor alloc] initWithRed:0.86 green:0.86 blue:0.86 alpha:1.0];
 	line2.backgroundColor = color;
 	[headerView addSubview:line2];
-	[color release];
 	
 	//Only display header if there are no teams
 	CGFloat yPos = 20;
@@ -136,9 +128,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 
 
 -(void)getAllEvents{
-	NSAutoreleasePool *pool;
-	pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	NSString *token = @"";
 	NSArray *gameArray = [NSArray array];
@@ -271,7 +261,6 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 	
 	
 	[self performSelectorOnMainThread:@selector(finishedMessages) withObject:nil waitUntilDone:NO];
-    [pool drain];
 
 }
 
@@ -429,10 +418,10 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 	if (cell == nil){
 		
 		if (mapIt) {
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:mapCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mapCell];
 
 		}else {
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:noMapCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:noMapCell];
 
 		}
 
@@ -445,21 +434,18 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 		
 		frame.size.height = 17;
 		frame.origin.y += 23;
 		UILabel *oppLabel = [[UILabel alloc] initWithFrame:frame];
 		oppLabel.tag = oppTag;
 		[cell.contentView addSubview:oppLabel];
-		[oppLabel release];
 		
 		frame.size.height = 15;
 		frame.origin.y += 18;
 		UILabel *descLabel = [[UILabel alloc] initWithFrame:frame];
 		descLabel.tag = descTag;
 		[cell.contentView addSubview:descLabel];
-		[descLabel release];
 		
 		frame.size.height = 15;
 		frame.origin.y = 5;
@@ -468,7 +454,6 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 		UILabel *typeLabel = [[UILabel alloc] initWithFrame:frame];
 		typeLabel.tag = typeTag;
 		[cell.contentView addSubview:typeLabel];
-		[typeLabel release];
 		
 		
 		//[cell.contentView bringSubviewToFront:mapButton];
@@ -480,7 +465,6 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 		UILabel *scoreLabel = [[UILabel alloc] initWithFrame:frame];
 		scoreLabel.tag = scoreTag;
 		[cell.contentView addSubview:scoreLabel];
-		[scoreLabel release];
 		
 		frame.origin.x = 0;
 		frame.origin.y = 30;
@@ -489,7 +473,6 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 		UILabel *noEventsLabel = [[UILabel alloc] initWithFrame:frame];
 		noEventsLabel.tag = noEventsTag;
 		[cell.contentView addSubview:noEventsLabel];
-		[noEventsLabel release];
 		
 		frame.origin.x = 0;
 		frame.origin.y = 0;
@@ -498,7 +481,6 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 		UILabel *canceledLabel = [[UILabel alloc] initWithFrame:frame];
 		canceledLabel.tag = canceledTag;
 		[cell.contentView addSubview:canceledLabel];
-		[canceledLabel release];
 		
 		
 	}
@@ -611,8 +593,6 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 			
 			
 			dateLabel.text = startDateString;
-			[dateFormat release];
-			[format release];
 			//retrieve the opponent
 			
 			oppLabel.text = [@"vs. " stringByAppendingString:theGame.opponent];
@@ -730,8 +710,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 			}
 			
 			dateLabel.text = startDateString;
-			[dateFormat release];
-			[format release];
+		
 			//retrieve the opponent
 			
 			oppLabel.text = [@"at " stringByAppendingString:thePracitce.location];
@@ -770,8 +749,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 			
 			
 			dateLabel.text = startDateString;
-			[dateFormat release];
-			[format release];
+		
 			
 			
 			oppLabel.text = theEvent.eventName;
@@ -786,7 +764,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 		if (row % 2 != 0) {
 			cell.contentView.backgroundColor = [UIColor whiteColor];
 			cell.accessoryView.backgroundColor = [UIColor whiteColor];
-			cell.backgroundView = [[[UIView alloc] init] autorelease]; 
+			cell.backgroundView = [[UIView alloc] init]; 
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
 			
 		}else {
@@ -794,7 +772,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 			cell.contentView.backgroundColor = tmpColor;
 			cell.accessoryView.backgroundColor = tmpColor;
 			
-			cell.backgroundView = [[[UIView alloc] init] autorelease]; 
+			cell.backgroundView = [[UIView alloc] init]; 
 			cell.backgroundView.backgroundColor = tmpColor;
 		}
 		
@@ -1004,7 +982,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 					self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
 					[self.undoCancel showInView:self.tabBarController.view];
-					[self.undoCancel release];
 				
 					
 				}
@@ -1026,7 +1003,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 					self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
 					[self.undoCancel showInView:self.tabBarController.view];
-					[self.undoCancel release];
 					
 					
 				}
@@ -1081,7 +1057,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 					self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
 					[self.undoCancel showInView:self.tabBarController.view];
-					[self.undoCancel release];
 					
 					
 				}
@@ -1184,7 +1159,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIActionSheet *deleteNow = [[UIActionSheet alloc] initWithTitle:@"'Delete' removes event from schedule. 'Cancel' marks event as cancelled." delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Delete Event" otherButtonTitles:@"Cancel Event", nil];
     deleteNow.actionSheetStyle = UIActionSheetStyleDefault;
     [deleteNow showInView:self.tabBarController.view];
-    [deleteNow release];
 	
 }
 
@@ -1232,9 +1206,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)deleteEvent{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Delete Event
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1347,12 +1319,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)cancelEvent{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Cancel Event
 	
@@ -1468,13 +1438,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
+
 	
 }
 
 -(void)activateEvent{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
+    
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
@@ -1589,7 +1559,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -1622,19 +1591,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
-- (void)dealloc {
-	[editEventActiviy release];
-	[events release];
-	[teamName release];
-	[teamId release];
-	[userRole release];
-	[error release];
-	[addButton release];
-	[sport release];
-	[barActivity release];
-	[eventActivityLabel release];
-	[undoCancel release];
-	[super dealloc];
-}
 
 @end

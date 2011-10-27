@@ -20,11 +20,5 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[rowImage release];
-	[super dealloc];
-	
-}
 
 @end

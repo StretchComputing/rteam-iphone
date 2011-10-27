@@ -110,7 +110,7 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	NSString *message = [NSString stringWithFormat:@"Was the final score %d-%d?", [self.scoreUs.text intValue], [self.scoreThem.text intValue]];
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Over?" message:message delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
-    [alert release];
+    //[alert release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -153,10 +153,10 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 
 - (void)runRequest {
 	
-	NSAutoreleasePool * pool;
+	//NSAutoreleasePool * pool;
 	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+    //pool = [[NSAutoreleasePool alloc] init];
+    //assert(pool != nil);
 	
 	NSString *token = @"";
 	
@@ -208,15 +208,15 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	
 
 	
-    [pool drain];
+    //[pool drain];
 }
 
 - (void)runRequestOver {
 	
-	NSAutoreleasePool * pool;
+	//NSAutoreleasePool * pool;
 	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+   /// pool = [[NSAutoreleasePool alloc] init];
+    //assert(pool != nil);
 	
 	NSString *token = @"";
 	
@@ -263,7 +263,7 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
+    //[pool drain];
 }
 
 
@@ -379,7 +379,7 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	[super viewDidUnload];
 	
 }
-
+/*
 - (void)dealloc {
 	[subThem release];
 	[subUs release];
@@ -401,7 +401,7 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	[cancelScoringButton release];
     [super dealloc];
 }
-
+*/
 
 @end
 

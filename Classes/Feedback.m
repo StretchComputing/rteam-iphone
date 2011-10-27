@@ -13,12 +13,12 @@
 @synthesize displayLabel, feedbackButton, reviewButton;
 
 -(void)viewDidLoad{
-		
+    
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.feedbackButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.reviewButton setBackgroundImage:stretch forState:UIControlStateNormal];
-
+    
 	
 }
 
@@ -45,16 +45,14 @@
 		[mailViewController setSubject:@"rTeam FeedBack"];
 		
 		[self presentModalViewController:mailViewController animated:YES];
-		[mailViewController release];
 		
 	}else {
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-        [alert release];
 	}
 	
-
+    
 	
 }
 
@@ -74,7 +72,7 @@
 		case MFMailComposeResultFailed:
 			self.displayLabel.text = @"Message Send Failed.";
 			self.displayLabel.textColor = [UIColor redColor];
-
+            
 			break;
 			
 		case MFMailComposeResultSaved:
@@ -102,11 +100,4 @@
 	
 }
 
--(void)dealloc{
-	[feedbackButton release];
-	[displayLabel release];
-	[reviewButton release];
-	[super dealloc];
-	
-}
 @end

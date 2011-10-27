@@ -24,17 +24,17 @@
 	UIActivityIndicatorView *barActivity;
 	NSMutableArray *fanPics;
 }
-@property (nonatomic, retain) NSMutableArray *fanPics;
-@property (nonatomic, retain) UITableView *fanTable;
-@property (nonatomic, retain) UILabel *fanActivityLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *fanActivity;
-@property (nonatomic, retain) UIActivityIndicatorView *barActivity;
+@property (nonatomic, strong) NSMutableArray *fanPics;
+@property (nonatomic, strong) UITableView *fanTable;
+@property (nonatomic, strong) UILabel *fanActivityLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *fanActivity;
+@property (nonatomic, strong) UIActivityIndicatorView *barActivity;
 
-@property (nonatomic, retain) NSString *error;
-@property (nonatomic, retain) NSString *currentMemberId;
-@property (nonatomic, retain) UIImageView *currentIcon;
-@property (nonatomic, retain) NSArray *fans;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *userRole;
+@property (nonatomic, strong) NSString *error;
+@property (nonatomic, strong) NSString *currentMemberId;
+@property (nonatomic, strong) UIImageView *currentIcon;
+@property (nonatomic, strong) NSArray *fans;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *userRole;
 @end

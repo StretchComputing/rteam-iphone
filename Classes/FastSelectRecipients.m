@@ -11,9 +11,7 @@
 #import "ServerAPI.h"
 #import "Player.h"
 #import "SendPoll.h"
-#import "FastSendMessage.h"
 #import "CurrentTeamTabs.h"
-#import "MessagesTabs.h" 
 #import "Fan.h"
 
 @implementation FastSelectRecipients
@@ -112,7 +110,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 		int tempNum = [tempCont count];
 		tempNum = tempNum - 2;
 		
-			
+			/*
 			if ([[tempCont objectAtIndex:tempNum] class] == [FastSendMessage class]) {
 				FastSendMessage *cont = [tempCont objectAtIndex:tempNum];
 				
@@ -163,6 +161,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 				
 				[self.navigationController popToViewController:cont animated:YES];
 			}
+             */
 		}
 		
 	
@@ -170,8 +169,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 }
 
 -(void)getAllMembers{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	self.haveFans = false;
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -269,7 +267,6 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 
@@ -319,7 +316,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 5;
 		frame.origin.y = 10;
@@ -329,14 +326,12 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 		frame.origin.x += 280;
 		/*
 		 UILabel *selectedLabel = [[UILabel alloc] initWithFrame:frame];
 		 selectedLabel.tag = selectedTag;
 		 [cell.contentView addSubview:selectedLabel];
-		 [selectedLabel release];
 		 */
 		frame.size.height = 20;
 		frame.size.width = 20;
@@ -344,7 +339,6 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 		tmpView.image = [UIImage imageNamed:@"blueCheck.png"];
 		tmpView.tag = selectedTag;
 		[cell.contentView addSubview:tmpView];
-		[tmpView release];
 		
 	}
 	
@@ -490,23 +484,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
-- (void)dealloc {
-	[members release];
-	[teamId release];
-	[selectedMembers release];
-	[error release];
-	[messageOrPoll release];
-	[fromWhere release];
-	[userRole release];
-	[eventType release];
-	[eventId release];
-	[allFansObjects release];
-	[memberTableView release];
-	[selectedMemberObjects release];
-	[saveButton release];
-	[loadingActivity release];
-	[loadingLabel release];
-	[super dealloc];
-}
 
 @end

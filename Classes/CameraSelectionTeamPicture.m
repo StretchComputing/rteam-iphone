@@ -29,7 +29,6 @@
 	
 	[self presentModalViewController:picker animated:YES];
 	
-	[picker release];
 	
 	
 	
@@ -61,7 +60,6 @@
     
 	NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
 	
-	[tmpView release];
 	
 	UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
 	
@@ -73,10 +71,9 @@
 	
 	UIGraphicsEndImageContext();
 	
-	[myThumbNail release];
 	
 	NSArray *views = [self.navigationController viewControllers];
-
+    
 	if ([TeamPicture class] == [[views objectAtIndex:[views count] - 3] class]) {
 		TeamPicture *tmpController = (TeamPicture *)[views objectAtIndex:[views count] - 3];
 		
@@ -106,7 +103,7 @@
         }
         
 	}else if ([TeamPicture class] == [[views objectAtIndex:[views count] - 2] class]) {
-
+        
         
 		TeamPicture *tmpController = (TeamPicture *)[views objectAtIndex:[views count] - 2];
 		
@@ -134,19 +131,15 @@
 	}else if ([TeamPicture class] == [[views objectAtIndex:[views count] - 2] class]) {
 		TeamPicture *tmpController = (TeamPicture *)[views objectAtIndex:[views count] - 2];
 		
-
+        
 		[self.navigationController popToViewController:tmpController animated:NO];
 	}
-
+    
 	
 	
 }
 
 
--(void)dealloc{
-	
-	[super dealloc];
-}
 
 @end
 

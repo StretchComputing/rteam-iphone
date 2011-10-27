@@ -15,7 +15,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
 
 
 + (id)buttonWithFrame:(CGRect)frame {
-	return [[[self alloc] initWithFrame:frame] autorelease];
+	return [[self alloc] initWithFrame:frame];
 }
 
 
@@ -53,7 +53,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         line2.backgroundColor = [UIColor whiteColor];
         line3.backgroundColor = [UIColor whiteColor];
         line4.backgroundColor = [UIColor whiteColor];
-
+        
         
         
         //Table displaing the yes, no, and ? for Attending:
@@ -66,7 +66,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         //Lines in tableView
         self.tableLineTop = [[UIView alloc] initWithFrame:CGRectMake(0, 19, 92, 1)];
         self.tableLineTop.backgroundColor = [UIColor whiteColor];
-       [self.tableDisplayView addSubview:self.tableLineTop];
+        [self.tableDisplayView addSubview:self.tableLineTop];
         
         self.tableLineLeft = [[UIView alloc] initWithFrame:CGRectMake(31, 19, 1, 37)];
         self.tableLineLeft.backgroundColor = [UIColor blackColor];
@@ -76,9 +76,9 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         //[self.tableDisplayView addSubview:self.tableLineRight];
         
         
-       // self.tableLineBottom = [[UIView alloc] initWithFrame:CGRectMake(0, 55, 92, 1)];
-       // self.tableLineBottom.backgroundColor = [UIColor blackColor];
-       // [self.tableDisplayView addSubview:self.tableLineBottom];
+        // self.tableLineBottom = [[UIView alloc] initWithFrame:CGRectMake(0, 55, 92, 1)];
+        // self.tableLineBottom.backgroundColor = [UIColor blackColor];
+        // [self.tableDisplayView addSubview:self.tableLineBottom];
         
         //Labels for tableView
         
@@ -95,7 +95,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         self.yesLabel.textAlignment = UITextAlignmentCenter;
         self.yesLabel.text = @"Us";
         self.yesLabel.textColor = [UIColor whiteColor];
-
+        
         self.yesLabel.font = [UIFont fontWithName:@"Helvetica" size:11];
         self.yesLabel.backgroundColor = [UIColor clearColor];
         [self.tableDisplayView addSubview:self.yesLabel];
@@ -105,7 +105,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         self.noLabel.textAlignment = UITextAlignmentCenter;
         self.noLabel.text = @"Them";
         self.noLabel.textColor = [UIColor whiteColor];
-
+        
         self.noLabel.font = [UIFont fontWithName:@"Helvetica" size:11];
         self.noLabel.backgroundColor = [UIColor clearColor];
         [self.tableDisplayView addSubview:self.noLabel];
@@ -160,9 +160,9 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         UIImageView *tmpCircle3 = [[UIImageView alloc] initWithFrame:CGRectMake(51, 47, 9, 9)];
         tmpCircle3.image = [UIImage imageNamed:@"smallCircle.png"];
         [self.tableDisplayView addSubview:tmpCircle3];
-    
         
-               
+        
+        
 		//Stuff From EventNowButton
         //Dynamic label
 		self.eventLabel = [[UILabel alloc] initWithFrame:CGRectMake(-34, 57, 158, 12 )];
@@ -197,7 +197,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
 		[self addSubview:self.canceledLabel];
 		[self bringSubviewToFront:self.canceledLabel];
         
-       
+        
 	}
 	
 	
@@ -205,27 +205,6 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
 }
 
 
--(void)dealloc{
-    
-    [buttonView release];
-    [tableDisplayView release];
-    [pollButton release];
-    [goToPageButton release];
-    [attendingLabel release];
-    [yesCount release];
-    [yesLabel release];
-    [noCount release];
-    [noLabel release];
-    [qCount release];
-    [qLabel release];
-    
-    [tableLineLeft release];
-    [tableLineRight release];
-    [tableLineTop release];
-    [tableLineBottom release];
-    [closeButton release];
-    [super dealloc];
-}
 
 @end
 

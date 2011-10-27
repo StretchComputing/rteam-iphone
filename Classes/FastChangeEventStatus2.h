@@ -23,7 +23,7 @@
 	IBOutlet UIButton *cancelButton;
 	
 	CLLocationManager *locationManager;
-
+    
 	CurrentEvent *selectedEvent;
 	
 	NSArray *recipArray;
@@ -63,45 +63,45 @@
 	NSString *latitude;
 	NSString *longitude;
 }
-@property (nonatomic, retain) 	CLLocationManager *locationManager;
-@property (nonatomic, retain) NSString *latitude;
-@property (nonatomic, retain) NSString *longitude;
-@property (nonatomic, retain) UILabel *newCurrentLocationLabel;
+@property (nonatomic, strong) 	CLLocationManager *locationManager;
+@property (nonatomic, strong) NSString *latitude;
+@property (nonatomic, strong) NSString *longitude;
+@property (nonatomic, strong, getter = theNewCurrentLocationLabel) UILabel *newCurrentLocationLabel;
 @property bool doneMessage;
 @property bool doneSecondary;
 @property int delay;
-@property (nonatomic, retain) NSString *todayTomorrowString;
-@property (nonatomic, retain) NSString *eventTypeString;
-@property (nonatomic, retain) NSString *timeString;
-@property (nonatomic, retain) UILabel *finalScoreLabel;
-@property (nonatomic, retain) UITextField *finalUs;
-@property (nonatomic, retain) UITextField *finalThem;
+@property (nonatomic, strong) NSString *todayTomorrowString;
+@property (nonatomic, strong) NSString *eventTypeString;
+@property (nonatomic, strong) NSString *timeString;
+@property (nonatomic, strong) UILabel *finalScoreLabel;
+@property (nonatomic, strong) UITextField *finalUs;
+@property (nonatomic, strong) UITextField *finalThem;
 
-@property (nonatomic, retain) UIDatePicker *newDateTime;
-@property (nonatomic, retain) UILabel *newDateTimeLabel;
+@property (nonatomic, strong, getter = theNewDateTime) UIDatePicker *newDateTime;
+@property (nonatomic, strong, getter = theNewDateTimeLabel) UILabel *newDateTimeLabel;
 
-@property (nonatomic, retain) UILabel *newLocationLabel;
-@property (nonatomic, retain) UITextField *newLocation;
-@property (nonatomic, retain) UISegmentedControl *setCurrentLocationButton;
+@property (nonatomic, strong, getter = theNewLocationLabel) UILabel *newLocationLabel;
+@property (nonatomic, strong, getter = theNewLocation) UITextField *newLocation;
+@property (nonatomic, strong) UISegmentedControl *setCurrentLocationButton;
 
 
 @property int status;
-@property (nonatomic, retain) NSString *messageIntro;
+@property (nonatomic, strong) NSString *messageIntro;
 @property bool sendSuccess;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UILabel *errorMessage;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UILabel *errorMessage;
 @property int currentRecipIndex;
-@property (nonatomic, retain) NSArray *recipArray;
-@property (nonatomic, retain) CurrentEvent *selectedEvent;
-@property (nonatomic, retain) UILabel *eventLabel;
-@property (nonatomic, retain) UILabel *messageLabel;
-@property (nonatomic, retain) NSString *messageString;
+@property (nonatomic, strong) NSArray *recipArray;
+@property (nonatomic, strong) CurrentEvent *selectedEvent;
+@property (nonatomic, strong) UILabel *eventLabel;
+@property (nonatomic, strong) UILabel *messageLabel;
+@property (nonatomic, strong) NSString *messageString;
 
-@property (nonatomic, retain) UILabel *toLabel;
+@property (nonatomic, strong) UILabel *toLabel;
 
-@property (nonatomic, retain) UIButton *sendButton;
-@property (nonatomic, retain) UIButton *cancelButton;
+@property (nonatomic, strong) UIButton *sendButton;
+@property (nonatomic, strong) UIButton *cancelButton;
 
 -(IBAction)endText;
 -(IBAction)send;

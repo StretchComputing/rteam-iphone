@@ -10,7 +10,7 @@
 
 
 @interface FastUpdateStatus : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-
+    
 	IBOutlet UITableView *myTableView;
 	IBOutlet UIButton *cancelButton;
 	IBOutlet UIButton *rightArrowButton;
@@ -32,23 +32,23 @@
 	
 	IBOutlet UITextView *noEventsText;
 	
-
+    
 }
-@property (nonatomic, retain) UITextView *noEventsText;
-@property (nonatomic, retain) UILabel *teamLabel;
+@property (nonatomic, strong) UITextView *noEventsText;
+@property (nonatomic, strong) UILabel *teamLabel;
 @property int currentEventIndex;
 @property bool eventsNowSuccess;
-@property (nonatomic, retain) UILabel *eventsError;
-@property (nonatomic, retain) NSMutableArray *eventsArray;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) NSString *currentInterval;
-@property (nonatomic, retain) UITableView *myTableView;
-@property (nonatomic, retain) UIButton *cancelButton;
-@property (nonatomic, retain) UIButton *rightArrowButton;
-@property (nonatomic, retain) UIButton *leftArrowButton;
+@property (nonatomic, strong) UILabel *eventsError;
+@property (nonatomic, strong) NSMutableArray *eventsArray;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) NSString *currentInterval;
+@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) UIButton *cancelButton;
+@property (nonatomic, strong) UIButton *rightArrowButton;
+@property (nonatomic, strong) UIButton *leftArrowButton;
 
-@property (nonatomic, retain) UILabel *currentEventLabel;
+@property (nonatomic, strong) UILabel *currentEventLabel;
 
 -(NSString *)getEventLabel:(id)event;
 -(IBAction)rightArrow;

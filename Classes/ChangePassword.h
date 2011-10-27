@@ -10,7 +10,7 @@
 
 
 @interface ChangePassword : UIViewController {
-
+    
 	IBOutlet UIButton *submitButton;
 	IBOutlet UIActivityIndicatorView *activity;
 	IBOutlet UITextField *password;
@@ -20,12 +20,12 @@
 	bool changeSuccess;
 	NSString *errorString;
 }
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UITextField *password;
-@property (nonatomic, retain) UITextField *confirmPassword;
-@property (nonatomic, retain) UILabel *error;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UITextField *password;
+@property (nonatomic, strong) UITextField *confirmPassword;
+@property (nonatomic, strong) UILabel *error;
 
 @property bool changeSuccess;
 

@@ -21,21 +21,12 @@
 		userRole = [[NSString alloc] init];
 		sport = [[NSString alloc] init];
 		teamUrl = [[NSString alloc] init];
-
+        
 	}
 	
 	return self;
 }
 
-- (void)dealloc {
-	
-	[name release];
-	[teamId release];
-	[userRole release];
-	[sport release];
-	[teamUrl release];
-	[super dealloc];
-}
 
 
 

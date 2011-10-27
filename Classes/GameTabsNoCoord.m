@@ -9,15 +9,12 @@
 #import "GameTabsNoCoord.h"
 #import "GameAttendance.h"
 #import "Gameday.h"
-#import "GameMessages.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "TeamActivity.h"
 #import "Fans.h"
 #import "Home.h"
 #import "FastActionSheet.h"
 #import "Vote.h"
-#import "GameChatter.h"
 
 @implementation GameTabsNoCoord
 
@@ -38,13 +35,7 @@ teamName, newActivity, fromHome;
 	
 	int index = self.selectedIndex;
 	
-	if (index == 11) {
-		TeamActivity *tmp = [self.viewControllers objectAtIndex:1];
-		[tmp viewWillAppear:NO];
-	}else if (index == 12) {
-		//GameChatter *tmp = [self.viewControllers objectAtIndex:1];
-		//[tmp viewWillAppear:NO];
-	}else if (index == 1) {
+	if (index == 1) {
 		Vote *tmp = [self.viewControllers objectAtIndex:1];
 		[tmp viewWillAppear:NO];
 	}else {
@@ -58,7 +49,6 @@ teamName, newActivity, fromHome;
 	if (self.fromHome) {
 		UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 		[self.navigationItem setLeftBarButtonItem:homeButton];
-		[homeButton release];
 	}
 	
 	
@@ -75,32 +65,16 @@ teamName, newActivity, fromHome;
 	self.title = @"Game Info:";
 	
 	Gameday *tab1 =  
-	[[[Gameday alloc] init] autorelease]; 
-	TeamActivity *tab2 =  
-	[[[TeamActivity alloc] init] autorelease];  
-	GameChatter *tab3 =  
-	[[[GameChatter alloc] init] autorelease]; 
+	[[Gameday alloc] init]; 
+
 	Vote *tab4 =  
-	[[[Vote alloc] init] autorelease]; 
+	[[Vote alloc] init]; 
 	
 	tab1.teamId = self.teamId;
 	tab1.gameId = self.gameId;
 	tab1.title = @"GameDay";
 	tab1.tabBarItem.image = [UIImage imageNamed:@"tabsGameday.png"];
-	
-	//tab2.teamId = self.teamId;
-	//tab2.gameId = self.gameId;
-	tab2.title = @"Activity";
-	tab2.tabBarItem.image = [UIImage imageNamed:@"tabsChatter.png"];
 
-	
-
-	
-	tab3.teamId = self.teamId;
-	tab3.gameId = self.gameId;
-	tab3.userRole = self.userRole;
-	tab3.title = @"Messages";
-    tab3.tabBarItem.image = [UIImage imageNamed:@"tabmessages.png"];
 	
 	//tab5.teamId = self.teamId;
 	//tab5.gameId = self.gameId;
@@ -135,14 +109,8 @@ teamName, newActivity, fromHome;
 	if ([viewController class] == [Gameday class]) {
 		Gameday *tmp = (Gameday *)viewController;
 		[tmp viewWillAppear:NO];
-	}else if ([viewController class] == [GameChatter class]) {
-		//GameChatter *tmp = (GameChatter *)viewController;
-		//[tmp viewWillAppear:NO];
 	}else if ([viewController class] == [GameAttendance class]) {
 		GameAttendance *tmp = (GameAttendance *)viewController;
-		[tmp viewWillAppear:NO];
-	}else if ([viewController class] == [TeamActivity class]) {
-		TeamActivity *tmp = (TeamActivity *)viewController;
 		[tmp viewWillAppear:NO];
 	}else if ([viewController class] == [Vote class]) {
 		Vote *tmp = (Vote *)viewController;
@@ -153,11 +121,6 @@ teamName, newActivity, fromHome;
 }
 
 -(void)getMessageThreadCount{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	
 	NSString *token = @"";
@@ -219,7 +182,6 @@ teamName, newActivity, fromHome;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 	
 }
 
@@ -251,7 +213,6 @@ teamName, newActivity, fromHome;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -285,20 +246,7 @@ teamName, newActivity, fromHome;
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-    [startDate release];
-	[endDate release];
-	[timeZone release];
-	[gameId release];
-	[teamId release];
-	[description release];
-	[latitude release];
-	[longitude release];
-	[opponent release];
-	[userRole release];
-	[teamName release];
-
-	[super dealloc];
-	
+  
 }
 
 @end

@@ -19,7 +19,7 @@
     
     PhoneNumberFormatter *myPhoneNumberFormatter;
     int myTextFieldSemaphore;
-
+    
     
     IBOutlet UIButton *verifyButton;
     IBOutlet UIButton *resendButton;
@@ -51,29 +51,29 @@
 @property bool carrierPicked;
 @property bool sendingText;
 @property bool tryAgainText;
-@property (nonatomic, retain) UIButton *carrierCheatButton;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UITextField *confirmCode;
-@property (nonatomic, retain) NSString *selectedCarrier;
-@property (nonatomic, retain) UIButton *selectCarrierButton;
+@property (nonatomic, strong) UIButton *carrierCheatButton;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UITextField *confirmCode;
+@property (nonatomic, strong) NSString *selectedCarrier;
+@property (nonatomic, strong) UIButton *selectCarrierButton;
 
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
 
-@property (nonatomic, retain)  UIButton *verifyButton;
-@property (nonatomic, retain)  UIButton *resendButton;
-@property (nonatomic, retain)  UIButton *finishButton;
+@property (nonatomic, strong)  UIButton *verifyButton;
+@property (nonatomic, strong)  UIButton *resendButton;
+@property (nonatomic, strong)  UIButton *finishButton;
 
-@property (nonatomic, retain)  UILabel *verifyError;
-@property (nonatomic, retain)  UILabel *resendError;
+@property (nonatomic, strong)  UILabel *verifyError;
+@property (nonatomic, strong)  UILabel *resendError;
 
-@property (nonatomic, retain)  UITextField *phoneNumberText;
-@property (nonatomic, retain)  UITextField *phoneCarrierText;
+@property (nonatomic, strong)  UITextField *phoneNumberText;
+@property (nonatomic, strong)  UITextField *phoneCarrierText;
 
-@property (nonatomic, retain)  UIPickerView *carrierPicker;
+@property (nonatomic, strong)  UIPickerView *carrierPicker;
 
-@property (nonatomic, retain) NSString *phoneNumber;
-@property (nonatomic, retain) NSString *carrierCode;
-@property (nonatomic, retain) NSArray *carriers;
+@property (nonatomic, strong) NSString *phoneNumber;
+@property (nonatomic, strong) NSString *carrierCode;
+@property (nonatomic, strong) NSArray *carriers;
 
 
 -(IBAction)verifiy;

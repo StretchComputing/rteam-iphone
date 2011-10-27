@@ -13,21 +13,6 @@
 @synthesize startDate, endDate, timeZone, practiceId, ppteamId, description, latitude, longitude, location, userRole, teamName, isCanceled;
 
 
-- (void)dealloc {
-    [startDate release];
-	[endDate release];
-	[timeZone release];
-	[practiceId release];
-	[ppteamId release];
-	[description release];
-	[latitude release];
-	[longitude release];
-	[location release];
-	[userRole release];
-	[teamName release];
-	[super dealloc];
-
-}
 
 
 @end

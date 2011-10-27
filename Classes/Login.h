@@ -30,15 +30,15 @@
 	NSString *startEmail;
 	
 }
-@property (nonatomic, retain) NSString *startEmail;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UIButton *resetPasswordButton;
-@property (nonatomic, retain) UITextField *email;
-@property (nonatomic, retain) UITextField *password;
-@property (nonatomic, retain) UILabel *error;
-@property (nonatomic, retain) UIActivityIndicatorView *registering;
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) UILabel *success;
+@property (nonatomic, strong) NSString *startEmail;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UIButton *resetPasswordButton;
+@property (nonatomic, strong) UITextField *email;
+@property (nonatomic, strong) UITextField *password;
+@property (nonatomic, strong) UILabel *error;
+@property (nonatomic, strong) UIActivityIndicatorView *registering;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) UILabel *success;
 
 
 @property int numMemberTeams;

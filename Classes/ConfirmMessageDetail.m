@@ -9,7 +9,6 @@
 #import "ConfirmMessageDetail.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "SendMessage.h"
 #import "FastActionSheet.h"
 
 @implementation ConfirmMessageDetail
@@ -58,9 +57,6 @@ displayString, messageSent, displayLabel, callTextActionSheet;
 
 -(void)getMemberInfo{
 
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	//self.playerInfo = [NSArray array];
 	
@@ -101,7 +97,6 @@ displayString, messageSent, displayLabel, callTextActionSheet;
 	
 	
 	[self performSelectorOnMainThread:@selector(doneMemberInfo) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -119,7 +114,7 @@ displayString, messageSent, displayLabel, callTextActionSheet;
 	
 }
 -(void)sendMessage{
-	
+	/*
 	SendMessage *tmp = [[SendMessage alloc] init];
 	tmp.teamId = self.teamId;
 	tmp.sendTeamId = self.teamId;
@@ -130,14 +125,13 @@ displayString, messageSent, displayLabel, callTextActionSheet;
 	//tmp.userRole = self.userRole;
 	tmp.includeFans = @"false";
 	[self.navigationController pushViewController:tmp animated:YES];
-	
+	*/
 }
 
 -(void)callText{
     self.callTextActionSheet = [[UIActionSheet alloc] initWithTitle:@"Call or Text this person?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Call", @"Text", nil];
     self.callTextActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [self.callTextActionSheet showInView:self.view];
-    [self.callTextActionSheet release];
 }
 
 -(void)markConfirm{
@@ -277,7 +271,6 @@ displayString, messageSent, displayLabel, callTextActionSheet;
 									messageViewController.messageComposeDelegate = self;
 									[messageViewController setRecipients:[NSArray arrayWithObject:numberToCall]];
 									[self presentModalViewController:messageViewController animated:YES];
-									[messageViewController release];
 									
 								}
 							}else {
@@ -371,7 +364,6 @@ displayString, messageSent, displayLabel, callTextActionSheet;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -392,23 +384,7 @@ displayString, messageSent, displayLabel, callTextActionSheet;
 	
 }
 
--(void)dealloc{
-	
-	[memberId release];
-	[confirmDate release];
-	[memberName release];
-	[nameLabel release];
-	[markConfirmButton release];
-	[callTextButton release];
-	[sendMessageButton release];
-	[phoneNumber release];
-	[displayString release];
-	[displayLabel release];
-	[teamId release];
-	[callTextActionSheet release];
-	[super dealloc];
-	
-}
+
 
 
 @end

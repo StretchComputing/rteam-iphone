@@ -11,14 +11,14 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 
 @interface Feedback : UIViewController <MFMailComposeViewControllerDelegate>  {
-
+    
 	IBOutlet UILabel *displayLabel;
 	IBOutlet UIButton *feedbackButton;
 	IBOutlet UIButton *reviewButton;
 }
-@property (nonatomic, retain) UIButton *reviewButton;
-@property (nonatomic, retain) UIButton *feedbackButton;
-@property (nonatomic, retain) UILabel *displayLabel;
+@property (nonatomic, strong) UIButton *reviewButton;
+@property (nonatomic, strong) UIButton *feedbackButton;
+@property (nonatomic, strong) UILabel *displayLabel;
 
 -(IBAction)feedback;
 -(IBAction)review;

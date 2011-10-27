@@ -28,21 +28,21 @@
     IBOutlet UILabel *scoreThemLabel;
     IBOutlet UILabel *intervalLabel;
 }
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *scoreUs;
-@property (nonatomic, retain) NSString *scoreThem;
-@property (nonatomic, retain) NSString *interval;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *scoreUs;
+@property (nonatomic, strong) NSString *scoreThem;
+@property (nonatomic, strong) NSString *interval;
 
-@property (nonatomic, retain)  UILabel *topLabel;
-@property (nonatomic, retain)  UILabel *usLabel;
-@property (nonatomic, retain)  UILabel *themLabel;
-@property (nonatomic, retain)  UILabel *scoreUsLabel;
-@property (nonatomic, retain)  UILabel *scoreThemLabel;
-@property (nonatomic, retain)  UILabel *intervalLabel;
+@property (nonatomic, strong)  UILabel *topLabel;
+@property (nonatomic, strong)  UILabel *usLabel;
+@property (nonatomic, strong)  UILabel *themLabel;
+@property (nonatomic, strong)  UILabel *scoreUsLabel;
+@property (nonatomic, strong)  UILabel *scoreThemLabel;
+@property (nonatomic, strong)  UILabel *intervalLabel;
 
 @property int initY;
 @property bool isFullScreen;
-@property (nonatomic, retain) UIButton *fullScreenButton;
+@property (nonatomic, strong) UIButton *fullScreenButton;
 
 -(IBAction)fullScreen;
 -(void)setLabels;

@@ -10,7 +10,7 @@
 
 
 @interface MessageReply : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
-
+    
 	NSString *teamId;
 	NSString *subject;
 	NSString *origMessage;
@@ -34,25 +34,25 @@
     UIToolbar *keyboardToolbar;
 }
 
-@property (nonatomic, retain) UIToolbar *keyboardToolbar;
+@property (nonatomic, strong) UIToolbar *keyboardToolbar;
 @property bool replyAlert;
-@property (nonatomic, retain) NSString *origMessageDate;
-@property (nonatomic, retain) UILabel *origMessageLabel;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *subject;
-@property (nonatomic, retain) NSString *origMessage;
-@property (nonatomic, retain) NSString *replyToName;
-@property (nonatomic, retain) NSString *replyToId;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) NSString *errorString;
+@property (nonatomic, strong) NSString *origMessageDate;
+@property (nonatomic, strong) UILabel *origMessageLabel;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *subject;
+@property (nonatomic, strong) NSString *origMessage;
+@property (nonatomic, strong) NSString *replyToName;
+@property (nonatomic, strong) NSString *replyToId;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) NSString *errorString;
 
-@property (nonatomic, retain) UILabel *toLabel;
-@property (nonatomic, retain) UITextView *newMessageText;
-@property (nonatomic, retain) UITextView *oldMessageText;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UILabel *toLabel;
+@property (nonatomic, strong, getter = theNewMessageText) UITextView *newMessageText;
+@property (nonatomic, strong) UITextView *oldMessageText;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
 
-@property (nonatomic, retain) UIButton *sendButton;
+@property (nonatomic, strong) UIButton *sendButton;
 
 -(IBAction)send;
 

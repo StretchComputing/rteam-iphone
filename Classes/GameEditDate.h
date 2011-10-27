@@ -10,14 +10,14 @@
 
 
 @interface GameEditDate : UIViewController <UIActionSheetDelegate> {
-
+    
 	NSDate *gameDate;
 	IBOutlet UIDatePicker *gameDatePicker;
 	IBOutlet UIButton *submitButton;
 }
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) NSDate* gameDate;
-@property (nonatomic, retain) UIDatePicker *gameDatePicker;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) NSDate* gameDate;
+@property (nonatomic, strong) UIDatePicker *gameDatePicker;
 
 
 -(IBAction)chooseDate;

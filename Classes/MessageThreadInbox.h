@@ -38,32 +38,32 @@
 	
 	//Both
 	bool threadingUsed;
-	NSString *receivedDate;   //date of most recent message if threading
+	NSString *createdDate;   //date of most recent message if threading
     
     NSString *participantRole;
-
-
+    
+    
 }
-@property (nonatomic, retain) NSString *participantRole;
-@property (nonatomic, retain) NSString *eventDate;
-@property (nonatomic, retain) NSArray *subThreadIds;
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) NSString *eventId;
+@property (nonatomic, strong) NSString *participantRole;
+@property (nonatomic, strong) NSString *eventDate;
+@property (nonatomic, strong) NSArray *subThreadIds;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSString *eventId;
 @property bool threadingUsed;
 @property int numberOfMessages;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *threadId;
-@property (nonatomic, retain) NSString *subject;
-@property (nonatomic, retain) NSString *body;
-@property (nonatomic, retain) NSString *messageType;
-@property (nonatomic, retain) NSString *status;
-@property (nonatomic, retain) NSString *receivedDate;
-@property (nonatomic, retain) NSString *isReminder;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *threadId;
+@property (nonatomic, strong) NSString *subject;
+@property (nonatomic, strong) NSString *body;
+@property (nonatomic, strong) NSString *messageType;
+@property (nonatomic, strong) NSString *status;
+@property (nonatomic, strong) NSString *createdDate;
+@property (nonatomic, strong) NSString *isReminder;
 @property BOOL wasViewed;
-@property (nonatomic, retain) NSArray *pollChoices;
-@property (nonatomic, retain) NSString *followUp;
-@property (nonatomic, retain) NSString *senderName;
-@property (nonatomic, retain) NSString *senderId;
+@property (nonatomic, strong) NSArray *pollChoices;
+@property (nonatomic, strong) NSString *followUp;
+@property (nonatomic, strong) NSString *senderName;
+@property (nonatomic, strong) NSString *senderId;
 
 @end

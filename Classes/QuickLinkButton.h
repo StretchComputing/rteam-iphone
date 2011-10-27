@@ -10,13 +10,13 @@
 
 
 @interface QuickLinkButton : UIButton {
-
+    
 	NSString *teamId;
 	UILabel *teamName;
 }
 
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) UILabel *teamName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) UILabel *teamName;
 
 -(void)addLabel;
 @end

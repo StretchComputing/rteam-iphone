@@ -14,7 +14,7 @@
     NSString *name;
     NSString *code;
 }
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *code;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *code;
 
 @end

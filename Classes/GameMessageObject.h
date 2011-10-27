@@ -10,7 +10,7 @@
 
 
 @interface GameMessageObject : NSObject {
-
+    
 	NSString *threadId;
 	NSString *teamId;
 	NSString *subject;
@@ -24,14 +24,14 @@
 	
 	NSString *teamName;
 }
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *threadId;
-@property (nonatomic, retain) NSString *subject;
-@property (nonatomic, retain) NSString *body;
-@property (nonatomic, retain) NSString *status;
-@property (nonatomic, retain) NSString *messageDate;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *threadId;
+@property (nonatomic, strong) NSString *subject;
+@property (nonatomic, strong) NSString *body;
+@property (nonatomic, strong) NSString *status;
+@property (nonatomic, strong) NSString *messageDate;
 
-@property (nonatomic, retain) NSString *senderName;
-@property (nonatomic, retain) NSString *senderId;
+@property (nonatomic, strong) NSString *senderName;
+@property (nonatomic, strong) NSString *senderId;
 @end

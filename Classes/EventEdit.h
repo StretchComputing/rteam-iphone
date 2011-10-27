@@ -39,30 +39,30 @@
 	
 	bool isCancel;
 }
-@property (nonatomic, retain) UIActionSheet *deleteActionSheet;
+@property (nonatomic, strong) UIActionSheet *deleteActionSheet;
 
-@property (nonatomic, retain) UIButton *deleteButton;
+@property (nonatomic, strong) UIButton *deleteButton;
 
 
-	
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSString *nameString;
-@property (nonatomic, retain) UITextField *eventName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *eventId;
-@property (nonatomic, retain) NSString *stringDate;
-@property (nonatomic, retain) NSString *opponent;
-@property (nonatomic, retain) NSString *description;
 
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UIButton *saveChanges;
-@property (nonatomic, retain) UIButton *practiceChangeDate;
-@property (nonatomic, retain) UITextView *practiceDescription;
-@property (nonatomic, retain) UITextField *practiceOpponent;
-@property (nonatomic, retain) UILabel *practiceDate;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSString *nameString;
+@property (nonatomic, strong) UITextField *eventName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *stringDate;
+@property (nonatomic, strong) NSString *opponent;
+@property (nonatomic, strong) NSString *description;
 
-@property (nonatomic, retain) NSDate *practiceDateObject;
-@property (nonatomic, retain) UILabel *errorMessage;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIButton *saveChanges;
+@property (nonatomic, strong) UIButton *practiceChangeDate;
+@property (nonatomic, strong) UITextView *practiceDescription;
+@property (nonatomic, strong) UITextField *practiceOpponent;
+@property (nonatomic, strong) UILabel *practiceDate;
+
+@property (nonatomic, strong) NSDate *practiceDateObject;
+@property (nonatomic, strong) UILabel *errorMessage;
 
 @property bool notifyTeam;
 @property bool fromDateChange;

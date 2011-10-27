@@ -56,11 +56,7 @@
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	NSDictionary *response = [ServerAPI resetUserPassword:self.email :self.answerField.text];
 	
@@ -106,7 +102,6 @@
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -170,18 +165,5 @@
 	//email = nil;
 	[super viewDidUnload];
 }
-	
-- (void)dealloc {
-	[question release];
-	[answerField release];
-	[questionField release];
-	[errorLabel release];
-	[activity release];
-	[submitButton release];
-	[email release];
-	[errorString release];
-    [super dealloc];
-}
-
 
 @end

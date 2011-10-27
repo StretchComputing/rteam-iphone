@@ -21,13 +21,13 @@
 	IBOutlet UILabel *singleLabel;
 	
 }
-@property (nonatomic, retain) UILabel *singleLabel;
-@property (nonatomic, retain) UIButton *recurringEventButton;
+@property (nonatomic, strong) UILabel *singleLabel;
+@property (nonatomic, strong) UIButton *recurringEventButton;
 
-@property (nonatomic, retain) UIButton *createButton;
-@property (nonatomic, retain) UISegmentedControl *practiceOrGame;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) UIDatePicker *startDate;
+@property (nonatomic, strong) UIButton *createButton;
+@property (nonatomic, strong) UISegmentedControl *practiceOrGame;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) UIDatePicker *startDate;
 
 -(IBAction)recurringEvent;
 -(IBAction)nextScreen;

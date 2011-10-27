@@ -13,27 +13,6 @@
 @synthesize eventName, eventType, eventId, eventDescription, eventDate, teamName, teamId, participantRole, imageName, eventLabel, gameInterval,
 sport, opponent, scoreUs, scoreThem, latitude, longitude, isCanceled, scoreLabel;
 
-- (void)dealloc {
-	[eventId release];
-	[eventName release];
-	[eventType release];
-	[eventDescription release];
-	[eventDate release];
-	[teamName release];
-	[teamId release];
-	[participantRole release];
-	[imageName release];
-	[eventLabel release];
-	[gameInterval release];
-	[sport release];
-	[opponent release];
-	[scoreUs release];
-	[scoreThem release];
-	[latitude release];
-	[longitude release];
-    [scoreLabel release];
-    [super dealloc];
-}
 
 
 @end

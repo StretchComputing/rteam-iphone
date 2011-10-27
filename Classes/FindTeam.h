@@ -10,15 +10,15 @@
 
 
 @interface FindTeam : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-
+    
 	IBOutlet UITextField *teamName;
 	IBOutlet UIButton *submitButton;
 	IBOutlet UITableView *tableList;
 	
 }
-@property (nonatomic, retain) UITextField *teamName;
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) UITableView *tableList;
+@property (nonatomic, strong) UITextField *teamName;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) UITableView *tableList;
 
 -(IBAction)submit;
 -(IBAction)endText;

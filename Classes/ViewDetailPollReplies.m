@@ -41,8 +41,7 @@
 
 
 -(void)getMembers{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -83,7 +82,6 @@
 	
 	
 	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -133,7 +131,6 @@
 						tmpReplyObject.memberId = tmpPlayer.memberId;
 						tmpReplyObject.teamId = self.teamId;
 						[allReplyObjectsMutable addObject:tmpReplyObject];
-						[tmpReplyObject release];
 						
 					}
 					
@@ -163,7 +160,6 @@
 						}
 						
 						[allReplyObjectsMutable addObject:tmpReplyObject];
-						[tmpReplyObject release];
 						
 					}
 					
@@ -200,7 +196,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 10;
 		frame.origin.y = 5;
@@ -210,21 +206,18 @@
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 		frame.size.height = 17;
 		frame.origin.y += 23;
 		UILabel *replyLabel = [[UILabel alloc] initWithFrame:frame];
 		replyLabel.tag = replyTag;
 		[cell.contentView addSubview:replyLabel];
-		[replyLabel release];
 		
 		frame.size.height = 15;
 		frame.origin.y += 18;
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 	}
 	
 	UILabel *nameLabel = (UILabel *)[cell.contentView viewWithTag:nameTag];
@@ -262,7 +255,6 @@
 		NSString *date = [dateFormat stringFromDate:formatedDate];
 
 	
-		[dateFormat release];
 		nameLabel.text = reply.name;
 		replyLabel.text =  [@"Reply: " stringByAppendingString:reply.reply];
 		dateLabel.text = [@"Date Replied: " stringByAppendingString:date];
@@ -314,9 +306,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			//[dateFormat setDateFormat:@"yyyy-MM-dd hh:mm aa"];
 			[dateFormat setDateFormat:@"MMM dd hh:mm aa"];
 			NSString *date = [dateFormat stringFromDate:formatedDate];
-			
-			[dateFormat release];
-			
+                    
 			nameString = reply.name;
 			replyString =  [@"Reply: " stringByAppendingString:reply.reply];
 			confirmDateString = [@"Date Replied: " stringByAppendingString:date];
@@ -342,7 +332,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -369,17 +358,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[replyArray release];
-	[teamId release];
-	[allReplyObjects release];
-	[myTableView release];
-	[members release];
-	[loadingLabel release];
-	[loadingActivity release];
-	[super dealloc];
-	
-}
+
 
 @end

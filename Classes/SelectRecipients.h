@@ -10,7 +10,7 @@
 
 
 @interface SelectRecipients : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
-
+    
 	NSArray *members;
 	NSString *teamId;
 	NSMutableArray *selectedMembers;
@@ -34,23 +34,28 @@
 	
 	bool haveMembers;
 }
+@property (nonatomic, retain) NSMutableArray *allMemberObjects;
+@property bool fans;
+@property bool team;
+@property bool isPoll;
+@property bool isPrivate;
 @property bool haveMembers;
-@property (nonatomic, retain)  UILabel *loadingLabel;
-@property (nonatomic, retain)  UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) UIButton *saveButton;
-@property (nonatomic, retain) UITableView *memberTableView;
+@property (nonatomic, strong)  UILabel *loadingLabel;
+@property (nonatomic, strong)  UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) UIButton *saveButton;
+@property (nonatomic, strong) UITableView *memberTableView;
 @property bool haveFans;
-@property (nonatomic, retain) NSMutableArray *allFansObjects;
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) NSString *eventId;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) NSString *messageOrPoll;
-@property (nonatomic, retain) NSString *error;
-@property (nonatomic, retain) NSString *fromWhere;
-@property (nonatomic, retain) NSArray *members;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSMutableArray *selectedMembers;
-@property (nonatomic, retain) NSMutableArray *selectedMemberObjects;
+@property (nonatomic, strong) NSMutableArray *allFansObjects;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) NSString *messageOrPoll;
+@property (nonatomic, strong) NSString *error;
+@property (nonatomic, strong) NSString *fromWhere;
+@property (nonatomic, strong) NSArray *members;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSMutableArray *selectedMembers;
+@property (nonatomic, strong) NSMutableArray *selectedMemberObjects;
 
 -(IBAction)save;
 

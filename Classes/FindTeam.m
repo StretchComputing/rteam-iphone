@@ -43,13 +43,13 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc]
-				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FirstLevelCell] autorelease];
+		cell = [[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault
+                reuseIdentifier: FirstLevelCell];
 	}
 	
 	//NSUInteger row = [indexPath row];
-
+    
 	
 	return cell;
 }
@@ -63,7 +63,7 @@
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	//NSUInteger row = [indexPath row];
 	
-
+    
 	
 	
 }
@@ -78,13 +78,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	tableList = nil;
 }
 
--(void)dealloc{
-	
-	[teamName release];
-	[submitButton release];
-	[tableList release];
-	[super dealloc];
-	
-}
 
 @end

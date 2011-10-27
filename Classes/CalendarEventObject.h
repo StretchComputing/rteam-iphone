@@ -10,12 +10,12 @@
 
 
 @interface CalendarEventObject : NSObject {
-
+    
 	NSDate *eventDate;
 	NSDate *eventTime;
 	NSString *eventType;
 }
-@property (nonatomic, retain) NSDate *eventDate;
-@property (nonatomic, retain) NSDate *eventTime;
-@property (nonatomic, retain) NSString *eventType;
+@property (nonatomic, strong) NSDate *eventDate;
+@property (nonatomic, strong) NSDate *eventTime;
+@property (nonatomic, strong) NSString *eventType;
 @end

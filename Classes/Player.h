@@ -37,8 +37,8 @@ MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
     bool guard1SmsConfirmed;
     bool guard1EmailConfirmed;
     bool guard2EmailConfirmed;
-
-
+    
+    
     bool guard1isUser;
 	
     NSString *guard2Email;
@@ -52,10 +52,10 @@ MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
     
 	PhoneNumberFormatter *myPhoneNumberFormatter;
     int myTextFieldSemaphore;
-
+    
 	UIAlertView *alertContact;
 	UIAlertView *alertRole;
-
+    
 	UIImage *tempProfileImage;
 	
 	NSString *fromEdit;
@@ -94,13 +94,13 @@ MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
 	NSString *changedRole;
 	bool shouldChangeRole;
 	
-
+    
 	
 	NSString *phone;
 	NSString *headUserRole;
 	
 	IBOutlet UILabel *errorLabel;
-
+    
 	
 	bool fromSearch;
 	
@@ -115,16 +115,16 @@ MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
 	bool deleteSuccess;
 	bool fromImage;
 	UIAlertView *alertCallText;
-											
+    
 	UIActionSheet *deleteActionSheet;
 	UIActionSheet *roleActionSheet;
 	UIActionSheet *callTextActionSheet;
-
+    
 	NSDictionary *playerInfo;
-											
+    
 	IBOutlet UILabel *loadingLabel;
 	IBOutlet UIActivityIndicatorView *loadingActivity;
-											
+    
 	UIActionSheet *changeProfilePicAction;
 	
 	UIImage *newImage;
@@ -162,25 +162,25 @@ MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
     UIAlertView *newPhoneAlert;
     bool isEmailConfirmed;
     bool didHideMessage;
-
+    
 }
 @property bool didHideMessage;
 @property bool isEmailConfirmed;
-@property (nonatomic, retain) UIAlertView *newPhoneAlert;
-@property (nonatomic, retain) NSString *initPhone;
+@property (nonatomic, strong, getter = theNewPhoneAlert) UIAlertView *newPhoneAlert;
+@property (nonatomic, strong) NSString *initPhone;
 @property int scenario;
-@property (nonatomic, retain) UIAlertView *callTextWhoAlertView;
-@property (nonatomic, retain) NSString *callOrTextWho;
-@property (nonatomic, retain) NSMutableArray *phoneOnlyArray;
+@property (nonatomic, strong) UIAlertView *callTextWhoAlertView;
+@property (nonatomic, strong) NSString *callOrTextWho;
+@property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
 @property bool isSmsConfirmed;
-@property (nonatomic, retain) NSString *guard1Key;
-@property (nonatomic, retain) NSString *guard2Key;
+@property (nonatomic, strong) NSString *guard1Key;
+@property (nonatomic, strong) NSString *guard2Key;
 
 
-@property (nonatomic, retain) NSString *guard1Email;
-@property (nonatomic, retain) NSString *guard1Phone;
-@property (nonatomic, retain) NSString *guard1First;
-@property (nonatomic, retain) NSString *guard1Last;
+@property (nonatomic, strong) NSString *guard1Email;
+@property (nonatomic, strong) NSString *guard1Phone;
+@property (nonatomic, strong) NSString *guard1First;
+@property (nonatomic, strong) NSString *guard1Last;
 @property bool guard1NA;
 @property bool guard1SmsConfirmed;
 @property bool guard1EmailConfirmed;
@@ -190,10 +190,10 @@ MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
 @property bool guard1isUser;
 
 
-@property (nonatomic, retain) NSString *guard2Email;
-@property (nonatomic, retain) NSString *guard2Phone;
-@property (nonatomic, retain) NSString *guard2First;
-@property (nonatomic, retain) NSString *guard2Last;
+@property (nonatomic, strong) NSString *guard2Email;
+@property (nonatomic, strong) NSString *guard2Phone;
+@property (nonatomic, strong) NSString *guard2First;
+@property (nonatomic, strong) NSString *guard2Last;
 @property bool guard2NA;
 @property bool guard2SmsConfirmed;
 @property bool guard2isUser;
@@ -201,85 +201,85 @@ MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
 
 @property bool portrait;
 @property bool isCurrentUser;
-@property (nonatomic, retain) UIButton *profilePhotoButton;
+@property (nonatomic, strong) UIButton *profilePhotoButton;
 
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) UILabel *switchFanLabel;
-@property (nonatomic, retain) UIButton *switchFanButton;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) UILabel *switchFanLabel;
+@property (nonatomic, strong) UIButton *switchFanButton;
 @property bool shouldUnload;
 @property bool fromCameraSelect;
-@property (nonatomic, retain) UIImage *selectedImage;
-@property (nonatomic, retain) NSData *selectedData;
+@property (nonatomic, strong) UIImage *selectedImage;
+@property (nonatomic, strong) NSData *selectedData;
 
-@property (nonatomic, retain) UIImage *newImage;
-@property (nonatomic, retain) UIActionSheet *changeProfilePicAction;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) NSDictionary *playerInfo;
-@property (nonatomic, retain) UIActionSheet *callTextActionSheet;
-@property (nonatomic, retain) UIActionSheet *deleteActionSheet;
-@property (nonatomic, retain) UIActionSheet *roleActionSheet;
-@property (nonatomic, retain) NSString *errorString;
+@property (nonatomic, strong, getter = theNewImage) UIImage *newImage;
+@property (nonatomic, strong) UIActionSheet *changeProfilePicAction;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) NSDictionary *playerInfo;
+@property (nonatomic, strong) UIActionSheet *callTextActionSheet;
+@property (nonatomic, strong) UIActionSheet *deleteActionSheet;
+@property (nonatomic, strong) UIActionSheet *roleActionSheet;
+@property (nonatomic, strong) NSString *errorString;
 @property bool isUser;
 @property bool isNetworkAuthenticated;
-@property (nonatomic, retain) UIAlertView *alertCallText;
+@property (nonatomic, strong) UIAlertView *alertCallText;
 @property bool fromImage;
 @property bool deleteSuccess;
-@property (nonatomic, retain) UIAlertView *alertDelete;
-@property (nonatomic, retain) UIButton *deleteButton;
-@property (nonatomic, retain) UIScrollView *scrollView;
-@property (nonatomic, retain) NSArray *guardiansArray;
-@property (nonatomic, retain) IBOutlet UIButton *editGuardianInfoButton;
+@property (nonatomic, strong) UIAlertView *alertDelete;
+@property (nonatomic, strong) UIButton *deleteButton;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) NSArray *guardiansArray;
+@property (nonatomic, strong) IBOutlet UIButton *editGuardianInfoButton;
 @property bool fromSearch;
 
 
-@property (nonatomic, retain) NSData *origCompressImage;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) NSString *headUserRole;
-@property (nonatomic, retain) NSString *phone;
+@property (nonatomic, strong) NSData *origCompressImage;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) NSString *headUserRole;
+@property (nonatomic, strong) NSString *phone;
 
 
-@property (nonatomic, retain) UIButton *startEditButton;
-@property (nonatomic, retain) UIButton *endEditButton;
+@property (nonatomic, strong) UIButton *startEditButton;
+@property (nonatomic, strong) UIButton *endEditButton;
 @property bool isEditing;
 
-@property (nonatomic, retain) NSString *firstName;
-@property (nonatomic, retain) NSString *lastName;
-@property (nonatomic, retain) NSString *email;
-@property (nonatomic, retain) NSString *jersey;
-@property (nonatomic, retain) NSString *memberId;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *fromEdit;
-@property (nonatomic, retain) NSData *compressImage;
-@property (nonatomic, retain) UIImage *tempProfileImage;
+@property (nonatomic, strong) NSString *firstName;
+@property (nonatomic, strong) NSString *lastName;
+@property (nonatomic, strong) NSString *email;
+@property (nonatomic, strong) NSString *jersey;
+@property (nonatomic, strong) NSString *memberId;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *fromEdit;
+@property (nonatomic, strong) NSData *compressImage;
+@property (nonatomic, strong) UIImage *tempProfileImage;
 
-@property (nonatomic, retain) UITextField *firstEdit;
-@property (nonatomic, retain) UITextField *lastEdit;
-@property (nonatomic, retain) UITextField *emailEdit;
-@property (nonatomic, retain) UITextField *mobileEdit;
-@property (nonatomic, retain) UITextField *jerseyEdit;
-@property (nonatomic, retain) UILabel *emailLabel;
-@property (nonatomic, retain) UILabel *jerseyLabel;
-@property (nonatomic, retain) UILabel *nameLabel;
-@property (nonatomic, retain) UIButton *sendMessageButton;
-@property (nonatomic, retain) UIButton *addContactButton;
-@property (nonatomic, retain) UIButton *callNumberButton;
-@property (nonatomic, retain) UIButton *addPhotoButton;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UITextField *firstEdit;
+@property (nonatomic, strong) UITextField *lastEdit;
+@property (nonatomic, strong) UITextField *emailEdit;
+@property (nonatomic, strong) UITextField *mobileEdit;
+@property (nonatomic, strong) UITextField *jerseyEdit;
+@property (nonatomic, strong) UILabel *emailLabel;
+@property (nonatomic, strong) UILabel *jerseyLabel;
+@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UIButton *sendMessageButton;
+@property (nonatomic, strong) UIButton *addContactButton;
+@property (nonatomic, strong) UIButton *callNumberButton;
+@property (nonatomic, strong) UIButton *addPhotoButton;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
 
-@property (nonatomic, retain) UIImageView *profileImage;
+@property (nonatomic, strong) UIImageView *profileImage;
 
-@property (nonatomic, retain) UILabel *displayMessage;
+@property (nonatomic, strong) UILabel *displayMessage;
 @property bool messageSent;
 @property bool contactAdded;
 
-@property (nonatomic, retain) UIButton *changeRoleButton;
-@property (nonatomic, retain) UITextView *changeRoleText;
-@property (nonatomic, retain) NSString *userRole;
+@property (nonatomic, strong) UIButton *changeRoleButton;
+@property (nonatomic, strong) UITextView *changeRoleText;
+@property (nonatomic, strong) NSString *userRole;
 
-@property (nonatomic, retain) UIAlertView *alertContact;
-@property (nonatomic, retain) UIAlertView *alertRole;
-@property (nonatomic, retain) NSString *changedRole;
+@property (nonatomic, strong) UIAlertView *alertContact;
+@property (nonatomic, strong) UIAlertView *alertRole;
+@property (nonatomic, strong) NSString *changedRole;
 @property bool shouldChangeRole;
 
 -(IBAction) sendMessage;

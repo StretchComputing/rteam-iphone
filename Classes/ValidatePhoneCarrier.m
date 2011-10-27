@@ -129,14 +129,12 @@
                 NSString *message = @"To validate your phone number, we need you to send a text to us from your phone.  Press 'Ok' to send the text now.";
                 UIAlertView *tmp = [[UIAlertView alloc] initWithTitle:@"Confirm Phone" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
                 [tmp show];
-                [tmp release];
                 
             }else{
                 self.sendingText = false;
                 NSString *message = @"To validate your phone number, we need you to send a text message (not an email) to 'join@rTeam.com', with the message 'yes'.  Please send this text from the device you entered the phone number for.  You can send the text at any time.";
                 UIAlertView *tmp = [[UIAlertView alloc] initWithTitle:@"Confirm Phone" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
                 [tmp show];
-                [tmp release];
                 
                 
             }
@@ -249,11 +247,7 @@ numberOfRowsInComponent:(NSInteger)component{
 
 
 -(void)runVerify{
-    
-    NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+ 
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -298,15 +292,7 @@ numberOfRowsInComponent:(NSInteger)component{
 					break;
 			}
 		}
-		
-		
-		
-		
-	
-	
-	
-	
-    [pool drain];
+
 	
 	[self performSelectorOnMainThread:@selector(doneVerify) withObject:nil waitUntilDone:NO];
 
@@ -337,11 +323,7 @@ numberOfRowsInComponent:(NSInteger)component{
 }
 
 -(void)runResend{
-    
-    NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -389,14 +371,7 @@ numberOfRowsInComponent:(NSInteger)component{
         }
     }
     
-    
-    
-    
-	
-	
-	
-	
-    [pool drain];
+
 	
 	[self performSelectorOnMainThread:@selector(doneResend) withObject:nil waitUntilDone:NO];
     
@@ -436,7 +411,6 @@ numberOfRowsInComponent:(NSInteger)component{
             NSString *bodyMessage = @"yes";
             [messageViewController setBody:bodyMessage];
             [self presentModalViewController:messageViewController animated:YES];
-            [messageViewController release];
             
         }else{
             //Cancel
@@ -465,7 +439,6 @@ numberOfRowsInComponent:(NSInteger)component{
                 NSString *bodyMessage = @"yes";
                 [messageViewController setBody:bodyMessage];
                 [self presentModalViewController:messageViewController animated:YES];
-                [messageViewController release];
                 
             }else { 
                 
@@ -527,7 +500,6 @@ numberOfRowsInComponent:(NSInteger)component{
         NSString *message = @"The text message was not sent.  To validate your phone number, you must send this text message.  You can try again, or cancel and finish registering without your phone number.";
         UIAlertView *tmp = [[UIAlertView alloc] initWithTitle:@"Text Not Sent" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Try Again", nil];
         [tmp show];
-        [tmp release];
         
     }
 	
@@ -556,26 +528,4 @@ numberOfRowsInComponent:(NSInteger)component{
     
 }
 
--(void)dealloc{
-    
-    [verifyButton release];
-    [verifyError release];
-    [resendError release];
-    [resendButton release];
-    [finishButton release];
-    [phoneCarrierText release];
-    [phoneNumberText release];
-    [carrierPicker release];
-    [phoneNumber release];
-    [carriers release];
-    [carrierCode release];
-    [activity release];
-    [selectCarrierButton release];
-    [confirmCode release];
-    [selectedCarrier release];
-    [errorString release];
-    [carrierCheatButton release];
-    [super dealloc];
-    
-}
 @end

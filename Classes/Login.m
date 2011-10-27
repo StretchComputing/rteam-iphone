@@ -80,11 +80,7 @@ resetPasswordButton, errorString, startEmail;
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	NSDictionary *response = [ServerAPI getUserToken:self.email.text :self.password.text];
 	
@@ -180,7 +176,6 @@ resetPasswordButton, errorString, startEmail;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -227,19 +222,5 @@ resetPasswordButton, errorString, startEmail;
 	resetPasswordButton  = nil;
 	[super viewDidUnload];
 }
-
-- (void)dealloc {
-	[email release];
-	[password release];
-	[error release];
-	[registering release];
-	[submitButton release];
-	[success release];
-	[resetPasswordButton release];
-	[errorString release];
-	[startEmail release];
-	[super dealloc];
-}
-
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "CameraSelectionTeam.h"
-#import "TeamActivity.h"
 #import "CurrentTeamTabs.h"
 
 @implementation CameraSelectionTeam
@@ -23,12 +22,11 @@
 	
 	UIImagePickerController * picker = [[UIImagePickerController alloc] init];
 	picker.delegate = self;
-
+    
 	picker.sourceType = UIImagePickerControllerSourceTypeCamera;
 	
 	[self presentModalViewController:picker animated:YES];
 	
-	[picker release];
 	
 	
 	
@@ -67,9 +65,8 @@
 	
 	[myThumbNail drawInRect:CGRectMake(0.0, 0.0, xVal, yVal)];
 	
-	UIImage *newImage    = UIGraphicsGetImageFromCurrentImageContext();
+	//UIImage *newImage    = UIGraphicsGetImageFromCurrentImageContext();
 	
-    [myThumbNail release];
     
 	UIGraphicsEndImageContext();
 	
@@ -86,15 +83,9 @@
             CurrentTeamTabs *cont = [temp objectAtIndex:num];
             
             
-            NSArray *tabs = [cont viewControllers];
+            //NSArray *tabs = [cont viewControllers];
             
-            TeamActivity *tmpStack = [tabs objectAtIndex:1];
-            
-            tmpStack.selectedImageData = UIImageJPEGRepresentation(newImage, 0.85);
-            
-            tmpStack.portrait = isPort;
-            tmpStack.selectedImage = tmpImage;
-            tmpStack.fromCameraSelect = true;
+           
             
             [self.navigationController popToViewController:cont animated:NO];
             
@@ -112,16 +103,9 @@
                 CurrentTeamTabs *cont = [temp objectAtIndex:num];
                 
                 
-                NSArray *tabs = [cont viewControllers];
+               // NSArray *tabs = [cont viewControllers];
                 
-                TeamActivity *tmpStack = [tabs objectAtIndex:1];
-                
-                tmpStack.selectedImageData = UIImageJPEGRepresentation(newImage, 0.85);
-                
-                tmpStack.portrait = isPort;
-
-                tmpStack.selectedImage = tmpImage;
-                tmpStack.fromCameraSelect = true;
+            
                 
                 [self.navigationController popToViewController:cont animated:NO];
                 
@@ -129,12 +113,12 @@
         }
         
     }
-		
+    
 	
 } 
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-
+    
 	[picker dismissModalViewControllerAnimated:YES];	
 	
 	NSArray *temp = [self.navigationController viewControllers];
@@ -153,9 +137,9 @@
             
         } 
     }
-   
+    
     num++;
-        
+    
     if (shouldRun){
         if (num >= 0) {
             
@@ -168,15 +152,11 @@
                 
             }
         }
-
+        
     }
-       
+    
 	
 }
 
--(void)dealloc{
-	
-	[super dealloc];
-}
 
 @end

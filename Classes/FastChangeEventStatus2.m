@@ -82,7 +82,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 		todayTomorrow = @"Tomorrow";
 	}
 	
-    [dateFormat release];
 	self.eventLabel.text = [NSString stringWithFormat:@"%@ %@, %@", eventTypeLabel, todayTomorrow, timeLabel];
 	self.eventTypeString = eventTypeLabel;
 	self.todayTomorrowString = todayTomorrow;
@@ -184,7 +183,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 			UIActionSheet *deleteNow = [[UIActionSheet alloc] initWithTitle:@"Are you sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Cancel Event" otherButtonTitles:nil];
 			deleteNow.actionSheetStyle = UIActionSheetStyleDefault;
 			[deleteNow showInView:self.view];
-			[deleteNow release];
 			
 		}else {
 			self.messageIntro = [NSString stringWithFormat:@"The %@ scheduled for %@ at %@ has been delayed by %d minutes.", self.eventTypeString,
@@ -202,7 +200,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 		NSString *startDateString = [format stringFromDate:self.newDateTime.date];
 		self.messageIntro = [NSString stringWithFormat:@"The %@ scheduled for %@ at %@ has been rescheduled, and will now occurr on %@.", 
 							 self.eventTypeString, self.todayTomorrowString, self.timeString, startDateString];
-		[format release];
 		
 		[self performSelectorInBackground:@selector(reschedule) withObject:nil];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
@@ -220,7 +217,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 		if (self.setCurrentLocationButton.selectedSegmentIndex == 0) {
 			//use current coordinates
 		
-			self.locationManager = [[[CLLocationManager alloc] init] autorelease];
+			self.locationManager = [[CLLocationManager alloc] init];
 			self.locationManager.delegate = self; // Tells the location manager to send updates to this object
 			[locationManager startUpdatingLocation];
 		}else {
@@ -260,11 +257,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -339,7 +332,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -393,11 +385,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 }
 
 - (void)reschedule {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -414,7 +402,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 		[format setDateFormat:@"YYYY-MM-dd HH:mm"];
 		
 		NSString *startDateString = [format stringFromDate:self.newDateTime.date];
-		[format release];
 		
 		if ([self.eventTypeString isEqualToString:@"Game"]) {
 			
@@ -462,14 +449,11 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 
 -(void)runDelete{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
@@ -522,7 +506,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 	
 	self.doneSecondary = true;
 	[self performSelectorOnMainThread:@selector(didFinish) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 	
 }
@@ -546,10 +529,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 
 - (void)gameOver {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	NSString *token = @"";
 	
@@ -593,18 +572,12 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 
 
 - (void)updateLocation {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	NSString *token = @"";
@@ -665,7 +638,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 
@@ -727,35 +699,6 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 
 }
 
--(void)dealloc{
-	[eventLabel release];
-	[messageString release];
-	[messageLabel release];
-	[toLabel release];
-	[sendButton release];
-	[cancelButton release];
-	[selectedEvent release];
-	[recipArray release];
-	[errorString release];
-	[errorMessage release];
-	[activity release];
-	[messageIntro release];
-	[finalScoreLabel release];
-	[finalUs release];
-	[finalThem release];
-	[newDateTime release];
-	[newDateTimeLabel release];
-	[newLocationLabel release];
-	[newLocation release];
-	[setCurrentLocationButton release];
-	[eventTypeString release];
-	[timeString release];
-	[todayTomorrowString release];
-	[latitude release];
-	[longitude release];
-	[locationManager release];
-	[super dealloc];
-}
 
 
 @end

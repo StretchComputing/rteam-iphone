@@ -29,29 +29,29 @@
 	}
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-
+    
 	if (mainDelegate.returnHome) {
 		mainDelegate.returnHome = NO;
 		[self.navigationController popViewControllerAnimated:NO];
 	}
 	
 	[self becomeFirstResponder];
-
-
+    
+    
 }
 
 - (void)viewDidLoad {
-		
+    
 	self.title = @"My Teams";
 	
 	MyTeams *tab1 =  
-	[[[MyTeams alloc] init] autorelease];  
+	[[MyTeams alloc] init];  
 	UIViewController *tab2 =  
-	[[[UIViewController alloc] init] autorelease];  
-
+	[[UIViewController alloc] init];  
+    
 	UIViewController *tab4 =  
-	[[[UIViewController alloc] init] autorelease]; 
-	InviteFan *tab5 = [[[InviteFan alloc] init] autorelease];
+	[[UIViewController alloc] init]; 
+	InviteFan *tab5 = [[InviteFan alloc] init];
 	
 	tab1.title = @"My Teams";
 	tab1.tabBarItem.image = [UIImage imageNamed:@"tabsMyTeams.png"];	
@@ -72,7 +72,6 @@
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
 	
 	
 }
@@ -86,15 +85,15 @@
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
 	
 	/*
-	self.navigationItem.title = viewController.tabBarItem.title;
-	
-	if ([viewController class] == [MyTeams class]) {
-		MyTeams *tmp = (MyTeams *)viewController;
-		[tmp viewWillAppear:NO];
-	}else if ([viewController class] == [InviteFan class]) {
-		InviteFan *tmp = (InviteFan *)viewController;
-		[tmp viewWillAppear:NO];
-	}
+     self.navigationItem.title = viewController.tabBarItem.title;
+     
+     if ([viewController class] == [MyTeams class]) {
+     MyTeams *tmp = (MyTeams *)viewController;
+     [tmp viewWillAppear:NO];
+     }else if ([viewController class] == [InviteFan class]) {
+     InviteFan *tmp = (InviteFan *)viewController;
+     [tmp viewWillAppear:NO];
+     }
 	 */
 	
 }
@@ -107,7 +106,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -129,9 +127,5 @@
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
-	
-	[super dealloc];
-}
 
 @end

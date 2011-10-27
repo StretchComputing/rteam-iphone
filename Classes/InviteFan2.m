@@ -23,20 +23,20 @@ multipleEmailArray, multipleEmailAlert;
 - (void)viewDidLoad {
 	
 	self.title=@"Invite Fan";
-
+    
 	
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.submitButton setBackgroundImage:stretch forState:UIControlStateNormal];
-
+    
 	
-//	if (self.addDone) {
-//		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
-//		[self.navigationItem setRightBarButtonItem:addButton];
-//		[addButton release];
-//	}
+    //	if (self.addDone) {
+    //		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
+    //		[self.navigationItem setRightBarButtonItem:addButton];
+    //		[addButton release];
+    //	}
 	
-
+    
 	
 	
 }
@@ -46,7 +46,6 @@ multipleEmailArray, multipleEmailAlert;
 	if (!self.hideHomeButton) {
 		UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 		[self.navigationItem setRightBarButtonItem:homeButton];
-		[homeButton release];
 	}
 	
 }
@@ -101,11 +100,7 @@ multipleEmailArray, multipleEmailAlert;
 }
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+    
 	
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -120,7 +115,7 @@ multipleEmailArray, multipleEmailAlert;
 	NSArray *rEmails = [NSArray array];
 	
 	NSString *theRole = @"fan";
-
+    
 	NSDictionary *response = [ServerAPI createMember:self.firstName.text :self.lastName.text :self.email.text
 													:@"" :rRoles :rEmails :self.teamId :mainDelegate.token :theRole :@""];
 	
@@ -150,7 +145,7 @@ multipleEmailArray, multipleEmailAlert;
 			case 208:
 				self.errorString = @"NA";
 				break;
-
+                
 			case 209:
 				self.errorString = @"*Fan email address already in use";
 				break;
@@ -162,14 +157,12 @@ multipleEmailArray, multipleEmailAlert;
 	}
 	
 	
-	[tmpRoles release];
 	[self performSelectorOnMainThread:
 	 @selector(didFinish)
 						   withObject:nil
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -200,9 +193,9 @@ multipleEmailArray, multipleEmailAlert;
 			self.error.text = @"Fan Invite Successfull!";
 			self.error.textColor = [UIColor colorWithRed:0.0 green:0.445 blue:0.0 alpha:1.0];
 		}
-
+        
 		
-
+        
 		
 	}else{
 		
@@ -214,7 +207,7 @@ multipleEmailArray, multipleEmailAlert;
 			self.error.text = self.errorString;
 			self.error.textColor = [UIColor redColor];
 		}
-
+        
 		
 		
 		
@@ -230,7 +223,7 @@ multipleEmailArray, multipleEmailAlert;
 
 -(void)endText {
 	[self becomeFirstResponder];
-
+    
 }
 
 - (void)showPicker:(id)sender {
@@ -240,7 +233,6 @@ multipleEmailArray, multipleEmailAlert;
     picker.peoplePickerDelegate = self;
 	
     [self presentModalViewController:picker animated:YES];
-    [picker release];
 }
 
 - (void)peoplePickerNavigationControllerDidCancel:
@@ -253,26 +245,23 @@ multipleEmailArray, multipleEmailAlert;
 (ABPeoplePickerNavigationController *)peoplePicker
       shouldContinueAfterSelectingPerson:(ABRecordRef)person {
 	
-    NSString* name = (NSString *)ABRecordCopyValue(person,
-												   kABPersonFirstNameProperty);
+    NSString* name = (__bridge_transfer NSString *)ABRecordCopyValue(person,
+                                                                     kABPersonFirstNameProperty);
 	
 	ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
 	
-	NSArray *emailArray = (NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
+	NSArray *emailArray = (__bridge_transfer NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
 	NSString *emailAddress = @"";
 	if ([emailArray count] > 0) {
 		emailAddress = [emailArray objectAtIndex:0];
         self.multipleEmailArray = [NSMutableArray arrayWithArray:emailArray];
 	}
     
-    [emailArray release];
 	
     self.firstName.text = name;
-    [name release];
 	
-    name = (NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+    name = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
     self.lastName.text = name;
-    [name release];
 	
 	//self.email.text = emailAddress;
     
@@ -313,7 +302,6 @@ multipleEmailArray, multipleEmailAlert;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -360,21 +348,5 @@ multipleEmailArray, multipleEmailAlert;
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	[firstName release];
-	[lastName release];
-	[email release];
-
-	[teamId release];
-	[submitButton release];
-	[serverProcess release];
-	[error release];
-	[userRole release];
-	[errorString release];
-    [multipleEmailArray release];
-    [multipleEmailAlert release];
-	[super dealloc];
-	
-}
 
 @end

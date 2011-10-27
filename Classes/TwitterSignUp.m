@@ -34,10 +34,4 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[webView release];
-	[super dealloc];
-	
-}
 @end

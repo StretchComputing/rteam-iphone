@@ -10,7 +10,7 @@
 
 
 @interface DeleteMessageFrequency : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-
+    
 	IBOutlet UITableView *myTableView;
 	IBOutlet UIActivityIndicatorView *activity;
 	
@@ -22,11 +22,11 @@
 	NSString *newValue;
 	
 }
-@property (nonatomic,retain) NSString *newValue;
-@property (nonatomic, retain) UILabel *displayLabel;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic,retain) NSMutableArray *selectedArray;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UITableView *myTableView;
+@property (nonatomic,strong, getter = theNewValue) NSString *newValue;
+@property (nonatomic, strong) UILabel *displayLabel;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic,strong) NSMutableArray *selectedArray;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UITableView *myTableView;
 
 @end

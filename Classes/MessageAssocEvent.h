@@ -10,13 +10,13 @@
 
 
 @interface MessageAssocEvent : UITableViewController {
-
+    
 	NSArray *events;
 	NSString *teamId;
 	NSString *error;
 }
-@property (nonatomic, retain) NSString *error;
-@property (nonatomic, retain) NSArray *events;
-@property (nonatomic, retain) NSString *teamId;
+@property (nonatomic, strong) NSString *error;
+@property (nonatomic, strong) NSArray *events;
+@property (nonatomic, strong) NSString *teamId;
 -(void)getAllEvents;
 @end

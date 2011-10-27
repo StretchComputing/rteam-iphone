@@ -13,16 +13,17 @@
 #import "MessageTabs.h"
 #import "GameTabs.h"
 #import "PracticeTabs.h"
-#import "MessagesTabs.h"
 #import "CurrentTeamTabs.h"
 #import "GameTabs.h"
 #import "PracticeTabs.h"
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Fan.h"
+#import "Player.h"
 
 @implementation SendPoll
 @synthesize doneButton, activity, pollQuestion, pollType, errorMessage, pollSubject, teamId, createSuccess, eventId, eventType, origLoc, recipients,
-toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
+toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, recipientObjects;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -128,11 +129,7 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -143,15 +140,7 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
 	
 	NSArray *choices = [NSArray arrayWithObjects:@"Yes", @"No", nil];
 	
-	
-	if (self.eventId == nil){
-		self.eventId = @"";
-	}
-	
-	if (self.eventType == nil) {
-		self.eventType = @"";
-	}
-	
+
 	NSString *dispResults = @"";
 	if (self.displayResults.selectedSegmentIndex == 0) {
 		dispResults = @"true";
@@ -159,17 +148,26 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
 		dispResults = @"false";
 	}
 	
-	NSArray *recip = [NSArray array];
-	
-	if (!self.toTeam) {
-		recip = self.recipients;
-	}
+	NSMutableArray *recipIds = [NSMutableArray array];
+    
+    for (int i = 0; i < [self.recipientObjects count]; i++) {
+        
+        if ([[self.recipientObjects objectAtIndex:i] class] == [Fan class]) {
+            Fan *tmpFan = [self.recipientObjects objectAtIndex:i];
+            [recipIds addObject:tmpFan.memberId];
+        }else if ([[self.recipientObjects objectAtIndex:i] class] == [Player class]) {
+            Player *tmpPlayer = [self.recipientObjects objectAtIndex:i];
+            [recipIds addObject:tmpPlayer.memberId];
+        }
+    }
+
+    NSArray *recip = [NSArray arrayWithArray:recipIds];
 
 	
 	NSDictionary *response = [NSDictionary dictionary];
 	if (![token isEqualToString:@""]){	
-	    response = [ServerAPI createMessageThread:token :self.teamId :self.pollSubject.text :self.pollQuestion.text :@"poll" :self.eventId 
-												 :self.eventType :@"false" :choices :recip :dispResults :self.includeFans :@""];
+	    response = [ServerAPI createMessageThread:token :self.teamId :self.pollSubject.text :self.pollQuestion.text :@"poll" :@"" 
+												 :@"" :@"false" :choices :recip :dispResults :@"true" :@""];
 				
 		NSString *status = [response valueForKey:@"status"];
 		
@@ -215,7 +213,6 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -225,90 +222,7 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
 	
 	if (self.createSuccess){
 		
-		//team, sent, inbox, game or pracitce
-		NSArray *tempCont = [self.navigationController viewControllers];
-		int tempNum = [tempCont count];
-		tempNum = tempNum - 3;
-		
-		if ([self.origLoc isEqualToString:@"MessagesTabs"]) {
-			
-			if ([[tempCont objectAtIndex:tempNum] class] == [MessagesTabs class]) {
-				MessagesTabs *cont = [tempCont objectAtIndex:tempNum];
-				cont.selectedIndex = 1;
-				
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [MessagesTabs class]) {
-				MessagesTabs *cont = [tempCont objectAtIndex:tempNum-1];
-				cont.selectedIndex = 1;
-			
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-		}
-		
-		if ([self.origLoc isEqualToString:@"CurrentTeamTabs"]) {
-			
-			if ([[tempCont objectAtIndex:tempNum] class] == [CurrentTeamTabs class]) {
-				CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum];
-				cont.teamId = self.teamId;
-				cont.selectedIndex = 4;
-				cont.userRole = self.userRole;
-	
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [CurrentTeamTabs class]) {
-				CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum-1];
-				cont.selectedIndex = 4;
-				cont.teamId = self.teamId;
-				cont.userRole = self.userRole;
-				
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-		}
-		
-		if ([self.origLoc isEqualToString:@"GameTabs"]) {
-			
-			if ([[tempCont objectAtIndex:tempNum] class] == [GameTabs class]) {
-				GameTabs *cont = [tempCont objectAtIndex:tempNum];
-				cont.teamId = self.teamId;
-				cont.selectedIndex = 3;
-				cont.userRole = self.userRole;
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [GameTabs class]) {
-				GameTabs *cont = [tempCont objectAtIndex:tempNum-1];
-				cont.selectedIndex = 3;
-				cont.teamId = self.teamId;
-				
-			
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-		}
-		
-		if ([self.origLoc isEqualToString:@"PracticeTabs"]) {
-			
-			if ([[tempCont objectAtIndex:tempNum] class] == [PracticeTabs class]) {
-				PracticeTabs *cont = [tempCont objectAtIndex:tempNum];
-				cont.teamId = self.teamId;
-				cont.selectedIndex = 1;
-				cont.userRole = self.userRole;
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [PracticeTabs class]) {
-				PracticeTabs *cont = [tempCont objectAtIndex:tempNum-1];
-				cont.selectedIndex = 1;
-				cont.teamId = self.teamId;
-				cont.userRole = self.userRole;
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-		}
-		
+		[self.navigationController dismissModalViewControllerAnimated:YES];		
 		
 		
 	}else{
@@ -317,7 +231,6 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
 			NSString *tmp = @"Only User's with confirmed email addresses can send polls.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}else {
 			self.errorMessage.text = self.errorString;
 			self.errorMessage.textColor = [UIColor redColor];
@@ -344,7 +257,6 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -394,39 +306,12 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet;
 	pollType = nil;
 	errorMessage = nil;
 	pollSubject = nil;
-	//origLoc = nil;
-	//eventId = nil;
-	//eventType = nil;
-	//recipients = nil;
-	//userRole = nil;
 	displayResults = nil;
-	//includeFans = nil;
-	//errorString = nil;
-	//teamId = nil;
 	pollActionSheet = nil;
 	[super viewDidUnload];
 
 }
 
--(void)dealloc{
-	
-	[doneButton release];
-	[activity release];
-	[pollQuestion release];
-	[pollType release];
-	[errorMessage release];
-	[pollSubject release];
-	[eventId release];
-	[eventType release];
-	[origLoc release];
-	[recipients release];
-	[userRole release];
-	[displayResults release];
-	[includeFans release];
-	[errorString release];
-	[teamId release];
-	[pollActionSheet release];
-	[super dealloc];
-}
+
 
 @end

@@ -16,7 +16,7 @@
 	NSString *basePath;
 	NSData *movieData;
 }
-@property (nonatomic, retain) NSData *movieData;
-@property (nonatomic, retain) NSString *basePath;
+@property (nonatomic, strong) NSData *movieData;
+@property (nonatomic, strong) NSString *basePath;
 
 @end

@@ -36,10 +36,10 @@
 		type = @"Game";
 	}else if ([self.eventType isEqualToString:@"practice"]) {
 		type = @"Practice";
-
+        
 	}else {
 		type = @"Event";
-
+        
 	}
 	
 	self.typeLabel.text = [NSString stringWithFormat:@"If the %@ is recurring, how often does it occur?", type];
@@ -60,7 +60,7 @@
 		self.orLabel.hidden = YES;
 		
 	}
-
+    
 	
 }
 
@@ -78,7 +78,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 10;
 		frame.origin.y = 10;
@@ -89,14 +89,12 @@
 		UILabel *cellLabel = [[UILabel alloc] initWithFrame:frame];
 		cellLabel.tag = cellTag;
 		[cell.contentView addSubview:cellLabel];
-		[cellLabel release];
 		
 		frame.origin.x = 125;
 		frame.size.width = 150;
 		UILabel *feedbackLabel = [[UILabel alloc] initWithFrame:frame];
 		feedbackLabel.tag = feedbackTag;
 		[cell.contentView addSubview:feedbackLabel];
-		[feedbackLabel release];
 		
 		
 		frame.size.height = 30;
@@ -106,7 +104,6 @@
 		UISegmentedControl *segControl = [[UISegmentedControl alloc] initWithFrame:frame];
 		segControl.tag = segTag;
 		[cell.contentView addSubview:segControl];
-		[segControl release];
 		
 		
 	}
@@ -239,7 +236,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -266,16 +262,4 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[calendarLabel release];
-	[orLabel release];
-	[myTableView release];
-	[calendarButton release];
-	[eventType release];
-	[typeLabel release];
-	[teamId release];
-	[super dealloc];
-	
-}
 @end

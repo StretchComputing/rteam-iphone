@@ -10,7 +10,7 @@
 
 
 @interface PlayerAttendance : UITableViewController {
-
+    
 	NSString *teamId;
 	NSString *memberId;
 	NSString *errorMessage;
@@ -24,13 +24,13 @@
 	
 }
 @property bool fromSearch;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *memberId;
-@property (nonatomic, retain) NSString *errorMessage;
-@property (nonatomic, retain) NSArray *attResults;
-@property (nonatomic, retain) NSArray *displayAttResults;
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) UISegmentedControl *segmentEventType;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *memberId;
+@property (nonatomic, strong) NSString *errorMessage;
+@property (nonatomic, strong) NSArray *attResults;
+@property (nonatomic, strong) NSArray *displayAttResults;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) UISegmentedControl *segmentEventType;
 @property bool segChange;
 
 -(void)getAttendance;

@@ -63,7 +63,7 @@
 	
     self.title = @"";
 	
-		
+    
 }
 
 
@@ -71,9 +71,9 @@
 
 -(IBAction)userRegister {
 	
-	  Register *nextController = [[Register alloc] init];
-      [self.navigationController  pushViewController:nextController animated:YES]; 
-
+    Register *nextController = [[Register alloc] init];
+    [self.navigationController  pushViewController:nextController animated:YES]; 
+    
 }
 
 
@@ -82,10 +82,6 @@
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
-
-	[super dealloc];
-}
 
 
 @end

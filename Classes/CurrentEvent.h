@@ -10,7 +10,7 @@
 
 
 @interface CurrentEvent : NSObject {
-
+    
 	NSString *eventId;
 	NSString *eventType;           //'game', 'practice' or 'generic' (or 'scores', 'newTeam')
 	NSString *eventName;
@@ -38,26 +38,26 @@
 	
 }
 @property bool isCanceled;
-@property (nonatomic, retain) NSString *scoreLabel;
+@property (nonatomic, strong) NSString *scoreLabel;
 
-@property (nonatomic, retain) NSString *latitude;
-@property (nonatomic, retain) NSString *longitude;
-@property (nonatomic, retain) NSString *scoreUs;
-@property (nonatomic, retain) NSString *scoreThem;
-@property (nonatomic, retain) NSString *opponent;
-@property (nonatomic, retain) NSString *sport;
-@property (nonatomic, retain) NSString *eventId;
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) NSString *eventName;
-@property (nonatomic, retain) NSString *eventDescription;
-@property (nonatomic, retain) NSString *eventDate;
+@property (nonatomic, strong) NSString *latitude;
+@property (nonatomic, strong) NSString *longitude;
+@property (nonatomic, strong) NSString *scoreUs;
+@property (nonatomic, strong) NSString *scoreThem;
+@property (nonatomic, strong) NSString *opponent;
+@property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSString *eventName;
+@property (nonatomic, strong) NSString *eventDescription;
+@property (nonatomic, strong) NSString *eventDate;
 
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *participantRole;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *participantRole;
 
-@property (nonatomic, retain) NSString *imageName;
-@property (nonatomic, retain) NSString *eventLabel;
+@property (nonatomic, strong) NSString *imageName;
+@property (nonatomic, strong) NSString *eventLabel;
 
-@property (nonatomic, retain) NSString *gameInterval;
+@property (nonatomic, strong) NSString *gameInterval;
 @end

@@ -10,33 +10,9 @@
 
 
 @implementation MessageThreadInbox
-@synthesize threadId, subject, body, messageType, status, receivedDate, isReminder, wasViewed, pollChoices, followUp, senderName, senderId,
+@synthesize threadId, subject, body, messageType, status, createdDate, isReminder, wasViewed, pollChoices, followUp, senderName, senderId,
 teamId, teamName, threadingUsed, numberOfMessages, eventId, eventType, subThreadIds, eventDate, participantRole;
 
 
 
--(void)dealloc{
-	
-	[threadId release];
-	[subThreadIds release];
-	[subject release];
-	[eventType release];
-	[body release];
-	[status release];
-	[eventDate release];
-	[messageType release];
-	[receivedDate release];
-	[isReminder release];
-	//[wasViewed release];
-	[pollChoices release];
-	[followUp release];
-	[senderId release];
-	[senderName release];
-	[teamId release];
-	[teamName release];
-	[eventId release];
-    [participantRole release];
-	[super dealloc];
-	
-}
 @end

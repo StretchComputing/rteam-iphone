@@ -35,7 +35,7 @@
 	IBOutlet UILabel *quarter;
 	IBOutlet UILabel *labelQuart;
 	
-
+    
 	bool isGameOver;
 	IBOutlet UIButton *gameOverButton;
 	
@@ -52,49 +52,49 @@
 	
 	
 	IBOutlet UIButton *cancelScoringButton;
-
+    
 	
     IBOutlet UIActivityIndicatorView *activity;
 	
 }
 
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UIButton *cancelScoringButton;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIButton *cancelScoringButton;
 @property bool isCoord;
-@property (nonatomic, retain) NSString *initScoreUs;
-@property (nonatomic, retain) NSString *initScoreThem;
-@property (nonatomic, retain) NSString *interval;
+@property (nonatomic, strong) NSString *initScoreUs;
+@property (nonatomic, strong) NSString *initScoreThem;
+@property (nonatomic, strong) NSString *interval;
 @property bool createSuccess;
-@property (nonatomic, retain) NSString *gameId;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) UIButton *gameOverButton;
+@property (nonatomic, strong) NSString *gameId;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) UIButton *gameOverButton;
 
 @property bool isGameOver;
-@property (nonatomic, retain) UIButton *subUs;
-@property (nonatomic, retain) UIButton *subThem;
+@property (nonatomic, strong) UIButton *subUs;
+@property (nonatomic, strong) UIButton *subThem;
 
-@property (nonatomic, retain) UIButton *addThem1;
-@property (nonatomic, retain) UIButton *addThem2;
-@property (nonatomic, retain) UIButton *addThem3;
-@property (nonatomic, retain) UIButton *addUs1;
-@property (nonatomic, retain) UIButton *addUs2;
-@property (nonatomic, retain) UIButton *addUs3;
-
-
+@property (nonatomic, strong) UIButton *addThem1;
+@property (nonatomic, strong) UIButton *addThem2;
+@property (nonatomic, strong) UIButton *addThem3;
+@property (nonatomic, strong) UIButton *addUs1;
+@property (nonatomic, strong) UIButton *addUs2;
+@property (nonatomic, strong) UIButton *addUs3;
 
 
-@property (nonatomic, retain) UIButton *addQuart;
-@property (nonatomic, retain) UIButton *subQuart;
-
-@property (nonatomic, retain) UILabel *scoreUs;
-@property (nonatomic, retain) UILabel *scoreThem;
-@property (nonatomic, retain) UILabel *quarter;
-@property (nonatomic, retain) UILabel *labelUs;
-@property (nonatomic, retain) UILabel *labelThem;
-@property (nonatomic, retain) UILabel *labelQuart;
 
 
-@property (nonatomic, retain) UISegmentedControl *topOrBottom;
+@property (nonatomic, strong) UIButton *addQuart;
+@property (nonatomic, strong) UIButton *subQuart;
+
+@property (nonatomic, strong) UILabel *scoreUs;
+@property (nonatomic, strong) UILabel *scoreThem;
+@property (nonatomic, strong) UILabel *quarter;
+@property (nonatomic, strong) UILabel *labelUs;
+@property (nonatomic, strong) UILabel *labelThem;
+@property (nonatomic, strong) UILabel *labelQuart;
+
+
+@property (nonatomic, strong) UISegmentedControl *topOrBottom;
 
 -(IBAction)cancel;
 -(IBAction)addU:(id)sender;

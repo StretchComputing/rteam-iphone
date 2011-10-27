@@ -22,13 +22,13 @@
 	IBOutlet UIButton *directionsButton;
 	
 }
-@property (nonatomic, retain ) UIButton *directionsButton;
+@property (nonatomic, strong ) UIButton *directionsButton;
 @property double eventLatCoord;
 @property double eventLongCoord;
 @property double latCoord;
 @property double longCoord;
-@property (nonatomic, retain) CLLocationManager *locationManager;
-@property (nonatomic, retain) MKMapView *map;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) MKMapView *map;
 
 -(IBAction)getDirections;
 

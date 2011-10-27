@@ -10,7 +10,7 @@
 
 
 @interface Activity : NSObject {
-
+    
 	NSString *activityText;
 	NSString *createdDate;
 	NSString *cacheId;
@@ -29,16 +29,16 @@
 	
 }
 @property bool isVideo;
-@property (nonatomic, retain) NSString *thumbnail;
-@property (nonatomic, retain) NSString *vote;
-@property (nonatomic, retain) NSString *activityId;
+@property (nonatomic, strong) NSString *thumbnail;
+@property (nonatomic, strong) NSString *vote;
+@property (nonatomic, strong) NSString *activityId;
 @property int numLikes;
 @property int numDislikes;
-@property (nonatomic,retain) NSString *activityText;
-@property (nonatomic,retain) NSString *createdDate;
-@property (nonatomic,retain) NSString *cacheId;
-@property (nonatomic,retain) NSString *teamId;
-@property (nonatomic,retain) NSString *teamName;
+@property (nonatomic,strong) NSString *activityText;
+@property (nonatomic,strong) NSString *createdDate;
+@property (nonatomic,strong) NSString *cacheId;
+@property (nonatomic,strong) NSString *teamId;
+@property (nonatomic,strong) NSString *teamName;
 
 
 @end

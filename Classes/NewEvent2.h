@@ -26,17 +26,17 @@
 	NSString *errorString;
 	
 }
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) IBOutlet UITextField *eventName;
-@property (nonatomic, retain) UIActivityIndicatorView *serverProcess;
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) UILabel *error;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) IBOutlet UITextField *eventName;
+@property (nonatomic, strong) UIActivityIndicatorView *serverProcess;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) UILabel *error;
 @property bool createSuccess;
-@property (nonatomic, retain) NSString *teamId;
+@property (nonatomic, strong) NSString *teamId;
 
-@property (nonatomic, retain) UITextField *location;
-@property (nonatomic, retain) UITextView *description;
-@property (nonatomic, retain) NSDate *start;
+@property (nonatomic, strong) UITextField *location;
+@property (nonatomic, strong) UITextView *description;
+@property (nonatomic, strong) NSDate *start;
 
 
 -(IBAction)createEvent;

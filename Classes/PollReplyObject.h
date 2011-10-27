@@ -10,16 +10,16 @@
 
 
 @interface PollReplyObject : NSObject {
-
+    
 	NSString *name;
 	NSString *dateReplied;
 	NSString *reply;
 	NSString *memberId;
 	NSString *teamId;
 }
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *memberId;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *dateReplied;
-@property (nonatomic, retain) NSString *reply;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *memberId;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *dateReplied;
+@property (nonatomic, strong) NSString *reply;
 @end

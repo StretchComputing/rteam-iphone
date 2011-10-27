@@ -10,7 +10,7 @@
 
 
 @interface FinalizePoll : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
-
+    
 	IBOutlet UITextView *followUpMessage;
 	IBOutlet UIButton *confirmButton;
 	IBOutlet UIActivityIndicatorView *activity;
@@ -23,13 +23,13 @@
 	NSString *errorString;
 }
 
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UITextView *followUpMessage;
-@property (nonatomic, retain) UIButton *confirmButton;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *messageThreadId;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UILabel *errorMessage;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UITextView *followUpMessage;
+@property (nonatomic, strong) UIButton *confirmButton;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *messageThreadId;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UILabel *errorMessage;
 @property bool createSuccess;
 
 -(IBAction)confirm;

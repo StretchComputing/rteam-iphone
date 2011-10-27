@@ -37,7 +37,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 - (void)viewDidLoad {
     self.guardianBackground.hidden = YES;
     self.removeGuardiansButton.hidden = YES;
-
+    
 	self.showedMemberAlert = false;
 	
 	myPhoneNumberFormatter = [[PhoneNumberFormatter alloc] init];
@@ -45,8 +45,8 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	
 	self.phoneOnlyArray = [NSMutableArray array];
 	[self.phoneText addTarget:self
-						action:@selector(autoFormatTextField:)
-			  forControlEvents:UIControlEventEditingChanged
+                       action:@selector(autoFormatTextField:)
+             forControlEvents:UIControlEventEditingChanged
 	 ];
     [self.onePhone addTarget:self
                       action:@selector(autoFormatTextField2:)
@@ -57,13 +57,13 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
                       action:@selector(autoFormatTextField3:)
             forControlEvents:UIControlEventEditingChanged
 	 ];
-
+    
 	self.teamId = @"";
 	self.emailArray = [NSMutableArray array];
 	
 	
 	self.addViewBackground.hidden = YES;
-
+    
 	self.miniBackgroundView.hidden = YES;
 	
 	self.addViewBackground.layer.masksToBounds = YES;
@@ -105,13 +105,13 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	[self.miniAddButton setBackgroundImage:stretch forState:UIControlStateNormal];
     [self.miniGuardAddButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.miniGuardCancelButton setBackgroundImage:stretch forState:UIControlStateNormal];
-
-
+    
+    
     UIImage *buttonImageNormal1 = [UIImage imageNamed:@"redButton.png"];
 	UIImage *stretch1 = [buttonImageNormal1 stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.removeGuardiansButton setBackgroundImage:stretch1 forState:UIControlStateNormal];
-
-
+    
+    
 	
 	
 }
@@ -120,14 +120,14 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 
 
 -(void)endText {
-
+    
 	[self becomeFirstResponder];
 }
 
 -(void)create{
-		
+    
 	self.errorLabel.text = @"";
-
+    
 	if ([self.teamName.text  isEqualToString:@""]) {
 		self.errorLabel.text = @"*You must enter a team name";
 		
@@ -158,11 +158,11 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 			[self.noMembers show];
 			
 		}
-
+        
 		
 		
 		
-	
+        
 		
 	}
 }
@@ -170,10 +170,10 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 
 - (void)runRequest {
 	
-	NSAutoreleasePool * pool;
+	//NSAutoreleasePool * pool;
 	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+    //pool = [[NSAutoreleasePool alloc] init];
+    // assert(pool != nil);
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -183,11 +183,11 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	}else {
 		useTwitter = @"false";
 	}
-
+    
 	
 	NSDictionary *results = [ServerAPI createTeam:self.teamName.text :@"" :@"No description entered..." :useTwitter
 												 :mainDelegate.token :self.from];
-
+    
 	NSString *status = [results valueForKey:@"status"];
 	
 	if ([status isEqualToString:@"100"]){
@@ -222,7 +222,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 				mainDelegate.quickLinkTwoName = [info valueForKey:@"teamName"];
 				mainDelegate.quickLinkTwoImage = [self.from lowercaseString];
 				[mainDelegate saveUserInfo];
-
+                
 			}
 		}
 		
@@ -245,14 +245,14 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 			case 208:
 				self.errorString = @"NA";
 				break;
-
+                
 			default:
 				//should never get here
 				self.errorString = @"*Error connecting to server";
 				break;
 		}
 	}
-		
+    
 	
 	[self performSelectorOnMainThread:
 	 @selector(didFinish)
@@ -260,7 +260,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
+    //[pool drain];
 }
 
 - (void)didFinish{
@@ -272,7 +272,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	if (self.createSuccess) {
 		
 		[self.serverProcess startAnimating];
-
+        
 		for (int i = 0; i < [self.emailArray count]; i++) {
 			NewMemberObject *tmpMember = [self.emailArray objectAtIndex:i];
 			
@@ -291,7 +291,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 		
 		if ([self.emailArray count] > 0) {
 			[self performSelectorInBackground:@selector(addMembers) withObject:nil];
-
+            
 		}else {
 			
 			[self.serverProcess stopAnimating];
@@ -345,7 +345,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 			NSString *tmp = @"Only User's with confirmed email addresses can connect a team to twitter.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
+            //[alert release];
 			self.errorLabel.text = @"Please try again";
 		}else {
 			self.errorLabel.text = self.errorString;
@@ -356,9 +356,9 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 		[self.teamName setEnabled:YES];
 		
 	}
-		
-		
-
+    
+    
+    
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
@@ -367,7 +367,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
+		//[actionSheet release];
 	}
 }
 
@@ -411,8 +411,8 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 
 -(void)addMembers{
 	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	//assert(pool != nil);
 	
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -534,7 +534,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 		}
 		
 		[tmpMemberArray addObject:tmpDictionary];
-		[tmpDictionary release];
+		//[tmpDictionary release];
 		
 	}
 	
@@ -580,18 +580,18 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 				//Log the status code?
 				self.errorString = @"There was an error connecting to the server.";
 				break;
-
+                
 		}
 	}
 	
 	
 	[self performSelectorOnMainThread:@selector(doneCreate) withObject:nil waitUntilDone:NO];
-	[pool drain];
+	//[pool drain];
 	
 }
 
 -(void)doneCreate{
-
+    
 	[self.serverProcess stopAnimating];
 	//Then go to the coaches home
 	NSArray *temp = [self.navigationController viewControllers];
@@ -637,7 +637,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
             [self.navigationController dismissModalViewControllerAnimated:YES];
         }else{
             [self.navigationController popToViewController:cont animated:YES];
-
+            
         }
 		
 	}
@@ -653,7 +653,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
     
     self.coordinatorSegment.selectedSegmentIndex = 1;
 	self.miniErrorLabel.text = @"";
-
+    
 	self.miniBackgroundView.hidden = NO;
 	self.saveButton.enabled = NO;
 	self.closeButton.enabled = NO;
@@ -668,7 +668,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	
 	if ([self.nameText.text isEqualToString:@""] && [self.emailText.text isEqualToString:@""] && [self.phoneText.text isEqualToString:@""]){
 		
-			self.miniErrorLabel.text = @"*You must fill out at least one field.";
+        self.miniErrorLabel.text = @"*You must fill out at least one field.";
 	}else {
 		
 		self.miniBackgroundView.hidden = YES;
@@ -720,7 +720,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 		
 		[self.emailArray addObject:tmp];
 		
-		[tmp release];
+		//[tmp release];
 		
 		self.phoneText.text = @"";
 		self.emailText.text = @"";
@@ -728,18 +728,18 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 		
 		[self.myTableView reloadData];
 	}
-
+    
 	
-
+    
 }
 
 -(void)miniCancel{
 	self.miniErrorLabel.text = @"";
-
+    
 	self.miniBackgroundView.hidden = YES;
 	self.saveButton.enabled = YES;
 	self.closeButton.enabled = YES;
-
+    
 	self.phoneText.text = @"";
 	self.emailText.text = @"";
 	self.nameText.text = @"";
@@ -768,9 +768,9 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	static NSString *EmptyCell=@"EmptyCell";
 	static NSString *MemberCell=@"MemberCell";
     static NSString *GuardianCell=@"GuardianCell";
-
+    
 	static NSInteger dateTag = 1;
-
+    
 	bool isEmpty = false;
 	if ([self.emailArray count] == 0) {
 		isEmpty = true;
@@ -784,10 +784,10 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
     }
     
 	UITableViewCell *cell;
-
+    
 	if (isEmpty) {
 		cell = [tableView dequeueReusableCellWithIdentifier:EmptyCell];
-
+        
 	}else {
         if (memberRow) {
             cell = [tableView dequeueReusableCellWithIdentifier:MemberCell];
@@ -796,30 +796,30 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
             cell = [tableView dequeueReusableCellWithIdentifier:GuardianCell];
             
         }
-
+        
 	}
-
+    
 	
 	if (cell == nil){
 		CGRect frame;
-
+        
 		
 		if (isEmpty) {
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:EmptyCell] autorelease];
-
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:EmptyCell];
+            
 		}else {
 			
             if (memberRow) {
-                cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:MemberCell] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MemberCell];
                 
             }else{
-                cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:GuardianCell] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:GuardianCell];
                 
             }
 			
-
+            
 		}
-
+        
 		
 		frame.origin.x = 35;
 		frame.origin.y = 5;
@@ -829,11 +829,11 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
+		//[dateLabel release];
 		
-				
+        
 	}
-
+    
 	UILabel *dateLabel = (UILabel *)[cell.contentView viewWithTag:dateTag];
 	
 	
@@ -916,9 +916,9 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
             
             
         }
-
         
-			}
+        
+    }
 	
 	
 	
@@ -936,7 +936,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	[self.emailArray removeObjectAtIndex:cell];
 	
 	[self.myTableView reloadData];
-
+    
 	
 }
 
@@ -984,8 +984,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
     }
-
-
+    
+    
 }
 
 
@@ -999,18 +999,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }else if (tmpButton.tag == 1){
         //Guardian 1
         self.addContactWhere = @"guard1";
-
+        
     }else{
         //Guardian 2
         self.addContactWhere = @"guard2";
-
+        
     }
     ABPeoplePickerNavigationController *picker =
 	[[ABPeoplePickerNavigationController alloc] init];
     picker.peoplePickerDelegate = self;
 	
     [self presentModalViewController:picker animated:YES];
-    [picker release];
+    //[picker release];
 }
 
 - (void)peoplePickerNavigationControllerDidCancel:
@@ -1023,7 +1023,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 (ABPeoplePickerNavigationController *)peoplePicker
       shouldContinueAfterSelectingPerson:(ABRecordRef)person {
 	self.twoAlerts = false;
-   
+    
     self.multipleEmailArray = [NSMutableArray array];
     self.multiplePhoneArray = [NSMutableArray array];
     self.multipleEmailArrayLabels = [NSMutableArray array];
@@ -1038,15 +1038,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.currentGuardName = @"";
     self.currentGuardPhone = @"";
     
-    NSString* fName = (NSString *)ABRecordCopyValue(person,
-                                                    kABPersonFirstNameProperty);
+    NSString *fName = (__bridge_transfer NSString *)ABRecordCopyValue(person,
+                                                                      kABPersonFirstNameProperty);
 	
-	NSString *lName = (NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+	NSString *lName = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
     
 	
 	ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
 	
-	NSArray *emailArray1 = (NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
+	NSArray *emailArray1 = (__bridge_transfer NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
 	NSString *emailAddress = @"";
 	if ([emailArray1 count] > 0) {
 		emailAddress = [emailArray1 objectAtIndex:0];
@@ -1054,7 +1054,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         for(int i = 0; i < ABMultiValueGetCount(emails); i++)
         {
-            NSString *test = (NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
+            NSString *test = (__bridge_transfer NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
             
             NSString *final = [self getType:test];
             
@@ -1067,7 +1067,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
 	
-	NSArray *phoneArray = (NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
+	NSArray *phoneArray = (__bridge_transfer NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
 	NSString *phoneString = @"";
 	if ([phoneArray count] > 0) {
 		phoneString = [phoneArray objectAtIndex:0];
@@ -1075,7 +1075,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         for(int i = 0; i < ABMultiValueGetCount(phone); i++)
         {
-            NSString *test = (NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
+            NSString *test = (__bridge_transfer NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
             
             NSString *final = [self getType:test];
             
@@ -1084,8 +1084,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
 	}
 	
-	[phoneArray release];
-    [emailArray1 release];
     
     if (fName == nil) {
         fName = @"";
@@ -1113,7 +1111,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     bool isPhone = false;
     if ([self.multipleEmailArray count] > 1){
         isEmail = true;
-
+        
         
         if ([self.multipleEmailArray count] > 4) {
             
@@ -1226,11 +1224,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }
             
         }
-         
+        
         
     }
     
-
+    
     if (isEmail && isPhone){
         
         self.miniMultiple = @"both";
@@ -1238,20 +1236,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.tmpMiniLastName = lName;
         
         self.twoAlerts = true;
-
+        
         if ([self.addContactWhere isEqualToString:@"member"]){
             
             [self.miniMultipleEmailAlert show];
-            [self.miniMultipleEmailAlert release];
             
         }else if ([self.addContactWhere isEqualToString:@"guard1"]){
             
             [self.guard1EmailAlert show];
-            [self.guard1EmailAlert release];
         }else{
             
             [self.guard2EmailAlert show];
-            [self.guard2EmailAlert release];
         }
         
         
@@ -1268,18 +1263,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if ([self.addContactWhere isEqualToString:@"member"]){
             
             [self.miniMultipleEmailAlert show];
-            [self.miniMultipleEmailAlert release];
             
         }else if ([self.addContactWhere isEqualToString:@"guard1"]){
             
             [self.guard1EmailAlert show];
-            [self.guard1EmailAlert release];
         }else{
             
             [self.guard2EmailAlert show];
-            [self.guard2EmailAlert release];
         }
-
+        
         
     }else if (isPhone){
         
@@ -1293,21 +1285,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if ([self.addContactWhere isEqualToString:@"member"]){
             
             [self.miniMultiplePhoneAlert show];
-            [self.miniMultiplePhoneAlert release];
             
         }else if ([self.addContactWhere isEqualToString:@"guard1"]){
             
             [self.guard1PhoneAlert show];
-            [self.guard1PhoneAlert release];
         }else{
             
             [self.guard2PhoneAlert show];
-            [self.guard2PhoneAlert release];
             
         }
         
-   
-
+        
+        
         
         
     }else{
@@ -1347,8 +1336,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [self.myTableView reloadData];
             
-            [tmpObject release];
-
+            
         }else if ([self.addContactWhere isEqualToString:@"guard1"]){
             
             self.oneName.text = self.currentGuardName;
@@ -1359,18 +1347,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             self.twoEmail.text = emailAddress;
             self.twoPhone.text = phoneString;
         }
-                
+        
         
     }
     
-    [fName release];
-	[lName release];
     
     
     [self dismissModalViewControllerAnimated:YES];
 	
     return NO;
-
+    
 }
 
 
@@ -1424,7 +1410,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			self.addViewBackground.hidden = NO;
 			self.submitButton.enabled = NO;
 		}
-
+        
 		
 	}else if (alertView == self.miniMultipleEmailAlert){
         
@@ -1458,10 +1444,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 [self.myTableView reloadData];
                 
-                [tmpObject release];
+                //[tmpObject release];
                 
             }
-          
+            
             
         }else{
             
@@ -1490,7 +1476,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 [self.myTableView reloadData];
                 
-                [tmpObject release];
+                //[tmpObject release];
             }
         }
         
@@ -1500,35 +1486,35 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             self.tmpMiniPhone = [self.multiplePhoneArray objectAtIndex:buttonIndex-1];
         }
-            
-                
-            NewMemberObject *tmpObject = [[NewMemberObject alloc] init];
-            tmpObject.firstName = @"";
-            tmpObject.lastName = @"";
-            tmpObject.email = @"";
-            tmpObject.phone = @"";
-            tmpObject.role = @"";
+        
+        
+        NewMemberObject *tmpObject = [[NewMemberObject alloc] init];
+        tmpObject.firstName = @"";
+        tmpObject.lastName = @"";
+        tmpObject.email = @"";
+        tmpObject.phone = @"";
+        tmpObject.role = @"";
         tmpObject.guardianOneName = @"";
         tmpObject.guardianOneEmail = @"";
         tmpObject.guardianOnePhone = @"";
         tmpObject.guardianTwoName = @"";
         tmpObject.guardianTwoEmail = @"";
         tmpObject.guardianTwoPhone = @"";
-            
-            tmpObject.firstName = self.tmpMiniFirstName;
-            tmpObject.lastName = self.tmpMiniLastName;
-            tmpObject.email = self.tmpMiniEmail;
-            tmpObject.phone = self.tmpMiniPhone;
-            
-            [self.emailArray addObject:tmpObject];
-            
-            [self.myTableView reloadData];
-            
-            [tmpObject release];
-                
-            
-            
-            
+        
+        tmpObject.firstName = self.tmpMiniFirstName;
+        tmpObject.lastName = self.tmpMiniLastName;
+        tmpObject.email = self.tmpMiniEmail;
+        tmpObject.phone = self.tmpMiniPhone;
+        
+        [self.emailArray addObject:tmpObject];
+        
+        [self.myTableView reloadData];
+        
+        //[tmpObject release];
+        
+        
+        
+        
         
         
     }else if (alertView == self.guard1EmailAlert){
@@ -1544,7 +1530,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 self.oneName.text = self.currentGuardName;
                 self.oneEmail.text = self.currentGuardEmail;
                 self.onePhone.text = self.currentGuardPhone;
-                               
+                
             }
             
             
@@ -1560,7 +1546,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }
         }
         
-
+        
         
     }else if (alertView == self.guard1PhoneAlert){
         
@@ -1574,7 +1560,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.oneEmail.text = self.currentGuardEmail;
         self.onePhone.text = self.currentGuardPhone;
         
-    
+        
     }else if (alertView == self.guard2EmailAlert){
         
         if (buttonIndex != 0) {
@@ -1621,7 +1607,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
     }
 	
-		
+    
 	
 	
 }
@@ -1740,109 +1726,48 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)viewDidUnload {
-	teamName = nil;
-	//from = nil;
-	enableTwitter = nil;
-	errorLabel = nil;
-	//oldTeams = nil;
-	serverProcess = nil;
-	submitButton = nil;
-	twitterUrl = nil;
-	errorString = nil;
-	addButton = nil;
-	addView = nil;
-	addViewBackground = nil;
-	closeButton = nil;
-	saveButton = nil;
-	addNewButton = nil;
-	myTableView = nil;
-	miniForeGroundView = nil;
-	miniBackgroundView = nil;
-	nameText = nil;
-	emailText = nil;
-	phoneText = nil;
-	miniErrorLabel = nil;
-	miniCancelButton = nil;
-	miniAddButton = nil;
-    miniGuardAddButton = nil;
-    miniGuardCancelButton = nil;
-    guardianBackground = nil;
-    onePhone = nil;
-    oneName = nil;
-    oneEmail = nil;
-    twoName = nil;
-    twoEmail = nil;
-    twoPhone = nil;
-    miniGuardErrorLabel = nil;
-    removeGuardiansButton = nil;
-    coordinatorSegment = nil;
-    
-	[super viewDidUnload];
+    /*
+     teamName = nil;
+     //from = nil;
+     enableTwitter = nil;
+     errorLabel = nil;
+     //oldTeams = nil;
+     serverProcess = nil;
+     submitButton = nil;
+     twitterUrl = nil;
+     errorString = nil;
+     addButton = nil;
+     addView = nil;
+     addViewBackground = nil;
+     closeButton = nil;
+     saveButton = nil;
+     addNewButton = nil;
+     myTableView = nil;
+     miniForeGroundView = nil;
+     miniBackgroundView = nil;
+     nameText = nil;
+     emailText = nil;
+     phoneText = nil;
+     miniErrorLabel = nil;
+     miniCancelButton = nil;
+     miniAddButton = nil;
+     miniGuardAddButton = nil;
+     miniGuardCancelButton = nil;
+     guardianBackground = nil;
+     onePhone = nil;
+     oneName = nil;
+     oneEmail = nil;
+     twoName = nil;
+     twoEmail = nil;
+     twoPhone = nil;
+     miniGuardErrorLabel = nil;
+     removeGuardiansButton = nil;
+     coordinatorSegment = nil;
+     
+     [super viewDidUnload];
+     */
 }
 
-- (void)dealloc {
-	[teamName release];
-	[enableTwitter release];
-	[myTableView release];
-	[addNewButton release];
-	[from release];
-	[errorLabel release];
-	[oldTeams release];
-	[serverProcess release];
-	[submitButton release];
-	[twitterUrl release];
-	[errorString release];
-	[addButton release];
-	[addView release];
-	[addViewBackground release];
-	[closeButton release];
-	[saveButton release];
-	[emailArray release];
-	[teamId release];
-	[miniBackgroundView release];
-	[miniForeGroundView release];
-	[nameText release];
-	[emailText release];
-	[phoneText release];
-	[miniErrorLabel release];
-	[miniCancelButton release];
-	[miniAddButton release];
-	[myPhoneNumberFormatter release];
-	[phoneOnlyArray release];
-	[noMembers release];
-    [miniMultiplePhoneAlert release];
-    [miniMultipleEmailAlert release];
-    [multipleEmailArray release];
-    [multiplePhoneArray release];
-    [miniMultiple release];
-    [tmpMiniFirstName release];
-    [tmpMiniLastName release];
-    [tmpMiniPhone release];
-    [tmpMiniEmail release];
-    [guardianBackground release];
-    [miniGuardAddButton release];
-    [miniGuardCancelButton release];
-    [oneName release];
-    [oneEmail release];
-    [onePhone release];
-    [twoName release];
-    [twoEmail release];
-    [twoPhone release];
-    [miniGuardErrorLabel release];
-    [removeGuardiansButton release];
-    [addContactWhere release];
-    [guard2EmailAlert release];
-    [guard2PhoneAlert release];
-    [guard1PhoneAlert release];
-    [guard1EmailAlert release];
-    [currentGuardEmail release];
-    [currentGuardName release];
-    [currentGuardPhone release];
-    [multipleEmailArrayLabels release];
-    [multiplePhoneArrayLabels release];
-    [coordinatorSegment release];
-	[super dealloc];
-}
 
 
 @end

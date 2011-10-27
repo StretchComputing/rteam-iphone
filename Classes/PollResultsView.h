@@ -10,7 +10,7 @@
 
 
 @interface PollResultsView : UIViewController {
-
+    
 	IBOutlet UILabel *option1;
 	IBOutlet UILabel *option2;
 	IBOutlet UILabel *option3;
@@ -36,29 +36,29 @@
 	NSString *no5;
 }
 
-@property (nonatomic, retain) UILabel *option1;
-@property (nonatomic, retain) UILabel *option2;
-@property (nonatomic, retain) UILabel *option3;
-@property (nonatomic, retain) UILabel *option4;
-@property (nonatomic, retain) UILabel *option5;
+@property (nonatomic, strong) UILabel *option1;
+@property (nonatomic, strong) UILabel *option2;
+@property (nonatomic, strong) UILabel *option3;
+@property (nonatomic, strong) UILabel *option4;
+@property (nonatomic, strong) UILabel *option5;
 
-@property (nonatomic, retain) UILabel *numOption1;
-@property (nonatomic, retain) UILabel *numOption2;
-@property (nonatomic, retain) UILabel *numOption3;
-@property (nonatomic, retain) UILabel *numOption4;
-@property (nonatomic, retain) UILabel *numOption5;
+@property (nonatomic, strong) UILabel *numOption1;
+@property (nonatomic, strong) UILabel *numOption2;
+@property (nonatomic, strong) UILabel *numOption3;
+@property (nonatomic, strong) UILabel *numOption4;
+@property (nonatomic, strong) UILabel *numOption5;
 
-@property (nonatomic, retain) NSString *o1;
-@property (nonatomic, retain) NSString *o2;
-@property (nonatomic, retain) NSString *o3;
-@property (nonatomic, retain) NSString *o4;
-@property (nonatomic, retain) NSString *o5;
+@property (nonatomic, strong) NSString *o1;
+@property (nonatomic, strong) NSString *o2;
+@property (nonatomic, strong) NSString *o3;
+@property (nonatomic, strong) NSString *o4;
+@property (nonatomic, strong) NSString *o5;
 
-@property (nonatomic, retain) NSString *no1;
-@property (nonatomic, retain) NSString *no2;
-@property (nonatomic, retain) NSString *no3;
-@property (nonatomic, retain) NSString *no4;
-@property (nonatomic, retain) NSString *no5;
+@property (nonatomic, strong) NSString *no1;
+@property (nonatomic, strong) NSString *no2;
+@property (nonatomic, strong) NSString *no3;
+@property (nonatomic, strong) NSString *no4;
+@property (nonatomic, strong) NSString *no5;
 
 -(void)setLabels;
 @end

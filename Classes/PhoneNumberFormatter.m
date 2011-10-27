@@ -75,22 +75,19 @@
 			}
 		}
 		if(i == [input length]) {
-			[res release];
 			res = temp;
 			break;
 		} else {
-			[temp release];
 		}
 	}
 	if([res length] == 0) {
-		[res release];
 		return input;
 	}
-	return [res autorelease];
+	return res;
 }
 
 - (NSString *)strip:(NSString *)phoneNumber {
-	NSMutableString *res = [[[NSMutableString alloc] init] autorelease];
+	NSMutableString *res = [[NSMutableString alloc] init];
 	for(int i = 0; i < [phoneNumber length]; i++) {
 		char next = [phoneNumber characterAtIndex:i];
 		if([self canBeInputByPhonePad:next])
@@ -105,9 +102,5 @@
 	return NO;
 }
 
-- (void)dealloc {
-	[predefinedFormats release];
-	[super dealloc];
-}
 
 @end

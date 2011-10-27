@@ -9,7 +9,6 @@
 #import "FinalizePoll.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "MessagesTabs.h"
 #import "CurrentTeamTabs.h"
 #import "GameTabs.h"
 #import "PracticeTabs.h"
@@ -80,11 +79,7 @@
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -148,7 +143,6 @@
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -160,12 +154,7 @@
 		tempNum = tempNum - 3;
 		
 			
-		if ([[tempCont objectAtIndex:tempNum] class] == [MessagesTabs class]) {
-			MessagesTabs *cont = [tempCont objectAtIndex:tempNum];
-			cont.selectedIndex = 1;
-				
-			[self.navigationController popToViewController:cont animated:YES];
-		}
+		
 		if ([[tempCont objectAtIndex:tempNum] class] == [CurrentTeamTabs class]) {
 			CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum];
 			cont.selectedIndex = 4;
@@ -203,7 +192,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -230,16 +218,7 @@
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
-	[teamId release];
-	[messageThreadId release];
-	[followUpMessage release];
-	[confirmButton release];
-	[activity release];
-	[errorMessage release];
-	[errorString release];
-    [super dealloc];
-}
+
 
 
 @end

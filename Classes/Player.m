@@ -10,7 +10,6 @@
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
 #import "Base64.h"
-#import "SendMessage.h"
 #import "PhoneNumberFormatter.h"
 #import "PlayerAttendance.h"
 #include <math.h>
@@ -193,7 +192,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	if (!self.fromSearch) {
 		UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
 		[self.navigationItem setRightBarButtonItem:doneButton];
-		[doneButton release];
 	}
 	
 	
@@ -211,8 +209,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 }
 
 -(void)memberInfo{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+	
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	//self.playerInfo = [NSArray array];
@@ -249,7 +246,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	
 	
 	[self performSelectorOnMainThread:@selector(getMemberInformation) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 -(void)getMemberInformation{
@@ -636,7 +632,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Info" style:UIBarButtonItemStyleDone target:nil action:nil];
 	self.navigationItem.backBarButtonItem = temp;
 
-	[temp release];
 	[self.navigationController pushViewController:tmp animated:YES];
 	
 }
@@ -703,7 +698,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
             self.callTextActionSheet = [[UIActionSheet alloc] initWithTitle:@"Call or Text this person?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Call", @"Text", nil];
             self.callTextActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
             [self.callTextActionSheet showInView:self.view];
-            [self.callTextActionSheet release];
         }
         
         
@@ -786,7 +780,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                             
                             [messageViewController setBody:bodyMessage];
                             [self presentModalViewController:messageViewController animated:YES];
-                            [messageViewController release];
                             
                         }
                     }else {
@@ -853,7 +846,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 }
 
 -(void)sendMessage{
-
+/*
 	SendMessage *tmp = [[SendMessage alloc] init];
 	tmp.teamId = self.teamId;
 	tmp.sendTeamId = self.teamId;
@@ -878,15 +871,12 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	tmp.origLoc = @"PlayerProfile";
 	tmp.includeFans = @"false";
 	[self.navigationController pushViewController:tmp animated:YES];
-	
+	*/
 }
 
 - (void)runRequest{
 	self.errorString = @"";
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -991,16 +981,12 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 
 - (void)runRequestRole{
 	self.errorString = @"";
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -1061,7 +1047,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 
@@ -1094,12 +1079,10 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                     NSString *message1 = @"You have changed the phone number of a member.  To receive messages, they must re-sign up for our texting service.  Would you like to send them a text right now with information on how to sign up?";
                     self.newPhoneAlert = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
                     [self.newPhoneAlert show];
-                    [self.newPhoneAlert release];
                 }else {
                     NSString *message1 = @"You have changed the phone number of a member.  We can still send them rTeam messages if they sign up for our free texting service from this new phone.  Please notify them that they must send the text 'yes' to 'join@rteam.com' to sign up.";
                     self.newPhoneAlert = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [self.newPhoneAlert show];
-                    [self.newPhoneAlert release];
                 }
 
                 
@@ -1131,10 +1114,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 - (void)runRequest2 {
 	self.errorString = @"";
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -1228,7 +1208,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish2{
@@ -1268,10 +1247,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 - (void)runDelete {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 
@@ -1316,7 +1292,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinishDelete{
@@ -1383,7 +1358,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	self.changeProfilePicAction =  [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
 	self.changeProfilePicAction.actionSheetStyle = UIActionSheetStyleDefault;
     [self.changeProfilePicAction showInView:self.view];
-    [self.changeProfilePicAction release];
 	
 }
 
@@ -1398,8 +1372,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 		
 		[self presentModalViewController:picker animated:YES];
-
-		[picker release];
 		
 	} else {
 
@@ -1432,7 +1404,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
     
 	NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
 	
-	[tmpView release];
 	
 	UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
 
@@ -1447,7 +1418,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	
 	self.compressImage = UIImageJPEGRepresentation(newImage1, 1.0);
 	
-	[myThumbNail release];
 		
 	//self.profileImage.image = [UIImage imageWithData:self.compressImage];
 	self.newImage = [UIImage imageWithData:self.compressImage];
@@ -1514,7 +1484,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
     self.deleteActionSheet = [[UIActionSheet alloc] initWithTitle:@"Are you sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete Member" otherButtonTitles:nil];
     self.deleteActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [self.deleteActionSheet showInView:self.view];
-    [self.deleteActionSheet release];
 }
 
 -(void)showActionSheetCallText{
@@ -1551,7 +1520,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                 [self.callTextActionSheet setCancelButtonIndex:4];
                 
                 [self.callTextActionSheet showInView:self.view];
-                [self.callTextActionSheet release];
             }
             
             if ([g1Phone isEqualToString:@""] && ![g2Phone isEqualToString:@""]) {
@@ -1570,7 +1538,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                 [self.callTextActionSheet setCancelButtonIndex:4];
                 
                 [self.callTextActionSheet showInView:self.view];
-                [self.callTextActionSheet release];
             }
             
             if (![g1Phone isEqualToString:@""] && ![g2Phone isEqualToString:@""]) {
@@ -1591,7 +1558,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                 [self.callTextActionSheet setCancelButtonIndex:6];
                 
                 [self.callTextActionSheet showInView:self.view];
-                [self.callTextActionSheet release];
             }
             
             
@@ -1603,7 +1569,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
             self.callTextActionSheet = [[UIActionSheet alloc] initWithTitle:@"Call or Text this member?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Call", @"Text", nil];
             self.callTextActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
             [self.callTextActionSheet showInView:self.view];
-            [self.callTextActionSheet release];
             
         }
        
@@ -1627,7 +1592,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
             [self.callTextActionSheet setCancelButtonIndex:4];
 
             [self.callTextActionSheet showInView:self.view];
-            [self.callTextActionSheet release];
         }else{
             self.callOrTextWho = @"guard1";
             
@@ -1635,7 +1599,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
             self.callTextActionSheet = [[UIActionSheet alloc] initWithTitle:@"Call or Text this member's guardian?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Call", @"Text", nil];
             self.callTextActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
             [self.callTextActionSheet showInView:self.view];
-            [self.callTextActionSheet release];
 
         }
                 
@@ -1649,7 +1612,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
             self.callTextActionSheet = [[UIActionSheet alloc] initWithTitle:@"Call or Text this member's guardian?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Call", @"Text", nil];
             self.callTextActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
             [self.callTextActionSheet showInView:self.view];
-            [self.callTextActionSheet release];
         
         
         
@@ -1670,7 +1632,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	self.roleActionSheet = [[UIActionSheet alloc] initWithTitle:@"Change Member's Role?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:buttonTitle, nil];
     self.roleActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [self.roleActionSheet showInView:self.view];
-    [self.roleActionSheet release];
 	
 }
 
@@ -1910,7 +1871,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
             NSString *message1 = @"You cannot make calls from this device.";
             UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:message1 delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert1 show];
-            [alert1 release];
             
         }
         
@@ -1993,7 +1953,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                         messageViewController.messageComposeDelegate = self;
                         [messageViewController setRecipients:[NSArray arrayWithObject:numberToCall]];
                         [self presentModalViewController:messageViewController animated:YES];
-                        [messageViewController release];
                         
                     }
                 }else { 
@@ -2024,7 +1983,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -2048,10 +2006,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 }
 
 - (void)makeFan {
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -2087,9 +2042,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		}
 	}
 	
-	
-	[pool drain];
-
 	
 	[self performSelectorOnMainThread:
 	 @selector(finishedFan)
@@ -2162,84 +2114,6 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	 
 }
 
--(void)dealloc{
-	[firstName release];
-	[lastName release];
-	[email release];
-	[jersey release];
-	[nameLabel release];
-	[memberId release];
-	[teamId release];
-	[jerseyLabel release];
-	[emailLabel release];
-	[sendMessageButton release];
-	[addContactButton release];
-	[profileImage release];
-	[callNumberButton release];
-	[firstEdit release];
-	[lastEdit release];
-	[mobileEdit release];
-	[emailEdit release];
-	[startEditButton release];
-	[endEditButton release];
-	[jerseyEdit release];
-	[addPhotoButton release];
-	[activity release];
-	[displayMessage release];
-	[changeRoleText release];
-	[changeRoleButton release];
-	[userRole release];
-	[alertRole release];
-	[alertContact release];
-	[changedRole release];
-	[phone release];
-	[headUserRole release];
-	[errorLabel release];
-	[origCompressImage release];
-	
-	[editGuardianInfoButton release];
-	[guardiansArray release];
-	[deleteButton release];
-	[scrollView release];
-	[alertDelete release];
-	[alertCallText release];
-	[errorString release];
-	[myPhoneNumberFormatter release];
-	[fromEdit release];
-	[compressImage release];	
-	[tempProfileImage release];
-	[roleActionSheet release];
-	[deleteActionSheet release];
-	[callTextActionSheet release];
-	[playerInfo release];
-	[loadingLabel release];
-	[loadingActivity release];
-	[changeProfilePicAction release];
-	[newImage release];
-	[selectedImage release];
-	[selectedData release];
-	[switchFanLabel release];
-	[teamName release];
-	[switchFanButton release];
-	[profilePhotoButton release];
-    [guard1Phone release];
-    [guard1Email release];
-    [guard1First release];
-    [guard1Last release];
-    [guard2Phone release];
-    [guard2Email release];
-    [guard2First release];
-    [guard2Last release];
-    [guard1Key release];
-    [guard2Key release];
-    [phoneOnlyArray release];
-    [callTextWhoAlertView release];
-    [callOrTextWho release];
-    [initPhone release];
-    [newPhoneAlert release];
-	[super dealloc];
-	
-}
 
 
 @end

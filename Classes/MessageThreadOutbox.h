@@ -33,24 +33,24 @@
 	bool threadingUsed;
 	NSString *createdDate;   //date of most recent message if threading
 	
-
+    
 }
-@property (nonatomic, retain) NSString *eventDate;
-@property (nonatomic, retain) NSArray *subThreadIds;
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) NSString *eventId;
+@property (nonatomic, strong) NSString *eventDate;
+@property (nonatomic, strong) NSArray *subThreadIds;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSString *eventId;
 @property int numberOfMessages;
 @property bool threadingUsed;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *threadId;
-@property (nonatomic, retain) NSString *subject;
-@property (nonatomic, retain) NSString *body;
-@property (nonatomic, retain) NSString *messageType;
-@property (nonatomic, retain) NSString *status;
-@property (nonatomic, retain) NSString *createdDate;
-@property (nonatomic, retain) NSString *numRecipients;
-@property (nonatomic, retain) NSString *numReplies;
-@property (nonatomic, retain) NSString *followUp;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *threadId;
+@property (nonatomic, strong) NSString *subject;
+@property (nonatomic, strong) NSString *body;
+@property (nonatomic, strong) NSString *messageType;
+@property (nonatomic, strong) NSString *status;
+@property (nonatomic, strong) NSString *createdDate;
+@property (nonatomic, strong) NSString *numRecipients;
+@property (nonatomic, strong) NSString *numReplies;
+@property (nonatomic, strong) NSString *followUp;
 
 @end

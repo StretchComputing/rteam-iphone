@@ -7,7 +7,6 @@
 //
 
 #import "CameraSelection.h"
-#import "AllActivity.h"
 
 @implementation CameraSelection
 
@@ -27,13 +26,12 @@
 	
 	[self presentModalViewController:picker animated:YES];
 	
-	[picker release];
 	
 	
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-	
+	/*
 	[picker dismissModalViewControllerAnimated:YES];	
 	
 	UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
@@ -68,17 +66,18 @@
 	UIImage *newImage    = UIGraphicsGetImageFromCurrentImageContext();
 	
 	UIGraphicsEndImageContext();
-
+    
 	NSArray *views = [self.navigationController viewControllers];
 	
+    
 	AllActivity *belowStack = [views objectAtIndex:[views count] - 2];
 	
 	belowStack.selectedImageData = UIImageJPEGRepresentation(newImage, 0.80);
-
+    
 	belowStack.portrait = isPort;
 	belowStack.selectedImage = tmpImage;
 	belowStack.fromCameraSelect = true;
-	
+	*/
 	[self.navigationController popViewControllerAnimated:NO];
 	
 	
@@ -87,7 +86,7 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
 	
 	[picker dismissModalViewControllerAnimated:YES];	
-
+    
 	[self.navigationController popViewControllerAnimated:NO];
 	
 }
@@ -98,9 +97,5 @@
 }
 
 
--(void)dealloc{
-	
-	[super dealloc];
-}
 
 @end

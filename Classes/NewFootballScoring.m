@@ -164,7 +164,6 @@ isCoord, addThem1, addThem3, addThem6, addUs1, addUs3, addUs6, hideGameScoringBu
 	NSString *message = [NSString stringWithFormat:@"Was the final score %d-%d?", [self.scoreUs.text intValue], [self.scoreThem.text intValue]];
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Over?" message:message delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
-    [alert release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -212,11 +211,7 @@ isCoord, addThem1, addThem3, addThem6, addUs1, addUs3, addUs6, hideGameScoringBu
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	NSString *token = @"";
 	
@@ -270,15 +265,11 @@ isCoord, addThem1, addThem3, addThem6, addUs1, addUs3, addUs6, hideGameScoringBu
 	
 	
 	
-    [pool drain];
 }
 
 - (void)runRequestOver {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	NSString *token = @"";
 	
@@ -325,7 +316,6 @@ isCoord, addThem1, addThem3, addThem6, addUs1, addUs3, addUs6, hideGameScoringBu
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 
@@ -464,37 +454,6 @@ isCoord, addThem1, addThem3, addThem6, addUs1, addUs3, addUs6, hideGameScoringBu
 	hideGameScoringButton = nil;
     activity = nil;
 	[super viewDidUnload];
-}
-- (void)dealloc {
-	[subThem release];
-	[subUs release];
-	[addThem1 release];
-	[addThem3 release];
-	[addThem6 release];
-	[addUs1 release];
-	[addUs3 release];
-	[addUs6 release];
-    [activity release];
-	
-	[addQuart release];
-	[subQuart release];
-	[scoreUs release];
-	[scoreThem release];
-	[quarter release];
-	[topOrBottom release];
-
-	[labelUs release];
-	[labelThem release];
-	[labelQuart release];
-	[gameOverButton release];
-	[gameId release];
-	[teamId release];
-	[initScoreUs release];
-	[initScoreThem release];
-	[interval release];
-	[hideGameScoringButton release];
-
-    [super dealloc];
 }
 
 

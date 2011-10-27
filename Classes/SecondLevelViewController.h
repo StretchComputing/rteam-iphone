@@ -11,8 +11,8 @@
 
 @interface SecondLevelViewController : UITableViewController {
 	UIImage *rowImage;
-
+    
 }
 
-@property (nonatomic, retain) UIImage *rowImage;
+@property (nonatomic, strong) UIImage *rowImage;
 @end

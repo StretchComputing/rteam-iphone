@@ -11,9 +11,7 @@
 #import "ServerAPI.h"
 #import "Player.h"
 #import "SendPoll.h"
-#import "SendMessage.h"
 #import "CurrentTeamTabs.h"
-#import "MessagesTabs.h" 
 #import "Fan.h"
 #import "FastRequestStatus2.h"
 
@@ -257,7 +255,7 @@ haveFans, memberTableView, saveButton, haveAttendance, allAbsentMembers, members
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 5;
 		frame.origin.y = 10;
@@ -267,14 +265,12 @@ haveFans, memberTableView, saveButton, haveAttendance, allAbsentMembers, members
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 		frame.origin.x += 280;
 		/*
 		 UILabel *selectedLabel = [[UILabel alloc] initWithFrame:frame];
 		 selectedLabel.tag = selectedTag;
 		 [cell.contentView addSubview:selectedLabel];
-		 [selectedLabel release];
 		 */
 		frame.size.height = 20;
 		frame.size.width = 20;
@@ -282,7 +278,6 @@ haveFans, memberTableView, saveButton, haveAttendance, allAbsentMembers, members
 		tmpView.image = [UIImage imageNamed:@"blueCheck.png"];
 		tmpView.tag = selectedTag;
 		[cell.contentView addSubview:tmpView];
-		[tmpView release];
 		
 	}
 	
@@ -443,8 +438,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)getAttendance{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -538,7 +532,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneAttendance) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 
@@ -567,23 +560,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	//allAbsentMembers = nil;
 	//membersOnly = nil;
 	[super viewDidUnload];
-}
-
-- (void)dealloc {
-	[members release];
-	[teamId release];
-	[selectedMembers release];
-	[error release];
-	[userRole release];
-	[eventType release];
-	[eventId release];
-	[allFansObjects release];
-	[memberTableView release];
-	[selectedMemberObjects release];
-	[saveButton release];
-	[allAbsentMembers release];
-	[membersOnly release];
-	[super dealloc];
 }
 
 @end

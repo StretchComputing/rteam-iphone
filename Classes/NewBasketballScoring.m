@@ -164,7 +164,6 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	NSString *message = [NSString stringWithFormat:@"Was the final score %d-%d?", [self.scoreUs.text intValue], [self.scoreThem.text intValue]];
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Over?" message:message delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
-    [alert release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -210,11 +209,7 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 }
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	NSString *token = @"";
 	
@@ -268,16 +263,11 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	
 	
 	
-    [pool drain];
 }
 
 - (void)runRequestOver {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	NSString *token = @"";
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -323,7 +313,6 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 
@@ -465,37 +454,6 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	
 }
 
-- (void)dealloc {
-	[subThem release];
-	[subUs release];
-	[addThem1 release];
-	[addThem2 release];
-	[addThem3 release];
-	[addUs1 release];
-	[addUs2 release];
-	[addUs3 release];
-	[activity release];
-	
-	[addQuart release];
-	[subQuart release];
-	[scoreUs release];
-	[scoreThem release];
-	[quarter release];
-	[topOrBottom release];
-
-	[labelUs release];
-	[labelThem release];
-	[labelQuart release];
-	[gameOverButton release];
-	[gameId release];
-	[teamId release];
-	[initScoreUs release];
-	[initScoreThem release];
-	[interval release];
-	[cancelScoringButton release];
-
-    [super dealloc];
-}
 
 
 @end

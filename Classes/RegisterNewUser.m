@@ -69,7 +69,7 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 	self.updateLat = @"";
 	self.updateLong = @"";
 	
-	self.locationManager = [[[CLLocationManager alloc] init] autorelease];
+	self.locationManager = [[CLLocationManager alloc] init];
 	self.locationManager.delegate = self; // Tells the location manager to send updates to this object
 	[locationManager startUpdatingLocation];
     
@@ -137,10 +137,7 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 
 - (void)runRequest {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
     
     
 	
@@ -218,7 +215,6 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -253,14 +249,12 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
                     NSString *message = @"To validate your phone number, we need you to send a text to us from your phone.  Press 'Ok' to send the text now.";
                     UIAlertView *tmp = [[UIAlertView alloc] initWithTitle:@"Confirm Phone" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
                     [tmp show];
-                    [tmp release];
                     
                 }else{
                     self.sendingText = false;
                     NSString *message = @"To validate your phone number, we need you to send a text message (not an email) to 'join@rTeam.com', with the message 'yes'.  Please send this text from the device you entered the phone number for.  You can send the text at any time.";
                     UIAlertView *tmp = [[UIAlertView alloc] initWithTitle:@"Confirm Phone" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
                     [tmp show];
-                    [tmp release];
                     
                     
                 }
@@ -467,9 +461,7 @@ numberOfRowsInComponent:(NSInteger)component{
 }
 
 -(void)getCarriers{
-    
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
     
 	NSDictionary *response = [ServerAPI getMobileCarrierList];
 	
@@ -508,10 +500,6 @@ numberOfRowsInComponent:(NSInteger)component{
 	}
 
     
-    
-    
-    [pool drain];
-    
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -529,7 +517,6 @@ numberOfRowsInComponent:(NSInteger)component{
             NSString *bodyMessage = @"yes";
             [messageViewController setBody:bodyMessage];
             [self presentModalViewController:messageViewController animated:YES];
-            [messageViewController release];
             
         }else{
             
@@ -556,7 +543,6 @@ numberOfRowsInComponent:(NSInteger)component{
                 NSString *bodyMessage = @"yes";
                 [messageViewController setBody:bodyMessage];
                 [self presentModalViewController:messageViewController animated:YES];
-                [messageViewController release];
                 
             }else { 
                 
@@ -619,7 +605,6 @@ numberOfRowsInComponent:(NSInteger)component{
         NSString *message = @"The text message was not sent.  To validate your phone number, you must send this text message.  You can try again, or finish registering without your phone number.";
         UIAlertView *tmp = [[UIAlertView alloc] initWithTitle:@"Text Not Sent" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Try Again", @"Continue", nil];
         [tmp show];
-        [tmp release];
         
     }
 	
@@ -636,379 +621,316 @@ numberOfRowsInComponent:(NSInteger)component{
     tmp1.name = @"AT&T";
     tmp1.code = @"103";
     [tmpCarrierArray addObject:tmp1];
-    [tmp1 release];
     
     MobileCarrier *tmp2 = [[MobileCarrier alloc] init];
     tmp2.name = @"Verizon";
     tmp2.code = @"158";
     [tmpCarrierArray addObject:tmp2];
-    [tmp2 release];
     
     MobileCarrier *tmp3 = [[MobileCarrier alloc] init];
     tmp3.name = @"Sprint";
     tmp3.code = @"147";
     [tmpCarrierArray addObject:tmp3];
-    [tmp3 release];
     
     MobileCarrier *tmp4 = [[MobileCarrier alloc] init];
     tmp4.name = @"T-Mobile";
     tmp4.code = @"150";
     [tmpCarrierArray addObject:tmp4];
-    [tmp4 release];
     
     MobileCarrier *tmp5 = [[MobileCarrier alloc] init];
     tmp5.name = @"Alltel";
     tmp5.code = @"102";
     [tmpCarrierArray addObject:tmp5];
-    [tmp5 release];
     
     MobileCarrier *tmp6 = [[MobileCarrier alloc] init];
     tmp6.name = @"US Cellular";
     tmp6.code = @"155";
     [tmpCarrierArray addObject:tmp6];
-    [tmp6 release];
     
     MobileCarrier *tmp7 = [[MobileCarrier alloc] init];
     tmp7.name = @"3 River Wireless";
     tmp7.code = @"100";
     [tmpCarrierArray addObject:tmp7];
-    [tmp7 release];
     
     MobileCarrier *tmp8 = [[MobileCarrier alloc] init];
     tmp8.name = @"ACS Wireless";
     tmp8.code = @"101";
     [tmpCarrierArray addObject:tmp8];
-    [tmp8 release];
     
     MobileCarrier *tmp9 = [[MobileCarrier alloc] init];
     tmp9.name = @"Bell Canada";
     tmp9.code = @"104";
     [tmpCarrierArray addObject:tmp9];
-    [tmp9 release];
     
     MobileCarrier *tmp10 = [[MobileCarrier alloc] init];
     tmp10.name = @"Bell Mobility (Canada)";
     tmp10.code = @"105";
     [tmpCarrierArray addObject:tmp10];
-    [tmp10 release];
     
     MobileCarrier *tmp11 = [[MobileCarrier alloc] init];
     tmp11.name = @"Bell Mobility";
     tmp11.code = @"106";
     [tmpCarrierArray addObject:tmp11];
-    [tmp11 release];
     
     MobileCarrier *tmp12 = [[MobileCarrier alloc] init];
     tmp12.name = @"Blue Sky Frog";
     tmp12.code = @"107";
     [tmpCarrierArray addObject:tmp12];
-    [tmp12 release];
     
     MobileCarrier *tmp13 = [[MobileCarrier alloc] init];
     tmp13.name = @"Bluegrass Cellular";
     tmp13.code = @"108";
     [tmpCarrierArray addObject:tmp13];
-    [tmp13 release];
     
     MobileCarrier *tmp14 = [[MobileCarrier alloc] init];
     tmp14.name = @"Boost Mobile";
     tmp14.code = @"109";
     [tmpCarrierArray addObject:tmp14];
-    [tmp14 release];
     
     MobileCarrier *tmp15 = [[MobileCarrier alloc] init];
     tmp15.name = @"BPL Mobile";
     tmp15.code = @"110";
     [tmpCarrierArray addObject:tmp15];
-    [tmp15 release];
     
     MobileCarrier *tmp16 = [[MobileCarrier alloc] init];
     tmp16.name = @"Carolina West Wireless";
     tmp16.code = @"111";
     [tmpCarrierArray addObject:tmp16];
-    [tmp16 release];
     
     MobileCarrier *tmp17 = [[MobileCarrier alloc] init];
     tmp17.name = @"Cellular One";
     tmp17.code = @"112";
     [tmpCarrierArray addObject:tmp17];
-    [tmp17 release];
     
     MobileCarrier *tmp18 = [[MobileCarrier alloc] init];
     tmp18.name = @"Cellular South";
     tmp18.code = @"113";
     [tmpCarrierArray addObject:tmp18];
-    [tmp18 release];
     
     MobileCarrier *tmp19 = [[MobileCarrier alloc] init];
     tmp19.name = @"Centennial Wireless";
     tmp19.code = @"114";
     [tmpCarrierArray addObject:tmp19];
-    [tmp19 release];
     
     MobileCarrier *tmp20 = [[MobileCarrier alloc] init];
     tmp20.name = @"CenturyTel";
     tmp20.code = @"115";
     [tmpCarrierArray addObject:tmp20];
-    [tmp20 release];
     
     MobileCarrier *tmp21 = [[MobileCarrier alloc] init];
     tmp21.name = @"Cingular (Now AT&T)";
     tmp21.code = @"116";
     [tmpCarrierArray addObject:tmp21];
-    [tmp21 release];
     
     MobileCarrier *tmp22 = [[MobileCarrier alloc] init];
     tmp22.name = @"Clearnet";
     tmp22.code = @"117";
     [tmpCarrierArray addObject:tmp22];
-    [tmp22 release];
     
     MobileCarrier *tmp23 = [[MobileCarrier alloc] init];
     tmp23.name = @"Comcast";
     tmp23.code = @"118";
     [tmpCarrierArray addObject:tmp23];
-    [tmp23 release];
     
     MobileCarrier *tmp24 = [[MobileCarrier alloc] init];
     tmp24.name = @"Corr Wireless Communications";
     tmp24.code = @"119";
     [tmpCarrierArray addObject:tmp24];
-    [tmp24 release];
     
     MobileCarrier *tmp25 = [[MobileCarrier alloc] init];
     tmp25.name = @"Dobson";
     tmp25.code = @"120";
     [tmpCarrierArray addObject:tmp25];
-    [tmp25 release];
     
     MobileCarrier *tmp26 = [[MobileCarrier alloc] init];
     tmp26.name = @"Edge Wireless";
     tmp26.code = @"121";
     [tmpCarrierArray addObject:tmp26];
-    [tmp26 release];
     
     MobileCarrier *tmp27 = [[MobileCarrier alloc] init];
     tmp27.name = @"Fido";
     tmp27.code = @"122";
     [tmpCarrierArray addObject:tmp27];
-    [tmp27 release];
     
     MobileCarrier *tmp28 = [[MobileCarrier alloc] init];
     tmp28.name = @"Golden Telecom";
     tmp28.code = @"123";
     [tmpCarrierArray addObject:tmp28];
-    [tmp28 release];
     
     MobileCarrier *tmp29 = [[MobileCarrier alloc] init];
     tmp29.name = @"Helio";
     tmp29.code = @"124";
     [tmpCarrierArray addObject:tmp29];
-    [tmp29 release];
     
     MobileCarrier *tmp30 = [[MobileCarrier alloc] init];
     tmp30.name = @"Houston Cellular";
     tmp30.code = @"125";
     [tmpCarrierArray addObject:tmp30];
-    [tmp30 release];
     
     MobileCarrier *tmp31 = [[MobileCarrier alloc] init];
     tmp31.name = @"Idea Cellular";
     tmp31.code = @"126";
     [tmpCarrierArray addObject:tmp31];
-    [tmp31 release];
     
     MobileCarrier *tmp32 = [[MobileCarrier alloc] init];
     tmp32.name = @"Illinois Valley Cellular";
     tmp32.code = @"127";
     [tmpCarrierArray addObject:tmp32];
-    [tmp32 release];
     
     MobileCarrier *tmp33 = [[MobileCarrier alloc] init];
     tmp33.name = @"Inland Cellular Telephone";
     tmp33.code = @"128";
     [tmpCarrierArray addObject:tmp33];
-    [tmp33 release];
     
     MobileCarrier *tmp34 = [[MobileCarrier alloc] init];
     tmp34.name = @"MCI";
     tmp34.code = @"129";
     [tmpCarrierArray addObject:tmp34];
-    [tmp34 release];
     
     MobileCarrier *tmp35 = [[MobileCarrier alloc] init];
     tmp35.name = @"Metrocall";
     tmp35.code = @"130";
     [tmpCarrierArray addObject:tmp35];
-    [tmp35 release];
     
     MobileCarrier *tmp36 = [[MobileCarrier alloc] init];
     tmp36.name = @"Metrocall 2-way";
     tmp36.code = @"131";
     [tmpCarrierArray addObject:tmp36];
-    [tmp36 release];
     
     MobileCarrier *tmp37 = [[MobileCarrier alloc] init];
     tmp37.name = @"Metro PCS";
     tmp37.code = @"132";
     [tmpCarrierArray addObject:tmp37];
-    [tmp37 release];
     
     MobileCarrier *tmp38 = [[MobileCarrier alloc] init];
     tmp38.name = @"Microcell";
     tmp38.code = @"133";
     [tmpCarrierArray addObject:tmp38];
-    [tmp38 release];
     
     MobileCarrier *tmp39 = [[MobileCarrier alloc] init];
     tmp39.name = @"Midwest Wireless";
     tmp39.code = @"134";
     [tmpCarrierArray addObject:tmp39];
-    [tmp39 release];
     
     MobileCarrier *tmp40 = [[MobileCarrier alloc] init];
     tmp40.name = @"Mobilcomm";
     tmp40.code = @"135";
     [tmpCarrierArray addObject:tmp40];
-    [tmp40 release];
     
     MobileCarrier *tmp41 = [[MobileCarrier alloc] init];
     tmp41.name = @"MTS";
     tmp41.code = @"136";
     [tmpCarrierArray addObject:tmp41];
-    [tmp41 release];
     
     MobileCarrier *tmp42 = [[MobileCarrier alloc] init];
     tmp42.name = @"Nextel";
     tmp42.code = @"137";
     [tmpCarrierArray addObject:tmp42];
-    [tmp42 release];
     
     MobileCarrier *tmp43 = [[MobileCarrier alloc] init];
     tmp43.name = @"OnlineBeep";
     tmp43.code = @"138";
     [tmpCarrierArray addObject:tmp43];
-    [tmp43 release];
     
     MobileCarrier *tmp44 = [[MobileCarrier alloc] init];
     tmp44.name = @"PCS One";
     tmp44.code = @"139";
     [tmpCarrierArray addObject:tmp44];
-    [tmp44 release];
     
     MobileCarrier *tmp45 = [[MobileCarrier alloc] init];
     tmp45.name = @"President's Choice";
     tmp45.code = @"140";
     [tmpCarrierArray addObject:tmp45];
-    [tmp45 release];
     
     MobileCarrier *tmp46 = [[MobileCarrier alloc] init];
     tmp46.name = @"Public Service Cellular";
     tmp46.code = @"141";
     [tmpCarrierArray addObject:tmp46];
-    [tmp46 release];
     
     MobileCarrier *tmp47 = [[MobileCarrier alloc] init];
     tmp47.name = @"Qwest";
     tmp47.code = @"142";
     [tmpCarrierArray addObject:tmp47];
-    [tmp47 release];
     
     MobileCarrier *tmp48 = [[MobileCarrier alloc] init];
     tmp48.name = @"Rogers AT&T Wireless";
     tmp48.code = @"143";
     [tmpCarrierArray addObject:tmp48];
-    [tmp48 release];
     
     MobileCarrier *tmp49 = [[MobileCarrier alloc] init];
     tmp49.name = @"Rogers Canada";
     tmp49.code = @"144";
     [tmpCarrierArray addObject:tmp49];
-    [tmp49 release];
     
     MobileCarrier *tmp50 = [[MobileCarrier alloc] init];
     tmp50.name = @"Satellink";
     tmp50.code = @"145";
     [tmpCarrierArray addObject:tmp50];
-    [tmp50 release];
     
     MobileCarrier *tmp51 = [[MobileCarrier alloc] init];
     tmp51.name = @"Southwestern Bell";
     tmp51.code = @"146";
     [tmpCarrierArray addObject:tmp51];
-    [tmp51 release];
     
     MobileCarrier *tmp52 = [[MobileCarrier alloc] init];
     tmp52.name = @"Sumcom";
     tmp52.code = @"148";
     [tmpCarrierArray addObject:tmp52];
-    [tmp52 release];
     
     MobileCarrier *tmp53 = [[MobileCarrier alloc] init];
     tmp53.name = @"Surewest Communications";
     tmp53.code = @"149";
     [tmpCarrierArray addObject:tmp53];
-    [tmp53 release];
     
     MobileCarrier *tmp54 = [[MobileCarrier alloc] init];
     tmp54.name = @"Telus";
     tmp54.code = @"151";
     [tmpCarrierArray addObject:tmp54];
-    [tmp54 release];
     
     MobileCarrier *tmp55 = [[MobileCarrier alloc] init];
     tmp55.name = @"Tracfone";
     tmp55.code = @"152";
     [tmpCarrierArray addObject:tmp55];
-    [tmp55 release];
     
     MobileCarrier *tmp56 = [[MobileCarrier alloc] init];
     tmp56.name = @"Triton";
     tmp56.code = @"153";
     [tmpCarrierArray addObject:tmp56];
-    [tmp56 release];
     
     MobileCarrier *tmp57 = [[MobileCarrier alloc] init];
     tmp57.name = @"Unicel";
     tmp57.code = @"154";
     [tmpCarrierArray addObject:tmp57];
-    [tmp57 release];
     
     MobileCarrier *tmp58 = [[MobileCarrier alloc] init];
     tmp58.name = @"Solo Mobile";
     tmp58.code = @"156";
     [tmpCarrierArray addObject:tmp58];
-    [tmp58 release];
     
     MobileCarrier *tmp59 = [[MobileCarrier alloc] init];
     tmp59.name = @"US West";
     tmp59.code = @"157";
     [tmpCarrierArray addObject:tmp59];
-    [tmp59 release];
     
     MobileCarrier *tmp60 = [[MobileCarrier alloc] init];
     tmp60.name = @"Virgin Mobile";
     tmp60.code = @"159";
     [tmpCarrierArray addObject:tmp60];
-    [tmp60 release];
     
     MobileCarrier *tmp61 = [[MobileCarrier alloc] init];
     tmp61.name = @"Virgin Mobile Canada";
     tmp61.code = @"160";
     [tmpCarrierArray addObject:tmp61];
-    [tmp61 release];
     
     MobileCarrier *tmp62 = [[MobileCarrier alloc] init];
     tmp62.name = @"West Central Wireless";
     tmp62.code = @"161";
     [tmpCarrierArray addObject:tmp62];
-    [tmp62 release];
     
     MobileCarrier *tmp63 = [[MobileCarrier alloc] init];
     tmp63.name = @"Western Wireless";
     tmp63.code = @"162";
     [tmpCarrierArray addObject:tmp63];
-    [tmp63 release];
     
     
     self.hardCarriers = [NSArray arrayWithArray:tmpCarrierArray];
@@ -1031,34 +953,6 @@ numberOfRowsInComponent:(NSInteger)component{
     carrierText = nil;
     selectCarrierButton = nil;
 	[super viewDidUnload];
-}
-
-- (void)dealloc {
-	[email release];
-	[password release];
-	[firstName release];
-	[lastName release];
-	[error release];
-	[registering release];
-	[submitButton release];
-	[firstString release];
-	[lastString release];
-	[errorString release];
-	[locationManager release];
-	[updateLat release];
-	[updateLong release];
-    [phoneText release];
-    [phoneExplain release];
-    [carrierText release];
-    [carrierPicker release];
-    [carrierLabel release];
-    [carrierExplain release];
-    [carriers release];
-    [selectedCarrier release];
-    [selectCarrierButton release];
-    [carrierCode release];
-    [hardCarriers release];
-	[super dealloc];
 }
 
 

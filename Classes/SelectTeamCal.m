@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
 	
 	self.title = @"Select Team";
-
+    
 	UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noLogoNoCrowd.png"]];
 	self.tableView.backgroundView = imageView;
 	
@@ -55,7 +55,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 10;
 		frame.origin.y = 10;
@@ -65,7 +65,6 @@
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 		
 	}
@@ -79,7 +78,7 @@
 	
 	Team *controller = [self.teams objectAtIndex:row];
 	nameLabel.text = controller.name;
-
+    
 	
 	
 	
@@ -93,7 +92,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	Team *tmpTeam = [self.teams objectAtIndex:row];
 	self.teamId = tmpTeam.teamId;
-
+    
 	if ([self.singleOrMultiple isEqualToString:@"single"]) {
 		if ([self.event isEqualToString:@"game"]) {
 			//Game	
@@ -123,21 +122,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		[self.navigationController pushViewController:tmp animated:YES];
 		
 	}
-
-		
+    
+    
 }
 
 
 
-- (void)dealloc {
-	[teams release];
-	[error release];
-	[event release];
-	[teamId release];
-	[finalDate release];
-	[singleOrMultiple release];
-	[super dealloc];
-}
 
 
 @end

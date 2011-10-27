@@ -128,7 +128,6 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 		
 		UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStyleBordered target:self action:@selector(shareImage)];
 		[self.navigationItem setRightBarButtonItem:shareButton];
-        [shareButton release];
 		
 	}else {
         self.thumbsDown.hidden = NO;
@@ -158,9 +157,7 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 
 
 -(void)getLargeImage{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -210,7 +207,6 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 	
 	
 	[self performSelectorOnMainThread:@selector(doneImage) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -287,14 +283,6 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 
 -(void)updateTweet{
 	
-
-		
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -354,7 +342,6 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)doneUpdate{
@@ -485,7 +472,6 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 	self.shareAction =  [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save Photo", @"Email Photo", nil];
 	self.shareAction.actionSheetStyle = UIActionSheetStyleDefault;
     [self.shareAction showInView:self.view];
-    [self.shareAction release];
 	
 }
 
@@ -527,13 +513,11 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 		[mailViewController addAttachmentData:imageData mimeType:@"image/jpeg" fileName:@"rTeamActivity"];
 		
 		[self presentModalViewController:mailViewController animated:YES];
-		[mailViewController release];
 		
 	}else {
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Failed." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-        [alert release];
 	}
 	
 	
@@ -581,7 +565,6 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -641,33 +624,4 @@ errorString, errorLabel, currentVoteBool, voteSuccess, imageBackground, likes, d
 }
 
 
--(void)dealloc{
-	[stringText release];
-	[dateText release];
-	[teamText release];
-	[dateLabel release];
-	[textLabel release];
-	[teamLabel release];
-	[displayImage release];
-	[currentVote release];
-	[loadingImageLabel release];
-	[loadingImageActivity release];
-	[starOne release];
-	[starTwo release];
-	[starThree release];
-	[thumbsUp release];
-	[thumbsDown release];
-	[voteLabel release];
-	[activityId release];
-	[teamId release];
-	[encodedPhoto release];
-	[errorString release];
-	[errorLabel release];
-	[imageBackground release];
-	[likesLabel release];
-	[dislikesLabel release];
-	[displayLabel release];
-	[shareAction release];
-	[super dealloc];
-}
 @end

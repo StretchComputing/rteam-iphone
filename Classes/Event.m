@@ -12,22 +12,6 @@
 @synthesize startDate, endDate, timeZone, eventId, teamId, description, latitude, longitude, location, userRole, eventName, teamName, isCanceled;
 
 
-- (void)dealloc {
-    [startDate release];
-	[endDate release];
-	[timeZone release];
-	[eventId release];
-	[teamId release];
-	[description release];
-	[latitude release];
-	[longitude release];
-	[location release];
-	[userRole release];
-	[eventName release];
-	[teamName release];
-	[super dealloc];
-	
-}
 
 
 @end

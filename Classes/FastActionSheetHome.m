@@ -11,8 +11,6 @@
 #import "FastUpdateStatus.h"
 #import "FastRequestStatus.h"
 #import "FastChangeEventStatus.h"
-#import "FastSendMessage.h"
-#import "FastHappeningNow.h"
 
 @implementation FastActionSheetHome
 
@@ -41,13 +39,9 @@
 		FastChangeEventStatus *tmp = [[FastChangeEventStatus alloc] init];
 		[sender.navigationController pushViewController:tmp animated:NO];
 	}else if (buttonIndex == 3){
-		FastSendMessage *tmp = [[FastSendMessage alloc] init];
-		[sender.navigationController pushViewController:tmp animated:NO];
+		//FastSendMessage *tmp = [[FastSendMessage alloc] init];
+		//[sender.navigationController pushViewController:tmp animated:NO];
 		
-	}else if (buttonIndex == 4) {
-		//Happening Now
-		FastHappeningNow *tmp = [[FastHappeningNow alloc] init];
-		[sender.navigationController pushViewController:tmp animated:NO];
 	}
 	
 	

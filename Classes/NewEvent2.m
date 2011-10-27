@@ -48,7 +48,7 @@
         // Be sure to test for equality using the "isEqualToString" message
         [textView resignFirstResponder];
 		[self becomeFirstResponder];
-
+        
         // Return FALSE so that the final '\n' character doesn't get added
         return FALSE;
     }
@@ -93,11 +93,7 @@
 }
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+    
 	
 	//Create the new game
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -117,7 +113,6 @@
 		theDescription = self.description.text;
 	}
 	
-	[format release];
 	
 	//get the current time zone
 	NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
@@ -130,7 +125,7 @@
 	
 	NSDictionary *response = [ServerAPI createEvent:self.teamId :mainDelegate.token :startDateString :@"" :theDescription :timeZone
 												   :latitude :longitude :self.location.text :@"generic" :self.eventName.text];
-		
+    
 	NSString *status = [response valueForKey:@"status"];
 	
 	if ([status isEqualToString:@"100"]){
@@ -170,7 +165,6 @@
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -224,7 +218,7 @@
 
 -(void)endText{
 	[self becomeFirstResponder];
-
+    
 }
 
 
@@ -234,7 +228,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -264,18 +257,5 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[serverProcess release];
-	[error release];
-	[submitButton release];
-	[teamId release];
-	[location release];
-	[eventName release];
-	[description release];
-	[start release];
-	[errorString release];
-	[super dealloc];
-}
 
 @end

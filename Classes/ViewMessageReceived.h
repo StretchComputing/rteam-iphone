@@ -10,7 +10,7 @@
 
 
 @interface ViewMessageReceived : UIViewController <UIActionSheetDelegate> {
-
+    
 	NSString *subject;
 	NSString *body;
 	NSString *receivedDate;
@@ -50,46 +50,46 @@
 	IBOutlet UISegmentedControl *upDown;
 	NSString *teamName;
 	IBOutlet UILabel *teamLabel;
-
+    
 	NSString *origTeamId;
     
     bool isAlert;
-
+    
 }
 @property bool isAlert;
-@property (nonatomic, retain) NSString *origTeamId;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) UILabel *teamLabel;
+@property (nonatomic, strong) NSString *origTeamId;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) UILabel *teamLabel;
 @property int currentMessageNumber;
-@property (nonatomic, retain) UISegmentedControl *upDown;
-@property (nonatomic, retain) NSArray *messageArray;
-@property (nonatomic, retain) UILabel *messageNumber;
+@property (nonatomic, strong) UISegmentedControl *upDown;
+@property (nonatomic, strong) NSArray *messageArray;
+@property (nonatomic, strong) UILabel *messageNumber;
 
-@property (nonatomic, retain) NSArray *individualReplies;
-@property (nonatomic, retain) NSString *confirmStatus;
-@property (nonatomic, retain) UIButton *viewMoreDetailButton;
-@property (nonatomic, retain) UILabel *confirmationsLabel;
+@property (nonatomic, strong) NSArray *individualReplies;
+@property (nonatomic, strong) NSString *confirmStatus;
+@property (nonatomic, strong) UIButton *viewMoreDetailButton;
+@property (nonatomic, strong) UILabel *confirmationsLabel;
 @property bool replySuccess;
-@property (nonatomic, retain) UILabel *replyMessage;
-@property (nonatomic, retain) UIToolbar *myToolbar;
-@property (nonatomic, retain) UIBarButtonItem *replyButton;
-@property (nonatomic, retain) UILabel *displaySender;
-@property (nonatomic, retain) NSString *senderName;
-@property (nonatomic, retain) NSString *senderId;
-@property (nonatomic, retain) NSString *userRole;
+@property (nonatomic, strong) UILabel *replyMessage;
+@property (nonatomic, strong) UIToolbar *myToolbar;
+@property (nonatomic, strong) UIBarButtonItem *replyButton;
+@property (nonatomic, strong) UILabel *displaySender;
+@property (nonatomic, strong) NSString *senderName;
+@property (nonatomic, strong) NSString *senderId;
+@property (nonatomic, strong) NSString *userRole;
 
-@property (nonatomic, retain) NSString *threadId;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *eventId;
-@property (nonatomic, retain) NSString *eventType;
+@property (nonatomic, strong) NSString *threadId;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *eventType;
 
-@property (nonatomic, retain) NSString *subject;
-@property (nonatomic, retain) NSString *body;
-@property (nonatomic, retain) NSString *receivedDate;
+@property (nonatomic, strong) NSString *subject;
+@property (nonatomic, strong) NSString *body;
+@property (nonatomic, strong) NSString *receivedDate;
 
-@property (nonatomic, retain) UILabel *displaySubject;
-@property (nonatomic, retain) UILabel *displayDate;
-@property (nonatomic, retain) UITextView *displayBody;
+@property (nonatomic, strong) UILabel *displaySubject;
+@property (nonatomic, strong) UILabel *displayDate;
+@property (nonatomic, strong) UITextView *displayBody;
 @property BOOL wasViewed;
 
 -(void)initMessageInfo;

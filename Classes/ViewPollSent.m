@@ -12,7 +12,6 @@
 #import "JSON/JSON.h"
 #import "ViewDetailPollReplies.h"
 #import "FinalizePoll.h"
-#import "MessagesTabs.h"
 #import "CurrentTeamTabs.h"
 #import "GameTabs.h"
 #import "PracticeTabs.h"
@@ -64,7 +63,7 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 	self.upDown.selectedSegmentIndex = -1;
 	[self.upDown addTarget:self action:@selector(segmentSelect:) forControlEvents:UIControlEventValueChanged];
 	
-	UIBarButtonItem *tmp = [[[UIBarButtonItem alloc] initWithCustomView: self.upDown] autorelease];
+	UIBarButtonItem *tmp = [[UIBarButtonItem alloc] initWithCustomView: self.upDown];
 	[self.navigationItem setRightBarButtonItem:tmp];
 	
 	int msg = self.currentPollNumber + 1;
@@ -197,9 +196,7 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 
 -(void)getInfo{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	if (self.teamId == nil) {
@@ -240,7 +237,6 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 	
 	
 	[self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -319,7 +315,6 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 	for (int i = 0; i < [pollChoices count]; i++) {
 		NSNumber *num = [[NSNumber alloc] initWithInt:0];
 		[pollChoicesCount addObject:num];
-		[num release];
 	}
 	
 	self.individualReplies = [self.response objectForKey:@"members"];
@@ -346,7 +341,6 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 					
 					NSNumber *newNum = [[NSNumber alloc] initWithInt:tmpInt];
 					[pollChoicesCount replaceObjectAtIndex:j withObject:newNum];
-					[newNum release];
 					
 					
 				}
@@ -429,7 +423,6 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 	NSString *message = @"Deleting this poll will remove if from the inbox of all recipients, and the results will be ignored.  Are you sure?";
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete This Poll?" message:message delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 	[alert show];
-    [alert release];
 	
 }
 
@@ -457,12 +450,7 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 			
 			//Could be "MessageTabs", "GameTabs", "PracticeTabs", or "CurrentTeamTabs"
 			
-			if ([[temp objectAtIndex:num] class] == [MessagesTabs class]) {
-				MessagesTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 1;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
+			if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
 				CurrentTeamTabs *cont = [temp objectAtIndex:num];
 				cont.selectedIndex = 4;
 				[self.navigationController popToViewController:cont animated:YES];
@@ -514,7 +502,6 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -570,42 +557,4 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 	
 }
 
--(void)dealloc{
-	[messageThreadId release];
-	[teamId release];
-	[subject release];
-	[body release];
-	[numReply release];
-	[option1 release];
-	[option2 release];
-	[option3 release];
-	[option4 release];
-	[option5 release];
-	[replyFraction release];
-	[individualReplies release];
-	[finalizedMessage release];
-	[status release];
-	[finalizeButton release];
-	[deletePollButton release];
-	[viewMoreDetailButton release];
-	[scrollView release];
-	[followUp release];
-	[downArrow release];
-	[pollNumber release];
-	[pollArray release];
-	[upDown release];
-	[teamName release];
-	[origTeamId release];
-	[teamNameLabel release];
-	[response release];
-	[loadingActivity release];
-	[loadingLabel release];
-	[resultsLabel release];
-	[errorLabel release];
-	[errorString release];
-	
-	[super dealloc];
-	
-}
-	
 @end

@@ -12,11 +12,11 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 
 @interface SettingsTabs : UIViewController <UITableViewDelegate, UITableViewDataSource, ADBannerViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate > {
-
+    
 	NSString *fromRegisterFlow;
 	NSString *didRegister;
 	int numMemberTeams;
-
+    
 	bool displaySuccess;
     
     bool passwordReset;
@@ -44,27 +44,27 @@
 }
 @property bool displaySuccess;
 
-@property (nonatomic, retain) NSString *fromRegisterFlow;
-@property (nonatomic, retain) NSString *didRegister;
+@property (nonatomic, strong) NSString *fromRegisterFlow;
+@property (nonatomic, strong) NSString *didRegister;
 @property int numMemberTeams;
 
 @property bool didSynch;
 @property bool synchSuccess;
 @property bool doneGames;
 @property bool doneEvents;
-@property (nonatomic, retain) NSArray *allGames;
-@property (nonatomic, retain) NSArray *allEvents;
-@property (nonatomic, retain) NSMutableArray *gamesAndEvents;
+@property (nonatomic, strong) NSArray *allGames;
+@property (nonatomic, strong) NSArray *allEvents;
+@property (nonatomic, strong) NSMutableArray *gamesAndEvents;
 
-@property (nonatomic, retain) UIActivityIndicatorView *largeActivity;
+@property (nonatomic, strong) UIActivityIndicatorView *largeActivity;
 @property BOOL bannerIsVisible;
-@property (nonatomic, retain) UITableView *myTableView;
+@property (nonatomic, strong) UITableView *myTableView;
 
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
 @property bool haveUserInfo;
 @property bool passwordReset;
-@property (nonatomic, retain) NSString *passwordResetQuestion;
+@property (nonatomic, strong) NSString *passwordResetQuestion;
 
 -(void)getUserInfo;
 

@@ -10,7 +10,7 @@
 
 
 @interface SendPollOptions : UIViewController <UIActionSheetDelegate> {
-
+    
 	IBOutlet UITextField *option1;
 	IBOutlet UITextField *option2;
 	IBOutlet UITextField *option3;
@@ -40,31 +40,31 @@
 	NSString *errorString;
 	bool toTeam;
 }
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSString *displayResults;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSString *displayResults;
 @property bool toTeam;
-@property (nonatomic, retain) NSArray *recipients;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) NSString *eventId;
-@property (nonatomic, retain) NSString *eventType;
+@property (nonatomic, strong) NSArray *recipients;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *eventType;
 
 
-@property (nonatomic, retain) UITextField *option1;
-@property (nonatomic, retain) UITextField *option2;
-@property (nonatomic, retain) UITextField *option3;
-@property (nonatomic, retain) UITextField *option4;
-@property (nonatomic, retain) UITextField *option5;
+@property (nonatomic, strong) UITextField *option1;
+@property (nonatomic, strong) UITextField *option2;
+@property (nonatomic, strong) UITextField *option3;
+@property (nonatomic, strong) UITextField *option4;
+@property (nonatomic, strong) UITextField *option5;
 
-@property (nonatomic, retain) UIActivityIndicatorView *action;
-@property (nonatomic, retain) UITextView *question;
-@property (nonatomic, retain) UILabel *errorMessage;
-@property (nonatomic, retain) NSString *origLoc;
+@property (nonatomic, strong) UIActivityIndicatorView *action;
+@property (nonatomic, strong) UITextView *question;
+@property (nonatomic, strong) UILabel *errorMessage;
+@property (nonatomic, strong) NSString *origLoc;
 
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) NSString *questionText;
-@property (nonatomic, retain) NSString *teamId;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) NSString *questionText;
+@property (nonatomic, strong) NSString *teamId;
 @property bool createSuccess;
-@property (nonatomic, retain) NSString *pollSubject;
+@property (nonatomic, strong) NSString *pollSubject;
 
 -(IBAction)submit;
 -(IBAction)endText;

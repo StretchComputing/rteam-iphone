@@ -91,9 +91,7 @@ newImage, dontMove, toOrientation, portrait;
 
 
 -(void)getImage{
-    
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+   
 	
 	NSString *token = @"";
 	
@@ -146,7 +144,6 @@ newImage, dontMove, toOrientation, portrait;
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneImage) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -226,7 +223,6 @@ newImage, dontMove, toOrientation, portrait;
 	self.camerActionSheet =  [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
 	self.camerActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [self.camerActionSheet showInView:self.view];
-    [self.camerActionSheet release];
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -264,7 +260,6 @@ newImage, dontMove, toOrientation, portrait;
 		
 		[self presentModalViewController:picker animated:YES];
 		
-		[picker release];
 		
 	} else {
 		
@@ -298,7 +293,6 @@ newImage, dontMove, toOrientation, portrait;
     
 	NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
 	
-	[tmpView release];
 	
 	UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
 	
@@ -313,7 +307,6 @@ newImage, dontMove, toOrientation, portrait;
 	
 	self.imageData = UIImageJPEGRepresentation(newImage1, 1.0);
 	
-	[myThumbNail release];
 	
 	UIImage *tmpImage = [UIImage imageWithData:self.imageData];
 	
@@ -344,10 +337,7 @@ newImage, dontMove, toOrientation, portrait;
 
 -(void)updateImage{
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -417,10 +407,7 @@ newImage, dontMove, toOrientation, portrait;
 		
 		
 	}
-	
-	
-	
-    [pool drain];
+
 	
 	[self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
 	
@@ -523,7 +510,6 @@ newImage, dontMove, toOrientation, portrait;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -548,28 +534,5 @@ newImage, dontMove, toOrientation, portrait;
 	
 }
 
--(void)dealloc{
-	
-	[camerActionSheet release];
-	[removeButton release];
-	[addChangeButton release];
-	[profilePic release];
-	[titleLabel release];
-	[loadingImageLabel release];
-	[loadingImageActivity release];
-	[displayLabel release];
-	[imageString release];
-	[imageData release];
-	[selectedImage release];
-	[activity release];
-	[errorString release];
-	[userRole release];
-	[teamId release];
-	[largeImageView release];
-    [allWhiteView release];
-    [toOrientation release];
-	[super dealloc];
-	
-}
 
 @end

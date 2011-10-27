@@ -10,7 +10,7 @@
 
 
 @interface NewOtherTeam : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>{
-
+    
 	IBOutlet UITextField *sport;
 	IBOutlet UITableView *myTableView;
 	NSArray *allSports;
@@ -22,12 +22,12 @@
 	
 }
 @property bool fromHome;
-@property (nonatomic, retain) UIButton *continueButton;
-@property (nonatomic, retain) UITextField *sport;
-@property (nonatomic, retain) UITableView *myTableView;
-@property (nonatomic, retain) NSArray *allSports;
-@property (nonatomic, retain) NSMutableArray *allMatches;
-@property (nonatomic, retain) UILabel *errorMessage;
+@property (nonatomic, strong) UIButton *continueButton;
+@property (nonatomic, strong) UITextField *sport;
+@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) NSArray *allSports;
+@property (nonatomic, strong) NSMutableArray *allMatches;
+@property (nonatomic, strong) UILabel *errorMessage;
 
 -(IBAction)endText;
 -(IBAction)nextScreen;

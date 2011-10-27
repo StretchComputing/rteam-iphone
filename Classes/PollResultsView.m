@@ -22,7 +22,7 @@ no1, no2, no3, no4, no5;
 	self.option3.lineBreakMode = UILineBreakModeMiddleTruncation;
 	self.option4.lineBreakMode = UILineBreakModeMiddleTruncation;
 	self.option5.lineBreakMode = UILineBreakModeMiddleTruncation;
-
+    
 	
 	if (self.o1 != nil) {
 		self.option1.text = self.o1;
@@ -30,7 +30,7 @@ no1, no2, no3, no4, no5;
 	
 	if (self.o2 != nil) {
 		self.option2.text = self.o2;
-
+        
 	}
 	
 	if (self.o3 != nil) {
@@ -39,7 +39,7 @@ no1, no2, no3, no4, no5;
 	}else {
 		[self.option3 setHidden:YES];
 		[self.numOption3 setHidden:YES];
-
+        
 	}
 	
 	if (self.o4 != nil) {
@@ -49,7 +49,7 @@ no1, no2, no3, no4, no5;
 	}else {
 		[self.option4 setHidden:YES];
 		[self.numOption4 setHidden:YES];
-
+        
 	}
 	
 	if (self.o5 != nil) {
@@ -59,7 +59,7 @@ no1, no2, no3, no4, no5;
 	}else {
 		[self.option5 setHidden:YES];
 		[self.numOption5 setHidden:YES];
-
+        
 	}
 	
 	
@@ -111,8 +111,8 @@ no1, no2, no3, no4, no5;
 }
 
 -(void)setLabels{
-
-
+    
+    
 	
 	if (self.no1 != nil) {
 		self.numOption1.text = self.no1;
@@ -158,7 +158,7 @@ no1, no2, no3, no4, no5;
 		
 	}
 	
-
+    
 	if (self.o1 != nil) {
 		self.option1.text = self.o1;
 	}
@@ -213,47 +213,23 @@ no1, no2, no3, no4, no5;
 	numOption5 = nil;
 	
 	/*
-	o1 = nil;
-	o2 = nil;
-	o3 = nil;
-	o4 = nil;
-	o5 = nil;
-	
-	no1 = nil;
-	no2 = nil;
-	no3 = nil;
-	no4 = nil;
-	no5 = nil;
+     o1 = nil;
+     o2 = nil;
+     o3 = nil;
+     o4 = nil;
+     o5 = nil;
+     
+     no1 = nil;
+     no2 = nil;
+     no3 = nil;
+     no4 = nil;
+     no5 = nil;
 	 */
 	
 	[super viewDidUnload];
 }
 
 
-- (void)dealloc {
-	[option1 release];
-	[option2 release];
-	[option3 release];
-	[option4 release];
-	[option5 release];
-    [numOption1 release];
-	[numOption2 release];
-	[numOption3 release];
-	[numOption4 release];
-	[numOption5 release];
-	
-	[o1 release];
-	[o2 release];
-	[o3 release];
-	[o4 release];
-	[o5 release];
-	[no1 release];
-	[no2 release];
-	[no3 release];
-	[no4 release];
-	[no5 release];
-    [super dealloc];
-}
 
 
 @end

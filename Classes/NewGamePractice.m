@@ -68,8 +68,8 @@
 		nextController.start = self.startDate.date;
 		[self.navigationController pushViewController:nextController animated:YES];
 	}
-
-
+    
+    
 	
 	
 }
@@ -81,7 +81,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -104,10 +103,10 @@
 	tmp.teamId = self.teamId;
 	if (self.practiceOrGame.selectedSegmentIndex == 0) {
 		tmp.eventType = @"game";
-
+        
 	}else if (self.practiceOrGame.selectedSegmentIndex == 1) {
 		tmp.eventType = @"practice";
-
+        
 	}else {
 		tmp.eventType = @"generic";
 	}
@@ -131,18 +130,18 @@
 			
 			break;
 		case 1:
-	
+            
 			self.singleLabel.text = @"Single Practice Date/Time";
 			[self.recurringEventButton setTitle:@"Add Multiple Practices" forState:UIControlStateNormal];
-
+            
 			break;
 			
 		case 2:
 			
 			self.singleLabel.text = @"Single Event Date/Time";
 			[self.recurringEventButton setTitle:@"Add Multiple Events" forState:UIControlStateNormal];
-
-
+            
+            
 			break;
 		default:
 			break;
@@ -162,15 +161,6 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	[teamId release];
-	[startDate release];
-	[practiceOrGame release];
-	[createButton release];
-	[recurringEventButton release];
-	[singleLabel release];
-	[super dealloc];
-}
 
 
 @end

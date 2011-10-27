@@ -10,7 +10,7 @@
 
 
 @interface ResetPasswordWithQuestion : UIViewController <UITextViewDelegate> {
-
+    
 	NSString *question;
 	IBOutlet UITextView *answerField;
 	IBOutlet UITextView *questionField;
@@ -22,15 +22,15 @@
 	bool success;
 	NSString *errorString;
 }
-@property (nonatomic, retain) NSString *email;
-@property (nonatomic, retain) NSString *errorString;
+@property (nonatomic, strong) NSString *email;
+@property (nonatomic, strong) NSString *errorString;
 @property bool success;
-@property (nonatomic, retain) UITextView *questionField;
-@property (nonatomic, retain) NSString *question;
-@property (nonatomic, retain) UITextView *answerField;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) UIButton *submitButton;
+@property (nonatomic, strong) UITextView *questionField;
+@property (nonatomic, strong) NSString *question;
+@property (nonatomic, strong) UITextView *answerField;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UIButton *submitButton;
 
 -(IBAction)submit;
 @end

@@ -14,24 +14,4 @@
 threadingUsed, eventType, subThreadIds, eventDate;
 
 
--(void)dealloc{
-	
-	[teamId release];
-	[subThreadIds release];
-	[eventType release];
-	[threadId release];
-	[eventId release];
-	[subject release];
-	[eventDate release];
-	[body release];
-	[status release];
-	[messageType release];
-	[createdDate release];
-	[numRecipients release];
-	[numReplies release];
-	[followUp release];
-	[teamName release];
-	[super dealloc];
-	
-}
 @end

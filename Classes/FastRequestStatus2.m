@@ -102,7 +102,6 @@ timeString, todayTomorrowString, eventTypeString;
 		todayTomorrow = @"Tomorrow";
 	}
 	
-    [dateFormat release];
 	self.eventLabel.text = [NSString stringWithFormat:@"%@ %@, %@", eventTypeLabel, todayTomorrow, timeLabel];
 	
 	self.messageIntro = [NSString stringWithFormat:@"In regard to the %@ %@ at %@: ", eventTypeLabel, todayTomorrow, timeLabel];
@@ -163,11 +162,7 @@ timeString, todayTomorrowString, eventTypeString;
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -263,7 +258,6 @@ timeString, todayTomorrowString, eventTypeString;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -283,7 +277,6 @@ timeString, todayTomorrowString, eventTypeString;
 			NSString *tmp = @"Only User's with confirmed email addresses can send messages.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}else {
 			
 			self.errorMessage.text = self.errorString;
@@ -345,26 +338,5 @@ timeString, todayTomorrowString, eventTypeString;
 
 }
 
--(void)dealloc{
-	[eventLabel release];
-	[messageString release];
-	[messageLabel release];
-	[toLabel release];
-	[sendButton release];
-	[cancelButton release];
-	[selectedEvent release];
-	[recipArray release];
-	[errorString release];
-	[errorMessage release];
-	[activity release];
-	[messageIntro release];
-	[includeFans release];
-	[recipients release];
-	[editRecipButton release];
-	[reminder release];
-	[timeString release];
-	[todayTomorrowString release];
-	[eventTypeString release];
-	[super dealloc];
-}
+
 @end

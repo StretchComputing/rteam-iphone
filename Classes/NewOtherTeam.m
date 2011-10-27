@@ -49,24 +49,24 @@
 	
 	if (length > 0) {
 		
-	 for (int i = 0; i < [self.allSports count]; i++) {
-		
-		NSString *currentSport = [self.allSports objectAtIndex:i];
-		
-		if (currentSport.length > length) {
-		
-		  NSString *substring = [currentSport substringToIndex:length];
-		
-		 // if ([currentText isEqualToString:substring]) {
-		//	[self.allMatches addObject:currentSport];
-		 // }
-			
-		  if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
-			  [self.allMatches addObject:currentSport];
-		  }
-			
-		}
-	 }
+        for (int i = 0; i < [self.allSports count]; i++) {
+            
+            NSString *currentSport = [self.allSports objectAtIndex:i];
+            
+            if (currentSport.length > length) {
+                
+                NSString *substring = [currentSport substringToIndex:length];
+                
+                // if ([currentText isEqualToString:substring]) {
+                //	[self.allMatches addObject:currentSport];
+                // }
+                
+                if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
+                    [self.allMatches addObject:currentSport];
+                }
+                
+            }
+        }
 	}
 	
 	if ([self.allMatches count] > 0) {
@@ -75,8 +75,8 @@
 	}else {
 		[self.myTableView setHidden:YES];
 	}
-
-
+    
+    
 }
 
 -(void)nextScreen{
@@ -98,7 +98,7 @@
         nextController.fromHome = self.fromHome;
 		[self.navigationController pushViewController:nextController animated:YES];
 	}
-
+    
 	
 	
 	
@@ -106,19 +106,19 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	
-
-		if(buttonIndex == 0) {	
-
-		}else if (buttonIndex == 1) {
-			
-			NewTeam *nextController = [[NewTeam alloc] init];
-			nextController.from = self.sport.text;
-			nextController.other = true;
-            nextController.fromHome = self.fromHome;
-			[self.navigationController pushViewController:nextController animated:YES];
-			
-		}
-
+    
+    if(buttonIndex == 0) {	
+        
+    }else if (buttonIndex == 1) {
+        
+        NewTeam *nextController = [[NewTeam alloc] init];
+        nextController.from = self.sport.text;
+        nextController.other = true;
+        nextController.fromHome = self.fromHome;
+        [self.navigationController pushViewController:nextController animated:YES];
+        
+    }
+    
 }
 
 -(bool)doesMatchSport{
@@ -127,14 +127,14 @@
 		
 		NSString *currentSport = [self.allSports objectAtIndex:i];
 		
-			if ([self.sport.text localizedCaseInsensitiveCompare:currentSport] == 0) {
-				return true;
-			}
-			
+        if ([self.sport.text localizedCaseInsensitiveCompare:currentSport] == 0) {
+            return true;
+        }
+        
 		
 	}
 	return false;
-
+    
 }
 
 
@@ -153,11 +153,11 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc]
-				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FirstLevelCell] autorelease];
+		cell = [[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault
+                reuseIdentifier: FirstLevelCell];
 	}
-
+    
 	NSUInteger row = [indexPath row];
 	NSString *theSport = [self.allMatches objectAtIndex:row];
 	cell.textLabel.text = [@" " stringByAppendingString:theSport];
@@ -188,7 +188,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -216,15 +215,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
-	[sport release];
-	[myTableView release];
-	[allMatches release];
-	[allSports release];
-	[errorMessage release];
-	[continueButton release];
-    [super dealloc];
-}
 
 
 @end

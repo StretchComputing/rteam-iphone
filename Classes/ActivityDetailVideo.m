@@ -29,7 +29,7 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 -(void)viewDidLoad{
 	
     self.title = @"Detail";
-
+    
 	self.playMovieButton.enabled = NO;
 	
 	self.imageBackground.hidden = YES;
@@ -111,26 +111,26 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 	self.likesLabel.text = [NSString stringWithFormat:@"%d", self.likes];
 	self.dislikesLabel.text = [NSString stringWithFormat:@"%d", self.dislikes];
 	
-
-		//get the image
-		self.loadingImageLabel.hidden = NO;
-		[self.loadingImageActivity startAnimating];
-		self.voteLabel.hidden = YES;
-		[self performSelectorInBackground:@selector(getVideo) withObject:nil];
-		
-		self.imageBackground.layer.masksToBounds = YES;
-		self.imageBackground.layer.cornerRadius = 10.0;
-		
-		self.displayImage.layer.masksToBounds = YES;
-		self.displayImage.layer.cornerRadius = 10.0;
-		
-		
-		UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStyleBordered target:self action:@selector(shareImage)];
-		[self.navigationItem setRightBarButtonItem:shareButton];
-        [shareButton release];
-		 
-		
-
+    
+    //get the image
+    self.loadingImageLabel.hidden = NO;
+    [self.loadingImageActivity startAnimating];
+    self.voteLabel.hidden = YES;
+    [self performSelectorInBackground:@selector(getVideo) withObject:nil];
+    
+    self.imageBackground.layer.masksToBounds = YES;
+    self.imageBackground.layer.cornerRadius = 10.0;
+    
+    self.displayImage.layer.masksToBounds = YES;
+    self.displayImage.layer.cornerRadius = 10.0;
+    
+    
+    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStyleBordered target:self action:@selector(shareImage)];
+    [self.navigationItem setRightBarButtonItem:shareButton];
+    
+    
+    
+    
 	
 	
 	
@@ -138,9 +138,6 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 
 
 -(void)getVideo{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -190,7 +187,6 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 	
 	
 	[self performSelectorOnMainThread:@selector(doneImage) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -198,7 +194,7 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 	
 	self.loadingImageLabel.hidden = YES;
 	[self.loadingImageActivity stopAnimating];
-
+    
 	
 	
 	if ([self.errorString isEqualToString:@""]) {
@@ -209,13 +205,12 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 		self.basePath = ([documentPaths count] > 0) ? [documentPaths objectAtIndex:0] : nil;
 		
 		[self.movieData writeToFile:[self.basePath stringByAppendingPathComponent:@"tmpMovie.MOV"] 
-					atomically:YES];
+                         atomically:YES];
 		
 		MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:[self.basePath stringByAppendingPathComponent:@"tmpMovie.MOV"]]];	
 		player.useApplicationAudioSession = NO;
 		player.shouldAutoplay = NO;
 		UIImage *tmpImage = [player thumbnailImageAtTime:0.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
-		[player release];
 		
 		self.displayImage.image = tmpImage;
 		self.imageBackground.hidden = NO;
@@ -252,15 +247,7 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 
 
 -(void)updateTweet{
-	
-	
-	
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+    
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -320,7 +307,6 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)doneUpdate{
@@ -451,7 +437,6 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 	self.shareAction =  [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save Video", @"Email Video", nil];
 	self.shareAction.actionSheetStyle = UIActionSheetStyleDefault;
     [self.shareAction showInView:self.view];
-    [self.shareAction release];
 	
 }
 
@@ -469,12 +454,12 @@ playMovieButton, movieString, movieData, basePath, playButtonImage;
 	UISaveVideoAtPathToSavedPhotosAlbum ([self.basePath stringByAppendingPathComponent:@"tmpMovie.MOV"] , self, @selector(video:didFinishSavingWithError: contextInfo:), nil);
 	
 }
-	
-	
-	
+
+
+
 - (void) video: (NSString *) videoPath
 didFinishSavingWithError: (NSError *) error
-contextInfo: (void *) contextInfo {
+   contextInfo: (void *) contextInfo {
 	
 	if (error != NULL){
 		
@@ -503,13 +488,11 @@ contextInfo: (void *) contextInfo {
 		[mailViewController addAttachmentData:self.movieData mimeType:@"video/quicktime" fileName:@"rTeamVideo"];
 		
 		[self presentModalViewController:mailViewController animated:YES];
-		[mailViewController release];
 		
 	}else {
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Failed." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-        [alert release];
 	}
 	
 	
@@ -557,7 +540,6 @@ contextInfo: (void *) contextInfo {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -588,7 +570,7 @@ contextInfo: (void *) contextInfo {
 }
 
 -(void)playMovie{
-		
+    
 	NSArray * documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	self.basePath = ([documentPaths count] > 0) ? [documentPaths objectAtIndex:0] : nil;
 	
@@ -639,38 +621,4 @@ contextInfo: (void *) contextInfo {
 }
 
 
--(void)dealloc{
-	[stringText release];
-	[dateText release];
-	[teamText release];
-	[dateLabel release];
-	[textLabel release];
-	[teamLabel release];
-	[displayImage release];
-	[currentVote release];
-	[loadingImageLabel release];
-	[loadingImageActivity release];
-	[starOne release];
-	[starTwo release];
-	[starThree release];
-	[thumbsUp release];
-	[thumbsDown release];
-	[voteLabel release];
-	[activityId release];
-	[teamId release];
-	[encodedPhoto release];
-	[errorString release];
-	[errorLabel release];
-	[imageBackground release];
-	[likesLabel release];
-	[dislikesLabel release];
-	[displayLabel release];
-	[shareAction release];
-	[playMovieButton release];
-	[movieString release];
-	[movieData release];
-	[basePath release];
-	[playButtonImage release];
-	[super dealloc];
-}
 @end

@@ -34,25 +34,25 @@
     bool isAttendance;
 }
 @property bool isAttendance;
-@property (nonatomic, retain) UIButton *closeButton;
-@property (nonatomic, retain) UIView *tableLineTop;
-@property (nonatomic, retain) UIView *tableLineBottom;
-@property (nonatomic, retain) UIView *tableLineLeft;
-@property (nonatomic, retain) UIView *tableLineRight;
+@property (nonatomic, strong) UIButton *closeButton;
+@property (nonatomic, strong) UIView *tableLineTop;
+@property (nonatomic, strong) UIView *tableLineBottom;
+@property (nonatomic, strong) UIView *tableLineLeft;
+@property (nonatomic, strong) UIView *tableLineRight;
 
-@property (nonatomic, retain) UIView *buttonView;
+@property (nonatomic, strong) UIView *buttonView;
 
-@property (nonatomic, retain)UIView *tableDisplayView;
-@property (nonatomic, retain)UILabel *attendingLabel;
-@property (nonatomic, retain)UILabel *yesLabel;
-@property (nonatomic, retain)UILabel *yesCount;
-@property (nonatomic, retain)UILabel *noLabel;
-@property (nonatomic, retain)UILabel *noCount;
-@property (nonatomic, retain)UILabel *qLabel;
-@property (nonatomic, retain)UILabel *qCount;
+@property (nonatomic, strong)UIView *tableDisplayView;
+@property (nonatomic, strong)UILabel *attendingLabel;
+@property (nonatomic, strong)UILabel *yesLabel;
+@property (nonatomic, strong)UILabel *yesCount;
+@property (nonatomic, strong)UILabel *noLabel;
+@property (nonatomic, strong)UILabel *noCount;
+@property (nonatomic, strong)UILabel *qLabel;
+@property (nonatomic, strong)UILabel *qCount;
 
-@property (nonatomic, retain)UIButton *pollButton;
-@property (nonatomic, retain)UIButton *goToPageButton;
+@property (nonatomic, strong)UIButton *pollButton;
+@property (nonatomic, strong)UIButton *goToPageButton;
 
 
 

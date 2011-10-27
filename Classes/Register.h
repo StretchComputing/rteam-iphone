@@ -34,7 +34,7 @@
 	
 	NSString *firstName;
 	NSString *lastName;
-
+    
 	IBOutlet UIButton *watchVideoButton;
 	
 	NSString *errorString;
@@ -43,24 +43,24 @@
 	IBOutlet UIButton *loginButton;
 	
 }
-@property (nonatomic, retain) UIView *middleView;
-@property (nonatomic, retain) UIButton *loginButton;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UIButton *watchVideoButton;
-@property (nonatomic, retain) NSString *firstName;
-@property (nonatomic, retain) NSString *lastName;
-@property (nonatomic, retain) UIButton *closeButton;
-@property (nonatomic, retain) UITextField *confirmEmail;
-@property (nonatomic, retain) UIButton *memberLogin;
-@property (nonatomic, retain) UITextField *email;
-@property (nonatomic, retain) UITextField *password;
-@property (nonatomic, retain) UILabel *error;
-@property (nonatomic, retain) UIActivityIndicatorView *registering;
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) UILabel *success;
-@property (nonatomic, retain) UIScrollView *helpScreen;
+@property (nonatomic, strong) UIView *middleView;
+@property (nonatomic, strong) UIButton *loginButton;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UIButton *watchVideoButton;
+@property (nonatomic, strong) NSString *firstName;
+@property (nonatomic, strong) NSString *lastName;
+@property (nonatomic, strong) UIButton *closeButton;
+@property (nonatomic, strong) UITextField *confirmEmail;
+@property (nonatomic, strong) UIButton *memberLogin;
+@property (nonatomic, strong) UITextField *email;
+@property (nonatomic, strong) UITextField *password;
+@property (nonatomic, strong) UILabel *error;
+@property (nonatomic, strong) UIActivityIndicatorView *registering;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) UILabel *success;
+@property (nonatomic, strong) UIScrollView *helpScreen;
 
-@property (nonatomic, retain) UIBarButtonItem *barItem;
+@property (nonatomic, strong) UIBarButtonItem *barItem;
 
 @property int numMemberTeams;
 @property bool createSuccess;

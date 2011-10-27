@@ -10,7 +10,7 @@
 
 
 @interface InviteFan : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
-
+    
 	IBOutlet UITableView *listOfTeams;
 	NSMutableArray *teamArray;
 	NSMutableArray *teamArrayTemp;
@@ -22,15 +22,15 @@
 	IBOutlet UILabel *loadingLabel;
 	IBOutlet UIActivityIndicatorView *loadingActivity;
 }
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) UILabel *error;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) UILabel *error;
 @property bool noRightButton;
-@property (nonatomic, retain) NSMutableArray *teamArray;
-@property (nonatomic, retain) NSMutableArray *teamArrayTemp;
+@property (nonatomic, strong) NSMutableArray *teamArray;
+@property (nonatomic, strong) NSMutableArray *teamArrayTemp;
 
-@property (nonatomic, retain) UITableView *listOfTeams;
+@property (nonatomic, strong) UITableView *listOfTeams;
 
 
 @end

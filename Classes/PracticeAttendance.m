@@ -76,11 +76,7 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 }
 
 -(void)getAttendanceInfo{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	self.attMarkerTemp = [[NSMutableArray alloc] init];
 	
@@ -202,9 +198,7 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 		}
 	}
 	
-	
-	[pool drain];
-	[self performSelectorOnMainThread:@selector(finishedAttendance) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(finishedAttendance) withObject:nil waitUntilDone:NO];
 }
 
 
@@ -253,7 +247,7 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 5;
 		frame.origin.y = 5;
@@ -263,7 +257,6 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 	}
 	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -274,7 +267,6 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 	attendance.frame = CGRectMake(175.0, 3.0, 140.0, 27.0);
 	attendance.tag = attTag;
 	[cell.contentView addSubview:attendance];
-	[attendance release];
 	
 	if (self.isCoord) {
 		attendance.enabled = YES;
@@ -356,11 +348,7 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//self.players is the array of Player objects
 	//self.attMarker is the corresponding array of whether they were present or absent
@@ -390,9 +378,7 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 			
 			[attendance addObject:attList];
 		}
-		
-		[attList release];
-		
+				
 	}
 	
 	finalAttendance = attendance;
@@ -448,9 +434,7 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 		self.successNoChoices = true;
 	}
 	
-	
-	[finalAttendance release];
-	
+		
 	
 	[self performSelectorOnMainThread:
 	 @selector(didFinish)
@@ -458,7 +442,6 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -509,37 +492,11 @@ saveSuccess, playerTableView, successNoChoices, successString, barActivity, attA
 	attActivityLabel = nil;
 	lineView = nil;
 	[super viewDidUnload];
-	
 
-
-	
 }
 
 
 
-- (void)dealloc {
-	[players release];
-	[teamId release];
-	[allSelector release];
-	[practiceId release];
-	[attMarker release];
-	[attMarkerTemp release];
-
-	[saveAll release];
-	[select release];
-	[activity release];
-	[successLabel release];
-	[startDate release];
-	[attReport release];
-	[playerTableView release];
-	[successString release];
-	[attActivity release];
-	[attActivityLabel release];
-	[barActivity release];
-	[userRole release];
-	[lineView release];
-	[super dealloc];
-}
 
 @end
 

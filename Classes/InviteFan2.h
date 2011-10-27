@@ -11,11 +11,11 @@
 #import <AddressBookUI/AddressBookUI.h>
 
 @interface InviteFan2 : UIViewController <ABPeoplePickerNavigationControllerDelegate, UIActionSheetDelegate>{
-
+    
 	IBOutlet UITextField *firstName;
 	IBOutlet UITextField *lastName;
 	IBOutlet UITextField *email;
-
+    
 	NSString *errorString;
 	
 	NSString *teamId;
@@ -31,22 +31,22 @@
 	
     NSMutableArray *multipleEmailArray;
     UIAlertView *multipleEmailAlert;
-
+    
 	
 }
-@property (nonatomic, retain) NSMutableArray *multipleEmailArray;
-@property (nonatomic, retain) UIAlertView *multipleEmailAlert;
+@property (nonatomic, strong) NSMutableArray *multipleEmailArray;
+@property (nonatomic, strong) UIAlertView *multipleEmailAlert;
 @property bool hideHomeButton;
-@property (nonatomic, retain) NSString *errorString;
+@property (nonatomic, strong) NSString *errorString;
 @property bool addDone;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) UITextField *firstName;
-@property (nonatomic, retain) UITextField *lastName;
-@property (nonatomic, retain) UITextField *email;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) UIActivityIndicatorView *serverProcess;
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) UILabel *error;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) UITextField *firstName;
+@property (nonatomic, strong) UITextField *lastName;
+@property (nonatomic, strong) UITextField *email;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) UIActivityIndicatorView *serverProcess;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) UILabel *error;
 @property bool createSuccess;
 
 -(IBAction) create;

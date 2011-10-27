@@ -52,63 +52,63 @@
 
 
 -(void)getListOfTeams{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	self.teamArrayTemp = [NSMutableArray array];	
-	
-	
-	//Retrieve teams from DB
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	
-	//If there is a token, do a DB lookup to find the teams associated with this coach:
-	if (![token isEqualToString:@""]){
+	@autoreleasepool {
+        
+		self.teamArrayTemp = [NSMutableArray array];	
 		
-		NSDictionary *response = [ServerAPI getListOfTeams:token];
 		
-		NSString *status = [response valueForKey:@"status"];
+		//Retrieve teams from DB
+		NSString *token = @"";
 		
-		if ([status isEqualToString:@"100"]){
-			
-			self.teamArrayTemp = [response valueForKey:@"teams"];
-			self.errorString = @"";
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//should never get here
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
+		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+		
+		if (mainDelegate.token != nil){
+			token = mainDelegate.token;
 		}
 		
 		
+		//If there is a token, do a DB lookup to find the teams associated with this coach:
+		if (![token isEqualToString:@""]){
+			
+			NSDictionary *response = [ServerAPI getListOfTeams:token];
+			
+			NSString *status = [response valueForKey:@"status"];
+			
+			if ([status isEqualToString:@"100"]){
+				
+				self.teamArrayTemp = [response valueForKey:@"teams"];
+				self.errorString = @"";
+			}else{
+				
+				//Server hit failed...get status code out and display error accordingly
+				int statusCode = [status intValue];
+				
+				switch (statusCode) {
+					case 0:
+						//null parameter
+						self.errorString = @"*Error connecting to server";
+						break;
+					case 1:
+						//error connecting to server
+						self.errorString = @"*Error connecting to server";
+						break;
+					default:
+						//should never get here
+						self.errorString = @"*Error connecting to server";
+						break;
+				}
+			}
+			
+			
+			
+			//get fan teams as well, then order them
+			
+		}
+        
 		
-		//get fan teams as well, then order them
 		
+		[self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
 	}
-
-	
-	
-	[self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)doneTeams{
@@ -125,7 +125,7 @@
 		self.listOfTeams.hidden = NO;
 		[self.listOfTeams reloadData];
 	}
-
+    
 	if ([self.teamArray count] == 0) {
 		self.error.text = @"You must create or join at least 1 team to invite a fan.";
 	}
@@ -135,10 +135,9 @@
 	}else {
 		UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 		[self.navigationItem setRightBarButtonItem:homeButton];
-		[homeButton release];
 		
 	}
-
+    
 }
 
 
@@ -158,15 +157,15 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc]
-				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FirstLevelCell] autorelease];
+		cell = [[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault
+                reuseIdentifier: FirstLevelCell];
 	}
 	
 	//Configure the cell
 	NSUInteger row = [indexPath row];
 	
-
+    
 	Team *team = [self.teamArray objectAtIndex:row];
 	cell.textLabel.textAlignment = UITextAlignmentLeft;
 	cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
@@ -187,7 +186,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	//Get the Team from the array, and forward action to the Teams home page
 	
 	NSUInteger row = [indexPath row];
-
+    
 	Team *coachTeam = [self.teamArray objectAtIndex:row];
 	InviteFanFinal *tmp = [[InviteFanFinal alloc] init];
 	tmp.teamId = coachTeam.teamId;
@@ -198,7 +197,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	self.navigationItem.backBarButtonItem = temp;
 	
 	[self.navigationController pushViewController:tmp animated:YES];
-
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -227,7 +226,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -253,16 +251,4 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[listOfTeams release];
-	[error release];
-	[teamArray release];
-	[errorString release];
-	[loadingActivity release];
-	[loadingLabel release];
-	[teamArrayTemp release];
-	[super dealloc];
-	
-}
 @end

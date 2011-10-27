@@ -102,20 +102,5 @@
 
 }
 
-- (void)dealloc
-{
-    [teamName release];
-    [scoreUs release];
-    [scoreThem release];
-    [interval release];
-    [fullScreenButton release];
-    [scoreUsLabel release];
-    [scoreThemLabel release];
-    [topLabel release];
-    [usLabel release];
-    [themLabel release];
-    [intervalLabel release];
-    [super dealloc];
-}
 
 @end

@@ -23,7 +23,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
 	
-
+    
 	CLLocation* myLocation = [[CLLocation alloc] initWithLatitude:self.eventLatCoord longitude:self.eventLongCoord];
 	CLLocationCoordinate2D location = myLocation.coordinate;
 	
@@ -82,7 +82,7 @@
 
 -(void)getDirections{
 	
-	self.locationManager = [[[CLLocationManager alloc] init] autorelease];
+	self.locationManager = [[CLLocationManager alloc] init];
 	self.locationManager.delegate = self; // Tells the location manager to send updates to this object
 	[locationManager startUpdatingLocation];
 	
@@ -95,7 +95,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -121,11 +120,4 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	[map release];
-	[locationManager release];
-	[directionsButton release];
-
-	[super dealloc];
-}
 @end

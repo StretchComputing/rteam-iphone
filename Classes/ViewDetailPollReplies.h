@@ -10,7 +10,7 @@
 
 
 @interface ViewDetailPollReplies : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
-
+    
 	NSArray *replyArray;
 	NSString *teamId;
 	NSArray *allReplyObjects;
@@ -24,14 +24,14 @@
 	
 	NSArray *members;
 }
-@property (nonatomic, retain) NSArray *members;
-@property (nonatomic, retain) UITableView *myTableView;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) NSArray *members;
+@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
 
 @property bool isSender;
-@property (nonatomic, retain) NSArray *replyArray;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSArray *allReplyObjects;
+@property (nonatomic, strong) NSArray *replyArray;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSArray *allReplyObjects;
 @property bool finalized;
 @end

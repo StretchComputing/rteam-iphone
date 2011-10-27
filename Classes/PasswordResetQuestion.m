@@ -10,7 +10,6 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "SettingsTabs.h"
-#import "Settings.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation PasswordResetQuestion
@@ -48,10 +47,7 @@
 }
 
 -(void)runRequest{
-    
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-    
+ 
     NSString *token = @"";
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -96,7 +92,6 @@
 	}
 
     [self performSelectorOnMainThread:@selector(doneRequest) withObject:nil waitUntilDone:NO];
-    [pool drain];
 }
 
 -(void)doneRequest{
@@ -152,18 +147,6 @@
     activity = nil;
     [super viewDidUnload];
  
-}
-
-
-- (void)dealloc {
-	[question release];
-	[newAnswer release];
-	[newQuestion release];
-	[errorLabel release];
-	[submitButton release];
-    [errorString release];
-    [activity release];
-    [super dealloc];
 }
 
 

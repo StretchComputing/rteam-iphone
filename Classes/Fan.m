@@ -10,7 +10,6 @@
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
 #import "Base64.h"
-#import "SendMessage.h"
 #import "PhoneNumberFormatter.h"
 #import "PlayerAttendance.h"
 #include <math.h>
@@ -67,8 +66,6 @@ isEmailConfirmed;
 
 
 -(void)memberInfo{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -103,7 +100,6 @@ isEmailConfirmed;
 	}
 
 	[self performSelectorOnMainThread:@selector(getMemberInformation) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 -(void)getMemberInformation{
@@ -267,7 +263,6 @@ isEmailConfirmed;
 	if (!self.fromSearch) {
 		UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
 		[self.navigationItem setRightBarButtonItem:doneButton];
-		[doneButton release];
 	}
 	
 	
@@ -450,7 +445,7 @@ isEmailConfirmed;
 
 
 -(void)sendMessage{
-	
+	/*
 	SendMessage *tmp = [[SendMessage alloc] init];
 	tmp.teamId = self.teamId;
 	tmp.sendTeamId = self.teamId;
@@ -476,15 +471,12 @@ isEmailConfirmed;
 	tmp.includeFans = @"false";
 	
 	[self.navigationController pushViewController:tmp animated:YES];
-	
+	*/
 }
 
 - (void)runRequest {
 	self.errorString = @"";
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -578,7 +570,6 @@ isEmailConfirmed;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -608,12 +599,10 @@ isEmailConfirmed;
                 NSString *message1 = @"You have changed the phone number of a fan.  To receive messages, they must re-sign up for our texting service.  Would you like to send them a text right now with information on how to sign up?";
                 self.newPhoneAlert = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
                 [self.newPhoneAlert show];
-                [self.newPhoneAlert release];
             }else {
                 NSString *message1 = @"You have changed the phone number of a fan.  We can still send them rTeam messages if they sign up for our free texting service from this new phone.  Please notify them that they must send the text 'yes' to 'join@rteam.com' to sign up.";
                 self.newPhoneAlert = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [self.newPhoneAlert show];
-                [self.newPhoneAlert release];
             }
             
             
@@ -638,11 +627,7 @@ isEmailConfirmed;
 
 - (void)runRequest2 {
 	self.errorString = @"";
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	
@@ -701,7 +686,6 @@ isEmailConfirmed;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 
@@ -735,11 +719,7 @@ isEmailConfirmed;
 
 - (void)runDelete {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	
@@ -784,7 +764,6 @@ isEmailConfirmed;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinishDelete{
@@ -844,7 +823,6 @@ isEmailConfirmed;
 	self.changeProfilePicAction =  [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
 	self.changeProfilePicAction.actionSheetStyle = UIActionSheetStyleDefault;
     [self.changeProfilePicAction showInView:self.view];
-    [self.changeProfilePicAction release];
 	
 }
 
@@ -859,7 +837,6 @@ isEmailConfirmed;
 		
 		[self presentModalViewController:picker animated:YES];
 		
-		[picker release];
 		
 	} else {
 		
@@ -891,7 +868,6 @@ isEmailConfirmed;
     
 	NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
 	
-	[tmpView release];
 	
 	UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
 	
@@ -906,7 +882,6 @@ isEmailConfirmed;
 	
 	self.compressImage = UIImageJPEGRepresentation(newImage1, 1.0);
 	
-	[myThumbNail release];
 	
 	//self.profileImage.image = [UIImage imageWithData:self.compressImage];
 	self.newImage = [UIImage imageWithData:self.compressImage];
@@ -931,7 +906,6 @@ isEmailConfirmed;
     self.deleteFanAction =  [[UIActionSheet alloc] initWithTitle:@"Are you sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete Fan" otherButtonTitles:nil];
 	self.deleteFanAction.actionSheetStyle = UIActionSheetStyleDefault;
     [self.deleteFanAction showInView:self.view];
-    [self.deleteFanAction release];
 
 	
 }
@@ -1019,7 +993,6 @@ isEmailConfirmed;
                             NSString *bodyMessage = [NSString stringWithFormat:@"Hi, you have been added via rTeam to the team '%@'. To sign up for our free texting service, send a text to 'join@rteam.com' with the message 'yes'.", teamNameShort];
                             [messageViewController setBody:bodyMessage];
                             [self presentModalViewController:messageViewController animated:YES];
-                            [messageViewController release];
                             
                         }
                     }else {
@@ -1055,7 +1028,6 @@ isEmailConfirmed;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -1148,10 +1120,6 @@ isEmailConfirmed;
 
 
 - (void)makeMember {
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -1197,7 +1165,6 @@ isEmailConfirmed;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)finishedMember{
@@ -1337,7 +1304,6 @@ isEmailConfirmed;
             NSString *message1 = @"You cannot make calls from this device.";
             UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:message1 delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert1 show];
-            [alert1 release];
             
         }
         
@@ -1414,7 +1380,6 @@ isEmailConfirmed;
                         messageViewController.messageComposeDelegate = self;
                         [messageViewController setRecipients:[NSArray arrayWithObject:numberToCall]];
                         [self presentModalViewController:messageViewController animated:YES];
-                        [messageViewController release];
                         
                     }
                 }else { 
@@ -1465,56 +1430,6 @@ isEmailConfirmed;
     mobileEdit = nil;
     callTextButton = nil;
     [super viewDidUnload];
-}
-
--(void)dealloc{
-	[firstName release];
-	[lastName release];
-	[email release];
-	[nameLabel release];
-	[memberId release];
-	[teamId release];
-	[emailLabel release];
-	[sendMessageButton release];
-	[profileImage release];
-	[firstEdit release];
-	[lastEdit release];
-	[emailEdit release];
-	[startEditButton release];
-	[endEditButton release];
-	[addPhotoButton release];
-	[activity release];
-	[displayMessage release];
-	[userRole release];
-	[phone release];
-	[headUserRole release];
-	[errorLabel release];
-	[origCompressImage release];
-
-	[errorString release];
-	[tempProfileImage release];
-	[fromEdit release];
-	[compressImage release];
-	[deleteFanButton release];
-	[playerInfo release];
-	[loadingActivity release];
-	[loadingLabel release];
-	[changeProfilePicAction release];
-	[newImage release];
-	[selectedImage release];
-	[selectedData release];
-	[switchToMemberLabel release];
-	[switchToMemberButton release];
-	[teamName release];
-    [deleteFanAction release];
-    [mobileEdit release];
-    [phoneOnlyArray release];
-    [initPhone release];
-    [newPhoneAlert release];
-    [callTextAction release];
-    [callTextButton release];
-	[super dealloc];
-	
 }
 
 

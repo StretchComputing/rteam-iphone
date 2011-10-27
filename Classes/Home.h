@@ -35,7 +35,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 	NSString *eventToday;
 	
 	IBOutlet UIToolbar *bottomBar;
-		
+    
 	int nextGameIndex;
 	int nextPracticeIndex;
 	int badgeNumber;
@@ -123,7 +123,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 	
 	NSString *membersUserRole;
 	NSString *membersTeamId;
-
+    
 	NSMutableArray *phoneOnlyArray;
 	
 	NSString *justAddName;
@@ -140,14 +140,14 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
     
     UIView *backViewTop;
     UIView *backViewBottom;
-
+    
     UIView *transViewTop;
     UIView *transViewBottom;
     
     UIButton *settingQbutton;
     UIButton *searchQbutton;
     UIButton *myTeamsQbutton;
-
+    
     UIButton *activityQbutton;
     UIButton *messagesQbutton;
     UIButton *eventsQbutton;
@@ -193,151 +193,151 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
     IBOutlet UIButton *quickLinkCancelTwoButton;
     
     IBOutlet UIImageView *blueArrow;
-
+    
 }
-@property (nonatomic, retain) UIImageView *blueArrow;
-@property (nonatomic, retain) UIButton *quickLinkCancelTwoButton;
+@property (nonatomic, strong) UIImageView *blueArrow;
+@property (nonatomic, strong) UIButton *quickLinkCancelTwoButton;
 
-@property (nonatomic, retain) UIButton *quickLinkChangeButton;
-@property (nonatomic, retain) UIButton *quickLinkCancelButton;
-@property (nonatomic, retain) UIButton *quickLinkOkButton;
-@property (nonatomic, retain) QuickLinkButton *shortcutButton;
+@property (nonatomic, strong) UIButton *quickLinkChangeButton;
+@property (nonatomic, strong) UIButton *quickLinkCancelButton;
+@property (nonatomic, strong) UIButton *quickLinkOkButton;
+@property (nonatomic, strong) QuickLinkButton *shortcutButton;
 @property double numObjects;
-@property (nonatomic, retain) UIButton *aboutButton;
+@property (nonatomic, strong) UIButton *aboutButton;
 @property int currentDisplay;
-@property (nonatomic, retain) UIView *registrationBackView;
-@property (nonatomic, retain) UIView *textBackView;
-@property (nonatomic, retain) UIView *textFrontView;
-@property (nonatomic, retain) UITextView *regTextView;
-@property (nonatomic, retain) UIButton *regTextButton;
+@property (nonatomic, strong) UIView *registrationBackView;
+@property (nonatomic, strong) UIView *textBackView;
+@property (nonatomic, strong) UIView *textFrontView;
+@property (nonatomic, strong) UITextView *regTextView;
+@property (nonatomic, strong) UIButton *regTextButton;
 
-@property (nonatomic, retain) UIImageView *scrollViewBack;
-@property (nonatomic, retain) UIView *moveableView;
+@property (nonatomic, strong) UIImageView *scrollViewBack;
+@property (nonatomic, strong) UIView *moveableView;
 @property BOOL isMoreShowing; 
-@property (nonatomic, retain) UIView *moveDividerBackground;
-@property (nonatomic, retain) UILabel *homeDividerLabel;
-@property (nonatomic, retain) UIButton *moveDividerButton;
-@property (nonatomic, retain) UIImageView *homeDivider;
-@property (nonatomic, retain) UITextView *helpExplanation;
-@property (nonatomic, retain) UIButton *closeQuestionButton;
+@property (nonatomic, strong) UIView *moveDividerBackground;
+@property (nonatomic, strong) UILabel *homeDividerLabel;
+@property (nonatomic, strong) UIButton *moveDividerButton;
+@property (nonatomic, strong) UIImageView *homeDivider;
+@property (nonatomic, strong) UITextView *helpExplanation;
+@property (nonatomic, strong) UIButton *closeQuestionButton;
 
-@property (nonatomic, retain) UIView *backViewTop;
-@property (nonatomic, retain) UIView *backViewBottom;
+@property (nonatomic, strong) UIView *backViewTop;
+@property (nonatomic, strong) UIView *backViewBottom;
 
-@property (nonatomic, retain) UIView *transViewTop;
-@property (nonatomic, retain) UIView *transViewBottom;
+@property (nonatomic, strong) UIView *transViewTop;
+@property (nonatomic, strong) UIView *transViewBottom;
 
-@property (nonatomic, retain) UIButton *settingQbutton;
-@property (nonatomic, retain) UIButton *searchQbutton;
-@property (nonatomic, retain) UIButton *myTeamsQbutton;
+@property (nonatomic, strong) UIButton *settingQbutton;
+@property (nonatomic, strong) UIButton *searchQbutton;
+@property (nonatomic, strong) UIButton *myTeamsQbutton;
 
-@property (nonatomic, retain) UIButton *activityQbutton;
-@property (nonatomic, retain) UIButton *messagesQbutton;
-@property (nonatomic, retain) UIButton *eventsQbutton;
-@property (nonatomic, retain) UIButton *quickLinksQbutton;
-@property (nonatomic, retain) UIButton *happeningNowQbutton;
-@property (nonatomic, retain) UIButton *helpQbutton;
-@property (nonatomic, retain) UIButton *inviteFanQbutton;
-@property (nonatomic, retain) UIButton *refreshQbutton;
+@property (nonatomic, strong) UIButton *activityQbutton;
+@property (nonatomic, strong) UIButton *messagesQbutton;
+@property (nonatomic, strong) UIButton *eventsQbutton;
+@property (nonatomic, strong) UIButton *quickLinksQbutton;
+@property (nonatomic, strong) UIButton *happeningNowQbutton;
+@property (nonatomic, strong) UIButton *helpQbutton;
+@property (nonatomic, strong) UIButton *inviteFanQbutton;
+@property (nonatomic, strong) UIButton *refreshQbutton;
 
-@property (nonatomic, retain) UIView *backHelpView;
-@property (nonatomic, retain) UIBarButtonItem *refreshButton;
-@property (nonatomic, retain) UIBarButtonItem *questionButton;
+@property (nonatomic, strong) UIView *backHelpView;
+@property (nonatomic, strong) UIBarButtonItem *refreshButton;
+@property (nonatomic, strong) UIBarButtonItem *questionButton;
 @property bool changingLink;
-@property (nonatomic, retain) UIView *displayIconsScrollBack;
-@property (nonatomic, retain) UIView *changeQuickLinkBack;
-@property (nonatomic, retain) NSString *justAddName;
-@property (nonatomic, retain) NSMutableArray *phoneOnlyArray;
+@property (nonatomic, strong) UIView *displayIconsScrollBack;
+@property (nonatomic, strong) UIView *changeQuickLinkBack;
+@property (nonatomic, strong) NSString *justAddName;
+@property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
 
-@property (nonatomic, retain) NSString *membersUserRole;
-@property (nonatomic, retain) NSString *membersTeamId;
-@property (nonatomic, retain) UIButton *addMembersButton;
+@property (nonatomic, strong) NSString *membersUserRole;
+@property (nonatomic, strong) NSString *membersTeamId;
+@property (nonatomic, strong) UIButton *addMembersButton;
 @property bool spotOpen;
 @property bool oneTeam;
-@property (nonatomic, retain) UIActionSheet *undoCancel;
-@property (nonatomic, retain) NSString *undoTeamId;
-@property (nonatomic, retain) NSString *undoEventId;
-@property (nonatomic, retain) NSString *undoEventType;
+@property (nonatomic, strong) UIActionSheet *undoCancel;
+@property (nonatomic, strong) NSString *undoTeamId;
+@property (nonatomic, strong) NSString *undoEventId;
+@property (nonatomic, strong) NSString *undoEventType;
 
 @property bool foundQuick1;
 @property bool foundQuick2;
-@property (nonatomic, retain) UIButton *changeIconButton;
+@property (nonatomic, strong) UIButton *changeIconButton;
 @property bool newActivity;
-@property (nonatomic, retain) UIImageView *newActivityBadge;
+@property (nonatomic, strong, getter = theNewActivityBadge) UIImageView *newActivityBadge;
 @property bool isEditingQuickLinkOne;
-@property (nonatomic, retain) UIScrollView *displayIconsScroll;
-@property (nonatomic, retain) UILabel *messageCountLabel;
-@property (nonatomic, retain) UIButton *fastButton;
-@property (nonatomic, retain) UIButton *myTeamsButton;
-@property (nonatomic, retain) UIButton *activityButton;
-@property (nonatomic, retain) UIButton *messagesButton;
+@property (nonatomic, strong) UIScrollView *displayIconsScroll;
+@property (nonatomic, strong) UILabel *messageCountLabel;
+@property (nonatomic, strong) UIButton *fastButton;
+@property (nonatomic, strong) UIButton *myTeamsButton;
+@property (nonatomic, strong) UIButton *activityButton;
+@property (nonatomic, strong) UIButton *messagesButton;
 
 @property BOOL bannerIsVisible;
-@property (nonatomic, retain) UIButton *eventsButton;
+@property (nonatomic, strong) UIButton *eventsButton;
 //Bottom Half quick links
 @property bool eventsNowTryAgain;
-@property (nonatomic, retain) UITextView *eventsNowError;
+@property (nonatomic, strong) UITextView *eventsNowError;
 @property bool eventsNowSuccess;
-@property (nonatomic, retain) NSMutableArray *eventsToday;
-@property (nonatomic, retain) NSMutableArray *eventsTomorrow;
+@property (nonatomic, strong) NSMutableArray *eventsToday;
+@property (nonatomic, strong) NSMutableArray *eventsTomorrow;
 @property int numberOfPages;
-@property (nonatomic, retain) UIActivityIndicatorView *eventsNowActivity;
-@property (nonatomic, retain) NSMutableArray *allBottomButtons;
+@property (nonatomic, strong) UIActivityIndicatorView *eventsNowActivity;
+@property (nonatomic, strong) NSMutableArray *allBottomButtons;
 
 //New Messages badge
-@property (nonatomic, retain) UIImageView *messageBadge;
+@property (nonatomic, strong) UIImageView *messageBadge;
 @property int newMessagesCount;
 @property bool newMessagesSuccess;
 //Quick Link Edit View
-@property (nonatomic, retain) UIScrollView *changeQuickLink;
-@property (nonatomic, retain) UITableView *newQuickLinkTable;
-@property (nonatomic, retain) UITextField *newQuickLinkAlias;
+@property (nonatomic, strong) UIScrollView *changeQuickLink;
+@property (nonatomic, strong, getter = theNewQuickLinkTable) UITableView *newQuickLinkTable;
+@property (nonatomic, strong, getter = theNewQuickLinkAlias) UITextField *newQuickLinkAlias;
 @property int rowNewQuickTeam;
-@property (nonatomic, retain) UIActivityIndicatorView *activityGettingTeams;
-@property (nonatomic, retain) UILabel *selectRowLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *activityGettingTeams;
+@property (nonatomic, strong) UILabel *selectRowLabel;
 //Background thread "Get Teams"
 @property bool teamListFailed;
 @property bool haveTeamList;
-@property (nonatomic, retain) NSArray *teamList;
+@property (nonatomic, strong) NSArray *teamList;
 
 //Quick Link Buttons
-@property (nonatomic, retain) UIButton *quickCreateTeam;
-@property (nonatomic, retain) QuickLinkButton *quickTeamOne;
-@property (nonatomic, retain) QuickLinkButton *quickTeamTwo;
+@property (nonatomic, strong) UIButton *quickCreateTeam;
+@property (nonatomic, strong) QuickLinkButton *quickTeamOne;
+@property (nonatomic, strong) QuickLinkButton *quickTeamTwo;
 
 @property bool alreadyCalled1;
 @property bool alreadyCalled2;
 @property bool alreadyCalledCreate;
-@property (nonatomic, retain) UIScrollView *scrollView;
-@property (nonatomic, retain) UIPageControl *pageControl;
-@property (nonatomic, retain) NSMutableArray *viewControllers;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIPageControl *pageControl;
+@property (nonatomic, strong) NSMutableArray *viewControllers;
 
-@property (nonatomic, retain) UIBarButtonItem *inviteFan;
+@property (nonatomic, strong) UIBarButtonItem *inviteFan;
 
 
-@property (nonatomic, retain) NSString *didRegister;
+@property (nonatomic, strong) NSString *didRegister;
 @property int numMemberTeams;
-@property (nonatomic, retain) NSString *userRole;
+@property (nonatomic, strong) NSString *userRole;
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *oneTeamFlag;
-
-
-@property (nonatomic, retain) NSArray *games;
-@property (nonatomic, retain) NSArray *practices;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *oneTeamFlag;
 
 
+@property (nonatomic, strong) NSArray *games;
+@property (nonatomic, strong) NSArray *practices;
 
-@property (nonatomic, retain) NSString *eventToday;
+
+
+@property (nonatomic, strong) NSString *eventToday;
 @property int eventTodayIndex;
 @property int nextGameIndex;
 @property int nextPracticeIndex;
 
-@property (nonatomic, retain) UIToolbar *bottomBar;
+@property (nonatomic, strong) UIToolbar *bottomBar;
 
 @property int badgeNumber;
-@property (nonatomic, retain) UILabel *serverError;
+@property (nonatomic, strong) UILabel *serverError;
 
 
 -(IBAction) allEvents;

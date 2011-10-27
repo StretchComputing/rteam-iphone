@@ -13,7 +13,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface ActivityDetail : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
-
+    
 	NSString *stringText;
 	NSString *dateText;
 	NSString *teamText;
@@ -64,47 +64,47 @@
 	UIActionSheet *shareAction;
 	
 }
-@property (nonatomic, retain) UIActionSheet *shareAction;
-@property (nonatomic, retain) UILabel *displayLabel;
+@property (nonatomic, strong) UIActionSheet *shareAction;
+@property (nonatomic, strong) UILabel *displayLabel;
 @property int likes;
 @property int dislikes;
-@property (nonatomic, retain) UILabel *likesLabel;
-@property (nonatomic, retain) UILabel *dislikesLabel;
+@property (nonatomic, strong) UILabel *likesLabel;
+@property (nonatomic, strong) UILabel *dislikesLabel;
 
-@property (nonatomic, retain) UIView *imageBackground;
+@property (nonatomic, strong) UIView *imageBackground;
 
 @property bool voteSuccess;
 @property BOOL currentVoteBool;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UILabel *errorLabel;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UILabel *errorLabel;
 
-@property (nonatomic, retain) NSString *activityId;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *encodedPhoto;
-@property (nonatomic, retain) UILabel *voteLabel;
-@property (nonatomic, retain) UIImageView *starOne;
-@property (nonatomic, retain) UIImageView *starTwo;
-@property (nonatomic, retain) UIImageView *starThree;
+@property (nonatomic, strong) NSString *activityId;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *encodedPhoto;
+@property (nonatomic, strong) UILabel *voteLabel;
+@property (nonatomic, strong) UIImageView *starOne;
+@property (nonatomic, strong) UIImageView *starTwo;
+@property (nonatomic, strong) UIImageView *starThree;
 
-@property (nonatomic, retain) UIButton *thumbsUp;
-@property (nonatomic, retain) UIButton *thumbsDown;
+@property (nonatomic, strong) UIButton *thumbsUp;
+@property (nonatomic, strong) UIButton *thumbsDown;
 
-@property (nonatomic, retain) UILabel *loadingImageLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingImageActivity;
+@property (nonatomic, strong) UILabel *loadingImageLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingImageActivity;
 
-@property (nonatomic, retain) NSString *stringText;
-@property (nonatomic, retain) NSString *dateText;
-@property (nonatomic, retain) NSString *teamText;
+@property (nonatomic, strong) NSString *stringText;
+@property (nonatomic, strong) NSString *dateText;
+@property (nonatomic, strong) NSString *teamText;
 
 @property bool isImage;
 
-@property (nonatomic, retain)  UILabel *dateLabel;
-@property (nonatomic, retain)  UITextView *textLabel;
-@property (nonatomic, retain)  UILabel *teamLabel;
+@property (nonatomic, strong)  UILabel *dateLabel;
+@property (nonatomic, strong)  UITextView *textLabel;
+@property (nonatomic, strong)  UILabel *teamLabel;
 
-@property (nonatomic, retain)  UIImageView *displayImage;
+@property (nonatomic, strong)  UIImageView *displayImage;
 
-@property (nonatomic, retain) NSString *currentVote;  //"like", "dislike", "none"
+@property (nonatomic, strong) NSString *currentVote;  //"like", "dislike", "none"
 
 @property float numStars;
 

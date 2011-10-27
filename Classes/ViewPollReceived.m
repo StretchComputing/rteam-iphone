@@ -9,7 +9,6 @@
 #import "ViewPollReceived.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "MessagesTabs.h"
 #import "CurrentTeamTabs.h"
 #import "GameTabs.h"
 #import "PracticeTabs.h"
@@ -67,7 +66,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	self.upDown.selectedSegmentIndex = -1;
 	[self.upDown addTarget:self action:@selector(segmentSelect:) forControlEvents:UIControlEventValueChanged];
 	
-	UIBarButtonItem *tmp = [[[UIBarButtonItem alloc] initWithCustomView: self.upDown] autorelease];
+	UIBarButtonItem *tmp = [[UIBarButtonItem alloc] initWithCustomView: self.upDown];
 	[self.navigationItem setRightBarButtonItem:tmp];
 	
 	int msg = self.currentPollNumber + 1;
@@ -108,10 +107,9 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 				
 				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
 				[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-				NSDate *tmpDate = [dateFormat dateFromString:newMessage.receivedDate];
+				NSDate *tmpDate = [dateFormat dateFromString:newMessage.createdDate];
 				[dateFormat setDateFormat:@"MMM dd, yyyy hh:mm aa"];
 				self.receivedDate = [dateFormat stringFromDate:tmpDate];
-				[dateFormat release];
 				
 				if (self.currentPollNumber == 0) {
 					[self.upDown setEnabled:NO forSegmentAtIndex:0];
@@ -150,10 +148,9 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 				
 				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
 				[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-				NSDate *tmpDate = [dateFormat dateFromString:newMessage.receivedDate];
+				NSDate *tmpDate = [dateFormat dateFromString:newMessage.createdDate];
 				[dateFormat setDateFormat:@"MMM dd, yyyy hh:mm aa"];
 				self.receivedDate = [dateFormat stringFromDate:tmpDate];
-				[dateFormat release];		
 				
 				if (self.currentPollNumber == ([self.pollArray count] - 1)) {
 					[self.upDown setEnabled:NO forSegmentAtIndex:1];
@@ -284,8 +281,8 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 
 -(void)getMessageThreadInfo{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
+    
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	if (mainDelegate.token != nil){
@@ -334,7 +331,6 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 	
 	[self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -439,7 +435,6 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 				NSString *date = [dateFormat stringFromDate:formatedDate];
 				[dateFormat setDateFormat:@"hh:mm aa"];
 				NSString *time = [dateFormat stringFromDate:formatedDate];
-				[dateFormat release];
 				
 				self.ownReply.text = [NSString stringWithFormat:@"Your reply was '%@', on %@ at %@", reply, date, time];
 				self.ownReply.lineBreakMode = UILineBreakModeWordWrap;
@@ -542,10 +537,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 }
 	
 -(void)updateWasViewed{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	
@@ -589,7 +581,6 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 		
 	}
 
-	[pool drain];
 	
 }
 
@@ -620,7 +611,6 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	NSString *confirm = [[@"Send poll response with the answer '" stringByAppendingString:reply] stringByAppendingString:@"'?"];
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:confirm message:@"Are you sure?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
-    [alert release];
 	
 	
 }
@@ -649,8 +639,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 }
 
 -(void)sendPollResponse{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    assert(pool!=nil);
+
     
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     NSString *token = @"";
@@ -696,7 +685,6 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
         
     }
 
-    [pool drain];
     [self performSelectorOnMainThread:@selector(doneSendResponse) withObject:nil waitUntilDone:NO];
 }
 
@@ -713,13 +701,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
         NSArray *tempCont = [self.navigationController viewControllers];
         int tempNum = [tempCont count];
         tempNum = tempNum - 2;
-        
-        if ([[tempCont objectAtIndex:tempNum] class] == [MessagesTabs class]) {
-            MessagesTabs *cont = [tempCont objectAtIndex:tempNum];
-            cont.selectedIndex = 0;
-            
-            [self.navigationController popToViewController:cont animated:YES];
-        }
+    
         
         
         if ([[tempCont objectAtIndex:tempNum] class] == [CurrentTeamTabs class]) {
@@ -784,12 +766,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 			
 			//Could be "MessageTabs", "GameTabs", "PracticeTabs", or "CurrentTeamTabs"
 			
-			if ([[temp objectAtIndex:num] class] == [MessagesTabs class]) {
-				MessagesTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 0;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
+			if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
 				CurrentTeamTabs *cont = [temp objectAtIndex:num];
 				cont.selectedIndex = 4;
 				[self.navigationController popToViewController:cont animated:YES];
@@ -856,7 +833,6 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -921,52 +897,5 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 	
 }
--(void)dealloc{
-	
-	[subject release];
-	[body release];
-	[receivedDate release];
-	[displayDate release];
-	[displayBody release];
-	[displaySubject release];
-	[teamId release];
-	[eventId release];
-	[eventType release];
-	[pollChoices release];
-	[buttonOption1 release];
-	[buttonOption2 release];
-	[buttonOption3 release];
-	[buttonOption4 release];
-	[buttonOption5 release];
-	[threadId release];
-	[displayFrom release];
-	[from release];
-	[status release];
-	[howToRespondMessage release];
-    [finalizedMessage release];
-	[followUpMessage release];
-	[ownReply release];
-	[displayScroll release];
-	[viewMoreDetailButton release];
-	[individualReplies release];
-	[myLineView release];
-	[myPollResultsView release];
-	[downArrow release];
-	[pollArray release];
-	[pollNumber release];
-	[upDown release];
-	[teamName release];
-	[origTeamId release];
-	[teamNameLabel release];
-	[finalAnswer release];
-	[loadingActivity release];
-	[loadingLabel release];
-	[messageThreadInfo release];
-	[deleteButton release];
-	[errorLabel release];
-	[errorString release];
-	[respondingActivity release];
-	[super dealloc];
-	
-}
+
 @end

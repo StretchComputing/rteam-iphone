@@ -14,7 +14,7 @@
 tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAttendance;
 
 + (id)buttonWithFrame:(CGRect)frame {
-	return [[[self alloc] initWithFrame:frame] autorelease];
+	return [[self alloc] initWithFrame:frame];
 }
 
 
@@ -129,7 +129,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         self.qCount.backgroundColor = [UIColor clearColor];
         [self.tableDisplayView addSubview:self.qCount];
         
-
+        
         
 		//Stuff From EventNowButton
         //Dynamic label
@@ -174,26 +174,5 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
 
 
 
--(void)dealloc{
-    
-    [buttonView release];
-    [tableDisplayView release];
-    [pollButton release];
-    [goToPageButton release];
-    [attendingLabel release];
-    [yesCount release];
-    [yesLabel release];
-    [noCount release];
-    [noLabel release];
-    [qCount release];
-    [qLabel release];
-    
-    [tableLineLeft release];
-    [tableLineRight release];
-    [tableLineTop release];
-    [tableLineBottom release];
-    [closeButton release];
-    [super dealloc];
-}
 
 @end

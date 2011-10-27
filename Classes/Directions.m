@@ -41,7 +41,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -59,10 +58,4 @@
 	return YES;
 }
 
--(void)dealloc{
-	
-	[webView release];
-	[urlString release];
-	[super dealloc];
-}
 @end

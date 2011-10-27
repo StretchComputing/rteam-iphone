@@ -13,10 +13,8 @@
 #import "Gameday.h"
 #import "GameTabs.h"
 #import "GameAttendance.h"
-#import "GameMessages.h"
 #import "GameEdit.h"
 #import "GameTabsNoCoord.h"
-#import "TeamActivity.h"
 #import "Scores.h"
 #import "TeamUrl.h"
 #import "Event.h"
@@ -24,15 +22,11 @@
 #import "PracticeTabs.h"
 #import "PracticeNotes.h"
 #import "PracticeAttendance.h"
-#import "PracticeMessages.h"
 #import "EventTabs.h"
 #import "EventAttendance.h"
 #import "EventNotes.h"
 #import "Fans.h"
-#import "EventMessages.h"
 #import "Vote.h"
-#import "GameChatter.h"
-#import "PracticeChatter.h"
 #import "QuartzCore/QuartzCore.h"
 #import "Base64.h"
 #import "TeamPicture.h"
@@ -139,7 +133,7 @@ displayWarning;
     //iAds
 	myAd = [[ADBannerView alloc] initWithFrame:CGRectZero];
 	myAd.delegate = self;
-	myAd.hidden = NO;
+	myAd.hidden = YES;
 	[self.view addSubview:myAd];
     	
 }
@@ -183,10 +177,6 @@ displayWarning;
 
 -(void)getListOfGames{
 
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	self.gamesArrayTemp = [NSMutableArray array];
 	
@@ -251,7 +241,6 @@ displayWarning;
 	}
 
 	[self performSelectorOnMainThread:@selector(done) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)done{
@@ -273,7 +262,6 @@ displayWarning;
                     
                     if (self.displayWarning){
                         [self.eventsAlert show];
-                        [self.eventsAlert release];
                     }
 				}
 				
@@ -311,11 +299,9 @@ displayWarning;
 
 			
 		}
-		[format release];
 		
 		NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:NO];
 		[self.pastGamesArrayTemp sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
-		[dateSorter release];
         
 		self.pastGamesArray = [NSMutableArray arrayWithArray:self.pastGamesArrayTemp];
 		
@@ -340,11 +326,7 @@ displayWarning;
 
 
 -(void)getListOfEvents{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	self.eventsArray = [NSMutableArray array];
 	self.futureEventsArray = [NSMutableArray array];
@@ -419,7 +401,6 @@ displayWarning;
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneEvents) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)doneEvents{
@@ -440,7 +421,6 @@ displayWarning;
                     self.eventsAlert = [[UIAlertView alloc] initWithTitle:@"No Team Events" message:message1 delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Add Events", nil];
                     if (self.displayWarning){
                         [self.eventsAlert show];
-                        [self.eventsAlert release];
                     }
                     
                 }
@@ -477,7 +457,6 @@ displayWarning;
 		//sort the futureEventsArray
 		NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
 		[self.futureEventsArray sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
-		[dateSorter release];
 		
 		
 		//Go through the futureEvents Array, if find an "Event", list that, else list first Practice
@@ -527,7 +506,6 @@ displayWarning;
 			[self.nextEventButton setHidden:YES];
 		}
 
-		[format release];
 		
 	}else {
 		self.nextEventInfoLabel.text = @"*None scheduled*";
@@ -588,20 +566,7 @@ displayWarning;
 		currentAttendance.startDate = currentPractice.startDate;
 		currentAttendance.userRole = self.userRole;
 
-		PracticeChatter *messages = [viewControllers objectAtIndex:2];
-		messages.teamId = self.teamId;
-		messages.practiceId = currentPractice.practiceId;
-		messages.userRole = self.userRole;
-		messages.startDate = currentPractice.startDate;
-
-		
-		/*
-		PracticeMessages *messages = [viewControllers objectAtIndex:1];
-		messages.teamId = self.teamId;
-		messages.practiceId = currentPractice.practiceId;
-		messages.userRole = self.userRole;
-		*/
-		
+	
 		[self.navigationController pushViewController:currentPracticeTab animated:YES];
 		
 	}else {
@@ -626,13 +591,7 @@ displayWarning;
 		currentAttendance.startDate = currentEvent.startDate;
 		currentAttendance.userRole = self.userRole;
 
-		/*
-		EventMessages *messages = [viewControllers objectAtIndex:1];
-		messages.teamId = self.teamId;
-		messages.eventId = currentEvent.eventId;
-		messages.userRole = self.userRole;
-		*/
-		
+	
 		[self.navigationController pushViewController:currentPracticeTab animated:YES];
 		
 	}
@@ -660,27 +619,16 @@ displayWarning;
 		currentNotes.description = currentGame.description;
 		currentNotes.startDate = currentGame.startDate;
 		currentNotes.opponentString = currentGame.opponent;
-		
-		
-		/*
-		TeamActivity *activity = [viewControllers objectAtIndex:1];
-		activity.teamId = self.teamId;
-		activity.userRole = self.userRole;
-		*/
-		
-		GameAttendance *currentAttendance = [viewControllers objectAtIndex:2];
+	
+		GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
 		currentAttendance.gameId = currentGame.gameId;
 		currentAttendance.teamId = self.teamId;
 		currentAttendance.startDate = currentGame.startDate;
 		
-		GameChatter *messages = [viewControllers objectAtIndex:1];
-		messages.gameId = currentGame.gameId;
-		messages.teamId = self.teamId;
-		messages.userRole = self.userRole;
-		messages.startDate = currentGame.startDate;
+
 
 		
-		Vote *fans = [viewControllers objectAtIndex:3];
+		Vote *fans = [viewControllers objectAtIndex:2];
 		fans.teamId = self.teamId;
 		fans.userRole = self.userRole;
 		fans.gameId = currentGame.gameId;
@@ -710,16 +658,10 @@ displayWarning;
 		currentNotes.description = currentGame.description;
 		currentNotes.startDate = currentGame.startDate;
 		currentNotes.opponentString = currentGame.opponent;
-		
-		
-		GameChatter *messages = [viewControllers objectAtIndex:1];
-		messages.gameId = currentGame.gameId;
-		messages.teamId = self.teamId;
-		messages.userRole = self.userRole;
-		messages.startDate = currentGame.startDate;
+
 
 		
-		Vote *fans = [viewControllers objectAtIndex:2];
+		Vote *fans = [viewControllers objectAtIndex:1];
 		fans.teamId = self.teamId;
 		fans.userRole = self.userRole;
 		fans.gameId = currentGame.gameId;
@@ -758,7 +700,7 @@ displayWarning;
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		
 		frame.origin.x = 10;
@@ -769,21 +711,18 @@ displayWarning;
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 		
 		frame.origin.y = 23;
 		frame.size.height = 14;
 		UILabel *resultLabel = [[UILabel alloc] initWithFrame:frame];
 		resultLabel.tag = resultTag;
 		[cell.contentView addSubview:resultLabel];
-		[resultLabel release];
 		
 		frame.origin.y = 39;
 		frame.size.width = 185;
 		UILabel *mvpLabel = [[UILabel alloc] initWithFrame:frame];
 		mvpLabel.tag = mvpTag;
 		[cell.contentView addSubview:mvpLabel];
-		[mvpLabel release];
 		
 		frame.origin.x += 41;
 		frame.origin.y = 39;
@@ -791,14 +730,12 @@ displayWarning;
 		UILabel *mvpNameLabel = [[UILabel alloc] initWithFrame:frame];
 		mvpNameLabel.tag = mvpNameTag;
 		[cell.contentView addSubview:mvpNameLabel];
-		[mvpNameLabel release];
 		
 		frame.origin.x = 200;
 		frame.size.width = 100;
 		UILabel *fansLabel = [[UILabel alloc] initWithFrame:frame];
 		fansLabel.tag = fansTag;
 		[cell.contentView addSubview:fansLabel];
-		[fansLabel release];
 		
 				
 	}
@@ -861,7 +798,6 @@ displayWarning;
 		[format1 setDateFormat:@"MMM dd 'at' hh:mm aa"];
 		NSString *gameDateString = [format1 stringFromDate:gameDate];
 		
-        [format1 release];
 		dateLabel.text = gameDateString;
 		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -979,25 +915,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			currentNotes.startDate = currentGame.startDate;
 			currentNotes.opponentString = currentGame.opponent;
 			
-			/*
-			TeamActivity *activity = [viewControllers objectAtIndex:1];
-			activity.teamId = self.teamId;
-			activity.userRole = self.userRole;
-			*/
-			
-			GameAttendance *currentAttendance = [viewControllers objectAtIndex:2];
+		
+			GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
 			currentAttendance.gameId = currentGame.gameId;
 			currentAttendance.teamId = self.teamId;
 			currentAttendance.startDate = currentGame.startDate;
 			
-			GameChatter *messages = [viewControllers objectAtIndex:1];
-			messages.gameId = currentGame.gameId;
-			messages.teamId = self.teamId;
-			messages.userRole = self.userRole;
-			messages.startDate = currentGame.startDate;
+		
 
 			
-			Vote *fans = [viewControllers objectAtIndex:3];
+			Vote *fans = [viewControllers objectAtIndex:2];
 			fans.teamId = self.teamId;
 			fans.userRole = self.userRole;
 			fans.gameId = currentGame.gameId;
@@ -1013,11 +940,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			currentGameTab.userRole = self.userRole;
 			currentGameTab.teamName = self.teamName;
 			
-			/*
-			TeamActivity *activity = [viewControllers objectAtIndex:1];
-			activity.teamId = self.teamId;
-			activity.userRole = self.userRole;
-			*/
+	
 			
 			Gameday *currentNotes = [viewControllers objectAtIndex:0];
 			currentNotes.gameId = currentGame.gameId;
@@ -1028,15 +951,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			currentNotes.startDate = currentGame.startDate;
 			currentNotes.opponentString = currentGame.opponent;
 	
-			
-			GameChatter *messages = [viewControllers objectAtIndex:1];
-			messages.gameId = currentGame.gameId;
-			messages.teamId = self.teamId;
-			messages.userRole = self.userRole;
-			messages.startDate = currentGame.startDate;
+	
 
 			
-			Vote *fans = [viewControllers objectAtIndex:2];
+			Vote *fans = [viewControllers objectAtIndex:1];
 			fans.teamId = self.teamId;
 			fans.userRole = self.userRole;
 			fans.gameId = currentGame.gameId;
@@ -1077,8 +995,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)getMvpInfo{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 		
 	for (int i = 0; i < [self.pastGamesArray count]; i++) {
 		
@@ -1106,8 +1023,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		}
 		
 	}
-	
-	[pool drain];
 
 }
 
@@ -1149,11 +1064,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	
 -(void)getTeamInfo{
-	
-	NSAutoreleasePool * pool;
-	
-	pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -1201,7 +1112,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	[self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
 	
-	[pool drain];
 	
 
 }
@@ -1244,7 +1154,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			
 			[blackView addSubview:teamImage];
-        [teamImage release];
 			
 			[backView addSubview:blackView];
 			[backView addSubview:teamPictureButton];
@@ -1257,13 +1166,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			UIBarButtonItem *teamPicture = [[UIBarButtonItem alloc] initWithCustomView:backView];
         
-        [backView release];
 			
 		if (displayPhoto) {
 			[self.tabBarController.navigationItem setLeftBarButtonItem:teamPicture];
 
 		}
-        [teamPicture release];
 			
 			
 	}else {
@@ -1284,7 +1191,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			if (displayPhoto) {
 				[self.tabBarController.navigationItem setLeftBarButtonItem:teamPicture];
 			}
-            [teamPicture release];
 			
 		}else {
 			[self.tabBarController.navigationItem setLeftBarButtonItem:nil];
@@ -1332,10 +1238,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)getListOfMembers{
 	
-	NSAutoreleasePool * pool;
-	
-	pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -1384,7 +1287,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
 	
-	[pool drain];
 	
 	
 }
@@ -1400,7 +1302,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				self.membersAlert = [[UIAlertView alloc] initWithTitle:@"No Team Members" message:message1 delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Add Members", nil];
 				if (self.displayWarning){
                     [self.membersAlert show];
-                    [self.membersAlert release];
                 }
 			}
 			
@@ -1434,45 +1335,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	[super viewDidUnload];
 }
--(void)dealloc{
-	[teamId release];
-	[userRole release];
-	[teamSport release];
-	[teamName release];
-	[nextGameInfoLabel release];
-	[topRight release];
-	[topLeft release];
-	[recentGamesTable release];
-	[scheduleButton release];
-	[allScoresButton release];
-	[webPageButton release];
-	[nextGameButton release];
-	[teamNameLabel release];
-	[gamesArray release];
-	[pastGamesArray release];
-	[errorLabel release];
-	[nextGameArray release];
-	[teamUrl release];
-	[scheduleButtonUnderline release];
-	[allScoresButtonUnderline release];
-	[webPageButtonUnderline release];
-	[nextEventButton release];
-	[nextEventInfoLabel release];
-	[eventsArray release];
-	[futureEventsArray release];
-	[nextEventArray release];
-	[eventsActivity release];
-	[myAd release];
-	[nextGameLabel release];
-	[nextEventLabel release];
-	[teamInfoThumbnail release];
-	[eventsAlert release];
-	[membersAlert release];
-	[pastGamesArrayTemp release];
-	[gamesArrayTemp release];
-	[super dealloc];
-	
-}
-
 
 @end

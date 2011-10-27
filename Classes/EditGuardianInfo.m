@@ -245,10 +245,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 
 - (void)runRequest {
 	self.errorString = @"";
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -320,7 +317,6 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 		
 	NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
 	
-	[tmpGuardians release];
 	
 	NSString *status = [response valueForKey:@"status"];
 	
@@ -363,7 +359,6 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -407,12 +402,10 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
                 NSString *message1 = @"You have added or changed at least one guardian with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Would you like to send them a text right now with information on how to sign up?";
                 UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
                 [alert1 show];
-                [alert1 release];
             }else {
                 NSString *message1 = @"You have added or changed at least one guardian with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Please notify them that they must send the text 'yes' to 'join@rteam.com' to sign up.";
                 UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert1 show];
-                [alert1 release];
             }
             
             
@@ -447,10 +440,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 
 - (void)runRemove {
 	self.errorString = @"";
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -497,7 +487,6 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
     
 	NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
 	
-	[tmpGuardians release];
 	
 	NSString *status = [response valueForKey:@"status"];
 	        
@@ -536,7 +525,6 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinishRemove{
@@ -599,7 +587,6 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -687,7 +674,6 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
                         
                         [messageViewController setBody:bodyMessage];
                         [self presentModalViewController:messageViewController animated:YES];
-                        [messageViewController release];
                         
                     }
                 }else {
@@ -798,31 +784,4 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	[oneFirstName release];
-	[oneEmail release];
-	[oneLastName release];
-	[twoEmail release];
-	[twoFirstName release];
-	[twoLastName release];
-	[activity release];
-	[errorLabel release];
-	[saveChangesButton release];
-	[removeGuardiansButton release];
-	[guardianArray release];
-	[teamId release];
-	[memberId release];
-	[errorString release];
-    [onePhone release];
-    [twoPhone release];
-    [oneKey release];
-    [twoKey release];
-    [confirmedLabel release];
-    [phoneOnlyArray release];
-    [initGuard1Phone release];
-    [initGuard2Phone release];
-    [teamName release];
-    [super dealloc];
-
-}
 @end

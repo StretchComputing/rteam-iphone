@@ -29,7 +29,7 @@
 	
 	NSString *locationString;
 	NSString *errorString;
-
+    
 	IBOutlet UISegmentedControl *updateAllGames;
 	
 	NSMutableArray *allPracticesArray;
@@ -45,26 +45,26 @@
 @property bool updateAllSuccess;
 @property bool haveGames;
 @property bool practiceSuccess;
-@property (nonatomic, retain) NSMutableArray *allPracticesArray;
+@property (nonatomic, strong) NSMutableArray *allPracticesArray;
 @property bool nameOnly;
-@property (nonatomic, retain) NSString *updateLat;
-@property ( nonatomic, retain) NSString *updateLong;
-@property (nonatomic, retain) UISegmentedControl *updateAllGames;
+@property (nonatomic, strong) NSString *updateLat;
+@property ( nonatomic, strong) NSString *updateLong;
+@property (nonatomic, strong) UISegmentedControl *updateAllGames;
 
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSString *locationString;
-@property (nonatomic, retain) UITextField *locationName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *practiceId;
-@property (nonatomic, retain) UIActivityIndicatorView *action;
-@property (nonatomic, retain) NSString *lat;
-@property (nonatomic, retain) NSString *longt;
-@property (nonatomic, retain) CLLocationManager *locationManager;
-@property (nonatomic, retain) UIButton *saveButton;
-@property (nonatomic, retain) UIButton *useCurrentButton;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSString *locationString;
+@property (nonatomic, strong) UITextField *locationName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *practiceId;
+@property (nonatomic, strong) UIActivityIndicatorView *action;
+@property (nonatomic, strong) NSString *lat;
+@property (nonatomic, strong) NSString *longt;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) UIButton *saveButton;
+@property (nonatomic, strong) UIButton *useCurrentButton;
 @property bool updateSuccess;
 
-@property (nonatomic, retain) UILabel *errorMessage;
+@property (nonatomic, strong) UILabel *errorMessage;
 
 -(IBAction)save;
 -(IBAction)useCurrent;

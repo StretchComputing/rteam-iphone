@@ -52,7 +52,6 @@ allEventsArray, teamId, errorString, location;
 	NSString *tmpDate = @"10:00 AM";
 	NSDate *theDate = [tmp dateFromString:tmpDate];
 	self.timePicker.date = theDate;
-	[tmp release];
 	
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
@@ -95,7 +94,6 @@ allEventsArray, teamId, errorString, location;
 		NSDate *start1 = [format dateFromString:self.startDate.text];
 		NSDate *end1 = [format dateFromString:self.endDate.text];
 		
-		[format release];
 		
 		if ([end1 isEqualToDate:[end1 earlierDate:start1]]) {
 			self.errorLabel.text = @"*'Start Date' can't be greater than 'End Date'";
@@ -180,12 +178,10 @@ allEventsArray, teamId, errorString, location;
 		
 	}
 	
-    //[tmpDate release];
     
 	self.allEventsArray = tmpArray;
 	
 	
-	[format release];
 	
 }
 
@@ -198,8 +194,6 @@ allEventsArray, teamId, errorString, location;
 	
     NSDate *newDate = [calendar dateByAddingComponents:dateComponents toDate:initDate options:0];
 	
-	[calendar release];
-	[dateComponents release];
 
 	return newDate;
   
@@ -312,7 +306,6 @@ numberOfRowsInComponent:(NSInteger)component{
 		self.timePicker.hidden = YES;
 		self.okTimeButton.hidden =YES;
 		
-		[format release];
 		
 	}else {
 		
@@ -360,7 +353,6 @@ numberOfRowsInComponent:(NSInteger)component{
 		
 	}
 	
-	[format release];
 	
 	self.startEndPicker.hidden = YES;
 	self.selectDateButton.hidden =YES;
@@ -480,10 +472,7 @@ numberOfRowsInComponent:(NSInteger)component{
 }
 
 -(void)createGames{
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Create the new game
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -516,7 +505,6 @@ numberOfRowsInComponent:(NSInteger)component{
 		
 		[tmpGameArray addObject:tmpGame1];
 		
-		[tmpGame release];
 		
 	}
 	
@@ -563,8 +551,6 @@ numberOfRowsInComponent:(NSInteger)component{
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
-	
 	
 	
 }
@@ -610,11 +596,7 @@ numberOfRowsInComponent:(NSInteger)component{
 
 
 -(void)createPractices{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Create the new game
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -650,7 +632,6 @@ numberOfRowsInComponent:(NSInteger)component{
 		
 		[tmpGameArray addObject:tmpGame1];
 		
-		[tmpGame release];
 		
 	}
 	
@@ -697,7 +678,6 @@ numberOfRowsInComponent:(NSInteger)component{
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 	
 	
 	
@@ -746,11 +726,7 @@ numberOfRowsInComponent:(NSInteger)component{
 
 -(void)createEvents{
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	//Create the new game
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -786,7 +762,6 @@ numberOfRowsInComponent:(NSInteger)component{
 		
 		[tmpGameArray addObject:tmpGame1];
 		
-		[tmpGame release];
 		
 	}	
 	gameArray = tmpGameArray;
@@ -832,7 +807,6 @@ numberOfRowsInComponent:(NSInteger)component{
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 	
 	
 	
@@ -882,7 +856,6 @@ numberOfRowsInComponent:(NSInteger)component{
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -924,34 +897,5 @@ numberOfRowsInComponent:(NSInteger)component{
 	
 }
 
--(void)dealloc{
-	
-	[dayPicker release];
-	[timePicker release];
-	[frequency release];
-	[startDate release];
-	[endDate release];
-	[timeField release];
-	[dayField release];
-	[submitButton release];
-	[okTimeButton release];
-	[selectDateButton release];
-	[startEndPicker release];
-	[currentDay release];
-	[titleLabel release];
-	[dayLabel release];
-	[errorLabel release];
-	[activity release];
-	[datePicker release];
-	[currentDate release];
-	[dateField release];
-	[eventType release];
-	[allEventsArray release];
-	[teamId release];
-	[errorString release];
-    [location release];
-	[super dealloc];
-	
-}
 
 @end

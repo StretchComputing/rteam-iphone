@@ -146,11 +146,7 @@ sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar;
 }
 
 - (void)sendTheMessage {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -224,7 +220,6 @@ sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -249,7 +244,6 @@ sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar;
 			NSString *tmp = @"Only User's with confirmed email addresses can send messages.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}else {
 			self.errorLabel.text = self.errorString;
 		}
@@ -265,7 +259,6 @@ sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -294,27 +287,6 @@ sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar;
 	
 	[super viewDidUnload];
 }
-
--(void)dealloc{
-	[origMessageLabel release];
-	[origMessageDate release];
-	[teamId release];
-	[subject release];
-	[origMessage release];
-	[replyToId release];
-	[replyToName release];
-	[userRole release];
-	[errorString release];
-	[toLabel release];
-	[newMessageText release];
-	[oldMessageText release];
-	[errorLabel release];
-	[activity release];
-	[sendButton release];
-	[super dealloc];
-	
-}
-	
 	
 
 @end

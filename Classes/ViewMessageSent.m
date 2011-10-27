@@ -9,7 +9,6 @@
 #import "ViewMessageSent.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "MessagesTabs.h"
 #import "CurrentTeamTabs.h"
 #import "PracticeTabs.h"
 #import "GameTabs.h"
@@ -53,7 +52,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 	self.upDown.selectedSegmentIndex = -1;
 	[self.upDown addTarget:self action:@selector(segmentSelect:) forControlEvents:UIControlEventValueChanged];
 	
-	UIBarButtonItem *tmp = [[[UIBarButtonItem alloc] initWithCustomView: self.upDown] autorelease];
+	UIBarButtonItem *tmp = [[UIBarButtonItem alloc] initWithCustomView: self.upDown];
 	[self.navigationItem setRightBarButtonItem:tmp];
 	
 	int msg = self.currentMessageNumber + 1;
@@ -186,10 +185,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 }
 
 -(void)getMessageInfo{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	if (mainDelegate.token != nil){
@@ -203,6 +199,9 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 		if (self.teamId == nil) {
 			self.teamId = self.origTeamId;
 		}
+        
+        NSLog(@"TeamID, Thread ID: %@, %@", self.teamId, self.threadId);
+        
 		response = [ServerAPI getMessageThreadInfo:token :self.teamId :self.threadId];
 		
 		NSString *status = [response valueForKey:@"status"];
@@ -240,7 +239,6 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 	
 
 	[self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -333,12 +331,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 			
 			//Could be "MessageTabs", "GameTabs", "PracticeTabs", or "CurrentTeamTabs"
 			
-			if ([[temp objectAtIndex:num] class] == [MessagesTabs class]) {
-				MessagesTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 2;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
+			if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
 				CurrentTeamTabs *cont = [temp objectAtIndex:num];
 				cont.selectedIndex = 4;
 				[self.navigationController popToViewController:cont animated:YES];
@@ -401,7 +394,6 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -450,37 +442,5 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 	[super viewDidUnload];
 }
 	
--(void)dealloc{
-	
-	[subject release];
-	[body release];
-	[createdDate release];
-	[displayDate release];
-	[displayBody release];
-	[displaySubject release];
-	[teamId release];
-	[eventId release];
-	[eventType release];
-	[threadId release];
-	[viewMoreDetailButton release];
-	[confirmString release];
-	[confirmStringLabel release];
-	[messageNumber release];
-	[messageArray release];
-	[upDown release];
-	[teamName release];
-	[teamNameLabel release];
-	[origTeamId release];
-	[individualReplies release];
-	[messageInfo release];
-	[loadingActivity release];
-	[loadingLabel release];
-	[deleteButton release];
-	[errorLabel release];
-	[errorString release];
-	[super dealloc];
-
-	
-}
 
 @end

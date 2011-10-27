@@ -22,9 +22,9 @@
 createSingleLabel;
 
 -(void)viewWillAppear:(BOOL)animated{
-
+    
 	[self performSelectorInBackground:@selector(getTeamList) withObject:nil];
-
+    
 }
 -(void)viewDidLoad{
 	
@@ -40,8 +40,6 @@ createSingleLabel;
 	
 	self.titleLabel.text = [[@"New Event On " stringByAppendingString:dateString] stringByAppendingString:@":"];
 	
-	[dateFormat release];
-	
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	//self.select.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
@@ -51,13 +49,13 @@ createSingleLabel;
 	UIImage *buttonImageNormal1 = [UIImage imageNamed:@"greenButton.png"];
 	UIImage *stretch1 = [buttonImageNormal1 stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.createMultipleButton setBackgroundImage:stretch1 forState:UIControlStateNormal];
-
+    
 }
 
 -(void)create{
 	
 	
-
+    
 	while (!self.haveTeamList) {
 		//Wait here for the background thread to finish;
 		
@@ -72,7 +70,7 @@ createSingleLabel;
 		[self performSelectorInBackground:@selector(getTeamList) withObject:nil];
 	}else {
 		
-
+        
 		if ([self.teamList count] == 0) {
 			
 			self.error.text = @"*You must create or be a part of at least 1 team to add an event";
@@ -103,7 +101,7 @@ createSingleLabel;
 				[dateFormat setDateFormat:@"yyyy-MM-dd "];
 				
 				NSString *dateString = [dateFormat stringFromDate:self.eventDate];
-
+                
 				NSString *dateTimeString = [dateString stringByAppendingString:timeString];
 				//string now has a format of @"yyyy-MM-dd hh:mm aa"
 				
@@ -111,7 +109,6 @@ createSingleLabel;
 				
 				NSDate *finalDate = [dateFormat dateFromString:dateTimeString];
 				
-                [dateFormat release];
 				SelectTeamCal *tmp = [[SelectTeamCal alloc] initWithStyle:UITableViewStyleGrouped];
 				
 				tmp.teams = coordTeams;
@@ -132,38 +129,37 @@ createSingleLabel;
 			}else {
 				self.error.text = @"*You are not a coordinator on any of your teams";
 			}
-
+            
 			
 		}else {
-		
+            
 			Team *tmpTeam = [self.teamList objectAtIndex:0];
 			self.teamId = tmpTeam.teamId;
 			if ([tmpTeam.userRole isEqualToString:@"coordinator"] || [tmpTeam.userRole isEqualToString:@"creator"]) {
 				
-			
-
+                
+                
 				//Combine the evenDate from previous screen with the eventTime picked on this screen, into one NSDate object
-	
+                
 				NSDate *theTime = self.eventTime.date;
-	
+                
 				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
 				[dateFormat setDateFormat:@"hh:mm aa"]; 
-	
+                
 				NSString *timeString = [dateFormat stringFromDate:theTime];
-	
+                
 				[dateFormat setDateFormat:@"yyyy-MM-dd "];
 				
 				NSString *dateString = [dateFormat stringFromDate:self.eventDate];
-
+                
 				NSString *dateTimeString = [dateString stringByAppendingString:timeString];
 				//string now has a format of @"yyyy-MM-dd hh:mm aa"
-	
+                
 				[dateFormat setDateFormat:@"yyyy-MM-dd hh:mm aa"];
-	
+                
 				NSDate *finalDate = [dateFormat dateFromString:dateTimeString];
-	
-				[dateFormat release];
-							
+                
+                
 				if (self.selection.selectedSegmentIndex == 0) {
 					//Game	
 					NewGame2 *nextController = [[NewGame2 alloc] init];
@@ -187,19 +183,15 @@ createSingleLabel;
 			}else {
 				self.error.text = @"*You must be a team coordinator to add events.";
 			}
-
-
-
+            
+            
+            
 		}
 	}
 }
 
 -(void)getTeamList{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+    
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -252,10 +244,6 @@ createSingleLabel;
 		
 	}
 	
-	
-	
-    [pool drain];
-	
 }
 
 -(void)segmentSelect:(id)sender{
@@ -293,7 +281,7 @@ createSingleLabel;
 }
 
 -(void)createMultiple{
-
+    
 	while (!self.haveTeamList) {
 		//Wait here for the background thread to finish;
 		
@@ -347,7 +335,6 @@ createSingleLabel;
 				
 				NSDate *finalDate = [dateFormat dateFromString:dateTimeString];
 				
-				[dateFormat release];
 				SelectTeamCal *tmp = [[SelectTeamCal alloc] initWithStyle:UITableViewStyleGrouped];
 				
 				tmp.teams = coordTeams;
@@ -401,7 +388,7 @@ createSingleLabel;
 			
 		}
 	}
-
+    
 	
 }
 
@@ -419,20 +406,5 @@ createSingleLabel;
 	createSingleLabel = nil;
 	[super viewDidUnload];
 }
-	
--(void)dealloc{
-	
-	[selection release];
-	[teamId release];
-	[eventDate release];
-	[eventTime release];
-	[titleLabel release];
-	[teamList release];
-	[createButton release];
-	[error release];
-	[createMultipleButton release];
-	[createSingleLabel release];
-	[super dealloc];
-	
-}
+
 @end

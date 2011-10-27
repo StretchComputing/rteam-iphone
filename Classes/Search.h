@@ -10,7 +10,7 @@
 #import <iAd/iAd.h>
 
 @interface Search : UIViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, ADBannerViewDelegate, UIActionSheetDelegate> {
-
+    
 	IBOutlet UISegmentedControl *searchCriteria;
 	IBOutlet UISearchBar *searchBar;
 	
@@ -32,18 +32,18 @@
 	IBOutlet UIActivityIndicatorView *searchActivity;
 	
 }
-@property (nonatomic, retain) UIActivityIndicatorView *searchActivity;
-@property (nonatomic, retain) UILabel *errorLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *searchActivity;
+@property (nonatomic, strong) UILabel *errorLabel;
 @property BOOL bannerIsVisible;
-@property (nonatomic, retain) NSMutableArray *allMatchesTeamName;
-@property (nonatomic, retain) NSMutableArray *potentialMatchesTeamName;
-@property (nonatomic, retain) NSString *error;
-@property (nonatomic, retain) NSMutableArray *allMatches;
-@property (nonatomic, retain) UISegmentedControl *searchCriteria;
-@property (nonatomic, retain) UISearchBar *searchBar;
-@property (nonatomic, retain) UITableView *searchTableView;
-@property (nonatomic, retain) NSMutableArray *potentialMatches;
-@property (nonatomic, retain) NSMutableArray *teamsOnly;
+@property (nonatomic, strong) NSMutableArray *allMatchesTeamName;
+@property (nonatomic, strong) NSMutableArray *potentialMatchesTeamName;
+@property (nonatomic, strong) NSString *error;
+@property (nonatomic, strong) NSMutableArray *allMatches;
+@property (nonatomic, strong) UISegmentedControl *searchCriteria;
+@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) UITableView *searchTableView;
+@property (nonatomic, strong) NSMutableArray *potentialMatches;
+@property (nonatomic, strong) NSMutableArray *teamsOnly;
 
 -(void)getListOfTeams;
 @end

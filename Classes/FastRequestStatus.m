@@ -59,8 +59,6 @@ noEventsText;
 
 -(void)getCurrentEvents{
 	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
 	
 	self.eventsArray = [NSMutableArray array];
 	
@@ -121,7 +119,6 @@ noEventsText;
 	
 	
 	
-	[pool drain];
 	[self performSelectorOnMainThread:@selector(doneEvents) withObject:nil waitUntilDone:NO];
 	
 }
@@ -219,7 +216,7 @@ noEventsText;
 	
 	if (cell == nil){
 		
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:firstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:firstLevelCell];
 		
 		
 		
@@ -232,11 +229,7 @@ noEventsText;
 		UILabel *optionLabel = [[UILabel alloc] initWithFrame:frame];
 		optionLabel.tag = optionTag;
 		[cell.contentView addSubview:optionLabel];
-		[optionLabel release];
-		
-		
-		
-		
+
 		
 	}
 	
@@ -386,7 +379,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		timeLabel = [dateFormat stringFromDate:eventDate];
 	}
 	
-	[dateFormat release];
 	
 	label = [NSString stringWithFormat:@"%@ %@", eventLabel, timeLabel];
 	
@@ -426,24 +418,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[rightArrowButton release];
-	[leftArrowButton release];
-	[cancelButton release];
-	[myTableView release];
-	[currentEventLabel release];
-	[loadingLabel release];
-	[loadingActivity release];
-	[eventsArray release];
-	[teamLabel release];
-	[recipients release];
-	[recipLabel release];
-	[includeFans release];
-	[editRecipButton release];
-	[noEventsText release];
-	[super dealloc];
-}
 
 @end
 

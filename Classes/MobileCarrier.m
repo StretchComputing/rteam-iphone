@@ -12,10 +12,4 @@
 @implementation MobileCarrier
 @synthesize name, code;
 
--(void)dealloc{
-    
-    [name release];
-    [code release];
-    [super dealloc];
-}
 @end

@@ -22,7 +22,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
 	
-
+    
 	UIImagePickerController * picker = [[UIImagePickerController alloc] init];
 	picker.delegate = self;
 	
@@ -30,7 +30,6 @@
 	
 	[self presentModalViewController:picker animated:YES];
 	
-	[picker release];
 	
 	
 	
@@ -40,7 +39,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	
-
+    
 	[picker dismissModalViewControllerAnimated:YES];	
 	
 	UIImageView *tmpView = [[UIImageView alloc] initWithImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
@@ -65,7 +64,6 @@
     
 	NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
 	
-	[tmpView release];
 	
 	UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
 	
@@ -77,7 +75,6 @@
 	
 	UIGraphicsEndImageContext();
 	
-	[myThumbNail release];
 	
 	NSArray *views = [self.navigationController viewControllers];
 	
@@ -104,7 +101,7 @@
             tmpController.compressImage = UIImageJPEGRepresentation(newImage1, 0.80);
             tmpController.profilePhotoButton.enabled = YES;
             tmpController.portrait = isPort;
-
+            
             [self.navigationController popToViewController:tmpController animated:NO];
         }
         
@@ -122,7 +119,7 @@
             tmpController.profilePhotoButton.enabled = YES;
             tmpController.profilePhotoButton.enabled = YES;
             tmpController.portrait = isPort;
-
+            
             [self.navigationController popToViewController:tmpController animated:NO];
             
         }else if ([Fan class] == [[views objectAtIndex:[views count] - 3] class]) {
@@ -134,13 +131,13 @@
             tmpController.compressImage = UIImageJPEGRepresentation(newImage1, 0.80);
             tmpController.profilePhotoButton.enabled = YES;
             tmpController.portrait = isPort;
-
+            
             [self.navigationController popToViewController:tmpController animated:NO];
         }
         
     }
 	
-
+    
 	
 	
 } 
@@ -150,19 +147,19 @@
 	[picker dismissModalViewControllerAnimated:YES];	
     
     NSArray *views = [self.navigationController viewControllers];
-
+    
 	int count = [views count];
     
     if ((count - 2) >= 0) {
         
         if ([Player class] == [[views objectAtIndex:[views count] - 2] class]) {
             Player *tmpController = (Player *)[views objectAtIndex:[views count] - 2];
-      
+            
             
             [self.navigationController popToViewController:tmpController animated:NO];
         }else if ([Fan class] == [[views objectAtIndex:[views count] - 2] class]) {
             Fan *tmpController = (Fan *)[views objectAtIndex:[views count] - 2];
-         
+            
             
             [self.navigationController popToViewController:tmpController animated:NO];
         }
@@ -173,12 +170,12 @@
         if ([Player class] == [[views objectAtIndex:[views count] - 3] class]) {
             
             Player *tmpController = (Player *)[views objectAtIndex:[views count] - 3];
-                     
+            
             [self.navigationController popToViewController:tmpController animated:NO];
             
         }else if ([Fan class] == [[views objectAtIndex:[views count] - 3] class]) {
             Fan *tmpController = (Fan *)[views objectAtIndex:[views count] - 3];
-          
+            
             
             [self.navigationController popToViewController:tmpController animated:NO];
         }
@@ -189,9 +186,5 @@
 }
 
 
--(void)dealloc{
-	
-	[super dealloc];
-}
 
 @end

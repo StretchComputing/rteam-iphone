@@ -7,10 +7,8 @@
 //
 
 #import "VideoSelection.h"
-#import "AllActivity.h"
 #import <MobileCoreServices/UTCoreTypes.h> 
 #import "CurrentTeamTabs.h"
-#import "TeamActivity.h"
 #import "AddGamePhoto.h"
 
 @implementation VideoSelection
@@ -40,7 +38,6 @@
 		picker.videoQuality = UIImagePickerControllerQualityTypeLow;
 		[self presentModalViewController:picker animated:YES];
 		
-		[picker release];
 	}
 	@catch (NSException * e) {
 		NSString *message1 = @"Video is not supported on this device.";
@@ -56,7 +53,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	
 	[picker dismissModalViewControllerAnimated:YES];	
-
+    
 	NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
 	NSData *movieData1 = [NSData dataWithContentsOfURL:videoURL];
 	
@@ -64,36 +61,17 @@
 	player.useApplicationAudioSession = NO;
 	player.shouldAutoplay = NO;
 	UIImage *tmpImage = [player thumbnailImageAtTime:0.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
-	[player release];
-
+    
 	NSArray *views = [self.navigationController viewControllers];
 	
-
-	if ([AllActivity class] == [[views objectAtIndex:[views count] - 2] class]) {
-		AllActivity *belowStack = [views objectAtIndex:[views count] - 2];
-
-		belowStack.movieData = movieData1;
-		belowStack.selectedImageData = UIImageJPEGRepresentation(tmpImage, 1.0);
-		belowStack.selectedImage = tmpImage;
-		belowStack.fromCameraSelect = true;
-		
-		[self.navigationController popToViewController:belowStack animated:NO];
-
-	
-	}else if ([CurrentTeamTabs class] == [[views objectAtIndex:[views count] - 2] class]) {
+    
+	if ([CurrentTeamTabs class] == [[views objectAtIndex:[views count] - 2] class]) {
 		
 		CurrentTeamTabs *belowStack = [views objectAtIndex:[views count] - 2];
 		
-		NSArray *tabs = [belowStack viewControllers];
-
-		TeamActivity *tempController = [tabs objectAtIndex:1];
-
-		
-		tempController.movieData = movieData1;
-		tempController.selectedImageData = UIImageJPEGRepresentation(tmpImage, 1.0);
-		tempController.selectedImage = tmpImage;
-		tempController.fromCameraSelect = true;
-		
+		//NSArray *tabs = [belowStack viewControllers];
+        
+	
 		[self.navigationController popToViewController:belowStack animated:NO];
 		
 		
@@ -115,25 +93,7 @@
 		if ([CurrentTeamTabs class] == [[views objectAtIndex:[views count] - 3] class]) {
 			
 			CurrentTeamTabs *belowStack = [views objectAtIndex:[views count] - 3];
-			
-			TeamActivity *tempController = [[belowStack viewControllers] objectAtIndex:1];
-			
-			tempController.movieData = movieData1;
-			tempController.selectedImageData = UIImageJPEGRepresentation(tmpImage, 1.0);
-			tempController.selectedImage = tmpImage;
-			tempController.fromCameraSelect = true;
-			
-			[self.navigationController popToViewController:belowStack animated:NO];
-			
-			
-		}else if ([AllActivity class] == [[views objectAtIndex:[views count] - 3] class]) {
-			
-			AllActivity *belowStack = [views objectAtIndex:[views count] - 3];
-			
-			belowStack.movieData = movieData1;
-			belowStack.selectedImageData = UIImageJPEGRepresentation(tmpImage, 1.0);
-			belowStack.selectedImage = tmpImage;
-			belowStack.fromCameraSelect = true;
+		
 			
 			[self.navigationController popToViewController:belowStack animated:NO];
 			
@@ -150,7 +110,7 @@
 			[self.navigationController popToViewController:belowStack animated:NO];
 			
 		}
-
+        
 		
 	}
 	
@@ -163,21 +123,14 @@
 	[picker dismissModalViewControllerAnimated:YES];	
 	
 	NSArray *views = [self.navigationController viewControllers];
-
+    
 	
-	if ([AllActivity class] == [[views objectAtIndex:[views count] - 2] class]) {
-		
-		AllActivity *belowStack = [views objectAtIndex:[views count] - 2];
-		
-		[self.navigationController popToViewController:belowStack animated:NO];
-
-		
-	}else if ([CurrentTeamTabs class] == [[views objectAtIndex:[views count] - 2] class]) {
+	if ([CurrentTeamTabs class] == [[views objectAtIndex:[views count] - 2] class]) {
 		
 		CurrentTeamTabs *belowStack = [views objectAtIndex:[views count] - 2];
 		
 		[self.navigationController popToViewController:belowStack animated:NO];
-
+        
 		
 		
 	} else if ([AddGamePhoto class] == [[views objectAtIndex:[views count] - 2] class]) {
@@ -195,17 +148,10 @@
 			
 			[self.navigationController popToViewController:belowStack animated:NO];
 			
-		}else if ([AllActivity class] == [[views objectAtIndex:[views count] - 3] class]) {
-			
-			AllActivity *belowStack = [views objectAtIndex:[views count] - 3];
-			
-			[self.navigationController popToViewController:belowStack animated:NO];
-			
-			
 		}else if ([AddGamePhoto class] == [[views objectAtIndex:[views count] - 3] class]) {
 			
 			AddGamePhoto *belowStack = [views objectAtIndex:[views count] - 3];
-	
+            
 			
 			[self.navigationController popToViewController:belowStack animated:NO];
 			
@@ -219,10 +165,5 @@
 }
 
 
--(void)dealloc{
-	[movieData release];
-	[basePath release];
-	[super dealloc];
-}
 
 @end

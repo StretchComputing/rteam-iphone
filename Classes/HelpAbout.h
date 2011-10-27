@@ -14,7 +14,7 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 
 @interface HelpAbout : UIViewController <ADBannerViewDelegate, MFMailComposeViewControllerDelegate, UIActionSheetDelegate> {
-
+    
 	IBOutlet UIScrollView *scrollView;
 	IBOutlet UIButton *feedbackButton;
 	
@@ -27,11 +27,11 @@
 	IBOutlet UILabel *welcomeLabel;
 }
 @property bool fromSettings;
-@property (nonatomic, retain) UILabel *welcomeLabel;
-@property (nonatomic, retain) UILabel *displayLabel;
+@property (nonatomic, strong) UILabel *welcomeLabel;
+@property (nonatomic, strong) UILabel *displayLabel;
 @property BOOL bannerIsVisible;
-@property (nonatomic, retain) UIButton *feedbackButton;
-@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, strong) UIButton *feedbackButton;
+@property (nonatomic, strong) UIScrollView *scrollView;
 -(IBAction)playMovie;
 -(IBAction)createTeamHelp;
 -(IBAction)addMemberHelp;

@@ -12,18 +12,6 @@
 @implementation Activity
 @synthesize activityText, createdDate, cacheId, teamName, teamId, numLikes, numDislikes, activityId, vote, thumbnail, isVideo;
 
--(void)dealloc{
-	
-	[activityText release];
-	[createdDate release];
-	[cacheId release];
-	[teamName release];
-	[teamId release];
-	[activityId release];
-	[vote release];
-	[thumbnail release];
-	[super dealloc];
-	
-}
+
 
 @end

@@ -44,27 +44,27 @@
 	
 	
 }
-@property (nonatomic, retain) NSString *justAddName;
-@property (nonatomic, retain) NSArray *phoneOnlyArray;
-@property (nonatomic, retain) NSString *displayName;
+@property (nonatomic, strong) NSString *justAddName;
+@property (nonatomic, strong) NSArray *phoneOnlyArray;
+@property (nonatomic, strong) NSString *displayName;
 @property BOOL returnHome;
 @property BOOL displayedConnectionError;
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UINavigationController *navController;
-@property (nonatomic, retain) NSString *dataFilePath;
-@property (nonatomic, retain) NSString *token;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet UINavigationController *navController;
+@property (nonatomic, strong) NSString *dataFilePath;
+@property (nonatomic, strong) NSString *token;
 @property BOOL registered;
-@property (nonatomic, retain) NSData *pushToken;
+@property (nonatomic, strong) NSData *pushToken;
 @property BOOL startNew;
 
-@property (nonatomic, retain) NSString *quickLinkOne;
-@property (nonatomic, retain) NSString *quickLinkTwo;
+@property (nonatomic, strong) NSString *quickLinkOne;
+@property (nonatomic, strong) NSString *quickLinkTwo;
 
-@property (nonatomic, retain) NSString *quickLinkOneName;
-@property (nonatomic, retain) NSString *quickLinkTwoName;
+@property (nonatomic, strong) NSString *quickLinkOneName;
+@property (nonatomic, strong) NSString *quickLinkTwoName;
 
-@property (nonatomic, retain) NSString *quickLinkOneImage;
-@property (nonatomic, retain) NSString *quickLinkTwoImage;
+@property (nonatomic, strong) NSString *quickLinkOneImage;
+@property (nonatomic, strong) NSString *quickLinkTwoImage;
 
 - (void) updateInterfaceWithReachability: (Reachability*) curReach;
 -(void)saveUserInfo;

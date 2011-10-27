@@ -42,12 +42,7 @@
 }
 
 - (void)getResetPasswordQuestion {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	NSDictionary *response = [ServerAPI getUserPasswordResetQuestion:self.email.text];
 	
 	
@@ -97,7 +92,6 @@
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -126,7 +120,6 @@
 			display = [display stringByAppendingFormat:@"'?"];
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:display message:@"Are you sure?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 			[alert show];
-            [alert release];
 		
 		}
 	}else {
@@ -223,14 +216,4 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[email release];
-	[activity release];
-	[error release];
-	[resetButton release];
-	[question release];
-	[errorString release];
-	[super dealloc];
-}
 @end

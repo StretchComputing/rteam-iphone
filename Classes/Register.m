@@ -148,10 +148,6 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 - (void)runMemberRequest {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	NSDictionary *response = [ServerAPI getMembershipStatus:self.email.text];
 	
@@ -201,7 +197,6 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinishMember{
@@ -257,11 +252,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 
 - (void)runRegister {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	NSDictionary *response = [ServerAPI createUser:self.firstName
 											  :self.lastName
@@ -336,7 +327,6 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinishRunRegister{
@@ -357,7 +347,6 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 			NSString *message1 = @"The email address you entered is already being used by a registered rTeam User.  If you are already a User, please use the Login Page access your account.";
 			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Email Not Valid" message:message1 delegate:self cancelButtonTitle:nil otherButtonTitles:@"Try Again", @"Login Page", nil];
 			[alert1 show];
-            [alert1 release];
 		}else {
 			self.error.text = self.errorString;
 
@@ -381,7 +370,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"rTeamWelcomeFinal" ofType:@"m4v"];      
 	if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 3.2)
 	{
-		MPMoviePlayerViewController *tmpMoviePlayViewController=[[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]] retain];
+		MPMoviePlayerViewController *tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
 		if (tmpMoviePlayViewController) {
 			[self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
@@ -390,7 +379,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 		//[tmpMoviePlayViewController release];
 	}
 	else{
-		MPMoviePlayerController *theMovie=[[[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:path]] retain];
+		MPMoviePlayerController *theMovie=[[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieFinishedCallback:) name:MPMoviePlayerPlaybackDidFinishNotification object:theMovie];
 		[theMovie play];
 	}
@@ -402,7 +391,8 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 {      
 	MPMoviePlayerController* theMovie=[aNotification object];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:theMovie];
-	[theMovie release]; [[UIApplication sharedApplication]
+
+    [[UIApplication sharedApplication]
 						 setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
 }
 
@@ -424,26 +414,6 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
-	[email release];
-	[password release];
-	[error release];
-	[registering release];
-	[submitButton release];
-	[success release];
-	[helpScreen release];
-	[barItem release];
-	[memberLogin release];
-	[closeButton release];
-	[firstName release];
-	[lastName release];
-	[confirmEmail release];
-	[watchVideoButton release];
-	[errorString release];
-	[loginButton release];
-	[middleView release];
-	[super dealloc];
-}
 
 
 @end

@@ -12,18 +12,5 @@
 @implementation GameMessageObject
 @synthesize threadId, teamId, subject, body, status, messageDate, senderName, senderId, teamName;
 
--(void)dealloc{
-	
-	[teamId release];
-	[threadId release];
-	[subject release];
-	[body release];
-	[status release];
-	[messageDate release];
-	[senderName release];
-	[senderId release];
-	[teamName release];
-	[super dealloc];
-}
 
 @end

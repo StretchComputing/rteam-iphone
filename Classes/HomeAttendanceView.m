@@ -68,19 +68,5 @@
     
 }
 
-- (void)dealloc
-{
-    [teamLabel release];
-    [dateLabel release];
-    [yesLabel release];
-    [noLabel release];
-    [noReplyLabel release];
-    [teamName release];
-    [yesCount release];
-    [noCount release];
-    [noReplyCount release];
-    [eventDate release];
-    [eventType release];
-    [super dealloc];
-}
+
 @end

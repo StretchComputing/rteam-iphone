@@ -30,7 +30,7 @@
 	minDate = [minDate dateByAddingTimeInterval:300];
 	[self.practiceDatePicker setDate:practiceDate];
 	
-
+    
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.submitButton setBackgroundImage:stretch forState:UIControlStateNormal];
@@ -57,7 +57,6 @@
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -80,13 +79,6 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[practiceDate release];
-	[practiceDatePicker release];
-	[submitButton release];
-	[super dealloc];
-}
 
 @end
 

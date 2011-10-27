@@ -10,7 +10,7 @@
 
 
 @interface GameEdit : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
-
+    
 	IBOutlet UIActivityIndicatorView *activity;
 	IBOutlet UIButton *saveChanges;
 	IBOutlet UITextField *gameOpponent;
@@ -40,26 +40,26 @@
 	bool isCancel;
 	
 }
-@property (nonatomic, retain) UIActionSheet *deleteActionSheet;
+@property (nonatomic, strong) UIActionSheet *deleteActionSheet;
 
-@property (nonatomic, retain) UIButton *deleteButton;
-@property (nonatomic, retain) NSString *errorString;
+@property (nonatomic, strong) UIButton *deleteButton;
+@property (nonatomic, strong) NSString *errorString;
 @property bool notifyTeam;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *gameId;
-@property (nonatomic, retain) NSString *stringDate;
-@property (nonatomic, retain) NSString *opponent;
-@property (nonatomic, retain) NSString *description;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *gameId;
+@property (nonatomic, strong) NSString *stringDate;
+@property (nonatomic, strong) NSString *opponent;
+@property (nonatomic, strong) NSString *description;
 
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UIButton *saveChanges;
-@property (nonatomic, retain) UIButton *gameChangeDate;
-@property (nonatomic, retain) UITextView *gameDescription;
-@property (nonatomic, retain) UITextField *gameOpponent;
-@property (nonatomic, retain) UILabel *gameDate;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIButton *saveChanges;
+@property (nonatomic, strong) UIButton *gameChangeDate;
+@property (nonatomic, strong) UITextView *gameDescription;
+@property (nonatomic, strong) UITextField *gameOpponent;
+@property (nonatomic, strong) UILabel *gameDate;
 
-@property (nonatomic, retain) NSDate *gameDateObject;
-@property (nonatomic, retain) UILabel *errorMessage;
+@property (nonatomic, strong) NSDate *gameDateObject;
+@property (nonatomic, strong) UILabel *errorMessage;
 
 @property bool fromDateChange;
 @property bool createSuccess;

@@ -12,7 +12,7 @@
 
 
 @interface TeamHome : UIViewController <UITableViewDelegate, UITableViewDataSource, ADBannerViewDelegate, UIActionSheetDelegate> {
-
+    
 	NSMutableArray *nextGameArray;
 	NSString *teamId;
 	NSString *userRole;
@@ -40,7 +40,7 @@
 	IBOutlet UIView *scheduleButtonUnderline;
 	IBOutlet UIView *allScoresButtonUnderline;
 	IBOutlet UIView *webPageButtonUnderline;
-
+    
 	
 	IBOutlet UIButton *nextGameButton;
 	
@@ -79,57 +79,57 @@
     bool displayWarning;
 }
 @property bool displayWarning;
-@property (nonatomic, retain) NSMutableArray *gamesArrayTemp;
-@property (nonatomic, retain) NSMutableArray *pastGamesArrayTemp;
+@property (nonatomic, strong) NSMutableArray *gamesArrayTemp;
+@property (nonatomic, strong) NSMutableArray *pastGamesArrayTemp;
 @property bool displayedMemberAlert;
 @property bool displayedEventAlert;
-@property (nonatomic, retain) UIAlertView *eventsAlert;
-@property (nonatomic, retain) UIAlertView *membersAlert;
+@property (nonatomic, strong) UIAlertView *eventsAlert;
+@property (nonatomic, strong) UIAlertView *membersAlert;
 
 @property bool noMembers;
 @property bool noEvents;
 @property bool noGames;
-@property (nonatomic, retain) NSString *teamInfoThumbnail;
-@property (nonatomic, retain) UILabel *nextGameLabel;
-@property (nonatomic, retain) UILabel *nextEventLabel;
+@property (nonatomic, strong) NSString *teamInfoThumbnail;
+@property (nonatomic, strong) UILabel *nextGameLabel;
+@property (nonatomic, strong) UILabel *nextEventLabel;
 @property (nonatomic) CGPoint touchUpLocation;
 @property (nonatomic) CGPoint gestureStartPoint;
-@property (nonatomic, retain) UIActivityIndicatorView *eventsActivity;
+@property (nonatomic, strong) UIActivityIndicatorView *eventsActivity;
 @property BOOL bannerIsVisible;
-@property (nonatomic, retain) NSMutableArray *nextEventArray;
-@property (nonatomic, retain) NSMutableArray *eventsArray;
-@property (nonatomic, retain) NSMutableArray *futureEventsArray;
+@property (nonatomic, strong) NSMutableArray *nextEventArray;
+@property (nonatomic, strong) NSMutableArray *eventsArray;
+@property (nonatomic, strong) NSMutableArray *futureEventsArray;
 @property bool eventSuccess;
-@property (nonatomic, retain) UILabel *nextEventInfoLabel;
-@property (nonatomic, retain) UIButton *nextEventButton;
-@property (nonatomic, retain) UIView *scheduleButtonUnderline;
-@property (nonatomic, retain) UIView *allScoresButtonUnderline;
-@property (nonatomic, retain) UIView *webPageButtonUnderline;
+@property (nonatomic, strong) UILabel *nextEventInfoLabel;
+@property (nonatomic, strong) UIButton *nextEventButton;
+@property (nonatomic, strong) UIView *scheduleButtonUnderline;
+@property (nonatomic, strong) UIView *allScoresButtonUnderline;
+@property (nonatomic, strong) UIView *webPageButtonUnderline;
 
-@property (nonatomic, retain) NSString *teamUrl;
-@property (nonatomic, retain) NSMutableArray *nextGameArray;
+@property (nonatomic, strong) NSString *teamUrl;
+@property (nonatomic, strong) NSMutableArray *nextGameArray;
 @property bool gameSuccess;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) NSMutableArray *pastGamesArray;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) NSMutableArray *pastGamesArray;
 
-@property (nonatomic, retain) NSMutableArray *gamesArray;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) NSString *teamSport;
+@property (nonatomic, strong) NSMutableArray *gamesArray;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) NSString *teamSport;
 
-@property (nonatomic, retain)  UILabel *teamNameLabel;
-@property (nonatomic, retain)  UILabel *nextGameInfoLabel;
+@property (nonatomic, strong)  UILabel *teamNameLabel;
+@property (nonatomic, strong)  UILabel *nextGameInfoLabel;
 
-@property (nonatomic, retain)  UIImageView *topRight;
-@property (nonatomic, retain)  UIImageView *topLeft;
+@property (nonatomic, strong)  UIImageView *topRight;
+@property (nonatomic, strong)  UIImageView *topLeft;
 
-@property (nonatomic, retain)  UITableView *recentGamesTable;
+@property (nonatomic, strong)  UITableView *recentGamesTable;
 
-@property (nonatomic, retain)  UIButton *scheduleButton;
-@property (nonatomic, retain)  UIButton *allScoresButton;
-@property (nonatomic, retain)  UIButton *webPageButton;
-@property (nonatomic, retain)  UIButton *nextGameButton;
+@property (nonatomic, strong)  UIButton *scheduleButton;
+@property (nonatomic, strong)  UIButton *allScoresButton;
+@property (nonatomic, strong)  UIButton *webPageButton;
+@property (nonatomic, strong)  UIButton *nextGameButton;
 
 -(IBAction)schedule;
 -(IBAction)allScores;

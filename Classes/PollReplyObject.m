@@ -12,13 +12,5 @@
 @implementation PollReplyObject
 @synthesize name, dateReplied, reply, memberId, teamId;
 
--(void)dealloc{
-	[name release];
-	[dateReplied release];
-	[reply release];
-	[memberId release];
-	[teamId release];
-	[super dealloc];
-}
 
 @end

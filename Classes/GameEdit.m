@@ -17,7 +17,6 @@
 #import "AllEventCalList.h"
 #import "AllEventsCalendar.h"
 #import "CurrentTeamTabs.h"
-#import "FastHappeningNow.h"
 
 @implementation GameEdit
 @synthesize activity, saveChanges, gameOpponent, gameDate, gameDescription, opponent, stringDate, description, teamId, gameId, gameChangeDate, 
@@ -65,7 +64,6 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 	
 	self.gameDate.text = [@"Date: " stringByAppendingString:[dateFormat stringFromDate:self.gameDateObject]];
 	
-	[dateFormat release];
 
 }
 
@@ -91,7 +89,6 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Team Alert" message:@"Notify your team of this update?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
-	[alert release];
 
 }
 
@@ -141,10 +138,6 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 
 - (void)runRequest {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -158,7 +151,6 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 	
 	NSString *startDate = [dateFormat stringFromDate:self.gameDateObject];
 	
-    [dateFormat release];
     
 	NSString *notify = @"";
 	if (self.notifyTeam) {
@@ -207,7 +199,6 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -252,7 +243,6 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -289,8 +279,7 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 
 -(void)removeGame{
 	isCancel = false;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Delete Event
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -336,13 +325,12 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 	
 	
 	[self performSelectorOnMainThread:@selector(doneCancelDelete) withObject:nil waitUntilDone:NO];
-	[pool drain];
+
 }
 
 -(void)cancelGame{
 	isCancel = true;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Cancel Event
 	
@@ -387,7 +375,6 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 	}
 
 	[self performSelectorOnMainThread:@selector(doneCancelDelete) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -426,11 +413,7 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 				CurrentTeamTabs *tmp = [viewControllers objectAtIndex:num - 3];
 				[self.navigationController popToViewController:tmp animated:NO];
 				
-			}else if ([FastHappeningNow class] == [[viewControllers objectAtIndex:num - 3] class]){
-            
-                FastHappeningNow *tmp = [viewControllers objectAtIndex:num - 3];
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else {
+			}else {
 				[self.navigationController dismissModalViewControllerAnimated:YES];
 
 			}
@@ -462,7 +445,6 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 	self.deleteActionSheet = [[UIActionSheet alloc] initWithTitle:@"'Delete' removes game from schedule. 'Cancel' marks game as cancelled." delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Delete Game" otherButtonTitles:@"Cancel Game", nil];
     self.deleteActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [self.deleteActionSheet showInView:self.view];
-    [self.deleteActionSheet release];
 	
 	
 }
@@ -489,24 +471,4 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 
 }
 
--(void)dealloc{
-	
-	[activity release];
-	[saveChanges release];
-	[gameOpponent release];
-	[gameDate release];
-	[gameDescription release];
-	[opponent release];
-	[stringDate release];
-	[description release];
-	[teamId release];
-	[gameId release];
-	[gameChangeDate release];
-	[gameDateObject release];
-	[errorMessage release];
-	[errorString release];
-	[deleteButton release];
-	[deleteActionSheet release];
-	[super dealloc];
-}
 @end

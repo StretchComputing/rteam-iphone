@@ -19,7 +19,7 @@
 errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage, selectedImageData, removePhotoButton, movieData, portrait;
 
 -(void)viewDidLoad{
-
+    
 	self.title = @"Game Photo";
 	self.countLabel.text = @"140";
 	self.activityText.delegate = self;
@@ -35,18 +35,17 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
     
     self.imagePreview.layer.masksToBounds = YES;
     self.imagePreview.layer.cornerRadius = 7.0;
-
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-
-
+    
+    
 	if (!self.hideAction) {
-
+        
 		self.photoAction = [[UIActionSheet alloc] initWithTitle:@"Post a Game Photo or Video to Activity?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", @"Take Video", nil];
 		self.photoAction.actionSheetStyle = UIActionSheetStyleDefault;
 		[self.photoAction showInView:self.view];
-		[self.photoAction release];
 	}
 	
 	if (self.fromCameraSelect) {
@@ -59,35 +58,34 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
         }else{
             
             self.imagePreview.frame = CGRectMake(59, 142, 200, 150);
-
+            
         }
 		self.imageData = self.selectedImageData;
 		self.fromCameraSelect = false;
 		self.noImageLabel.hidden = YES;
 		self.removePhotoButton.hidden = NO;
-
+        
 		
 	}
 	
 	[self becomeFirstResponder];
-
-
+    
+    
 }
 
 -(void)newPhoto{
 	self.errorLabel.text = @"";
-
+    
 	self.photoAction = [[UIActionSheet alloc] initWithTitle:@"Post a Game Photo or Video to Activity?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", @"Take Video", nil];
 	self.photoAction.actionSheetStyle = UIActionSheetStyleDefault;
 	[self.photoAction showInView:self.view];
-	[self.photoAction release];
 	
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSUInteger newLength = [textField.text length] + [string length] - range.length;
 	self.errorLabel.text = @"";
-
+    
 	
 	if (![string isEqualToString:@"\n"]) {
 		
@@ -123,22 +121,18 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 		self.submitButton.enabled = NO;
 		self.activityText.enabled = NO;
 		self.removePhotoButton.enabled = NO;
-
+        
 		[self performSelectorInBackground:@selector(createActivity) withObject:nil];
 		
 		
 	}
-
+    
 	
 }
 
 
 -(void)createActivity{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+    
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -207,8 +201,7 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 	
 	[self performSelectorOnMainThread:@selector(doneActivity) withObject:nil waitUntilDone:NO];
 	
-	[pool drain];
-
+    
 	
 	
 }
@@ -225,24 +218,24 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 		self.errorLabel.text = @"Submit Successful!";
 		self.errorLabel.textColor = [UIColor colorWithRed:0.0 green:100.0/255.0 blue:0.0 alpha:1.0];
 		[self performSelector:@selector(doneSuccess) withObject:nil afterDelay:1];
-
+        
 	}else {
 		self.errorLabel.text = self.errorString;
 		[self.submitActivity stopAnimating];
-
+        
 	}
-
+    
 	
 }
 
 -(void)doneSuccess{
-
+    
 	[self.navigationController popViewControllerAnimated:NO];
 	
 }
 -(void)getImageCamera{
 	self.hideAction = true;
-
+    
 	CameraSelectionGame *tmp = [[CameraSelectionGame alloc] init];
 	
 	[self.navigationController pushViewController:tmp animated:NO];
@@ -271,7 +264,6 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 	
 	[self presentModalViewController:picker animated:YES];
 	
-	[picker release];
 	
 	
 }
@@ -308,11 +300,10 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 	
 	UIImage *newImage    = UIGraphicsGetImageFromCurrentImageContext();
 	
-    [myThumbNail release];
     
 	UIGraphicsEndImageContext();
 	
-
+    
 	self.imageData = UIImageJPEGRepresentation(newImage, 1.0);
 	
 	self.imagePreview.image = tmpImage;
@@ -339,7 +330,6 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -364,13 +354,13 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 				[self.navigationController popViewControllerAnimated:NO];
 			}
 		}
-
+        
 		
-
+        
 		
 	}else{
 		[FastActionSheet doAction:self :buttonIndex];
-
+        
 	}
 	
 	
@@ -412,24 +402,4 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 	
 }
 
--(void)dealloc{
-	
-	[newPhotoButton release];
-	[submitButton release];
-	[imagePreview release];
-	[photoAction release];
-	[imageData release];
-	[activityText release];
-	[countLabel release];
-	[noImageLabel release];
-	[errorLabel release];
-	[submitActivity release];
-	[errorString release];
-	[teamId release];
-	[selectedImage release];
-	[selectedImageData release];
-	[removePhotoButton release];
-	[movieData release];
-	[super dealloc];
-}
 @end

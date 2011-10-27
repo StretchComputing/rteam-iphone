@@ -11,16 +11,15 @@
 #import "ServerAPI.h"
 #import "Player.h"
 #import "SendPoll.h"
-#import "SendMessage.h"
 #import "CurrentTeamTabs.h"
-#import "MessagesTabs.h" 
 #import "Fan.h"
 #import "FastActionSheet.h"
-
+#import "SendPrivateMessage.h"
+#import "SendPoll.h"
 
 @implementation SelectRecipients
 @synthesize teamId, members, selectedMembers, selectedMemberObjects, fromWhere, error, messageOrPoll, userRole, eventType, eventId, allFansObjects,
-haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMembers;
+haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMembers, isPoll, isPrivate, team, fans, allMemberObjects;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -30,6 +29,9 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 
 
 - (void)viewDidLoad {
+    self.team = true;
+    self.fans = true;
+    
 	self.haveMembers = false;
 	self.memberTableView.delegate = self;
 	self.memberTableView.dataSource = self;
@@ -59,193 +61,62 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 
 -(void)save{
 	
+    self.navigationItem.backBarButtonItem =
+    [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                     style:UIBarButtonItemStyleBordered
+                                    target:nil
+                                    action:nil];
+    
 	NSMutableArray *justMemberObjects = [NSMutableArray array];
 	
-	for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
-		if ([[self.selectedMemberObjects objectAtIndex:i] class] == [Player class]) {
-			[justMemberObjects addObject:[self.selectedMemberObjects objectAtIndex:i]];
-		}else if ([[self.selectedMemberObjects objectAtIndex:i] class] == [Fan class]) {
-			[justMemberObjects addObject:[self.selectedMemberObjects objectAtIndex:i]];
-		}
-	}
+    
+    if (self.team || self.fans) {
+        
+        if (self.team) {
+            for (int i = 0; i < [self.allMemberObjects count]; i++) {
+                [justMemberObjects addObject:[self.allMemberObjects objectAtIndex:i]];
+            }
+        }
+        
+        if (self.fans) {
+            for (int i = 0; i < [self.allFansObjects count]; i++) {
+                [justMemberObjects addObject:[self.allFansObjects objectAtIndex:i]];
+            }
+        }
+        
+    }else{
+        for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
+            
+            if (([[self.selectedMemberObjects objectAtIndex:i] class] == [Fan class]) || ([[self.selectedMemberObjects objectAtIndex:i] class] == [Player class]) ) {
+                [justMemberObjects addObject:[self.selectedMemberObjects objectAtIndex:i]];
+
+            }
+
+            
+        }
+    }
 	
-	//If its a Poll
-	if ([self.messageOrPoll isEqualToString:@"poll"]) {
-		SendPoll *tmp = [[SendPoll alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.origLoc = self.fromWhere;
-		if (self.userRole != nil) {
-			tmp.userRole = self.userRole;
-		}
-		if (self.eventType != nil) {
-			tmp.eventType = self.eventType;
-			tmp.eventId = self.eventId;
-		}
-		
-		if ([[self.selectedMembers objectAtIndex:0] isEqualToString:@"s"]) {
-			tmp.toTeam = true;
-			tmp.includeFans = @"";
-		}else if ([[self.selectedMembers objectAtIndex:1] isEqualToString:@"s"]) {
-			tmp.toTeam = true;
-			tmp.includeFans = @"false";
-		}else if ([[self.selectedMembers objectAtIndex:2] isEqualToString:@"s"]) {
-			
-			NSMutableArray *fanIds = [NSMutableArray array];
-			for (int i = 0; i < [self.allFansObjects count]; i++) {
-				Player *tmp = [self.allFansObjects objectAtIndex:i];
-				[fanIds addObject:tmp.memberId];
-			
-			}
-			tmp.recipients = fanIds;
-			tmp.includeFans = @"";
-			
-		}else {
-			
-			NSMutableArray *mutableMemberIds = [NSMutableArray array];
-			for (int i = 0; i < [justMemberObjects count]; i++) {
-				Player *tmpPlayer = [justMemberObjects objectAtIndex:i];
-				
-				[mutableMemberIds addObject:tmpPlayer.memberId];
-			}
-			tmp.recipients = mutableMemberIds;
-			tmp.includeFans = @"";
-		}
-		
-		UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Recipients" style:UIBarButtonItemStyleDone target:nil action:nil];
-		self.navigationItem.backBarButtonItem = temp;
-
-		[self.navigationController pushViewController:tmp animated:YES];
-	}else {
-
-	NSArray *tempCont = [self.navigationController viewControllers];
-	int tempNum = [tempCont count];
-	tempNum = tempNum - 2;
 	
-	if ([self.fromWhere isEqualToString:@"ButtonTabs"]) {
-		
-		if ([[tempCont objectAtIndex:tempNum] class] == [SendMessage class]) {
-			SendMessage *cont = [tempCont objectAtIndex:tempNum];
-			
-			cont.sendTeamId = self.teamId;
-			
-			if ([[self.selectedMembers objectAtIndex:0] isEqualToString:@"s"]) {
-				cont.toTeam = true;
-				cont.includeFans = @"";
-			}else if ([[self.selectedMembers objectAtIndex:1] isEqualToString:@"s"]) {
-				cont.toTeam = true;
-				cont.includeFans = @"false";
-			}else if ([[self.selectedMembers objectAtIndex:2] isEqualToString:@"s"]) {
-					
-				cont.recipients = self.allFansObjects;
-				cont.includeFans = @"";
-				cont.fansOnly = true;
+    if (self.isPrivate) {
+        
+        SendPrivateMessage *tmp = [[SendPrivateMessage alloc] init];
+        tmp.recipientObjects = [NSArray arrayWithArray:justMemberObjects];
+        tmp.teamId = self.teamId;
+        [self.navigationController pushViewController:tmp animated:YES];
+        
+    }else if (self.isPoll){
+        
+        SendPoll *tmp = [[SendPoll alloc] init];
+        tmp.recipientObjects = [NSArray arrayWithArray:justMemberObjects];
+        tmp.teamId = self.teamId;
+        [self.navigationController pushViewController:tmp animated:YES];
+    }
 
-			}else {
-				cont.toTeam = false;
-
-				cont.recipients = justMemberObjects;
-				cont.includeFans = @"";
-			}
-			
-			[self.navigationController popToViewController:cont animated:YES];
-		}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [SendMessage class]) {
-			SendMessage *cont = [tempCont objectAtIndex:tempNum-1];
-			cont.sendTeamId = self.teamId;
-			
-			if ([[self.selectedMembers objectAtIndex:0] isEqualToString:@"s"]) {
-				cont.toTeam = true;
-				cont.includeFans = @"";
-			}else if ([[self.selectedMembers objectAtIndex:1] isEqualToString:@"s"]) {
-				cont.toTeam = true;
-				cont.includeFans = @"false";
-			}else if ([[self.selectedMembers objectAtIndex:2] isEqualToString:@"s"]) {
-				
-				cont.recipients = self.allFansObjects;
-				cont.includeFans = @"";
-				cont.fansOnly = true;
-
-			}else {
-				cont.toTeam = false;
-
-				cont.recipients = justMemberObjects;
-				cont.includeFans = @"";
-			}
-			
-			[self.navigationController popToViewController:cont animated:YES];
-		}
-	}
-	
-	if ([self.fromWhere isEqualToString:@"MessagesTabs"]) {
-		
-		if ([[tempCont objectAtIndex:tempNum] class] == [MessagesTabs class]) {
-			MessagesTabs *cont = [tempCont objectAtIndex:tempNum];
-			cont.selectedIndex = 3;
-
-			NSArray *viewControllers = cont.viewControllers;
-			SendMessage *tmpSendMessage = [viewControllers objectAtIndex:3];
-			tmpSendMessage.sendTeamId = self.teamId;
-			
-			if ([[self.selectedMembers objectAtIndex:0] isEqualToString:@"s"]) {
-				tmpSendMessage.toTeam = true;
-				tmpSendMessage.includeFans = @"";
-			}else if ([[self.selectedMembers objectAtIndex:1] isEqualToString:@"s"]) {
-				tmpSendMessage.toTeam = true;
-				tmpSendMessage.includeFans = @"false";
-			}else if ([[self.selectedMembers objectAtIndex:2] isEqualToString:@"s"]) {
-				
-				tmpSendMessage.recipients = self.allFansObjects;
-				tmpSendMessage.includeFans = @"";
-				tmpSendMessage.fansOnly = true;
-			}else {
-				tmpSendMessage.toTeam = false;
-
-				tmpSendMessage.recipients = justMemberObjects;
-				tmpSendMessage.includeFans = @"";
-			}
-			
-			
-			[self.navigationController popToViewController:cont animated:YES];
-		}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [MessagesTabs class]) {
-			MessagesTabs *cont = [tempCont objectAtIndex:tempNum-1];
-			cont.selectedIndex = 3;
-
-			NSArray *viewControllers = cont.viewControllers;
-			SendMessage *tmpSendMessage = [viewControllers objectAtIndex:3];
-			tmpSendMessage.sendTeamId = self.teamId;
-			
-			if ([[self.selectedMembers objectAtIndex:0] isEqualToString:@"s"]) {
-				tmpSendMessage.toTeam = true;
-				tmpSendMessage.includeFans = @"";
-			}else if ([[self.selectedMembers objectAtIndex:1] isEqualToString:@"s"]) {
-				tmpSendMessage.toTeam = true;
-				tmpSendMessage.includeFans = @"false";
-			}else if ([[self.selectedMembers objectAtIndex:2] isEqualToString:@"s"]) {
-				
-				tmpSendMessage.recipients = self.allFansObjects;
-				tmpSendMessage.includeFans = @"";
-				tmpSendMessage.fansOnly = true;
-
-			}else {
-				tmpSendMessage.toTeam = false;
-
-				tmpSendMessage.recipients = justMemberObjects;
-				tmpSendMessage.includeFans = @"";
-			}
-			
-			
-			
-			[self.navigationController popToViewController:cont animated:YES];
-		}
-	}
-	}
-	
 
 }
 
 -(void)getAllMembers{
-		
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	self.haveFans = false;
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -311,6 +182,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 				}
 				
 			}
+            self.allMemberObjects = [NSMutableArray arrayWithArray:tmpArray];
 			//tmpArray now holds no fans
 			//Add fans to the end of the array
 			for (int i = 0; i < [self.allFansObjects count]; i++) {
@@ -344,7 +216,6 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 
@@ -395,7 +266,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 5;
 		frame.origin.y = 10;
@@ -405,22 +276,16 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 		frame.origin.x += 280;
-		/*
-		UILabel *selectedLabel = [[UILabel alloc] initWithFrame:frame];
-		selectedLabel.tag = selectedTag;
-		[cell.contentView addSubview:selectedLabel];
-		[selectedLabel release];
-		 */
+	
+        
 		frame.size.height = 20;
 		frame.size.width = 20;
 		UIImageView *tmpView = [[UIImageView alloc] initWithFrame:frame];
 		tmpView.image = [UIImage imageNamed:@"blueCheck.png"];
 		tmpView.tag = selectedTag;
 		[cell.contentView addSubview:tmpView];
-		[tmpView release];
 		
 	}
 	
@@ -488,6 +353,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	if (row == 0) {
 		
+        self.team = true;
+        self.fans = true;
+        
 		if (add) {
 			[self.selectedMembers replaceObjectAtIndex:1 withObject:@""];
 			[self.selectedMembers replaceObjectAtIndex:2 withObject:@""];
@@ -496,9 +364,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		for (int i = 3; i < [self.selectedMembers count]; i++) {
 			[self.selectedMembers replaceObjectAtIndex:i withObject:@""];
 		}
+        
+        for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
+            [self.selectedMemberObjects replaceObjectAtIndex:i withObject:@""];
+        }
 		
 	}else if (row == 1){
 		
+        self.team = true;
+        self.fans = false;
+        
 		if (add) {
 			[self.selectedMembers replaceObjectAtIndex:0 withObject:@""];
 			[self.selectedMembers replaceObjectAtIndex:2 withObject:@""];
@@ -506,9 +381,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		for (int i = 3; i < [self.selectedMembers count]; i++) {
 			[self.selectedMembers replaceObjectAtIndex:i withObject:@""];
 		}
+        
+        for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
+            [self.selectedMemberObjects replaceObjectAtIndex:i withObject:@""];
+        }
 		
 	}else if (row == 2){
 		
+        self.team = false;
+        self.fans = true;
+        
 		if (self.haveFans) {
 			
 			if (add) {
@@ -522,9 +404,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			[self.selectedMembers replaceObjectAtIndex:2 withObject:@""];
 		}
 
+        for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
+            [self.selectedMemberObjects replaceObjectAtIndex:i withObject:@""];
+        }
 		
 	}else {
 		
+        self.team = false;
+        self.fans = false;
+        
 		[self.selectedMembers replaceObjectAtIndex:0 withObject:@""];
 		[self.selectedMembers replaceObjectAtIndex:1 withObject:@""];
 		[self.selectedMembers replaceObjectAtIndex:2 withObject:@""];
@@ -549,7 +437,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -567,43 +454,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)viewDidUnload{
-	/*
-	members = nil;
-	teamId = nil;
-	selectedMembers = nil;
-	error = nil;
-	messageOrPoll = nil;
-	fromWhere = nil;
-	userRole = nil;
-	eventId = nil;
-	eventType = nil;
-	allFansObjects = nil;
-	*/
+
 	memberTableView = nil;
-	//selectedMemberObjects = nil;
 	saveButton = nil;
 	loadingActivity = nil;
 	loadingLabel = nil;
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
-	[members release];
-	[teamId release];
-	[selectedMembers release];
-	[error release];
-	[messageOrPoll release];
-	[fromWhere release];
-	[userRole release];
-	[eventType release];
-	[eventId release];
-	[allFansObjects release];
-	[memberTableView release];
-	[selectedMemberObjects release];
-	[saveButton release];
-	[loadingActivity release];
-	[loadingLabel release];
-	[super dealloc];
-}
 
 @end

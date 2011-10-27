@@ -12,12 +12,5 @@
 @implementation VoteMemberObject
 @synthesize memberName, memberId, numVotes;
 
--(void)dealloc{
-	
-	[memberName release];
-	[memberId release];
-	[super dealloc];
-	
-}
 
 @end

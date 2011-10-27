@@ -10,7 +10,7 @@
 
 
 @interface ProfilePhoto : UIViewController {
-
+    
 	
 	IBOutlet UILabel *nameLabel;
 	IBOutlet UILabel *teamLabel;
@@ -21,13 +21,13 @@
 	NSString *nameString;
 	NSString *teamString;
 }
-@property (nonatomic, retain ) NSString *nameString;
-@property (nonatomic, retain ) NSString *teamString;
+@property (nonatomic, strong ) NSString *nameString;
+@property (nonatomic, strong ) NSString *teamString;
 
-@property (nonatomic, retain) UIView *backView;
-@property (nonatomic, retain) UILabel *nameLabel;
-@property (nonatomic, retain)  UILabel *teamLabel;
-@property (nonatomic, retain)  UIImageView *photo;
+@property (nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong)  UILabel *teamLabel;
+@property (nonatomic, strong)  UIImageView *photo;
 
-@property (nonatomic, retain) NSData *imageData;
+@property (nonatomic, strong) NSData *imageData;
 @end

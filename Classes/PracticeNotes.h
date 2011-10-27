@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 @interface PracticeNotes : UIViewController <CLLocationManagerDelegate> {
-
+    
 	IBOutlet UILabel *errorLabel;
 	
 	IBOutlet UILabel *opponent;
@@ -44,29 +44,29 @@
 	NSString *timeString;
 	
 }
-@property (nonatomic, retain) NSString *dayString;
-@property (nonatomic, retain) NSString *timeString;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UIActivityIndicatorView *loading;
-@property (nonatomic, retain) NSString *startDateString;
-@property (nonatomic, retain) NSString *opponentString;
-@property (nonatomic, retain) NSString *descriptionString;
-@property (nonatomic, retain) UIBarButtonItem *editDone;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) UILabel *opponent;
-@property (nonatomic, retain) UILabel *day;
-@property (nonatomic, retain) UILabel *time;
-@property (nonatomic, retain) UITextView *description;
+@property (nonatomic, strong) NSString *dayString;
+@property (nonatomic, strong) NSString *timeString;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UIActivityIndicatorView *loading;
+@property (nonatomic, strong) NSString *startDateString;
+@property (nonatomic, strong) NSString *opponentString;
+@property (nonatomic, strong) NSString *descriptionString;
+@property (nonatomic, strong) UIBarButtonItem *editDone;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UILabel *opponent;
+@property (nonatomic, strong) UILabel *day;
+@property (nonatomic, strong) UILabel *time;
+@property (nonatomic, strong) UITextView *description;
 
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *practiceId;
-@property (nonatomic, retain) NSString *latitude;
-@property (nonatomic, retain) NSString *longitude;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *practiceId;
+@property (nonatomic, strong) NSString *latitude;
+@property (nonatomic, strong) NSString *longitude;
 
-@property (nonatomic, retain) UIButton *updateLocationButton;
-@property (nonatomic, retain) UIButton *viewMapButton;
-@property (nonatomic, retain) CLLocationManager *locationManager;
+@property (nonatomic, strong) UIButton *updateLocationButton;
+@property (nonatomic, strong) UIButton *viewMapButton;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 @property bool updateSuccess;
 
 @property bool fromNextUpdate;

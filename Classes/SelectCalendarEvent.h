@@ -13,7 +13,7 @@
 @interface SelectCalendarEvent : UIViewController<KLCalendarViewDelegate, UIActionSheetDelegate> {
 	KLCalendarView *calendarView;
 	KLTile *currentTile;
-
+    
 	KLTile *tile;
 	BOOL shouldPushAnotherView;
 	
@@ -21,7 +21,7 @@
 	NSString *eventType;
 	
 	NSDate *dateSelected;
-
+    
 	NSString *error;
 	
 	IBOutlet UILabel *eventLabel;
@@ -46,38 +46,38 @@
 	IBOutlet UIActivityIndicatorView *activity;
 	
 	UIBarButtonItem *createButton;
-
+    
 	
 }
-@property (nonatomic, retain) UIBarButtonItem *createButton;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIBarButtonItem *createButton;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
 
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *errorString;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *errorString;
 @property bool isEventToday;
-@property (nonatomic, retain) UIButton *addEventButton;
+@property (nonatomic, strong) UIButton *addEventButton;
 
-@property (nonatomic, retain) UITextField *eventTimeField;
-@property (nonatomic, retain) UIButton *removeEventButton;
+@property (nonatomic, strong) UITextField *eventTimeField;
+@property (nonatomic, strong) UIButton *removeEventButton;
 
-@property (nonatomic, retain) UIDatePicker *timePicker;
-@property (nonatomic, retain) UIButton *cancelTimeButton;
-@property (nonatomic, retain) UIButton *okTimeButton;
+@property (nonatomic, strong) UIDatePicker *timePicker;
+@property (nonatomic, strong) UIButton *cancelTimeButton;
+@property (nonatomic, strong) UIButton *okTimeButton;
 
-@property (nonatomic, retain) UIView *explainPickerView;
-@property (nonatomic, retain) UILabel *explainPickerLabel;
+@property (nonatomic, strong) UIView *explainPickerView;
+@property (nonatomic, strong) UILabel *explainPickerLabel;
 
-@property (nonatomic, retain) UILabel *eventLabel;
+@property (nonatomic, strong) UILabel *eventLabel;
 @property BOOL shouldPushAnotherView;
-@property (nonatomic, retain) NSString *error;
+@property (nonatomic, strong) NSString *error;
 
-@property (nonatomic, retain) NSMutableArray *allEvents;
+@property (nonatomic, strong) NSMutableArray *allEvents;
 
 
 
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) NSDate *dateSelected;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSDate *dateSelected;
 
 
 -(IBAction)timeEditStart;

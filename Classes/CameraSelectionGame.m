@@ -27,7 +27,6 @@
 	
 	[self presentModalViewController:picker animated:YES];
 	
-	[picker release];
 	
 	
 	
@@ -67,8 +66,7 @@
 	
 	UIImage *newImage    = UIGraphicsGetImageFromCurrentImageContext();
 	
-    [myThumbNail release];
-
+    
 	UIGraphicsEndImageContext();
 	
 	
@@ -107,7 +105,7 @@
         }
         
     }
-
+    
 	
 } 
 
@@ -125,9 +123,5 @@
 	
 }
 
--(void)dealloc{
-	
-	[super dealloc];
-}
 
 @end

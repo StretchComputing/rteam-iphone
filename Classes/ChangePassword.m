@@ -11,7 +11,6 @@
 #import "ServerAPI.h"
 #import "JSON/JSON.h"
 #import "SettingsTabs.h"
-#import "Settings.h"
 
 @implementation ChangePassword
 @synthesize submitButton, error, password, confirmPassword, activity, changeSuccess, errorString;
@@ -54,11 +53,7 @@
 
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -104,7 +99,6 @@
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -143,16 +137,6 @@
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[submitButton release];
-	[error release];
-	[password release];
-	[confirmPassword release];
-	[activity release];
-	[errorString release];
-	[super dealloc];
-}
 
 -(void)endText{
 	

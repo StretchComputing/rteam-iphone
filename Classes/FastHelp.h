@@ -18,6 +18,6 @@
 	BOOL bannerIsVisible;
 }
 @property BOOL bannerIsVisible;
-@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @end
 

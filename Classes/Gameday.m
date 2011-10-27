@@ -118,10 +118,7 @@ errorString, photoButton, showCamera;
 
 
 -(void)getGameInfo{
-	NSAutoreleasePool * pool;
 	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	self.errorString = @"";
 	
@@ -213,9 +210,7 @@ errorString, photoButton, showCamera;
 			
 			self.day.text = [@"- " stringByAppendingString:[format stringFromDate:formatStartDate]];
 			self.time.text = [timeFormat stringFromDate:formatStartDate];
-			[timeFormat release];
-			[format release];
-			[dateFormat release];
+	
 			
 			
 		}else{
@@ -240,7 +235,6 @@ errorString, photoButton, showCamera;
 		}
 		
 	}
-	[pool drain];
 	[self performSelectorOnMainThread:@selector(didFinish) withObject:nil waitUntilDone:NO];
 }
 
@@ -1028,9 +1022,7 @@ errorString, photoButton, showCamera;
 
 
 -(void)findTwitter{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	NSString *token = @"";
@@ -1074,7 +1066,6 @@ errorString, photoButton, showCamera;
 	
 	
 	[self performSelectorOnMainThread:@selector(doneTwitter) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)doneTwitter{
@@ -1121,55 +1112,6 @@ errorString, photoButton, showCamera;
 
 
 }
-
--(void)dealloc{
-    myAd.delegate = nil;
-	[gameId release];
-	[teamId release];
-	[opponent release];
-	[day release];
-	[time release];
-	[successMessage release];
-	[locationManager release];
-	[nameGameLocation release];
-	[locationName release];
-	[moreDetail release];
-	[scoringNotEnabled release];
-	[enableScoring release];
-	[error release];
-	[mapButton release];
-	[locationLabel release];
-	[scoreUs release];
-	[scoreThem release];
-	[interval release];
-	[userRole release];
-	[updateLocationButton release];
-	[myAd release];
-	[sport release];
-	[usLabel release];
-	[scoreUsLabel release];
-	[themLabel release];
-	[scoreThemLabel release];
-	[scoreDividerLabel release];
-	[keepScoreButton release];
-	[intervalLabel release];
-	[refreshActivity release];
-	[editFinalButton release];
-	[mainActivity release];
-	[editDone release];
-	[startDate release];
-	[description release];
-	[opponentString release];
-	[orOtherInterval release];
-	[errorString release];
-	[defaultScoringButton release];
-	[latitude release]; 
-	[longitude release];
-	[photoButton release];
-	[super dealloc];
-	
-}
-
 
 
 @end

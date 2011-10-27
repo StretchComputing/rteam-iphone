@@ -10,7 +10,7 @@
 
 
 @interface TeamNavigation : UINavigationController{
-
+    
 	NSString *teamName;
 	NSString *teamId;
 	NSString *userRole;
@@ -18,9 +18,9 @@
 	NSString *teamUrl;
 }
 
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) NSString *sport;
-@property (nonatomic, retain) NSString *teamUrl;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) NSString *teamUrl;
 @end

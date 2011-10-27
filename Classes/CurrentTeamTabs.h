@@ -10,7 +10,7 @@
 
 
 @interface CurrentTeamTabs : UITabBarController <UITabBarControllerDelegate, UIActionSheetDelegate> {
-
+    
 	NSString *teamId;
 	NSString *teamName;
 	NSString *userRole;
@@ -28,11 +28,11 @@
 @property bool newActivity;
 @property bool messageSuccess;
 @property int messageCount;
-@property (nonatomic, retain) NSString *sport;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *userRole;
+@property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *userRole;
 @property bool toTeam;
-@property (nonatomic, retain) NSArray *recipients;
+@property (nonatomic, strong) NSArray *recipients;
 -(IBAction)done;
 @end

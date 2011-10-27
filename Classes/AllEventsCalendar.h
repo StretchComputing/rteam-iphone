@@ -63,7 +63,7 @@
 	UIActionSheet *canceledAction;
 }
 
-@property (nonatomic, retain) UIActionSheet *canceledAction;
+@property (nonatomic, strong) UIActionSheet *canceledAction;
 @property bool gotGames;
 @property bool gotPractices;
 @property bool gotEvents;
@@ -76,28 +76,28 @@
 @property bool emptyPractices;
 @property bool emptyEvents;
 @property int deleteCell;
-@property (nonatomic, retain) NSString *deleteEventTeamId;
-@property (nonatomic, retain) NSString *deleteEventType;
-@property (nonatomic, retain) NSString *deleteEventId;
-@property (nonatomic, retain) UIActivityIndicatorView *deleteActivity;
-@property (nonatomic, retain) UIActionSheet *deleteAction;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) UILabel *activityLabel;
-@property (nonatomic, retain) NSMutableArray *allGenericEvents;
+@property (nonatomic, strong) NSString *deleteEventTeamId;
+@property (nonatomic, strong) NSString *deleteEventType;
+@property (nonatomic, strong) NSString *deleteEventId;
+@property (nonatomic, strong) UIActivityIndicatorView *deleteActivity;
+@property (nonatomic, strong) UIActionSheet *deleteAction;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) UILabel *activityLabel;
+@property (nonatomic, strong) NSMutableArray *allGenericEvents;
 @property bool createdEvent;
-@property (nonatomic, retain) NSString *error;
-@property (nonatomic, retain) UISegmentedControl *segmentedControl;
-@property (nonatomic, retain) UIToolbar *bottomBar;
-@property (nonatomic, retain) NSMutableArray *allGames;
-@property (nonatomic, retain) NSMutableArray *allPractices;
-@property (nonatomic, retain) NSMutableArray *allEvents;
+@property (nonatomic, strong) NSString *error;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) UIToolbar *bottomBar;
+@property (nonatomic, strong) NSMutableArray *allGames;
+@property (nonatomic, strong) NSMutableArray *allPractices;
+@property (nonatomic, strong) NSMutableArray *allEvents;
 
-@property (nonatomic, retain) NSMutableArray *gamesToday;
-@property (nonatomic, retain) NSMutableArray *practicesToday;
-@property (nonatomic, retain) NSMutableArray *eventsToday;
+@property (nonatomic, strong) NSMutableArray *gamesToday;
+@property (nonatomic, strong) NSMutableArray *practicesToday;
+@property (nonatomic, strong) NSMutableArray *eventsToday;
 
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) NSDate *dateSelected;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSDate *dateSelected;
 -(void)getAllEvents;
 -(void)getAllGames;
 -(void)filterGames;

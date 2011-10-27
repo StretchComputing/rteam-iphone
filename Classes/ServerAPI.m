@@ -47,12 +47,12 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		[ tempDictionary setObject:firstName forKey:@"firstName"];
 		[ tempDictionary setObject:lastName forKey:@"lastName"];
 		[ tempDictionary setObject:email forKey:@"emailAddress"];
 		[ tempDictionary setObject:password forKey:@"password"];
-	
+        
 		if (![latitude isEqualToString:@""]) {
 			[ tempDictionary setObject:latitude forKey:@"latitude"];
 		}
@@ -72,27 +72,28 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![alreadyMember isEqualToString:@""]) {
 			[ tempDictionary setObject:alreadyMember forKey:@"alreadyMember"];
 		}
-
+        
 		loginDict = tempDictionary;
-	
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
-		[tempDictionary release];
-	
+        
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/users"];
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-		NSString *returnString = [[[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding] autorelease];
+		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
 		
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
-
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		if ([apiStatus isEqualToString:@"100"]) {
@@ -114,7 +115,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		return returnDictionary;
 	}
 	
-
+    
 }
 
 + (NSDictionary *)getUserInfo:(NSString *)token :(NSString *)includePhoto{
@@ -130,29 +131,29 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-			
+        
 		NSString *tmpUrl = @"";
 		
 		if ([includePhoto isEqualToString:@"true"]) {
 			tmpUrl = [NSString stringWithFormat:@"%@/user?includePhoto=true", baseUrl];
-	
+            
 		}else {
 			tmpUrl = [NSString stringWithFormat:@"%@/user", baseUrl];
 		}
-
-	
+        
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
-	
+        
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    
+        
 		SBJSON *jsonParser = [SBJSON new];
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
@@ -202,15 +203,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		tmpUrl = [tmpUrl stringByAppendingString:password];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setHTTPMethod: @"GET"];
-	
-	
+        
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse:nil error: nil ];
-	
-		NSString *returnString = [[[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding] autorelease];
-	
+        
+		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+        
 		SBJSON *jsonParser = [SBJSON new];
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		NSString *userIconOneId = @"create";
@@ -228,7 +229,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			userIconTwoAlias = [response valueForKey:@"userIconTwoAlias"];
 			userIconOneImage = [response valueForKey:@"userIconOneImage"];
 			userIconTwoImage = [response valueForKey:@"userIconTwoImage"];
-
+            
 			[returnDictionary setValue:userIconOneId forKey:@"userIconOneId"];
 			[returnDictionary setValue:userIconOneAlias forKey:@"userIconOneAlias"];
 			[returnDictionary setValue:userIconTwoId forKey:@"userIconTwoId"];
@@ -238,7 +239,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		}
 		
 		statusReturn = apiStatus;
-
+        
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		[returnDictionary setValue:token forKey:@"token"];
 		return returnDictionary;
@@ -270,40 +271,39 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	
 	@try{
 		
-
+        
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		[ tempDictionary setObject:@"" forKey:@"isPasswordReset"];
-	
+        
 		if (![resetPasswordAnswer isEqualToString:@""]) {
 			[tempDictionary setObject:resetPasswordAnswer forKey:@"passwordResetAnswer"];
 		}
 		
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
-		[tempDictionary release];
-	
+        
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/user?emailAddress="];
 		tmpUrl = [tmpUrl stringByAppendingString:email];
 		
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
-	
+        
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-
+        
 		statusReturn = apiStatus;
 		
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -337,15 +337,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *profile = [ServerAPI encodeBase64data:profileImage];
 		
 		if ([addRemove isEqualToString:@"remove"]) {
@@ -355,7 +355,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				[ tempDictionary setObject:profile forKey:@"photo"];
 			}
 		}
-
+        
 		
 		
         if (![orientation isEqualToString:@""]){
@@ -370,7 +370,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
         }
         
 		[ tempDictionary setObject:password forKey:@"password"];
-	
+        
 		//Set optional fields
 		if (![firstName isEqualToString:@""]){
 			[ tempDictionary setObject:firstName forKey:@"firstName"];
@@ -382,7 +382,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			[ tempDictionary setObject:alertToken forKey:@"alertToken"];
 		}
 		
-
+        
 		if (![resetPasswordAnswer isEqualToString:@""]){
 			[ tempDictionary setObject:resetPasswordAnswer forKey:@"passwordResetAnswer"];
 		}
@@ -415,18 +415,17 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![userIconTwoImage isEqualToString:@""]){
 			[ tempDictionary setObject:userIconTwoImage forKey:@"userIconTwoImage"];
 		}
-
+        
 		if (![autoArchiveDayCount isEqualToString:@""]){
 			//convert it to an int
 			
 			NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
 			[f setNumberStyle:NSNumberFormatterDecimalStyle];
 			NSNumber * myNumber = [f numberFromString:autoArchiveDayCount];
-			[f release];
 			
 			[ tempDictionary setObject:myNumber forKey:@"autoArchiveDayCount"];
 		}
-	
+        
         
         if (![phoneNumber isEqualToString:@""]){
 			[ tempDictionary setObject:phoneNumber forKey:@"phoneNumber"];
@@ -443,33 +442,32 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
                 
                 NSNumber *confirm = [NSNumber numberWithBool:1];
                 [tempDictionary setObject:confirm forKey:@"sendConfirmation"];
-
+                
             }
 		}
 		
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
 		
-		[tempDictionary release];
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/user"];
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
 		
 		SBJSON *jsonParser = [SBJSON new];
-    
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		statusReturn = apiStatus;
@@ -506,29 +504,29 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
-	
+        
+        
 		[ tempDictionary setObject:teamName forKey:@"teamName"];
 		[ tempDictionary setObject:description forKey:@"description"];
-	
+        
 		//Set optional fields
 		if (![useTwitter isEqualToString:@""]){
 			NSNumber *twitter;
-						
+            
 			if ([useTwitter isEqualToString:@"true"]) {
 				twitter = [NSNumber numberWithBool:1];
 			}else {
 				twitter = [NSNumber numberWithBool:0];
-
+                
 			}
-
+            
 			[tempDictionary setObject:twitter forKey:@"useTwitter"];
 		}
-	
+        
 		
 		if (![leagueName isEqualToString:@""]){
 			[ tempDictionary setObject:leagueName forKey:@"leagueName"];
@@ -536,34 +534,33 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![sport isEqualToString:@""]) {
 			[ tempDictionary setObject:sport forKey:@"sport"];
 		}
-	
+        
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
+        
 		
-		[tempDictionary release];
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/teams"];
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
-	
-
+        
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-
-				
+        
+        
 		SBJSON *jsonParser = [SBJSON new];
-    
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
+        
 		if ([apiStatus isEqualToString:@"100"]) {
 			
 			teamIdReturn = [response valueForKey:@"teamId"];
@@ -574,7 +571,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		}
 		
 		statusReturn = apiStatus;
-	
+        
 		[returnDictionary setValue:teamIdReturn forKey:@"teamId"];
 		[returnDictionary setValue:teamPageReturn forKey:@"teamPage"];
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -582,21 +579,21 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			[returnDictionary setValue:twitterUrl forKey:@"twitterUrl"];
 		}
 		return returnDictionary;
-	
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
 	}
-
+    
 }
 
 
 
 
 + (NSDictionary *)getListOfTeams:(NSString *)token{
-		
+    
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSMutableArray *teams = [NSMutableArray array];
@@ -608,57 +605,54 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/teams"];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
 	    
 		SBJSON *jsonParser = [SBJSON new];
-    
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
-	
-		[responseString release];
-		[request release];
-	
+        
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		if ([apiStatus isEqualToString:@"100"]) {
-		
+            
 			statusReturn = apiStatus;
 			
 			NSArray *teamsJsonObjects = [response valueForKey:@"teams"];
-	
+            
 			int size = [teamsJsonObjects count];
-	
+            
 			for (int i = 0; i < size; i++){
-		
+                
 				Team *tmpTeam = [[Team alloc] init];
-			
+                
 				NSDictionary *thisTeam = [teamsJsonObjects objectAtIndex:i];
-		
+                
 				tmpTeam.name = [thisTeam valueForKey:@"teamName"];
-		
+                
 				tmpTeam.teamId = [thisTeam valueForKey:@"teamId"];
-		
+                
 				tmpTeam.userRole = [thisTeam valueForKey:@"participantRole"];
-		
+                
 				tmpTeam.sport = [thisTeam valueForKey:@"sport"];
 				tmpTeam.useTwitter = [[thisTeam valueForKey:@"useTwitter"] boolValue];
 				tmpTeam.teamUrl = [thisTeam valueForKey:@"teamSiteUrl"];
 				//tmpTeam.teamUrl = @"http://www.google.com";
-		
+                
 				[teams addObject:tmpTeam];
-		
-				[tmpTeam release];
-
+                
+                
 			}
 			
 			[returnDictionary setValue:teams forKey:@"teams"];
@@ -669,8 +663,8 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			[returnDictionary setValue:statusReturn forKey:@"status"];
 			return returnDictionary;
 		}
-
-	
+        
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -694,9 +688,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-			
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
 		
 		NSString *tmpUrl = @"";
@@ -711,12 +705,12 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
-	
+        
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-
+        
 		
 		SBJSON *jsonParser = [SBJSON new];
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -760,14 +754,14 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *profile = [ServerAPI encodeBase64data:teamPicture];
 		
-	
+        
 		if (![profile isEqualToString:@""]) {
 			[ tempDictionary setObject:profile forKey:@"photo"];
 		}
@@ -796,14 +790,14 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			[tempDictionary setObject:twitter forKey:@"useTwitter"];
 			
 		}
-
+        
 		
 		
 		if (![sport isEqualToString:@""]) {
 			[ tempDictionary setObject:sport forKey:@"sport"];
 		}
 		
-	
+        
         if (![orientation isEqualToString:@""]){
             NSNumber *isPortrait;
             
@@ -816,42 +810,41 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
         }
         
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
-	
-		[tempDictionary release];
-	
+        
+        
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
-	
-	
+        
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
+        
 		statusReturn = apiStatus;
-	
+        
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		if ([response valueForKey:@"twitterAuthorizationUrl"] != nil) {
 			[returnDictionary setValue:[response valueForKey:@"twitterAuthorizationUrl"] forKey:@"twitterUrl"];
 		}
 		return returnDictionary;
-	
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -876,30 +869,30 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	@try{
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *tmpUrl = [[baseUrl stringByAppendingFormat:@"/team/"] stringByAppendingString:teamId];
-	
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"DELETE"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
 		
 		SBJSON *jsonParser = [SBJSON new];
-    
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
+        
 		statusReturn = apiStatus;
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		
 		return returnDictionary;
-	
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -928,20 +921,20 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	
 	@try{
 		
-	
+        
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
-	
+        
+        
 		[ tempDictionary setObject:firstName forKey:@"firstName"];
 		[ tempDictionary setObject:lastName forKey:@"lastName"];
-	
+        
 		//Handle optional fields
-	
+        
 		if (![emailAddress isEqualToString:@""]){
 			[ tempDictionary setObject:emailAddress forKey:@"emailAddress"];
 		}
@@ -954,7 +947,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if ([guardianEmails count] > 0){
 			[ tempDictionary setObject:guardianEmails forKey:@"guardians"];
 		}
-
+        
 		if ([userRole isEqualToString:@""]) {
 			[ tempDictionary setObject:@"member" forKey:@"participantRole"];
 		}else {
@@ -964,31 +957,30 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![phoneNumber isEqualToString:@""]) {
 			[ tempDictionary setObject:phoneNumber forKey:@"phoneNumber"];
 		}
-
+        
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
+        
 		
-		[tempDictionary release];
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/members"];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-			
+        
 		SBJSON *jsonParser = [SBJSON new];
-
+        
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
@@ -1037,14 +1029,13 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
 		
 		[tempDictionary setObject:members forKey:@"members"];
-
+        
 		loginDict = tempDictionary;
 		
 		
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
 		
-		[tempDictionary release];
 		
 		NSString *tmpUrl = [NSString stringWithFormat:@"%@/team/%@/members/multiple", baseUrl, teamId];
 		
@@ -1054,10 +1045,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
-		        
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-
+        
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -1094,7 +1085,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSMutableArray *members = [NSMutableArray array];
-
+    
 	
 	if ((token == nil) || (teamId == nil) || (role == nil) || (removeSelf == nil)) {
 		statusReturn = @"0";
@@ -1104,45 +1095,43 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	
 	@try{
 		
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *tmpUrl = [[baseUrl stringByAppendingFormat:@"/team/"] stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/members?includeFans=true"];
-	
+        
 		
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
+        
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-			
+        
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
-	
-		[responseString release];
-		[request release];
-	
+        
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		if ([apiStatus isEqualToString:@"100"]) {
-		
+            
 			NSArray *memberJsonObjects = [response valueForKey:@"members"];
-	
+            
 			int size = [memberJsonObjects count];
-		
+            
 			for (int i = 0; i < size; i++){
-		
+                
 				NSDictionary *thisMember = [memberJsonObjects objectAtIndex:i];
 				NSString *currentRole = [thisMember valueForKey:@"participantRole"];
 				
 				if ([currentRole isEqualToString:@"fan"]) {
 					Fan *tmpPlayer = [[Fan alloc] init];
-										
+                    
 					tmpPlayer.firstName = [thisMember valueForKey:@"memberName"];
 					tmpPlayer.memberId = [thisMember valueForKey:@"memberId"];
 					tmpPlayer.userRole = [thisMember valueForKey:@"participantRole"];  //creator, coordinator, member, or fan
@@ -1214,11 +1203,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							[members addObject:tmpPlayer];
 						}
 					}
-					[tmpPlayer release];
-
+                    
 				}else {
 					Player *tmpPlayer = [[Player alloc] init];
-										
+                    
 					tmpPlayer.firstName = [thisMember valueForKey:@"memberName"];
 					tmpPlayer.memberId = [thisMember valueForKey:@"memberId"];
 					tmpPlayer.userRole = [thisMember valueForKey:@"participantRole"];  //creator, coordinator, member, or fan
@@ -1275,9 +1263,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
                             if ([tmp1 valueForKey:@"isUser"] != nil) {
                                 tmpPlayer.guard1isUser = [[tmp1 valueForKey:@"isUser"] boolValue];
                             }
-
+                            
                         }
-                                               
+                        
                         
                         if ([guardArray count] > 1) {
                             NSDictionary *tmp2 = [guardArray objectAtIndex:1];
@@ -1321,8 +1309,8 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 					}else {
 						tmpPlayer.email = @"";
 					}
-
-
+                    
+                    
 					if ([thisMember valueForKey:@"phoneNumber"] != nil) {
 						tmpPlayer.phone = [thisMember valueForKey:@"phoneNumber"];
 					}else {
@@ -1356,11 +1344,11 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 								if (![[thisMember valueForKey:@"isCurrentUser"] boolValue]) {
 									[members addObject:tmpPlayer];
 								}
-
+                                
 							}else {
 								[members addObject:tmpPlayer];
 							}
-
+                            
 						}
 					}else if ([role isEqualToString:@"member"]) {
 						if (![tmpPlayer.userRole isEqualToString:@"fan"]) {
@@ -1383,13 +1371,12 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							[members addObject:tmpPlayer];
 						}
 					}
-					[tmpPlayer release];
-
+                    
 				}
-
-		
+                
+                
 			}
-	
+            
 			//Sort list of players alphabetically (right now by first name)
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES];
 			[members sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
@@ -1398,13 +1385,13 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			[returnDictionary setValue:statusReturn forKey:@"status"];
 			[returnDictionary setValue:members forKey:@"members"];
 			return returnDictionary;
-	
+            
 		}else {
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
 			return returnDictionary;
 		}
-
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -1429,49 +1416,49 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-
+        
 		NSString *tmpUrl = @"";
 		
 		if ([includePhoto isEqualToString:@"true"]) {
 			tmpUrl = [NSString stringWithFormat:@"%@/team/%@/member/%@?includePhoto=true", baseUrl, teamId, memberId];
 		}else{
 			tmpUrl = [NSString stringWithFormat:@"%@/team/%@/member/%@?includePhoto=false", baseUrl, teamId, memberId];
-
+            
 		}
-
-
-	
+        
+        
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
-	
+        
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];        
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
+        
 		if ([apiStatus isEqualToString:@"100"]) {
 			memberInfo = response;
 		}
-	
+        
 		statusReturn = apiStatus;
-	
+        
 		[returnDictionary setValue:memberInfo forKey:@"memberInfo"];
 		[returnDictionary setValue:statusReturn forKey:@"status"];
-	
+        
 		return returnDictionary;
-	
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -1495,34 +1482,34 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	@try{
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *tmpUrl = [[baseUrl stringByAppendingFormat:@"/team/"] stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/member/"];
 		tmpUrl = [tmpUrl stringByAppendingString:memberId];
-	
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"DELETE"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
-	
+        
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
-	
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
+        
 		statusReturn = apiStatus;
-	
+        
 		[returnDictionary setValue:statusReturn forKey:@"status"];
-	
+        
 		return returnDictionary;
-	
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -1533,7 +1520,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 }
 
 +(NSDictionary *)updateMember:(NSString *)memberId :(NSString *)teamId :(NSString *)firstName :(NSString *)lastName 
-						 :(NSString *)jerseyNumber :(NSArray *)roles :(NSArray *)guardianEmails :(NSString *)token :(NSData *)profileImage 
+                             :(NSString *)jerseyNumber :(NSArray *)roles :(NSArray *)guardianEmails :(NSString *)token :(NSData *)profileImage 
                              :(NSString *)email :(NSString *)userRole :(NSString *)phoneNumber :(NSString *)orientation{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
@@ -1553,12 +1540,12 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-				
+        
 		
 		NSString *profile = [ServerAPI encodeBase64data:profileImage];
 		
@@ -1572,28 +1559,28 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
         
         if (![jerseyNumber isEqualToString:@""]) {
             [ tempDictionary setObject:jerseyNumber forKey:@"jerseyNumber"];
-
+            
         }
 		
         if ([roles count] > 0){
             [ tempDictionary setObject:roles forKey:@"roles"];
 		}
-
+        
 		if ([guardianEmails count] > 0){
             
             if ([guardianEmails count] > 2) {
                 [tempDictionary setObject:[NSArray array] forKey:@"guardians"];
             }else{
                 [ tempDictionary setObject:guardianEmails forKey:@"guardians"];
-
+                
             }
 		}
 		
 		if (![profile isEqualToString:@""]) {
 			[ tempDictionary setObject:profile forKey:@"photo"];
 		}
-	
-	
+        
+        
 		
 		if (![email isEqualToString:@""]) {
 			if ([email isEqualToString:@"remove"]) {
@@ -1612,10 +1599,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
                 [tempDictionary setObject:@"" forKey:@"phoneNumber"];
             }else{
                 [ tempDictionary setObject:phoneNumber forKey:@"phoneNumber"];
-
+                
             }
 		}
-	
+        
         if (![orientation isEqualToString:@""]){
             NSNumber *isPortrait;
             
@@ -1628,47 +1615,46 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
         }
         
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
-	
-		[tempDictionary release];
-
+        
+        
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/member/"];
 		tmpUrl = [tmpUrl stringByAppendingString:memberId];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-	                
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
 		
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
+        
 		statusReturn = apiStatus;
-	
+        
 		[returnDictionary setValue:statusReturn forKey:@"status"];
-	
+        
 		return returnDictionary;
-	
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
 	}
-
+    
 	
 }
 
@@ -1687,15 +1673,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/member?emailAddress="];
 		tmpUrl = [tmpUrl stringByAppendingString:email];
-	
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-		NSString *returnString = [[[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding] autorelease];
+		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
 		
 		SBJSON *jsonParser = [SBJSON new];
 		
@@ -1765,17 +1751,17 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
-	
+        
+        
 		[ tempDictionary setObject:startDate forKey:@"startDate"];
 		[ tempDictionary setObject:timeZone forKey:@"timeZone"];
 		[ tempDictionary setObject:description forKey:@"description"];
-
-	
+        
+        
 		if (![endDate isEqualToString:@""]){
 			[ tempDictionary setObject:endDate forKey:@"endDate"];
 		}
@@ -1788,30 +1774,29 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![longitude isEqualToString:@""]){
 			[ tempDictionary setObject:longitude forKey:@"longitude"];
 		}
-	
-	
+        
+        
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
-	
-		[tempDictionary release];
-
+        
+        
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/games"];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -1875,10 +1860,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
 		
-		[tempDictionary release];
 		
 		NSString *tmpUrl = [NSString stringWithFormat:@"%@/team/%@/games/recurring/multiple", baseUrl, teamId];
-									
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		
@@ -1888,9 +1872,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-
+        
 		SBJSON *jsonParser = [SBJSON new];
-        		
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
@@ -1933,15 +1917,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	@try{
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 		NSString *timeZone = [tmp1 name];
-	
+        
 		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
-	
-
+        
+        
 		NSString *tmpUrl = baseUrl;
 		if (![teamId isEqualToString:@""]) {
 			tmpUrl = [[tmpUrl stringByAppendingFormat:@"/team/"] stringByAppendingString:teamId];
@@ -1950,19 +1934,19 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		}else {
 			tmpUrl = [[tmpUrl stringByAppendingFormat:@"/games/"] stringByAppendingString:timeZone];
 		}
-
-
-
+        
+        
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
-	
+        
+        
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-
+        
 		SBJSON *jsonParser = [SBJSON new];
-    		        
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
 		
 		//[responseString release];
@@ -1971,21 +1955,21 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		if ([apiStatus isEqualToString:@"100"]) {
-
+            
 			NSDictionary *gameArray = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
-	
+            
 			NSArray *gameJsonObjects = [gameArray valueForKey:@"games"];
-	
+            
 			int size = [gameJsonObjects count];
-	
-	
-	
+            
+            
+            
 			for (int i = 0; i < size; i++){
 				
 				Game *tmpGame = [[Game alloc] init];
-		
+                
 				NSDictionary *thisGame = [gameJsonObjects objectAtIndex:i];
-		
+                
 				tmpGame.description = [thisGame valueForKey:@"description"];
 				tmpGame.startDate = [thisGame valueForKey:@"startDate"];
 				tmpGame.gameId = [thisGame valueForKey:@"gameId"];
@@ -1999,7 +1983,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 					tmpGame.hasMvp = false;
 					tmpGame.mvp = @"";
 				}
-
+                
 				
 				if ([thisGame valueForKey:@"location"] != nil) {
 					tmpGame.location = [thisGame valueForKey:@"location"];
@@ -2014,7 +1998,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				}else {
 					tmpGame.teamId = [teamId copy];
 				}
-
+                
 				
 				if ([thisGame valueForKey:@"latitude"] != nil) {
 					tmpGame.latitude = [thisGame valueForKey:@"latitude"];
@@ -2028,38 +2012,37 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 					tmpGame.scoreUs = [[thisGame valueForKey:@"scoreUs"] stringValue];
 					tmpGame.scoreThem = [[thisGame valueForKey:@"scoreThem"] stringValue];
 				}
-		
-		
+                
+                
 				[games addObject:tmpGame];
-		
-				[tmpGame release];
-		
+                
+                
 			}
-	
+            
 			//Sort games by date
 			//Sort list of players alphabetically (right now by first name)
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
 			[games sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
-		
+            
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
 			[returnDictionary setValue:games forKey:@"games"];
 			return returnDictionary;
-		
+            
 		}else {
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
 			return returnDictionary;
 		}
-	
+        
 	}
-
+    
 	@catch (NSException *e) {
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
 	}	
-
+    
 	
 }
 
@@ -2080,29 +2063,29 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	@try{
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 		NSString *timeZone = [tmp1 name];
-	
+        
 		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
-	
+        
 		NSString *tmpUrl = [[baseUrl stringByAppendingFormat:@"/team/"] stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/game/"];
 		tmpUrl = [tmpUrl stringByAppendingString:gameId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/"];
 		tmpUrl = [tmpUrl stringByAppendingString:timeZone];
-	
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
-	
+        
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-			
+        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -2149,9 +2132,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
 		
 		if (![startDate isEqualToString:@""]){
@@ -2197,54 +2180,53 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				[tempDictionary setObject:@"plain" forKey:@"notificationType"];
 			}else {
 				[tempDictionary setObject:@"none" forKey:@"notificationType"];
-
+                
 			}
-
+            
 		}
 		
 		//if (![updateAll isEqualToString:@""]) {
-			
-			NSNumber *upAll;
-			
-			if ([updateAll isEqualToString:@"true"]) {
-				upAll = [NSNumber numberWithBool:1];
-				[tempDictionary setObject:upAll forKey:@"updateAll"];
-			}else {
-				upAll = [NSNumber numberWithBool:0];
-				[tempDictionary setObject:upAll forKey:@"updateAll"];
-			}
-
+        
+        NSNumber *upAll;
+        
+        if ([updateAll isEqualToString:@"true"]) {
+            upAll = [NSNumber numberWithBool:1];
+            [tempDictionary setObject:upAll forKey:@"updateAll"];
+        }else {
+            upAll = [NSNumber numberWithBool:0];
+            [tempDictionary setObject:upAll forKey:@"updateAll"];
+        }
+        
 		//}
-
-	
+        
+        
 		if (![pollStatus isEqualToString:@""]) {
 			[ tempDictionary setObject:pollStatus forKey:@"pollStatus"];
 		}
 		
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
+        
 		
-		[loginDict release];
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/game/"];
 		tmpUrl = [tmpUrl stringByAppendingString:gameId];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-
-
+        
+        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -2299,11 +2281,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
 		
-		[loginDict release];
 		
-	
+        
 		NSString *tmpUrl = [NSString stringWithFormat:@"%@/team/%@/game/%@/vote/%@", baseUrl, teamId, gameId, voteType];
-
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		
@@ -2323,7 +2304,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		if ([apiStatus isEqualToString:@"100"]) {
-
+            
 		}
 		
 		statusReturn = apiStatus;
@@ -2425,27 +2406,27 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
-	
+        
+        
 		[tempDictionary setObject:startDate forKey:@"startDate"];
 		[tempDictionary setObject:timeZone forKey:@"timeZone"];
 		[tempDictionary setObject:description forKey:@"description"];
 		[tempDictionary setValue:eventType forKey:@"eventType"];
-	
+        
 		
 		if (![endDate isEqualToString:@""]){
 			[ tempDictionary setObject:endDate forKey:@"endDate"];
 		}
 		if (![location isEqualToString:@""]){
-		[ tempDictionary setObject:location forKey:@"opponent"];
+            [ tempDictionary setObject:location forKey:@"opponent"];
 		}
 		if (![latitude isEqualToString:@""]){
 			[ tempDictionary setObject:latitude forKey:@"latitude"];
@@ -2458,29 +2439,28 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			[tempDictionary setObject:eventName forKey:@"eventName"];
 		}
 		
-	
+        
 		loginDict = tempDictionary;
-	
+        
 		
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-	
-	
-		[tempDictionary release];
-	
+        
+        
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/practices"];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		
 		
 		SBJSON *jsonParser = [SBJSON new];
@@ -2546,7 +2526,6 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
 		
-		[tempDictionary release];
 		
 		NSString *tmpUrl = [NSString stringWithFormat:@"%@/team/%@/practices/recurring/multiple", baseUrl, teamId];
 		
@@ -2559,7 +2538,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-
+        
 		
 		SBJSON *jsonParser = [SBJSON new];
 		
@@ -2607,15 +2586,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	@try{
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
 		
 		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 		NSString *timeZone = [tmp1 name];
-	
+        
 		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
-	
-	
+        
+        
 		NSString *tmpUrl = baseUrl;
 		if (![teamId isEqualToString:@""]) {
 			tmpUrl = [[tmpUrl stringByAppendingFormat:@"/team/"] stringByAppendingString:teamId];
@@ -2624,138 +2603,134 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		}else {
 			tmpUrl = [[tmpUrl stringByAppendingFormat:@"/practices/"] stringByAppendingString:timeZone];
 		}
-	
-	
+        
+        
 		if (![eventType isEqualToString:@""]) {
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"?eventType=%@", eventType];
 		}
 		
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
-	
+        
+        
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-	
+        
 		
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
 		
-		[responseString release];
-		[request release];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		//NOT necessarily going to be practice objects
 		if ([apiStatus isEqualToString:@"100"]) {
-
+            
 			NSArray *eventJsonObjects = [response valueForKey:@"practices"];
-	
+            
 			int size = [eventJsonObjects count];
-	
+            
 			for (int i = 0; i < size; i++){
-		
-					NSDictionary *thisEvent = [eventJsonObjects objectAtIndex:i];
-					
-					if ([[thisEvent valueForKey:@"eventType"] isEqualToString:@"practice"]) {
-						
-						Practice *tmpPractice = [[Practice alloc] init];
-						
-						NSDictionary *thisPractice = [eventJsonObjects objectAtIndex:i];
-						
-						tmpPractice.description = [thisPractice valueForKey:@"description"];
-						tmpPractice.startDate = [thisPractice valueForKey:@"startDate"];
-						tmpPractice.practiceId = [thisPractice valueForKey:@"practiceId"];
-						tmpPractice.location = [thisPractice valueForKey:@"opponent"];
-						
-						if ([thisPractice valueForKey:@"latitude"] != nil) {
-							tmpPractice.latitude = [thisPractice valueForKey:@"latitude"];
-						}
-						if ([thisPractice valueForKey:@"longitude"] != nil) {
-							tmpPractice.longitude = [thisPractice valueForKey:@"longitude"];
-						}
-						
-						if ([teamId isEqualToString:@""]) {
-							tmpPractice.ppteamId = [thisPractice valueForKey:@"teamId"];
-							tmpPractice.userRole = [thisPractice valueForKey:@"participantRole"];
-						}else {
-							tmpPractice.ppteamId = [teamId copy];
-						}
-						
-						if ([thisPractice valueForKey:@"teamName"] != nil) {
-							tmpPractice.teamName = [thisPractice valueForKey:@"teamName"];
-						}
-						
-						if ([thisPractice valueForKey:@"isCanceled"] != nil) {
-							tmpPractice.isCanceled = [[thisPractice valueForKey:@"isCanceled"] boolValue];
-						}
-						
-						[events addObject:tmpPractice];
-						
-						[tmpPractice release];
-						
-						
-					}else if ([[thisEvent valueForKey:@"eventType"] isEqualToString:@"generic"]){
-						
-						Event *tmpEvent = [[Event alloc] init];
-						tmpEvent.description = [thisEvent valueForKey:@"description"];
-						tmpEvent.startDate = [thisEvent valueForKey:@"startDate"];
-						tmpEvent.eventId = [thisEvent valueForKey:@"practiceId"];
-						tmpEvent.location = [thisEvent valueForKey:@"opponent"];
-						
-						if ([thisEvent valueForKey:@"eventName"] != nil) {
-							tmpEvent.eventName = [thisEvent valueForKey:@"eventName"];
-						}
-						if ([teamId isEqualToString:@""]) {
-							tmpEvent.teamId = [thisEvent valueForKey:@"teamId"];
-							tmpEvent.userRole = [thisEvent valueForKey:@"participantRole"];
-						}else {
-							tmpEvent.teamId = [teamId copy];
-						}
-						
-						if ([thisEvent valueForKey:@"teamName"] != nil) {
-							tmpEvent.teamName = [thisEvent valueForKey:@"teamName"];
-						}
-						
-						if ([thisEvent valueForKey:@"latitude"] != nil) {
-							tmpEvent.latitude = [thisEvent valueForKey:@"latitude"];
-						}
-						if ([thisEvent valueForKey:@"longitude"] != nil) {
-							tmpEvent.longitude = [thisEvent valueForKey:@"longitude"];
-						}
-						
-						if ([thisEvent valueForKey:@"isCanceled"] != nil) {
-							tmpEvent.isCanceled = [[thisEvent valueForKey:@"isCanceled"] boolValue];
-						}
-						
-						[events addObject:tmpEvent];
-						
-						[tmpEvent release];
-
-					}
-						
-					
+                
+                NSDictionary *thisEvent = [eventJsonObjects objectAtIndex:i];
+                
+                if ([[thisEvent valueForKey:@"eventType"] isEqualToString:@"practice"]) {
+                    
+                    Practice *tmpPractice = [[Practice alloc] init];
+                    
+                    NSDictionary *thisPractice = [eventJsonObjects objectAtIndex:i];
+                    
+                    tmpPractice.description = [thisPractice valueForKey:@"description"];
+                    tmpPractice.startDate = [thisPractice valueForKey:@"startDate"];
+                    tmpPractice.practiceId = [thisPractice valueForKey:@"practiceId"];
+                    tmpPractice.location = [thisPractice valueForKey:@"opponent"];
+                    
+                    if ([thisPractice valueForKey:@"latitude"] != nil) {
+                        tmpPractice.latitude = [thisPractice valueForKey:@"latitude"];
+                    }
+                    if ([thisPractice valueForKey:@"longitude"] != nil) {
+                        tmpPractice.longitude = [thisPractice valueForKey:@"longitude"];
+                    }
+                    
+                    if ([teamId isEqualToString:@""]) {
+                        tmpPractice.ppteamId = [thisPractice valueForKey:@"teamId"];
+                        tmpPractice.userRole = [thisPractice valueForKey:@"participantRole"];
+                    }else {
+                        tmpPractice.ppteamId = [teamId copy];
+                    }
+                    
+                    if ([thisPractice valueForKey:@"teamName"] != nil) {
+                        tmpPractice.teamName = [thisPractice valueForKey:@"teamName"];
+                    }
+                    
+                    if ([thisPractice valueForKey:@"isCanceled"] != nil) {
+                        tmpPractice.isCanceled = [[thisPractice valueForKey:@"isCanceled"] boolValue];
+                    }
+                    
+                    [events addObject:tmpPractice];
+                    
+                    
+                    
+                }else if ([[thisEvent valueForKey:@"eventType"] isEqualToString:@"generic"]){
+                    
+                    Event *tmpEvent = [[Event alloc] init];
+                    tmpEvent.description = [thisEvent valueForKey:@"description"];
+                    tmpEvent.startDate = [thisEvent valueForKey:@"startDate"];
+                    tmpEvent.eventId = [thisEvent valueForKey:@"practiceId"];
+                    tmpEvent.location = [thisEvent valueForKey:@"opponent"];
+                    
+                    if ([thisEvent valueForKey:@"eventName"] != nil) {
+                        tmpEvent.eventName = [thisEvent valueForKey:@"eventName"];
+                    }
+                    if ([teamId isEqualToString:@""]) {
+                        tmpEvent.teamId = [thisEvent valueForKey:@"teamId"];
+                        tmpEvent.userRole = [thisEvent valueForKey:@"participantRole"];
+                    }else {
+                        tmpEvent.teamId = [teamId copy];
+                    }
+                    
+                    if ([thisEvent valueForKey:@"teamName"] != nil) {
+                        tmpEvent.teamName = [thisEvent valueForKey:@"teamName"];
+                    }
+                    
+                    if ([thisEvent valueForKey:@"latitude"] != nil) {
+                        tmpEvent.latitude = [thisEvent valueForKey:@"latitude"];
+                    }
+                    if ([thisEvent valueForKey:@"longitude"] != nil) {
+                        tmpEvent.longitude = [thisEvent valueForKey:@"longitude"];
+                    }
+                    
+                    if ([thisEvent valueForKey:@"isCanceled"] != nil) {
+                        tmpEvent.isCanceled = [[thisEvent valueForKey:@"isCanceled"] boolValue];
+                    }
+                    
+                    [events addObject:tmpEvent];
+                    
+                    
+                }
+                
+                
 				
 			}
-	
+            
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
 			[events sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
-	
+            
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
 			[returnDictionary setValue:events forKey:@"events"];
 			return returnDictionary;
-	
+            
 		}else {
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
 			return returnDictionary;
 		}
-
+        
 	}
-
+    
 	@catch (NSException *e) {
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -2766,7 +2741,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 
 
 +(NSDictionary *)getListOfEventsNow:(NSString *)token{
-		
+    
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSMutableArray *eventsToday = [NSMutableArray array];
@@ -2793,10 +2768,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		
 		NSString *tmpUrl = baseUrl;
-	
+        
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/practices/%@?happening=now", timeZone];
 		
-	
+        
 		
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
@@ -2805,19 +2780,17 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-				
+        
 		SBJSON *jsonParser = [SBJSON new];
-		        
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
 		
-		[responseString release];
-		[request release];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		//NOT necessarily going to be practice objects
 		if ([apiStatus isEqualToString:@"100"]) {
-		
+            
 			if ([response valueForKey:@"today"] != nil) {
 				//if there are any events today
 				NSArray *today = [response valueForKey:@"today"];
@@ -2849,14 +2822,13 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 					}else {
 						tmpEvent.isCanceled = false;
 					}
-
+                    
 					if ([todaysEvent valueForKey:@"latitude"] != nil) {
 						tmpEvent.latitude = [todaysEvent valueForKey:@"latitude"];
 						tmpEvent.longitude = [todaysEvent valueForKey:@"longitude"];
 					}
-										
+                    
 					[eventsToday addObject:tmpEvent];
-					[tmpEvent release];
 					
 				}
 				
@@ -2865,7 +2837,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			if ([response valueForKey:@"tomorrow"] != nil) {
 				//if there are any events today
 				NSArray *tomorrow = [response valueForKey:@"tomorrow"];
-								
+                
 				for (int i = 0; i < [tomorrow count]; i++) {
 					
 					NSDictionary *tomorrowsEvent = [tomorrow objectAtIndex:i];
@@ -2900,7 +2872,6 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 					}
 					
 					[eventsTomorrow addObject:tmpEvent];
-					[tmpEvent release];
 					
 				}
 				
@@ -2913,7 +2884,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			[eventsTomorrow sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
 			
 			statusReturn = apiStatus;
-		
+            
 			
 			[returnDictionary setValue:statusReturn forKey:@"status"];
 			[returnDictionary setValue:eventsToday forKey:@"eventsToday"];
@@ -3018,15 +2989,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		if (![startDate isEqualToString:@""]){
 			[ tempDictionary setObject:startDate forKey:@"startDate"];
 		}
@@ -3048,7 +3019,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![location isEqualToString:@""]){
 			[ tempDictionary setObject:location forKey:@"opponent"];
 		}
-	
+        
 		if (![eventName isEqualToString:@""]){
 			[ tempDictionary setObject:eventName forKey:@"eventName"];
 		}
@@ -3063,7 +3034,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			}
 			
 		}
-	
+        
 		NSNumber *cancel;
 		
 		if ([isCanceled isEqualToString:@"true"]) {
@@ -3085,27 +3056,26 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		}
 		
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
-		[loginDict release];
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/practice/"];
 		tmpUrl = [tmpUrl stringByAppendingString:eventId];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-
+        
 		
 		SBJSON *jsonParser = [SBJSON new];
 		
@@ -3145,38 +3115,37 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		[ tempDictionary setObject:teamId forKey:@"teamId"];
 		[ tempDictionary setObject:eventId forKey:@"eventId"];
 		[ tempDictionary setObject:eventType forKey:@"eventType"];
 		[ tempDictionary setObject:attList forKey:@"attendees"];
 		[ tempDictionary setObject:startDate forKey:@"eventDate"];
-	
+        
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
-		[loginDict release];
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/attendees"];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
-		        
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
@@ -3212,9 +3181,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	@try{
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *tmpUrl = [[baseUrl stringByAppendingFormat:@"/attendees?teamId="] stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"&"];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"eventId="];
@@ -3222,14 +3191,14 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"&"];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"eventType="];
 		tmpUrl = [tmpUrl stringByAppendingString:eventType];
-	
-	
+        
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
 		
 		SBJSON *jsonParser = [SBJSON new];
@@ -3274,60 +3243,60 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	@try{
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 		NSString *timeZone = [tmp1 name];
 		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
-	
+        
 		NSString *tmpUrl = [[baseUrl stringByAppendingFormat:@"/attendees?teamId="] stringByAppendingString:teamId];
-	
+        
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"&memberId="];
 		tmpUrl = [tmpUrl stringByAppendingString:memberId];
-	
+        
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"&timeZone="];
 		tmpUrl = [tmpUrl stringByAppendingString:timeZone];
-	
+        
 		if (![eventType isEqualToString:@""]) {
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"&eventType="];
 			tmpUrl = [tmpUrl stringByAppendingString:eventType];
 		}
-	
+        
 		if (![startDate isEqualToString:@""]){
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"&startDate="];
 			tmpUrl = [tmpUrl stringByAppendingString:startDate];
 		}
-	
+        
 		if (![endDate isEqualToString:@""]) {
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"&endDate="];
 			tmpUrl = [tmpUrl stringByAppendingString:endDate];
 		}
-	
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
-	
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
+        
 		if ([apiStatus isEqualToString:@"100"]) {
 			attendance = [response valueForKey:@"attendees"];
 		}
 		statusReturn = apiStatus;
-	
+        
 		[returnDictionary setValue:attendance forKey:@"attendance"];
 		[returnDictionary setValue:statusReturn forKey:@"status"];
-	
+        
 		return returnDictionary;
-	
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -3352,35 +3321,35 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	@try{
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *tmpUrl = [[baseUrl stringByAppendingFormat:@"/team/"] stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/game/"];
 		tmpUrl = [tmpUrl stringByAppendingString:gameId];
-	
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"DELETE"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
-	
-	
+        
+        
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
-	
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-	
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
-	
+        
+        
 		statusReturn = apiStatus;
-	
+        
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		
 		return returnDictionary;
-	
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -3463,25 +3432,25 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
-	
+        
+        
 		[ tempDictionary setObject:subject forKey:@"subject"];
 		[ tempDictionary setObject:body forKey:@"body"];
 		[ tempDictionary setObject:type forKey:@"type"];
-	
-	
+        
+        
 		if (![eventId isEqualToString:@""]){
 			[ tempDictionary setObject:eventId forKey:@"eventId"];
 			[ tempDictionary setObject:eventType forKey:@"eventType"];
-
+            
 		}
 		if ([pollChoices count] > 0){
 			[ tempDictionary setObject:pollChoices forKey:@"pollChoices"];
@@ -3499,7 +3468,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![includeFans isEqualToString:@""]){
 			[ tempDictionary setObject:includeFans forKey:@"includeFans"];
 		}
-	
+        
 		
 		if (![coordinatorsOnly isEqualToString:@""]) {
 			
@@ -3510,32 +3479,31 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				[tempDictionary setObject:coordOnly forKey:@"coordinatorsOnly"];
 			}
 		}
-	
+        
 		loginDict = tempDictionary;
-	
-	
+        
+        
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-
-		[tempDictionary release];
-	
+        
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/messageThreads"];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
-
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-		
+		        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		
@@ -3558,7 +3526,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 }
 
 +(NSDictionary *)getMessageThreadInfo:(NSString *)token :(NSString *)teamId :(NSString *)messageThreadId{
-
+    
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
@@ -3573,15 +3541,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
 		
 		NSString *timeZone = [[NSTimeZone systemTimeZone] name];
 		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
-
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/messageThread/"];
@@ -3589,15 +3557,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/"];
 		tmpUrl = [tmpUrl stringByAppendingString:timeZone];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"?includeMemberInfo=true"];
-	
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -3623,7 +3591,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 }
 
 +(NSDictionary *)getMessageThreads:(NSString *)token :(NSString *)teamId :(NSString *)messageGroup :(NSString *)eventId :(NSString *)eventType 
-							 :(NSString *)pollOrMsg :(NSString *)status{
+                                  :(NSString *)pollOrMsg :(NSString *)status{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
@@ -3644,35 +3612,35 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if ([pollOrMsg isEqualToString:@"poll"]) {
 			isPoll = true;
 		}
-	
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSString *timeZone = [[NSTimeZone systemTimeZone] name];
 		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
-	
-	
+        
+        
 		NSString *tmpUrl = baseUrl;
-	
+        
 		if (![teamId isEqualToString:@""]) {
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"/team/"];
 			tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		}
-	
+        
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/messageThreads/"];
 		tmpUrl = [tmpUrl stringByAppendingString:timeZone];
-	
+        
 		bool param = false;
-	
+        
 		if (![messageGroup isEqualToString:@""]) {
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"?messageGroup="];
 			tmpUrl = [tmpUrl stringByAppendingString:messageGroup];
 			param = true;
 		}
-	
+        
 		if (![status isEqualToString:@""]) {
-		
+            
 			if (param) {
 				tmpUrl = [tmpUrl stringByAppendingFormat:@"&"];
 			}else {
@@ -3682,21 +3650,21 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			tmpUrl = [tmpUrl stringByAppendingString:status];
 			param = true;
 		}
-	
-	
+        
+        
 		if (![eventId isEqualToString:@""]) {
 			if (param) {
 				tmpUrl = [tmpUrl stringByAppendingFormat:@"&"];
 			}else {
 				tmpUrl = [tmpUrl stringByAppendingFormat:@"?"];
 			}
-		
+            
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"eventId="];
 			tmpUrl = [tmpUrl stringByAppendingString:eventId];
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"&eventType="];
 			tmpUrl = [tmpUrl stringByAppendingString:eventType];
-		
-
+            
+            
 		}
 		
 		if (param) {
@@ -3707,34 +3675,35 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"useThreads=true"];
 		
-
-	
+        
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"GET"];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-					
+        
 		SBJSON *jsonParser = [SBJSON new];
-                
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 	    if ([apiStatus isEqualToString:@"100"]) {
 			
-		
+            
 			NSMutableArray *returnThreads = [NSMutableArray array];
-	
+            
 			if (![messageGroup isEqualToString:@"outbox"]) {
-		
+                
 				NSArray *inbox = [response valueForKey:@"inbox"];
-						
+                
+                
 				for (int i = 0; i < [inbox count]; i++) {
 					NSDictionary *message = [inbox objectAtIndex:i];
-			
+                    
 					if (([message valueForKey:@"gameId"] == nil) && ([message valueForKey:@"practiceId"] == nil)) {
 						
 						MessageThreadInbox *tmp = [[MessageThreadInbox alloc] init];
@@ -3745,12 +3714,12 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						tmp.body = [message valueForKey:@"body"];
 						tmp.messageType = [message valueForKey:@"type"];
 						tmp.status = [message valueForKey:@"status"];
-						tmp.receivedDate = [message valueForKey:@"receivedDate"];
+						tmp.createdDate = [message valueForKey:@"receivedDate"];
 						tmp.isReminder = [message valueForKey:@"isReminder"];
-					
+                        
 						tmp.wasViewed = [[message valueForKey:@"wasViewed"] boolValue];
-
-
+                        
+                        
                         if ([message valueForKey:@"participantRole"] != nil) {
                             tmp.participantRole = [message valueForKey:@"participantRole"];
                         }else{
@@ -3762,8 +3731,8 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						tmp.senderId = [message valueForKey:@"senderMemberId"];
 						tmp.teamId = [message valueForKey:@"teamId"];
 						tmp.teamName = [message valueForKey:@"teamName"];
-
-			
+                        
+                        
 						if (isPoll) {
 							if ([tmp.messageType isEqualToString:@"poll"]) {
 								[returnThreads addObject:tmp];
@@ -3776,8 +3745,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							}
 						}
 						
-						[tmp release];
-
+                        
 					}else if ([message valueForKey:@"practiceId"] == nil) {
 						//Handle the gameId threads
 						MessageThreadInbox *tmp = [[MessageThreadInbox alloc] init];
@@ -3788,8 +3756,8 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						tmp.eventId = [message valueForKey:@"gameId"];
 						tmp.numberOfMessages = [messages count];
 						tmp.subject = [NSString stringWithFormat:@"Game Thread (%d)", [messages count]];
-					
-
+                        
+                        
 						NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
 						[dateFormat setDateFormat:@"YYYY-MM-dd HH:mm"];
 						
@@ -3810,10 +3778,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							if (!tmpBool) {
 								tmp.wasViewed = false;
 							}
-
+                            
 							tmp.teamName = [tmpDictionary valueForKey:@"teamName"];
 							tmp.teamId = [tmpDictionary valueForKey:@"teamId"];
-														
+                            
 							NSDate *tmpDate = [dateFormat dateFromString:tmpDateString];
 							
 							if ([finalDate isEqualToDate:[finalDate earlierDate:tmpDate]]) {
@@ -3833,9 +3801,8 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						tmp.eventDate = [message valueForKey:@"date"];
 						[dateFormat setDateFormat:@"MM/dd"];
 						tmp.body = [NSString stringWithFormat:@"Messages for Game on %@", [dateFormat stringFromDate:tmpBodyDate]];
-						[dateFormat release];
-												
-						tmp.receivedDate = finalStringDate;
+                        
+						tmp.createdDate = finalStringDate;
 						
 						if (isPoll) {
 							if ([tmp.messageType isEqualToString:@"poll"]) {
@@ -3849,7 +3816,6 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							}
 						}
 						
-						[tmp release];
 						
 					}else {
 						//Handle the practiceId threads
@@ -3885,7 +3851,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							
 							tmp.teamId = [tmpDictionary valueForKey:@"teamId"];
 							tmp.teamName = [tmpDictionary valueForKey:@"teamName"];
-
+                            
 							NSDate *tmpDate = [dateFormat dateFromString:tmpDateString];
 							
 							if ([finalDate isEqualToDate:[finalDate earlierDate:tmpDate]]) {
@@ -3895,7 +3861,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							
 							NSString *tmpThreadId = [tmpDictionary valueForKey:@"messageThreadId"];
 							[subIds addObject:tmpThreadId];
-
+                            
 						}
 						
 						tmp.subThreadIds = subIds;
@@ -3903,13 +3869,12 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						NSString *finalStringDate = [dateFormat stringFromDate:finalDate];
 						NSDate *tmpBodyDate = [dateFormat dateFromString:[message valueForKey:@"date"]];
 						tmp.eventDate = [message valueForKey:@"date"];
-
+                        
 						[dateFormat setDateFormat:@"MM/dd"];
 						tmp.body = [NSString stringWithFormat:@"Messages for Event on %@", [dateFormat stringFromDate:tmpBodyDate]];
 						
-						[dateFormat release];
 						
-						tmp.receivedDate = finalStringDate;
+						tmp.createdDate = finalStringDate;
 						
 						if (isPoll) {
 							if ([tmp.messageType isEqualToString:@"poll"]) {
@@ -3923,27 +3888,26 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							}
 						}
 						
-						[tmp release];
 						
 						
 						
 					}
-
-
+                    
+                    
 				}
 			}
-	
+            
 			if (![messageGroup isEqualToString:@"inbox"]) {
-		
+                
 				NSArray *outbox = [response valueForKey:@"outbox"];
-		
+                
 				for (int i = 0; i < [outbox count]; i++) {
 					NSDictionary *message = [outbox objectAtIndex:i];
-			
+                    
 					if (([message valueForKey:@"gameId"] == nil) && ([message valueForKey:@"practiceId"] == nil)) {
-
+                        
 						MessageThreadOutbox *tmp = [[MessageThreadOutbox alloc] init];
-			
+                        
 						tmp.threadId = [message valueForKey:@"messageThreadId"];
 						tmp.subject = [message valueForKey:@"subject"];
 						tmp.body = [message valueForKey:@"body"];
@@ -3954,12 +3918,12 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						tmp.numReplies = [[message valueForKey:@"numOfReplies"] stringValue];
 						tmp.teamId = [message valueForKey:@"teamId"];
 						tmp.teamName = [message valueForKey:@"teamName"];
-
-					
+                        
+                        
 						if ([message valueForKey:@"followUpMessage"] != nil) {
-								tmp.followUp = [message valueForKey:@"followUpMessage"];
+                            tmp.followUp = [message valueForKey:@"followUpMessage"];
 						}
-			
+                        
 						if (isPoll) {
 							if ([tmp.messageType isEqualToString:@"poll"]) {
 								[returnThreads addObject:tmp];
@@ -3971,8 +3935,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 								[returnThreads addObject:tmp];
 							}
 						}
-
-						[tmp release];
+                        
 						
 					}else if ([message valueForKey:@"practiceId"] == nil) {
 						//Handle the gameId threads
@@ -4001,7 +3964,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							
 							tmp.teamId = [tmpDictionary valueForKey:@"teamId"];
 							tmp.teamName = [tmpDictionary valueForKey:@"teamName"];
-
+                            
 							NSDate *tmpDate = [dateFormat dateFromString:tmpDateString];
 							
 							if ([finalDate isEqualToDate:[finalDate earlierDate:tmpDate]]) {
@@ -4011,7 +3974,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							
 							NSString *tmpThreadId = [tmpDictionary valueForKey:@"messageThreadId"];
 							[subIds addObject:tmpThreadId];
-
+                            
 						}
 						
 						tmp.subThreadIds = subIds;
@@ -4019,11 +3982,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						NSString *finalStringDate = [dateFormat stringFromDate:finalDate];
 						NSDate *tmpBodyDate = [dateFormat dateFromString:[message valueForKey:@"date"]];
 						tmp.eventDate = [message valueForKey:@"date"];
-
+                        
 						[dateFormat setDateFormat:@"MM/dd"];
 						tmp.body = [NSString stringWithFormat:@"Messages for Game on %@", [dateFormat stringFromDate:tmpBodyDate]];
 						
-						[dateFormat release];
 						
 						tmp.createdDate = finalStringDate;
 						
@@ -4039,7 +4001,6 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							}
 						}
 						
-						[tmp release];
 						
 					}else {
 						//Handle the practiceId threads
@@ -4057,7 +4018,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						[dateFormat setDateFormat:@"YYYY-MM-dd HH:mm"];
 						
 						NSDate *finalDate = [dateFormat dateFromString:@"2000-01-01 11:00"];
-								
+                        
 						NSMutableArray *subIds = [NSMutableArray array];
 						for (int j = 0; j < [messages count]; j++) {
 							
@@ -4067,7 +4028,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							
 							tmp.teamId = [tmpDictionary valueForKey:@"teamId"];
 							tmp.teamName = [tmpDictionary valueForKey:@"teamName"];
-
+                            
 							NSDate *tmpDate = [dateFormat dateFromString:tmpDateString];
 							
 							if ([finalDate isEqualToDate:[finalDate earlierDate:tmpDate]]) {
@@ -4077,7 +4038,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							
 							NSString *tmpThreadId = [tmpDictionary valueForKey:@"messageThreadId"];
 							[subIds addObject:tmpThreadId];
-
+                            
 							
 						}
 						
@@ -4085,11 +4046,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						NSString *finalStringDate = [dateFormat stringFromDate:finalDate];
 						NSDate *tmpBodyDate = [dateFormat dateFromString:[message valueForKey:@"date"]];
 						tmp.eventDate = [message valueForKey:@"date"];
-
+                        
 						[dateFormat setDateFormat:@"MM/dd"];
 						tmp.body = [NSString stringWithFormat:@"Messages for Event on %@", [dateFormat stringFromDate:tmpBodyDate]];
 						
-						[dateFormat release];
 						
 						tmp.createdDate = finalStringDate;
 						
@@ -4105,23 +4065,20 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							}
 						}
 						
-						[tmp release];
 						
 						
 						
 					}
 					
-
-
+                    
+                    
 				}
 			}
-	
-			[returnString release];
-			[request release];
-	
+            
+            
 			messageArray = returnThreads;
 			
-		
+            
 			[returnDictionary setValue:apiStatus forKey:@"status"];
 			[returnDictionary setValue:messageArray forKey:@"messages"];
 			return returnDictionary;
@@ -4130,8 +4087,8 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			[returnDictionary setValue:apiStatus forKey:@"status"];
 			return returnDictionary;
 		}
-
-	
+        
+        
 	}
 	@catch (NSException *e) {
 		statusReturn = @"1";
@@ -4160,16 +4117,16 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
-	
+        
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
-
-	
+        
+        
 		if (![reply isEqualToString:@""]) {
 			[ tempDictionary setObject:reply forKey:@"reply"];
 		}
@@ -4182,35 +4139,34 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![status isEqualToString:@""]) {
 			[ tempDictionary setObject:status forKey:@"status"];
 		}
-
+        
 		loginDict = tempDictionary;
-	
+        
 		
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
-		[tempDictionary release];
-	
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
 		tmpUrl = [tmpUrl stringByAppendingFormat:@"/messageThread/"];
 		tmpUrl = [tmpUrl stringByAppendingString:messageThreadId];
-	
+        
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
-	
+        
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-	
+        
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-	
+        
 		statusReturn = apiStatus;
 		
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -4239,7 +4195,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-
+        
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
@@ -4262,10 +4218,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
 		
-		[tempDictionary release];
 		
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/messageThreads"];
-	
+        
 		
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
@@ -4316,7 +4271,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-				
+        
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/messageThreads/count/new"];
 		
 		bool param = false;
@@ -4333,25 +4288,22 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if (![resynch isEqualToString:@""]) {
 			if (param) {
 				tmpUrl = [tmpUrl stringByAppendingString:@"&resynchCounter=true"];
-
+                
 			}else {
 				tmpUrl = [tmpUrl stringByAppendingString:@"?resynchCounter=true"];
-
+                
 			}
 			param = true;
-
-
-		}
+        }
 		
 		
 		if (param){
 			tmpUrl = [tmpUrl stringByAppendingString:@"&includeNewActivity=true"];
-
+            
 		}else {
 			tmpUrl = [tmpUrl stringByAppendingString:@"?includeNewActivity=true"];
-
+            
 		}
-
 		
 		
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
@@ -4455,7 +4407,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	
 	@try{
 		
-
+        
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		
@@ -4472,7 +4424,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		tmpUrl = [NSString stringWithFormat:@"%@/activities/%@", baseUrl, timeZone];
 		
 		bool firstParam = false;
-		
+		        
 		if (![maxCount isEqualToString:@""]){
 			
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"?maxCount=%@", maxCount];
@@ -4499,16 +4451,16 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		if (![mostCurrentDate isEqualToString:@""]){
 			
-				
-				NSString *symbol;
-				if (firstParam) {
-					symbol = @"&";
-				}else {
-					symbol = @"?";
-				}
+            
+            NSString *symbol;
+            if (firstParam) {
+                symbol = @"&";
+            }else {
+                symbol = @"?";
+            }
 			firstParam = true;
-				tmpUrl = [tmpUrl stringByAppendingFormat:@"%@mostCurrentDate=%@", symbol, mostCurrentDate];
-				
+            tmpUrl = [tmpUrl stringByAppendingFormat:@"%@mostCurrentDate=%@", symbol, mostCurrentDate];
+            
 			
 			
 		}
@@ -4536,16 +4488,16 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-				
-		SBJSON *jsonParser = [SBJSON new];
         
+		SBJSON *jsonParser = [SBJSON new];
+                
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-		
+		        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		if ([apiStatus isEqualToString:@"100"]) {
 			NSArray *returnActivites = [response valueForKey:@"activities"];
-		
+            
 			for (int i = 0; i < [returnActivites count]; i++) {
 				NSDictionary *tmpDict = [returnActivites objectAtIndex:i];
 				Activity *tmpActivity = [[Activity alloc] init];
@@ -4554,29 +4506,29 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				tmpActivity.createdDate = [tmpDict valueForKey:@"createdDate"];
 				tmpActivity.cacheId = [tmpDict valueForKey:@"cacheId"];
 				
-					
+                
 				tmpActivity.teamId = [tmpDict valueForKey:@"teamId"];
 				tmpActivity.teamName = [tmpDict valueForKey:@"teamName"];
 				
 				tmpActivity.activityId = [tmpDict valueForKey:@"activityId"];
-
+                
 				tmpActivity.numLikes = [[tmpDict valueForKey:@"numberOfLikeVotes"] intValue];
 				tmpActivity.numDislikes = [[tmpDict valueForKey:@"numberOfDislikeVotes"] intValue];
 				
 				tmpActivity.isVideo = [[tmpDict valueForKey:@"isVideo"] boolValue];
+                tmpActivity.vote = [tmpDict valueForKey:@"vote"];
 				
 				if ([tmpDict valueForKey:@"thumbNail"] != nil) {
 					tmpActivity.thumbnail = [tmpDict valueForKey:@"thumbNail"];
 				}else {
 					tmpActivity.thumbnail = @"";
 				}
-
+                
 				
 				[activities addObject:tmpActivity];
-
+                
 				
 				
-				[tmpActivity release];
 				
 			}
 		}
@@ -4585,7 +4537,6 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		[returnDictionary setValue:activities forKey:@"activities"];
-		//[activities release];
 		return returnDictionary;
 		
 	}
@@ -4598,15 +4549,15 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	
 }
 
-	
+
 
 +(NSDictionary *)getActivityTeam:(NSString *)token :(NSString *)teamId :(NSString *)maxCount :(NSString *)refreshFirst :(NSString *)newOnly
-							:(NSString *)maxCacheId{
+                                :(NSString *)maxCacheId{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSMutableArray *activities = [NSMutableArray array];
-
+    
 	
 	if ((token == nil) || (teamId == nil) || (maxCount == nil) || (refreshFirst == nil) || (newOnly == nil) || (maxCacheId == nil)) {
 		
@@ -4621,7 +4572,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-	
+        
 		
 		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 		NSString *timeZone = [tmp1 name];
@@ -4630,7 +4581,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSString *tmpUrl = @"";
 		
-
+        
 		tmpUrl = [NSString stringWithFormat:@"%@/team/%@/activities/%@", baseUrl, teamId, timeZone];
 		
 		bool firstParam = false;
@@ -4655,9 +4606,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			if ([refreshFirst isEqualToString:@"true"] && ![newOnly isEqualToString:@""]) {
 				tmpUrl = [tmpUrl stringByAppendingFormat:@"&newOnly=%@", newOnly];
 			}
-
+            
 		}
-	
+        
 		
 		if (![maxCacheId isEqualToString:@""]){
 			
@@ -4675,7 +4626,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			}
 			
 		}
-
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
@@ -4684,7 +4635,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
 		
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -4725,7 +4676,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				}
 				
 				[activities addObject:tmpActivity];
-
+                
 			}
 		}
 		statusReturn = apiStatus;
@@ -4758,7 +4709,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	}
 	
 	@try{
-				
+        
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
 		
@@ -4768,12 +4719,13 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		
 		NSString *photoString = [ServerAPI encodeBase64data:photo];
+        
 		NSString *videoString = [Base64 encode:video];
 		
 		if (![statusUpdate isEqualToString:@""]) {
 			[ tempDictionary setObject:statusUpdate forKey:@"statusUpdate"];
 		}
-
+        
 		if (![photoString isEqualToString:@""]) {
 			[tempDictionary setObject:photoString forKey:@"photo"];
 		}
@@ -4799,7 +4751,6 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
 		
-		[tempDictionary release];
 		
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];
@@ -4820,7 +4771,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-
+        
 		statusReturn = apiStatus;
 		
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -4850,7 +4801,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	
 	@try{
 		
-
+        
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
 		
@@ -4864,28 +4815,27 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
 		
-		[tempDictionary release];
 		
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-
+        
 		
 		NSString *tmpUrl = [NSString stringWithFormat:@"%@/team/%@/activity/%@", baseUrl, teamId, activityId];
 		
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
-
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
-
+        
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-						
+        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -4958,33 +4908,31 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				
 				[finalActivityArray addObject:tmpDictionary1];
 				
-				[tmpDictionary1 release];
 			}
 			
 			[ tempDictionary setObject:finalActivityArray forKey:@"activities"];
 		}
-	
-
+        
+        
 		loginDict = tempDictionary;
 		
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
 		
-		[tempDictionary release];
 		
 		NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
-
+        
 		
 		
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-				
+        
 		SBJSON *jsonParser = [SBJSON new];
-
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
@@ -4992,9 +4940,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		if ([apiStatus isEqualToString:@"100"]) {
 			NSArray *returnActivites = [response valueForKey:@"activities"];
 			[returnDictionary setValue:returnActivites forKey:@"activities"];
-
+            
 		}
-
+        
 		
 		statusReturn = apiStatus;
 		
@@ -5046,7 +4994,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-	
+        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -5155,14 +5103,12 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
 	    
 		SBJSON *jsonParser = [SBJSON new];
-                
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
         
-		[responseString release];
-		[request release];
         
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-		        
+        
 		if ([apiStatus isEqualToString:@"100"]) {
             
 			statusReturn = apiStatus;
@@ -5180,11 +5126,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				tmpTeam.name = [thisTeam valueForKey:@"name"];
                 
 				tmpTeam.code = [thisTeam valueForKey:@"code"];
-              
-
+                
+                
 				[teams addObject:tmpTeam];
                 
-				[tmpTeam release];
                 
 			}
 			
@@ -5204,7 +5149,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
 	}	
-
+    
     
     
     
@@ -5238,13 +5183,14 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	encode([encodeData length], (char *)[encodeData bytes], sizeof(encodeArray), encodeArray);
 	NSString *dataStr = [NSString stringWithCString:encodeArray length:strlen(encodeArray)];
     
-   // NSString *dataStr = [NSString stringWithCString:encodeArray encoding:NSUTF8StringEncoding];
+    // NSString *dataStr = [NSString stringWithCString:encodeArray encoding:NSUTF8StringEncoding];
 	
 	NSString *encodedString =[@"" stringByAppendingFormat:@"%@", dataStr];
 	
 	
 	return encodedString;
 }
+
 
 
 

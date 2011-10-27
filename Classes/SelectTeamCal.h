@@ -18,12 +18,12 @@
 	NSDate *finalDate;
 	NSString *singleOrMultiple;
 }
-@property (nonatomic, retain) NSString *singleOrMultiple;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSDate *finalDate;
-@property (nonatomic, retain) NSString *event;
-@property (nonatomic, retain) NSString *error;
-@property (nonatomic, retain) NSArray *teams;
+@property (nonatomic, strong) NSString *singleOrMultiple;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSDate *finalDate;
+@property (nonatomic, strong) NSString *event;
+@property (nonatomic, strong) NSString *error;
+@property (nonatomic, strong) NSArray *teams;
 
 
 @end

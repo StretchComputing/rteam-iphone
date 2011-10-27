@@ -11,7 +11,7 @@
 
 @interface AddGamePhoto : UIViewController <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate,
 UITextFieldDelegate>{
-
+    
 	bool hideAction;
 	UIActionSheet *photoAction;
 	
@@ -44,26 +44,26 @@ UITextFieldDelegate>{
 	
 }
 @property bool portrait;
-@property (nonatomic, retain) NSData *movieData;
-@property (nonatomic, retain) UIButton *removePhotoButton;
+@property (nonatomic, strong) NSData *movieData;
+@property (nonatomic, strong) UIButton *removePhotoButton;
 @property bool fromCameraSelect;
-@property (nonatomic, retain) NSData *selectedImageData;
-@property (nonatomic, retain) UIImage *selectedImage;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UIActivityIndicatorView *submitActivity;
+@property (nonatomic, strong) NSData *selectedImageData;
+@property (nonatomic, strong) UIImage *selectedImage;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UIActivityIndicatorView *submitActivity;
 
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) UILabel *noImageLabel;
-@property (nonatomic, retain) UILabel *countLabel;
-@property (nonatomic, retain) UITextField *activityText;
-@property (nonatomic, retain) NSData *imageData;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UILabel *noImageLabel;
+@property (nonatomic, strong) UILabel *countLabel;
+@property (nonatomic, strong) UITextField *activityText;
+@property (nonatomic, strong) NSData *imageData;
 @property bool stayHere;
-@property (nonatomic, retain) UIImageView *imagePreview;
-@property (nonatomic, retain) UIButton *submitButton;
-@property (nonatomic, retain) UIButton *newPhotoButton;
+@property (nonatomic, strong) UIImageView *imagePreview;
+@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong, getter = theNewPhotoButton) UIButton *newPhotoButton;
 
-@property (nonatomic, retain) UIActionSheet *photoAction;
+@property (nonatomic, strong) UIActionSheet *photoAction;
 @property bool hideAction;
 
 -(IBAction)submit;

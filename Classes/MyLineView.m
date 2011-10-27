@@ -35,9 +35,6 @@
 	CGContextStrokePath(context);
 }
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 
 @end

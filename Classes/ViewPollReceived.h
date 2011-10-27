@@ -10,7 +10,7 @@
 #import "PollResultsView.h"
 
 @interface ViewPollReceived : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
-
+    
 	NSString *subject;
 	NSString *body;
 	NSString *receivedDate;
@@ -56,7 +56,7 @@
 	NSArray *individualReplies;
 	
 	IBOutlet UIImageView *downArrow;
-
+    
 	IBOutlet UILabel *pollNumber;
 	NSArray *pollArray;              //Array of (Messages)
 	int currentPollNumber;
@@ -81,60 +81,60 @@
     IBOutlet UIActivityIndicatorView *respondingActivity;
 	
 }
-@property (nonatomic, retain) UIActivityIndicatorView *respondingActivity;
+@property (nonatomic, strong) UIActivityIndicatorView *respondingActivity;
 
-@property (nonatomic, retain)  UILabel *errorLabel;
-@property (nonatomic, retain)  NSString *errorString;
-@property (nonatomic, retain) UIBarButtonItem *deleteButton;
-@property (nonatomic, retain) NSDictionary *messageThreadInfo;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) PollResultsView *myPollResultsView;
-@property (nonatomic, retain) UIView *myLineView;
-@property (nonatomic, retain) NSString *origTeamId;
+@property (nonatomic, strong)  UILabel *errorLabel;
+@property (nonatomic, strong)  NSString *errorString;
+@property (nonatomic, strong) UIBarButtonItem *deleteButton;
+@property (nonatomic, strong) NSDictionary *messageThreadInfo;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) PollResultsView *myPollResultsView;
+@property (nonatomic, strong) UIView *myLineView;
+@property (nonatomic, strong) NSString *origTeamId;
 
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) UILabel *teamNameLabel;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) UILabel *teamNameLabel;
 
 @property int currentPollNumber;
-@property (nonatomic, retain) UISegmentedControl *upDown;
-@property (nonatomic, retain) NSArray *pollArray;
-@property (nonatomic, retain) UILabel *pollNumber;
+@property (nonatomic, strong) UISegmentedControl *upDown;
+@property (nonatomic, strong) NSArray *pollArray;
+@property (nonatomic, strong) UILabel *pollNumber;
 
 
-@property (nonatomic, retain) UIImageView *downArrow;
-@property (nonatomic, retain) NSArray *individualReplies;
-@property (nonatomic, retain) UIButton *viewMoreDetailButton;
-@property (nonatomic, retain) UIScrollView *displayScroll;
-@property (nonatomic, retain) UILabel *ownReply;
-@property (nonatomic, retain) UITextView *followUpMessage;
+@property (nonatomic, strong) UIImageView *downArrow;
+@property (nonatomic, strong) NSArray *individualReplies;
+@property (nonatomic, strong) UIButton *viewMoreDetailButton;
+@property (nonatomic, strong) UIScrollView *displayScroll;
+@property (nonatomic, strong) UILabel *ownReply;
+@property (nonatomic, strong) UITextView *followUpMessage;
 @property bool displayResults;
-@property (nonatomic, retain) UITextView *finalizedMessage;
-@property (nonatomic, retain) UITextView *howToRespondMessage;
-@property (nonatomic, retain) NSString *status;
+@property (nonatomic, strong) UITextView *finalizedMessage;
+@property (nonatomic, strong) UITextView *howToRespondMessage;
+@property (nonatomic, strong) NSString *status;
 @property BOOL wasViewed;
-@property (nonatomic, retain) NSString *from;
-@property (nonatomic, retain) UILabel *displayFrom;
-@property (nonatomic, retain) NSString *threadId;
-@property (nonatomic, retain) NSString *finalAnswer;
-@property (nonatomic, retain) NSArray *pollChoices;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *eventId;
-@property (nonatomic, retain) NSString *eventType;
+@property (nonatomic, strong) NSString *from;
+@property (nonatomic, strong) UILabel *displayFrom;
+@property (nonatomic, strong) NSString *threadId;
+@property (nonatomic, strong) NSString *finalAnswer;
+@property (nonatomic, strong) NSArray *pollChoices;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *eventType;
 
-@property (nonatomic, retain) NSString *subject;
-@property (nonatomic, retain) NSString *body;
-@property (nonatomic, retain) NSString *receivedDate;
+@property (nonatomic, strong) NSString *subject;
+@property (nonatomic, strong) NSString *body;
+@property (nonatomic, strong) NSString *receivedDate;
 
-@property (nonatomic, retain) UILabel *displaySubject;
-@property (nonatomic, retain) UILabel *displayDate;
-@property (nonatomic, retain) UITextView *displayBody;
+@property (nonatomic, strong) UILabel *displaySubject;
+@property (nonatomic, strong) UILabel *displayDate;
+@property (nonatomic, strong) UITextView *displayBody;
 
-@property (nonatomic, retain) UIButton *buttonOption1;
-@property (nonatomic, retain) UIButton *buttonOption2;
-@property (nonatomic, retain) UIButton *buttonOption3;
-@property (nonatomic, retain) UIButton *buttonOption4;
-@property (nonatomic, retain) UIButton *buttonOption5;
+@property (nonatomic, strong) UIButton *buttonOption1;
+@property (nonatomic, strong) UIButton *buttonOption2;
+@property (nonatomic, strong) UIButton *buttonOption3;
+@property (nonatomic, strong) UIButton *buttonOption4;
+@property (nonatomic, strong) UIButton *buttonOption5;
 
 -(void)finalReply:(NSString *)reply;
 -(void)initPollInfo;

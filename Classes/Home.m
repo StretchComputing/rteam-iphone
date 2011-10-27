@@ -8,7 +8,6 @@
 
 #import "Team.h"
 #import "InviteFan2.h"
-#import "MessagesTabs.h"
 #import "TeamsTabs.h"
 #import "Home.h"
 #import "Practice.h"
@@ -33,26 +32,20 @@
 #import "CurrentEvent.h"
 #import "EventNowButton.h"
 #import "GameTabsNoCoord.h"
-#import "GameMessages.h"
-#import "PracticeMessages.h"
 #import "EventTabs.h"
 #import "EventNotes.h"
-#import "EventMessages.h"
 #import "EventAttendance.h"
 #import "Scores.h"
 #import "HelpAbout.h"
-#import "TeamActivity.h"
-#import "AllActivity.h"
 #import <iAd/iAD.h>
 #import "FastActionSheetHome.h"
 #import "Vote.h"
-#import "GameChatter.h"
-#import "PracticeChatter.h"
 #import "NewPlayer.h"
 #import "NewMemberObject.h"
 #import "AttendingButton.h"
 #import "ScoreButton.h"
 #import "NewActivity.h"
+#import "SendPoll.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -212,12 +205,10 @@ blueArrow;
 			NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Would you like to send them a text right now with information on how to sign up?";
 			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
 			[alert1 show];
-            [alert1 release];
 		}else {
 			NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Please notify them that they must send the text 'yes' to 'join@rteam.com' to sign up.";
 			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert1 show];
-            [alert1 release];
 		}
 		
 		
@@ -235,10 +226,10 @@ blueArrow;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *quickLinkOne = mainDelegate.quickLinkOne;
 	NSString *quickLinkOneName = mainDelegate.quickLinkOneName;
-	NSString *quickLinkOneImage = mainDelegate.quickLinkOneImage;
+	//NSString *quickLinkOneImage = mainDelegate.quickLinkOneImage;
     
     //both are teamIds
-    int height1 = [self getIconHeight:quickLinkOneImage];
+    //int height1 = [self getIconHeight:quickLinkOneImage];
     
     self.shortcutButton.teamId = quickLinkOne;
     [self.shortcutButton addLabel];
@@ -300,6 +291,7 @@ blueArrow;
 			tmpNav.teamName = toTeam.name;
 			tmpNav.userRole = toTeam.userRole;
 			tmpNav.sport = toTeam.sport;
+            tmpNav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 			[self.navigationController presentModalViewController:tmpNav animated:YES];
             
 		}else {
@@ -328,6 +320,7 @@ blueArrow;
 	UINavigationController *navController = [[UINavigationController alloc] init];
 	[navController pushViewController:tmp animated:NO];
 	
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self presentModalViewController:navController animated:YES];
 }
 
@@ -503,7 +496,6 @@ blueArrow;
 	NSArray *items1 = [NSArray arrayWithObjects:question, flexibleSpace, refresh, nil];
 	self.bottomBar.items = items1;
 	
-	[flexibleSpace release];
 		
     self.textFrontView.layer.masksToBounds = YES;
 	self.textFrontView.layer.cornerRadius = 5.0;
@@ -709,6 +701,7 @@ blueArrow;
 	
 	[navController pushViewController:tmp animated:YES];
 	
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self.navigationController presentModalViewController:navController animated:YES];
 	
 }
@@ -743,6 +736,7 @@ blueArrow;
 			
 			[navController pushViewController:tmp animated:YES];
 			
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 			[self.navigationController presentModalViewController:navController animated:YES];
 			
 			
@@ -752,7 +746,7 @@ blueArrow;
 			UINavigationController *navController = [[UINavigationController alloc] init];
 			
 			[navController pushViewController:tmp animated:YES];
-			
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 			[self.navigationController presentModalViewController:navController animated:YES];
 		}else {
 			
@@ -846,8 +840,8 @@ blueArrow;
                         NSString *bodyMessage = [NSString stringWithFormat:@"Hi, you have been added via rTeam to the team '%@'. To sign up for our free texting service, send a text to 'join@rteam.com' with the message 'yes'.", teamNameShort];
                         
 						[messageViewController setBody:bodyMessage];
+                        messageViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 						[self presentModalViewController:messageViewController animated:YES];
-						[messageViewController release];
 						
 					}
 				}else {
@@ -873,15 +867,7 @@ blueArrow;
 
 -(void)newsFeed{
 	
-	self.serverError.text = @"";
 
-	AllActivity *tmp = [[AllActivity alloc] init];
-	
-	UINavigationController *navController = [[UINavigationController alloc] init];
-	
-	[navController pushViewController:tmp animated:NO];
-	
-	[self.navigationController presentModalViewController:navController animated:YES];
 
 	
 }
@@ -901,6 +887,8 @@ blueArrow;
 	
 	[tmpController pushViewController:tmp animated:NO];
 	
+    tmpController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+
 	[self.navigationController presentModalViewController:tmpController animated:YES];
 	
 }
@@ -919,6 +907,7 @@ blueArrow;
 	
 	[navController pushViewController:tmp animated:NO];
 	
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self.navigationController presentModalViewController:navController animated:YES];
     
    
@@ -934,6 +923,7 @@ blueArrow;
 
 	[navController pushViewController:nextController animated:NO];	
 	
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self presentModalViewController:navController animated:YES];
 }
 
@@ -947,9 +937,11 @@ blueArrow;
 	
 	[navController pushViewController:tmp animated:NO];
 	
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self.navigationController presentModalViewController:navController animated:YES];	
-	
-	
+ 
 }
 
 
@@ -966,9 +958,9 @@ blueArrow;
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc]
+		cell = [[UITableViewCell alloc]
 				 initWithStyle:UITableViewCellStyleDefault
-				 reuseIdentifier: FirstLevelCell] autorelease];
+				 reuseIdentifier: FirstLevelCell];
 	}
 	
 	NSUInteger row = [indexPath row];
@@ -1009,10 +1001,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)getTeamList{
 
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -1091,9 +1079,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 	}
 	
-	[pool drain];
-
-	
 }
 
 -(void)doneTeams{
@@ -1110,11 +1095,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 }
 -(void)updateUserIcons{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -1167,11 +1148,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		
 	}
-	
 
-	
-    [pool drain];
-	
 }
 
 
@@ -1182,10 +1159,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)getMessageThreadCount{
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -1245,7 +1219,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 	
 }
 
@@ -1258,14 +1231,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		if (self.newMessagesCount > 0) {
 			
 
-			if (self.newMessagesCount > 9) {
-				self.messageCountLabel.text = [NSString stringWithFormat:@"%d", self.newMessagesCount];
-				self.messageBadge.image = [UIImage imageNamed:@"redWhiteCircle.png"];
-			}else {
-				self.messageCountLabel.text = [NSString stringWithFormat:@"%d", self.newMessagesCount];
+			//if (self.newMessagesCount > 9) {
+				//self.messageCountLabel.text = [NSString stringWithFormat:@"%d", self.newMessagesCount];
+			//	self.messageBadge.image = [UIImage imageNamed:@"redWhiteCircle.png"];
+			//}else {
+				//self.messageCountLabel.text = [NSString stringWithFormat:@"%d", self.newMessagesCount];
 				self.messageBadge.image = [UIImage imageNamed:@"redWhiteCircleShort.png"];
+            self.messageCountLabel.text = @"!";
 
-			}
+			//}
 
 		}else {
 
@@ -1297,13 +1271,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)getEventsNow{
-	
-	
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	self.eventsToday = [NSMutableArray array];
 	self.eventsTomorrow = [NSMutableArray array];
@@ -1363,7 +1331,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 	
 }
 
@@ -1438,7 +1405,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			[dateFormat setDateFormat:@"a"];
 			NSString *startDateAmPm = [dateFormat stringFromDate:formatedDate];
 	
-			[dateFormat release];
 						
 			if ([[startDateString substringToIndex:1] isEqualToString:@"0"]) {
 				startDateString  = [startDateString substringFromIndex:1];
@@ -1529,7 +1495,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			[dateFormat setDateFormat:@"a"];
 			NSString *startDateAmPm = [dateFormat stringFromDate:formatedDate];
 			
-			[dateFormat release];
 			
 			if ([[startDateString substringToIndex:1] isEqualToString:@"0"]) {
 				startDateString  = [startDateString substringFromIndex:1];
@@ -1608,7 +1573,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	scores.teamName = @"";
 	
 	//[self.allBottomButtons addObject:scores];
-	[scores release];
 	
 	CurrentEvent *newTeam = [[CurrentEvent alloc] init];
 	newTeam.eventType = @"newTeam";
@@ -1617,7 +1581,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	newTeam.teamName = @"";
 	
 	//[self.allBottomButtons addObject:newTeam];
-	[newTeam release];
 	
 	
 	
@@ -1628,8 +1591,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     for (unsigned i = 0; i < self.numberOfPages; i++) {
         [controllers addObject:[NSNull null]];
     }
-    self.viewControllers = controllers;
-    [controllers release];
+    self.viewControllers = [NSMutableArray arrayWithArray:controllers];
 	
     // a page is the width of the scroll view
 	//scrollView.frame = CGRectMake(100, 300, 200, 100);
@@ -1663,7 +1625,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ((NSNull *)controller == [NSNull null]) {
         controller = [[MyViewController alloc] initWithPageNumber:page];
         [viewControllers replaceObjectAtIndex:page withObject:controller];
-        [controller release];
     }
 	
     // add the controller's view to the scroll view
@@ -1674,7 +1635,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         controller.view.frame = frame;
 		UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"scrollimage.png"]];
 		[controller.view addSubview:image];
-        [image release];
 		
         
 		for (int j = 0; j < self.numberOfPages; j++) {
@@ -1739,7 +1699,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventLabel.text = tmp1.eventLabel;
                             [tmp1Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                             [controller.view addSubview:tmp1Button];
-                            [tmp1Button release];
                             
                         }else{
                             //game has a score, display the score
@@ -1808,7 +1767,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventLabel.text = tmp1.eventLabel;
                             [tmp1Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                             [controller.view addSubview:tmp1Button];
-                            [tmp1Button release];
                             
                         }
                         
@@ -1836,7 +1794,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                         [tmp1Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
                         [controller.view addSubview:tmp1Button];
-                        [tmp1Button release];
                         
                     }else{
                         
@@ -1883,7 +1840,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventLabel.text = tmp1.eventLabel;
                             [tmp1Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                             [controller.view addSubview:tmp1Button];
-                            [tmp1Button release];
                             
                             
                             
@@ -1910,7 +1866,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                             [tmp1Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
                             [controller.view addSubview:tmp1Button];
-                            [tmp1Button release];
                             
                         }
                     }
@@ -1958,7 +1913,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 // [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
-                                [tmp2Button release];
                                 
                             }else{
                                 //display the score
@@ -2025,7 +1979,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 // [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
-                                [tmp2Button release];
                                 
                             }
                             
@@ -2053,7 +2006,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             [tmp2Button setImage:[UIImage imageNamed:tmp2.imageName] forState:UIControlStateNormal];
                             [tmp2Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
                             [controller.view addSubview:tmp2Button];
-                            [tmp2Button release];
                             
                         }else{
                             
@@ -2101,7 +2053,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 // [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
-                                [tmp2Button release];
                                 
                                 
                             }else{
@@ -2126,7 +2077,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 [tmp2Button setImage:[UIImage imageNamed:tmp2.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
-                                [tmp2Button release];
                             }
                         }
                         
@@ -2235,7 +2185,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 		self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
 		[self.undoCancel showInView:self.view];
-		[self.undoCancel release];
 		
 	}else {
 		
@@ -2281,6 +2230,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				
 				[navController pushViewController:currentGameTab animated:YES];
 				
+                navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 				[self.navigationController presentModalViewController:navController animated:YES];
 				
 			}else {
@@ -2311,6 +2261,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				
 				[navController pushViewController:currentGameTab animated:YES];
 				
+                navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 				[self.navigationController presentModalViewController:navController animated:YES];
 				
 			}
@@ -2349,7 +2300,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			UINavigationController *navController = [[UINavigationController alloc] init];
 			
 			[navController pushViewController:currentPracticeTab animated:YES];
-			
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 			[self.navigationController presentModalViewController:navController animated:YES];
 			
 			
@@ -2386,7 +2337,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			UINavigationController *navController = [[UINavigationController alloc] init];
 			
 			[navController pushViewController:currentPracticeTab animated:YES];
-			
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 			[self.navigationController presentModalViewController:navController animated:YES];
 			
 			
@@ -2397,7 +2348,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			UINavigationController *navController = [[UINavigationController alloc] init];
 			
 			[navController pushViewController:tmp animated:YES];
-			
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+
 			[self.navigationController presentModalViewController:navController animated:YES];
 			
 		}else if ([eventType isEqualToString:@"newTeam"]) {
@@ -2411,7 +2363,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			UINavigationController *navController = [[UINavigationController alloc] init];
 			
 			[navController pushViewController:tmp animated:NO];
-			
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 			[self.navigationController presentModalViewController:navController animated:YES];
 		}
 		
@@ -2696,7 +2648,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheetHome *actionSheet = [[FastActionSheetHome alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -2733,11 +2684,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)getUserInfo{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Retrieve teams from DB
 	NSString *token = @"";
@@ -2775,15 +2722,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 	}
 	
-	[pool drain];
 	
 }
 
 
 -(void)deleteEvent{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Delete Event
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -2893,14 +2837,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 
 -(void)activateEvent{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	if (mainDelegate.token != nil){
@@ -3009,7 +2950,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -3373,99 +3313,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[name release];
-	[teamId release];
-	[oneTeamFlag release];
-	[games release];
-	[practices release];
-	[eventToday release];
-	[bottomBar release];
-	[userRole release];
-	[inviteFan release];
-	[serverError release];
-	[quickTeamOne release];
-	[quickTeamTwo release];
-	[quickCreateTeam release];
-	[teamList release];
-	[changeQuickLink release];
-	[newQuickLinkAlias release];
-	[newQuickLinkTable release];
-	[messageBadge release];
-	[activityGettingTeams release];
-	[eventsNowActivity release];
-	[eventsToday release];
-	[eventsTomorrow release];
-	[eventsNowError release];
-	[allBottomButtons release];
-	[selectRowLabel release];
-	[eventsButton release];
-	[myTeamsButton release];
-	[activityButton release];
-	[messagesButton release];
-    myAd.delegate = nil;
-	[myAd release];
-	[fastButton release];
-	[messageCountLabel release];
-	[displayIconsScroll release];
-	[newActivityBadge release];
-	[changeIconButton release];
-	[didRegister release];
-	[scrollView release];
-	[pageControl release];
-	[viewControllers release];
-	[undoCancel release];
-	[undoEventId release];
-	[undoEventType release];
-	[undoEventId release];
-	[membersUserRole release];
-	[membersTeamId release];
-	[addMembersButton release];
-	[phoneOnlyArray release];
-	[justAddName release];
-	[changeQuickLinkBack release];
-	[displayIconsScrollBack release];
-    [refreshButton release];
-    [questionButton release];
-    [backHelpView release];
-    [backViewBottom release];
-    [transViewTop release];
-    [transViewBottom release];
-    [settingQbutton release];
-    [searchQbutton release];
-    [myTeamsQbutton release];
-    [activityQbutton release];
-    [messagesQbutton release];
-    [eventsQbutton release];
-    [quickLinksQbutton release];
-    [happeningNowQbutton release];
-    [helpQbutton release];
-    [inviteFanQbutton release];
-    [refreshQbutton release];
-    [backViewTop release];
-    [closeQuestionButton release];
-    [helpExplanation release];
-    [homeDivider release];
-    [moveDividerButton release];
-    [homeDividerLabel release];
-    [moveDividerBackground release];
-    [moveableView release];
-    [scrollViewBack release];
-    [HomeScoreView release];
-    [HomeAttendanceView release];
-    [registrationBackView release];
-    [regTextView release];
-    [regTextButton release];
-    [textBackView release];
-    [textFrontView release];
-    [aboutButton release];
-    [shortcutButton release];
-    [quickLinkOkButton release];
-    [quickLinkCancelButton release];
-    [quickLinkChangeButton release];
-    [quickLinkCancelTwoButton release];
-    [blueArrow release];
-    
-	[super dealloc];
 }
 
 @end

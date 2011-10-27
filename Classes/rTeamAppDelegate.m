@@ -5,43 +5,43 @@
 //  Created by Nick Wroblewski on 10/27/09.
 
 /*
-Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple Inc.
-("Apple") in consideration of your agreement to the following terms, and your
-use, installation, modification or redistribution of this Apple software
-constitutes acceptance of these terms.  If you do not agree with these terms,
-please do not use, install, modify or redistribute this Apple software.
-
-In consideration of your agreement to abide by the following terms, and subject
-to these terms, Apple grants you a personal, non-exclusive license, under
-Apple's copyrights in this original Apple software (the "Apple Software"), to
-use, reproduce, modify and redistribute the Apple Software, with or without
-modifications, in source and/or binary forms; provided that if you redistribute
-the Apple Software in its entirety and without modifications, you must retain
-this notice and the following text and disclaimers in all such redistributions
-of the Apple Software.
-Neither the name, trademarks, service marks or logos of Apple Inc. may be used
-to endorse or promote products derived from the Apple Software without specific
-prior written permission from Apple.  Except as expressly stated in this notice,
-no other rights or licenses, express or implied, are granted by Apple herein,
-including but not limited to any patent rights that may be infringed by your
-derivative works or by other works in which the Apple Software may be
-incorporated.
-
-The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO
-WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED
-WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN
-COMBINATION WITH YOUR PRODUCTS.
-
-IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR
-DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF
-CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF
-APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-Copyright (C) 2009 Apple Inc. All Rights Reserved.*/
+ Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple Inc.
+ ("Apple") in consideration of your agreement to the following terms, and your
+ use, installation, modification or redistribution of this Apple software
+ constitutes acceptance of these terms.  If you do not agree with these terms,
+ please do not use, install, modify or redistribute this Apple software.
+ 
+ In consideration of your agreement to abide by the following terms, and subject
+ to these terms, Apple grants you a personal, non-exclusive license, under
+ Apple's copyrights in this original Apple software (the "Apple Software"), to
+ use, reproduce, modify and redistribute the Apple Software, with or without
+ modifications, in source and/or binary forms; provided that if you redistribute
+ the Apple Software in its entirety and without modifications, you must retain
+ this notice and the following text and disclaimers in all such redistributions
+ of the Apple Software.
+ Neither the name, trademarks, service marks or logos of Apple Inc. may be used
+ to endorse or promote products derived from the Apple Software without specific
+ prior written permission from Apple.  Except as expressly stated in this notice,
+ no other rights or licenses, express or implied, are granted by Apple herein,
+ including but not limited to any patent rights that may be infringed by your
+ derivative works or by other works in which the Apple Software may be
+ incorporated.
+ 
+ The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO
+ WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED
+ WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN
+ COMBINATION WITH YOUR PRODUCTS.
+ 
+ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR
+ DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF
+ CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF
+ APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ Copyright (C) 2009 Apple Inc. All Rights Reserved.*/
 
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
@@ -56,7 +56,7 @@ Copyright (C) 2009 Apple Inc. All Rights Reserved.*/
 quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName;
 
 - (id) init {
-
+    
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	NSString *path = [documentsDirectory stringByAppendingPathComponent:@"teams.dat"];
@@ -93,8 +93,7 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 		[self setQuickLinkTwoImage:tempLinkTwoImage];
 		[self setToken:tempToken];
 		[decoder finishDecoding];
-		[decoder release];
-
+        
 		bool reset = false;
 		if (reset) {
 			self.token = @"";
@@ -108,9 +107,9 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	} else {
 		self.token = @"";
 	}
-		
+    
 	displayedConnectionError = NO;
-
+    
 	initChange = false;
 	return self;
 	
@@ -122,24 +121,24 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	if ([launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey] != nil) {
 		[self.navController dismissModalViewControllerAnimated:NO];
 		[self.navController popToRootViewControllerAnimated:NO];
-	
+        
 	}
-
+    
 	
     // Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the
     // method "reachabilityChanged" will be called. 
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
 	
-	hostReach = [[Reachability reachabilityWithHostName: @"www.rteamtest.appspot.com"] retain];
+	hostReach = [Reachability reachabilityWithHostName: @"www.rteamtest.appspot.com"];
 	//[hostReach startNotifier];
 	//[self updateInterfaceWithReachability: hostReach];
 	
-
-    internetReach = [[Reachability reachabilityForInternetConnection] retain];
+    
+    internetReach = [Reachability reachabilityForInternetConnection];
 	[internetReach startNotifier];
 	[self updateInterfaceWithReachability: internetReach];
 	
-    wifiReach = [[Reachability reachabilityForLocalWiFi] retain];
+    wifiReach = [Reachability reachabilityForLocalWiFi];
 	//[wifiReach startNotifier];
 	//[self updateInterfaceWithReachability: wifiReach];
 	
@@ -147,12 +146,12 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	// Override point for customization after application launch
 	[window addSubview: navController.view];
 	[window makeKeyAndVisible];
-		
+    
 	
 	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge
-																			   | UIRemoteNotificationTypeSound)];
+                                                                           | UIRemoteNotificationTypeSound)];
 	return YES;
-
+    
 	
 }
 
@@ -161,22 +160,21 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	NSDictionary *aps = [userInfo valueForKey:@"aps"];
 	
 	NSString *alertMessage;
-		
+    
 	alertMessage = [aps valueForKey:@"alert"];
-
+    
 	
 	if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
 		//App is running
 		
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New Message" message:alertMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	[alert show];
-		[alert release];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New Message" message:alertMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
 		
 	}else {
 		[self.navController dismissModalViewControllerAnimated:NO];
 		[self.navController popToRootViewControllerAnimated:NO];
 	}
-
+    
 	
 	
 }
@@ -195,11 +193,11 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
     self.registered = YES;
     //[ServerAPI sendProviderDeviceToken:devToken]; 
 	self.pushToken = devToken;
-
+    
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-
+    
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {
@@ -218,10 +216,9 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
 	[encoder finishEncoding];
-
+    
 	
 	[theData writeToFile:dataFilePath atomically:YES];
-	[encoder release];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -229,9 +226,9 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	//Set the badge number as we leave the App
 	
 	NSDictionary *response = [ServerAPI getMessageThreadCount:self.token :@"" :@"" :@"" :@"true"];
-		
+    
 	if ([[response valueForKey:@"status"] isEqualToString:@"100"]) {
-			[[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[response valueForKey:@"count"] intValue]];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[response valueForKey:@"count"] intValue]];
 	}
 	
 	
@@ -252,7 +249,6 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	
 	
 	[theData writeToFile:dataFilePath atomically:YES];
-	[encoder release];
 	
 }
 
@@ -276,14 +272,13 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	
 	
 	[theData writeToFile:dataFilePath atomically:YES];
-	[encoder release];
 	
 }
 
 
 -(void)applicationWillEnterForeground:(UIApplication *)application {
-
-
+    
+    
 }
 
 
@@ -301,18 +296,17 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 		{
 			case NotReachable:
 			{
-
-				  NSString *message = @"An internet connection is required for this app.  Please make sure you are connected to the internet to continue.";
-				  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connection Lost" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-				  [alert show];
-                [alert release];
-			
+                
+                NSString *message = @"An internet connection is required for this app.  Please make sure you are connected to the internet to continue.";
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connection Lost" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+                
 				break;
 			}
 				
 			case ReachableViaWWAN:
 			{
-			
+                
 				break;
 			}
 			case ReachableViaWiFi:
@@ -322,7 +316,7 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 			}
 		}
 	}
-		
+    
 }
 
 //Called by Reachability whenever status changes.
@@ -338,27 +332,6 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 
 
 
-- (void)dealloc {
-
-    [window release];
-	[navController release];
-	[dataFilePath release];
-	[token release];
-	[pushToken release];
-	[quickLinkOne release];
-	[quickLinkTwo release];
-	[quickLinkOneName release];
-	[quickLinkTwoName release];
-	[quickLinkOneImage release];
-	[quickLinkTwoImage release];
-	[displayName release];
-	[hostReach release];
-    [internetReach release];
-	[phoneOnlyArray release];
-    [wifiReach release];
-    [justAddName release];
-    [super dealloc];
-}
 
 
 @end

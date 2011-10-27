@@ -10,7 +10,7 @@
 
 
 @interface NewMemberObject : NSObject {
-
+    
 	NSString *firstName;
 	NSString *lastName;
 	NSString *email;
@@ -26,16 +26,16 @@
     NSString *guardianTwoPhone;
     
 }
-@property (nonatomic, retain) NSString *role;
-@property (nonatomic, retain) NSString *firstName;
-@property (nonatomic, retain) NSString *lastName;
-@property (nonatomic, retain) NSString *email;
-@property (nonatomic, retain) NSString *phone;
+@property (nonatomic, strong) NSString *role;
+@property (nonatomic, strong) NSString *firstName;
+@property (nonatomic, strong) NSString *lastName;
+@property (nonatomic, strong) NSString *email;
+@property (nonatomic, strong) NSString *phone;
 
-@property (nonatomic, retain) NSString *guardianOneName;
-@property (nonatomic, retain) NSString *guardianOneEmail;
-@property (nonatomic, retain) NSString *guardianOnePhone;
-@property (nonatomic, retain) NSString *guardianTwoName;
-@property (nonatomic, retain) NSString *guardianTwoEmail;
-@property (nonatomic, retain) NSString *guardianTwoPhone;
+@property (nonatomic, strong) NSString *guardianOneName;
+@property (nonatomic, strong) NSString *guardianOneEmail;
+@property (nonatomic, strong) NSString *guardianOnePhone;
+@property (nonatomic, strong) NSString *guardianTwoName;
+@property (nonatomic, strong) NSString *guardianTwoEmail;
+@property (nonatomic, strong) NSString *guardianTwoPhone;
 @end

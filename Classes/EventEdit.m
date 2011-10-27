@@ -18,7 +18,6 @@
 #import "AllEventCalList.h"
 #import "AllEventsCalendar.h"
 #import "CurrentTeamTabs.h"
-#import "FastHappeningNow.h"
 
 @implementation EventEdit
 @synthesize activity, saveChanges, practiceOpponent, practiceDate, practiceDescription, opponent, stringDate, description, teamId, eventId, 
@@ -71,7 +70,6 @@ deleteActionSheet;
 	
 	self.practiceDate.text = [@"Date: " stringByAppendingString:[dateFormat stringFromDate:self.practiceDateObject]];
 	
-	[dateFormat release];
 }
 
 
@@ -146,10 +144,7 @@ deleteActionSheet;
 
 - (void)runRequest {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -163,7 +158,6 @@ deleteActionSheet;
 	
 	NSString *startDate = [dateFormat stringFromDate:self.practiceDateObject];
 	
-    [dateFormat release];
     
 	NSDictionary *response = [NSDictionary dictionary];
 	
@@ -215,7 +209,6 @@ deleteActionSheet;
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -262,7 +255,6 @@ deleteActionSheet;
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -305,15 +297,13 @@ deleteActionSheet;
 	self.deleteActionSheet = [[UIActionSheet alloc] initWithTitle:@"'Delete' removes event from schedule. 'Cancel' marks event as cancelled." delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Delete Event" otherButtonTitles:@"Cancel Event", nil];
     self.deleteActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [self.deleteActionSheet showInView:self.view];
-    [self.deleteActionSheet release];
 	
 }
 
 
 -(void)removeEvent{
 	isCancel = false;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Delete Event
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -359,14 +349,12 @@ deleteActionSheet;
 	
 	
 	[self performSelectorOnMainThread:@selector(doneCancelDelete) withObject:nil waitUntilDone:NO];
-	[pool drain];
 }
 
 -(void)cancelEvent{
 	
 	isCancel = true;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Cancel Event
 	
@@ -411,7 +399,6 @@ deleteActionSheet;
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneCancelDelete) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -451,11 +438,7 @@ deleteActionSheet;
 				CurrentTeamTabs *tmp = [viewControllers objectAtIndex:num - 3];
 				[self.navigationController popToViewController:tmp animated:NO];
 				
-			}else if ([FastHappeningNow class] == [[viewControllers objectAtIndex:num - 3] class]){
-                
-                FastHappeningNow *tmp = [viewControllers objectAtIndex:num - 3];
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else {
+			}else {
 				[self.navigationController dismissModalViewControllerAnimated:YES];
 				
 			}
@@ -498,24 +481,4 @@ deleteActionSheet;
 	
 }
 
--(void)dealloc{
-	
-	[activity release];
-	[saveChanges release];
-	[practiceOpponent release];
-	[practiceDate release];
-	[practiceDescription release];
-	[opponent release];
-	[stringDate release];
-	[description release];
-	[teamId release];
-	[eventId release];
-	[practiceChangeDate release];
-	[practiceDateObject release];
-	[errorMessage release];
-	[eventName release];
-	[nameString release];
-	[errorString release];
-	[super dealloc];
-}
 @end

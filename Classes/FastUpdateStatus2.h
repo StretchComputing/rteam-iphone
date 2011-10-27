@@ -10,7 +10,7 @@
 #import "CurrentEvent.h"
 
 @interface FastUpdateStatus2 : UIViewController {
-
+    
 	IBOutlet UILabel *eventLabel;
 	IBOutlet UILabel *messageLabel;
 	NSString *messageString;
@@ -31,32 +31,32 @@
 	NSString *errorString;
 	bool sendSuccess;
 	NSString *messageIntro;
-
+    
 	NSString *todayTomorrowString;
 	NSString *eventTypeString;
 	NSString *timeString;
 	
 }
-@property (nonatomic, retain) NSString *todayTomorrowString;
-@property (nonatomic, retain) NSString *eventTypeString;
-@property (nonatomic, retain) NSString *timeString;
+@property (nonatomic, strong) NSString *todayTomorrowString;
+@property (nonatomic, strong) NSString *eventTypeString;
+@property (nonatomic, strong) NSString *timeString;
 
-@property (nonatomic, retain) NSString *messageIntro;
+@property (nonatomic, strong) NSString *messageIntro;
 @property bool sendSuccess;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
-@property (nonatomic, retain) UILabel *errorMessage;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UILabel *errorMessage;
 @property int currentRecipIndex;
-@property (nonatomic, retain) NSArray *recipArray;
-@property (nonatomic, retain) CurrentEvent *selectedEvent;
-@property (nonatomic, retain) UILabel *eventLabel;
-@property (nonatomic, retain) UILabel *messageLabel;
-@property (nonatomic, retain) NSString *messageString;
+@property (nonatomic, strong) NSArray *recipArray;
+@property (nonatomic, strong) CurrentEvent *selectedEvent;
+@property (nonatomic, strong) UILabel *eventLabel;
+@property (nonatomic, strong) UILabel *messageLabel;
+@property (nonatomic, strong) NSString *messageString;
 
-@property (nonatomic, retain) UILabel *toLabel;
+@property (nonatomic, strong) UILabel *toLabel;
 
-@property (nonatomic, retain) UIButton *sendButton;
-@property (nonatomic, retain) UIButton *cancelButton;
+@property (nonatomic, strong) UIButton *sendButton;
+@property (nonatomic, strong) UIButton *cancelButton;
 
 -(IBAction)send;
 -(IBAction)cancel;

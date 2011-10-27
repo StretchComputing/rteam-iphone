@@ -49,9 +49,6 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 
 -(void)getMemberVotes{
 	
-	NSAutoreleasePool *pool;
-	pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
 	
 	NSString *token = @"";
 	NSMutableArray *tmpMemberArray = [NSMutableArray array];
@@ -96,7 +93,6 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 				
 				[tmpMemberArray addObject:tmpMember];
 				
-				[tmpMember release];
 				
 			}
 			
@@ -130,7 +126,6 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 
 	
 	
-	[pool drain];
 	[self performSelectorOnMainThread:@selector(doneMemberVotes) withObject:nil waitUntilDone:NO];
 	
 	
@@ -205,7 +200,7 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 		CGRect frame;
 		
 	
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:MemberCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MemberCell];
 			
 
 		frame.origin.x = 5;
@@ -216,7 +211,6 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 		
 		frame.size.height = 20;
 		frame.size.width = 20;
@@ -226,7 +220,6 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 		tmpView.image = [UIImage imageNamed:@"blueCheck.png"];
 		tmpView.tag = imageTag;
 		[cell.contentView addSubview:tmpView];
-		[tmpView release];
 		
 		
 	}
@@ -302,9 +295,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)castVote:(NSString *)memberId{
-	NSAutoreleasePool *pool;
-	pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	NSString *token = @"";
 	
@@ -359,7 +350,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	
-	[pool drain];
 	[self performSelectorOnMainThread:@selector(doneVoting) withObject:nil waitUntilDone:NO];
 	
 	
@@ -381,11 +371,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)getGameInfo{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	self.errorString = @"";
 	
@@ -440,7 +426,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		}
 		
 	}
-	[pool drain];
 	[self performSelectorOnMainThread:@selector(doneGameInfo) withObject:nil waitUntilDone:NO];
 	
 }
@@ -473,12 +458,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)updateGame{
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	
@@ -528,7 +508,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 
 	
 	
@@ -561,24 +540,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
--(void)dealloc{
-	
-	[teamId release];
-	[userRole release];
-	[loadingLabel release];
-	[loadingActivity release];
-	[myTableView release];
-	[closeVotingButton release];
-	[errorLabel release];
-	[activity release];
-	[memberArray release];
-	[errorString release];
-	[myVote release];
-	[gameId release];
-	[votingActivity release];
-	[updateStatus release];
-	[super dealloc];
-	
-}
 
 @end

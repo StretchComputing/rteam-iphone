@@ -10,7 +10,7 @@
 #import "CurrentEvent.h"
 
 @interface EventNowButton : UIButton {
-
+    
 	CurrentEvent *event;
 	UILabel *eventLabel;
 	UILabel *teamLabel;
@@ -25,17 +25,17 @@
     NSString *eventType;
     NSString *eventDate;
 }
-@property (nonatomic, retain) NSString *eventType;
-@property (nonatomic, retain) NSString *eventDate;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSString *eventDate;
 
-@property (nonatomic, retain) NSString *scoreUs;
-@property (nonatomic, retain) NSString *scoreThem;
-@property (nonatomic, retain) NSString *interval;
-@property (nonatomic, retain) NSString *teamName;
+@property (nonatomic, strong) NSString *scoreUs;
+@property (nonatomic, strong) NSString *scoreThem;
+@property (nonatomic, strong) NSString *interval;
+@property (nonatomic, strong) NSString *teamName;
 
-@property (nonatomic, retain) UILabel *scoreLabel;
-@property (nonatomic, retain) UILabel *canceledLabel;
-@property (nonatomic, retain) CurrentEvent *event;
-@property (nonatomic, retain) UILabel *teamLabel;
-@property (nonatomic, retain) UILabel *eventLabel;
+@property (nonatomic, strong) UILabel *scoreLabel;
+@property (nonatomic, strong) UILabel *canceledLabel;
+@property (nonatomic, strong) CurrentEvent *event;
+@property (nonatomic, strong) UILabel *teamLabel;
+@property (nonatomic, strong) UILabel *eventLabel;
 @end

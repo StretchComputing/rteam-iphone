@@ -46,16 +46,15 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 	
 	//Header to be displayed if there are no players
 	UIView *headerView =
-	[[[UIView alloc]
+	[[UIView alloc]
 	  initWithFrame:CGRectMake(0, 0, 300, 75)]
-	 autorelease];
+	 ;
 	
 	UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(0, 74, 320, 1)];
 	UIColor *color = [[UIColor alloc] initWithRed:0.86 green:0.86 blue:0.86 alpha:1.0];
 	line2.backgroundColor = color;
 	[headerView addSubview:line2];
-	[color release];
-    [line2 release];
+	
 	
 	
 	NSArray *segments = [NSArray arrayWithObjects:@"Roster", @"Fans", nil];
@@ -129,12 +128,10 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Would you like to send them a text right now with information on how to sign up?";
 			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
 			[alert1 show];
-            [alert1 release];
 		}else {
 			NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Please notify them that they must send the text 'yes' to 'join@rteam.com' to sign up.";
 			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert1 show];
-            [alert1 release];
 		}
 
 		
@@ -148,9 +145,6 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 
 -(void)getListOfMembers{
 
-	NSAutoreleasePool *pool;
-	pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
 	
 	NSString *token = @"";
 	NSDictionary *response = [NSDictionary dictionary];
@@ -225,7 +219,6 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 	}
 
 	[self performSelectorOnMainThread:@selector(finishedMembers) withObject:nil waitUntilDone:NO];
-	[pool drain];
 
 
 }
@@ -343,7 +336,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		
 		frame.origin.x = 50;
@@ -353,7 +346,6 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 		frame.origin.x = 50;
 		frame.origin.y = 25;
@@ -362,7 +354,6 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 		UILabel *descLabel = [[UILabel alloc] initWithFrame:frame];
 		descLabel.tag = descTag;
 		[cell.contentView addSubview:descLabel];
-		[descLabel release];
         
         frame.origin.x = 50;
 		frame.origin.y = 40;
@@ -371,7 +362,6 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 		UILabel *descLabel1 = [[UILabel alloc] initWithFrame:frame];
 		descLabel1.tag = descTag1;
 		[cell.contentView addSubview:descLabel1];
-		[descLabel1 release];
         
         frame.origin.x = 50;
 		frame.origin.y = 55;
@@ -380,7 +370,6 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 		UILabel *descLabel2 = [[UILabel alloc] initWithFrame:frame];
 		descLabel2.tag = descTag2;
 		[cell.contentView addSubview:descLabel2];
-		[descLabel2 release];
         
         
 		
@@ -391,7 +380,6 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 		UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
 		imageView.tag = imageTag;
 		[cell.contentView addSubview:imageView];
-		[imageView release];
 		
 		
 	}
@@ -526,14 +514,14 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			if (row % 2 != 0) {
 				cell.contentView.backgroundColor = [UIColor whiteColor];
 				cell.accessoryView.backgroundColor = [UIColor whiteColor];
-				cell.backgroundView = [[[UIView alloc] init] autorelease]; 
+				cell.backgroundView = [[UIView alloc] init]; 
 				cell.backgroundView.backgroundColor = [UIColor whiteColor];
 			}else {
 				UIColor *tmpColor = [UIColor colorWithRed:0.92 green:0.92 blue:0.92 alpha:1.0];
 				cell.contentView.backgroundColor = tmpColor;
 				cell.accessoryView.backgroundColor = tmpColor;
 				
-				cell.backgroundView = [[[UIView alloc] init] autorelease]; 
+				cell.backgroundView = [[UIView alloc] init]; 
 				cell.backgroundView.backgroundColor = tmpColor;
 			}
 			
@@ -769,14 +757,14 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			if (row % 2 != 0) {
 				cell.contentView.backgroundColor = [UIColor whiteColor];
 				cell.accessoryView.backgroundColor = [UIColor whiteColor];
-				cell.backgroundView = [[[UIView alloc] init] autorelease]; 
+				cell.backgroundView = [[UIView alloc] init]; 
 				cell.backgroundView.backgroundColor = [UIColor whiteColor];
 			}else {
 				UIColor *tmpColor = [UIColor colorWithRed:0.92 green:0.92 blue:0.92 alpha:1.0];
 				cell.contentView.backgroundColor = tmpColor;
 				cell.accessoryView.backgroundColor = tmpColor;
 				
-				cell.backgroundView = [[[UIView alloc] init] autorelease]; 
+				cell.backgroundView = [[UIView alloc] init]; 
 				cell.backgroundView.backgroundColor = tmpColor;
 			}
 			
@@ -830,12 +818,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)getPicsFans {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -899,7 +882,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		}
 	
 	}
-    [pool drain];
 }
 
 - (void)didFinishFans{
@@ -914,10 +896,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)getPicsPlayers {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -980,7 +958,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		}
 		
 	}
-    [pool drain];
 }
 
 - (void)didFinishPlayers{
@@ -1112,7 +1089,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         
 						[messageViewController setBody:bodyMessage];
 						[self presentModalViewController:messageViewController animated:YES];
-						[messageViewController release];
 						
 					}
 				}else {
@@ -1175,29 +1151,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
-- (void)dealloc {
-	[players release];
-	[teamName release];
-	[teamId release];
-	[userRole release];
-	[segRosterFans release];
-	[currentMemberId release];
-	[addButton release];
-	[error release];
-	[fans release];
-	[playerPics release];
-	[fanPics release];
-	[memberActivity release];
-	[memberActivityLabel release];
-	[barActivity release];
-	[memberTableView release];
-	[tmpPlayerPics release];
-	[tmpFanPics release];
-	[tmpPlayers release];
-	[tmpFans release];
-	[phoneOnlyArray release];
-	[super dealloc];
-}
 
 @end
 

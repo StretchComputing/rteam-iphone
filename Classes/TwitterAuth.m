@@ -29,7 +29,6 @@
         }
 		UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(goTeams)];
 		[self.navigationItem setLeftBarButtonItem:backButton];
-		[backButton release];
 	}
 	
 	
@@ -79,11 +78,5 @@
 	
 }
 
--(void)dealloc{
-	
-	[webView release];
-	[url release];
-	[super dealloc];
-}
 
 @end

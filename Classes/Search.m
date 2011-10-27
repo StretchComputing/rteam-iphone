@@ -16,10 +16,8 @@
 #import "Home.h"
 #import "FastActionSheet.h"
 #import "TeamHome.h"
-#import "TeamActivity.h"
 #import "EventList.h"
 #import "Players.h"
-#import "TeamMessages.h"
 #import "CurrentTeamTabs.h"
 
 @implementation Search
@@ -29,6 +27,8 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
 -(void)viewDidAppear:(BOOL)animated{
 	
 	//[self becomeFirstResponder];
+    [self.searchBar becomeFirstResponder];
+
 	
 }
 -(void)viewDidLoad{
@@ -56,7 +56,6 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
 	
 }
 
@@ -68,8 +67,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
 
 
 -(void)getListOfTeams{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	NSString *token = @"";
 	NSArray *teamArray = [NSArray array];
@@ -125,7 +123,6 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
 	
 	[self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
 	
-	[pool drain];
 	
 }
 
@@ -349,7 +346,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 10;
 		frame.origin.y = 9;
@@ -359,14 +356,12 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
 		UILabel *nameLabel = [[UILabel alloc] initWithFrame:frame];
 		nameLabel.tag = nameTag;
 		[cell.contentView addSubview:nameLabel];
-		[nameLabel release];
 		
 		frame.origin.x = 180;
 		frame.size.width = 103;
 		UILabel *teamLabel = [[UILabel alloc] initWithFrame:frame];
 		teamLabel.tag = teamTag;
 		[cell.contentView addSubview:teamLabel];
-		[teamLabel release];
 	
 		
 	}
@@ -446,14 +441,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([[self.allMatches objectAtIndex:row] class] == [Team class]) {
 		
 		Team *coachTeam = [self.allMatches objectAtIndex:row];
-		/*TeamNavigation *tmp = [[TeamNavigation alloc] init];
-		tmp.teamId = coachTeam.teamId;
-		tmp.teamName = coachTeam.name;
-		tmp.userRole = coachTeam.userRole;
-		tmp.sport = coachTeam.sport;
-		[self.navigationController presentModalViewController:tmp animated:YES];
-		*/
-		
+	
 		CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
 		
 		NSArray *viewControllers = tmp.viewControllers;
@@ -471,25 +459,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		home.teamName = coachTeam.name;
 		home.teamUrl = coachTeam.teamUrl;
 		
-		TeamActivity *activity = [viewControllers objectAtIndex:1];
-		activity.teamId = coachTeam.teamId;
-		activity.userRole = coachTeam.userRole;
-		
-		Players *people = [viewControllers objectAtIndex:2];
+	
+		Players *people = [viewControllers objectAtIndex:1];
 		people.teamId = coachTeam.teamId;
 		people.userRole = coachTeam.userRole;
 		people.teamName = coachTeam.name;
 		
-		EventList *events = [viewControllers objectAtIndex:3];
+		EventList *events = [viewControllers objectAtIndex:2];
 		events.teamId = coachTeam.teamId;
 		events.userRole = coachTeam.userRole;
 		events.sport = coachTeam.sport;
 		events.teamName = coachTeam.name;
 		
-		//TeamMessages *message = [viewControllers objectAtIndex:4];
-		//message.teamId = coachTeam.teamId;
-		//message.userRole = coachTeam.userRole;
-
+	
 		[self.navigationController pushViewController:tmp animated:YES];
 
 		
@@ -515,11 +497,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -621,7 +598,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		
 	}
-    [pool drain];
+
 }
 
 - (void)didFinish{
@@ -687,7 +664,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -721,22 +697,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
--(void)dealloc{
-	[searchActivity release];
-	[searchBar release];
-	[searchCriteria release];
-	[searchTableView release];
-	[potentialMatches release];
-	[allMatches release];
-	[teamsOnly release];
-	[error release];
-	[potentialMatchesTeamName release];
-	[allMatchesTeamName release];
-	[errorLabel release];
-    myAd.delegate = nil;
-	[myAd release];
-	[super dealloc];
-	
-}
+
 
 @end

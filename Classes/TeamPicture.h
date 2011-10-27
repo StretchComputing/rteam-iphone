@@ -48,31 +48,31 @@
     bool portrait;
 }
 @property bool portrait;
-@property (nonatomic, retain) NSString *toOrientation;
+@property (nonatomic, strong) NSString *toOrientation;
 @property bool dontMove;
 @property bool newImage;
-@property (nonatomic, retain) UIView *allWhiteView;
-@property (nonatomic, retain) UIActionSheet *camerActionSheet;
-@property (nonatomic, retain) UIImageView *largeImageView;
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *userRole;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain)  UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIView *allWhiteView;
+@property (nonatomic, strong) UIActionSheet *camerActionSheet;
+@property (nonatomic, strong) UIImageView *largeImageView;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *userRole;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong)  UIActivityIndicatorView *activity;
 @property bool fromCameraSelect;
-@property (nonatomic, retain) UIImage *selectedImage;
-@property (nonatomic, retain) NSData *imageData;
-@property (nonatomic, retain) NSString *imageString;
+@property (nonatomic, strong) UIImage *selectedImage;
+@property (nonatomic, strong) NSData *imageData;
+@property (nonatomic, strong) NSString *imageString;
 @property bool hasImage;
 @property bool addImage;
-@property (nonatomic, retain) UIButton *removeButton;
-@property (nonatomic, retain) UIButton *addChangeButton;
-@property (nonatomic, retain) UIImageView *profilePic;
-@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, strong) UIButton *removeButton;
+@property (nonatomic, strong) UIButton *addChangeButton;
+@property (nonatomic, strong) UIImageView *profilePic;
+@property (nonatomic, strong) UILabel *titleLabel;
 
-@property (nonatomic, retain) UILabel *loadingImageLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingImageActivity;
+@property (nonatomic, strong) UILabel *loadingImageLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingImageActivity;
 
-@property (nonatomic, retain) UILabel *displayLabel;
+@property (nonatomic, strong) UILabel *displayLabel;
 
 -(IBAction)remove;
 -(IBAction)addChange;

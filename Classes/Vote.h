@@ -10,7 +10,7 @@
 
 
 @interface Vote : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-
+    
 	NSString *teamId;
 	NSString *userRole;
 	
@@ -36,25 +36,25 @@
 	NSString *updateStatus;
 	
 }
-@property (nonatomic, retain) NSString *updateStatus;
+@property (nonatomic, strong) NSString *updateStatus;
 @property bool gameInfoSuccess;
 @property bool updateSuccess;
 @property bool isOpen;
-@property (nonatomic, retain) UIActivityIndicatorView *votingActivity;
+@property (nonatomic, strong) UIActivityIndicatorView *votingActivity;
 
-@property (nonatomic, retain) NSString *gameId;
-@property (nonatomic, retain) NSString *myVote;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSMutableArray *memberArray;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, retain) UITableView *myTableView;
-@property (nonatomic, retain) UIButton *closeVotingButton;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) NSString *gameId;
+@property (nonatomic, strong) NSString *myVote;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSMutableArray *memberArray;
+@property (nonatomic, strong) UILabel *loadingLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) UIButton *closeVotingButton;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
 
-@property (nonatomic, retain) NSString *teamId;
-@property (nonatomic, retain) NSString *userRole;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *userRole;
 
 -(IBAction)closeVoting;
 @end

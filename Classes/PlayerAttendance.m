@@ -20,13 +20,12 @@
 	self.displayAttResults = self.attResults;
 	
 	UIView *headerView =
-	[[[UIView alloc]
-	  initWithFrame:CGRectMake(0, 0, 300, 70)]
-	 autorelease];
+	[[UIView alloc]
+     initWithFrame:CGRectMake(0, 0, 300, 70)];
 	
 	
 	UILabel *headerLabel =
-	[[[UILabel alloc] initWithFrame:CGRectMake(75, 1, 300, 40)] autorelease];
+	[[UILabel alloc] initWithFrame:CGRectMake(75, 1, 300, 40)];
 	headerLabel.text = NSLocalizedString(@"Player Attendance:", @"");
 	headerLabel.textColor = [UIColor blackColor];
 	headerLabel.font = [UIFont boldSystemFontOfSize:16];
@@ -57,7 +56,6 @@
 	if (!self.fromSearch) {
 		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
 		[self.navigationItem setRightBarButtonItem:addButton];
-		[addButton release];
 	}
 	
 	
@@ -65,8 +63,6 @@
 	UIColor *color = [[UIColor alloc] initWithRed:0.86 green:0.86 blue:0.86 alpha:1.0];
 	line2.backgroundColor = color;
 	[headerView addSubview:line2];
-	[color release];
-    [line2 release];
 	
 }
 
@@ -93,17 +89,16 @@
 		
 		
 		NSDictionary *response = [ServerAPI getAttendeesMember:token :self.teamId :self.memberId :self.eventType :@"" :@""];
-				
+        
 		NSString *status = [response valueForKey:@"status"];
 		
 		if ([status isEqualToString:@"100"]){
-						
+            
 			self.attResults = [response valueForKey:@"attendance"];
 			NSMutableArray *tmp = [NSMutableArray arrayWithArray:self.attResults];
 			
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"eventDate" ascending:YES];
 			[tmp sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
-			[lastNameSorter release];
             
 			self.attResults = tmp;
 			self.displayAttResults = tmp;
@@ -134,7 +129,7 @@
     
 	
 	[self.tableView reloadData];
-
+    
 }
 
 -(void)filterAttendance:(NSString *)event{
@@ -144,17 +139,17 @@
 		self.displayAttResults = self.attResults;
 	}else{
 		
-	NSMutableArray *tmp = [NSMutableArray array];
-	
-	for (int i = 0; i < [self.attResults count]; i++) {
-		
-		NSDictionary *results = [self.attResults objectAtIndex:i];
-		
-		if ([[results objectForKey:@"eventType"] isEqualToString:event]) {
-			[tmp addObject:results];
-		}
-		
-	}
+        NSMutableArray *tmp = [NSMutableArray array];
+        
+        for (int i = 0; i < [self.attResults count]; i++) {
+            
+            NSDictionary *results = [self.attResults objectAtIndex:i];
+            
+            if ([[results objectForKey:@"eventType"] isEqualToString:event]) {
+                [tmp addObject:results];
+            }
+            
+        }
 		self.displayAttResults = tmp;
 		
 	}
@@ -168,7 +163,7 @@
 	UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
 	int selection = [segmentedControl selectedSegmentIndex];
 	
-
+    
 	switch (selection) {
 		case 0:
 			self.eventType = @"game";
@@ -215,7 +210,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 10;
 		frame.origin.y = 5;
@@ -225,21 +220,18 @@
 		UILabel *eventLabel = [[UILabel alloc] initWithFrame:frame];
 		eventLabel.tag = eventTag;
 		[cell.contentView addSubview:eventLabel];
-		[eventLabel release];
 		
 		frame.size.height = 17;
 		frame.origin.y += 23;
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 		
 		frame.size.height = 15;
 		frame.origin.y += 20;
 		UILabel *eventNameLabel = [[UILabel alloc] initWithFrame:frame];
 		eventNameLabel.tag = eventNameTag;
 		[cell.contentView addSubview:eventNameLabel];
-		[eventNameLabel release];
 		
 		frame.size.height = 35;
 		frame.size.width = 40;
@@ -248,7 +240,6 @@
 		UIImageView *absentOrPresent = [[UIImageView alloc] initWithFrame:frame];
 		absentOrPresent.tag = imageTag;
 		[cell.contentView addSubview:absentOrPresent];
-		[absentOrPresent release];
 		
 		frame.size.height = 23;
 		frame.size.width = 70;
@@ -257,8 +248,7 @@
 		UILabel *imageLabel = [[UILabel alloc] initWithFrame:frame];
 		imageLabel.tag = imageLabelTag;
 		[cell.contentView addSubview:imageLabel];
-		[imageLabel release];
-
+        
 	}
 	
 	UILabel *dateLabel = (UILabel *)[cell.contentView viewWithTag:dateTag];
@@ -310,8 +300,6 @@
         
         dateLabel.text = startDateString;
         dateLabel.textAlignment = UITextAlignmentLeft;
-        [dateFormat release];
-        [format release];
         
         //Is it a game or practice	
         eventNameLabel.text = @"";
@@ -337,10 +325,10 @@
             imageLabel.text = @"Absent";
         }
         
-
-
+        
+        
     }
-   
+    
 	
 	return cell;
 }
@@ -352,28 +340,16 @@
 
 -(void)viewDidUnload{
 	/*
-	teamId = nil;
-	memberId = nil;
-	errorMessage = nil;
-	attResults = nil;
-	eventType = nil;
+     teamId = nil;
+     memberId = nil;
+     errorMessage = nil;
+     attResults = nil;
+     eventType = nil;
 	 */
 	segmentEventType = nil;
 	//displayAttResults = nil;
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[teamId release];
-	[memberId release];
-	[errorMessage release];
-	[attResults release];
-	[eventType release];
-	[segmentEventType release];
-	[displayAttResults release];
-	[super dealloc];
-	
-}
 
 @end

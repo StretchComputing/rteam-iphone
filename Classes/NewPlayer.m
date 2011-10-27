@@ -168,7 +168,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
 	
 }
 
@@ -251,11 +250,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 }
 
 - (void)runRequest {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -374,15 +369,13 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 	}
 	
 
-	[tmpRoles release];
-	[guardians release];	
+	
 	[self performSelectorOnMainThread:
 	 @selector(didFinish)
 						   withObject:nil
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 - (void)didFinish{
@@ -430,7 +423,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 			NSString *tmp = @"Only User's with confirmed email addresses can add new team members.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}else {
 			self.error.text = self.errorString;
 		}
@@ -495,7 +487,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
     picker.peoplePickerDelegate = self;
 	
     [self presentModalViewController:picker animated:YES];
-    [picker release];
 }
 
 - (void)peoplePickerNavigationControllerDidCancel:
@@ -524,15 +515,15 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
     self.currentGuardEmail = @"";
     self.currentGuardPhone = @"";
     
-    NSString* fName = (NSString *)ABRecordCopyValue(person,
+    NSString* fName = (__bridge NSString *)ABRecordCopyValue(person,
 												   kABPersonFirstNameProperty);
 	
-	NSString *lName = (NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+	NSString *lName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
 
 	
 	ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
 	
-	NSArray *emailArray1 = (NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
+	NSArray *emailArray1 = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
 	NSString *emailAddress = @"";
 	if ([emailArray1 count] > 0) {
 		emailAddress = [emailArray1 objectAtIndex:0];
@@ -540,7 +531,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         
         for(int i = 0; i < ABMultiValueGetCount(emails); i++)
         {
-            NSString *test = (NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
+            NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
             
             NSString *final = [self getType:test];
             
@@ -553,7 +544,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 	
 	ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
 	
-	NSArray *phoneArray = (NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
+	NSArray *phoneArray = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
 	NSString *phoneString = @"";
 	if ([phoneArray count] > 0) {
 		phoneString = [phoneArray objectAtIndex:0];
@@ -561,7 +552,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         
         for(int i = 0; i < ABMultiValueGetCount(phone); i++)
         {
-            NSString *test = (NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
+            NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
             
             NSString *final = [self getType:test];
             
@@ -571,8 +562,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 	}
 
 	
-	[phoneArray release];
-    [emailArray1 release];
+
 
     if (fName == nil) {
         fName = @"";
@@ -733,16 +723,13 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
             if ([self.addContactWhere isEqualToString:@"member"]){
                 
                 [self.miniMultipleEmailAlert show];
-                [self.miniMultipleEmailAlert release];
                 
             }else if ([self.addContactWhere isEqualToString:@"guard1"]){
                 
                 [self.guard1EmailAlert show];
-                [self.guard1EmailAlert release];
             }else{
                 
                 [self.guard2EmailAlert show];
-                [self.guard2EmailAlert release];
             }
 
             
@@ -758,16 +745,13 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
             if ([self.addContactWhere isEqualToString:@"member"]){
                 
                 [self.miniMultipleEmailAlert show];
-                [self.miniMultipleEmailAlert release];
                 
             }else if ([self.addContactWhere isEqualToString:@"guard1"]){
                 
                 [self.guard1EmailAlert show];
-                [self.guard1EmailAlert release];
             }else{
                 
                 [self.guard2EmailAlert show];
-                [self.guard2EmailAlert release];
             }
 
             
@@ -783,16 +767,13 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
             if ([self.addContactWhere isEqualToString:@"member"]){
                 
                 [self.miniMultiplePhoneAlert show];
-                [self.miniMultiplePhoneAlert release];
                 
             }else if ([self.addContactWhere isEqualToString:@"guard1"]){
                 
                 [self.guard1PhoneAlert show];
-                [self.guard1PhoneAlert release];
             }else{
                 
                 [self.guard2PhoneAlert show];
-                [self.guard2PhoneAlert release];
                 
             }
 
@@ -835,7 +816,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                 
                 [self.myTableView reloadData];
                 
-                [tmpObject release];
                 
             }else if ([self.addContactWhere isEqualToString:@"guard1"]){
                 
@@ -948,9 +928,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		
 	}
 
-   
-	[fName release];
-	[lName release];
 
 
     [self dismissModalViewControllerAnimated:YES];
@@ -975,7 +952,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -1074,7 +1050,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		NSString *tmp = @"You must add at least one member to submit.";
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Members Added." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-        [alert release];
 		
 	}else {
 		self.submitButton.enabled = YES;
@@ -1097,9 +1072,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 
 
 -(void)addMembers{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
+
 	//Create the new player
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -1220,7 +1193,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		}
 		
 		[tmpMemberArray addObject:tmpDictionary];
-		[tmpDictionary release];
 		
 	}
 	
@@ -1271,7 +1243,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 
 	
 	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -1322,13 +1293,11 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 			NSString *tmp = @"Only User's with confirmed email addresses can add new team members.  To confirm your email, please click on the activation link in the email we sent you.";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}else {
             
 			NSString *tmp = self.errorString;
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add Members Failed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alert show];
-            [alert release];
 		}
 	}
 
@@ -1393,7 +1362,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		
 		[self.emailArray addObject:tmp];
 		
-		[tmp release];
 		
 		self.phoneText.text = @"";
 		self.emailText.text = @"";
@@ -1477,15 +1445,15 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		
 		
 		if (isEmpty) {
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:EmptyCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:EmptyCell];
 			
 		}else {
             
             if (memberRow) {
-                cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:MemberCell] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MemberCell];
                 
             }else{
-                cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:GuardianCell] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:GuardianCell];
                 
             }
 			
@@ -1501,7 +1469,6 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
 		[cell.contentView addSubview:dateLabel];
-		[dateLabel release];
 		
 		
 	}
@@ -1724,7 +1691,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 [self.myTableView reloadData];
                 
-                [tmpObject release];
                 
 
             }
@@ -1756,7 +1722,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 [self.myTableView reloadData];
                 
-                [tmpObject release];
             }
             
         }
@@ -1790,7 +1755,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [self.myTableView reloadData];
             
-            [tmpObject release];
 
             
         
@@ -2052,95 +2016,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     removeGuardiansButton = nil;
     coordinatorSegment = nil;
 	[super viewDidUnload];
-}
-
--(void)dealloc{
-	[barItem release];
-	[helpScreen release];
-	[firstName release];
-	[lastName release];
-	[email release];
-	[guardianEmail release];
-	[roles release];
-	[teamId release];
-	[submitButton release];
-	[serverProcess release];
-	[error release];
-	[isCoordinator release];
-	[userRole release];
-	[closeButton release];
-	[sendEmailButton release];
-	[addParentGuardianButton release];
-	[guardianOneFirst release];
-	[guardianOneLast release];
-	[guardianOneEmail release];
-	[guardianTwoFirst release];
-	[guardianTwoLast release];
-	[guardianTwoEmail release];
-	[errorString release];
-	[firstNamePicked release];
-	[lastNamePicked release];
-	[phoneNumber release];
-	[addMultipleMembersButton release];
-	
-	[addViewBackground release];
-	[addView release];
-	
-	[closeMultipleButton release];
-	[saveButton release];
-	
-	[addNewButton release];
-	
-	[myTableView release];
-	[phoneOnlyArray release];
-	[miniBackgroundView release];
-	[miniForeGroundView release];
-	[nameText release];
-	[emailText release];
-	[phoneText release];
-	[miniErrorLabel release];
-	[miniCancelButton release];
-	[miniAddButton release];
-	[emailArray release];
-	[multipleActivity release];
-	[addContactButton release];
-    [multiplePhoneArray release];
-    [multipleEmailArray release];
-    [multiplePhoneAlert release];
-    [multipleEmailAlert release];
-    [tmpMiniEmail release];
-    [tmpMiniPhone release];
-    [tmpMiniFirstName release];
-    [tmpMiniLastName release];
-    [miniMultiple release];
-    [miniMultipleEmailAlert release];
-    [miniMultiplePhoneAlert release];
-    [guardianOnePhone release];
-    [guardianTwoPhone release];
-    [guardianBackground release];
-    [miniGuardAddButton release];
-    [miniGuardCancelButton release];
-    [oneName release];
-    [oneEmail release];
-    [onePhone release];
-    [twoName release];
-    [twoEmail release];
-    [twoPhone release];
-    [removeGuardiansButton release];
-    [miniGuardErrorLabel release];
-    [addContactWhere release];
-    [guard2EmailAlert release];
-    [guard2PhoneAlert release];
-    [guard1PhoneAlert release];
-    [guard1EmailAlert release];
-    [currentGuardEmail release];
-    [currentGuardName release];
-    [currentGuardPhone release];
-    [multipleEmailArrayLabels release];
-    [multiplePhoneArrayLabels release];
-    [coordinatorSegment release];
-	[super dealloc];
-	
 }
 
 @end

@@ -10,11 +10,7 @@
 #import "CurrentTeamTabs.h"
 #import "Players.h"
 #import "Fans.h"
-#import "SendMessage.h"
-#import "MessagesInbox.h"
 #import "EventList.h"
-#import "TeamMessages.h"
-#import "TeamActivity.h"
 #import "TeamHome.h"
 
 @implementation TeamNavigation
@@ -69,23 +65,13 @@
 -(void)viewDidUnload{
 	
 	/*
-	teamName = nil;
-	teamId = nil;
-	userRole = nil;
-	sport = nil;
-	teamUrl = nil;
+     teamName = nil;
+     teamId = nil;
+     userRole = nil;
+     sport = nil;
+     teamUrl = nil;
 	 */
 	[super viewDidUnload];
 }
 
--(void)dealloc{
-	
-	[teamName release];
-	[teamId release];
-	[sport release];
-	[userRole release];
-	[teamUrl release];
-	[super dealloc];
-	
-}
 @end

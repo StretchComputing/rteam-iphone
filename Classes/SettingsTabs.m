@@ -128,8 +128,6 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 
 
 -(void)getUserInfo{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
 	
 	NSString *token = @"";
 	
@@ -179,7 +177,6 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 	}
 	
 	[self performSelectorOnMainThread:@selector(doneUserInfo) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -204,7 +201,7 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
 	if (cell == nil){
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:FirstLevelCell] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
 		CGRect frame;
 		frame.origin.x = 10;
 		frame.origin.y = 10;
@@ -215,14 +212,12 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 		UILabel *cellLabel = [[UILabel alloc] initWithFrame:frame];
 		cellLabel.tag = cellTag;
 		[cell.contentView addSubview:cellLabel];
-		[cellLabel release];
 		
 		frame.origin.x = 125;
 		frame.size.width = 150;
 		UILabel *feedbackLabel = [[UILabel alloc] initWithFrame:frame];
 		feedbackLabel.tag = feedbackTag;
 		[cell.contentView addSubview:feedbackLabel];
-		[feedbackLabel release];
 		
 		
 		frame.size.height = 30;
@@ -232,7 +227,6 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 		UISwitch *switchControl = [[UISwitch alloc] initWithFrame:frame];
 		switchControl.tag = segTag;
 		[cell.contentView addSubview:switchControl];
-		[switchControl release];
 		
 		
 	}
@@ -315,6 +309,7 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
         }
     }
 	
+    cellLabel.backgroundColor = [UIColor clearColor];
 	return cell;
 }
 
@@ -391,7 +386,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             UIActionSheet *synch = [[UIActionSheet alloc] initWithTitle:@"Do you want to sync your rTeam Events to your iPhone Calendar?" delegate:self cancelButtonTitle:@"No" destructiveButtonTitle:nil otherButtonTitles:@"Yes", nil];
             synch.actionSheetStyle = UIActionSheetStyleDefault;
             [synch showInView:self.view];
-            [synch release];
             
 		}
 
@@ -408,13 +402,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 [mailViewController setSubject:@"rTeam FeedBack"];
                 
                 [self presentModalViewController:mailViewController animated:YES];
-                [mailViewController release];
                 
             }else {
                 
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
-                [alert release];
             }
 
         }else if (row == 1){
@@ -581,9 +573,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)getGames{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-    
+	
 	
 	NSArray *games = [NSArray array];
 	NSString *token = @"";
@@ -637,11 +627,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 - (void)getEvents {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	NSArray *practices = [NSArray array];
 	NSString *token = @"";
@@ -690,7 +676,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	self.allEvents = [NSMutableArray arrayWithArray:practices];	
 	
 	[self performSelectorOnMainThread:@selector(doneCall) withObject:nil waitUntilDone:NO];
-    [pool drain];
 }
 
 
@@ -718,7 +703,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             NSString *message = @"You have no current rTeam events to push to your iPhone calendar.";
             UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"No New Events" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert1 show];
-            [alert1 release];
         }
         
         
@@ -727,8 +711,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)synchEvents{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+ 
     
     NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
 	[self.gamesAndEvents sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
@@ -952,12 +935,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
     }
-    
-    [eventStore release];
-    [dateFormat release];
+ 
     
     [self performSelectorOnMainThread:@selector(doneSynch) withObject:nil waitUntilDone:NO];
-    [pool drain];
 }
 
 -(void)doneSynch{
@@ -969,7 +949,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         NSString *message = @"Your iPhone calendar is currently up to date with all of your rTeam events.";
         UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"No New Events" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert1 show];
-        [alert1 release];
         
     }else{
         
@@ -978,13 +957,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             NSString *message = @"Your rTeam events were successfully added to your iPhone calendar.";
             UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Success!" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert1 show];
-            [alert1 release];
         }else{
             
             NSString *message = @"An error occurred while trying to add your rTeam events to your iPhone calendar.";
             UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Sync Failed" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert1 show];
-            [alert1 release];
             
         }
     }
@@ -995,10 +972,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)firstTeam{
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
@@ -1041,11 +1015,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	}else{
 		
 	}
-    
-	
 
-	
-    [pool drain];
 }
 
 -(void)viewDidUnload{
@@ -1059,18 +1029,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
-- (void)dealloc {
-	[fromRegisterFlow release];
-	[didRegister release];
-    [passwordResetQuestion release];
-	[myTableView release];
-	[loadingActivity release];
-	[loadingLabel release];
-    [largeActivity release];
-    [allGames release];
-    [allEvents release];
-    [super dealloc];
-}
 
 
 @end

@@ -34,25 +34,25 @@
 	
 	IBOutlet UIActivityIndicatorView *editEventActiviy;
 }
-@property (nonatomic, retain) UIActivityIndicatorView *editEventActiviy;
+@property (nonatomic, strong) UIActivityIndicatorView *editEventActiviy;
 @property int actionRow;
-@property (nonatomic, retain) UIActionSheet *undoCancel;
-@property (nonatomic, retain) UITableView *eventsTableView;
+@property (nonatomic, strong) UIActionSheet *undoCancel;
+@property (nonatomic, strong) UITableView *eventsTableView;
 
-@property (nonatomic, retain) UIActivityIndicatorView *barActivity;
+@property (nonatomic, strong) UIActivityIndicatorView *barActivity;
 
-@property (nonatomic, retain) UILabel *eventActivityLabel;
+@property (nonatomic, strong) UILabel *eventActivityLabel;
 
-@property (nonatomic, retain) NSString *sport;
-@property (nonatomic, retain) UIBarButtonItem *addButton;
-@property (nonatomic, retain) UILabel *error;
-@property (nonatomic, retain) NSArray *events;
-@property (nonatomic, retain) NSString *teamName;
-@property (nonatomic, retain) NSString *teamId;
+@property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) UIBarButtonItem *addButton;
+@property (nonatomic, strong) UILabel *error;
+@property (nonatomic, strong) NSArray *events;
+@property (nonatomic, strong) NSString *teamName;
+@property (nonatomic, strong) NSString *teamId;
 @property int deleteRow;
 @property bool isPastGame;
 @property bool fromEdit;
-@property (nonatomic, retain) NSString *userRole;
+@property (nonatomic, strong) NSString *userRole;
 
 -(void)getAllEvents;
 -(void)deleteActionSheet;

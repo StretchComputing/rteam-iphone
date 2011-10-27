@@ -14,11 +14,9 @@
 #import "KLDate.h"
 #import "GameAttendance.h"
 #import "Gameday.h"
-#import "GameMessages.h"
 #import "GameTabs.h"
 #import "GameTabsNoCoord.h"
 #import "Practice.h"
-#import "PracticeMessages.h"
 #import "PracticeTabs.h"
 #import "PracticeNotes.h"
 #import "PracticeAttendance.h"
@@ -27,15 +25,11 @@
 #import "Event.h"
 #import "EventTabs.h"
 #import "EventNotes.h"
-#import "EventMessages.h"
 #import "EventAttendance.h"
-#import "TeamActivity.h"
 #import "Home.h"
 #import "Fans.h"
 #import "FastActionSheet.h"
 #import "Vote.h"
-#import "GameChatter.h"
-#import "PracticeChatter.h"
 
 @implementation AllEventsCalendar
 @synthesize allGames, allPractices, allEvents, eventType, dateSelected, gamesToday, practicesToday, eventsToday, bottomBar, segmentedControl, 
@@ -54,13 +48,14 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	if (self.createdEvent) {
 		self.createdEvent = false;
 		[self performSelectorInBackground:@selector(getAllGames) withObject:nil];
-		[calendarView refreshViewWithPushDirection:nil];
+		//[calendarView refreshViewWithPushDirection:nil];
+        [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
+
 		[myTableView reloadData];
 	}
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	[self.navigationItem setRightBarButtonItem:homeButton];
-	[homeButton release];
 
 }
 
@@ -122,7 +117,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	self.gotPractices = false;
 	self.gotEvents = false;
 	
-	calendarView = [[[KLCalendarView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,  320.0f, 360) delegate:self] autorelease];
+	calendarView = [[KLCalendarView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,  320.0f, 360) delegate:self];
 	
 	myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0,242,320,135) style:UITableViewStylePlain];
 	
@@ -132,7 +127,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	myHeaderView.backgroundColor = [UIColor grayColor];
 	[myTableView setTableHeaderView:myHeaderView];
 	
-    [myHeaderView release];
 	self.bottomBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 377, 320, 40)];
 	
 	UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -151,8 +145,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	NSArray *items1 = [NSArray arrayWithObjects:flexibleSpace, tmp, flexibleSpace, nil];
 	self.bottomBar.items = items1;
-	[flexibleSpace release];
-    [tmp release];
+
 	
 	[self.view addSubview:myTableView];
 	[self.view addSubview:calendarView];
@@ -163,7 +156,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"List" style:UIBarButtonItemStyleBordered target:self action:@selector(listView)];
 	[self.navigationItem setLeftBarButtonItem:addButton];
-	[addButton release];
 	
 	self.deleteActivity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(141, 295, 37, 37)];
 	self.deleteActivity.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
@@ -175,8 +167,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 
 
 -(void)getAllGames{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	//Start 2 background threads for practices and all events here?
 	[self performSelectorInBackground:@selector(getAllPractices) withObject:nil];
@@ -241,12 +232,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 }
 
 - (void)getAllPractices {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
-	
+
 	NSArray *practices = [NSArray array];
 	NSString *token = @"";
 	
@@ -294,7 +280,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	self.allPractices = [NSMutableArray arrayWithArray:practices];	
 	
 	[self performSelectorOnMainThread:@selector(finishedPractices) withObject:nil waitUntilDone:NO];
-    [pool drain];
 }
 
 -(void)finishedPractices{
@@ -306,10 +291,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 
 - (void)getAllEvents {
 	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	NSArray *practices = [NSArray array];
 	NSString *token = @"";
@@ -357,7 +339,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	self.allGenericEvents = [NSMutableArray arrayWithArray:practices];	
 
 	[self performSelectorOnMainThread:@selector(finishedEvents) withObject:nil waitUntilDone:NO];
-    [pool drain];
+
 }
 
 -(void)finishedEvents{
@@ -369,11 +351,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 
 
 - (void)combineEvents {
-	
-	NSAutoreleasePool * pool;
-	
-    pool = [[NSAutoreleasePool alloc] init];
-    assert(pool != nil);
+
 	
 	self.allEvents = [NSMutableArray array];
 
@@ -410,7 +388,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 
 	NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
 	[self.allEvents sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
-	[dateSorter release];
     
 	[self performSelectorOnMainThread:
 	 @selector(didFinishEvents)
@@ -418,7 +395,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 						waitUntilDone:NO
 	 ];
 	
-    [pool drain];
 }
 
 -(void)didFinishEvents{
@@ -527,10 +503,10 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	if (cell == nil){
 		
 		if (addDelete) {
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:deleteCell1] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:deleteCell1];
 			
 		}else {
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:noDeleteCell] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:noDeleteCell];
 			
 		}
 		
@@ -543,7 +519,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		UILabel *eventLabel = [[UILabel alloc] initWithFrame:frame];
 		eventLabel.tag = eventTag;
 		[cell.contentView addSubview:eventLabel];
-		[eventLabel release];
 		
 		frame.origin.x = 10;
 		frame.origin.y = 24;
@@ -552,7 +527,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		UILabel *teamLabel = [[UILabel alloc] initWithFrame:frame];
 		teamLabel.tag = teamTag;
 		[cell.contentView addSubview:teamLabel];
-		[teamLabel release];
 		
 		
 		
@@ -563,7 +537,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		UILabel *canceledLabel = [[UILabel alloc] initWithFrame:frame];
 		canceledLabel.tag = canceledTag;
 		[cell.contentView addSubview:canceledLabel];
-		[canceledLabel release];
 		
 		
 	}
@@ -629,7 +602,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			eventLabel.text = [@"Game at " stringByAppendingString:hour];
 			eventLabel.textAlignment = UITextAlignmentCenter;
 			teamLabel.text = tmpGame.teamName;
-			[dateFormat release];
 			if ([tmpGame.interval isEqualToString:@"-4"]) {
 				canceledLabel.hidden = NO;
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -651,7 +623,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			eventLabel.textAlignment = UITextAlignmentCenter;
 			teamLabel.text = tmpGame.teamName;
 
-            [dateFormat release];
 			if (tmpGame.isCanceled) {
 				canceledLabel.hidden = NO;
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -676,7 +647,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 				eventLabel.text = [@"Game at " stringByAppendingString:hour];
 				eventLabel.textAlignment = UITextAlignmentCenter;
 				teamLabel.text = tmpGame.teamName;
-				[dateFormat release];
                 
 				if ([tmpGame.interval isEqualToString:@"-4"]) {
 					canceledLabel.hidden = NO;
@@ -700,7 +670,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 				eventLabel.textAlignment = UITextAlignmentCenter;
 				teamLabel.text = tmpGame.teamName;
 
-                [dateFormat release];
 				if (tmpGame.isCanceled) {
 					canceledLabel.hidden = NO;
 					cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -719,7 +688,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 				
 				NSString *hour = [dateFormat stringFromDate:eventDate];
 				eventLabel.text = [@"Event at " stringByAppendingString:hour];
-                [dateFormat release];
 				eventLabel.textAlignment = UITextAlignmentCenter;
 				teamLabel.text = tmpEvent.teamName;
 
@@ -819,7 +787,8 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		tile = aTile;
 	}
 	else{
-	    [tile restoreBackgroundColor];
+	    //[tile restoreBackgroundColor];
+        [tile performSelector:@selector(restoreBackgroundColor)];
 		tile = aTile;
 	}
 	
@@ -848,7 +817,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	NSDate *formatedDate = [dateFormat dateFromString:stringDate];
 	self.dateSelected = formatedDate;
 	
-    [dateFormat release];
 	if ([self.eventType isEqualToString:@"game"]) {
 		[self filterGames];
 		
@@ -1030,7 +998,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	tmpMutable = [NSMutableArray arrayWithArray:self.allEvents];
 	[tmpMutable sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
 	self.allEvents = tmpMutable;
-    [lastNameSorter release];
 	
 	
 	tmp.allGames = [NSArray arrayWithArray:self.allGames];
@@ -1081,7 +1048,8 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			break;
 	}
 	
-	[calendarView refreshViewWithPushDirection:nil];
+	//[calendarView refreshViewWithPushDirection:nil];
+    [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
 	[myTableView reloadData];
 	
 	
@@ -1110,7 +1078,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			[self.gamesToday addObject:tmpGame];
 		}
 		
-		[dateFormat release];
 	}
 
 }
@@ -1140,7 +1107,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			[self.practicesToday addObject:tmpGame];
 		}
 		
-		[dateFormat release];
 	}
 	
 }
@@ -1172,7 +1138,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 				[self.eventsToday addObject:tmpGame];
 			}
 			
-			[dateFormat release];
 			
 		}else if ([[self.allEvents objectAtIndex:i] class]==[Game class]) {
 			
@@ -1193,7 +1158,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 				[self.eventsToday addObject:tmpGame];
 			}
 			
-			[dateFormat release];
 			
 		}else if ([[self.allEvents objectAtIndex:i] class]==[Event class]) {
 			
@@ -1214,7 +1178,6 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 				[self.eventsToday addObject:tmpEvent];
 			}
 			
-			[dateFormat release];
 			
 		}else {
 			
@@ -1353,7 +1316,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 				self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
 				[self.canceledAction showInView:self.view];
-				[self.canceledAction release];
 				
 				
 			}
@@ -1385,7 +1347,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 				self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
 				[self.canceledAction showInView:self.view];
-				[self.canceledAction release];
 				
 				
 			}
@@ -1537,7 +1498,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 					self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
 					[self.canceledAction showInView:self.view];
-					[self.canceledAction release];
 					
 					
 				}
@@ -1570,7 +1530,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 					self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
 					[self.canceledAction showInView:self.view];
-					[self.canceledAction release];
 					
 					
 				}
@@ -1635,7 +1594,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
 					self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
 					[self.canceledAction showInView:self.view];
-					[self.canceledAction release];
 					
 					
 				}
@@ -1690,7 +1648,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
 		actionSheet.delegate = self;
 		[actionSheet showInView:self.view];
-		[actionSheet release];
 	}
 }
 
@@ -1742,8 +1699,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)runDelete{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
+
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
@@ -1911,7 +1867,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	
 	[self performSelectorOnMainThread:@selector(doneDelete) withObject:nil waitUntilDone:NO];
-	[pool drain];
 
 }
 
@@ -2021,7 +1976,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	[self.deleteActivity stopAnimating];
 
-	[calendarView refreshViewWithPushDirection:nil];
+	//[calendarView refreshViewWithPushDirection:nil];
+    [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
+
 	[myTableView reloadData];
 }
 
@@ -2029,9 +1986,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)cancelEvent{
 
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
-	
 	//Cancel Event
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -2170,13 +2124,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
 -(void)activateEvent{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	assert(pool != nil);
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
@@ -2319,7 +2270,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
 	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
-	[pool drain];
 	
 }
 
@@ -2370,33 +2320,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super viewDidUnload];
 }
 
-- (void)dealloc {
-	[allGames release];
-	[canceledAction release];
-	[gamesToday release];
-	[allPractices release];
-	[practicesToday release];
-	[allEvents release];
-	[eventsToday release];
-	[eventType release];
-	[dateSelected release];
-	[bottomBar release];
-	[segmentedControl release];
-	[error release];
-	[allGenericEvents release];
-	[calendarView release];
-	[currentTile release];
-	[myTableView release];
-	[tableViewData release];
-	[tile release];
-	[loadingActivity release];
-	[activityLabel release];
-	[deleteActivity release];
-	[deleteAction release];
-	[deleteEventType release];
-	[deleteEventId release];
-	[deleteEventTeamId release];
-    [super dealloc];
-}
 
 @end
