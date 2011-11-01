@@ -15,23 +15,15 @@
 
 @interface HelpAbout : UIViewController <ADBannerViewDelegate, MFMailComposeViewControllerDelegate, UIActionSheetDelegate> {
     
-	IBOutlet UIScrollView *scrollView;
-	IBOutlet UIButton *feedbackButton;
-	
-	IBOutlet UILabel *displayLabel;
-	
-	ADBannerView *myAd;
-	BOOL bannerIsVisible;
-    bool fromSettings;
-	
-	IBOutlet UILabel *welcomeLabel;
+
 }
+@property (nonatomic, strong) ADBannerView *myAd;
 @property bool fromSettings;
-@property (nonatomic, strong) UILabel *welcomeLabel;
-@property (nonatomic, strong) UILabel *displayLabel;
+@property (nonatomic, strong) IBOutlet UILabel *welcomeLabel;
+@property (nonatomic, strong) IBOutlet UILabel *displayLabel;
 @property BOOL bannerIsVisible;
-@property (nonatomic, strong) UIButton *feedbackButton;
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UIButton *feedbackButton;
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 -(IBAction)playMovie;
 -(IBAction)createTeamHelp;
 -(IBAction)addMemberHelp;

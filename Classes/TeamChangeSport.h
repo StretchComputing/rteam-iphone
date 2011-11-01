@@ -10,20 +10,15 @@
 
 
 @interface TeamChangeSport : UIViewController <UITableViewDelegate, UITableViewDataSource>{
-	
-	IBOutlet UITextField *sport;
-	IBOutlet UITableView *myTableView;
-	NSArray *allSports;
-	NSMutableArray *allMatches;
-	IBOutlet UILabel *errorMessage;
+
 	
 	
 }
-@property (nonatomic, strong) UITextField *sport;
-@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) IBOutlet UITextField *sport;
+@property (nonatomic, strong) IBOutlet UITableView *myTableView;
 @property (nonatomic, strong) NSArray *allSports;
 @property (nonatomic, strong) NSMutableArray *allMatches;
-@property (nonatomic, strong) UILabel *errorMessage;
+@property (nonatomic, strong) IBOutlet UILabel *errorMessage;
 
 -(IBAction)endText;
 -(IBAction)selectSport;

@@ -10,10 +10,10 @@
 
 @interface SelectTeams : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) IBOutlet UITableView *myTableView;
+@property (nonatomic, strong) IBOutlet UITableView *myTableView;
 
 @property bool isPrivate;
 @property bool isPoll;
-@property (nonatomic, retain) NSArray *myTeams;
-@property (nonatomic, retain) NSMutableArray *rowsSelected;
+@property (nonatomic, strong) NSArray *myTeams;
+@property (nonatomic, strong) NSMutableArray *rowsSelected;
 @end

@@ -16,7 +16,7 @@
 
 @implementation SendPollOptions
 @synthesize action, question, errorMessage, option1, option2, option3, option4, option5, submitButton, questionText, teamId, createSuccess, 
-eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayResults, errorString;
+eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayResults, errorString, theOption1, theOption2, theOption3, theOption4, theOption5;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -55,6 +55,13 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 		
 		//Create the team in a background thread
 		
+        self.theOption1 = [NSString stringWithString:self.option1.text];
+        self.theOption2 = [NSString stringWithString:self.option2.text];
+        self.theOption3 = [NSString stringWithString:self.option3.text];
+        self.theOption4 = [NSString stringWithString:self.option4.text];
+        self.theOption5 = [NSString stringWithString:self.option5.text];
+
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 
@@ -65,95 +72,96 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 
 - (void)runRequest {
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	NSArray *choices = [NSArray arrayWithObjects:self.option1.text, self.option2.text, nil];
-	NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:choices];
-	
-	if (![self.option3.text isEqualToString:@""]) {
-		[tmpArray addObject:self.option3.text];
-	}
-	if (![self.option4.text isEqualToString:@""]) {
-		[tmpArray addObject:self.option4.text];
-	}
-	if (![self.option5.text isEqualToString:@""]) {
-		[tmpArray addObject:self.option5.text];
-	}
-	
-	choices = tmpArray;
-	
-	if (self.eventType == nil){
-		self.eventType = @"";
-	} 
-	if (self.eventId == nil){
-		self.eventId = @"";
-	}
-	
-	NSArray *recip = [NSArray array];
-	
-	if (!self.toTeam) {
-		recip = self.recipients;
-	}
-	
-	NSDictionary *response = [NSDictionary dictionary];
-	if (![token isEqualToString:@""]){	
-				
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        NSArray *choices = [NSArray arrayWithObjects:self.theOption1, self.theOption2, nil];
+        NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:choices];
+        
+        if (![self.theOption3 isEqualToString:@""]) {
+            [tmpArray addObject:self.theOption3];
+        }
+        if (![self.theOption4 isEqualToString:@""]) {
+            [tmpArray addObject:self.theOption4];
+        }
+        if (![self.theOption5 isEqualToString:@""]) {
+            [tmpArray addObject:self.theOption5];
+        }
+        
+        choices = tmpArray;
+        
+        if (self.eventType == nil){
+            self.eventType = @"";
+        } 
+        if (self.eventId == nil){
+            self.eventId = @"";
+        }
+        
+        NSArray *recip = [NSArray array];
+        
+        if (!self.toTeam) {
+            recip = self.recipients;
+        }
+        
+        NSDictionary *response = [NSDictionary dictionary];
+        if (![token isEqualToString:@""]){	
+            
+            
+            response = [ServerAPI createMessageThread:token :self.teamId :self.pollSubject :self.questionText :@"poll" :self.eventId :self.eventType :@"false" :choices :recip :self.displayResults :@"false" :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.createSuccess = true;
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                self.createSuccess = false;
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 207:
+                        //error connecting to server
+                        self.errorString = @"*Fans cannot send polls.";
+                        break;
+                    case 208:
+                        self.errorString = @"NA";
+                        break;
+                        
+                    default:
+                        //should never get here
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-		response = [ServerAPI createMessageThread:token :self.teamId :self.pollSubject :self.questionText :@"poll" :self.eventId :self.eventType :@"false" :choices 
-												 :recip :self.displayResults :@"false" :@""];
+    }
 		
-		NSString *status = [response valueForKey:@"status"];
-		
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.createSuccess = true;
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			self.createSuccess = false;
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 207:
-					//error connecting to server
-					self.errorString = @"*Fans cannot send polls.";
-					break;
-				case 208:
-					self.errorString = @"NA";
-					break;
-
-				default:
-					//should never get here
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-
-		
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{

@@ -22,7 +22,7 @@
 
 @implementation Search
 @synthesize searchBar, searchCriteria, searchTableView, potentialMatches, allMatches, teamsOnly, error, potentialMatchesTeamName, 
-allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
+allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -55,7 +55,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
 	[self.view addSubview:myAd];
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-	[self.navigationItem setRightBarButtonItem:homeButton];
+	[self.navigationItem setLeftBarButtonItem:homeButton];
 	
 }
 
@@ -68,60 +68,62 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity;
 
 -(void)getListOfTeams{
 
+	@autoreleasepool {
+        NSString *token = @"";
+        NSArray *teamArray = [NSArray array];
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        
+        //If there is a token, do a DB lookup to find the teams associated with this coach:
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getListOfTeams:token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                teamArray = [response valueForKey:@"teams"];
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //should never get here
+                        self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
+        self.potentialMatches = [NSMutableArray arrayWithArray:teamArray];
+        for (int i = 0; i < [self.potentialMatches count]; i++) {
+            Team *tmpTeam = [self.potentialMatches objectAtIndex:i];
+            
+            [self.potentialMatchesTeamName addObject:tmpTeam];
+        }
+        self.teamsOnly = [NSMutableArray arrayWithArray:teamArray];
+        
+        [self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
+    }
 	
-	NSString *token = @"";
-	NSArray *teamArray = [NSArray array];
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	
-	//If there is a token, do a DB lookup to find the teams associated with this coach:
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getListOfTeams:token];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			teamArray = [response valueForKey:@"teams"];
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.error = @"*Error connecting to server";
-					break;
-				default:
-					//should never get here
-					self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
-
-	self.potentialMatches = [NSMutableArray arrayWithArray:teamArray];
-	for (int i = 0; i < [self.potentialMatches count]; i++) {
-		Team *tmpTeam = [self.potentialMatches objectAtIndex:i];
-		
-		[self.potentialMatchesTeamName addObject:tmpTeam];
-	}
-	self.teamsOnly = [NSMutableArray arrayWithArray:teamArray];
-	
-	[self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
 	
 	
 }
@@ -498,107 +500,110 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)runRequest {
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        for (int i = 0; i < [self.teamsOnly count]; i++) {
+            
+            Team *tmpTeam = [self.teamsOnly objectAtIndex:i];
+            
+            NSArray *tmp = [NSArray array];
+            
+            NSDictionary *response = [ServerAPI getListOfTeamMembers:tmpTeam.teamId :mainDelegate.token :@"all" :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                tmp = [response valueForKey:@"members"];
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Log the status code?
+                        self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            for (int j = 0; j < [tmp count]; j++) {
+                
+                
+                
+                if ([[tmp objectAtIndex:j] class] == [Player class]) {
+                    Player *tmpPlayer = [tmp objectAtIndex:j];
+                    
+                    if ((tmpPlayer.firstName != nil) && ![tmpPlayer.firstName isEqualToString:@""]) {
+                        NSString *fullName = tmpPlayer.firstName;
+                        
+                        NSArray *names = [fullName componentsSeparatedByString:@" "];
+                        tmpPlayer.firstName = [names objectAtIndex:0];
+                        
+                        tmpPlayer.lastName = @"";
+                        bool oneBefore = false;
+                        for (int i = 1; i < [names count]; i++) {
+                            
+                            if (oneBefore) {
+                                tmpPlayer.lastName = [tmpPlayer.lastName stringByAppendingFormat:@" %@", [names objectAtIndex:i]];
+                            }else {
+                                tmpPlayer.lastName = [tmpPlayer.lastName stringByAppendingString:[names objectAtIndex:i]];
+                            }
+                            oneBefore = true;
+                            
+                        }
+                    }
+                    
+                    
+                    [self.potentialMatches addObject:tmpPlayer];
+                    [self.potentialMatchesTeamName addObject:tmpTeam];
+                }
+                
+                if ([[tmp objectAtIndex:j] class] == [Fan class]) {
+                    Fan *tmpPlayer = [tmp objectAtIndex:j];
+                    
+                    NSString *fullName = tmpPlayer.firstName;
+                    
+                    
+                    NSArray *names = [fullName componentsSeparatedByString:@" "];
+                    tmpPlayer.firstName = [names objectAtIndex:0];
+                    
+                    
+                    @try {
+                        tmpPlayer.lastName = [names objectAtIndex:1];
+                    }
+                    @catch (NSException * e) {
+                        tmpPlayer.lastName = @"";
+                    }
+                    
+                    
+                    
+                    [self.potentialMatches addObject:tmpPlayer];
+                    [self.potentialMatchesTeamName addObject:tmpTeam];
+                    
+                }
+                
+            }
+            
+            
+            
+        }
+
+    }
 	
-	for (int i = 0; i < [self.teamsOnly count]; i++) {
-		
-		Team *tmpTeam = [self.teamsOnly objectAtIndex:i];
-		
-		NSArray *tmp = [NSArray array];
-		
-		NSDictionary *response = [ServerAPI getListOfTeamMembers:tmpTeam.teamId :mainDelegate.token :@"all" :@""];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			tmp = [response valueForKey:@"members"];
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.error = @"*Error connecting to server";
-					break;
-				default:
-					//Log the status code?
-					self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-		for (int j = 0; j < [tmp count]; j++) {
-			
-			
-			
-			if ([[tmp objectAtIndex:j] class] == [Player class]) {
-				Player *tmpPlayer = [tmp objectAtIndex:j];
-				
-				if ((tmpPlayer.firstName != nil) && ![tmpPlayer.firstName isEqualToString:@""]) {
-					NSString *fullName = tmpPlayer.firstName;
-					
-					NSArray *names = [fullName componentsSeparatedByString:@" "];
-					tmpPlayer.firstName = [names objectAtIndex:0];
-					
-					tmpPlayer.lastName = @"";
-					bool oneBefore = false;
-					for (int i = 1; i < [names count]; i++) {
-						
-						if (oneBefore) {
-							tmpPlayer.lastName = [tmpPlayer.lastName stringByAppendingFormat:@" %@", [names objectAtIndex:i]];
-						}else {
-							tmpPlayer.lastName = [tmpPlayer.lastName stringByAppendingString:[names objectAtIndex:i]];
-						}
-						oneBefore = true;
-
-					}
-				}
-
-				
-				[self.potentialMatches addObject:tmpPlayer];
-				[self.potentialMatchesTeamName addObject:tmpTeam];
-			}
-			
-			if ([[tmp objectAtIndex:j] class] == [Fan class]) {
-				Fan *tmpPlayer = [tmp objectAtIndex:j];
-			
-				NSString *fullName = tmpPlayer.firstName;
-				
-				
-				NSArray *names = [fullName componentsSeparatedByString:@" "];
-				tmpPlayer.firstName = [names objectAtIndex:0];
-				
-
-				@try {
-					tmpPlayer.lastName = [names objectAtIndex:1];
-				}
-				@catch (NSException * e) {
-					tmpPlayer.lastName = @"";
-				}
-			
-			
-								
-				[self.potentialMatches addObject:tmpPlayer];
-				[self.potentialMatchesTeamName addObject:tmpTeam];
-
-			}
-			 
-		}
-		
-		
-		
-	}
-
 }
 
 - (void)didFinish{

@@ -11,8 +11,7 @@
 
 @interface QuickLinkButton : UIButton {
     
-	NSString *teamId;
-	UILabel *teamName;
+
 }
 
 @property (nonatomic, strong) NSString *teamId;

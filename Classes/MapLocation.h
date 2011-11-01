@@ -10,25 +10,16 @@
 #import <MapKit/MapKit.h>
 
 @interface MapLocation : UIViewController <CLLocationManagerDelegate, UIActionSheetDelegate> {
-	
-	IBOutlet MKMapView *map;
-	CLLocationManager *locationManager;
-	double latCoord;
-	double longCoord;
-	
-	double eventLatCoord;
-	double eventLongCoord;
-	
-	IBOutlet UIButton *directionsButton;
+
 	
 }
-@property (nonatomic, strong ) UIButton *directionsButton;
+@property (nonatomic, strong ) IBOutlet UIButton *directionsButton;
 @property double eventLatCoord;
 @property double eventLongCoord;
 @property double latCoord;
 @property double longCoord;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) MKMapView *map;
+@property (nonatomic, strong) IBOutlet MKMapView *map;
 
 -(IBAction)getDirections;
 

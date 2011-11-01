@@ -15,7 +15,7 @@
 
 
 @implementation SendPrivateMessage
-@synthesize keyboardIsUp, keyboardButton, recipients, cancelMessageButton, messageText, activity, recipLabel, recipientObjects, errorString, errorLabel, teamId;
+@synthesize keyboardIsUp, keyboardButton, recipients, cancelMessageButton, messageText, activity, recipLabel, recipientObjects, errorString, errorLabel, teamId, theMessageText;
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -66,6 +66,8 @@
 
 -(void)post{
     
+    self.theMessageText = [NSString stringWithString:self.messageText.text];
+    
     if ((self.messageText.text != nil) && ![self.messageText.text isEqualToString:@""]) {
         
         [self.activity startAnimating];
@@ -83,63 +85,61 @@
 
 -(void)createActivity{
     
-    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-
-	NSDictionary *response = [NSDictionary dictionary];
-
-	
-
-
-    
-	if (![token isEqualToString:@""]){	
-                
-        response = [ServerAPI createMessageThread:token :self.teamId :@"(no subject)" :self.messageText.text :@"confirm" :@""
-                                                 :@"" :@"true" :[NSArray array] :self.recipients :@"" :@"true" :@""];	
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        NSString *status = [response valueForKey:@"status"];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        NSDictionary *response = [NSDictionary dictionary];
+        
+        if (![token isEqualToString:@""]){	
+            
+            response = [ServerAPI createMessageThread:token :self.teamId :@"(no subject)" :self.theMessageText :@"confirm" :@""
+                                                     :@"" :@"true" :[NSArray array] :self.recipients :@"" :@"true" :@""];	
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
                 
-        if ([status isEqualToString:@"100"]){
-            
-            self.errorString = @"";
-            
-        }else{
-            
-            //Server hit failed...get status code out and display error accordingly
-            int statusCode = [status intValue];
-            
-            switch (statusCode) {
-                case 0:
-                    //null parameter
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 1:
-                    //error connecting to server
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 207:
-                    //error connecting to server
-                    self.errorString = @"*Fans cannot send messages.";
-                    break;
-                case 208:
-                    self.errorString = @"NA";
-                    break;
-                    
-                default:
-                    //should never get here
-                    self.errorString = @"*Error connecting to server";
-                    break;
+                self.errorString = @"";
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 207:
+                        //error connecting to server
+                        self.errorString = @"*Fans cannot send messages.";
+                        break;
+                    case 208:
+                        self.errorString = @"NA";
+                        break;
+                        
+                    default:
+                        //should never get here
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
             }
+            
         }
         
-	}
-	
-
-    [self performSelectorOnMainThread:@selector(donePost) withObject:nil waitUntilDone:NO];
+        
+        [self performSelectorOnMainThread:@selector(donePost) withObject:nil waitUntilDone:NO];
+    }
     
 }
 

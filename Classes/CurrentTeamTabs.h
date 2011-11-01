@@ -11,19 +11,9 @@
 
 @interface CurrentTeamTabs : UITabBarController <UITabBarControllerDelegate, UIActionSheetDelegate> {
     
-	NSString *teamId;
-	NSString *teamName;
-	NSString *userRole;
-	
-	bool toTeam;
-	bool messageSuccess;
-	int messageCount;
-	NSArray *recipients;
-	
-	NSString *sport;
-	bool newActivity;
-	bool tookPicture;
+
 }
+@property bool fromHome;
 @property bool tookPicture;
 @property bool newActivity;
 @property bool messageSuccess;

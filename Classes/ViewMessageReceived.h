@@ -97,4 +97,6 @@
 -(IBAction)reply;
 -(IBAction)deleteMessage;
 -(IBAction)viewMoreDetail;
+-(NSString *)getDateLabel:(NSString *)dateCreated;
+
 @end

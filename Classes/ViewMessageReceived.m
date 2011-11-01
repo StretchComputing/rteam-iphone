@@ -85,7 +85,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 	}
 	
 	self.title = @"Message";
-	self.displayDate.text = self.receivedDate;
+	self.displayDate.text = [self getDateLabel:self.receivedDate];
 	self.displaySubject.text = self.subject;
 	self.displayBody.text = self.body;
 	self.teamLabel.text = self.teamName;
@@ -494,36 +494,65 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 	
 }
 
+
+//Sends back the dateLabel (5 minutes ago, 3 days ago, etc) of the post from the created date
+-(NSString *)getDateLabel:(NSString *)dateCreated{
+    //date created format: yyyy-MM-dd HH:mm  
+    
+    NSDate *todaysDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+    NSDate *createdDateOrig = [dateFormatter dateFromString:dateCreated];
+    
+    NSTimeInterval interval = [todaysDate timeIntervalSinceDate:createdDateOrig];
+    
+    if (interval <  3600) {
+        //Less than an hour, do minutes
+        
+        int minutes = floor(interval/60.0);
+        
+        if (minutes == 0) {
+            return @"< 1 minute ago";
+        }
+        return [NSString stringWithFormat:@"%d minutes ago", minutes];
+        
+    }else if (interval < 86400){
+        //less than a day, do hours
+        
+        int hours = floor(interval/3600.0);
+        
+        if (hours == 1) {
+            return @"1 hour ago";
+        }
+        return [NSString stringWithFormat:@"%d hours ago", hours];
+        
+    }else{
+        //do days
+        
+        int days = floor(interval/86400.0);
+        
+        if (days == 1) {
+            return @"1 day ago";
+        }
+        return [NSString stringWithFormat:@"%d days ago", days];
+    }
+    
+}
+
 -(void)viewDidUnload{
 	
-	
-	//subject = nil;
-	//body = nil;
-	//receivedDate = nil;
+
 	displayDate = nil;
 	displayBody = nil;
 	displaySubject = nil;
-	//teamId = nil;
-	//eventId = nil;
-	//eventType = nil;
-	//threadId = nil;
-	//senderId = nil;
-	//senderName = nil;
-	//userRole = nil;
 	replyButton = nil;
 	myToolbar = nil;
 	replyMessage = nil;
 	viewMoreDetailButton = nil;
 	confirmationsLabel = nil;
-	//confirmStatus = nil;
-	//individualReplies = nil;
 	messageNumber = nil;
-	//messageArray = nil;
 	upDown = nil;
 	teamLabel = nil;
-	//teamName = nil;
-	//origTeamId = nil;
-	
 	individualReplies = nil;
 
 	[super viewDidUnload];

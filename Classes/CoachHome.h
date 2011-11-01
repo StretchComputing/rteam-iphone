@@ -11,7 +11,6 @@
 
 @interface CoachHome : UIViewController {
 
-	bool logout;
 }
 @property bool logout;
 -(IBAction)userRegister;

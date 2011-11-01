@@ -8,7 +8,6 @@
 
 
 @interface MyViewController : UIViewController {
-    UILabel *pageNumberLabel;
     int pageNumber;
 }
 

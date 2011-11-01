@@ -79,7 +79,8 @@
 	Team *controller = [self.teams objectAtIndex:row];
 	nameLabel.text = controller.name;
     
-	
+    nameLabel.backgroundColor = [UIColor clearColor];
+    
 	
 	
 	return cell;

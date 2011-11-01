@@ -117,105 +117,108 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 
 -(void)getAllMembers{
 
-	
-	self.haveFans = false;
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	//If there is a token, do a DB lookup to find the players associated with this team:
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"all" :@"true"];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.members = [response valueForKey:@"members"];
-			NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:self.members];
-
-			//Remove not network auth
-			for (int i = 0; i < [tmpArray count]; i++) {
-				
-				if ([[tmpArray objectAtIndex:i] class] == [Fan class]) {
-					Fan *tmp = [tmpArray objectAtIndex:i];
-					
-					if (!tmp.isNetworkAuthenticated) {
-						[tmpArray removeObjectAtIndex:i];
-						i--;
-					}
+	@autoreleasepool {
+        self.haveFans = false;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        //If there is a token, do a DB lookup to find the players associated with this team:
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"all" :@"true"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.members = [response valueForKey:@"members"];
+                NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:self.members];
+                
+                //Remove not network auth
+                for (int i = 0; i < [tmpArray count]; i++) {
                     
-					
-				}else {
-					Player *tmp = [tmpArray objectAtIndex:i];
-					bool remove = false;
-                    
-					if (!tmp.isNetworkAuthenticated) {
-						if (tmp.guard1SmsConfirmed || tmp.guard1EmailConfirmed || tmp.guard2SmsConfirmed || tmp.guard2EmailConfirmed) {
-                            remove = false;
-                        }else{
-                            remove = true;
+                    if ([[tmpArray objectAtIndex:i] class] == [Fan class]) {
+                        Fan *tmp = [tmpArray objectAtIndex:i];
+                        
+                        if (!tmp.isNetworkAuthenticated) {
+                            [tmpArray removeObjectAtIndex:i];
+                            i--;
                         }
-					}
-                    
-                    if (remove) {
-                        [tmpArray removeObjectAtIndex:i];
-						i--;
+                        
+                        
+                    }else {
+                        Player *tmp = [tmpArray objectAtIndex:i];
+                        bool remove = false;
+                        
+                        if (!tmp.isNetworkAuthenticated) {
+                            if (tmp.guard1SmsConfirmed || tmp.guard1EmailConfirmed || tmp.guard2SmsConfirmed || tmp.guard2EmailConfirmed) {
+                                remove = false;
+                            }else{
+                                remove = true;
+                            }
+                        }
+                        
+                        if (remove) {
+                            [tmpArray removeObjectAtIndex:i];
+                            i--;
+                        }
                     }
-				}
+                    
+                }
+                
+                
+                for (int i = 0; i < [tmpArray count]; i++) {
+                    
+                    if ([[tmpArray objectAtIndex:i] class] == [Fan class]) {
+                        Fan *tmp = [tmpArray objectAtIndex:i];
+                        [self.allFansObjects addObject:tmp];
+                        self.haveFans = true;
+                        [tmpArray removeObjectAtIndex:i];
+                        i--;
+                    }
+                    
+                }
+                self.allMemberObjects = [NSMutableArray arrayWithArray:tmpArray];
+                //tmpArray now holds no fans
+                //Add fans to the end of the array
+                for (int i = 0; i < [self.allFansObjects count]; i++) {
+                    [tmpArray addObject:[self.allFansObjects objectAtIndex:i]];
+                }
+                
+                self.members = tmpArray;
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Log the status code?
+                        self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
 
-			}
-			
-			
-			for (int i = 0; i < [tmpArray count]; i++) {
-				
-				if ([[tmpArray objectAtIndex:i] class] == [Fan class]) {
-					Fan *tmp = [tmpArray objectAtIndex:i];
-					[self.allFansObjects addObject:tmp];
-					self.haveFans = true;
-					[tmpArray removeObjectAtIndex:i];
-					i--;
-				}
-				
-			}
-            self.allMemberObjects = [NSMutableArray arrayWithArray:tmpArray];
-			//tmpArray now holds no fans
-			//Add fans to the end of the array
-			for (int i = 0; i < [self.allFansObjects count]; i++) {
-				[tmpArray addObject:[self.allFansObjects objectAtIndex:i]];
-			}
-			
-			self.members = tmpArray;
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.error = @"*Error connecting to server";
-					break;
-				default:
-					//Log the status code?
-					self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-	}
+    }
 	
-	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
 }
 
 

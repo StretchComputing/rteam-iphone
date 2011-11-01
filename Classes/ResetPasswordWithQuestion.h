@@ -10,27 +10,18 @@
 
 
 @interface ResetPasswordWithQuestion : UIViewController <UITextViewDelegate> {
-    
-	NSString *question;
-	IBOutlet UITextView *answerField;
-	IBOutlet UITextView *questionField;
-	IBOutlet UIActivityIndicatorView *activity;
-	IBOutlet UILabel *errorLabel;
-	IBOutlet UIButton *submitButton;
-	
-	NSString *email;
-	bool success;
-	NSString *errorString;
+  
 }
+@property (nonatomic, strong) NSString *theAnswerField;
 @property (nonatomic, strong) NSString *email;
 @property (nonatomic, strong) NSString *errorString;
 @property bool success;
-@property (nonatomic, strong) UITextView *questionField;
+@property (nonatomic, strong) IBOutlet UITextView *questionField;
 @property (nonatomic, strong) NSString *question;
-@property (nonatomic, strong) UITextView *answerField;
-@property (nonatomic, strong) UIActivityIndicatorView *activity;
-@property (nonatomic, strong) UILabel *errorLabel;
-@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) IBOutlet UITextView *answerField;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activity;
+@property (nonatomic, strong) IBOutlet UILabel *errorLabel;
+@property (nonatomic, strong) IBOutlet UIButton *submitButton;
 
 -(IBAction)submit;
 @end

@@ -11,10 +11,6 @@
 
 @interface FeedTableCell : UITableViewCell {
     
-
-
-    
-    
 }
 
 

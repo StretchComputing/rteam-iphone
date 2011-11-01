@@ -12,64 +12,36 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 
 @interface ValidatePhoneCarrier : UIViewController <UIPickerViewDelegate, MFMessageComposeViewControllerDelegate> {
-    
-    NSString *phoneNumber;
-    NSString *carrierCode;
-    NSArray *carriers;
-    
+
     PhoneNumberFormatter *myPhoneNumberFormatter;
     int myTextFieldSemaphore;
-    
-    
-    IBOutlet UIButton *verifyButton;
-    IBOutlet UIButton *resendButton;
-    IBOutlet UIButton *finishButton;
-    
-    IBOutlet UILabel *verifyError;
-    IBOutlet UILabel *resendError;
-    
-    IBOutlet UITextField *phoneNumberText;
-    IBOutlet UITextField *phoneCarrierText;
-    IBOutlet UITextField *confirmCode;
-    
-    IBOutlet UIPickerView *carrierPicker;
-    
-    IBOutlet UIActivityIndicatorView *activity;
-    
-    IBOutlet UIButton *selectCarrierButton;
-    
-    NSString *selectedCarrier;
-    NSString *errorString;
-    
-    IBOutlet UIButton *carrierCheatButton;
-    
-    bool sendingText;
-    bool tryAgainText;
-    bool carrierPicked;
+
     
 }
+@property (nonatomic, strong) NSString *thePhoneNumber;
+@property (nonatomic, strong) NSString *theConfirmCode;
 @property bool carrierPicked;
 @property bool sendingText;
 @property bool tryAgainText;
-@property (nonatomic, strong) UIButton *carrierCheatButton;
+@property (nonatomic, strong) IBOutlet UIButton *carrierCheatButton;
 @property (nonatomic, strong) NSString *errorString;
-@property (nonatomic, strong) UITextField *confirmCode;
+@property (nonatomic, strong) IBOutlet UITextField *confirmCode;
 @property (nonatomic, strong) NSString *selectedCarrier;
-@property (nonatomic, strong) UIButton *selectCarrierButton;
+@property (nonatomic, strong) IBOutlet UIButton *selectCarrierButton;
 
-@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activity;
 
-@property (nonatomic, strong)  UIButton *verifyButton;
-@property (nonatomic, strong)  UIButton *resendButton;
-@property (nonatomic, strong)  UIButton *finishButton;
+@property (nonatomic, strong)  IBOutlet UIButton *verifyButton;
+@property (nonatomic, strong)  IBOutlet UIButton *resendButton;
+@property (nonatomic, strong)  IBOutlet UIButton *finishButton;
 
-@property (nonatomic, strong)  UILabel *verifyError;
-@property (nonatomic, strong)  UILabel *resendError;
+@property (nonatomic, strong)  IBOutlet UILabel *verifyError;
+@property (nonatomic, strong)  IBOutlet UILabel *resendError;
 
-@property (nonatomic, strong)  UITextField *phoneNumberText;
-@property (nonatomic, strong)  UITextField *phoneCarrierText;
+@property (nonatomic, strong)  IBOutlet UITextField *phoneNumberText;
+@property (nonatomic, strong)  IBOutlet UITextField *phoneCarrierText;
 
-@property (nonatomic, strong)  UIPickerView *carrierPicker;
+@property (nonatomic, strong)  IBOutlet UIPickerView *carrierPicker;
 
 @property (nonatomic, strong) NSString *phoneNumber;
 @property (nonatomic, strong) NSString *carrierCode;

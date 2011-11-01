@@ -33,17 +33,14 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 	
 	int eventTodayIndex;
 	NSString *eventToday;
-	
-	IBOutlet UIToolbar *bottomBar;
-    
+	    
 	int nextGameIndex;
 	int nextPracticeIndex;
 	int badgeNumber;
 	
 	UIBarButtonItem *inviteFan;
-	
-	IBOutlet UIScrollView *scrollView;
-	IBOutlet UIPageControl *pageControl;
+
+    
 	NSMutableArray *viewControllers;
 	
 	BOOL pageControlUsed;
@@ -211,7 +208,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 @property (nonatomic, strong) UITextView *regTextView;
 @property (nonatomic, strong) UIButton *regTextButton;
 
-@property (nonatomic, strong) UIImageView *scrollViewBack;
+@property (nonatomic, strong) IBOutlet UIImageView *scrollViewBack;
 @property (nonatomic, strong) UIView *moveableView;
 @property BOOL isMoreShowing; 
 @property (nonatomic, strong) UIView *moveDividerBackground;
@@ -309,7 +306,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 @property bool alreadyCalled2;
 @property bool alreadyCalledCreate;
 @property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) UIPageControl *pageControl;
+@property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 
 @property (nonatomic, strong) UIBarButtonItem *inviteFan;
@@ -334,7 +331,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 @property int nextGameIndex;
 @property int nextPracticeIndex;
 
-@property (nonatomic, strong) UIToolbar *bottomBar;
+@property (nonatomic, strong) IBOutlet UIToolbar *bottomBar;
 
 @property int badgeNumber;
 @property (nonatomic, strong) UILabel *serverError;

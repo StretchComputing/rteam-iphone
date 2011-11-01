@@ -13,7 +13,7 @@
 #import "ServerAPI.h"
 
 @implementation ValidatePhoneCarrier
-@synthesize  phoneNumber, carrierCode, carriers, verifyError, verifyButton, resendError, resendButton, finishButton, phoneNumberText, phoneCarrierText, carrierPicker, activity, selectCarrierButton, selectedCarrier, confirmCode, errorString, carrierCheatButton, sendingText, tryAgainText, carrierPicked;
+@synthesize  phoneNumber, carrierCode, carriers, verifyError, verifyButton, resendError, resendButton, finishButton, phoneNumberText, phoneCarrierText, carrierPicker, activity, selectCarrierButton, selectedCarrier, confirmCode, errorString, carrierCheatButton, sendingText, tryAgainText, carrierPicked, theConfirmCode, thePhoneNumber;
 
 -(void)viewDidLoad{
     
@@ -85,6 +85,8 @@
         self.resendButton.enabled = NO;
         self.finishButton.enabled = NO;
         
+        self.theConfirmCode = [NSString stringWithString:self.confirmCode.text];
+        
         [self performSelectorInBackground:@selector(runVerify) withObject:nil];
     }
     
@@ -149,6 +151,8 @@
             self.resendButton.enabled = NO;
             self.finishButton.enabled = NO;
         
+            self.thePhoneNumber = [NSString stringWithString:self.phoneNumberText.text];
+            
             [self performSelectorInBackground:@selector(runResend) withObject:nil];
         }
     }
@@ -248,18 +252,18 @@ numberOfRowsInComponent:(NSInteger)component{
 
 -(void)runVerify{
  
-	
-	//Retrieve teams from DB
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
+	@autoreleasepool {
+        //Retrieve teams from DB
+        NSString *token = @"";
         
-    NSDictionary *response = [ServerAPI updateUser:token :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :[NSData data] :@"" :@"" :@"" :@"" :self.confirmCode.text :@"false"];
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        
+        NSDictionary *response = [ServerAPI updateUser:token :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :[NSData data] :@"" :@"" :@"" :@"" :self.theConfirmCode :@"false"];
 		
 		NSString *status = [response valueForKey:@"status"];
 		
@@ -292,11 +296,12 @@ numberOfRowsInComponent:(NSInteger)component{
 					break;
 			}
 		}
+        
+        
+        [self performSelectorOnMainThread:@selector(doneVerify) withObject:nil waitUntilDone:NO];
 
+    }
 	
-	[self performSelectorOnMainThread:@selector(doneVerify) withObject:nil waitUntilDone:NO];
-
-    
 }
 
 -(void)doneVerify{
@@ -324,56 +329,58 @@ numberOfRowsInComponent:(NSInteger)component{
 
 -(void)runResend{
 
-	
-	//Retrieve teams from DB
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-    
-    NSDictionary *response = [ServerAPI updateUser:token :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :[NSData data] :@"" :@"" 
-                                                  :self.phoneNumberText.text
-                                                  :self.carrierCode :@"" :@"true"];
-    
-    NSString *status = [response valueForKey:@"status"];
-    
-    if ([status isEqualToString:@"100"]){
+	@autoreleasepool {
+        //Retrieve teams from DB
+        NSString *token = @"";
         
-        self.errorString = @"";
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-    }else{
-        
-        //self.memberTeams = [NSMutableArray array];
-        //Server hit failed...get status code out and display error accordingly
-        int statusCode = [status intValue];
-        
-        switch (statusCode) {
-            case 0:
-                //null parameter
-                self.errorString = @"*Error connecting to server";
-                break;
-            case 1:
-                //error connecting to server
-                self.errorString = @"*Error connecting to server";
-                break;
-            case 547:
-                //error connecting to server
-                self.errorString = @"*Invalid Confirmation Code.";
-                break;
-            default:
-                //should never get here
-                self.errorString = @"*Error connecting to server";
-                break;
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
         }
+        
+        
+        NSDictionary *response = [ServerAPI updateUser:token :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :[NSData data] :@"" :@"" 
+                                                      :self.thePhoneNumber
+                                                      :self.carrierCode :@"" :@"true"];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString = @"";
+            
+        }else{
+            
+            //self.memberTeams = [NSMutableArray array];
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 547:
+                    //error connecting to server
+                    self.errorString = @"*Invalid Confirmation Code.";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(doneResend) withObject:nil waitUntilDone:NO];
     }
-    
-
 	
-	[self performSelectorOnMainThread:@selector(doneResend) withObject:nil waitUntilDone:NO];
     
 }
 -(void)doneResend{

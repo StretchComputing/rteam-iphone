@@ -13,8 +13,7 @@
 @interface VideoSelection : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate > {
 	
 	bool playMovie;
-	NSString *basePath;
-	NSData *movieData;
+
 }
 @property (nonatomic, strong) NSData *movieData;
 @property (nonatomic, strong) NSString *basePath;

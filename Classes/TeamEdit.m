@@ -18,7 +18,7 @@
 @implementation TeamEdit
 @synthesize teamId, sportLabel, description, teamName, errorLabel, activity, changeSportButton, saveChangesButton, saveSuccess, newTeamName,
 connectTwitterButton, connectTwitterLabel, twitterUser, updateTwitter, twitterUrl, disconnectTwitterButton, errorString, teamInfo, loadingActivity,
-loadingLabel, disconnect;
+loadingLabel, disconnect, theDescription, theTeamName, theSportLabel;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -80,50 +80,53 @@ loadingLabel, disconnect;
 }
 -(void)getGameInfo{
 
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
+            NSDictionary *response = [ServerAPI getTeamInfo:self.teamId :token :@"false"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.teamInfo = [response valueForKey:@"teamInfo"];
+                
+                self.errorString = @"";
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                [self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneGameInfo) withObject:nil waitUntilDone:NO];
+
+    }
 	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	if (![token isEqualToString:@""]){	
-		NSDictionary *response = [ServerAPI getTeamInfo:self.teamId :token :@"false"];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.teamInfo = [response valueForKey:@"teamInfo"];
-			
-			self.errorString = @"";
-
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			[self.errorLabel setHidden:NO];
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-
-	[self performSelectorOnMainThread:@selector(doneGameInfo) withObject:nil waitUntilDone:NO];
-
 	
 }
 
@@ -181,6 +184,10 @@ loadingLabel, disconnect;
 	[self.description setEditable:NO];
 	[self.saveChangesButton setEnabled:NO];
 	[self.changeSportButton setEnabled:NO];
+    
+    self.theDescription = [NSString stringWithString:self.description.text];
+    self.theTeamName = [NSString stringWithString:self.teamName.text];
+    self.theSportLabel = [NSString stringWithString:self.sportLabel.text];
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 	
@@ -190,64 +197,67 @@ loadingLabel, disconnect;
 
 - (void)runRequest {
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *twitterParam = @"";
-	
-	if (self.updateTwitter) {
-		twitterParam = @"true";
-	}
-	
-    NSString *theDescription = @"";
-    if ([self.description.text isEqualToString:@""]){
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        theDescription = @"No description entered...";
-    }else{
-        theDescription = self.description.text;
-    }
-    
-	NSDictionary *results = [ServerAPI updateTeam:mainDelegate.token :self.teamId :self.teamName.text :theDescription :@"" :twitterParam :self.sportLabel.text :[NSData data] :@""];
-	
-	NSString *status = [results valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
-		
-		self.saveSuccess = true;
+        NSString *twitterParam = @"";
+        
+        if (self.updateTwitter) {
+            twitterParam = @"true";
+        }
+        
+        NSString *newDesc = @"";
+        if ([self.theDescription isEqualToString:@""]){
+            
+            newDesc = @"No description entered...";
+        }else{
+            newDesc = self.theDescription;
+        }
+        
+        NSDictionary *results = [ServerAPI updateTeam:mainDelegate.token :self.teamId :self.theTeamName :newDesc :@"" :twitterParam :self.theSportLabel :[NSData data] :@""];
+        
+        NSString *status = [results valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.saveSuccess = true;
 			
-		if (self.updateTwitter) {
-			self.twitterUrl = [results valueForKey:@"twitterUrl"];
-			self.twitterUser = true;
-		}
+            if (self.updateTwitter) {
+                self.twitterUrl = [results valueForKey:@"twitterUrl"];
+                self.twitterUser = true;
+            }
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.saveSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorLabel.text = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorLabel.text = @"*Error connecting to server";
+                    break;
+                default:
+                    //should never get here
+                    self.errorLabel.text = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
 		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.saveSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorLabel.text = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorLabel.text = @"*Error connecting to server";
-				break;
-			default:
-				//should never get here
-				self.errorLabel.text = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{
@@ -371,49 +381,51 @@ loadingLabel, disconnect;
 -(void)removeTwitter{
 	
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        
+        
+        NSDictionary *results = [ServerAPI updateTeam:mainDelegate.token :self.teamId :@"" :@"" :@"" :@"false" :@"" :[NSData data] :@""];
+        
+        NSString *status = [results valueForKey:@"status"];
+		
+        if ([status isEqualToString:@"100"]){
+            
+            
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.saveSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(doneRemoveTwitter)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+        
 
-	
-	NSDictionary *results = [ServerAPI updateTeam:mainDelegate.token :self.teamId :@"" :@"" :@"" :@"false" :@"" :[NSData data] :@""];
-	
-	NSString *status = [results valueForKey:@"status"];
+    }
 		
-	if ([status isEqualToString:@"100"]){
-		
-	
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.saveSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//should never get here
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(doneRemoveTwitter)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
-	
 }
 
 -(void)doneRemoveTwitter{
@@ -435,21 +447,16 @@ loadingLabel, disconnect;
 }
 
 -(void)viewDidUnload{
-	//teamId = nil;
 	sportLabel = nil;
 	description = nil;
 	teamName = nil;
 	errorLabel = nil;
-	//newTeamName = nil;
 	activity = nil;
 	changeSportButton = nil;
 	saveChangesButton = nil;
 	connectTwitterLabel = nil;
 	connectTwitterButton = nil;
-	//twitterUrl = nil;
 	disconnectTwitterButton = nil;
-	//errorString = nil;
-	//teamInfo = nil;
 	loadingLabel = nil;
 	loadingActivity = nil;
 	disconnect = nil;

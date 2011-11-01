@@ -10,10 +10,8 @@
 
 
 @interface ImageButton : UIButton {
-    
-    NSString *messageId;
-    int rowPlaced;
+
 }
 @property int rowPlaced;
-@property (nonatomic, retain) NSString *messageId;
+@property (nonatomic, strong) NSString *messageId;
 @end

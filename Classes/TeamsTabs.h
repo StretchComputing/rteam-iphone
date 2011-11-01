@@ -11,7 +11,6 @@
 
 @interface TeamsTabs : UITabBarController <UITabBarControllerDelegate, UIActionSheetDelegate>  {
 
-	bool quickCreate;
 }
 @property bool quickCreate;
 @end

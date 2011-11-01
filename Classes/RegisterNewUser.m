@@ -23,7 +23,6 @@
 #import "SettingsTabs.h"
 #import "MobileCarrier.h"
 #import "ValidatePhoneCarrier.h"
-#import "ValidatePhoneNoCarrier.h"
 
 
 @implementation RegisterNewUser
@@ -462,44 +461,51 @@ numberOfRowsInComponent:(NSInteger)component{
 
 -(void)getCarriers{
 
-    
-	NSDictionary *response = [ServerAPI getMobileCarrierList];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
-		
-        self.didGetCarrierList = true;
-        self.carriers = [response valueForKey:@"mobileCarriers"];
+    @autoreleasepool {
+        NSDictionary *response = [ServerAPI getMobileCarrierList];
         
-        self.selectedCarrier = @"I don't know.";
-        self.carrierCode = @"";
+        NSString *status = [response valueForKey:@"status"];
         
-        [self.carrierPicker reloadAllComponents];
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//should never get here
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
+        if ([status isEqualToString:@"100"]){
+            
+            self.didGetCarrierList = true;
+            self.carriers = [response valueForKey:@"mobileCarriers"];
+            
+            self.selectedCarrier = @"I don't know.";
+            self.carrierCode = @"";
+            
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneCarriers) withObject:nil waitUntilDone:NO];
 
+    }
     
+}
+
+-(void)doneCarriers{
+    [self.carrierPicker reloadAllComponents];
+
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

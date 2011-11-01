@@ -11,11 +11,7 @@
 
 @interface TeamNavigation : UINavigationController{
     
-	NSString *teamName;
-	NSString *teamId;
-	NSString *userRole;
-	NSString *sport;
-	NSString *teamUrl;
+
 }
 
 @property (nonatomic, strong) NSString *teamName;

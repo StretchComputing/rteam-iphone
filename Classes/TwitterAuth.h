@@ -10,12 +10,9 @@
 
 
 @interface TwitterAuth : UIViewController {
-    
-	IBOutlet UIWebView *webView;
-	NSString *url;
-    bool fromHome;
+
 }
 @property bool fromHome;
-@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) NSString *url;
 @end

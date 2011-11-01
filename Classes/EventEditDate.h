@@ -11,13 +11,11 @@
 
 @interface EventEditDate : UIViewController <UIActionSheetDelegate> {
 	
-	NSDate *practiceDate;
-	IBOutlet UIDatePicker *practiceDatePicker;
-	IBOutlet UIButton *submitButton;
+
 }
-@property (nonatomic, strong) UIButton *submitButton;
+@property (nonatomic, strong) IBOutlet UIButton *submitButton;
 @property (nonatomic, strong) NSDate* practiceDate;
-@property (nonatomic, strong) UIDatePicker *practiceDatePicker;
+@property (nonatomic, strong) IBOutlet UIDatePicker *practiceDatePicker;
 
 
 -(IBAction)chooseDate;

@@ -26,7 +26,6 @@
 #import "ImageButton.h"
 #import "ImageDisplayMultiple.h"
 #import "PhotosActivity.h"
-#import "ActivityDetail.h"
 #import "ActivityDetailVideo.h"
 #import "NewActivityDetail.h"
 
@@ -34,7 +33,7 @@
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd;
 
 
 -(void)home{
@@ -63,10 +62,10 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     self.title = @"Activity";
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-	[self.navigationItem setRightBarButtonItem:addButton];
+	[self.navigationItem setLeftBarButtonItem:addButton];
     
     UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(compose)];
-	[self.navigationItem setLeftBarButtonItem:composeButton];
+	[self.navigationItem setRightBarButtonItem:composeButton];
     
     self.numberOfPages = 3;
     [self setUpScrollView];
@@ -612,7 +611,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }else{
         //my
         
-        if ([self.myActivityArray class] == [MessageThreadInbox class]) {
+        if ([[self.myActivityArray objectAtIndex:row] class] == [MessageThreadInbox class]) {
 			MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:row];
 			
 			if ([messageOrPoll.pollChoices count] > 0) {
@@ -635,19 +634,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				poll.wasViewed = messageOrPoll.wasViewed;
 				poll.status = messageOrPoll.status;
 				
-				//For cycling through polls
-                /*
-				poll.pollArray = self.pollsOnlyArray;
-				
-				for (int i = 0; i < [self.pollsOnlyArray count]; i++) {
-					
-					MessageThreadInbox *tmp = [self.pollsOnlyArray objectAtIndex:i];
-					
-					if ([tmp.threadId isEqualToString:messageOrPoll.threadId]) {
-						poll.currentPollNumber = i;
-					}
-				}
-				*/
 				
 				
 				[self.navigationController pushViewController:poll animated:YES];
@@ -658,39 +644,21 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 ViewMessageReceived *message = [[ViewMessageReceived alloc] init];
 				
                 
-                //message.from = messageOrPoll.sender
                 message.subject = messageOrPoll.subject;
                 message.body = messageOrPoll.body;
                 message.userRole = messageOrPoll.participantRole;
                 message.teamId = messageOrPoll.teamId;
                 
                 message.confirmStatus = messageOrPoll.status;
-                
-                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-                [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-                NSDate *tmpDate = [dateFormat dateFromString:messageOrPoll.createdDate];
-                [dateFormat setDateFormat:@"MMM dd, yyyy hh:mm aa"];
-                message.receivedDate = [dateFormat stringFromDate:tmpDate];
+
+                message.receivedDate = messageOrPoll.createdDate;
                 
                 message.wasViewed = messageOrPoll.wasViewed;
                 message.threadId = messageOrPoll.threadId;
                 message.senderId = messageOrPoll.senderId;
                 message.senderName = messageOrPoll.senderName;
                 message.teamName = messageOrPoll.teamName;
-                
-                //For cycling through messages
-                /*
-                message.messageArray = self.messagesOnlyArray;
-                
-                for (int i = 0; i < [self.messagesOnlyArray count]; i++) {
-                    
-                    MessageThreadInbox *tmp = [self.messagesOnlyArray objectAtIndex:i];
-                    
-                    if ([tmp.threadId isEqualToString:messageOrPoll.threadId]) {
-                        message.currentMessageNumber = i;
-                    }
-                }
-                */
+              
                 
                 [self.navigationController pushViewController:message animated:YES];
                 
@@ -726,20 +694,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 }else {
                     tmp.replyFraction = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people have replied."];
                 }
-                
-                /*
-                tmp.pollArray = self.results;
-                
-                for (int i = 0; i < [self.results count]; i++) {
-                    
-                    MessageThreadOutbox *tmp1 = [self.results objectAtIndex:i];
-                    
-                    if ([tmp1.threadId isEqualToString:thread.threadId]) {
-                        tmp.currentPollNumber = i;
-                    }
-                }
-                
-                */
+   
                 
                 [self.navigationController pushViewController:tmp animated:YES];
 
@@ -756,28 +711,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 viewMessage.createdDate = message.createdDate;
                 viewMessage.teamName = message.teamName;
                 viewMessage.teamId = message.teamId;
-                /*
-                NSMutableArray *noThreadingArray = [NSMutableArray arrayWithArray:self.myActivityArray];
-                
-                for (int i = 0; i < [noThreadingArray count]; i++) {
-                    MessageThreadOutbox *tmpMessage = [noThreadingArray objectAtIndex:i];
-                    
-                    if (tmpMessage.threadingUsed) {
-                        [noThreadingArray removeObjectAtIndex:i];
-                        i--;
-                    }
-                }
-                viewMessage.messageArray = noThreadingArray;
-                
-                for (int i = 0; i < [noThreadingArray count]; i++) {
-                    
-                    MessageThreadOutbox *tmp = [noThreadingArray objectAtIndex:i];
-                    
-                    if ([tmp.threadId isEqualToString:message.threadId]) {
-                        viewMessage.currentMessageNumber = i;
-                    }
-                }
-                */
+
                 
                 NSString *recipients = message.numRecipients;
                 NSString *replies = message.numReplies;
@@ -1080,55 +1014,59 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)getNewActivity{
     
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	if (![token isEqualToString:@""]){	
-		
-		NSDate *today = [NSDate date];
-		NSDate *tomorrow = [NSDate dateWithTimeInterval:86400 sinceDate:today];
-		NSDateFormatter *format = [[NSDateFormatter alloc] init];
-		[format setDateFormat:@"YYYY-MM-dd"];
-		NSString *dateString = [format stringFromDate:tomorrow];
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-		
-		NSDictionary *response = [ServerAPI getActivity:token :@"25" :@"true" :@"" :dateString :@"20"];
-		
-		NSString *status = [response valueForKey:@"status"];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
         
-		if ([status isEqualToString:@"100"]){
-			
-			self.tmpActivityArray = [response valueForKey:@"activities"];
-			self.newActivityFailed = false;
-			
-		}else{
-			
-			self.newActivityFailed = true;
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			//[self.errorLabel setHidden:NO];
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	[self performSelectorOnMainThread:@selector(doneNewActivity) withObject:nil waitUntilDone:NO];
+        if (![token isEqualToString:@""]){	
+            
+            NSDate *today = [NSDate date];
+            NSDate *tomorrow = [NSDate dateWithTimeInterval:86400 sinceDate:today];
+            NSDateFormatter *format = [[NSDateFormatter alloc] init];
+            [format setDateFormat:@"YYYY-MM-dd"];
+            NSString *dateString = [format stringFromDate:tomorrow];
+            
+            
+            NSDictionary *response = [ServerAPI getActivity:token :@"25" :@"true" :@"" :dateString :@"20"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.tmpActivityArray = [response valueForKey:@"activities"];
+                self.newActivityFailed = false;
+                
+            }else{
+                
+                self.newActivityFailed = true;
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        [self performSelectorOnMainThread:@selector(doneNewActivity) withObject:nil waitUntilDone:NO];
+
+    }
+	
 }
 
 -(void)doneNewActivity{
@@ -1150,42 +1088,46 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)getMyActivity{
     
-    NSMutableArray *messages = [NSMutableArray array];
-    
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSDictionary *response = [ServerAPI getMessageThreads:mainDelegate.token :@"" :@"" :@"" :@"" :@"" :@"active"];
-    
-    NSString *status = [response valueForKey:@"status"];
+    @autoreleasepool {
+        NSMutableArray *messages = [NSMutableArray array];
         
-    if ([status isEqualToString:@"100"]){
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSDictionary *response = [ServerAPI getMessageThreads:mainDelegate.token :@"" :@"" :@"" :@"" :@"" :@"active"];
         
-        messages = [response valueForKey:@"messages"];
+        NSString *status = [response valueForKey:@"status"];
         
-    }else{
-        
-        int statusCode = [status intValue];
-        
-        switch (statusCode) {
-            case 0:
-                //null parameter
-                //self.error = @"*Error connecting to server";
-                break;
-            case 1:
-                //error connecting to server
-                //self.error = @"*Error connecting to server";
-                break;
-            default:
-                //should never get here
-                //self.error = @"*Error connecting to server";
-                break;
+        if ([status isEqualToString:@"100"]){
+            
+            messages = [response valueForKey:@"messages"];
+            
+        }else{
+            
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.error = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    //self.error = @"*Error connecting to server";
+                    break;
+                default:
+                    //should never get here
+                    //self.error = @"*Error connecting to server";
+                    break;
+            }
         }
+        
+        [self performSelectorOnMainThread:@selector(doneMyActivity:) withObject:messages waitUntilDone:NO];
+
     }
-    
-    [self performSelectorOnMainThread:@selector(doneMyActivity:) withObject:messages waitUntilDone:NO];
-    
+       
 }
 
 -(void)doneMyActivity:(NSMutableArray *)messages{
+    
     
     if (self.shouldCallStop) {
         [self performSelector:@selector(stopLoading) withObject:nil afterDelay:1.0];

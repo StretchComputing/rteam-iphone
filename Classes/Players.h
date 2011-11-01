@@ -11,36 +11,8 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 
 @interface Players : UIViewController <UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate> {
-	NSMutableArray *players;
-	NSMutableArray *fans;
-	NSMutableArray *playerPics;
-	NSMutableArray *fanPics;
-	NSString *teamName;
-	NSString *teamId;
-	NSString *userRole;
-	
-	NSString *error;
-	NSString *currentMemberId;
-	
-	NSMutableArray *tmpPlayerPics;
-	NSMutableArray *tmpFanPics;
-	NSMutableArray *tmpPlayers;
-	NSMutableArray *tmpFans;
-	
-	bool isFans;
-	
-	UISegmentedControl *segRosterFans;
-	
-	UIBarButtonItem *addButton;
+
     
-	
-	IBOutlet UIActivityIndicatorView *memberActivity;
-	IBOutlet UILabel *memberActivityLabel;
-	IBOutlet UITableView *memberTableView;
-	
-	IBOutlet UIActivityIndicatorView *barActivity;
-	
-	NSMutableArray *phoneOnlyArray;
 }
 @property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
 @property (nonatomic,strong) NSMutableArray *tmpPlayerPics;
@@ -50,12 +22,12 @@
 @property (nonatomic,strong) NSMutableArray *tmpFans;
 
 
-@property (nonatomic, strong) UITableView *memberTableView;
+@property (nonatomic, strong) IBOutlet UITableView *memberTableView;
 
-@property (nonatomic, strong) UIActivityIndicatorView *barActivity;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *barActivity;
 
-@property (nonatomic, strong) UILabel *memberActivityLabel;
-@property (nonatomic, strong) UIActivityIndicatorView *memberActivity;
+@property (nonatomic, strong) IBOutlet UILabel *memberActivityLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *memberActivity;
 
 
 

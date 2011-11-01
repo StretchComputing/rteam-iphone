@@ -16,7 +16,7 @@
 
 @implementation AddGamePhoto
 @synthesize hideAction, photoAction, newPhotoButton, submitButton, imagePreview, stayHere, imageData, activityText, countLabel, noImageLabel,
-errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage, selectedImageData, removePhotoButton, movieData, portrait;
+errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage, selectedImageData, removePhotoButton, movieData, portrait, theActivityText;
 
 -(void)viewDidLoad{
     
@@ -122,6 +122,8 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 		self.activityText.enabled = NO;
 		self.removePhotoButton.enabled = NO;
         
+        self.theActivityText = [NSString stringWithString:self.activityText.text];
+        
 		[self performSelectorInBackground:@selector(createActivity) withObject:nil];
 		
 		
@@ -133,77 +135,76 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 
 -(void)createActivity{
     
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	if (![token isEqualToString:@""]){	
-		
-		NSData *tmpData = [NSData data];
-		
-		if ([self.imageData length] > 0) {
-			tmpData = self.imageData;
-		}
-		
-		NSData *tmpMovieData = [NSData data];
-		
-		
-		if ([self.movieData length] > 0) {
-			tmpMovieData = self.movieData;
-		}
-		
-        NSString *orientation = @"";
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        if ([tmpData length] > 0) {
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
             
-            if (self.portrait) {
-                orientation = @"portrait";
+            NSData *tmpData = [NSData data];
+            
+            if ([self.imageData length] > 0) {
+                tmpData = self.imageData;
+            }
+            
+            NSData *tmpMovieData = [NSData data];
+            
+            
+            if ([self.movieData length] > 0) {
+                tmpMovieData = self.movieData;
+            }
+            
+            NSString *orientation = @"";
+            
+            if ([tmpData length] > 0) {
+                
+                if (self.portrait) {
+                    orientation = @"portrait";
+                }else{
+                    orientation = @"landscape";
+                }
+            }
+            
+            NSDictionary *response = [ServerAPI createActivity:token :self.teamId :self.theActivityText :tmpData :tmpMovieData :orientation];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
             }else{
-                orientation = @"landscape";
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
             }
         }
         
-		NSDictionary *response = [ServerAPI createActivity:token :self.teamId :self.activityText.text :tmpData :tmpMovieData :orientation];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.errorString = @"";
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			//[self.errorLabel setHidden:NO];
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:@selector(doneActivity) withObject:nil waitUntilDone:NO];
-	
-    
-	
-	
+        
+        [self performSelectorOnMainThread:@selector(doneActivity) withObject:nil waitUntilDone:NO];
+
+    }
+
 }
 
 -(void)doneActivity{

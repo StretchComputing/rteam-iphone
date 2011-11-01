@@ -52,6 +52,7 @@
 
 
 -(void)getListOfTeams{
+    
 	@autoreleasepool {
         
 		self.teamArrayTemp = [NSMutableArray array];	
@@ -98,10 +99,7 @@
 						break;
 				}
 			}
-			
-			
-			
-			//get fan teams as well, then order them
+
 			
 		}
         

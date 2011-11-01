@@ -42,6 +42,7 @@ futureEventsArray, nextEventArray, bannerIsVisible, eventsActivity, touchUpLocat
 teamInfoThumbnail, noEvents, noGames, eventsAlert, membersAlert, noMembers, displayedMemberAlert, displayedEventAlert, gamesArrayTemp, pastGamesArrayTemp,
 displayWarning;
 
+
 -(void)viewWillDisappear:(BOOL)animated{
 	
 	displayPhoto = false;
@@ -145,7 +146,7 @@ displayWarning;
 	self.displayWarning = true;
 	[self performSelectorInBackground:@selector(getListOfMembers) withObject:nil];
 
-	[self.tabBarController.navigationItem setLeftBarButtonItem:nil];
+	[self.tabBarController.navigationItem setRightBarButtonItem:nil];
 
 	self.nextGameArray = [NSMutableArray array];
 	self.title = @"Team Home";
@@ -1168,7 +1169,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
 			
 		if (displayPhoto) {
-			[self.tabBarController.navigationItem setLeftBarButtonItem:teamPicture];
+			//[self.tabBarController.navigationItem setLeftBarButtonItem:teamPicture];
 
 		}
 			
@@ -1189,7 +1190,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			
 			if (displayPhoto) {
-				[self.tabBarController.navigationItem setLeftBarButtonItem:teamPicture];
+				//[self.tabBarController.navigationItem setLeftBarButtonItem:teamPicture];
 			}
 			
 		}else {

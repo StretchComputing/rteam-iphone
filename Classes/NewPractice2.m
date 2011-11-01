@@ -15,7 +15,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @implementation NewPractice2
-@synthesize createSuccess, serverProcess, error, submitButton, teamId, location, duration, description, start, errorString;
+@synthesize createSuccess, serverProcess, error, submitButton, teamId, location, duration, description, start, errorString, theDuration, theDescription, theLocation;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -59,12 +59,13 @@
 
 -(void)createPractice{
 	
-
-	
-	
 	self.error.text = @"";
 	//Validate all fields are entered:
 	
+    self.theDescription = [NSString stringWithString:self.description.text];
+    self.theDuration = [NSString stringWithString:self.duration.text];
+    self.theLocation = [NSString stringWithString:self.location.text];
+    
 	if ([self.duration.text length] > 0) {
 		int x = [self.duration.text intValue];
 		
@@ -120,99 +121,104 @@
 
 - (void)runRequest {
 
-	
-	//Create the new game
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	//format the start date
-	
-	NSDateFormatter *format = [[NSDateFormatter alloc] init];
-	[format setDateFormat:@"YYYY-MM-dd HH:mm"];
-	
-	NSString *startDateString = [format stringFromDate:self.start];
-	
-	//add duration to start date for end date
-	
-	NSString *endDateString;
-	if (self.duration.text > 0) {
-		
-		int minutes = [self.duration.text intValue];
-		int seconds = minutes * 60;
-		
-		NSDate *endDate = [self.start dateByAddingTimeInterval:seconds];
-		
-		endDateString = [format stringFromDate:endDate];
-	}else {
-		endDateString = @"";
-	}
-	
-	NSString *theDescription = @"";
-	if ([self.description.text isEqualToString:@""]) {
-		theDescription = @"No description entered...";
-	}else {
-		theDescription = self.description.text;
-	}
-	
-	NSString *theLocation = @"";
-	if ([self.location.text isEqualToString:@""]) {
-		theLocation = @"Location TBD";
-	}else {
-		theLocation = self.location.text;
-	}
-	
-	
-	//get the current time zone
-	NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
-	
-	NSString *timeZone = [tmp1 name];
-	
-	//Not using lat/long right now
-	NSString *latitude = @"";
-	NSString *longitude = @"";
-	
-	NSDictionary *response = [ServerAPI createEvent:self.teamId :mainDelegate.token :startDateString :endDateString :theDescription :timeZone
-												   :latitude :longitude :theLocation :@"practice" :@"A Practice"];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	
-	if ([status isEqualToString:@"100"]){
-		
-		self.createSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-            case 205:
-				//error connecting to server
-				self.errorString = @"*You must be a coordinator to add events.";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
+    @autoreleasepool {
+        
+        //Create the new game
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        //format the start date
+        
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        [format setDateFormat:@"YYYY-MM-dd HH:mm"];
+        
+        NSString *startDateString = [format stringFromDate:self.start];
+        
+        //add duration to start date for end date
+        
+        NSString *endDateString;
+        if (self.theDuration > 0) {
+            
+            int minutes = [self.theDuration intValue];
+            int seconds = minutes * 60;
+            
+            NSDate *endDate = [self.start dateByAddingTimeInterval:seconds];
+            
+            endDateString = [format stringFromDate:endDate];
+        }else {
+            endDateString = @"";
+        }
+        
+        NSString *descrip = @"";
+        if ([self.theDescription isEqualToString:@""]) {
+            descrip = @"No description entered...";
+        }else {
+            descrip = self.theDescription;
+        }
+        
+        NSString *theLoc = @"";
+        if ([self.theLocation isEqualToString:@""]) {
+            theLoc = @"Location TBD";
+        }else {
+            theLoc = self.theLocation;
+        }
+        
+        
+        //get the current time zone
+        NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
+        
+        NSString *timeZone = [tmp1 name];
+        
+        //Not using lat/long right now
+        NSString *latitude = @"";
+        NSString *longitude = @"";
+        
+        NSDictionary *response = [ServerAPI createEvent:self.teamId :mainDelegate.token :startDateString :endDateString :descrip :timeZone
+                                                       :latitude :longitude :theLoc :@"practice" :@"A Practice"];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 205:
+                    //error connecting to server
+                    self.errorString = @"*You must be a coordinator to add events.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
+        
+    }
 	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
+		
 }
 
 - (void)didFinish{
@@ -293,12 +299,10 @@
 	serverProcess = nil;
 	error = nil;
 	submitButton = nil;
-	//teamId = nil;
 	location = nil;
 	duration = nil;
 	description = nil;
-	//start = nil;
-	//errorString = nil;
+
 	[super viewDidUnload];
 }
 

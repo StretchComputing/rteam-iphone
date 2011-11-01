@@ -23,7 +23,7 @@
 
 @implementation SendPoll
 @synthesize doneButton, activity, pollQuestion, pollType, errorMessage, pollSubject, teamId, createSuccess, eventId, eventType, origLoc, recipients,
-toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, recipientObjects;
+toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, recipientObjects, thePollSubject, thePollQuestion;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -130,89 +130,90 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
 
 - (void)runRequest {
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	NSArray *choices = [NSArray arrayWithObjects:@"Yes", @"No", nil];
-	
-
-	NSString *dispResults = @"";
-	if (self.displayResults.selectedSegmentIndex == 0) {
-		dispResults = @"true";
-	}else {
-		dispResults = @"false";
-	}
-	
-	NSMutableArray *recipIds = [NSMutableArray array];
-    
-    for (int i = 0; i < [self.recipientObjects count]; i++) {
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        if ([[self.recipientObjects objectAtIndex:i] class] == [Fan class]) {
-            Fan *tmpFan = [self.recipientObjects objectAtIndex:i];
-            [recipIds addObject:tmpFan.memberId];
-        }else if ([[self.recipientObjects objectAtIndex:i] class] == [Player class]) {
-            Player *tmpPlayer = [self.recipientObjects objectAtIndex:i];
-            [recipIds addObject:tmpPlayer.memberId];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        NSArray *choices = [NSArray arrayWithObjects:@"Yes", @"No", nil];
+        
+        
+        NSString *dispResults = @"";
+        if (self.displayResults.selectedSegmentIndex == 0) {
+            dispResults = @"true";
+        }else {
+            dispResults = @"false";
         }
+        
+        NSMutableArray *recipIds = [NSMutableArray array];
+        
+        for (int i = 0; i < [self.recipientObjects count]; i++) {
+            
+            if ([[self.recipientObjects objectAtIndex:i] class] == [Fan class]) {
+                Fan *tmpFan = [self.recipientObjects objectAtIndex:i];
+                [recipIds addObject:tmpFan.memberId];
+            }else if ([[self.recipientObjects objectAtIndex:i] class] == [Player class]) {
+                Player *tmpPlayer = [self.recipientObjects objectAtIndex:i];
+                [recipIds addObject:tmpPlayer.memberId];
+            }
+        }
+        
+        NSArray *recip = [NSArray arrayWithArray:recipIds];
+        
+        NSDictionary *response = [NSDictionary dictionary];
+        if (![token isEqualToString:@""]){	
+            response = [ServerAPI createMessageThread:token :self.teamId :self.thePollSubject :self.thePollQuestion :@"poll" :@"" 
+                                                     :@"" :@"false" :choices :recip :dispResults :@"true" :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.createSuccess = true;
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                self.createSuccess = false;
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 207:
+                        //error connecting to server
+                        self.errorString = @"*Fans cannot send polls.";
+                        break;
+                    case 208:
+                        self.errorString = @"NA";
+                        break;
+                        
+                    default:
+                        //should never get here
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
     }
-
-    NSArray *recip = [NSArray arrayWithArray:recipIds];
-
-	
-	NSDictionary *response = [NSDictionary dictionary];
-	if (![token isEqualToString:@""]){	
-	    response = [ServerAPI createMessageThread:token :self.teamId :self.pollSubject.text :self.pollQuestion.text :@"poll" :@"" 
-												 :@"" :@"false" :choices :recip :dispResults :@"true" :@""];
-				
-		NSString *status = [response valueForKey:@"status"];
 		
-		if ([status isEqualToString:@"100"]){
-			
-			self.createSuccess = true;
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			self.createSuccess = false;
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 207:
-					//error connecting to server
-					self.errorString = @"*Fans cannot send polls.";
-					break;
-				case 208:
-					self.errorString = @"NA";
-					break;
-
-				default:
-					//should never get here
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{
@@ -278,6 +279,9 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
 			
 			//Create the team in a background thread
 			
+            self.thePollSubject = [NSString stringWithString:self.pollSubject.text];
+            self.thePollQuestion = [NSString stringWithString:self.pollQuestion.text];
+            
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			
 		}

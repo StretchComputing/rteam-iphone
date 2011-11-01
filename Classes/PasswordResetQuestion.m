@@ -13,7 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @implementation PasswordResetQuestion
-@synthesize question, newQuestion, newAnswer, submitButton, errorLabel, activity, errorString;
+@synthesize question, newQuestion, newAnswer, submitButton, errorLabel, activity, errorString, newQuestionString, newAnswerString;
 
 -(void)viewDidLoad{
 	self.title = @"Question";
@@ -41,6 +41,9 @@
         self.newAnswer.enabled = NO;
         
         [self.activity startAnimating];
+        
+        self.newQuestionString = [NSString stringWithString:self.newQuestion.text];
+        self.newAnswerString = [NSString stringWithString:self.newAnswer.text];
         [self performSelectorInBackground:@selector(runRequest) withObject:nil];
     }
 		
@@ -48,50 +51,54 @@
 
 -(void)runRequest{
  
-    NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI updateUser:token :@"" :@"" :@"" :@"" :self.newQuestion.text :self.newAnswer.text :@"" :@"" :@"" :@"" :@"" :@"" :@"" :[NSData data] :@"" :@"" :@"" :@"" :@"" :@""]; 		
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.errorString = @"";
-			
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
+    @autoreleasepool {
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI updateUser:token :@"" :@"" :@"" :@"" :self.newQuestionString :self.newAnswerString :@"" :@"" :@"" :@"" :@"" :@"" :@"" :[NSData data] :@"" :@"" :@"" :@"" :@"" :@""]; 		
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneRequest) withObject:nil waitUntilDone:NO];
 
-    [self performSelectorOnMainThread:@selector(doneRequest) withObject:nil waitUntilDone:NO];
+    }
+   
 }
 
 -(void)doneRequest{

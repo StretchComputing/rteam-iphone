@@ -11,9 +11,8 @@
 
 @interface Directions : UIViewController <UIActionSheetDelegate> {
 	
-	IBOutlet UIWebView *webView;
-	NSString *urlString;
+
 }
 @property (nonatomic, strong) NSString *urlString;
-@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) IBOutlet UIWebView *webView;
 @end

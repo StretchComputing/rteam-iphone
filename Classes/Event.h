@@ -9,22 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface Event : NSObject {
-	NSString *startDate;
-	NSString *endDate;
-	NSString *eventId;
-	NSString *teamId;
-	NSString *timeZone;
-	NSString *description;
-	NSString *latitude;
-	NSString *longitude;
-	NSString *location;
-	NSString *userRole;
-	NSString *eventName;
-	NSString *teamName;
-	
-	bool isCanceled;
-	
-	
+
 }
 @property bool isCanceled;
 @property (nonatomic, strong) NSString *teamName;

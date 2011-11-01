@@ -14,7 +14,7 @@
 
 @implementation MessageReply
 @synthesize teamId, subject, origMessage, replyToId, replyToName, userRole, errorString, toLabel, newMessageText, oldMessageText, errorLabel, activity,
-sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar;
+sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar, theNewMessage;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -138,6 +138,7 @@ sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar;
 		self.sendButton.enabled = NO;
 		[self.activity startAnimating];
 		
+        self.theNewMessage = [NSString stringWithString:self.newMessageText.text];
 		[self performSelectorInBackground:@selector(sendTheMessage) withObject:nil];
 	}
 
@@ -147,79 +148,81 @@ sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar;
 
 - (void)sendTheMessage {
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	
-	NSDictionary *response = [NSDictionary dictionary];
-	NSMutableArray *mutableMemberIds = [NSMutableArray array];
-	NSArray *recipientMemberIds = [NSArray array];
-	
-	[mutableMemberIds addObject:self.replyToId];
-	
-	recipientMemberIds = mutableMemberIds;
-	
-		
-	if (![token isEqualToString:@""]){	
-		
-        NSString *doAlert = @"false";
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        if (self.replyAlert){
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        
+        NSDictionary *response = [NSDictionary dictionary];
+        NSMutableArray *mutableMemberIds = [NSMutableArray array];
+        NSArray *recipientMemberIds = [NSArray array];
+        
+        [mutableMemberIds addObject:self.replyToId];
+        
+        recipientMemberIds = mutableMemberIds;
+        
+		
+        if (![token isEqualToString:@""]){	
             
-            doAlert = @"true";
+            NSString *doAlert = @"false";
+            
+            if (self.replyAlert){
+                
+                doAlert = @"true";
+                
+            }
+            response = [ServerAPI createMessageThread:token :self.teamId :self.subject :self.theNewMessage :@"plain" :@"" 
+                                                     :@"" :doAlert :[NSArray array] :recipientMemberIds :@"" :@"false" :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 207:
+                        self.errorString = @"*Only members can send messages.";
+                        break;
+                    case 208:
+                        self.errorString = @"NA";
+                        break;
+                        
+                    default:
+                        //should never get here
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
             
         }
-		response = [ServerAPI createMessageThread:token :self.teamId :self.subject :self.newMessageText.text :@"plain" :@"" 
-												 :@"" :doAlert :[NSArray array] :recipientMemberIds :@"" :@"false" :@""];
         
-		NSString *status = [response valueForKey:@"status"];
-    
-        
-		if ([status isEqualToString:@"100"]){
-			
-			self.errorString = @"";
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-                case 207:
-					self.errorString = @"*Only members can send messages.";
-					break;
-				case 208:
-					self.errorString = @"NA";
-					break;
-					
-				default:
-					//should never get here
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
 		
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{

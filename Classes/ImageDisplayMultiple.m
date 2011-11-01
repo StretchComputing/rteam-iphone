@@ -218,51 +218,54 @@
 
 -(void)getLargeImages{
 
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        NSString *errorString = @"";
+        
+        if (![token isEqualToString:@""]){	
+            
+            NSDictionary *response = [ServerAPI getActivityImage:token :self.activityId :self.teamId];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.encodedPhoto = [response valueForKey:@"photo"];
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(doneImage:) withObject:errorString waitUntilDone:NO];
+    }
 	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-    NSString *errorString = @"";
-    
-	if (![token isEqualToString:@""]){	
-		
-        NSDictionary *response = [ServerAPI getActivityImage:token :self.activityId :self.teamId];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.encodedPhoto = [response valueForKey:@"photo"];
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-    
-	
-	
-	[self performSelectorOnMainThread:@selector(doneImage:) withObject:errorString waitUntilDone:NO];
 	
 }
 

@@ -10,43 +10,23 @@
 
 
 @interface SendPoll : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
-    
-	IBOutlet UIActivityIndicatorView *activity;
-	IBOutlet UIButton *doneButton;
-	IBOutlet UITextView *pollQuestion;
-	IBOutlet UISegmentedControl *pollType;
-	IBOutlet UISegmentedControl *displayResults;
-	IBOutlet UITextField *pollSubject;
-	
-	IBOutlet UILabel *errorMessage;
-	
-	NSString *teamId;
-	bool createSuccess;
-	bool toTeam;
-	
-	NSString *eventId;
-	NSString *eventType;
-	NSString *origLoc;
-	NSArray *recipients;
-	
-	NSString *userRole;
-	NSString *includeFans;
-	NSString *errorString;
-	
-	UIActionSheet *pollActionSheet;
+   
 }
-@property (nonatomic, retain) NSArray *recipientObjects;
+
+@property (nonatomic, strong) NSString *thePollSubject;
+@property (nonatomic, strong) NSString *thePollQuestion;
+@property (nonatomic, strong) NSArray *recipientObjects;
 @property (nonatomic, strong) UIActionSheet *pollActionSheet;
 @property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) NSString *includeFans;
-@property (nonatomic, strong) UISegmentedControl *displayResults;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *displayResults;
 @property (nonatomic, strong) NSString *userRole;
-@property (nonatomic, strong) UIActivityIndicatorView *activity;
-@property (nonatomic, strong) UIButton *doneButton;
-@property (nonatomic, strong) UITextView *pollQuestion;
-@property (nonatomic, strong) UISegmentedControl *pollType;
-@property (nonatomic, strong) UILabel *errorMessage;
-@property (nonatomic, strong) UITextField *pollSubject;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activity;
+@property (nonatomic, strong) IBOutlet UIButton *doneButton;
+@property (nonatomic, strong) IBOutlet UITextView *pollQuestion;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *pollType;
+@property (nonatomic, strong) IBOutlet UILabel *errorMessage;
+@property (nonatomic, strong) IBOutlet UITextField *pollSubject;
 @property (nonatomic, strong) NSString *teamId;
 @property bool createSuccess;
 

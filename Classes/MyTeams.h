@@ -14,70 +14,27 @@
 @interface MyTeams : UIViewController <UITableViewDelegate, UITableViewDataSource, ADBannerViewDelegate, UIActionSheetDelegate,
 MFMessageComposeViewControllerDelegate> {
 	
-	NSArray *teams;
-	IBOutlet UIView *header;
-	IBOutlet UIView *footer;
-	NSString *error;
-	NSString *didRegister;
-	int deleteRow;
-	int teamsStored;
-	int numMemberTeams;
-	
-	UIAlertView *alertOne;
-	UIAlertView *alertTwo;
-	
-	
-	NSMutableArray *memberTeams;
-	NSMutableArray *fanTeams;
-	bool noMemberTeams;
-	bool noFanTeams;
-	
-	bool deleteMember;
-	bool deleteFan;
-	bool quickCreate;
-	bool haveTeamList;
-	NSArray *homeTeamList;
-	
-	ADBannerView *myAd;
-	BOOL bannerIsVisible;
-	IBOutlet UIButton *createTeamButton;
-	UIButton *joinTeamButton;
-	
-	IBOutlet UITableView *myTableView;
-	IBOutlet UIView *viewLine;
-	
-	NSMutableArray *phoneOnlyArray;
-	
-	UIAlertView *myAlertView;
-	
-	IBOutlet UILabel *loadingLabel;
-	IBOutlet UIActivityIndicatorView *loadingActivity;
-	
-	bool gettingTeams;
-	
-	NSString *newlyCreatedTeam;
-	
-	NSMutableArray *allTeamsArray;
-    
-    bool displayNa;
-    bool displayError;
-    bool fromHome;
+
 }
+@property (nonatomic, retain) UIAlertView *alertOne;
+@property (nonatomic, retain) UIAlertView *alertTwo;
+
+@property (nonatomic, strong) ADBannerView *myAd;
 @property bool fromHome;
 @property bool displayError;
 @property bool displayNa;
 @property (nonatomic, strong) NSMutableArray *allTeamsArray;
 @property (nonatomic, strong) NSString *newlyCreatedTeam;
 @property bool gettingTeams;
-@property (nonatomic, strong) UILabel *loadingLabel;
-@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) IBOutlet UILabel *loadingLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *loadingActivity;
 @property (nonatomic, strong) UIAlertView *myAlertView;
 @property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
-@property (nonatomic, strong) UIView *viewLine;
-@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) IBOutlet UIView *viewLine;
+@property (nonatomic, strong) IBOutlet UITableView *myTableView;
 @property bool quickCreate;
-@property (nonatomic, strong) UIButton *createTeamButton;
-@property (nonatomic, strong) UIButton *joinTeamButton;
+@property (nonatomic, strong) IBOutlet UIButton *createTeamButton;
+@property (nonatomic, strong) IBOutlet UIButton *joinTeamButton;
 @property BOOL bannerIsVisible;
 @property bool haveTeamList;
 @property (nonatomic, strong) NSArray *homeTeamList;
@@ -91,8 +48,8 @@ MFMessageComposeViewControllerDelegate> {
 @property bool deleteFan;
 
 @property (nonatomic, strong) NSArray *teams;
-@property (nonatomic, strong) UIView *header;
-@property (nonatomic, strong) UIView *footer;
+@property (nonatomic, strong) IBOutlet UIView *header;
+@property (nonatomic, strong) IBOutlet UIView *footer;
 @property (nonatomic, strong) NSString *didRegister;
 @property int deleteRow;
 @property int teamsStored;

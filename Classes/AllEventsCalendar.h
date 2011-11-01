@@ -18,49 +18,6 @@
 	KLTile *tile;
 	BOOL shouldPushAnotherView;
 	
-	NSMutableArray *allGames;           //All Games
-	NSMutableArray *allPractices;       //All Practices
-	NSMutableArray *allEvents;          //All Games + Practices + Generic Events
-	NSMutableArray *allGenericEvents;   //All Generic Events
-	
-	NSMutableArray *gamesToday;
-	NSMutableArray *practicesToday;
-	NSMutableArray *eventsToday;        //All Games + Practices + Generic Events today
-	
-	NSString *eventType;
-	
-	NSDate *dateSelected;
-	UIToolbar *bottomBar;
-	UISegmentedControl *segmentedControl;
-	NSString *error;
-	
-	bool createdEvent;
-	
-	UIActivityIndicatorView *loadingActivity;
-	UILabel *activityLabel;
-	
-	UIActivityIndicatorView *deleteActivity;
-	UIActionSheet *deleteAction;
-	
-	NSString *deleteEventType;
-	NSString *deleteEventId;
-	NSString *deleteEventTeamId;
-	
-	int deleteCell;
-	
-	bool emptyGames;
-	bool emptyPractices;
-	bool emptyEvents;
-	
-	bool gDelete;
-	bool pDelete;
-	bool eDelete;
-	
-	bool gotGames;
-	bool gotPractices;
-	bool gotEvents;
-	
-	UIActionSheet *canceledAction;
 }
 
 @property (nonatomic, strong) UIActionSheet *canceledAction;
@@ -98,6 +55,7 @@
 
 @property (nonatomic, strong) NSString *eventType;
 @property (nonatomic, strong) NSDate *dateSelected;
+
 -(void)getAllEvents;
 -(void)getAllGames;
 -(void)filterGames;

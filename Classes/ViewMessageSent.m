@@ -19,7 +19,7 @@
 @implementation ViewMessageSent
 @synthesize subject, body, createdDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, threadId, recipients,
 individualReplies, viewMoreDetailButton, confirmString, confirmStringLabel, messageNumber, messageArray, currentMessageNumber, upDown,
-teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel, deleteButton, errorLabel, errorString;
+teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel, deleteButton, errorLabel, errorString, nameLabel;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -42,7 +42,11 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 
 -(void)viewDidLoad{
 	
-	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    self.nameLabel.text = mainDelegate.displayName;
+    self.nameLabel.textColor = [UIColor blueColor];
+    
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.viewMoreDetailButton setBackgroundImage:stretch forState:UIControlStateNormal];
@@ -199,9 +203,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 		if (self.teamId == nil) {
 			self.teamId = self.origTeamId;
 		}
-        
-        NSLog(@"TeamID, Thread ID: %@, %@", self.teamId, self.threadId);
-        
+                
 		response = [ServerAPI getMessageThreadInfo:token :self.teamId :self.threadId];
 		
 		NSString *status = [response valueForKey:@"status"];
@@ -281,7 +283,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 	
 	self.individualReplies = recip;
 	self.title = @"Sent Message";
-	self.displayDate.text = self.createdDate;
+    self.displayDate.text = [self getDateLabel:self.createdDate];
 	self.displaySubject.text = self.subject;
 	self.displayBody.text = self.body;
 	self.teamNameLabel.text = self.teamName;
@@ -405,38 +407,69 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 	
 }
 
+
+//Sends back the dateLabel (5 minutes ago, 3 days ago, etc) of the post from the created date
+-(NSString *)getDateLabel:(NSString *)dateCreated{
+    //date created format: yyyy-MM-dd HH:mm  
+    
+    NSDate *todaysDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+    NSDate *createdDateOrig = [dateFormatter dateFromString:dateCreated];
+    
+    NSTimeInterval interval = [todaysDate timeIntervalSinceDate:createdDateOrig];
+    
+    if (interval <  3600) {
+        //Less than an hour, do minutes
+        
+        int minutes = floor(interval/60.0);
+        
+        if (minutes == 0) {
+            return @"< 1 minute ago";
+        }
+        return [NSString stringWithFormat:@"%d minutes ago", minutes];
+        
+    }else if (interval < 86400){
+        //less than a day, do hours
+        
+        int hours = floor(interval/3600.0);
+        
+        if (hours == 1) {
+            return @"1 hour ago";
+        }
+        return [NSString stringWithFormat:@"%d hours ago", hours];
+        
+    }else{
+        //do days
+        
+        int days = floor(interval/86400.0);
+        
+        if (days == 1) {
+            return @"1 day ago";
+        }
+        return [NSString stringWithFormat:@"%d days ago", days];
+    }
+    
+}
+
 - (BOOL)canBecomeFirstResponder {
 	return YES;
 }
 
 -(void)viewDidUnload{
-	
-	//subject = nil;
-	//body = nil;
-	//createdDate = nil;
+
 	displayDate = nil;
 	displayBody = nil;
 	displaySubject = nil;
-	//teamId = nil;
-	//eventId = nil;
-	//eventType = nil;
-	//threadId = nil;
 	viewMoreDetailButton = nil;
-	//confirmString = nil;
 	confirmStringLabel = nil;
 	messageNumber = nil;
-	//messageArray = nil;
 	upDown = nil;
-	//teamName = nil;
 	teamNameLabel = nil;
-	//origTeamId = nil;
-	//individualReplies = nil;
-	//messageInfo = nil;
 	loadingActivity = nil;
 	loadingLabel = nil;
 	deleteButton = nil;
 	errorLabel = nil;
-	//errorString = nil;
 
 	
 	[super viewDidUnload];

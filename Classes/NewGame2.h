@@ -11,30 +11,22 @@
 
 @interface NewGame2 : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
     
-	IBOutlet UIActivityIndicatorView *serverProcess;
-	IBOutlet UIButton *submitButton;
-	IBOutlet UILabel *error;
-	
-	bool createSuccess;
-	NSString *teamId;
-	
-	IBOutlet UITextField *opponent;
-	IBOutlet UITextField *duration;
-	IBOutlet UITextView *description;
-	NSDate *start;
-    
-	NSString *errorString;
+
 }
+@property (nonatomic, strong) NSString *theDescription;
+@property (nonatomic, strong) NSString *theOpponent;
+@property (nonatomic, retain) NSString *theDuration;
+
 @property (nonatomic, strong) NSString *errorString;
-@property (nonatomic, strong) UIActivityIndicatorView *serverProcess;
-@property (nonatomic, strong) UIButton *submitButton;
-@property (nonatomic, strong) UILabel *error;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *serverProcess;
+@property (nonatomic, strong) IBOutlet UIButton *submitButton;
+@property (nonatomic, strong) IBOutlet UILabel *error;
 @property bool createSuccess;
 @property (nonatomic, strong) NSString *teamId;
 
-@property (nonatomic, strong) UITextField *opponent;
-@property (nonatomic, strong) UITextField *duration;
-@property (nonatomic, strong) UITextView *description;
+@property (nonatomic, strong) IBOutlet UITextField *opponent;
+@property (nonatomic, strong) IBOutlet UITextField *duration;
+@property (nonatomic, strong) IBOutlet UITextView *description;
 @property (nonatomic, strong) NSDate *start;
 
 

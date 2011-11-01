@@ -92,59 +92,61 @@ newImage, dontMove, toOrientation, portrait;
 
 -(void)getImage{
    
-	
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if (![token isEqualToString:@""]){
+	@autoreleasepool {
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getTeamInfo:self.teamId :token :@"true"];
+            
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                NSDictionary *info = [response valueForKey:@"teamInfo"];
+                
+                if ([info valueForKey:@"photo"] != nil) {
+                    self.hasImage = true;
+                    self.imageString = [info valueForKey:@"photo"];
+                }else {
+                    self.hasImage = false;
+                }
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        //self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneImage) withObject:nil waitUntilDone:NO];
+
+    }
 		
-		NSDictionary *response = [ServerAPI getTeamInfo:self.teamId :token :@"true"];
-		
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			NSDictionary *info = [response valueForKey:@"teamInfo"];
-			
-			if ([info valueForKey:@"photo"] != nil) {
-				self.hasImage = true;
-				self.imageString = [info valueForKey:@"photo"];
-			}else {
-				self.hasImage = false;
-			}
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					//self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
-	
-	[self performSelectorOnMainThread:@selector(doneImage) withObject:nil waitUntilDone:NO];
-	
 }
 
 
@@ -338,78 +340,80 @@ newImage, dontMove, toOrientation, portrait;
 -(void)updateImage{
 	
 
-	
-	//Retrieve teams from DB
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	//NSString *addRemove = @"";
-	
-	if (!self.addImage) {
-		//addRemove = @"remove";
-	}
-	
-	NSData *tmpData = [NSData data];
-	
-	if (self.imageData != nil) {
-		tmpData = imageData;
-	}
-	//If there is a token, do a DB lookup to find the teams associated with this coach:
-	if (![token isEqualToString:@""]){
-		
-        NSString *orientation = @"";
+	@autoreleasepool {
+        //Retrieve teams from DB
+        NSString *token = @"";
         
-        if ([tmpData length] > 0) {
-            
-            if (self.portrait) {
-                orientation = @"portrait";
-            }else{
-                orientation = @"landscape";
-            }
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
         }
-		
-		NSDictionary *response = [ServerAPI updateTeam:token :self.teamId :@"" :@"" :@"" :@"" :@"" :tmpData :orientation];
-		
-		NSString *status = [response valueForKey:@"status"];
-				
-		if ([status isEqualToString:@"100"]){
-			
-			self.errorString = @"";
-			
-		}else{
-			
-			//self.memberTeams = [NSMutableArray array];
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//should never get here
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-		
-		
-	}
-
+        
+        //NSString *addRemove = @"";
+        
+        if (!self.addImage) {
+            //addRemove = @"remove";
+        }
+        
+        NSData *tmpData = [NSData data];
+        
+        if (self.imageData != nil) {
+            tmpData = imageData;
+        }
+        //If there is a token, do a DB lookup to find the teams associated with this coach:
+        if (![token isEqualToString:@""]){
+            
+            NSString *orientation = @"";
+            
+            if ([tmpData length] > 0) {
+                
+                if (self.portrait) {
+                    orientation = @"portrait";
+                }else{
+                    orientation = @"landscape";
+                }
+            }
+            
+            NSDictionary *response = [ServerAPI updateTeam:token :self.teamId :@"" :@"" :@"" :@"" :@"" :tmpData :orientation];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+            }else{
+                
+                //self.memberTeams = [NSMutableArray array];
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //should never get here
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            
+            
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
+    }
 	
-	[self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
 	
 }
 

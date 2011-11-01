@@ -214,242 +214,10 @@
         
         [self.myScrollView addSubview:imageBack];
         [self.myScrollView addSubview:insideImageView];
-        /*
-        UIButton *postImageView = [UIButton buttonWithType:UIButtonTypeCustom];
-        postImageView.frame = CGRectMake(1, 1, 80, 80);
-        [postImageView setImage:[UIImage imageWithData:[self.postImageArray objectAtIndex:0]] forState:UIControlStateNormal];
-        [postImageView addTarget:self action:@selector(imageSelected) forControlEvents:UIControlEventTouchUpInside];
-        
-        imageBack.layer.masksToBounds = YES;
-        imageBack.layer.cornerRadius = 4.0;
-        postImageView.layer.masksToBounds = YES;
-        postImageView.layer.cornerRadius = 4.0;
-        
-        [imageBack addSubview:postImageView];
-        [self.myScrollView addSubview:imageBack];
-        */
-     
+  
         currentHeight += 90;
     }
 
-
-    
-    
-    
-    
-    //Replies
-    /*
-    self.commentBackground = [[UIView alloc] initWithFrame:CGRectMake(10, currentHeight, 300, 23)];
-    
-    if ([self.replies count] > 0) {
-        
-        
-        self.commentBackground.hidden = NO;
-        int count = [self.replies count];
-        
-        
-        UILabel *replyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-        replyLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
-        replyLabel.textColor = [UIColor blackColor];
-        replyLabel.backgroundColor = [UIColor clearColor];
-        replyLabel.textAlignment = UITextAlignmentCenter;
-        replyLabel.autoresizingMask = UIViewAutoresizingNone;
-        
-        if (count == 1) {
-            replyLabel.text = [NSString stringWithFormat:@"%d Reply:", count];
-            
-        }else{
-            replyLabel.text = [NSString stringWithFormat:@"%d Replies:", count];
-            
-        }
-        
-        
-        UIView *replyFrontView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-        UIView *replyTextView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-        self.commentBackground.frame = CGRectMake(10, currentHeight, 300, 100);
-        
-        replyFrontView.frame = CGRectMake(1, 1, 298, 98);
-        replyTextView.frame = CGRectMake(0, 17, 298, 100);
-        
-        NSString *totalReplyText = @"";
-        int previousText = -13;
-        int totalImgAdjust = 0;
-        
-        for (int i = 0; i < [self.replies count]; i++) {
-            LiveMessage *theReply = [self.replies objectAtIndex:i];
-            
-            if (i == [self.replies count] - 1) {
-                totalReplyText = [totalReplyText stringByAppendingFormat:@"%@ - %@", theReply.createdBy, theReply.message];
-            }else{
-                totalReplyText = [totalReplyText stringByAppendingFormat:@"%@ - %@ \n", theReply.createdBy, theReply.message];
-            }
-            
-            NSString *currentReplyText = [NSString stringWithFormat:@"%@ - %@", theReply.createdBy, theReply.message];
-            int subHeight = [self findHeightForString:currentReplyText withWidth:283];
-            
-            
-            UITextView *subReplyView = [[UITextView alloc] initWithFrame:CGRectMake(replyTextView.frame.origin.x, replyTextView.frame.origin.y + previousText, replyTextView.frame.size.width, subHeight + 15)];
-            subReplyView.text = currentReplyText;
-            subReplyView.userInteractionEnabled = NO;
-            
-            int imgAdjust = 0;
-            if ([mainDelegate.messageImageDictionary valueForKey:theReply.sysId] != nil) {
-                imgAdjust = 100;
-                totalImgAdjust += 100;
-                
-                NSMutableArray *arrayOfData = [mainDelegate.messageImageDictionary valueForKey:theReply.sysId];
-                
-                if ([arrayOfData count] > 0) {
-                    
-                    UIView *replyBackOne = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 82, 82)];
-                    replyBackOne.backgroundColor = [UIColor blackColor];
-                    
-                    ImageButton *replyImageOne = [ImageButton buttonWithType:UIButtonTypeCustom];
-                    replyImageOne.messageId = theReply.sysId;
-                    replyImageOne.frame = CGRectMake(1, 1, 80, 80);
-                    
-                    [replyImageOne setImage:[UIImage imageWithData:[arrayOfData objectAtIndex:0]] forState:UIControlStateNormal];
-                    [replyImageOne addTarget:self action:@selector(imageSelectedReply:) forControlEvents:UIControlEventTouchUpInside];
-                    
-                    replyBackOne.frame = CGRectMake(10, replyTextView.frame.origin.y + previousText + subHeight + 15, 82, 82);
-                    
-                    [replyBackOne addSubview:replyImageOne];
-                    replyBackOne.autoresizingMask = UIViewAutoresizingNone;
-                    [replyTextView addSubview:replyBackOne];
-                    
-                    replyBackOne.layer.masksToBounds = YES;
-                    replyBackOne.layer.cornerRadius = 4.0;
-                    replyImageOne.layer.masksToBounds = YES;
-                    replyImageOne.layer.cornerRadius = 4.0;
-                    
-                    if ([arrayOfData count] > 1) {
-                        
-                        UIView *replyBackTwo = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 82, 82)];
-                        replyBackTwo.backgroundColor = [UIColor blackColor];
-                        ImageButton *replyImageTwo = [ImageButton buttonWithType:UIButtonTypeCustom];
-                        replyImageTwo.messageId = theReply.sysId;
-                        replyImageTwo.frame = CGRectMake(1, 1, 80, 80);
-                        
-                        [replyImageTwo setImage:[UIImage imageWithData:[arrayOfData objectAtIndex:1]] forState:UIControlStateNormal];
-                        [replyImageTwo addTarget:self action:@selector(imageSelectedReply:) forControlEvents:UIControlEventTouchUpInside];
-                        
-                        replyBackTwo.frame = CGRectMake(110, replyTextView.frame.origin.y + previousText + subHeight + 15, 82, 82);
-                        
-                        [replyBackTwo addSubview:replyImageTwo];
-                        replyBackTwo.autoresizingMask = UIViewAutoresizingNone;
-                        
-                        [replyTextView addSubview:replyBackTwo];
-                        
-                        replyBackTwo.layer.masksToBounds = YES;
-                        replyBackTwo.layer.cornerRadius = 4.0;
-                        replyImageTwo.layer.masksToBounds = YES;
-                        replyImageTwo.layer.cornerRadius = 4.0;
-                    }
-                    
-                }
-            }
-            
-            previousText = previousText + subHeight + imgAdjust;
-            
-            subReplyView.backgroundColor = [UIColor clearColor];
-            
-            subReplyView.font = [UIFont fontWithName:@"Helvetica" size:13];
-            subReplyView.textColor = [UIColor blackColor];
-            
-            
-            UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-            nameLabel.text = [NSString stringWithFormat:@"%@ -", theReply.createdBy];
-            nameLabel.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0];
-            nameLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
-            
-            CGSize constraints = CGSizeMake(300, 100);
-            CGSize sizeForWidth = [theReply.createdBy sizeWithFont:[UIFont fontWithName:@"Helvetica-Bold" size:13] constrainedToSize:constraints];
-            
-            
-            nameLabel.frame = CGRectMake(2, 8, sizeForWidth.width + 9, 18);
-            
-            [subReplyView addSubview:nameLabel];
-            [replyTextView addSubview:subReplyView];
-            
-            
-        }
-        
-        CGRect frame = replyTextView.frame;
-        CGRect frame2 = replyFrontView.frame;
-        CGRect frame3 = self.commentBackground.frame;
-        
-        int width = [self findHeightForString:totalReplyText withWidth:283];
-        frame.size.height = width + 17 + totalImgAdjust;
-        frame2.size.height = width + 15 + 17 + totalImgAdjust;
-        frame3.size.height = width + 17 + 17 + totalImgAdjust;
-        
-        
-        self.commentBackground.frame = frame3;
-        replyFrontView.frame = frame2;
-        replyTextView.frame = frame;
-        
-        UIView *replySeparator = [[UIView alloc] initWithFrame:CGRectMake(0, 22, self.commentBackground.frame.size.width, 1)];
-        replySeparator.backgroundColor = [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:190.0/255.0 alpha:1.0];
-        [replyFrontView addSubview:replySeparator];
-        replySeparator.frame = CGRectMake(0, 24, 298, 1);
-        
-        replyFrontView.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0];
-        self.commentBackground.backgroundColor = [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:190.0/255.0 alpha:1.0];
-        
-        
-        replyLabel.frame = CGRectMake(0, 0, replyFrontView.frame.size.width, 22);
-        [replyFrontView addSubview:replyLabel];
-        [replyFrontView addSubview:replyTextView];
-        
-        [self.commentBackground addSubview:replyFrontView];
-        [self.myScrollView addSubview:self.commentBackground];
-        
-        self.commentBackground.layer.masksToBounds = YES;
-        self.commentBackground.layer.cornerRadius = 4.0;
-        replyFrontView.layer.masksToBounds = YES;
-        replyFrontView.layer.cornerRadius = 4.0;
-        replyTextView.layer.masksToBounds = YES;
-        replyTextView.layer.cornerRadius = 4.0;
-        replyLabel.layer.masksToBounds = YES;
-        replyLabel.layer.cornerRadius = 4.0;
-        
-        currentHeight += self.commentBackground.frame.size.height + 5;
-        
-        
-    }else{
-        self.commentBackground.hidden = YES;
-    }
-    
-    UITextView *likeText = [[UITextView alloc] initWithFrame:CGRectMake(10, self.commentBackground.frame.size.height + self.commentBackground.frame.origin.y, 300, 1)];
-    
-    likeText.textColor = [UIColor darkTextColor];
-    likeText.editable = NO;
-    likeText.scrollEnabled = NO;
-    NSString *likeString = @"Liked By: ";
-    
-    for (int i = 0; i < [self.likes count]; i++) {
-        LiveProfile *thisProfile = [self.likes objectAtIndex:i];
-        
-        if (i == [self.likes count] - 1) {
-            likeString = [likeString stringByAppendingFormat:@" %@", thisProfile.name];
-        }else{
-            likeString = [likeString stringByAppendingFormat:@" %@,", thisProfile.name];
-        }
-    }
-    likeText.text = likeString;
-    
-    if ([self.likes count] > 0) {
-        currentHeight = currentHeight + likeText.frame.size.height + 5;
-        [self.myScrollView addSubview:likeText];
-        
-    }
-    CGRect frame1 = likeText.frame;
-    frame1.size.height = likeText.contentSize.height;
-    likeText.frame = frame1;
-    */
-
- 
-    
     currentHeight = currentHeight + 20;
     [self.myScrollView setContentSize:CGSizeMake(320, currentHeight)];
     
@@ -506,63 +274,66 @@
 
 -(void)updateTweet{
 	
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	if (![token isEqualToString:@""]){	
-		
-		NSString *likeDislike = @"";
-		
-		if (self.currentVoteBool == YES) {
-			likeDislike = @"like";
-		}else {
-			likeDislike = @"dislike";
-			
-		}
-		
-		NSDictionary *response = [ServerAPI updateActivity:token :self.teamId :self.messageId :likeDislike];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.voteSuccess = true;
-			self.numLikes = [[response valueForKey:@"likes"] intValue];
-			self.numDislikes = [[response valueForKey:@"dislikes"] intValue];
-						
-			
-			
-		}else{
-			
-			self.voteSuccess = false;
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
             
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			//[self.errorLabel setHidden:NO];
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
+            NSString *likeDislike = @"";
+            
+            if (self.currentVoteBool == YES) {
+                likeDislike = @"like";
+            }else {
+                likeDislike = @"dislike";
+                
+            }
+            
+            NSDictionary *response = [ServerAPI updateActivity:token :self.teamId :self.messageId :likeDislike];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.voteSuccess = true;
+                self.numLikes = [[response valueForKey:@"likes"] intValue];
+                self.numDislikes = [[response valueForKey:@"dislikes"] intValue];
+                
+                
+                
+            }else{
+                
+                self.voteSuccess = false;
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
+
+    }
 	
-	[self performSelectorOnMainThread:@selector(doneUpdate) withObject:nil waitUntilDone:NO];
 }
 
 -(void)doneUpdate{

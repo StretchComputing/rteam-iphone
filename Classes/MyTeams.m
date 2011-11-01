@@ -27,7 +27,7 @@
 @synthesize teams, header, footer, didRegister, deleteRow, teamsStored, numMemberTeams, fanTeams, memberTeams, noFanTeams,
 deleteMember, deleteFan, noMemberTeams, error, haveTeamList, homeTeamList, bannerIsVisible, createTeamButton, joinTeamButton, quickCreate,
 myTableView, viewLine, myAlertView, phoneOnlyArray, loadingLabel, loadingActivity, gettingTeams, newlyCreatedTeam, allTeamsArray, displayNa, displayError,
-fromHome;
+fromHome, myAd, alertOne, alertTwo;
 	
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -58,10 +58,10 @@ fromHome;
 	
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-	[self.navigationItem setRightBarButtonItem:homeButton];
+	[self.navigationItem setLeftBarButtonItem:homeButton];
     
     UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(create)];
-	[self.navigationItem setLeftBarButtonItem:createButton];
+	[self.navigationItem setRightBarButtonItem:createButton];
 	
 	
 }
@@ -181,72 +181,75 @@ fromHome;
 
 -(void)getAllTeams{
 
-	
-	//Retrieve teams from DB
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	
-	//If there is a token, do a DB lookup to find the teams associated with this coach:
-	if (![token isEqualToString:@""]){
-		
-		
-		NSDictionary *response = [ServerAPI getListOfTeams:token];
-		
-		NSString *status = [response valueForKey:@"status"];
-				
-		if ([status isEqualToString:@"100"]){
-			
-			NSArray *allteams = [response valueForKey:@"teams"];
-			
-			self.allTeamsArray = [NSMutableArray arrayWithArray:allteams];
-			
-			for (int i = 0; i < [allteams count]; i++) {
-				
-				Team *tmpTeam = [allteams objectAtIndex:i];
-				
-				if ([tmpTeam.userRole isEqualToString:@"fan"]) {
-					[self.fanTeams addObject:tmpTeam];
-				}else {
-					[self.memberTeams addObject:tmpTeam];
-				}
+    @autoreleasepool {
+        //Retrieve teams from DB
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        
+        //If there is a token, do a DB lookup to find the teams associated with this coach:
+        if (![token isEqualToString:@""]){
+            
+            
+            NSDictionary *response = [ServerAPI getListOfTeams:token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                NSArray *allteams = [response valueForKey:@"teams"];
+                
+                self.allTeamsArray = [NSMutableArray arrayWithArray:allteams];
+                
+                for (int i = 0; i < [allteams count]; i++) {
+                    
+                    Team *tmpTeam = [allteams objectAtIndex:i];
+                    
+                    if ([tmpTeam.userRole isEqualToString:@"fan"]) {
+                        [self.fanTeams addObject:tmpTeam];
+                    }else {
+                        [self.memberTeams addObject:tmpTeam];
+                    }
+                    
+                }
+                
+            }else{
+                
+                self.memberTeams = [NSMutableArray array];
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //should never get here
+                        self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            //get fan teams as well, then order them
+            
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
 
-			}
-			
-		}else{
-			
-			self.memberTeams = [NSMutableArray array];
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.error = @"*Error connecting to server";
-					break;
-				default:
-					//should never get here
-					self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-		//get fan teams as well, then order them
-		
-	}
+    }
 	
-	[self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
-	
+		
 }
 
 -(void)doneTeams{
@@ -1067,12 +1070,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	header = nil;
 	footer = nil;
-	//teams = nil;
-	//didRegister = nil;
-	//fanTeams = nil;
-	//memberTeams = nil;
-	//error = nil;
-	//homeTeamList = nil;
+
 	alertOne = nil;
 	alertTwo = nil;
 	createTeamButton = nil;

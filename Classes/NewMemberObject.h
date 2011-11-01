@@ -10,20 +10,7 @@
 
 
 @interface NewMemberObject : NSObject {
-    
-	NSString *firstName;
-	NSString *lastName;
-	NSString *email;
-	NSString *phone;
-	NSString *role;
-    
-    //Guardian Info
-    NSString *guardianOneName;
-    NSString *guardianOneEmail;
-    NSString *guardianOnePhone;
-    NSString *guardianTwoName;
-    NSString *guardianTwoEmail;
-    NSString *guardianTwoPhone;
+
     
 }
 @property (nonatomic, strong) NSString *role;

@@ -10,7 +10,7 @@
 
 @interface ActivityPost : UIViewController <UITextViewDelegate>
 
-
+@property (nonatomic, strong) NSString *theMessageText;
 @property bool keyboardIsUp;
 @property (nonatomic, retain) NSMutableArray *selectedTeams;
 @property bool savedTeams;

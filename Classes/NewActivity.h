@@ -11,76 +11,10 @@
 
 @interface NewActivity : UIViewController <UIScrollViewDelegate, ADBannerViewDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource> {
     
-    IBOutlet UIScrollView *topScrollView;
-    IBOutlet UIScrollView *bottomScrollView;
-    
-    int numberOfPages;
-    int currentPage;
-    
-    NSMutableArray *viewControllers;
-    
-    UIView *view1;
-    UIView *view2;
-    UIView *view3;
-    
-    UIView *view1Top;
-    UIView *view2Top;
-    UIView *view3Top;
-    
-    int currentMiddle;
-    
-    ADBannerView *myAd;
-    BOOL bannerIsVisible;
-    
-    //3 tables (one in each view) Everything, Sent, Photos
-    UITableView *allActivityTable;
-    UIActivityIndicatorView *allActivityLoadingIndicator;
-    UILabel *allActivityLoadingLabel;
-    
-    UITableView *myActivityTable;
-    UIActivityIndicatorView *myActivityLoadingIndicator;
-    UILabel *myActivityLoadingLabel;
-    
-    
-    //Arrays for the tables
-    NSMutableArray *tmpActivitiyArray;
-    NSMutableArray *activityArray;
-    
-    
-    
-    //Try pull down refresh code
-    UIView *refreshHeaderView;
-    UILabel *refreshLabel;
-    UIImageView *refreshArrow;
-    UIActivityIndicatorView *refreshSpinner;
-    NSString *textPull;
-    NSString *textRelease;
-    NSString *textLoading;
-    
-    UIView *refreshHeaderView2;
-    UILabel *refreshLabel2;
-    UIImageView *refreshArrow2;
-    UIActivityIndicatorView *refreshSpinner2;
-    NSString *textPull2;
-    NSString *textRelease2;
-    NSString *textLoading2;
-    
-    
-    BOOL isLoading;
-    BOOL isDragging;
-    bool shouldCallStop;
-    NSString *currentTable; //everyone, me, photos
-    
-    
-    //Misc
-    bool newActivityFailed;
-    bool hasNewActivity;
-    
-    //
-    bool didInitMyActivity;
-    bool didInitPhotos;
+
 }
-@property (nonatomic, retain) NSMutableArray *myActivityArray;  //Holds messages sent/received, polls sent/received
+@property (nonatomic, strong) ADBannerView *myAd;
+@property (nonatomic, strong) NSMutableArray *myActivityArray;  //Holds messages sent/received, polls sent/received
 @property bool didInitPhotos;
 @property bool didInitMyActivity;
 @property bool shouldCallStop;
@@ -132,8 +66,8 @@
 
 @property int numberOfPages;
 @property int currentPage;
-@property (nonatomic, strong) UIScrollView *topScrollView;
-@property (nonatomic, strong) UIScrollView *bottomScrollView;
+@property (nonatomic, strong) IBOutlet UIScrollView *topScrollView;
+@property (nonatomic, strong) IBOutlet UIScrollView *bottomScrollView;
 
 - (void)loadScrollViewWithPage:(int)page;
 -(void)setUpScrollView;

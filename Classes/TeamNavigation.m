@@ -20,6 +20,7 @@
 	
 	CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
 	
+    tmp.fromHome = true;
 	NSArray *viewControllers = tmp.viewControllers;
 	
 	tmp.teamId = self.teamId;

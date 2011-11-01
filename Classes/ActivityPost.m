@@ -14,7 +14,7 @@
 #import "SelectRecipients.h"
 
 @implementation ActivityPost
-@synthesize messageText, postTeamId, teamSelectButton, hasTeams, teams, savedTeams, selectedTeams, keyboardIsUp, keyboardButton, sendPollButton, sendPrivateButton, activity, segControl;
+@synthesize messageText, postTeamId, teamSelectButton, hasTeams, teams, savedTeams, selectedTeams, keyboardIsUp, keyboardButton, sendPollButton, sendPrivateButton, activity, segControl, theMessageText;
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -65,6 +65,7 @@
 
 -(void)post{
     
+    self.theMessageText = [NSString stringWithString:self.messageText.text];
     if ((self.messageText.text != nil) && ![self.messageText.text isEqualToString:@""]) {
         
         [self.activity startAnimating];
@@ -85,48 +86,51 @@
 
 -(void)createActivity{
     
-    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    NSString *orientation = @"";
-    NSData *tmpData = [NSData data];
-    NSData *tmpMovieData = [NSData data];
-    
-    NSDictionary *response = [ServerAPI createActivity:mainDelegate.token :self.postTeamId :self.messageText.text :tmpData :tmpMovieData :orientation];
-    
-    
-    NSString *status = [response valueForKey:@"status"];
-    
-    if ([status isEqualToString:@"100"]){
+    @autoreleasepool {
         
-
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-    }else{
+        NSString *orientation = @"";
+        NSData *tmpData = [NSData data];
+        NSData *tmpMovieData = [NSData data];
         
-        //Server hit failed...get status code out and display error accordingly
-        int statusCode = [status intValue];
-     
-        //[self.errorLabel setHidden:NO];
-        switch (statusCode) {
-            case 0:
-                //null parameter
-                //self.errorLabel.text = @"*Error connecting to server";
-                break;
-            case 1:
-                //error connecting to server
-                //self.errorLabel.text = @"*Error connecting to server";
-                break;
-            case 208:
-                //self.errorString = @"NA";
-            default:
-                //log status code?
-                //self.errorLabel.text = @"*Error connecting to server";
-                break;
+        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token :self.postTeamId :self.theMessageText :tmpData :tmpMovieData :orientation];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            //[self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.errorLabel.text = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    //self.errorLabel.text = @"*Error connecting to server";
+                    break;
+                case 208:
+                    //self.errorString = @"NA";
+                default:
+                    //log status code?
+                    //self.errorLabel.text = @"*Error connecting to server";
+                    break;
+            }
         }
+
+        [self performSelectorOnMainThread:@selector(donePost) withObject:nil waitUntilDone:NO];
+        
     }
-
-
-
-    [self performSelectorOnMainThread:@selector(donePost) withObject:nil waitUntilDone:NO];
+   
 
 }
 
@@ -145,50 +149,53 @@
 
 -(void)getListOfTeams{
 
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	if (![token isEqualToString:@""]){	
-		NSDictionary *response = [ServerAPI getListOfTeams:token];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-		
-			NSArray *teamsHere = [response valueForKey:@"teams"];
-			
-            self.teams = [NSMutableArray arrayWithArray:teamsHere];
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			//[self.errorLabel setHidden:NO];
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
+            NSDictionary *response = [ServerAPI getListOfTeams:token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                NSArray *teamsHere = [response valueForKey:@"teams"];
+                
+                self.teams = [NSMutableArray arrayWithArray:teamsHere];
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
+    }
 	
-	
-	[self performSelectorOnMainThread:@selector(doneTeams) withObject:nil waitUntilDone:NO];
 	
 }
 
@@ -273,7 +280,7 @@
             
             SelectRecipients *tmp = [[SelectRecipients alloc] init];
             tmp.teamId = tmpTeam.teamId;
-            tmp.isPoll = true;
+            tmp.isPrivate = true;
             [self.navigationController pushViewController:tmp animated:YES];
             
         }else{

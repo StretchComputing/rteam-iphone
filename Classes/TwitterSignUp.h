@@ -11,8 +11,7 @@
 
 @interface TwitterSignUp : UIViewController {
     
-	IBOutlet UIWebView *webView;
 }
-@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) IBOutlet UIWebView *webView;
 
 @end

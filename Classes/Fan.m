@@ -261,8 +261,8 @@ isEmailConfirmed;
 	//self.isEditing = false;
 	
 	if (!self.fromSearch) {
-		UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
-		[self.navigationItem setRightBarButtonItem:doneButton];
+		//UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
+		//[self.navigationItem setRightBarButtonItem:doneButton];
 	}
 	
 	

@@ -18,7 +18,7 @@
 #import "MessageHelp.h"
 
 @implementation HelpAbout
-@synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings;
+@synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings, myAd;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -42,15 +42,6 @@
      setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
 }
 
-/*
- -(void)myMovieViewFinishedCallback1:(NSNotification*)aNotification {
- MPMoviePlayerViewController* theMovieView=[aNotification object];
- [self dismissMoviePlayerViewControllerAnimated];
- [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:theMovieView];
- [theMovieView release];
- [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
- }
- */
 
 -(void)viewWillAppear:(BOOL)animated{
 	

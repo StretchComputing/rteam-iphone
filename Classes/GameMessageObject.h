@@ -10,19 +10,7 @@
 
 
 @interface GameMessageObject : NSObject {
-    
-	NSString *threadId;
-	NSString *teamId;
-	NSString *subject;
-	
-	NSString *body;
-	NSString *status;
-	NSString *messageDate;
-	
-	NSString *senderName;
-	NSString *senderId;
-	
-	NSString *teamName;
+
 }
 @property (nonatomic, strong) NSString *teamName;
 @property (nonatomic, strong) NSString *teamId;

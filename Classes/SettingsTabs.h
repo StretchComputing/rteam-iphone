@@ -13,35 +13,9 @@
 
 @interface SettingsTabs : UIViewController <UITableViewDelegate, UITableViewDataSource, ADBannerViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate > {
     
-	NSString *fromRegisterFlow;
-	NSString *didRegister;
-	int numMemberTeams;
-    
-	bool displaySuccess;
-    
-    bool passwordReset;
-	NSString *passwordResetQuestion;
-	bool haveUserInfo;
-	IBOutlet UITableView *myTableView;
-	
-	IBOutlet UILabel *loadingLabel;
-	IBOutlet UIActivityIndicatorView *loadingActivity;
-	
-	ADBannerView *myAd;
-	
-	BOOL bannerIsVisible;
-    
-    IBOutlet UIActivityIndicatorView *largeActivity;
-    
-    bool doneGames;
-    bool doneEvents;
-    NSArray *allGames;
-    NSArray *allEvents;
-    NSMutableArray *gamesAndEvents;
-    
-    bool didSynch;
-    bool synchSuccess;
+
 }
+@property (nonatomic, strong) ADBannerView *myAd;
 @property bool displaySuccess;
 
 @property (nonatomic, strong) NSString *fromRegisterFlow;
@@ -56,12 +30,12 @@
 @property (nonatomic, strong) NSArray *allEvents;
 @property (nonatomic, strong) NSMutableArray *gamesAndEvents;
 
-@property (nonatomic, strong) UIActivityIndicatorView *largeActivity;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *largeActivity;
 @property BOOL bannerIsVisible;
-@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) IBOutlet UITableView *myTableView;
 
-@property (nonatomic, strong) UILabel *loadingLabel;
-@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) IBOutlet UILabel *loadingLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *loadingActivity;
 @property bool haveUserInfo;
 @property bool passwordReset;
 @property (nonatomic, strong) NSString *passwordResetQuestion;

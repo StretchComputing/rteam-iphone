@@ -11,38 +11,23 @@
 
 @interface HomeScoreView : UIViewController {
     
-    IBOutlet UIButton *fullScreenButton;
-    bool isFullScreen;
-    int initY;
-    
-    //Team Name, score us, score them, interval
-    NSString *teamName;
-    NSString *scoreUs;
-    NSString *scoreThem;
-    NSString *interval;
-    
-    IBOutlet UILabel *topLabel;
-    IBOutlet UILabel *usLabel;
-    IBOutlet UILabel *themLabel;
-    IBOutlet UILabel *scoreUsLabel;
-    IBOutlet UILabel *scoreThemLabel;
-    IBOutlet UILabel *intervalLabel;
+
 }
 @property (nonatomic, strong) NSString *teamName;
 @property (nonatomic, strong) NSString *scoreUs;
 @property (nonatomic, strong) NSString *scoreThem;
 @property (nonatomic, strong) NSString *interval;
 
-@property (nonatomic, strong)  UILabel *topLabel;
-@property (nonatomic, strong)  UILabel *usLabel;
-@property (nonatomic, strong)  UILabel *themLabel;
-@property (nonatomic, strong)  UILabel *scoreUsLabel;
-@property (nonatomic, strong)  UILabel *scoreThemLabel;
-@property (nonatomic, strong)  UILabel *intervalLabel;
+@property (nonatomic, strong) IBOutlet UILabel *topLabel;
+@property (nonatomic, strong) IBOutlet UILabel *usLabel;
+@property (nonatomic, strong) IBOutlet UILabel *themLabel;
+@property (nonatomic, strong) IBOutlet UILabel *scoreUsLabel;
+@property (nonatomic, strong) IBOutlet UILabel *scoreThemLabel;
+@property (nonatomic, strong) IBOutlet UILabel *intervalLabel;
 
 @property int initY;
 @property bool isFullScreen;
-@property (nonatomic, strong) UIButton *fullScreenButton;
+@property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
 
 -(IBAction)fullScreen;
 -(void)setLabels;

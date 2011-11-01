@@ -63,10 +63,10 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 	[self.eventsTableView setEditing:NO animated:NO];
 	
 	if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
-		[self.tabBarController.navigationItem setLeftBarButtonItem:self.addButton];
+		[self.tabBarController.navigationItem setRightBarButtonItem:self.addButton];
 	}else{
         
-        self.tabBarController.navigationItem.leftBarButtonItem = nil;
+        self.tabBarController.navigationItem.rightBarButtonItem = nil;
 
     }
 	
@@ -129,139 +129,142 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 
 -(void)getAllEvents{
 
-	
-	NSString *token = @"";
-	NSArray *gameArray = [NSArray array];
-	NSArray *practiceArray = [NSArray array];
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	
-	
-	//If there is a token, do a DB lookup to find the players associated with this team:
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getListOfGames:self.teamId :token];
-		NSDictionary *responsePractice = [ServerAPI getListOfEvents:self.teamId :token :@"all"];
-		
-		NSString *status = [response valueForKey:@"status"];
-		NSString *statusPractice = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
+    @autoreleasepool {
+        NSString *token = @"";
+        NSArray *gameArray = [NSArray array];
+        NSArray *practiceArray = [NSArray array];
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        
+        
+        //If there is a token, do a DB lookup to find the players associated with this team:
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getListOfGames:self.teamId :token];
+            NSDictionary *responsePractice = [ServerAPI getListOfEvents:self.teamId :token :@"all"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            NSString *statusPractice = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                gameArray = [response valueForKey:@"games"];
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.error.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.error.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Game retrieval failed, log error code?
+                        self.error.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            if ([statusPractice isEqualToString:@"100"]){
+                
+                practiceArray = [responsePractice valueForKey:@"events"];
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.error.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.error.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Practice retrieval failed, log status code?
+                        self.error.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        
+        //check for  old games;
+        NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
+        self.isPastGame = false;
+        
+        
+        for (int i = 0; i < [gameArray count]; i++) {
+            //Game *tmpPractice = [gameArray objectAtIndex:i];
+            
+            //NSString *date = tmpPractice.startDate;
+            
+            //NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+            //	[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+            
+            //***********TODO CHANGE THIS (display old games?)
+            //NSDate *formatedDate = [dateFormat dateFromString:date];
+            //NSDate *todaysDate = [NSDate date];
+            
+            //if (![formatedDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
+            
+            [tmpArray addObject:[gameArray objectAtIndex:i]];
+            
+            //}
+            
+            
+        }
+        
+        
+        for (int i = 0; i < [practiceArray count]; i++) {
+            /*
+             Practice *tmpPractice = [practiceArray objectAtIndex:i];
+             
+             NSString *date = tmpPractice.startDate;
+             
+             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+             [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+             NSDate *formatedDate = [dateFormat dateFromString:date];
+             NSDate *todaysDate = [NSDate date];
+             
+             if (![formatedDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
+             */
+            [tmpArray addObject:[practiceArray objectAtIndex:i]];
 			
-			gameArray = [response valueForKey:@"games"];
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.error.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.error.text = @"*Error connecting to server";
-					break;
-				default:
-					//Game retrieval failed, log error code?
-					self.error.text = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-		if ([statusPractice isEqualToString:@"100"]){
-			
-			practiceArray = [responsePractice valueForKey:@"events"];
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.error.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.error.text = @"*Error connecting to server";
-					break;
-				default:
-					//Practice retrieval failed, log status code?
-					self.error.text = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	
-	//check for  old games;
-	NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
-	self.isPastGame = false;
-	
-	
-	for (int i = 0; i < [gameArray count]; i++) {
-		//Game *tmpPractice = [gameArray objectAtIndex:i];
-		
-		//NSString *date = tmpPractice.startDate;
-		
-		//NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-	//	[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-		
-		//***********TODO CHANGE THIS (display old games?)
-		//NSDate *formatedDate = [dateFormat dateFromString:date];
-		//NSDate *todaysDate = [NSDate date];
-		
-		//if (![formatedDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
-		
-		[tmpArray addObject:[gameArray objectAtIndex:i]];
-		
-		//}
-		
-		
-	}
-	
-	
-	for (int i = 0; i < [practiceArray count]; i++) {
-        /*
-		Practice *tmpPractice = [practiceArray objectAtIndex:i];
-		
-		NSString *date = tmpPractice.startDate;
-		
-		NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-		[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-		NSDate *formatedDate = [dateFormat dateFromString:date];
-		NSDate *todaysDate = [NSDate date];
-		
-		if (![formatedDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
-			*/
-        [tmpArray addObject:[practiceArray objectAtIndex:i]];
-			
-		//}
-		
-		
-	}
-	
-	
-	NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-	[tmpArray sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
-	
-	
-	self.events = [NSArray arrayWithArray:tmpArray];
-	
-	
-	[self performSelectorOnMainThread:@selector(finishedMessages) withObject:nil waitUntilDone:NO];
+            //}
+            
+            
+        }
+        
+        
+        NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
+        [tmpArray sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+        
+        
+        self.events = [NSArray arrayWithArray:tmpArray];
+        
+        
+        [self performSelectorOnMainThread:@selector(finishedMessages) withObject:nil waitUntilDone:NO];
 
+    }
+	
+	
 }
 
 
@@ -1207,358 +1210,364 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)deleteEvent{
 
+	@autoreleasepool {
+        //Delete Event
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if ([[self.events objectAtIndex:self.deleteRow] class] == [Game class]) {
+            
+            Game *gameToDelete = [self.events objectAtIndex:self.deleteRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI deleteGame:token :self.teamId :gameToDelete.gameId];
+                
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+                
+                
+            }
+            
+        }else if ([[self.events objectAtIndex:self.deleteRow] class] == [Practice class]) {
+            
+            Practice *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI deleteEvent:token :self.teamId :practiceToDelete.practiceId];
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+            }
+        }else {
+            
+            Event *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI deleteEvent:token :self.teamId :practiceToDelete.eventId];
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+            }
+            
+            
+        }
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
+    }
 	
-	//Delete Event
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if ([[self.events objectAtIndex:self.deleteRow] class] == [Game class]) {
-		
-		Game *gameToDelete = [self.events objectAtIndex:self.deleteRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI deleteGame:token :self.teamId :gameToDelete.gameId];
-			
-			NSString *status = [response valueForKey:@"status"];
-						
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						//self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-			
-			
-		}
-		
-	}else if ([[self.events objectAtIndex:self.deleteRow] class] == [Practice class]) {
-		
-		Practice *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI deleteEvent:token :self.teamId :practiceToDelete.practiceId];
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						//self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-		}
-	}else {
-		
-		Event *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI deleteEvent:token :self.teamId :practiceToDelete.eventId];
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						//self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-		}
-		
-		
-	}
-
-	
-	
-	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
 }
 
 -(void)cancelEvent{
 
-	
-	//Cancel Event
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if ([[self.events objectAtIndex:self.deleteRow] class] == [Game class]) {
-		
-		Game *gameToDelete = [self.events objectAtIndex:self.deleteRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI updateGame:token :self.teamId :gameToDelete.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"-4" :@"" :@"" :@""];
-			
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						//self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//	self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-			
-			
-		}
-		
-	}else if ([[self.events objectAtIndex:self.deleteRow] class] == [Practice class]) {
-		
-		Practice *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.practiceId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"true"];
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						////null parameter
-						//	self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//	self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//	self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-		}
-	}else {
-		
-		Event *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"true"];
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						//self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-		}
-		
-		
-	}
-	
-	
-	
-	
-	
-	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
+	@autoreleasepool {
+        //Cancel Event
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if ([[self.events objectAtIndex:self.deleteRow] class] == [Game class]) {
+            
+            Game *gameToDelete = [self.events objectAtIndex:self.deleteRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI updateGame:token :self.teamId :gameToDelete.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"-4" :@"" :@"" :@""];
+                
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //	self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+                
+                
+            }
+            
+        }else if ([[self.events objectAtIndex:self.deleteRow] class] == [Practice class]) {
+            
+            Practice *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.practiceId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"true"];
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            ////null parameter
+                            //	self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //	self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //	self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+            }
+        }else {
+            
+            Event *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"true"];
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+            }
+            
+            
+        }
+        
+        
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
 
+    }
+	
 	
 }
 
 -(void)activateEvent{
 
     
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if ([[self.events objectAtIndex:self.actionRow] class] == [Game class]) {
+            
+            Game *gameToDelete = [self.events objectAtIndex:self.actionRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI updateGame:token :self.teamId :gameToDelete.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"0" :@"" :@"" :@""];
+                
+                
+                NSString *status = [response valueForKey:@"status"];
+                
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+                
+                
+            }
+            
+        }else if ([[self.events objectAtIndex:self.actionRow] class] == [Practice class]) {
+            
+            Practice *practiceToDelete = [self.events objectAtIndex:self.actionRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.practiceId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false"];
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            ///self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+            }
+        }else {
+            
+            Event *practiceToDelete = [self.events objectAtIndex:self.actionRow];
+            if (![token isEqualToString:@""]){
+                NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false"];
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            ///null parameter
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //log status code
+                            //self.error.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+            }
+            
+            
+        }
+        
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
+    }
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if ([[self.events objectAtIndex:self.actionRow] class] == [Game class]) {
-		
-		Game *gameToDelete = [self.events objectAtIndex:self.actionRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI updateGame:token :self.teamId :gameToDelete.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"0" :@"" :@"" :@""];
-			
-			
-			NSString *status = [response valueForKey:@"status"];
-			
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						//self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-			
-			
-		}
-		
-	}else if ([[self.events objectAtIndex:self.actionRow] class] == [Practice class]) {
-		
-		Practice *practiceToDelete = [self.events objectAtIndex:self.actionRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.practiceId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false"];
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						//self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						///self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-		}
-	}else {
-		
-		Event *practiceToDelete = [self.events objectAtIndex:self.actionRow];
-		if (![token isEqualToString:@""]){
-			NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false"];
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						///null parameter
-						//self.error.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//self.error.text = @"*Error connecting to server";
-						break;
-					default:
-						//log status code
-						//self.error.text = @"*Error connecting to server";
-						break;
-				}
-			}
-		}
-		
-		
-	}
-	
-	
-	
-	
-	[self performSelectorOnMainThread:@selector(doneEventEdit) withObject:nil waitUntilDone:NO];
 	
 }
 

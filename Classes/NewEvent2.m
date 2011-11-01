@@ -16,7 +16,7 @@
 
 
 @implementation NewEvent2
-@synthesize createSuccess, serverProcess, error, submitButton, teamId, location, eventName, description, start, errorString;
+@synthesize createSuccess, serverProcess, error, submitButton, teamId, location, eventName, description, start, errorString, theLocation, theDescription, theEventName;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -61,6 +61,12 @@
 -(void)createEvent{
 	
 	error.text = @"";
+    
+    self.theDescription = [NSString stringWithString:self.description.text];
+    self.theEventName = [NSString stringWithString:self.eventName.text];
+    self.theLocation = [NSString stringWithString:self.location.text];
+    
+    
 	//Validate all fields are entered:
 	if ([self.eventName.text  isEqualToString:@""]){
 		error.text = @"*You must enter a value for the event name.";	
@@ -94,77 +100,79 @@
 
 - (void)runRequest {
     
-	
-	//Create the new game
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	//format the start date
-	
-	NSDateFormatter *format = [[NSDateFormatter alloc] init];
-	[format setDateFormat:@"YYYY-MM-dd HH:mm"];
-	
-	NSString *startDateString = [format stringFromDate:self.start];
-	
-	
-	NSString *theDescription = @"";
-	if ([self.description.text isEqualToString:@""]) {
-		theDescription = @"No description entered...";
-	}else {
-		theDescription = self.description.text;
-	}
-	
-	
-	//get the current time zone
-	NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
-	
-	NSString *timeZone = [tmp1 name];
-	
-	//Not using lat/long right now
-	NSString *latitude = @"";
-	NSString *longitude = @"";
-	
-	NSDictionary *response = [ServerAPI createEvent:self.teamId :mainDelegate.token :startDateString :@"" :theDescription :timeZone
-												   :latitude :longitude :self.location.text :@"generic" :self.eventName.text];
-    
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
+	@autoreleasepool {
+        //Create the new game
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        //format the start date
+        
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        [format setDateFormat:@"YYYY-MM-dd HH:mm"];
+        
+        NSString *startDateString = [format stringFromDate:self.start];
+        
+        
+        NSString *theDesc = @"";
+        if ([self.theDescription isEqualToString:@""]) {
+            theDesc = @"No description entered...";
+        }else {
+            theDesc = self.theDescription;
+        }
+        
+        
+        //get the current time zone
+        NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
+        
+        NSString *timeZone = [tmp1 name];
+        
+        //Not using lat/long right now
+        NSString *latitude = @"";
+        NSString *longitude = @"";
+        
+        NSDictionary *response = [ServerAPI createEvent:self.teamId :mainDelegate.token :startDateString :@"" :theDesc :timeZone
+                                                       :latitude :longitude :self.theLocation :@"generic" :self.theEventName];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 205:
+                    //error connecting to server
+                    self.errorString = @"*You must be a coordinator to add events.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
 		
-		self.createSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-            case 205:
-				//error connecting to server
-				self.errorString = @"*You must be a coordinator to add events.";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{
@@ -200,7 +208,7 @@
         
 	}else{
 		
-		self.error.text = self.errorString;
+		self.error.text = [NSString stringWithString:self.errorString];
 		
 		[submitButton setEnabled:YES];
 		[self.navigationItem setHidesBackButton:NO];

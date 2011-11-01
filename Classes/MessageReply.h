@@ -10,34 +10,13 @@
 
 
 @interface MessageReply : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
-    
-	NSString *teamId;
-	NSString *subject;
-	NSString *origMessage;
-	NSString *replyToName;
-	NSString *replyToId;
-	NSString *userRole;
-	NSString *errorString;
-	NSString *origMessageDate;
-	
-	IBOutlet UILabel *origMessageLabel;
-	IBOutlet UILabel *toLabel;
-	IBOutlet UITextView *newMessageText;
-	IBOutlet UITextView *oldMessageText;
-	IBOutlet UILabel *errorLabel;
-	IBOutlet UIActivityIndicatorView *activity;
-	
-	IBOutlet UIButton *sendButton;
-    
-    bool replyAlert;
-    
-    UIToolbar *keyboardToolbar;
-}
 
+}
+@property (nonatomic, retain) NSString *theNewMessage;
 @property (nonatomic, strong) UIToolbar *keyboardToolbar;
 @property bool replyAlert;
 @property (nonatomic, strong) NSString *origMessageDate;
-@property (nonatomic, strong) UILabel *origMessageLabel;
+@property (nonatomic, strong) IBOutlet UILabel *origMessageLabel;
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSString *subject;
 @property (nonatomic, strong) NSString *origMessage;
@@ -46,13 +25,13 @@
 @property (nonatomic, strong) NSString *userRole;
 @property (nonatomic, strong) NSString *errorString;
 
-@property (nonatomic, strong) UILabel *toLabel;
-@property (nonatomic, strong, getter = theNewMessageText) UITextView *newMessageText;
-@property (nonatomic, strong) UITextView *oldMessageText;
-@property (nonatomic, strong) UILabel *errorLabel;
-@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) IBOutlet UILabel *toLabel;
+@property (nonatomic, strong, getter = theNewMessageText) IBOutlet UITextView *newMessageText;
+@property (nonatomic, strong) IBOutlet UITextView *oldMessageText;
+@property (nonatomic, strong) IBOutlet UILabel *errorLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activity;
 
-@property (nonatomic, strong) UIButton *sendButton;
+@property (nonatomic, strong) IBOutlet UIButton *sendButton;
 
 -(IBAction)send;
 

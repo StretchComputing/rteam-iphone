@@ -10,18 +10,19 @@
 
 @interface SendPrivateMessage : UIViewController <UITextViewDelegate>
 
+@property (nonatomic, retain) NSString *theMessageText;
 @property bool keyboardIsUp;
-@property (nonatomic, retain) NSMutableArray *recipients;
-@property (nonatomic, retain) NSArray *recipientObjects;
-@property (nonatomic, retain) NSString *errorString;
-@property (nonatomic, retain) NSString *teamId;
+@property (nonatomic, strong) NSMutableArray *recipients;
+@property (nonatomic, strong) NSArray *recipientObjects;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSString *teamId;
 
-@property (nonatomic, retain) IBOutlet UILabel *errorLabel;
-@property (nonatomic, retain) IBOutlet UILabel *recipLabel;
-@property (nonatomic, retain) IBOutlet UIButton *cancelMessageButton;
-@property (nonatomic, retain) IBOutlet UITextView *messageText;
-@property (nonatomic, retain) IBOutlet UIButton *keyboardButton;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activity;
+@property (nonatomic, strong) IBOutlet UILabel *errorLabel;
+@property (nonatomic, strong) IBOutlet UILabel *recipLabel;
+@property (nonatomic, strong) IBOutlet UIButton *cancelMessageButton;
+@property (nonatomic, strong) IBOutlet UITextView *messageText;
+@property (nonatomic, strong) IBOutlet UIButton *keyboardButton;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activity;
 
 
 -(IBAction)cancelMessage;

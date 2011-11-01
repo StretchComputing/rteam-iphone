@@ -11,8 +11,6 @@
 
 @interface DeleteSelectButton : UIButton {
 
-	int sRow;
-	int sSec;
 }
 @property int sRow;
 @property int sSec;

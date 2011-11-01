@@ -13,7 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @implementation ResetPasswordWithQuestion
-@synthesize question, answerField, questionField, errorLabel, activity, submitButton, success, email, errorString;
+@synthesize question, answerField, questionField, errorLabel, activity, submitButton, success, email, errorString, theAnswerField;
 
 -(void)viewDidLoad{
 	
@@ -48,6 +48,8 @@
 		
 		//Register the User in a background thread
 		
+        self.theAnswerField = [NSString stringWithString:self.answerField.text];
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 		
@@ -58,7 +60,7 @@
 - (void)runRequest {
 
 	
-	NSDictionary *response = [ServerAPI resetUserPassword:self.email :self.answerField.text];
+	NSDictionary *response = [ServerAPI resetUserPassword:self.email :self.theAnswerField];
 	
 	
 	NSString *status = [response valueForKey:@"status"];

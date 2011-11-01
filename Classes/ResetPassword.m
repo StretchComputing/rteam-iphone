@@ -13,7 +13,7 @@
 #import "ResetPasswordWithQuestion.h"
 
 @implementation ResetPassword
-@synthesize email, activity, error, hasQuestion, resetButton, success, question, errorString;
+@synthesize email, activity, error, hasQuestion, resetButton, success, question, errorString, theEmail;
 
 -(void)viewDidLoad{
 	
@@ -33,6 +33,8 @@
 		[activity startAnimating];
 		[self.resetButton setEnabled:NO];
 		[self.email setEnabled:NO];
+        
+        self.theEmail = [NSString stringWithString:self.email.text];
 		
 		[self performSelectorInBackground:@selector(getResetPasswordQuestion) withObject:nil];
 		
@@ -43,55 +45,58 @@
 
 - (void)getResetPasswordQuestion {
 
-	NSDictionary *response = [ServerAPI getUserPasswordResetQuestion:self.email.text];
-	
-	
-	NSString *status = [response valueForKey:@"status"];
-			
-	if ([status isEqualToString:@"100"]){
-		
-		self.success = true;
-		self.question = [response valueForKey:@"passwordResetQuestion"];
-		
-		if ([self.question isEqualToString:@""]) {
-			self.hasQuestion = false;
-		}else {
-			self.hasQuestion = true;
-		}
+    @autoreleasepool {
+        NSDictionary *response = [ServerAPI getUserPasswordResetQuestion:self.theEmail];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.success = true;
+            self.question = [response valueForKey:@"passwordResetQuestion"];
+            
+            if ([self.question isEqualToString:@""]) {
+                self.hasQuestion = false;
+            }else {
+                self.hasQuestion = true;
+            }
+            
+            
+        }else{
+            
+            self.success = false;
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 600:
+                    //invalid user credentials
+                    self.errorString = @"*Email address does not match any users";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
+    }
 		
-	}else{
-		
-		self.success = false;
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 600:
-				//invalid user credentials
-				self.errorString = @"*Email address does not match any users";
-				break;
-			default:
-				//should never get here
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{

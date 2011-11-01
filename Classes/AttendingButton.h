@@ -10,28 +10,7 @@
 #import "EventNowButton.h"
 
 @interface AttendingButton : EventNowButton {
-    
-    UIView *buttonView;
-    
-    UIView *tableDisplayView;
-    UILabel *attendingLabel;
-    UILabel *yesLabel;
-    UILabel *yesCount;
-    UILabel *noLabel;
-    UILabel *noCount;
-    UILabel *qLabel;
-    UILabel *qCount;
-    
-    UIButton *pollButton;
-    UIButton *goToPageButton;
-    UIButton *closeButton;
-    
-    UIView *tableLineTop;
-    UIView *tableLineBottom;
-    UIView *tableLineLeft;
-    UIView *tableLineRight;
-    
-    bool isAttendance;
+
 }
 @property bool isAttendance;
 @property (nonatomic, strong) UIButton *closeButton;

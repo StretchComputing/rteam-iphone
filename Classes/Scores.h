@@ -13,53 +13,27 @@
 
 @interface Scores : UIViewController <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate,
 ADBannerViewDelegate> {
-    
-	NSString *teamId;
-	
-	IBOutlet UIScrollView *scroll;
-	IBOutlet UITableView *teamTable;
-	IBOutlet UITableView *table;
-	IBOutlet UIToolbar *bottomBar;
-	UIBarButtonItem *filterButton;
-	UIBarButtonItem *refreshButton;
-	
-	NSArray *games;
-	NSString *error;
-	NSArray *teamList;
-	bool haveTeamList;
-	
-	NSString *sport;
-	NSString *teamName;
-	
-	BOOL bannerIsVisible;
-	ADBannerView *myAd;
-	
-	IBOutlet UILabel *loadingLabel;
-	IBOutlet UIActivityIndicatorView *loadingActivity;
-	IBOutlet UIActivityIndicatorView *refreshActivity;
-	
-	IBOutlet UIButton *cancelButton;
-	
-	IBOutlet UIView *insideView;
+
     
 	
 }
-@property (nonatomic, strong) UIView *insideView;
-@property (nonatomic, strong) UIButton *cancelButton;
-@property (nonatomic, strong) UIActivityIndicatorView *refreshActivity;
-@property (nonatomic, strong) UILabel *loadingLabel;
-@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) ADBannerView *myAd;
+@property (nonatomic, strong) IBOutlet UIView *insideView;
+@property (nonatomic, strong) IBOutlet UIButton *cancelButton;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *refreshActivity;
+@property (nonatomic, strong) IBOutlet UILabel *loadingLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *loadingActivity;
 @property BOOL bannerIsVisible;
 @property (nonatomic, strong) NSString *sport;
 @property (nonatomic, strong) NSString *teamName;
 @property (nonatomic, strong) NSArray *teamList;
 @property bool haveTeamList;
-@property (nonatomic, strong) UIScrollView  *scroll;
-@property (nonatomic, strong) UITableView *teamTable;
+@property (nonatomic, strong) IBOutlet UIScrollView  *scroll;
+@property (nonatomic, strong) IBOutlet UITableView *teamTable;
 @property (nonatomic, strong) NSString *error;
-@property (nonatomic, strong) UITableView *table;
+@property (nonatomic, strong) IBOutlet UITableView *table;
 @property (nonatomic, strong) NSString *teamId;
-@property (nonatomic, strong) UIToolbar *bottomBar;
+@property (nonatomic, strong) IBOutlet UIToolbar *bottomBar;
 @property (nonatomic, strong) UIBarButtonItem *filterButton;
 @property (nonatomic, strong) UIBarButtonItem *refreshButton;
 @property (nonatomic, strong) NSArray *games;

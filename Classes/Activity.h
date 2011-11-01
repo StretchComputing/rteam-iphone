@@ -10,22 +10,7 @@
 
 
 @interface Activity : NSObject {
-    
-	NSString *activityText;
-	NSString *createdDate;
-	NSString *cacheId;
-	NSString *teamId;
-	NSString *teamName;
-	NSString *activityId;
-	
-	NSString *vote;   //like, dislike, none
-	
-	NSString *thumbnail;
-	
-	int numLikes;
-	int numDislikes;
-	
-	bool isVideo;
+
 	
 }
 @property bool isVideo;

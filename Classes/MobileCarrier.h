@@ -11,8 +11,7 @@
 
 @interface MobileCarrier : NSObject {
     
-    NSString *name;
-    NSString *code;
+ 
 }
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *code;

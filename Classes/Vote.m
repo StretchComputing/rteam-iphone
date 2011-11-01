@@ -49,87 +49,77 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 
 -(void)getMemberVotes{
 	
-	
-	NSString *token = @"";
-	NSMutableArray *tmpMemberArray = [NSMutableArray array];
+	@autoreleasepool {
+        NSString *token = @"";
+        NSMutableArray *tmpMemberArray = [NSMutableArray array];
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        //If there is a token, do a DB lookup to find the players associated with this team:
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getGameVoteTallies:token :self.teamId :self.gameId :@"mvp"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+                self.myVote = @"";
+                if ([response valueForKey:@"votedFor"] != nil) {
+                    self.myVote = [response valueForKey:@"votedFor"];
+                    
+                }
+                NSArray *memberTallies = [response valueForKey:@"memberTallies"];
+                
+                for (int i = 0; i < [memberTallies count]; i++) {
+                    
+                    NSDictionary *tmpDictionary = [memberTallies objectAtIndex:i];
+                    VoteMemberObject *tmpMember = [[VoteMemberObject alloc] init];
+                    
+                    tmpMember.memberId = [tmpDictionary valueForKey:@"memberId"];
+                    tmpMember.memberName = [tmpDictionary valueForKey:@"memberName"];
+                    tmpMember.numVotes = [[tmpDictionary valueForKey:@"voteCount"] intValue];
+                    
+                    
+                    [tmpMemberArray addObject:tmpMember];
+                    
+                    
+                }
+                
+                self.memberArray = tmpMemberArray;
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Game retrieval failed, log error code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+               
+        }
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	
-	
-	//If there is a token, do a DB lookup to find the players associated with this team:
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getGameVoteTallies:token :self.teamId :self.gameId :@"mvp"];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.errorString = @"";
-			
-			self.myVote = @"";
-			if ([response valueForKey:@"votedFor"] != nil) {
-				self.myVote = [response valueForKey:@"votedFor"];
+        [self performSelectorOnMainThread:@selector(doneMemberVotes) withObject:nil waitUntilDone:NO];
 
-			}
-			NSArray *memberTallies = [response valueForKey:@"memberTallies"];
-			
-			for (int i = 0; i < [memberTallies count]; i++) {
-				
-				NSDictionary *tmpDictionary = [memberTallies objectAtIndex:i];
-				VoteMemberObject *tmpMember = [[VoteMemberObject alloc] init];
-				
-				tmpMember.memberId = [tmpDictionary valueForKey:@"memberId"];
-				tmpMember.memberName = [tmpDictionary valueForKey:@"memberName"];
-				tmpMember.numVotes = [[tmpDictionary valueForKey:@"voteCount"] intValue];
-				
-				
-				[tmpMemberArray addObject:tmpMember];
-				
-				
-			}
-			
-			self.memberArray = tmpMemberArray;
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//Game retrieval failed, log error code?
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-	
-	}
-	
-	
+    }
 
-	
-	
-	[self performSelectorOnMainThread:@selector(doneMemberVotes) withObject:nil waitUntilDone:NO];
-	
-	
-	
 }
 
 -(void)doneMemberVotes{
@@ -296,63 +286,53 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)castVote:(NSString *)memberId{
 
-	
-	NSString *token = @"";
-	
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	
-	
-	//If there is a token, do a DB lookup to find the players associated with this team:
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI castGameVote:token :self.teamId :self.gameId :@"mvp" :memberId];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.errorString = @"";
-						
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//Game retrieval failed, log error code?
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-		
-	}
-	
-	
-	
-	
-	
-	[self performSelectorOnMainThread:@selector(doneVoting) withObject:nil waitUntilDone:NO];
-	
-	
+	@autoreleasepool {
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+
+        //If there is a token, do a DB lookup to find the players associated with this team:
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI castGameVote:token :self.teamId :self.gameId :@"mvp" :memberId];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Game retrieval failed, log error code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+ 
+        }
+
+        [self performSelectorOnMainThread:@selector(doneVoting) withObject:nil waitUntilDone:NO];
+    }
+
 }
 
 -(void)doneVoting{
@@ -372,61 +352,62 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)getGameInfo{
 
-	
-	self.errorString = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-    NSDictionary *response;
-	NSDictionary *gameInfo;
-	//If there is a token, do a DB lookup to find the game info 
-	if (![token isEqualToString:@""]){
-		
-		response = [ServerAPI getGameInfo:self.gameId :self.teamId :token];
-		
-		NSString *status = [response valueForKey:@"status"];
-	
-		if ([status isEqualToString:@"100"]){
-			self.gameInfoSuccess = true;
-			gameInfo = [response valueForKey:@"gameInfo"];
-			
-			NSString *pollStatus = [gameInfo valueForKey:@"pollStatus"];
-						
-			if ([pollStatus isEqualToString:@"closed"]) {
-				self.isOpen = false;
-			}else {
-				self.isOpen = true;
-			}
-
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
-	[self performSelectorOnMainThread:@selector(doneGameInfo) withObject:nil waitUntilDone:NO];
+	@autoreleasepool {
+        self.errorString = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        NSDictionary *response;
+        NSDictionary *gameInfo;
+        //If there is a token, do a DB lookup to find the game info 
+        if (![token isEqualToString:@""]){
+            
+            response = [ServerAPI getGameInfo:self.gameId :self.teamId :token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                self.gameInfoSuccess = true;
+                gameInfo = [response valueForKey:@"gameInfo"];
+                
+                NSString *pollStatus = [gameInfo valueForKey:@"pollStatus"];
+                
+                if ([pollStatus isEqualToString:@"closed"]) {
+                    self.isOpen = false;
+                }else {
+                    self.isOpen = true;
+                }
+                
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        [self performSelectorOnMainThread:@selector(doneGameInfo) withObject:nil waitUntilDone:NO];
+    }
 	
 }
 
@@ -459,58 +440,57 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)updateGame{
 
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	
-	NSDictionary *response = [NSDictionary dictionary];
-	if (![mainDelegate.token isEqualToString:@""]){	
-		response = [ServerAPI updateGame:mainDelegate.token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false" :self.updateStatus :@""];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.updateSuccess = true;
-			
-			if (self.isOpen) {
-				self.isOpen = false;
-			}else {
-				self.isOpen = true;
-			}
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSDictionary *response = [NSDictionary dictionary];
+        if (![mainDelegate.token isEqualToString:@""]){	
+            response = [ServerAPI updateGame:mainDelegate.token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false" :self.updateStatus :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.updateSuccess = true;
+                
+                if (self.isOpen) {
+                    self.isOpen = false;
+                }else {
+                    self.isOpen = true;
+                }
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                self.updateSuccess = false;
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(doneUpdate)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+   
+    }
 
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			self.updateSuccess = false;
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(doneUpdate)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
-
-	
-	
 }
 
 -(void)doneUpdate{

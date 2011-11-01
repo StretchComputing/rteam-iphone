@@ -20,7 +20,7 @@
 
 @implementation Login
 @synthesize email, password, error, registering, submitButton, createSuccess, invalidEmail, isMember, serverError, success, numMemberTeams, 
-resetPasswordButton, errorString, startEmail;
+resetPasswordButton, errorString, startEmail, theEmail, thePassword;
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -72,6 +72,9 @@ resetPasswordButton, errorString, startEmail;
 		
 		//Register the User in a background thread
 		
+        self.theEmail = [NSString stringWithString:self.email.text];
+        self.thePassword = [NSString stringWithString:self.password.text];
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 		
@@ -81,101 +84,103 @@ resetPasswordButton, errorString, startEmail;
 
 - (void)runRequest {
 
-	
-	NSDictionary *response = [ServerAPI getUserToken:self.email.text :self.password.text];
-	
+	@autoreleasepool {
+        NSDictionary *response = [ServerAPI getUserToken:self.theEmail :self.thePassword];
+        
 		
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
-		
-		NSString *token = [response valueForKey:@"token"];
-		
-		NSString *userIconOneId = [response valueForKey:@"userIconOneId"];
-		NSString *userIconOneAlias = [response valueForKey:@"userIconOneAlias"];
-		NSString *userIconTwoId = [response valueForKey:@"userIconTwoId"];
-		NSString *userIconTwoAlias = [response valueForKey:@"userIconTwoAlias"];
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            NSString *token = [response valueForKey:@"token"];
+            
+            NSString *userIconOneId = [response valueForKey:@"userIconOneId"];
+            NSString *userIconOneAlias = [response valueForKey:@"userIconOneAlias"];
+            NSString *userIconTwoId = [response valueForKey:@"userIconTwoId"];
+            NSString *userIconTwoAlias = [response valueForKey:@"userIconTwoAlias"];
+            
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            mainDelegate.token = token;
+            
+            if (userIconOneId == nil) {
+                mainDelegate.quickLinkOne = @"create";
+            }else {
+                mainDelegate.quickLinkOne = userIconOneId;
+                
+            }
+            
+            if (userIconOneAlias == nil) {
+                mainDelegate.quickLinkOneName = @"";
+            }else {
+                mainDelegate.quickLinkOneName = userIconOneAlias;
+                
+            }
+            
+            if (userIconTwoId == nil) {
+                mainDelegate.quickLinkTwo = @"";
+            }else {
+                mainDelegate.quickLinkTwo = userIconTwoId;
+                
+            }
+            
+            if (userIconTwoAlias == nil) {
+                mainDelegate.quickLinkTwoName = @"";
+            }else {
+                mainDelegate.quickLinkTwoName = userIconTwoAlias;			
+            }
+            
+            if ([response valueForKey:@"userIconOneImage"] != nil) {
+                NSString *imageOne = [response valueForKey:@"userIconOneImage"];
+                mainDelegate.quickLinkOneImage = imageOne;
+            }else {
+                mainDelegate.quickLinkOneImage = @"";
+            }
+            
+            if ([response valueForKey:@"userIconTwoImage"] != nil) {
+                NSString *imageOne = [response valueForKey:@"userIconTwoImage"];
+                mainDelegate.quickLinkTwoImage = imageOne;
+            }else {
+                mainDelegate.quickLinkTwoImage = @"";
+            }
+            
+            [mainDelegate saveUserInfo];
+            
+            self.createSuccess = true;
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 200:
+                    //invalid user credentials
+                    self.errorString = @"*Invalid username/password";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
+    }
 		
-		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-		mainDelegate.token = token;
-		
-		if (userIconOneId == nil) {
-			mainDelegate.quickLinkOne = @"create";
-		}else {
-			mainDelegate.quickLinkOne = userIconOneId;
-
-		}
-		
-		if (userIconOneAlias == nil) {
-			mainDelegate.quickLinkOneName = @"";
-		}else {
-			mainDelegate.quickLinkOneName = userIconOneAlias;
-			
-		}
-		
-		if (userIconTwoId == nil) {
-			mainDelegate.quickLinkTwo = @"";
-		}else {
-			mainDelegate.quickLinkTwo = userIconTwoId;
-			
-		}
-		
-		if (userIconTwoAlias == nil) {
-			mainDelegate.quickLinkTwoName = @"";
-		}else {
-			mainDelegate.quickLinkTwoName = userIconTwoAlias;			
-		}
-
-		if ([response valueForKey:@"userIconOneImage"] != nil) {
-			NSString *imageOne = [response valueForKey:@"userIconOneImage"];
-			mainDelegate.quickLinkOneImage = imageOne;
-		}else {
-			mainDelegate.quickLinkOneImage = @"";
-		}
-
-		if ([response valueForKey:@"userIconTwoImage"] != nil) {
-			NSString *imageOne = [response valueForKey:@"userIconTwoImage"];
-			mainDelegate.quickLinkTwoImage = imageOne;
-		}else {
-			mainDelegate.quickLinkTwoImage = @"";
-		}
-		
-		[mainDelegate saveUserInfo];
-		
-		self.createSuccess = true;
-	}else{
-	
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 200:
-				//invalid user credentials
-				self.errorString = @"*Invalid username/password";
-				break;
-			default:
-				//should never get here
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{

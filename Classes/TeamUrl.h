@@ -11,10 +11,9 @@
 
 @interface TeamUrl : UIViewController {
     
-	IBOutlet UIWebView *webView;
-	NSString *url;
+
 }
 
-@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) NSString *url;
 @end

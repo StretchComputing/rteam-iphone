@@ -14,7 +14,7 @@
 
 @implementation InviteFan2
 @synthesize firstName, lastName, email, teamId, submitButton, serverProcess, error, createSuccess, userRole, addDone, errorString, hideHomeButton,
-multipleEmailArray, multipleEmailAlert;
+multipleEmailArray, multipleEmailAlert, theFirstName, theLastName, theEmail;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -28,17 +28,7 @@ multipleEmailArray, multipleEmailAlert;
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.submitButton setBackgroundImage:stretch forState:UIControlStateNormal];
-    
-	
-    //	if (self.addDone) {
-    //		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
-    //		[self.navigationItem setRightBarButtonItem:addButton];
-    //		[addButton release];
-    //	}
-	
-    
-	
-	
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -59,9 +49,6 @@ multipleEmailArray, multipleEmailAlert;
 -(void)done{
 	[[self parentViewController] dismissModalViewControllerAnimated:YES];
 }
-
-
-
 
 -(void)create {
 	
@@ -84,85 +71,85 @@ multipleEmailArray, multipleEmailAlert;
 		[self.firstName setEnabled:NO];
 		[self.lastName setEnabled:NO];
 		[self.email setEnabled:NO];
-		
-		
-		
-		
+
 		//Create the player in a background thread
-		
+        self.theFirstName = [NSString stringWithString:self.firstName.text];
+        self.theLastName = [NSString stringWithString:self.lastName.text];
+        self.theEmail = [NSString stringWithString:self.email.text];
+
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 	}
-	
-	
-	
-	
+
 }
 
 - (void)runRequest {
     
-	
-	//Create the new player
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpRoles = [[NSMutableArray alloc] init];
-	
-	NSString *role = @"player";
-	
-	[tmpRoles addObject:role];
-	
-	NSArray *rRoles = tmpRoles;
-	NSArray *rEmails = [NSArray array];
-	
-	NSString *theRole = @"fan";
-    
-	NSDictionary *response = [ServerAPI createMember:self.firstName.text :self.lastName.text :self.email.text
-													:@"" :rRoles :rEmails :self.teamId :mainDelegate.token :theRole :@""];
-	
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	
-	if ([status isEqualToString:@"100"]){
+	@autoreleasepool {
+        //Create the new player
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpRoles = [[NSMutableArray alloc] init];
+        
+        NSString *role = @"player";
+        
+        [tmpRoles addObject:role];
+        
+        NSArray *rRoles = tmpRoles;
+        NSArray *rEmails = [NSArray array];
+        
+        NSString *theRole = @"fan";
+        
+        NSDictionary *response = [ServerAPI createMember:self.theFirstName :self.theLastName :self.theEmail
+                                                        :@"" :rRoles :rEmails :self.teamId :mainDelegate.token :theRole :@""];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 208:
+                    self.errorString = @"NA";
+                    break;
+                    
+                case 209:
+                    self.errorString = @"*Fan email address already in use";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
 		
-		self.createSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 208:
-				self.errorString = @"NA";
-				break;
-                
-			case 209:
-				self.errorString = @"*Fan email address already in use";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{
@@ -339,12 +326,9 @@ multipleEmailArray, multipleEmailAlert;
 	firstName = nil;
 	email = nil;
 	lastName = nil;
-	//teamId = nil;
-	//userRole = nil;
 	submitButton = nil;
 	serverProcess = nil;
 	error = nil;
-	//errorString = nil;
 	[super viewDidUnload];
 }
 

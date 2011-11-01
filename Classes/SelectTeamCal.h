@@ -10,13 +10,7 @@
 #import "Team.h"
 
 @interface SelectTeamCal : UITableViewController {
-	
-	NSArray *teams;
-	NSString *error;
-	NSString *event;
-	NSString *teamId;
-	NSDate *finalDate;
-	NSString *singleOrMultiple;
+
 }
 @property (nonatomic, strong) NSString *singleOrMultiple;
 @property (nonatomic, strong) NSString *teamId;

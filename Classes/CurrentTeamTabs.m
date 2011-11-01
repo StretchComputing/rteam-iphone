@@ -18,7 +18,7 @@
 
 @implementation CurrentTeamTabs
 //@synthesize navBar, tabBar;
-@synthesize teamId, teamName, userRole, toTeam, recipients, sport, messageSuccess, messageCount, newActivity, tookPicture;
+@synthesize teamId, teamName, userRole, toTeam, recipients, sport, messageSuccess, messageCount, newActivity, tookPicture, fromHome;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -33,7 +33,11 @@
 
 -(void)viewWillAppear:(BOOL)animated{
 		
-	[self.navigationItem setHidesBackButton:YES];
+    if (self.fromHome) {
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
+        [self.navigationItem setLeftBarButtonItem:addButton];
+    }
+	//[self.navigationItem setHidesBackButton:YES];
 	
 	int index = self.selectedIndex;
 	
@@ -93,9 +97,7 @@
 	
 	
 	self.viewControllers = [NSArray arrayWithObjects:tab1, tab3, tab4, nil]; 
-	
-	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
-	[self.navigationItem setRightBarButtonItem:addButton];
+
 	
 	self.delegate = self;
 	

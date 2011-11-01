@@ -15,7 +15,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @implementation NewGame2
-@synthesize createSuccess, serverProcess, error, submitButton, teamId, opponent, duration, description, start, errorString;
+@synthesize createSuccess, serverProcess, error, submitButton, teamId, opponent, duration, description, start, errorString, theDuration, theOpponent, theDescription;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -36,6 +36,7 @@
 	
 	self.description.layer.masksToBounds = YES;
 	self.description.layer.cornerRadius = 7.0;
+    self.description.text = @"";
 }	
 
 
@@ -62,6 +63,10 @@
 	self.error.text = @"";
 	//Validate all fields are entered:
 	
+    self.theDescription = [NSString stringWithString:self.description.text];
+    self.theDuration = [NSString stringWithString:self.duration.text];
+    self.theOpponent = [NSString stringWithString:self.opponent.text];
+    
 	if ([self.duration.text length] > 0) {
 		int x = [self.duration.text intValue];
 		
@@ -83,7 +88,7 @@
 			[self.duration setEnabled:NO];
 			
 			
-			//Create the player in a background thread
+			//Create the game in a background thread
 			
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			
@@ -104,8 +109,9 @@
 		[self.duration setEnabled:NO];
 		
 
-		//Create the player in a background thread
-		
+		//Create the game in a background thread
+    
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 	}
@@ -117,105 +123,108 @@
 
 - (void)runRequest {
 
-	
-	//Create the new game
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	//format the start date
-	
-	NSDateFormatter *format = [[NSDateFormatter alloc] init];
-	[format setDateFormat:@"YYYY-MM-dd HH:mm"];
-	
-	NSString *startDateString = [format stringFromDate:self.start];
+	@autoreleasepool {
+        //Create the new game
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        //format the start date
+        
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        [format setDateFormat:@"YYYY-MM-dd HH:mm"];
+        
+        NSString *startDateString = [format stringFromDate:self.start];
 		
-	//add duration to start date for end date
-	
-	NSString *endDateString;
-	if (self.duration.text > 0) {
-		
-		int minutes = [self.duration.text intValue];
-		int seconds = minutes * 60;
-		
-		NSDate *endDate = [self.start dateByAddingTimeInterval:seconds];
-		
-		endDateString = [format stringFromDate:endDate];
-	}else {
-		endDateString = @"";
-	}
-	
-
-
-	
-
-	//get the current time zone
-	NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
-	
-	NSString *timeZone = [tmp1 name];
-	
-	//Not using lat/long right now
-	NSString *latitude = @"";
-	NSString *longitude = @"";
-	
-	NSString *theDescription = @"";
-	
-	if ([self.description.text isEqualToString:@""]) {
-		theDescription = @"No description entered...";
-	}else {
-		theDescription = self.description.text;
-	}
-	
-	NSString *theOpponent = @"";
-	if ([self.opponent.text isEqualToString:@""]) {
-		theOpponent = @"Opponent TBD";
-	}else {
-		theOpponent = self.opponent.text;
-	}
-
-
-	NSDictionary *response = [ServerAPI createGame:self.teamId :mainDelegate.token :startDateString :endDateString 
-												 :theDescription :timeZone :latitude :longitude
-												 :theOpponent];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	
-	if ([status isEqualToString:@"100"]){
-		
+        //add duration to start date for end date
+        
+        NSString *endDateString;
+        if (self.theDuration > 0) {
+            
+            int minutes = [self.theDuration intValue];
+            int seconds = minutes * 60;
+            
+            NSDate *endDate = [self.start dateByAddingTimeInterval:seconds];
+            
+            endDateString = [format stringFromDate:endDate];
+        }else {
+            endDateString = @"";
+        }
+        
+        
+        
+        
+        
+        //get the current time zone
+        NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
+        
+        NSString *timeZone = [tmp1 name];
+        
+        //Not using lat/long right now
+        NSString *latitude = @"";
+        NSString *longitude = @"";
+        
+        NSString *newDescription = @"";
+ 
+        
+        if ([self.theDescription isEqualToString:@""]) {
+            newDescription = @"No description entered...";
+        }else {
+            newDescription = self.theDescription;
+        }
+        
+        NSString *newOpp = @"";
+        if ([self.theOpponent isEqualToString:@""]) {
+            newOpp = @"Opponent TBD";
+        }else {
+            newOpp = self.theOpponent;
+        }
+        
+        
+        NSDictionary *response = [ServerAPI createGame:self.teamId :mainDelegate.token :startDateString :endDateString 
+                                                      :newDescription :timeZone :latitude :longitude
+                                                      :newOpp];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        
+        if ([status isEqualToString:@"100"]){
+            
 			self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 205:
+                    //error connecting to server
+                    self.errorString = @"*You must be a coordinator to add events.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
 		
-	}else{
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
 		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-            case 205:
-				//error connecting to server
-				self.errorString = @"*You must be a coordinator to add events.";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-		
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{
@@ -294,15 +303,12 @@
 
 
 -(void)viewDidUnload{
-	createSuccess = nil;
 	serverProcess = nil;
 	error = nil;
 	submitButton = nil;
-	//teamId = nil;
 	opponent = nil;
 	duration = nil;
 	description = nil;
-	//start = nil;
 	[super viewDidUnload];
 }
 

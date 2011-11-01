@@ -12,30 +12,22 @@
 
 @interface NewEvent2 : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
 	
-	IBOutlet UIActivityIndicatorView *serverProcess;
-	IBOutlet UIButton *submitButton;
-	IBOutlet UILabel *error;
-	bool createSuccess;
-	NSString *teamId;
-	
-	IBOutlet UITextField *location;
-	IBOutlet UITextField *eventName;
-	IBOutlet UITextView *description;
-	NSDate *start;
-	
-	NSString *errorString;
-	
 }
+
+@property (nonatomic, strong) NSString *theDescription;
+@property (nonatomic, strong) NSString *theLocation;
+@property (nonatomic, retain) NSString *theEventName;
+
 @property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) IBOutlet UITextField *eventName;
-@property (nonatomic, strong) UIActivityIndicatorView *serverProcess;
-@property (nonatomic, strong) UIButton *submitButton;
-@property (nonatomic, strong) UILabel *error;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *serverProcess;
+@property (nonatomic, strong) IBOutlet UIButton *submitButton;
+@property (nonatomic, strong) IBOutlet UILabel *error;
 @property bool createSuccess;
 @property (nonatomic, strong) NSString *teamId;
 
-@property (nonatomic, strong) UITextField *location;
-@property (nonatomic, strong) UITextView *description;
+@property (nonatomic, strong) IBOutlet UITextField *location;
+@property (nonatomic, strong) IBOutlet UITextView *description;
 @property (nonatomic, strong) NSDate *start;
 
 

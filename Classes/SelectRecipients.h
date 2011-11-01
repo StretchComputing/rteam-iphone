@@ -10,40 +10,18 @@
 
 
 @interface SelectRecipients : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
-    
-	NSArray *members;
-	NSString *teamId;
-	NSMutableArray *selectedMembers;
-	NSMutableArray *selectedMemberObjects;
-	NSMutableArray *allFansObjects;
-	NSString *fromWhere;
-	NSString *messageOrPoll;
-	NSString *error;
-	
-	NSString *userRole;
-	NSString *eventType;
-	NSString *eventId;
-	
-	bool haveFans;
-	
-	IBOutlet UIButton *saveButton;
-	IBOutlet UITableView *memberTableView;
-	
-	IBOutlet UILabel *loadingLabel;
-	IBOutlet UIActivityIndicatorView *loadingActivity;
-	
-	bool haveMembers;
+
 }
-@property (nonatomic, retain) NSMutableArray *allMemberObjects;
+@property (nonatomic, strong) NSMutableArray *allMemberObjects;
 @property bool fans;
 @property bool team;
 @property bool isPoll;
 @property bool isPrivate;
 @property bool haveMembers;
-@property (nonatomic, strong)  UILabel *loadingLabel;
-@property (nonatomic, strong)  UIActivityIndicatorView *loadingActivity;
-@property (nonatomic, strong) UIButton *saveButton;
-@property (nonatomic, strong) UITableView *memberTableView;
+@property (nonatomic, strong) IBOutlet UILabel *loadingLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) IBOutlet UIButton *saveButton;
+@property (nonatomic, strong) IBOutlet UITableView *memberTableView;
 @property bool haveFans;
 @property (nonatomic, strong) NSMutableArray *allFansObjects;
 @property (nonatomic, strong) NSString *eventType;

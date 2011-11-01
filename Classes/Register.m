@@ -21,7 +21,7 @@
 
 @implementation Register
 @synthesize email, password, error, registering, submitButton, createSuccess, invalidEmail, isMember, serverError, success, numMemberTeams, helpScreen,
-isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName, watchVideoButton, errorString, loginButton, middleView;
+isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName, watchVideoButton, errorString, loginButton, middleView, theEmail, thePassword;
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -138,6 +138,8 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 		
 		//Register the User in a background thread
 
+        self.theEmail = [NSString stringWithString:self.email.text];
+        
 		[self performSelectorInBackground:@selector(runMemberRequest) withObject:nil];
 	
 		
@@ -148,55 +150,57 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 - (void)runMemberRequest {
 	
-	
-	NSDictionary *response = [ServerAPI getMembershipStatus:self.email.text];
-	
-	NSString *status = [response valueForKey:@"status"];
-	self.isMember = false;
+	@autoreleasepool {
+        NSDictionary *response = [ServerAPI getMembershipStatus:self.theEmail];
+        
+        NSString *status = [response valueForKey:@"status"];
+        self.isMember = false;
 		
-	if ([status isEqualToString:@"100"]){
-		
-		self.numMemberTeams = [[response valueForKey:@"numberOfTeams"] intValue];
-		
-		if (self.numMemberTeams > 0) {
-			self.isMember = true;
-		}
-		
-		if ([response valueForKey:@"firstName"] != nil) {
-			self.firstName = [response valueForKey:@"firstName"];
-		}
+        if ([status isEqualToString:@"100"]){
+            
+            self.numMemberTeams = [[response valueForKey:@"numberOfTeams"] intValue];
+            
+            if (self.numMemberTeams > 0) {
+                self.isMember = true;
+            }
+            
+            if ([response valueForKey:@"firstName"] != nil) {
+                self.firstName = [response valueForKey:@"firstName"];
+            }
+            
+            if ([response valueForKey:@"lastName"] != nil) {
+                self.lastName = [response valueForKey:@"lastName"];
+            }
+        }else{
+            
+            self.isMember = false;
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinishMember)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-		if ([response valueForKey:@"lastName"] != nil) {
-			self.lastName = [response valueForKey:@"lastName"];
-		}
-	}else{
+    }
 		
-		self.isMember = false;
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinishMember)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinishMember{
@@ -231,6 +235,9 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 			
 			//Register the User in a background thread
 			
+            self.theEmail = [NSString stringWithString:self.email.text];
+            self.thePassword = [NSString stringWithString:self.password.text];
+            
 			[self performSelectorInBackground:@selector(runRegister) withObject:nil];
 			
 		}
@@ -253,80 +260,83 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 - (void)runRegister {
 
-	
-	NSDictionary *response = [ServerAPI createUser:self.firstName
-											  :self.lastName
-											  :self.email.text
-											  :self.password.text
-												  :@"true" :@"" :@"" :@"" :@""];
-	
-	
-	NSString *status = [response valueForKey:@"status"];
+	@autoreleasepool {
+        NSDictionary *response = [ServerAPI createUser:self.firstName
+                                                      :self.lastName
+                                                      :self.theEmail
+                                                      :self.thePassword
+                                                      :@"true" :@"" :@"" :@"" :@""];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
 		
-	if ([status isEqualToString:@"100"]){
+        if ([status isEqualToString:@"100"]){
+            
+            NSString *token = [response valueForKey:@"token"];
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            mainDelegate.token = token;
+            mainDelegate.quickLinkOne = @"create";
+            mainDelegate.quickLinkTwo = @"";
+            mainDelegate.quickLinkOneName = @"";
+            mainDelegate.quickLinkTwoName = @"";
+            mainDelegate.quickLinkOneImage = @"";
+            mainDelegate.quickLinkTwoImage = @"";
+            
+            [mainDelegate saveUserInfo];
+            
+            self.createSuccess = true;
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                case 201:
+                    //email address already in use
+                    self.errorString = @"*Email address is already in use.";
+                    break;
+                case 300:
+                    //first and last names required
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                case 303:
+                    //email address and password required
+                    self.errorString = @"*Email address and password required.";
+                    break;
+                case 518:
+                    //invalid already member parameter
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                case 542:
+                    //invalid already member parameter
+                    self.errorString = @"*Invalid phone number.";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinishRunRegister)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+        
+    }
 		
-		NSString *token = [response valueForKey:@"token"];
-		
-		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-		mainDelegate.token = token;
-		mainDelegate.quickLinkOne = @"create";
-		mainDelegate.quickLinkTwo = @"";
-		mainDelegate.quickLinkOneName = @"";
-		mainDelegate.quickLinkTwoName = @"";
-		mainDelegate.quickLinkOneImage = @"";
-		mainDelegate.quickLinkTwoImage = @"";
-		
-		[mainDelegate saveUserInfo];
-		
-		self.createSuccess = true;
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server.";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server.";
-				break;
-			case 201:
-				//email address already in use
-				self.errorString = @"*Email address is already in use.";
-				break;
-			case 300:
-				//first and last names required
-				self.errorString = @"*Error connecting to server.";
-				break;
-			case 303:
-				//email address and password required
-				self.errorString = @"*Email address and password required.";
-				break;
-			case 518:
-				//invalid already member parameter
-				self.errorString = @"*Error connecting to server.";
-				break;
-            case 542:
-				//invalid already member parameter
-				self.errorString = @"*Invalid phone number.";
-				break;
-			default:
-				//should never get here
-				self.errorString = @"*Error connecting to server.";
-				break;
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinishRunRegister)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinishRunRegister{

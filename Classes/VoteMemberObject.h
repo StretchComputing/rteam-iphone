@@ -10,10 +10,7 @@
 
 
 @interface VoteMemberObject : NSObject {
-    
-	NSString *memberName;
-	NSString *memberId;
-	int numVotes;
+
 }
 
 @property (nonatomic, strong) NSString *memberName;

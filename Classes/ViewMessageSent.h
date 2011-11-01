@@ -47,6 +47,7 @@
 	IBOutlet UILabel *errorLabel;
 	NSString *errorString;
 }
+@property (nonatomic, strong) IBOutlet UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *errorLabel;
 @property (nonatomic, strong) NSString *errorString;
 
@@ -86,5 +87,6 @@
 
 -(IBAction)deleteMessage;
 -(IBAction)ViewDetailMessageReplies;
+-(NSString *)getDateLabel:(NSString *)dateCreated;
 
 @end

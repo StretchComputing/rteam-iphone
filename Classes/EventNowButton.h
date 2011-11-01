@@ -11,19 +11,7 @@
 
 @interface EventNowButton : UIButton {
     
-	CurrentEvent *event;
-	UILabel *eventLabel;
-	UILabel *teamLabel;
-	UILabel *canceledLabel;
-    UILabel *scoreLabel;
-    
-    NSString *scoreUs;
-    NSString *scoreThem;
-    NSString *interval;
-    NSString *teamName;
-    
-    NSString *eventType;
-    NSString *eventDate;
+
 }
 @property (nonatomic, strong) NSString *eventType;
 @property (nonatomic, strong) NSString *eventDate;

@@ -12,53 +12,25 @@
 
 @interface Register : UIViewController {
 	
-	IBOutlet UITextField *email;
-	IBOutlet UITextField *password;
-	IBOutlet UILabel *error;
-	IBOutlet UILabel *success;
-	IBOutlet UIActivityIndicatorView *registering;
-	IBOutlet UIButton *submitButton;
-	IBOutlet UIScrollView *helpScreen;
-	IBOutlet UITextField *confirmEmail;
-	IBOutlet UIButton *memberLogin;
-	IBOutlet UIButton *closeButton;
-	
-	UIBarButtonItem *barItem;
-	
-	int numMemberTeams;
-	bool createSuccess;
-	bool invalidEmail;
-	bool serverError;
-	bool isMember;
-	bool isHelpOpen;
-	
-	NSString *firstName;
-	NSString *lastName;
-    
-	IBOutlet UIButton *watchVideoButton;
-	
-	NSString *errorString;
-	
-	IBOutlet UIView *middleView;
-	IBOutlet UIButton *loginButton;
-	
 }
-@property (nonatomic, strong) UIView *middleView;
-@property (nonatomic, strong) UIButton *loginButton;
+@property (nonatomic, strong) NSString *theEmail;
+@property (nonatomic, strong) NSString *thePassword;
+@property (nonatomic, strong) IBOutlet UIView *middleView;
+@property (nonatomic, strong) IBOutlet UIButton *loginButton;
 @property (nonatomic, strong) NSString *errorString;
-@property (nonatomic, strong) UIButton *watchVideoButton;
+@property (nonatomic, strong) IBOutlet UIButton *watchVideoButton;
 @property (nonatomic, strong) NSString *firstName;
 @property (nonatomic, strong) NSString *lastName;
-@property (nonatomic, strong) UIButton *closeButton;
-@property (nonatomic, strong) UITextField *confirmEmail;
-@property (nonatomic, strong) UIButton *memberLogin;
-@property (nonatomic, strong) UITextField *email;
-@property (nonatomic, strong) UITextField *password;
-@property (nonatomic, strong) UILabel *error;
-@property (nonatomic, strong) UIActivityIndicatorView *registering;
-@property (nonatomic, strong) UIButton *submitButton;
-@property (nonatomic, strong) UILabel *success;
-@property (nonatomic, strong) UIScrollView *helpScreen;
+@property (nonatomic, strong) IBOutlet UIButton *closeButton;
+@property (nonatomic, strong) IBOutlet UITextField *confirmEmail;
+@property (nonatomic, strong) IBOutlet UIButton *memberLogin;
+@property (nonatomic, strong) IBOutlet UITextField *email;
+@property (nonatomic, strong) IBOutlet UITextField *password;
+@property (nonatomic, strong) IBOutlet UILabel *error;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *registering;
+@property (nonatomic, strong) IBOutlet UIButton *submitButton;
+@property (nonatomic, strong) IBOutlet UILabel *success;
+@property (nonatomic, strong) IBOutlet UIScrollView *helpScreen;
 
 @property (nonatomic, strong) UIBarButtonItem *barItem;
 

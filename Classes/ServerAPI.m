@@ -1117,7 +1117,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
         
         
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
-		
+		        
 		if ([apiStatus isEqualToString:@"100"]) {
             
 			NSArray *memberJsonObjects = [response valueForKey:@"members"];
@@ -1798,9 +1798,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
         
 		SBJSON *jsonParser = [SBJSON new];
-		
+
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
-		
+        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		if ([apiStatus isEqualToString:@"100"]) {
@@ -3900,7 +3901,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			if (![messageGroup isEqualToString:@"inbox"]) {
                 
 				NSArray *outbox = [response valueForKey:@"outbox"];
-                
+                                
 				for (int i = 0; i < [outbox count]; i++) {
 					NSDictionary *message = [outbox objectAtIndex:i];
                     
@@ -3924,6 +3925,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
                             tmp.followUp = [message valueForKey:@"followUpMessage"];
 						}
                         
+                        /*
 						if (isPoll) {
 							if ([tmp.messageType isEqualToString:@"poll"]) {
 								[returnThreads addObject:tmp];
@@ -3932,10 +3934,11 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 							if (![tmp.messageType isEqualToString:@"poll"]) {
 								[returnThreads addObject:tmp];
 							}else if ([pollOrMsg isEqualToString:@"both"]) {
-								[returnThreads addObject:tmp];
 							}
 						}
-                        
+                         */
+                        [returnThreads addObject:tmp];
+
 						
 					}else if ([message valueForKey:@"practiceId"] == nil) {
 						//Handle the gameId threads
@@ -3989,6 +3992,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						
 						tmp.createdDate = finalStringDate;
 						
+                        /*
 						if (isPoll) {
 							if ([tmp.messageType isEqualToString:@"poll"]) {
 								[returnThreads addObject:tmp];
@@ -4000,7 +4004,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 								[returnThreads addObject:tmp];
 							}
 						}
-						
+						*/
+                        [returnThreads addObject:tmp];
+
 						
 					}else {
 						//Handle the practiceId threads
@@ -4053,6 +4059,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 						
 						tmp.createdDate = finalStringDate;
 						
+                        /*
 						if (isPoll) {
 							if ([tmp.messageType isEqualToString:@"poll"]) {
 								[returnThreads addObject:tmp];
@@ -4064,7 +4071,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 								[returnThreads addObject:tmp];
 							}
 						}
-						
+                        */
+                        [returnThreads addObject:tmp];
+
 						
 						
 						
