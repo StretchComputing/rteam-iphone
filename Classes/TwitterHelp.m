@@ -12,7 +12,7 @@
 #import "FastActionSheet.h"
 
 @implementation TwitterHelp
-@synthesize scrollView, bannerIsVisible;
+@synthesize scrollView, bannerIsVisible, myAd;
 
 
 -(void)viewDidAppear:(BOOL)animated{

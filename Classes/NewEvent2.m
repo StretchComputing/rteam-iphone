@@ -62,10 +62,6 @@
 	
 	error.text = @"";
     
-    self.theDescription = [NSString stringWithString:self.description.text];
-    self.theEventName = [NSString stringWithString:self.eventName.text];
-    self.theLocation = [NSString stringWithString:self.location.text];
-    
     
 	//Validate all fields are entered:
 	if ([self.eventName.text  isEqualToString:@""]){
@@ -88,7 +84,10 @@
 		
 		
 		//Create the player in a background thread
-		
+        self.theDescription = [NSString stringWithString:self.description.text];
+        self.theEventName = [NSString stringWithString:self.eventName.text];
+        self.theLocation = [NSString stringWithString:self.location.text];
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 	}
@@ -128,7 +127,7 @@
         //Not using lat/long right now
         NSString *latitude = @"";
         NSString *longitude = @"";
-        
+                
         NSDictionary *response = [ServerAPI createEvent:self.teamId :mainDelegate.token :startDateString :@"" :theDesc :timeZone
                                                        :latitude :longitude :self.theLocation :@"generic" :self.theEventName];
         

@@ -11,31 +11,12 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 
 @interface ConfirmMessageDetail : UIViewController <UIActionSheetDelegate, MFMessageComposeViewControllerDelegate> {
-    
-	NSString *memberId;
-	NSString *confirmDate;
-	NSString *memberName;
-	NSString *teamId;
-	
-	NSString *displayString;
-	NSString *phoneNumber;
-    
-	IBOutlet UILabel *nameLabel;
-	IBOutlet UILabel *confirmLabel;
-	
-	IBOutlet UIButton *callTextButton;
-	IBOutlet UIButton *markConfirmButton;
-	IBOutlet UIButton *sendMessageButton;
-	
-	IBOutlet UILabel *displayLabel;
-	bool messageSent;
-	
-	UIActionSheet *callTextActionSheet;
+
 	
 	
 }
 @property (nonatomic, strong) UIActionSheet *callTextActionSheet;
-@property (nonatomic, strong) UILabel *displayLabel;
+@property (nonatomic, strong) IBOutlet UILabel *displayLabel;
 @property bool messageSent;
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSString *displayString;
@@ -44,12 +25,12 @@
 @property (nonatomic, strong) NSString *confirmDate;
 @property (nonatomic, strong) NSString *memberName;
 
-@property (nonatomic, strong) UILabel *nameLabel;
-@property (nonatomic, strong) UILabel *confirmLabel;
+@property (nonatomic, strong) IBOutlet UILabel *nameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *confirmLabel;
 
-@property (nonatomic, strong) UIButton *callTextButton;
-@property (nonatomic, strong) UIButton *markConfirmButton;
-@property (nonatomic, strong) UIButton *sendMessageButton;
+@property (nonatomic, strong) IBOutlet UIButton *callTextButton;
+@property (nonatomic, strong) IBOutlet UIButton *markConfirmButton;
+@property (nonatomic, strong) IBOutlet UIButton *sendMessageButton;
 
 
 -(IBAction)sendMessage;

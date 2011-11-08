@@ -24,4 +24,11 @@
 @property bool didReply;
 @property (nonatomic, strong) NSMutableArray *imageDataArray;
 
+
+@end
+
+
+
+@interface UIDevice (ForceRteamOrien)
+- (void) setOrientation:(UIInterfaceOrientation)orientation;
 @end

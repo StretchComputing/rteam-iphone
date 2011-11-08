@@ -119,46 +119,48 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 
 -(void)updateWasViewed{
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if (![token isEqualToString:@""]){
-		if (self.teamId == nil) {
-			self.teamId = self.origTeamId;
-		}
-		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"true" :@"" :@""];
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					//self.error.text = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
+            if (self.teamId == nil) {
+                self.teamId = self.origTeamId;
+            }
+            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"true" :@"" :@""];
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
 
+    }
 	
 	
 }
@@ -442,56 +444,59 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 
 -(void)getThreadInfo{
  
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if (![token isEqualToString:@""]){
-		
-		if (self.teamId == nil) {
-			self.teamId = self.origTeamId;
-		}
-		
-		NSDictionary *response = [ServerAPI getMessageThreadInfo:token :self.teamId :self.threadId];
-		
-		NSString *status1 = [response valueForKey:@"status"];
-		
-		if ([status1 isEqualToString:@"100"]){
-			
-			NSDictionary *threadInfo1 = [response valueForKey:@"messageThreadInfo"];
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
             
-            NSString *alert = [threadInfo1 valueForKey:@"isAlert"];
-                        
-            if ([alert isEqualToString:@"true"]){
-                self.isAlert = true;
+            if (self.teamId == nil) {
+                self.teamId = self.origTeamId;
             }
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status1 intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.errorString = @"*Error retrieving poll information.";
-					break;
-				case 1:
-					//error connecting to server
-					//self.errorString = @"*Error retrieving poll information.";
-					break;
-				default:
-					//log status code
-					//self.errorString = @"*Error retrieving poll information.";
-					break;
-			}
-		}
+            
+            NSDictionary *response = [ServerAPI getMessageThreadInfo:token :self.teamId :self.threadId];
+            
+            NSString *status1 = [response valueForKey:@"status"];
+            
+            if ([status1 isEqualToString:@"100"]){
+                
+                NSDictionary *threadInfo1 = [response valueForKey:@"messageThreadInfo"];
+                
+                NSString *alert = [threadInfo1 valueForKey:@"isAlert"];
+                
+                if ([alert isEqualToString:@"true"]){
+                    self.isAlert = true;
+                }
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status1 intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorString = @"*Error retrieving poll information.";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorString = @"*Error retrieving poll information.";
+                        break;
+                    default:
+                        //log status code
+                        //self.errorString = @"*Error retrieving poll information.";
+                        break;
+                }
+            }
+            
+        }
+        
+
+    }
 		
-	}
-    
-	
 }
 
 

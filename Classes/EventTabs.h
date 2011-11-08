@@ -10,20 +10,7 @@
 
 
 @interface EventTabs : UITabBarController <UITabBarControllerDelegate, UIActionSheetDelegate> {
-	NSString *startDate;
-	NSString *endDate;
-	NSString *eventId;
-	NSString *teamId;
-	NSString *timeZone;
-	NSString *description;
-	NSString *latitude;
-	NSString *longitude;
-	NSString *location;
-	NSString *userRole;
-	
-	bool messageSuccess;
-	int messageCount;
-	bool fromHome;
+
 }
 @property bool fromHome;
 @property bool messageSuccess;

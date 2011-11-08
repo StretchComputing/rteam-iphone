@@ -9,25 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface Fans : UIViewController <UITableViewDataSource, UITableViewDelegate> {
-	NSArray *fans;
-	NSString *teamName;
-	NSString *teamId;
-	NSString *userRole;
-	
-	NSString *currentMemberId;
-	UIImageView *currentIcon;
-	NSString *error;
-	
-	IBOutlet UITableView *fanTable;
-	IBOutlet UILabel *fanActivityLabel;
-	IBOutlet UIActivityIndicatorView *fanActivity;
-	UIActivityIndicatorView *barActivity;
-	NSMutableArray *fanPics;
+
 }
 @property (nonatomic, strong) NSMutableArray *fanPics;
-@property (nonatomic, strong) UITableView *fanTable;
-@property (nonatomic, strong) UILabel *fanActivityLabel;
-@property (nonatomic, strong) UIActivityIndicatorView *fanActivity;
+@property (nonatomic, strong) IBOutlet UITableView *fanTable;
+@property (nonatomic, strong) IBOutlet UILabel *fanActivityLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *fanActivity;
 @property (nonatomic, strong) UIActivityIndicatorView *barActivity;
 
 @property (nonatomic, strong) NSString *error;

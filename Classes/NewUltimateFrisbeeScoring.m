@@ -15,7 +15,7 @@
 @implementation NewUltimateFrisbeeScoring
 @synthesize topOrBottom, subUs, subThem, scoreUs, scoreThem, isGameOver,
 labelUs, labelThem, gameOverButton, gameId, teamId, createSuccess, initScoreUs, initScoreThem, interval,
-isCoord, addThem, addUs, cancelScoringButton, activity;
+isCoord, addThem, addUs, cancelScoringButton, activity, theScoreUs, theScoreThem;
 
 -(void)viewDidLoad{
 	
@@ -67,8 +67,10 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	
 	
 	int us = [self.scoreUs.text intValue];
-	us = us++;
+	us++;
 	self.scoreUs.text = [NSString stringWithFormat:@"%d", us];
+    self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+    self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 }
@@ -79,6 +81,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	if (us != 0) {
 		us--;
 		self.scoreUs.text = [NSString stringWithFormat:@"%d", us];
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 	
@@ -88,8 +92,10 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 -(void)addT{
 	
 	int them = [self.scoreThem.text intValue];
-	them = them ++;
+	them++;
 	self.scoreThem.text = [NSString stringWithFormat:@"%d", them];
+    self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+    self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 }
 
@@ -99,6 +105,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	if (them != 0) {
 		them--;
 		self.scoreThem.text = [NSString stringWithFormat:@"%d", them];
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 	
@@ -132,6 +140,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
         self.cancelScoringButton.enabled =NO;
         
         [self.activity startAnimating];
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
         
 		[self performSelectorInBackground:@selector(runRequestOver) withObject:nil];
 		

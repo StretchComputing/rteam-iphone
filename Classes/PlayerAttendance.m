@@ -54,8 +54,8 @@
 	self.tableView.tableHeaderView = headerView;
 	
 	if (!self.fromSearch) {
-		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
-		[self.navigationItem setRightBarButtonItem:addButton];
+		//UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
+		//[self.navigationItem setRightBarButtonItem:addButton];
 	}
 	
 	

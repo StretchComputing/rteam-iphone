@@ -15,7 +15,7 @@
 @implementation NewLacrosseScoring
 @synthesize topOrBottom, subUs, subThem, addQuart, subQuart, scoreUs, scoreThem, quarter, isGameOver,
 labelUs, labelThem, labelQuart, gameOverButton, gameId, teamId, createSuccess, initScoreUs, initScoreThem, interval,
-isCoord, addThem, addUs, cancelScoringButton, activity;
+isCoord, addThem, addUs, cancelScoringButton, activity, theScoreUs, theScoreThem;
 
 -(void)viewDidLoad{
 	
@@ -74,8 +74,10 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	
 	
 	int us = [self.scoreUs.text intValue];
-	us = us++;
+	us++;
 	self.scoreUs.text = [NSString stringWithFormat:@"%d", us];
+    self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+    self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 }
@@ -86,6 +88,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	if (us != 0) {
 		us--;
 		self.scoreUs.text = [NSString stringWithFormat:@"%d", us];
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 	
@@ -95,8 +99,10 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 -(void)addT{
 	
 	int them = [self.scoreThem.text intValue];
-	them = them ++;
+	them ++;
 	self.scoreThem.text = [NSString stringWithFormat:@"%d", them];
+    self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+    self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 }
 
@@ -106,6 +112,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	if (them != 0) {
 		them--;
 		self.scoreThem.text = [NSString stringWithFormat:@"%d", them];
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 	
@@ -125,6 +133,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 			quart++;
 			self.quarter.text = [NSString stringWithFormat:@"%d", quart];
 		}
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 		
@@ -135,6 +145,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	
 	if ([self.quarter.text isEqualToString:@"OT"]) {
 		self.quarter.text = @"4";
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}else {
 		int quart = [self.quarter.text intValue];
@@ -142,6 +154,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 		if ((quart != 0) && (quart != 1)) {
 			quart--;
 			self.quarter.text = [NSString stringWithFormat:@"%d", quart];
+            self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+            self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		}		
 	}
@@ -176,7 +190,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
         self.subThem.enabled = NO;
         self.gameOverButton.enabled = NO;
         self.cancelScoringButton.enabled = NO;
-        
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequestOver) withObject:nil];
 		
         /*

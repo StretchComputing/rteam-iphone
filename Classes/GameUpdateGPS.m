@@ -17,7 +17,7 @@
 
 @implementation GameUpdateGPS
 @synthesize gameId, teamId, locationName, action, lat, longt, locationManager, saveButton, useCurrentButton, updateSuccess, errorMessage, 
-locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, allGamesArray, haveGames, gameSuccess, updateAllSuccess;
+locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, allGamesArray, haveGames, gameSuccess, updateAllSuccess, theLocationName;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -55,6 +55,8 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 	[self.navigationItem setHidesBackButton:YES];
 	self.saveButton.enabled = NO;
 	self.useCurrentButton.enabled = NO;
+    self.theLocationName = [NSString stringWithString:self.locationName.text];
+
 	
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 
@@ -99,7 +101,8 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 	self.updateLong = currentLongt;
 	
 	
-	
+	self.theLocationName = [NSString stringWithString:self.locationName.text];
+    
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 	
@@ -111,79 +114,81 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 
 - (void)runRequest{
 
-	
-	NSString *locationStr = @"";
-	NSString *paramLat = @"";
-	NSString *paramLong = @"";
-	
-	if (self.nameOnly) {
-		
-		locationStr = self.locationName.text;
-		
-	}else {
-		
-		paramLat = self.updateLat;
-		paramLong = self.updateLong;
-		
-		if (![self.locationName.text isEqualToString:@""] && (self.locationName.text != nil)) {
-			locationStr = self.locationName.text;
-		}
-	}
+	@autoreleasepool {
+        NSString *locationStr = @"";
+        NSString *paramLat = @"";
+        NSString *paramLong = @"";
+        
+        if (self.nameOnly) {
+            
+            locationStr = self.theLocationName;
+            
+        }else {
+            
+            paramLat = self.updateLat;
+            paramLong = self.updateLong;
+            
+            if (![self.theLocationName isEqualToString:@""] && (self.theLocationName != nil)) {
+                locationStr = self.theLocationName;
+            }
+        }
+        
+        NSString *updateAll = @"";
+        
+        if (self.updateAllGames.selectedSegmentIndex == 0) {
+            updateAll = @"true";
+        }
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        NSDictionary *response =[NSDictionary dictionary];
+        //If there is a token, do a DB lookup to find the game info 
+        if (![token isEqualToString:@""]){
+            
+            
+            response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :paramLat :paramLong :@"" :locationStr :@"" :@"" :@"" :@"" :@"" :updateAll];
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.updateSuccess = true;
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                self.updateSuccess = false;
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-	NSString *updateAll = @"";
-	
-	if (self.updateAllGames.selectedSegmentIndex == 0) {
-		updateAll = @"true";
-	}
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	NSDictionary *response =[NSDictionary dictionary];
-	//If there is a token, do a DB lookup to find the game info 
-	if (![token isEqualToString:@""]){
+    }
 		
-
-		response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :paramLat :paramLong :@"" :locationStr :@"" :@"" :@"" :@"" :@"" :updateAll];
-		NSString *status = [response valueForKey:@"status"];
-
-		if ([status isEqualToString:@"100"]){
-			
-			self.updateSuccess = true;
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			self.updateSuccess = false;
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{
@@ -249,77 +254,78 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 
 -(void)getAllGames{
 
-	
-	NSString *token = @"";
-	
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	
-	
-	//If there is a token, do a DB lookup to find the players associated with this team:
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getListOfGames:self.teamId :token];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.allGamesArray = [response valueForKey:@"games"];
-			self.haveGames = true;
-			self.gameSuccess = true;
-			
-		}else{
-			
-			self.gameSuccess = false;
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error.text = @"*Error connecting to server";
-					break;
-				default:
-					//Game retrieval failed, log error code?
-					//self.error.text = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-	}
-	
+	@autoreleasepool {
+        NSString *token = @"";
+        
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        
+        
+        //If there is a token, do a DB lookup to find the players associated with this team:
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getListOfGames:self.teamId :token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.allGamesArray = [response valueForKey:@"games"];
+                self.haveGames = true;
+                self.gameSuccess = true;
+                
+            }else{
+                
+                self.gameSuccess = false;
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Game retrieval failed, log error code?
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+        }
+        
+        
+    }
 
+    
+    
 }
-
+	
 
 
 
 -(void)viewDidUnload{
-	//gameId = nil;
-	//teamId = nil;
+
 	locationName = nil;
 	action = nil;
-	//lat = nil;
-	//longt = nil;
+
 	locationManager = nil;
 	useCurrentButton = nil;
 	saveButton = nil;
 	errorMessage = nil;
-	//locationString = nil;
-	//errorString = nil;
+
 	updateAllGames = nil;
 	[super viewDidUnload];
 

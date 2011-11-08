@@ -13,9 +13,10 @@
 #import "TableDisplayUtil.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
+#import "VideoDisplay.h"
 
 @implementation NewActivityDetail
-@synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, isCurrent, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel;
+@synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, isCurrent, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel, isVideo;
 
 
 - (void)viewDidLoad{
@@ -199,6 +200,19 @@
         
         myImage.frame = CGRectMake(1, 1, imageBack.frame.size.width -2, imageBack.frame.size.height - 2);
         
+        if (!self.isVideo) {
+
+            [insideImageView addTarget:self action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
+
+        }else{
+            UIImageView *playButton = [[UIImageView alloc] initWithFrame:CGRectMake(myImage.frame.size.width/2 - 15, myImage.frame.size.height/2 -15, 30, 30)];
+            playButton.image = [UIImage imageNamed:@"playButtonSmall.png"];
+            [myImage addSubview:playButton];
+            
+            [insideImageView addTarget:self action:@selector(videoSelected:) forControlEvents:UIControlEventTouchUpInside];
+
+        }
+        
         [imageBack addSubview:myImage];
         
         imageBack.layer.masksToBounds = YES;
@@ -210,7 +224,6 @@
         insideImageView.frame = CGRectMake(52, currentHeight, 82, 82);
         insideImageView.backgroundColor = [UIColor clearColor];
         
-        [insideImageView addTarget:self action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
         
         [self.myScrollView addSubview:imageBack];
         [self.myScrollView addSubview:insideImageView];
@@ -230,6 +243,20 @@
     newDisplay.activityId = self.messageId;
     newDisplay.teamId = self.teamId;
     [self.navigationController pushViewController:newDisplay animated:YES];    
+    
+}
+
+-(void)videoSelected:(id)sender{
+    
+    VideoDisplay *newDisplay = [[VideoDisplay alloc] init];
+    newDisplay.activityId = messageId;
+    newDisplay.teamId = teamId;
+    
+    UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:nil action:nil];
+    self.navigationItem.backBarButtonItem = temp;
+    
+    
+    [self.navigationController pushViewController:newDisplay animated:NO];    
     
 }
 

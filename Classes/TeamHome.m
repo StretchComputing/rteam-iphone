@@ -40,7 +40,7 @@ webPageButton, nextGameButton, teamNameLabel, gamesArray, pastGamesArray, errorL
 scheduleButtonUnderline, allScoresButtonUnderline, webPageButtonUnderline, nextEventInfoLabel, nextEventButton, eventSuccess, eventsArray,
 futureEventsArray, nextEventArray, bannerIsVisible, eventsActivity, touchUpLocation, gestureStartPoint, nextGameLabel, nextEventLabel,
 teamInfoThumbnail, noEvents, noGames, eventsAlert, membersAlert, noMembers, displayedMemberAlert, displayedEventAlert, gamesArrayTemp, pastGamesArrayTemp,
-displayWarning;
+displayWarning, myAd, displayPhoto;
 
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -151,11 +151,11 @@ displayWarning;
 	self.nextGameArray = [NSMutableArray array];
 	self.title = @"Team Home";
 	
-	if (myAd != nil) {
-		//myAd.hidden = YES;
-		self.bannerIsVisible = NO;
-		
-	}
+	if (myAd.bannerLoaded) {
+        myAd.hidden = NO;
+    }else{
+        myAd.hidden = YES;
+    }
 	
 	[self.eventsActivity startAnimating];
 	
@@ -178,70 +178,74 @@ displayWarning;
 
 -(void)getListOfGames{
 
-	
-	self.gamesArrayTemp = [NSMutableArray array];
-	
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getListOfGames:self.teamId :token];
-		
-		NSString *status = [response valueForKey:@"status"];
-				
-		if ([status isEqualToString:@"100"]){
-			
-			self.gameSuccess = true;
-			self.gamesArrayTemp = [response valueForKey:@"games"];
-			
-		
-			
-			
-			if ([self.gamesArrayTemp count] == 0) {
-				self.noGames = true;
-			}
-			
-			for (int i = 0; i < [self.gamesArrayTemp count]; i++) {
-				
-				Game *tmpGame = [self.gamesArrayTemp objectAtIndex:i];
-				
-				if ([tmpGame.interval isEqualToString:@"-4"]) {
-					[self.gamesArrayTemp removeObjectAtIndex:i];
-					i--;
-				}
-			}
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			self.gameSuccess = false;
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					//self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
+	@autoreleasepool {
+    
+        self.gamesArrayTemp = [NSMutableArray array];
+        
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getListOfGames:self.teamId :token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.gameSuccess = true;
+                self.gamesArrayTemp = [response valueForKey:@"games"];
+                
+                
+                
+                
+                if ([self.gamesArrayTemp count] == 0) {
+                    self.noGames = true;
+                }
+                
+                for (int i = 0; i < [self.gamesArrayTemp count]; i++) {
+                    
+                    Game *tmpGame = [self.gamesArrayTemp objectAtIndex:i];
+                    
+                    if ([tmpGame.interval isEqualToString:@"-4"]) {
+                        [self.gamesArrayTemp removeObjectAtIndex:i];
+                        i--;
+                    }
+                }
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                self.gameSuccess = false;
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        //self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
+        [self performSelectorOnMainThread:@selector(done) withObject:nil waitUntilDone:NO];
 
-	[self performSelectorOnMainThread:@selector(done) withObject:nil waitUntilDone:NO];
+	
+    }
 }
 
 -(void)done{
@@ -328,80 +332,82 @@ displayWarning;
 
 -(void)getListOfEvents{
 
-	
-	self.eventsArray = [NSMutableArray array];
-	self.futureEventsArray = [NSMutableArray array];
-	self.nextEventArray = [NSMutableArray array];
-	
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getListOfEvents:self.teamId :token :@"all"];
-		
-		NSString *status = [response valueForKey:@"status"];
-				
-		if ([status isEqualToString:@"100"]){
-			
-			self.eventSuccess = true;
-			self.eventsArray = [response valueForKey:@"events"];
-			
-			
-			if ([self.eventsArray count] == 0) {
-				self.noEvents = true;
-			}
+	@autoreleasepool {
+        self.eventsArray = [NSMutableArray array];
+        self.futureEventsArray = [NSMutableArray array];
+        self.nextEventArray = [NSMutableArray array];
+        
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getListOfEvents:self.teamId :token :@"all"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.eventSuccess = true;
+                self.eventsArray = [response valueForKey:@"events"];
+                
+                
+                if ([self.eventsArray count] == 0) {
+                    self.noEvents = true;
+                }
+                
+                for (int i = 0; i < [self.eventsArray count]; i++) {
+                    
+                    if ([Event class] == [[self.eventsArray objectAtIndex:i] class]) {
+                        
+                        Event *tmpEvent = [self.eventsArray objectAtIndex:i];
+                        
+                        if (tmpEvent.isCanceled) {
+                            [self.eventsArray removeObjectAtIndex:i];
+                            i--;
+                        }
+                    }else if ([Practice class] == [[self.eventsArray objectAtIndex:i] class]) {
+                        
+                        Practice *tmpEvent = [self.eventsArray objectAtIndex:i];
+                        
+                        if (tmpEvent.isCanceled) {
+                            [self.eventsArray removeObjectAtIndex:i];
+                            i--;
+                        }
+                    }
+                }
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                self.eventSuccess = false;
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        //self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneEvents) withObject:nil waitUntilDone:NO];
 
-			for (int i = 0; i < [self.eventsArray count]; i++) {
-				
-				if ([Event class] == [[self.eventsArray objectAtIndex:i] class]) {
-					
-					Event *tmpEvent = [self.eventsArray objectAtIndex:i];
-					
-					if (tmpEvent.isCanceled) {
-						[self.eventsArray removeObjectAtIndex:i];
-						i--;
-					}
-				}else if ([Practice class] == [[self.eventsArray objectAtIndex:i] class]) {
-					
-					Practice *tmpEvent = [self.eventsArray objectAtIndex:i];
-					
-					if (tmpEvent.isCanceled) {
-						[self.eventsArray removeObjectAtIndex:i];
-						i--;
-					}
-				}
-			}
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			self.eventSuccess = false;
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					//self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
-	
-	[self performSelectorOnMainThread:@selector(doneEvents) withObject:nil waitUntilDone:NO];
+    }
 }
 
 -(void)doneEvents{
@@ -987,7 +993,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 	if (self.bannerIsVisible) {
 		
-		//myAd.hidden = YES;
+        myAd.hidden = YES;
 		self.bannerIsVisible = NO;
 		
 	}
@@ -997,34 +1003,37 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)getMvpInfo{
 
-		
-	for (int i = 0; i < [self.pastGamesArray count]; i++) {
-		
-		Game *tmpGame = [self.pastGamesArray objectAtIndex:i];
-		
-		if ([tmpGame.mvp isEqualToString:@""]) {
-			
-			rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    @autoreleasepool {
+        for (int i = 0; i < [self.pastGamesArray count]; i++) {
+            
+            Game *tmpGame = [self.pastGamesArray objectAtIndex:i];
+            
+            if ([tmpGame.mvp isEqualToString:@""]) {
+                
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                
+                NSDictionary *response = [ServerAPI getGameVoteTallies:mainDelegate.token :self.teamId :tmpGame.gameId :@"mvp"];
+                
+                if ([[response valueForKey:@"status"] isEqualToString:@"100"]) {
+                    
+                    NSArray *memberTallies = [response valueForKey:@"memberTallies"];
+                    
+                    NSString *newMvp = [self getMvp:memberTallies];
+                    
+                    tmpGame.mvp = newMvp;
+                    
+                    [self performSelectorOnMainThread:@selector(doneMvp) withObject:nil waitUntilDone:NO];
+                    
+                    
+                    
+                }
+            }
+            
+        }
 
-			NSDictionary *response = [ServerAPI getGameVoteTallies:mainDelegate.token :self.teamId :tmpGame.gameId :@"mvp"];
-			
-			if ([[response valueForKey:@"status"] isEqualToString:@"100"]) {
-				
-				NSArray *memberTallies = [response valueForKey:@"memberTallies"];
-				
-				NSString *newMvp = [self getMvp:memberTallies];
-				
-				tmpGame.mvp = newMvp;
-
-				[self performSelectorOnMainThread:@selector(doneMvp) withObject:nil waitUntilDone:NO];
-				
-			
-				
-			}
-		}
+    }
 		
-	}
-
+	
 }
 
 -(void)doneMvp{
@@ -1066,53 +1075,55 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 -(void)getTeamInfo{
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	if (![token isEqualToString:@""]){	
-		NSDictionary *response = [ServerAPI getTeamInfo:self.teamId :token :@"false"];
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
+            NSDictionary *response = [ServerAPI getTeamInfo:self.teamId :token :@"false"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                NSDictionary *tmpDictionary = [response valueForKey:@"teamInfo"];
+                
+                self.teamInfoThumbnail = @"";
+                
+                self.teamInfoThumbnail = [tmpDictionary valueForKey:@"thumbNail"];
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
+
+    }
 		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			NSDictionary *tmpDictionary = [response valueForKey:@"teamInfo"];
-			
-			self.teamInfoThumbnail = @"";
-			
-			self.teamInfoThumbnail = [tmpDictionary valueForKey:@"thumbNail"];
-									
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			//[self.errorLabel setHidden:NO];
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
-	
 	
 
 }
@@ -1169,7 +1180,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
 			
 		if (displayPhoto) {
-			//[self.tabBarController.navigationItem setLeftBarButtonItem:teamPicture];
+			[self.tabBarController.navigationItem setRightBarButtonItem:teamPicture];
 
 		}
 			
@@ -1190,7 +1201,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			
 			if (displayPhoto) {
-				//[self.tabBarController.navigationItem setLeftBarButtonItem:teamPicture];
+				[self.tabBarController.navigationItem setRightBarButtonItem:teamPicture];
 			}
 			
 		}else {
@@ -1240,54 +1251,57 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)getListOfMembers{
 	
 
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
+            NSDictionary *response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"" :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                NSArray *memberArray = [response valueForKey:@"members"];
+                
+                
+                if ([memberArray count] <= 1) {
+                    self.noMembers = true;
+                }
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
+
+    }
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	if (![token isEqualToString:@""]){	
-		NSDictionary *response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"" :@""];
 		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			NSArray *memberArray = [response valueForKey:@"members"];
-			
-			
-			if ([memberArray count] <= 1) {
-				self.noMembers = true;
-			}
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			//[self.errorLabel setHidden:NO];
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
-	
 	
 	
 }

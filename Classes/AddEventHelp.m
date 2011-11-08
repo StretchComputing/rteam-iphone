@@ -11,7 +11,7 @@
 #import "FastActionSheet.h"
 
 @implementation AddEventHelp
-@synthesize scrollView, bannerIsVisible;
+@synthesize scrollView, bannerIsVisible, myAd;
 
 
 -(void)viewDidAppear:(BOOL)animated{

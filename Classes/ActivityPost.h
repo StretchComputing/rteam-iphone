@@ -7,8 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import "NewActivity.h"
 
-@interface ActivityPost : UIViewController <UITextViewDelegate>
+@interface ActivityPost : UIViewController <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
+@property (nonatomic, strong) NewActivity *fromClass;
+
+@property (nonatomic, strong) NSData *videoDataToSend;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) IBOutlet UILabel *errorLabel;
+@property (nonatomic, strong) NSString *sendOrientation;
+@property bool isTakeVideo;
+@property bool isSendVideo;
+@property (nonatomic, strong) IBOutlet UIButton *cancelImageButton;
+@property (nonatomic, strong) NSData *imageDataToSend;
+@property (nonatomic, strong) NSString *cameraSaveMessage;
+@property (nonatomic, strong) IBOutlet UIImageView *previewImage;
+
 
 @property (nonatomic, strong) NSString *theMessageText;
 @property bool keyboardIsUp;
@@ -30,4 +46,6 @@
 -(IBAction)sendPoll;
 -(IBAction)privateMessage;
 -(IBAction)keyboard;
+-(IBAction)cancelImage;
+-(IBAction)segmentSelect;
 @end

@@ -24,6 +24,15 @@
 @synthesize searchBar, searchCriteria, searchTableView, potentialMatches, allMatches, teamsOnly, error, potentialMatchesTeamName, 
 allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    if (myAd.bannerLoaded) {
+        myAd.hidden = NO;
+    }else{
+        myAd.hidden = YES;
+    }
+    
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	//[self becomeFirstResponder];

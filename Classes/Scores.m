@@ -36,7 +36,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 -(void)viewDidLoad{
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-	[self.navigationItem setRightBarButtonItem:homeButton];
+	[self.navigationItem setLeftBarButtonItem:homeButton];
 	
 	//iAds
 	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];

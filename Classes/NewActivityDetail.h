@@ -10,7 +10,7 @@
 
 @interface NewActivityDetail : UIViewController
 
-
+@property bool isVideo;
 @property (nonatomic, strong) IBOutlet UILabel *voteLabel;
 @property (nonatomic, strong) NSString *currentVote;
 @property bool voteSuccess;

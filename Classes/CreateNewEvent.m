@@ -192,58 +192,60 @@ createSingleLabel;
 
 -(void)getTeamList{
     
-	
-	//Retrieve teams from DB
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	
-	//If there is a token, do a DB lookup to find the teams associated with this coach:
-	if (![token isEqualToString:@""]){
+	@autoreleasepool {
+        //Retrieve teams from DB
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        
+        //If there is a token, do a DB lookup to find the teams associated with this coach:
+        if (![token isEqualToString:@""]){
+            
+            
+            NSDictionary *response = [ServerAPI getListOfTeams:token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.teamList = [response valueForKey:@"teams"];
+                self.haveTeamList = true;
+                
+            }else{
+                
+                self.teamListFailed = true;
+                //self.memberTeams = [NSMutableArray array];
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //should never get here
+                        //self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            
+            
+        }
+
+    }
 		
-		
-		NSDictionary *response = [ServerAPI getListOfTeams:token];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.teamList = [response valueForKey:@"teams"];
-			self.haveTeamList = true;
-			
-		}else{
-			
-			self.teamListFailed = true;
-			//self.memberTeams = [NSMutableArray array];
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error = @"*Error connecting to server";
-					break;
-				default:
-					//should never get here
-					//self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-		
-		
-	}
-	
 }
 
 -(void)segmentSelect:(id)sender{

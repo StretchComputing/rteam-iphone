@@ -10,39 +10,7 @@
 
 
 @interface MessageThreadInbox : UIViewController {
-	//Messages
-	NSString *threadId;
-	NSString *teamId;
-	IBOutlet NSString *displaySubject;
-	NSString *subject;
-	
-	NSString *body;
-	NSString *messageType;
-	NSString *status;
-	NSString *isReminder;
-	BOOL wasViewed;
-	NSArray *pollChoices;
-	NSString *followUp;
-	
-	NSString *senderName;
-	NSString *senderId;
-	
-	NSString *teamName;
-	
-	//Threads
-	int numberOfMessages;
-	NSString *eventId;
-	NSString *eventType;
-	NSArray *subThreadIds;
-	NSString *eventDate;
-	
-	//Both
-	bool threadingUsed;
-	NSString *createdDate;   //date of most recent message if threading
-    
-    NSString *participantRole;
-    
-    
+        
 }
 @property (nonatomic, strong) NSString *participantRole;
 @property (nonatomic, strong) NSString *eventDate;

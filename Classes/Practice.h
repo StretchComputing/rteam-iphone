@@ -9,19 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface Practice : NSObject {
-	NSString *startDate;
-	NSString *endDate;
-	NSString *practiceId;
-	NSString *ppteamId;
-	NSString *timeZone;
-	NSString *description;
-	NSString *latitude;
-	NSString *longitude;
-	NSString *location;
-	NSString *userRole;
-	NSString *teamName;
-	
-	bool isCanceled;
+
     
 	
 }

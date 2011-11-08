@@ -11,27 +11,7 @@
 
 @interface MessageThreadOutbox : UIViewController {
 	
-	NSString *threadId;
-	NSString *subject;
-	NSString *body;
-	NSString *messageType; //poll, message
-	NSString *status;      //active, all
-	NSString *numRecipients;
-	NSString *numReplies;
-	NSString *followUp;
-	NSString *teamId;
-	NSString *teamName;
-	
-	//Threads
-	int numberOfMessages;
-	NSString *eventId;
-	NSString *eventType;
-	NSArray *subThreadIds;
-	NSString *eventDate;
-	
-	//Both
-	bool threadingUsed;
-	NSString *createdDate;   //date of most recent message if threading
+
 	
     
 }

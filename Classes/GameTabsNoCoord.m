@@ -30,9 +30,7 @@ teamName, newActivity, fromHome;
 
 -(void)viewWillAppear:(BOOL)animated{
 
-	
-	//[self performSelectorInBackground:@selector(getMessageThreadCount) withObject:nil];
-	
+    
 	int index = self.selectedIndex;
 	
 	if (index == 1) {
@@ -120,91 +118,6 @@ teamName, newActivity, fromHome;
 	
 }
 
--(void)getMessageThreadCount{
-	
-	
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	
-	//If there is a token, do a DB lookup to find the teams associated with this coach:
-	if (![token isEqualToString:@""]){
-		
-		
-		NSDictionary *response = [ServerAPI getMessageThreadCount:token :self.teamId :self.gameId :@"game" :@""];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.messageSuccess = true;
-			
-			self.messageCount = [[response valueForKey:@"count"] intValue];
-			
-			self.newActivity = [[response valueForKey:@"newActivity"] boolValue];
-
-		}else{
-			self.messageSuccess = false;
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error = @"*Error connecting to server";
-					break;
-				default:
-					//should never get here
-					//self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-		
-		
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(finishedMessageCount)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
-	
-}
-
--(void)finishedMessageCount{
-	
-	if (self.messageSuccess) {
-		
-		/*
-		GameChatter *tmpItem = [self.viewControllers objectAtIndex:1];
-		
-		if (self.messageCount > 0){
-			
-			tmpItem.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.messageCount];
-		}else {
-			tmpItem.tabBarItem.badgeValue = nil;
-
-		}
-*/
-
-		
-	}
-	
-}
 
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {

@@ -23,8 +23,11 @@
 - (void)viewDidLoad {
 	self.title=@"New Team";
     
-	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-	[self.navigationItem setRightBarButtonItem:homeButton];
+    if (self.fromHome) {
+       	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
+        [self.navigationItem setLeftBarButtonItem:homeButton]; 
+    }
+
 	
 	
 } 

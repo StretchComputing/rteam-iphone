@@ -12,9 +12,10 @@
 #import "Team.h"
 #import "SelectTeams.h"
 #import "SelectRecipients.h"
+#import <MobileCoreServices/UTCoreTypes.h> 
 
 @implementation ActivityPost
-@synthesize messageText, postTeamId, teamSelectButton, hasTeams, teams, savedTeams, selectedTeams, keyboardIsUp, keyboardButton, sendPollButton, sendPrivateButton, activity, segControl, theMessageText;
+@synthesize messageText, postTeamId, teamSelectButton, hasTeams, teams, savedTeams, selectedTeams, keyboardIsUp, keyboardButton, sendPollButton, sendPrivateButton, activity, segControl, theMessageText, previewImage, cameraSaveMessage, cancelImageButton, imageDataToSend, isTakeVideo, isSendVideo, sendOrientation, errorLabel, errorString, videoDataToSend, fromClass;
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -43,8 +44,9 @@
 }
 - (void)viewDidLoad
 {
+    self.cancelImageButton.hidden = YES;
     self.keyboardIsUp = false;
-    self.title = @"Post";
+    self.title = @"Post to Activity";
     
     self.hasTeams = false;
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancel)];
@@ -59,6 +61,9 @@
     [self.teamSelectButton setTitle:@"Loading Teams..." forState:UIControlStateNormal];
     self.messageText.delegate = self;
     
+    self.sendOrientation = @"";
+    self.imageDataToSend = [NSData data];
+    self.videoDataToSend = [NSData data];
     [super viewDidLoad];
 
 }
@@ -66,8 +71,8 @@
 -(void)post{
     
     self.theMessageText = [NSString stringWithString:self.messageText.text];
-    if ((self.messageText.text != nil) && ![self.messageText.text isEqualToString:@""]) {
-        
+
+    
         [self.activity startAnimating];
         [self.sendPrivateButton setEnabled:NO];
         [self.sendPollButton setEnabled:NO];
@@ -76,7 +81,6 @@
         [self.segControl setEnabled:NO];
         
         [self performSelectorInBackground:@selector(createActivity) withObject:nil];
-    }
     
 }
 -(void)cancel{
@@ -89,18 +93,27 @@
     @autoreleasepool {
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        NSString *orientation = @"";
+                
         NSData *tmpData = [NSData data];
         NSData *tmpMovieData = [NSData data];
         
-        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token :self.postTeamId :self.theMessageText :tmpData :tmpMovieData :orientation];
+        if (self.isSendVideo) {
+            tmpMovieData = [NSData dataWithData:self.videoDataToSend];
+        }
+        tmpData = [NSData dataWithData:self.imageDataToSend];
+
+ 
+        
+        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token :self.postTeamId :self.theMessageText :tmpData :tmpMovieData :self.sendOrientation];
         
         
         NSString *status = [response valueForKey:@"status"];
         
+        NSLog(@"Status: %@", status);
+        
         if ([status isEqualToString:@"100"]){
             
+            self.errorString=@"";
             
             
         }else{
@@ -112,17 +125,17 @@
             switch (statusCode) {
                 case 0:
                     //null parameter
-                    //self.errorLabel.text = @"*Error connecting to server";
+                   self.errorString = @"*Error connecting to server";
                     break;
                 case 1:
                     //error connecting to server
-                    //self.errorLabel.text = @"*Error connecting to server";
+                    self.errorString = @"*Error connecting to server";
                     break;
                 case 208:
-                    //self.errorString = @"NA";
+                   self.errorString = @"NA";
                 default:
                     //log status code?
-                    //self.errorLabel.text = @"*Error connecting to server";
+                    self.errorString = @"*Error connecting to server";
                     break;
             }
         }
@@ -143,7 +156,14 @@
     [self.teamSelectButton setEnabled:YES];
     [self.segControl setEnabled:YES];
 
-    [self.navigationController dismissModalViewControllerAnimated:YES];
+    if ([self.errorString isEqualToString:@""]) {
+        
+        fromClass.fromPost = true;
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+
+    }else{
+        self.errorLabel.text = self.errorString;
+    }
 }
 
 
@@ -327,8 +347,196 @@
     }
     
 }
+
+
+-(void)segmentSelect{
+    
+    if (self.segControl.selectedSegmentIndex == 2) {
+        self.isTakeVideo = true;
+     
+        [self performSelector:@selector(selectVideo) withObject:nil afterDelay:0.2];
+
+        [self performSelector:@selector(reset) withObject:nil afterDelay:0.2];
+        
+        
+    }else if (self.segControl.selectedSegmentIndex == 0){
+        
+        self.isTakeVideo = false;
+        [self performSelector:@selector(selectCamera) withObject:nil afterDelay:0.2];
+        [self performSelector:@selector(reset) withObject:nil afterDelay:2.0];
+        
+        
+        
+    }else if (self.segControl.selectedSegmentIndex == 1){
+        self.isTakeVideo = false;
+        [self performSelector:@selector(selectLibrary) withObject:nil afterDelay:0.2];
+        [self performSelector:@selector(reset) withObject:nil afterDelay:2.0];
+        
+        
+    }
+    
+}
+
+
+-(void)selectCamera{
+    self.cameraSaveMessage = self.messageText.text;
+    
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self presentModalViewController:picker animated:YES];
+    
+}
+
+-(void)selectLibrary{
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    [self presentModalViewController:picker animated:YES];
+    
+}
+
+-(void)selectVideo{
+    
+    //video
+    @try {
+        
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        
+        picker.delegate = self;
+        
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        picker.mediaTypes =  
+        [NSArray arrayWithObject:(NSString *)kUTTypeMovie];
+        picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModeVideo;
+        picker.videoMaximumDuration = 30;
+        picker.videoQuality = UIImagePickerControllerQualityTypeLow;
+        [self presentModalViewController:picker animated:YES];
+        
+    }
+    @catch (NSException * e) {
+        NSString *message1 = @"Video is not supported on this device.";
+        UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Invalid Device" message:message1 delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert1 show];
+        
+        [self.navigationController popViewControllerAnimated:NO];
+        
+    }
+    
+}
+-(void)reset{
+    
+    self.segControl.selectedSegmentIndex = -1;
+}
+
+
+
+
+
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+	
+    if (self.isTakeVideo) {
+        self.isSendVideo = true;
+        [picker dismissModalViewControllerAnimated:YES];	
+        
+        NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        self.videoDataToSend = [NSData dataWithContentsOfURL:videoURL];
+                
+        MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL: videoURL];
+        player.useApplicationAudioSession = NO;
+        player.shouldAutoplay = NO;
+        UIImage *tmpImage = [player thumbnailImageAtTime:0.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
+        
+        if (tmpImage.size.height > tmpImage.size.width) {
+            self.sendOrientation = @"portrait";
+        }else{
+            self.sendOrientation = @"landscape";
+        }
+        
+        self.imageDataToSend = UIImageJPEGRepresentation(tmpImage, 0.90);
+        self.previewImage.image = tmpImage;
+        
+    }else{
+        self.isSendVideo = false;
+        [picker dismissModalViewControllerAnimated:YES];	
+        
+        UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        
+        float xVal;
+        float yVal;
+        
+        bool isPort = true;
+        
+        if (tmpImage.size.height > tmpImage.size.width) {
+            //Portrait
+            
+            xVal = 210.0;
+            yVal = 280.0;
+            isPort = true;
+            self.sendOrientation = @"portrait";
+        }else{
+            //Landscape
+            xVal = 280.0;
+            yVal = 210.0;
+            isPort = false;
+            self.sendOrientation = @"landscape";
+        }
+        
+        NSData *jpegImage = UIImageJPEGRepresentation(tmpImage, 1.0);
+        
+        UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
+        
+        UIGraphicsBeginImageContext(CGSizeMake(xVal, yVal));
+        
+        [myThumbNail drawInRect:CGRectMake(0.0, 0.0, xVal, yVal)];
+        
+        UIImage *newImage    = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+        
+        
+        self.imageDataToSend = UIImageJPEGRepresentation(newImage, 0.90);
+        
+        self.cancelImageButton.hidden = NO;
+        self.previewImage.image = [UIImage imageWithData:self.imageDataToSend];
+
+        
+    }
+       
+    self.previewImage.hidden = NO;
+    self.cancelImageButton.hidden = NO;
+
+} 
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+	
+	[picker dismissModalViewControllerAnimated:YES];	
+    if ([self.imageDataToSend length] == 0) {
+        self.previewImage.hidden = YES;
+    }
+	
+}
+
+
+-(void)cancelImage{
+    
+    self.imageDataToSend = [NSData data];
+    self.previewImage.hidden = YES;
+    self.previewImage.image = nil;
+    self.cancelImageButton.hidden = YES;
+    self.videoDataToSend = [NSData data];
+}
+
 - (void)viewDidUnload
 {
+    cancelImageButton = nil;
+    previewImage = nil;
     messageText = nil;
     teamSelectButton = nil;
     keyboardButton = nil;
@@ -336,6 +544,7 @@
     activity = nil;
     sendPollButton = nil;
     sendPrivateButton = nil;
+    errorLabel = nil;
     [super viewDidUnload];
 
 }

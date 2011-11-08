@@ -26,14 +26,14 @@
 #import "ImageButton.h"
 #import "ImageDisplayMultiple.h"
 #import "PhotosActivity.h"
-#import "ActivityDetailVideo.h"
 #import "NewActivityDetail.h"
+#import "VideoDisplay.h"
 
 #define REFRESH_HEADER_HEIGHT 52.0f
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost;
 
 
 -(void)home{
@@ -44,7 +44,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 -(void)compose{
     
     ActivityPost *tmp = [[ActivityPost alloc] init];
-	
+	tmp.fromClass = self;
 	UINavigationController *navController = [[UINavigationController alloc] init];
 	
 	[navController pushViewController:tmp animated:NO];
@@ -54,6 +54,24 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     
 }
 	
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    
+    if (self.fromPost) {
+        self.fromPost = false;
+        [self performSelectorInBackground:@selector(getNewActivity) withObject:nil];
+        [self performSelectorInBackground:@selector(getMyActivity) withObject:nil];
+    }
+    
+    
+    if (myAd.bannerLoaded) {
+        myAd.hidden = NO;
+    }else{
+        myAd.hidden = YES;
+    }
+    
+}
     
     
 - (void)viewDidLoad
@@ -230,7 +248,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 	myAd.hidden = YES;
 	[self.view addSubview:myAd];
     
-    self.topScrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"topScrollBack.png"]];
+    self.topScrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"topScrollBack2.png"]];
     
     [super viewDidLoad];
 }
@@ -531,23 +549,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             Activity *tmpActivity = [self.activityArray objectAtIndex:row];
 			
-			if (tmpActivity.isVideo) {
-				ActivityDetailVideo *next = [[ActivityDetailVideo alloc] init];
-				next.stringText = tmpActivity.activityText;
-				next.dateText = [self formatDateString:tmpActivity.createdDate];
-				
-				
-				//next.numStars = [self getNumberOfStars:tmpActivity.numLikes :tmpActivity.numDislikes];
-				
-				next.currentVote = tmpActivity.vote;
-				next.activityId = tmpActivity.activityId;
-				next.teamId = tmpActivity.teamId;
-				next.likes = tmpActivity.numLikes;
-				next.dislikes = tmpActivity.numDislikes;
-				
-				[self.navigationController pushViewController:next animated:YES];
-				
-			}else {
+
                 
                 NewActivityDetail *theMessage = [[NewActivityDetail alloc] init];
                 
@@ -560,13 +562,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 theMessage.numDislikes = tmpActivity.numDislikes;
                 
                 theMessage.currentVote = tmpActivity.vote;
-
+            theMessage.isVideo = tmpActivity.isVideo;
                 //theMessage.likes = [NSArray arrayWithArray:messageSelected.likedBy];
                 //theMessage.replies = [NSArray arrayWithArray:messageSelected.replies];
                 //theMessage.tags = [NSArray arrayWithArray:messageSelected.tags];
                 //theMessage.profile = messageSelected.profile;
                 
-                theMessage.postImageArray = [NSMutableArray arrayWithObject:[Base64 decode:tmpActivity.thumbnail]];
+                if ([tmpActivity.thumbnail length] > 0) {
+                    theMessage.postImageArray = [NSMutableArray arrayWithObject:[Base64 decode:tmpActivity.thumbnail]];
+                }else{
+                    theMessage.postImageArray = [NSMutableArray array];
+                }
           
                 
                 //Profile Image
@@ -576,32 +582,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 [self.navigationController pushViewController:theMessage animated:YES];
                 
 
-                
-                /*
-				ActivityDetail *next = [[ActivityDetail alloc] init];
-				next.stringText = tmpActivity.activityText;
-				next.dateText = [self formatDateString:tmpActivity.createdDate];
-				
-				if (![tmpActivity.thumbnail isEqualToString:@""]) {
-					next.isImage = true;
-				}else {
-					next.isImage = false;
-				}
-				
-                next.numStars = 2;
-				//next.numStars = [self getNumberOfStars:tmpActivity.numLikes :tmpActivity.numDislikes];
-				
-				next.currentVote = tmpActivity.vote;
-				next.activityId = tmpActivity.activityId;
-				next.teamId = tmpActivity.teamId;
-				next.likes = tmpActivity.numLikes;
-				next.dislikes = tmpActivity.numDislikes;
-				
-				[self.navigationController pushViewController:next animated:YES];
-                 */
-				
-			}
-
+    
             
         }else{
             //Polls
@@ -801,7 +782,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	    
 	if (self.bannerIsVisible) {
 		
-		//myAd.hidden = YES;
+		myAd.hidden = YES;
 		self.bannerIsVisible = NO;
 		
 	}
@@ -1195,6 +1176,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 //For clicking on an image inside the message (company feed)
 -(void)imageSelected:(id)sender{
     
+    NSLog(@"Image Selected");
+    
     ImageButton *tmpButton = (ImageButton *)sender;
     
     NSString *messageId = [NSString stringWithString:tmpButton.messageId];
@@ -1217,5 +1200,36 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.navigationController pushViewController:newDisplay animated:YES];    
     
 }
+
+
+-(void)videoSelected:(id)sender{
+        
+    ImageButton *tmpButton = (ImageButton *)sender;
+    
+    NSString *messageId = [NSString stringWithString:tmpButton.messageId];
+    NSString *teamId = @"";
+    NSMutableArray *arrayOfImageData = [NSMutableArray array];
+    for (int i = 0; i < [self.activityArray count]; i++) {
+        Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+        
+        if ([tmpActivity.activityId isEqualToString:messageId]) {
+            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+            [arrayOfImageData addObject:profileData];
+            teamId = tmpActivity.teamId;
+            break;
+        }
+    }
+    
+    VideoDisplay *newDisplay = [[VideoDisplay alloc] init];
+    newDisplay.activityId = messageId;
+    newDisplay.teamId = teamId;
+    
+    UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:nil action:nil];
+    self.navigationItem.backBarButtonItem = temp;
+    
+    [self.navigationController pushViewController:newDisplay animated:NO];    
+    
+}
+
 
 @end

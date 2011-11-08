@@ -65,55 +65,7 @@
 	NSArray *views = [self.navigationController viewControllers];
 	
     
-	if ([CurrentTeamTabs class] == [[views objectAtIndex:[views count] - 2] class]) {
 		
-		CurrentTeamTabs *belowStack = [views objectAtIndex:[views count] - 2];
-		
-		//NSArray *tabs = [belowStack viewControllers];
-        
-	
-		[self.navigationController popToViewController:belowStack animated:NO];
-		
-		
-	}else if ([AddGamePhoto class] == [[views objectAtIndex:[views count] - 2] class]) {
-		
-		AddGamePhoto *belowStack = [views objectAtIndex:[views count] - 2];
-		
-		belowStack.movieData = movieData1;
-		belowStack.selectedImageData = UIImageJPEGRepresentation(tmpImage, 1.0);
-		belowStack.selectedImage = tmpImage;
-		belowStack.fromCameraSelect = true;
-		
-		[self.navigationController popToViewController:belowStack animated:NO];
-		
-	}
-	
-	if ([views count] > 2) {
-		
-		if ([CurrentTeamTabs class] == [[views objectAtIndex:[views count] - 3] class]) {
-			
-			CurrentTeamTabs *belowStack = [views objectAtIndex:[views count] - 3];
-		
-			
-			[self.navigationController popToViewController:belowStack animated:NO];
-			
-			
-		}else if ([AddGamePhoto class] == [[views objectAtIndex:[views count] - 3] class]) {
-			
-			AddGamePhoto *belowStack = [views objectAtIndex:[views count] - 3];
-			
-			belowStack.movieData = movieData1;
-			belowStack.selectedImageData = UIImageJPEGRepresentation(tmpImage, 1.0);
-			belowStack.selectedImage = tmpImage;
-			belowStack.fromCameraSelect = true;
-			
-			[self.navigationController popToViewController:belowStack animated:NO];
-			
-		}
-        
-		
-	}
-	
 	
 	
 } 

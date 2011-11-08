@@ -10,62 +10,27 @@
 
 
 @interface ViewMessageSent : UIViewController <UIActionSheetDelegate>{
-    
-	NSString *subject;
-	NSString *body;
-	NSString *createdDate;
-	
-	NSString *teamId;
-	NSString *eventId;
-	NSString *eventType;
-	NSString *threadId;
-    
-	IBOutlet UILabel *displaySubject;
-	IBOutlet UILabel *displayDate;
-	IBOutlet UITextView *displayBody;
-	IBOutlet UILabel *recipients;
-	NSArray *individualReplies;
-	
-	IBOutlet UIButton *viewMoreDetailButton;
-	IBOutlet UILabel *confirmStringLabel;
-	NSString *confirmString;
-	
-	IBOutlet UILabel *messageNumber;
-	NSArray *messageArray;              //Array of (Messages)
-	int currentMessageNumber;
-	IBOutlet UISegmentedControl *upDown;
-	NSString *teamName;
-	IBOutlet UILabel *teamNameLabel;
-	
-	NSString *origTeamId;
-	
-	NSDictionary *messageInfo;
-	IBOutlet UILabel *loadingLabel;
-	IBOutlet UIActivityIndicatorView *loadingActivity;
-	IBOutlet UIBarButtonItem *deleteButton;
-	
-	IBOutlet UILabel *errorLabel;
-	NSString *errorString;
+
 }
 @property (nonatomic, strong) IBOutlet UILabel *nameLabel;
-@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) IBOutlet UILabel *errorLabel;
 @property (nonatomic, strong) NSString *errorString;
 
-@property (nonatomic, strong) UIBarButtonItem *deleteButton;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *deleteButton;
 
 @property (nonatomic, strong) NSDictionary *messageInfo;
-@property (nonatomic, strong) UILabel *loadingLabel;
-@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) IBOutlet UILabel *loadingLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *loadingActivity;
 @property (nonatomic, strong) NSString *origTeamId;
 @property (nonatomic, strong) NSString *teamName;
-@property (nonatomic, strong) UILabel *teamNameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *teamNameLabel;
 @property int currentMessageNumber;
-@property (nonatomic, strong) UISegmentedControl *upDown;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *upDown;
 @property (nonatomic, strong) NSArray *messageArray;
-@property (nonatomic, strong) UILabel *messageNumber;
+@property (nonatomic, strong) IBOutlet UILabel *messageNumber;
 
 
-@property (nonatomic, strong) UIButton *viewMoreDetailButton;
+@property (nonatomic, strong) IBOutlet UIButton *viewMoreDetailButton;
 @property (nonatomic, strong) NSArray *individualReplies;
 @property (nonatomic, strong) NSString *threadId;
 @property (nonatomic, strong) NSString *teamId;
@@ -76,12 +41,12 @@
 @property (nonatomic, strong) NSString *body;
 @property (nonatomic, strong) NSString *createdDate;
 
-@property (nonatomic, strong) UILabel *displaySubject;
-@property (nonatomic, strong) UILabel *displayDate;
-@property (nonatomic, strong) UITextView *displayBody;
-@property (nonatomic, strong) UILabel *recipients;
+@property (nonatomic, strong) IBOutlet UILabel *displaySubject;
+@property (nonatomic, strong) IBOutlet UILabel *displayDate;
+@property (nonatomic, strong) IBOutlet UITextView *displayBody;
+@property (nonatomic, strong) IBOutlet UILabel *recipients;
 @property (nonatomic, strong) NSString *confirmString;
-@property (nonatomic, strong) UILabel *confirmStringLabel;
+@property (nonatomic, strong) IBOutlet UILabel *confirmStringLabel;
 
 -(void)initMessageInfo;
 

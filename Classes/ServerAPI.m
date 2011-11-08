@@ -2393,7 +2393,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 +(NSDictionary *)createEvent:(NSString *)teamId :(NSString *)token :(NSString *)startDate :(NSString *)endDate :(NSString *)description 
 							:(NSString *)timeZone :(NSString *)latitude :(NSString *)longitude :(NSString *)location :(NSString *)eventType
 							:(NSString *)eventName{
-	
+    	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSString *practiceId = @"";
@@ -2620,7 +2620,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
         
 		
 		SBJSON *jsonParser = [SBJSON new];
-		
+		        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
 		
 		

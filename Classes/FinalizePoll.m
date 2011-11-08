@@ -16,7 +16,7 @@
 
 
 @implementation FinalizePoll
-@synthesize teamId, messageThreadId, followUpMessage, confirmButton, createSuccess, errorMessage, activity, errorString;
+@synthesize teamId, messageThreadId, followUpMessage, confirmButton, createSuccess, errorMessage, activity, errorString, theFollowUpMessage;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -71,6 +71,7 @@
 		
 		//Create the team in a background thread
 		
+    self.theFollowUpMessage = [NSString stringWithString:self.followUpMessage.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 	
@@ -80,69 +81,71 @@
 
 - (void)runRequest {
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        
+        NSString *followUp = @"";
+        NSString *status = @"";
+        
+        if (self.theFollowUpMessage != nil && ![self.theFollowUpMessage isEqualToString:@"Enter your follow up message here..."] &&
+            ![self.theFollowUpMessage isEqualToString:@""]) {
+            
+            followUp = self.theFollowUpMessage;
+        }else {
+            followUp = @"none";
+        }
+        
+        
+        
+        NSDictionary *response = [NSDictionary dictionary];
+        if (![token isEqualToString:@""]){	
+            
+            
+            response = [ServerAPI updateMessageThread:token :self.teamId :self.messageThreadId :@"" :@"" :followUp :status];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.createSuccess = true;
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                self.createSuccess = false;
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-	
-	NSString *followUp = @"";
-	NSString *status = @"";
-	
-	if (self.followUpMessage.text != nil && ![self.followUpMessage.text isEqualToString:@"Enter your follow up message here..."] &&
-		![self.followUpMessage.text isEqualToString:@""]) {
+    }
 		
-		followUp = self.followUpMessage.text;
-	}else {
-		followUp = @"none";
-	}
-
-	
-
-	NSDictionary *response = [NSDictionary dictionary];
-	if (![token isEqualToString:@""]){	
-		
-		
-		response = [ServerAPI updateMessageThread:token :self.teamId :self.messageThreadId :@"" :@"" :followUp :status];
-				
-		NSString *status = [response valueForKey:@"status"];
-		
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.createSuccess = true;
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			self.createSuccess = false;
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{

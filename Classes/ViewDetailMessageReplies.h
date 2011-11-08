@@ -11,26 +11,11 @@
 
 @interface ViewDetailMessageReplies : UIViewController <UITableViewDelegate, UIActionSheetDelegate, UITableViewDataSource> {
 	
-	NSArray *replyArray;
-	NSString *teamId;
-	NSArray *allReplyObjects;
-	
-	bool finalized;
-	bool getInfo;
-	NSString *threadId;
-	
-	bool isSender;
-    
-	IBOutlet UITableView *myTableView;
-	IBOutlet UILabel *loadingLabel;
-	IBOutlet UIActivityIndicatorView *loadingActivity;
-	
-	NSArray *members;
-}
+	}
 @property (nonatomic, strong) NSArray *members;
-@property (nonatomic, strong) UITableView *myTableView;
-@property (nonatomic, strong) UILabel *loadingLabel;
-@property (nonatomic, strong) UIActivityIndicatorView *loadingActivity;
+@property (nonatomic, strong) IBOutlet UITableView *myTableView;
+@property (nonatomic, strong) IBOutlet UILabel *loadingLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *loadingActivity;
 
 @property bool isSender;
 @property (nonatomic, strong) NSString *threadId;

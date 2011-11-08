@@ -10,70 +10,27 @@
 
 
 @interface ViewMessageReceived : UIViewController <UIActionSheetDelegate> {
-    
-	NSString *subject;
-	NSString *body;
-	NSString *receivedDate;
-	
-	NSString *teamId;
-	NSString *eventId;
-	NSString *eventType;
-	NSString *threadId;
-	BOOL wasViewed;
-	
-	IBOutlet UILabel *displaySubject;
-	IBOutlet UILabel *displayDate;
-	IBOutlet UITextView *displayBody;
-	IBOutlet UILabel *displaySender;
-	
-	IBOutlet UIBarButtonItem *replyButton;
-	IBOutlet UIToolbar *myToolbar;
-	
-	NSString *senderName;
-	NSString *senderId;
-	
-	NSString *userRole;
-	
-	bool replySuccess;
-	IBOutlet UILabel *replyMessage;
-	
-	IBOutlet UIButton *viewMoreDetailButton;
-	IBOutlet UILabel *confirmationsLabel;
-	
-	NSString *confirmStatus;
-	
-	NSArray *individualReplies;
-	
-	IBOutlet UILabel *messageNumber;
-	NSArray *messageArray;              //Array of (Messages)
-	int currentMessageNumber;
-	IBOutlet UISegmentedControl *upDown;
-	NSString *teamName;
-	IBOutlet UILabel *teamLabel;
-    
-	NSString *origTeamId;
-    
-    bool isAlert;
+
     
 }
 @property bool isAlert;
 @property (nonatomic, strong) NSString *origTeamId;
 @property (nonatomic, strong) NSString *teamName;
-@property (nonatomic, strong) UILabel *teamLabel;
+@property (nonatomic, strong) IBOutlet UILabel *teamLabel;
 @property int currentMessageNumber;
-@property (nonatomic, strong) UISegmentedControl *upDown;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *upDown;
 @property (nonatomic, strong) NSArray *messageArray;
-@property (nonatomic, strong) UILabel *messageNumber;
+@property (nonatomic, strong) IBOutlet UILabel *messageNumber;
 
 @property (nonatomic, strong) NSArray *individualReplies;
 @property (nonatomic, strong) NSString *confirmStatus;
-@property (nonatomic, strong) UIButton *viewMoreDetailButton;
-@property (nonatomic, strong) UILabel *confirmationsLabel;
+@property (nonatomic, strong) IBOutlet UIButton *viewMoreDetailButton;
+@property (nonatomic, strong) IBOutlet UILabel *confirmationsLabel;
 @property bool replySuccess;
-@property (nonatomic, strong) UILabel *replyMessage;
-@property (nonatomic, strong) UIToolbar *myToolbar;
-@property (nonatomic, strong) UIBarButtonItem *replyButton;
-@property (nonatomic, strong) UILabel *displaySender;
+@property (nonatomic, strong) IBOutlet UILabel *replyMessage;
+@property (nonatomic, strong) IBOutlet UIToolbar *myToolbar;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *replyButton;
+@property (nonatomic, strong) IBOutlet UILabel *displaySender;
 @property (nonatomic, strong) NSString *senderName;
 @property (nonatomic, strong) NSString *senderId;
 @property (nonatomic, strong) NSString *userRole;
@@ -87,9 +44,9 @@
 @property (nonatomic, strong) NSString *body;
 @property (nonatomic, strong) NSString *receivedDate;
 
-@property (nonatomic, strong) UILabel *displaySubject;
-@property (nonatomic, strong) UILabel *displayDate;
-@property (nonatomic, strong) UITextView *displayBody;
+@property (nonatomic, strong) IBOutlet UILabel *displaySubject;
+@property (nonatomic, strong) IBOutlet UILabel *displayDate;
+@property (nonatomic, strong) IBOutlet UITextView *displayBody;
 @property BOOL wasViewed;
 
 -(void)initMessageInfo;

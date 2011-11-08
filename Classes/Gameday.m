@@ -13,17 +13,10 @@
 #import "GameUpdateGPS.h"
 #import "MapLocation.h"
 #import <iAd/iAd.h>
-#import "NewFootballScoring.h"
-#import "NewBasketballScoring.h"
-#import "NewSoccerScoring.h"
-#import "NewLacrosseScoring.h"
-#import "NewHockeyScoring.h"
-#import "NewWaterPoloScoring.h"
-#import "NewDefaultScoring.h"
-#import "NewUltimateFrisbeeScoring.h"
-#import "GameEdit.h"
-#import "NewBaseballScoring.h"
+
 #import "AddGamePhoto.h"
+#import "GameEdit.h"
+
 
 
 
@@ -33,7 +26,7 @@ successMessage, latitude, longitude, fromNextUpdate, nameGameLocation, locationN
 enableScoring, isScoringEnabled, error, scoreUs, scoreThem, interval, userRole, updateLocationButton, sport, defaultScoringButton, getInfo,
 bannerIsVisible, usLabel, scoreUsLabel, themLabel, scoreThemLabel, scoreDividerLabel, keepScoreButton, intervalLabel, setInfoGame, setInfoScore,
 refreshActivity, isGameOver, editFinalButton, mainActivity, editDone, startDate, description, opponentString, orOtherInterval, scoringAdded,
-errorString, photoButton, showCamera;
+errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, mySoccerScoring, myBaseballScoring, myFootballScoring, myLacrosseScoring, myWaterPoloScoring, myBasketballScoring, myUltimateFrisbeeScoring;
 
 
 -(void)editGame{
@@ -52,7 +45,12 @@ errorString, photoButton, showCamera;
 }
 -(void)viewWillAppear:(BOOL)animated{
 
-	
+    if (myAd.bannerLoaded) {
+        myAd.hidden = NO;
+    }else{
+        myAd.hidden = YES;
+    }
+    
 	self.isGameOver = false;
 	
 	self.photoButton.hidden = YES;
@@ -72,6 +70,7 @@ errorString, photoButton, showCamera;
 		[self.mainActivity startAnimating];
 		[self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
 	}else {
+        self.getInfo = true;
 	}
 	
     
@@ -86,7 +85,7 @@ errorString, photoButton, showCamera;
     self.editDone = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editGame)];
 
 	self.scoringAdded = false;
-	self.getInfo = true;
+	self.getInfo = false;
 	self.orOtherInterval.hidden = YES;
 	[self viewWillAppear:NO];
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
@@ -119,129 +118,142 @@ errorString, photoButton, showCamera;
 
 -(void)getGameInfo{
 	
-	
-	self.errorString = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	NSDictionary *gameInfo = [NSDictionary dictionary];
-	//If there is a token, do a DB lookup to find the game info 
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getGameInfo:self.gameId :self.teamId :token];
-		
-		NSString *status = [response valueForKey:@"status"];
-		        
-		if ([status isEqualToString:@"100"]){
-			
-			gameInfo = [response valueForKey:@"gameInfo"];
-			
-			NSString *starDate = [gameInfo valueForKey:@"startDate"];
-			self.startDate = startDate;
-			
-			if ([gameInfo valueForKey:@"location"] != nil) {
-				NSString *locationString = [gameInfo valueForKey:@"location"];
-				self.locationName = locationString;
-				self.locationLabel.text = [NSString stringWithFormat:@"- %@", locationString];
-				self.locationLabel.textColor = [UIColor blackColor];
-			}else {
-				self.locationLabel.text = @"- *No location entered*";
-				self.locationLabel.textColor = [UIColor grayColor];
-			}
+	@autoreleasepool {
+        self.errorString = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        NSDictionary *gameInfo = [NSDictionary dictionary];
+        //If there is a token, do a DB lookup to find the game info 
+        if (![token isEqualToString:@""]){
 
-			
-			NSString *opp = [gameInfo valueForKey:@"opponent"];
-			self.description = [gameInfo valueForKey:@"description"];
-			self.opponentString = opp;
-			if ([gameInfo valueForKey:@"latitude"] != nil) {
-				
-				self.latitude = [[gameInfo valueForKey:@"latitude"] stringValue];
-				self.longitude = [[gameInfo valueForKey:@"longitude"] stringValue];
-				
-				[self.mapButton setHidden:NO];
-			}else{
-				[self.mapButton setHidden:YES];
-			}
-			
-			self.opponent.text = [@"- " stringByAppendingString:[@"Game vs. " stringByAppendingString:opp]];
-			
-			
-			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-			[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-			NSDate *formatStartDate = [dateFormat dateFromString:starDate];
-			
-			NSDate *todaysDate = [NSDate date];
-			
-			if ([gameInfo valueForKey:@"interval"] != nil) {
-				
-				self.interval = [[gameInfo valueForKey:@"interval"] stringValue];
-				self.scoreUs = [[gameInfo valueForKey:@"scoreUs"] stringValue];
-				self.scoreThem = [[gameInfo valueForKey:@"scoreThem"] stringValue];
-				                
-				if ([self.interval isEqualToString:@"-1"]) {
-					//Game is over
-					self.isGameOver = true;
-					
-				}else if (![self.interval isEqualToString:@"0"]) {
-					//If the game has already started, or is over, display the scoring view
-					self.setInfoScore = true;
-					self.setInfoGame = false;
-					
-				}else if ([formatStartDate isEqualToDate:[todaysDate earlierDate:formatStartDate]]) {
-					//By date, game is already in progress
-					self.setInfoGame = true; 
-					self.setInfoScore = false;
+            
+            NSDictionary *response = [ServerAPI getGameInfo:self.gameId :self.teamId :token];
+            
+            NSString *status = [response valueForKey:@"status"];
+                        
+            if ([status isEqualToString:@"100"]){
+                
+                gameInfo = [response valueForKey:@"gameInfo"];
+                self.errorString = @"";
+                                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        [self performSelectorOnMainThread:@selector(didFinish:) withObject:gameInfo waitUntilDone:NO];
 
-					
-				}
-				
-			}
-			
-			
-			
-			NSDateFormatter *format = [[NSDateFormatter alloc] init];
-			NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-			[format setDateFormat:@"EEE, MMM dd"];
-			[timeFormat setDateFormat:@"h:mm aa"];
-			
-			self.day.text = [@"- " stringByAppendingString:[format stringFromDate:formatStartDate]];
-			self.time.text = [timeFormat stringFromDate:formatStartDate];
-	
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
-	[self performSelectorOnMainThread:@selector(didFinish) withObject:nil waitUntilDone:NO];
+    }
+    
 }
 
--(void)didFinish{
+-(void)didFinish:(NSDictionary *)gameInfo{
+    
 	self.error.text = self.errorString;
 	[self.mainActivity stopAnimating];
 	[self.refreshActivity stopAnimating];
+    
+    if ([self.errorString isEqualToString:@""] ) {
+        
+        NSString *starDate = [gameInfo valueForKey:@"startDate"];
+                
+        self.startDate = startDate;
+        
+        if ([gameInfo valueForKey:@"location"] != nil) {
+            NSString *locationString = [gameInfo valueForKey:@"location"];
+            self.locationName = locationString;
+            self.locationLabel.text = [NSString stringWithFormat:@"- %@", locationString];
+            self.locationLabel.textColor = [UIColor blackColor];
+        }else {
+            self.locationLabel.text = @"- *No location entered*";
+            self.locationLabel.textColor = [UIColor grayColor];
+        }
+        
+        
+        NSString *opp = [gameInfo valueForKey:@"opponent"];
+                
+        self.description = [gameInfo valueForKey:@"description"];
+        self.opponentString = opp;
+        if ([gameInfo valueForKey:@"latitude"] != nil) {
+            
+            self.latitude = [[gameInfo valueForKey:@"latitude"] stringValue];
+            self.longitude = [[gameInfo valueForKey:@"longitude"] stringValue];
+            
+            [self.mapButton setHidden:NO];
+        }else{
+            [self.mapButton setHidden:YES];
+        }
+        
+        self.opponent.text = [@"- " stringByAppendingString:[@"Game vs. " stringByAppendingString:opp]];
+        
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+        NSDate *formatStartDate = [dateFormat dateFromString:starDate];
+        
+        NSDate *todaysDate = [NSDate date];
+        
+        if ([gameInfo valueForKey:@"interval"] != nil) {
+            
+            self.interval = [[gameInfo valueForKey:@"interval"] stringValue];
+            self.scoreUs = [[gameInfo valueForKey:@"scoreUs"] stringValue];
+            self.scoreThem = [[gameInfo valueForKey:@"scoreThem"] stringValue];
+            
+            if ([self.interval isEqualToString:@"-1"]) {
+                //Game is over
+                self.isGameOver = true;
+                
+            }else if (![self.interval isEqualToString:@"0"]) {
+                //If the game has already started, or is over, display the scoring view
+                self.setInfoScore = true;
+                self.setInfoGame = false;
+                
+            }else if ([formatStartDate isEqualToDate:[todaysDate earlierDate:formatStartDate]]) {
+                //By date, game is already in progress
+                self.setInfoGame = true; 
+                self.setInfoScore = false;
+                
+                
+            }
+            
+        }
+        
+        
+        
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+        [format setDateFormat:@"EEE, MMM dd"];
+        [timeFormat setDateFormat:@"h:mm aa"];
+        
+        self.day.text = [@"- " stringByAppendingString:[format stringFromDate:formatStartDate]];
+        self.time.text = [timeFormat stringFromDate:formatStartDate];
+        
+
+    }
+    
 	if (self.setInfoGame) {
 		self.setInfoGame = false;
 		[self setInfoGameStarted];
@@ -635,23 +647,23 @@ errorString, photoButton, showCamera;
 	self.scoringAdded = true;
 	if ([lowerSport isEqualToString:@"football"] || [lowerSport isEqualToString:@"flag football"]) {
 		
-		NewFootballScoring *tmp = [[NewFootballScoring alloc] init];
+		self.myFootballScoring = [[NewFootballScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.myFootballScoring.teamId = self.teamId;
+		self.myFootballScoring.gameId = self.gameId;
+		self.myFootballScoring.initScoreUs = self.scoreUs;
+		self.myFootballScoring.initScoreThem = self.scoreThem;
+		self.myFootballScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.myFootballScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.myFootballScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.myFootballScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.myFootballScoring.view];
+		[self.view bringSubviewToFront:self.myFootballScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -660,23 +672,23 @@ errorString, photoButton, showCamera;
 		
 	}else if ([lowerSport isEqualToString:@"basketball"]) {
 		
-		NewBasketballScoring *tmp = [[NewBasketballScoring alloc] init];
+		self.myBasketballScoring = [[NewBasketballScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.myBasketballScoring.teamId = self.teamId;
+		self.myBasketballScoring.gameId = self.gameId;
+		self.myBasketballScoring.initScoreUs = self.scoreUs;
+		self.myBasketballScoring.initScoreThem = self.scoreThem;
+		self.myBasketballScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.myBasketballScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.myBasketballScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.myBasketballScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.myBasketballScoring.view];
+		[self.view bringSubviewToFront:self.myBasketballScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -685,23 +697,23 @@ errorString, photoButton, showCamera;
 		
 	}else if ([lowerSport isEqualToString:@"soccer"]) {
 		
-		NewSoccerScoring *tmp = [[NewSoccerScoring alloc] init];
+		self.mySoccerScoring = [[NewSoccerScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.mySoccerScoring.teamId = self.teamId;
+		self.mySoccerScoring.gameId = self.gameId;
+		self.mySoccerScoring.initScoreUs = self.scoreUs;
+		self.mySoccerScoring.initScoreThem = self.scoreThem;
+		self.mySoccerScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.mySoccerScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.mySoccerScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.mySoccerScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.mySoccerScoring.view];
+		[self.view bringSubviewToFront:self.mySoccerScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -710,23 +722,23 @@ errorString, photoButton, showCamera;
 		
 	}else if ([lowerSport isEqualToString:@"lacrosse"]) {
 		
-		NewLacrosseScoring *tmp = [[NewLacrosseScoring alloc] init];
+		self.myLacrosseScoring = [[NewLacrosseScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.myLacrosseScoring.teamId = self.teamId;
+		self.myLacrosseScoring.gameId = self.gameId;
+		self.myLacrosseScoring.initScoreUs = self.scoreUs;
+		self.myLacrosseScoring.initScoreThem = self.scoreThem;
+		self.myLacrosseScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.myLacrosseScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.myLacrosseScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.myLacrosseScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.myLacrosseScoring.view];
+		[self.view bringSubviewToFront:self.myLacrosseScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -735,23 +747,23 @@ errorString, photoButton, showCamera;
 		
 	}else if ([lowerSport isEqualToString:@"water polo"]) {
 		
-		NewWaterPoloScoring *tmp = [[NewWaterPoloScoring alloc] init];
+		self.myWaterPoloScoring = [[NewWaterPoloScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.myWaterPoloScoring.teamId = self.teamId;
+		self.myWaterPoloScoring.gameId = self.gameId;
+		self.myWaterPoloScoring.initScoreUs = self.scoreUs;
+		self.myWaterPoloScoring.initScoreThem = self.scoreThem;
+		self.myWaterPoloScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.myWaterPoloScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.myWaterPoloScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.myWaterPoloScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.myWaterPoloScoring.view];
+		[self.view bringSubviewToFront:self.myWaterPoloScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -760,23 +772,23 @@ errorString, photoButton, showCamera;
 		
 	}else if ([lowerSport isEqualToString:@"hockey"]) {
 		
-		NewHockeyScoring *tmp = [[NewHockeyScoring alloc] init];
+		self.myHockeyScoring = [[NewHockeyScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.myHockeyScoring.teamId = self.teamId;
+		self.myHockeyScoring.gameId = self.gameId;
+		self.myHockeyScoring.initScoreUs = self.scoreUs;
+		self.myHockeyScoring.initScoreThem = self.scoreThem;
+		self.myHockeyScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.myHockeyScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.myHockeyScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.myHockeyScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.myHockeyScoring.view];
+		[self.view bringSubviewToFront:self.myHockeyScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -785,23 +797,23 @@ errorString, photoButton, showCamera;
 		
 	}else if ([lowerSport isEqualToString:@"ultimate frisbee"]) {
 		
-		NewUltimateFrisbeeScoring *tmp = [[NewUltimateFrisbeeScoring alloc] init];
+		self.myUltimateFrisbeeScoring = [[NewUltimateFrisbeeScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.myUltimateFrisbeeScoring.teamId = self.teamId;
+		self.myUltimateFrisbeeScoring.gameId = self.gameId;
+		self.myUltimateFrisbeeScoring.initScoreUs = self.scoreUs;
+		self.myUltimateFrisbeeScoring.initScoreThem = self.scoreThem;
+		self.myUltimateFrisbeeScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.myUltimateFrisbeeScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.myUltimateFrisbeeScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.myUltimateFrisbeeScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.myUltimateFrisbeeScoring.view];
+		[self.view bringSubviewToFront:self.myUltimateFrisbeeScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -810,23 +822,23 @@ errorString, photoButton, showCamera;
 		
 	}else if (([lowerSport isEqualToString:@"baseball"]) || ([lowerSport isEqualToString:@"softball"])) {
 		
-		NewBaseballScoring *tmp = [[NewBaseballScoring alloc] init];
+		self.myBaseballScoring = [[NewBaseballScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.myBaseballScoring.teamId = self.teamId;
+		self.myBaseballScoring.gameId = self.gameId;
+		self.myBaseballScoring.initScoreUs = self.scoreUs;
+		self.myBaseballScoring.initScoreThem = self.scoreThem;
+		self.myBaseballScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.myBaseballScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.myBaseballScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.myBaseballScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.myBaseballScoring.view];
+		[self.view bringSubviewToFront:self.myBaseballScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -837,23 +849,23 @@ errorString, photoButton, showCamera;
 		
 	}else{
 		
-		NewDefaultScoring *tmp = [[NewDefaultScoring alloc] init];
+		self.myDefaultScoring = [[NewDefaultScoring alloc] init];
 		
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
+		self.myDefaultScoring.teamId = self.teamId;
+		self.myDefaultScoring.gameId = self.gameId;
+		self.myDefaultScoring.initScoreUs = self.scoreUs;
+		self.myDefaultScoring.initScoreThem = self.scoreThem;
+		self.myDefaultScoring.interval = self.interval;
 		
 		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
+			self.myDefaultScoring.isCoord = true;
 		}else {
-			tmp.isCoord = false;
+			self.myDefaultScoring.isCoord = false;
 		}
 		
-		tmp.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
+		self.myDefaultScoring.view.frame = CGRectMake(0, 142, 320, 225);
+		[self.view addSubview:self.myDefaultScoring.view];
+		[self.view bringSubviewToFront:self.myDefaultScoring.view];
 		
 		[self.enableScoring setHidden:YES];
 		[self.scoringNotEnabled setHidden:YES];
@@ -1023,49 +1035,53 @@ errorString, photoButton, showCamera;
 
 -(void)findTwitter{
 
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
+            NSDictionary *response = [ServerAPI getTeamInfo:self.teamId :token :@"false"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                NSDictionary *teamInfo = [response valueForKey:@"teamInfo"];
+                
+                self.showCamera = [[teamInfo valueForKey:@"useTwitter"] boolValue];
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneTwitter) withObject:nil waitUntilDone:NO];
+
+    }
 	
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	} 
-	
-	if (![token isEqualToString:@""]){	
-		NSDictionary *response = [ServerAPI getTeamInfo:self.teamId :token :@"false"];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			NSDictionary *teamInfo = [response valueForKey:@"teamInfo"];
-			
-			self.showCamera = [[teamInfo valueForKey:@"useTwitter"] boolValue];
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			//[self.errorLabel setHidden:NO];
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code?
-					//self.errorLabel.text = @"*Error connecting to server";
-					break;
-			}
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:@selector(doneTwitter) withObject:nil waitUntilDone:NO];
 }
 
 -(void)doneTwitter{

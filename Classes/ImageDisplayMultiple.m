@@ -118,10 +118,8 @@
 
 -(void)goSmall:(id)sender{
 
-    //[[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];  
-    
-    //[[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:UIInterfaceOrientationPortrait];
-    
+    [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];     
+        
     [self resetScroll];
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -138,9 +136,9 @@
      
     self.isFullScreen = false;
     
-    UIViewController *c = [[UIViewController alloc]init];
-    [self presentModalViewController:c animated:NO];
-    [self dismissModalViewControllerAnimated:NO];
+    //UIViewController *c = [[UIViewController alloc]init];
+    //[self presentModalViewController:c animated:NO];
+    //[self dismissModalViewControllerAnimated:NO];
 
 }
 
@@ -298,6 +296,7 @@
     [super viewDidUnload];
     
 }
+
 
 
 @end

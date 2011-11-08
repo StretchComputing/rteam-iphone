@@ -177,15 +177,32 @@
             [view removeFromSuperview];
         }
         
+        for (UIView *view in [insideImageView subviews]) {
+            [view removeFromSuperview];
+        }
+        
+        //remove all targets
+        [insideImageView removeTarget:nil 
+                           action:NULL 
+                 forControlEvents:UIControlEventAllEvents]; 
+        
         if ((tmpThumbnail != nil)  && (![tmpThumbnail isEqualToString:@""])){
             isImage = true;
       
             NSData *profileData = [Base64 decode:tmpThumbnail];
             insideImageView.hidden = NO;
             insideImageView.messageId = result.activityId;
+            
+         
   
 
-            [insideImageView addTarget:sentClass action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
+            if (result.isVideo) {
+                [insideImageView addTarget:sentClass action:@selector(videoSelected:) forControlEvents:UIControlEventTouchUpInside];
+
+            }else{
+                [insideImageView addTarget:sentClass action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
+
+            }
             
             imageBack.hidden = NO;
             imageBack.backgroundColor = [UIColor blackColor];
@@ -205,6 +222,12 @@
             
             myImage.frame = CGRectMake(1, 1, imageBack.frame.size.width -2, imageBack.frame.size.height - 2);
             
+            if (result.isVideo) {
+                UIImageView *playButton = [[UIImageView alloc] initWithFrame:CGRectMake(myImage.frame.size.width/2 - 15, myImage.frame.size.height/2 -15, 30, 30)];
+                playButton.image = [UIImage imageNamed:@"playButtonSmall.png"];
+                [myImage addSubview:playButton];
+            }
+            
             [imageBack addSubview:myImage];
             
             imageBack.layer.masksToBounds = YES;
@@ -215,6 +238,11 @@
             
             insideImageView.frame = CGRectMake(52, imageStart, 82, 82);
             insideImageView.backgroundColor = [UIColor clearColor];
+            
+           
+        
+            
+            
             [cell.contentView bringSubviewToFront:insideImageView];
    
         }else{

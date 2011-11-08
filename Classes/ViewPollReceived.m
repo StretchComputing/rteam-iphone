@@ -282,55 +282,57 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 -(void)getMessageThreadInfo{
 
-    
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
+            
+            if (self.teamId == nil) {
+                self.teamId = self.origTeamId;
+            }
+            
+            NSDictionary *response = [ServerAPI getMessageThreadInfo:token :self.teamId :self.threadId];
+            
+            NSString *status1 = [response valueForKey:@"status"];
+            
+            if ([status1 isEqualToString:@"100"]){
+                
+                self.messageThreadInfo = [NSDictionary dictionary];
+                
+                self.messageThreadInfo = [response valueForKey:@"messageThreadInfo"];
+                
+                self.errorString = @"";
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status1 intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error retrieving poll information.";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error retrieving poll information.";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error retrieving poll information.";
+                        break;
+                }
+            }
+            
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
+    }
 	
-	if (![token isEqualToString:@""]){
-		
-		if (self.teamId == nil) {
-			self.teamId = self.origTeamId;
-		}
-		
-		NSDictionary *response = [ServerAPI getMessageThreadInfo:token :self.teamId :self.threadId];
-		
-		NSString *status1 = [response valueForKey:@"status"];
-		
-		if ([status1 isEqualToString:@"100"]){
-			
-			self.messageThreadInfo = [NSDictionary dictionary];
-			
-			self.messageThreadInfo = [response valueForKey:@"messageThreadInfo"];
-			
-			self.errorString = @"";
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status1 intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error retrieving poll information.";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error retrieving poll information.";
-					break;
-				default:
-					//log status code
-					self.errorString = @"*Error retrieving poll information.";
-					break;
-			}
-		}
-		
-	}
-
-	
-	[self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
 	
 }
 
@@ -537,50 +539,54 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 }
 	
 -(void)updateWasViewed{
+    
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
+            
+            if (self.teamId == nil) {
+                self.teamId = self.origTeamId;
+            }
+            
+            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"true" :@"" :@""];
+            
+            NSString *status1 = [response valueForKey:@"status"];
+            
+            if ([status1 isEqualToString:@"100"]){
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status1 intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
 
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	if (![token isEqualToString:@""]){
-		
-		if (self.teamId == nil) {
-			self.teamId = self.origTeamId;
-		}
-		
-		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"true" :@"" :@""];
-		
-		NSString *status1 = [response valueForKey:@"status"];
-		
-		if ([status1 isEqualToString:@"100"]){
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status1 intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					//self.error.text = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
+    }
 
+	
 	
 }
 
@@ -640,52 +646,55 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 -(void)sendPollResponse{
 
-    
-    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *token = @"";
-    if (mainDelegate.token != nil){
-        token = mainDelegate.token;
-    }
-    
-    if (![token isEqualToString:@""]){
-        
-        if (self.teamId == nil) {
-            self.teamId = self.origTeamId;
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
         }
         
-        NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :self.finalAnswer :@"" :@"" :@""];
-        
-        NSString *status1 = [response valueForKey:@"status"];
-        
-        
-        if ([status1 isEqualToString:@"100"]){
+        if (![token isEqualToString:@""]){
             
-            self.errorString = @"";
-            
-        }else{
-            
-            //Server hit failed...get status code out and display error accordingly
-            int statusCode = [status1 intValue];
-            
-            switch (statusCode) {
-                case 0:
-                    //null parameter
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 1:
-                    //error connecting to server
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                default:
-                    //log status code
-                    self.errorString = @"*Error connecting to server";
-                    break;
+            if (self.teamId == nil) {
+                self.teamId = self.origTeamId;
             }
+            
+            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :self.finalAnswer :@"" :@"" :@""];
+            
+            NSString *status1 = [response valueForKey:@"status"];
+            
+            
+            if ([status1 isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status1 intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
         }
         
-    }
+        [self performSelectorOnMainThread:@selector(doneSendResponse) withObject:nil waitUntilDone:NO];
 
-    [self performSelectorOnMainThread:@selector(doneSendResponse) withObject:nil waitUntilDone:NO];
+    }
+   
 }
 
 -(void)doneSendResponse{

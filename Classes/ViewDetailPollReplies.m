@@ -42,46 +42,48 @@
 
 -(void)getMembers{
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSDictionary *response;
-	if (mainDelegate.token != nil) {
-		
-		response = [ServerAPI getListOfTeamMembers:self.teamId :mainDelegate.token :@"all" :@""];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.members = [response valueForKey:@"members"];
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					//self.error.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					//self.error.text = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					//self.error.text = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSDictionary *response;
+        if (mainDelegate.token != nil) {
+            
+            response = [ServerAPI getListOfTeamMembers:self.teamId :mainDelegate.token :@"all" :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.members = [response valueForKey:@"members"];
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        //self.error.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
+    }
 
-	
-	
-	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
 	
 }
 

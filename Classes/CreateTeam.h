@@ -12,9 +12,9 @@
 @interface CreateTeam : UIViewController <UIActionSheetDelegate> {
 
 
-    bool fromHome;
 }
 @property bool fromHome;
+
 -(IBAction)football;
 -(IBAction)basketball;
 -(IBAction)baseball;

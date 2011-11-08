@@ -18,7 +18,7 @@
     self = [super init];
 	if (self){
 		
-		self =  [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Update My Status", @"Request Member Status", @"Update Event Status", @"Send Message", @"Happening Now", nil];
+		self =  (FastActionSheetHome *)[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Update My Status", @"Request Member Status", @"Update Event Status", @"Send Message", @"Happening Now", nil];
 		
 		
 	}

@@ -29,7 +29,6 @@ teamName, newActivity, fromHome;
 
 -(void)viewWillAppear:(BOOL)animated{
 	
-	
 	int index = self.selectedIndex;
 	
 	if (index == 100) {
@@ -61,7 +60,6 @@ teamName, newActivity, fromHome;
 	
 }
 - (void)viewDidLoad {
-
 	
 	self.tabBar.backgroundColor = [UIColor greenColor];
 	self.title = @"GameDay";
@@ -77,8 +75,8 @@ teamName, newActivity, fromHome;
 	[[Vote alloc] init]; 
 
 	
-	tab1.teamId = self.teamId;
-	tab1.gameId = self.gameId;
+	//tab1.teamId = self.teamId;
+	//tab1.gameId = self.gameId;
 	tab1.userRole = self.userRole;
 	tab1.title = @"Game Day";
 	tab1.tabBarItem.image = [UIImage imageNamed:@"tabsGameday.png"];

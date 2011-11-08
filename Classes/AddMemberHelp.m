@@ -12,7 +12,7 @@
 #import "FastActionSheet.h"
 
 @implementation AddMemberHelp
-@synthesize scrollView, bannerIsVisible;
+@synthesize scrollView, bannerIsVisible, myAd;
 
 -(void)viewDidAppear:(BOOL)animated{
 	

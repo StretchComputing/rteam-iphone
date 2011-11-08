@@ -15,7 +15,7 @@
 @implementation NewBasketballScoring
 @synthesize topOrBottom, subUs, subThem, addQuart, subQuart, scoreUs, scoreThem, quarter, isGameOver,
 labelUs, labelThem, labelQuart, gameOverButton, gameId, teamId, createSuccess, initScoreUs, initScoreThem, interval,
-isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButton, activity;
+isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButton, activity, theScoreUs, theScoreThem;
 
 -(void)viewDidLoad{
 	
@@ -82,6 +82,8 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	int us = [self.scoreUs.text intValue];
 	us = us + increase;
 	self.scoreUs.text = [NSString stringWithFormat:@"%d", us];
+    self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+    self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 }
@@ -92,6 +94,8 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	if (us != 0) {
 		us--;
 		self.scoreUs.text = [NSString stringWithFormat:@"%d", us];
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 	
@@ -106,6 +110,8 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	int them = [self.scoreThem.text intValue];
 	them = them + increase;
 	self.scoreThem.text = [NSString stringWithFormat:@"%d", them];
+    self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+    self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 }
 
@@ -115,6 +121,8 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	if (them != 0) {
 		them--;
 		self.scoreThem.text = [NSString stringWithFormat:@"%d", them];
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 	
@@ -134,6 +142,8 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 			quart++;
 			self.quarter.text = [NSString stringWithFormat:@"%d", quart];
 		}
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 		
@@ -144,6 +154,8 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	
 	if ([self.quarter.text isEqualToString:@"OT"]) {
 		self.quarter.text = @"4";
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}else {
 		int quart = [self.quarter.text intValue];
@@ -151,6 +163,8 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 		if ((quart != 0) && (quart != 1)) {
 			quart--;
 			self.quarter.text = [NSString stringWithFormat:@"%d", quart];
+            self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+            self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		}		
 	}
@@ -189,6 +203,8 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
         self.subThem.enabled = NO;
         self.gameOverButton.enabled = NO;
         self.cancelScoringButton.enabled = NO;
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
         
 		[self performSelectorInBackground:@selector(runRequestOver) withObject:nil];
 		

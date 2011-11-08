@@ -10,20 +10,7 @@
 
 
 @interface GameTabsNoCoord : UITabBarController <UITabBarControllerDelegate, UIActionSheetDelegate> {
-	NSString *startDate;
-	NSString *endDate;
-	NSString *gameId;
-	NSString *teamId;
-	NSString *timeZone;
-	NSString *description;
-	NSString *latitude;
-	NSString *longitude;
-	NSString *opponent;
-	NSString *userRole;
-	NSString *teamName;
-	bool messageSuccess;
-	int messageCount;
-	bool fromHome;
+
 }
 @property bool fromHome;
 @property bool newActivity;

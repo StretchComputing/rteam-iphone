@@ -12,7 +12,6 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "CoachHome.h"
-#import "FindTeam.h"
 #import "CurrentTeamTabs.h"
 #import "TeamNavigation.h"
 #import "TeamEdit.h"
@@ -75,6 +74,12 @@ fromHome, myAd, alertOne, alertTwo;
 
 -(void)viewWillAppear:(BOOL)animated{
 		
+    if (myAd.bannerLoaded) {
+        myAd.hidden = NO;
+    }else{
+        myAd.hidden = YES;
+    }
+    
 	[super setEditing:NO animated:NO];
 	[self.myTableView setEditing:NO animated:NO];
 	
@@ -440,9 +445,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)findTeam{
-	
-	FindTeam *nextController = [[FindTeam alloc] init];
-	[self.navigationController pushViewController:nextController animated:YES];	
+
 	
 }
 

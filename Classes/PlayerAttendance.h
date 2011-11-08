@@ -10,17 +10,7 @@
 
 
 @interface PlayerAttendance : UITableViewController {
-    
-	NSString *teamId;
-	NSString *memberId;
-	NSString *errorMessage;
-	NSArray *attResults;
-	NSArray *displayAttResults;
-	NSString *eventType;
-	bool segChange;
-	UISegmentedControl *segmentEventType;
-	
-	bool fromSearch;
+
 	
 }
 @property bool fromSearch;

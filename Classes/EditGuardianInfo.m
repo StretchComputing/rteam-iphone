@@ -15,7 +15,7 @@
 @implementation EditGuardianInfo
 @synthesize guardianArray, oneFirstName, oneLastName, oneEmail, twoFirstName, twoLastName, twoEmail, saveChangesButton, removeGuardiansButton,
 activity, errorLabel, teamId, memberId, errorString, onePhone, twoPhone, oneKey, twoKey, guard1Na, guard2Na, phoneOnlyArray,
-confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, guard2SmsConfirmed, guard2isUser, guard1EmailConfirmed, guard2EmailConfirmed, guard1isUser;
+confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, guard2SmsConfirmed, guard2isUser, guard1EmailConfirmed, guard2EmailConfirmed, guard1isUser, theOneEmail, theOnePhone, theTwoEmail, theTwoPhone, theOneLastName, theTwoLastName, theOneFirstName, theTwoFirstName;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -173,6 +173,17 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 	self.errorLabel.text = @"";
 	self.phoneOnlyArray = [NSMutableArray array];
     
+    self.theOneFirstName = [NSString stringWithString:self.oneFirstName.text];
+    self.theOneLastName = [NSString stringWithString:self.oneLastName.text];
+    self.theOneEmail = [NSString stringWithString:self.oneEmail.text];
+    self.theOnePhone = [NSString stringWithString:self.onePhone.text];
+    
+    self.theTwoFirstName = [NSString stringWithString:self.twoFirstName.text];
+    self.theTwoLastName = [NSString stringWithString:self.twoLastName.text];
+    self.theTwoEmail = [NSString stringWithString:self.twoEmail.text];
+    self.theTwoPhone = [NSString stringWithString:self.twoPhone.text];
+
+    
 	if ([self.oneLastName.text isEqualToString:@""] || [self.oneFirstName.text isEqualToString:@""]) {
         self.errorLabel.text = @"*Please fill out the entire name for Guardian 1.";
     }else if ([self.onePhone.text isEqualToString:@""] && [self.oneEmail.text isEqualToString:@""]){
@@ -244,121 +255,125 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 
 
 - (void)runRequest {
-	self.errorString = @"";
-
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpGuardians = [[NSMutableArray alloc] init];
-	
-	NSMutableDictionary *guardianOne = [NSMutableDictionary dictionary];
-	NSMutableDictionary *guardianTwo = [NSMutableDictionary dictionary];
     
-    if (self.oneEmail.text == nil) {
-        self.oneEmail.text = @"";
-    }
-    if (self.onePhone.text == nil) {
-        self.onePhone.text = @"";
-    }
-    
-    if (self.twoEmail.text == nil) {
-        self.twoEmail.text = @"";
-    }if (self.twoPhone.text == nil) {
-        self.twoPhone.text = @"";
-    }
-	
-	if (![self.oneFirstName.text isEqualToString:@""]) {
-		
-		NSDictionary *tmpDictionary = [NSDictionary dictionary];
-		[guardianOne setObject:self.oneFirstName.text forKey:@"firstName"];
-		[guardianOne setObject:self.oneLastName.text forKey:@"lastName"];
-		[guardianOne setObject:self.oneEmail.text forKey:@"emailAddress"];
-        [guardianOne setObject:self.onePhone.text forKey:@"phoneNumber"];
-        if (self.oneKey != nil) {
-            [guardianOne setObject:self.oneKey forKey:@"key"];
-
-        }
-		
-		tmpDictionary = guardianOne;
-		[tmpGuardians addObject:tmpDictionary];
-	}
-	
-	if (![self.twoFirstName.text isEqualToString:@""]) {
-		
-		NSDictionary *tmpDictionary = [NSDictionary dictionary];
-		[guardianTwo setObject:self.twoFirstName.text forKey:@"firstName"];
-		[guardianTwo setObject:self.twoLastName.text forKey:@"lastName"];
-		[guardianTwo setObject:self.twoEmail.text forKey:@"emailAddress"];
-        [guardianTwo setObject:self.twoPhone.text forKey:@"phoneNumber"];
+    @autoreleasepool {
+        self.errorString = @"";
         
-        if (self.twoKey != nil) {
-            [guardianTwo setObject:self.twoKey forKey:@"key"];
-        }
-		
-		tmpDictionary = guardianTwo;
-		[tmpGuardians addObject:tmpDictionary];
-	}
-	NSArray *guardians = tmpGuardians;
-    
-    if (![self.onePhone.text isEqualToString:@""]) {
         
-        if (![self.onePhone.text isEqualToString:self.initGuard1Phone] && !self.guard1EmailConfirmed) {
-            [self.phoneOnlyArray addObject:self.onePhone.text];
-        }
-    }
-    
-    if (![self.twoPhone.text isEqualToString:@""]) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        if (![self.twoPhone.text isEqualToString:self.initGuard2Phone] && !self.guard2EmailConfirmed) {
-            [self.phoneOnlyArray addObject:self.twoPhone.text];
+        NSMutableArray *tmpGuardians = [[NSMutableArray alloc] init];
+        
+        NSMutableDictionary *guardianOne = [NSMutableDictionary dictionary];
+        NSMutableDictionary *guardianTwo = [NSMutableDictionary dictionary];
+        
+        if (self.theOneEmail == nil) {
+            self.theOneEmail = @"";
         }
-    }
-	
+        if (self.theOnePhone == nil) {
+            self.theOnePhone = @"";
+        }
+        
+        if (self.theTwoEmail == nil) {
+            self.theTwoEmail = @"";
+        }if (self.theTwoPhone == nil) {
+            self.theTwoPhone = @"";
+        }
+        
+        if (![self.theOneFirstName isEqualToString:@""]) {
+            
+            NSDictionary *tmpDictionary = [NSDictionary dictionary];
+            [guardianOne setObject:self.theOneFirstName forKey:@"firstName"];
+            [guardianOne setObject:self.theOneLastName forKey:@"lastName"];
+            [guardianOne setObject:self.theOneEmail forKey:@"emailAddress"];
+            [guardianOne setObject:self.theOnePhone forKey:@"phoneNumber"];
+            if (self.oneKey != nil) {
+                [guardianOne setObject:self.oneKey forKey:@"key"];
+                
+            }
+            
+            tmpDictionary = guardianOne;
+            [tmpGuardians addObject:tmpDictionary];
+        }
+        
+        if (![self.theTwoFirstName isEqualToString:@""]) {
+            
+            NSDictionary *tmpDictionary = [NSDictionary dictionary];
+            [guardianTwo setObject:self.theTwoFirstName forKey:@"firstName"];
+            [guardianTwo setObject:self.theTwoLastName forKey:@"lastName"];
+            [guardianTwo setObject:self.theTwoEmail forKey:@"emailAddress"];
+            [guardianTwo setObject:self.theTwoPhone forKey:@"phoneNumber"];
+            
+            if (self.twoKey != nil) {
+                [guardianTwo setObject:self.twoKey forKey:@"key"];
+            }
+            
+            tmpDictionary = guardianTwo;
+            [tmpGuardians addObject:tmpDictionary];
+        }
+        NSArray *guardians = tmpGuardians;
+        
+        if (![self.theOnePhone isEqualToString:@""]) {
+            
+            if (![self.theOnePhone isEqualToString:self.initGuard1Phone] && !self.guard1EmailConfirmed) {
+                [self.phoneOnlyArray addObject:self.theOnePhone];
+            }
+        }
+        
+        if (![self.theTwoPhone isEqualToString:@""]) {
+            
+            if (![self.theTwoPhone isEqualToString:self.initGuard2Phone] && !self.guard2EmailConfirmed) {
+                [self.phoneOnlyArray addObject:self.theTwoPhone];
+            }
+        }
+        
 		
-	NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
-	
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
-		
-		self.errorString = @"";
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		[self.errorLabel setHidden:NO];
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-            case 219:
-				//error connecting to server
-				self.errorString = @"*Email addresses must be unique.";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString = @"";
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            [self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 219:
+                    //error connecting to server
+                    self.errorString = @"*Email addresses must be unique.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
+    }
+		
 }
 
 - (void)didFinish{
@@ -439,92 +454,96 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 
 
 - (void)runRemove {
-	self.errorString = @"";
-
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpGuardians = [[NSMutableArray alloc] init];
-	
-	NSMutableDictionary *guardianOne = [NSMutableDictionary dictionary];
-	NSMutableDictionary *guardianTwo = [NSMutableDictionary dictionary];
     
-  
-	
-	if (![self.oneKey isEqualToString:@""] && (self.oneKey != nil)) {
-		
-		NSDictionary *tmpDictionary = [NSDictionary dictionary];
-		[guardianOne setObject:@"" forKey:@"firstName"];
-		[guardianOne setObject:@"" forKey:@"lastName"];
-		[guardianOne setObject:@"" forKey:@"emailAddress"];
-        [guardianOne setObject:@"" forKey:@"phoneNumber"];
-        if (self.oneKey != nil) {
-            [guardianOne setObject:self.oneKey forKey:@"key"];
-            
-        }
-		
-		tmpDictionary = guardianOne;
-		[tmpGuardians addObject:tmpDictionary];
-	}
-	
-	if (![self.twoKey isEqualToString:@""] && (self.twoKey != nil)) {
-		
-		NSDictionary *tmpDictionary = [NSDictionary dictionary];
-		[guardianTwo setObject:@"" forKey:@"firstName"];
-		[guardianTwo setObject:@"" forKey:@"lastName"];
-		[guardianTwo setObject:@"" forKey:@"emailAddress"];
-        [guardianTwo setObject:@"" forKey:@"phoneNumber"];
+    @autoreleasepool {
+        self.errorString = @"";
         
-        if (self.twoKey != nil) {
-            [guardianTwo setObject:self.twoKey forKey:@"key"];
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpGuardians = [[NSMutableArray alloc] init];
+        
+        NSMutableDictionary *guardianOne = [NSMutableDictionary dictionary];
+        NSMutableDictionary *guardianTwo = [NSMutableDictionary dictionary];
+        
+        
+        
+        if (![self.oneKey isEqualToString:@""] && (self.oneKey != nil)) {
+            
+            NSDictionary *tmpDictionary = [NSDictionary dictionary];
+            [guardianOne setObject:@"" forKey:@"firstName"];
+            [guardianOne setObject:@"" forKey:@"lastName"];
+            [guardianOne setObject:@"" forKey:@"emailAddress"];
+            [guardianOne setObject:@"" forKey:@"phoneNumber"];
+            if (self.oneKey != nil) {
+                [guardianOne setObject:self.oneKey forKey:@"key"];
+                
+            }
+            
+            tmpDictionary = guardianOne;
+            [tmpGuardians addObject:tmpDictionary];
         }
+        
+        if (![self.twoKey isEqualToString:@""] && (self.twoKey != nil)) {
+            
+            NSDictionary *tmpDictionary = [NSDictionary dictionary];
+            [guardianTwo setObject:@"" forKey:@"firstName"];
+            [guardianTwo setObject:@"" forKey:@"lastName"];
+            [guardianTwo setObject:@"" forKey:@"emailAddress"];
+            [guardianTwo setObject:@"" forKey:@"phoneNumber"];
+            
+            if (self.twoKey != nil) {
+                [guardianTwo setObject:self.twoKey forKey:@"key"];
+            }
+            
+            tmpDictionary = guardianTwo;
+            [tmpGuardians addObject:tmpDictionary];
+        }
+        NSArray *guardians = tmpGuardians;
+        
+        
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString = @"";
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            [self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinishRemove)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
 		
-		tmpDictionary = guardianTwo;
-		[tmpGuardians addObject:tmpDictionary];
-	}
-	NSArray *guardians = tmpGuardians;
-	
-    
-	NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
-	
-	
-	NSString *status = [response valueForKey:@"status"];
-	        
-	if ([status isEqualToString:@"100"]){
-		
-		self.errorString = @"";
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		[self.errorLabel setHidden:NO];
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-    
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinishRemove)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinishRemove{

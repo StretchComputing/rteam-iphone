@@ -11,23 +11,16 @@
 
 @interface NewGamePractice : UIViewController <UIActionSheetDelegate> {
 	
-	IBOutlet UIDatePicker *startDate;
-	IBOutlet UISegmentedControl *practiceOrGame;
-	NSString *teamId;
-	
-	IBOutlet UIButton *createButton;
-	IBOutlet UIButton *recurringEventButton;
-	
-	IBOutlet UILabel *singleLabel;
+
 	
 }
-@property (nonatomic, strong) UILabel *singleLabel;
-@property (nonatomic, strong) UIButton *recurringEventButton;
+@property (nonatomic, strong) IBOutlet UILabel *singleLabel;
+@property (nonatomic, strong) IBOutlet UIButton *recurringEventButton;
 
-@property (nonatomic, strong) UIButton *createButton;
-@property (nonatomic, strong) UISegmentedControl *practiceOrGame;
+@property (nonatomic, strong) IBOutlet UIButton *createButton;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *practiceOrGame;
 @property (nonatomic, strong) NSString *teamId;
-@property (nonatomic, strong) UIDatePicker *startDate;
+@property (nonatomic, strong) IBOutlet  UIDatePicker *startDate;
 
 -(IBAction)recurringEvent;
 -(IBAction)nextScreen;

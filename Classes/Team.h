@@ -11,12 +11,7 @@
 
 @interface Team : NSObject {
     
-	NSString *name;
-	NSString *teamId;
-	NSString *userRole;  //The role of the current user for this team;
-	NSString *sport;
-	NSString *teamUrl;
-	bool useTwitter;
+
 	
 }
 @property (nonatomic, strong) NSString *teamUrl;

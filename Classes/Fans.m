@@ -101,67 +101,69 @@ fanPics;
 
 
 -(void)getAllFans{
-	
-	NSString *token = @"";
-	NSArray *playerArray = [NSArray array];
-	self.fanPics = [NSMutableArray array];
+    
+    
+    @autoreleasepool {
+        NSString *token = @"";
+        NSArray *playerArray = [NSArray array];
+        self.fanPics = [NSMutableArray array];
+        
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        
+        
+        //If there is a token, do a DB lookup to find the players associated with this team:
+        if (![token isEqualToString:@""]){
+            
+            
+            NSDictionary *response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"fan" :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                playerArray = [response valueForKey:@"members"];
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Log the status code?
+                        self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
+        self.fans = playerArray;
+        
+        for (int i = 0; i < [self.fans count]; i++) {
+            [self.fanPics addObject:@""];
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(finishedFans) withObject:nil waitUntilDone:NO];
+    }
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	
-	
-	//If there is a token, do a DB lookup to find the players associated with this team:
-	if (![token isEqualToString:@""]){
-		
-		
-		NSDictionary *response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"fan" :@""];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			playerArray = [response valueForKey:@"members"];
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.error = @"*Error connecting to server";
-					break;
-				default:
-					//Log the status code?
-					self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
-	
-	self.fans = playerArray;
-	
-	for (int i = 0; i < [self.fans count]; i++) {
-		[self.fanPics addObject:@""];
-	}
-	
-	
-	[self performSelectorOnMainThread:@selector(finishedFans) withObject:nil waitUntilDone:NO];
-
-	
 }
 
 -(void)finishedFans{
@@ -250,67 +252,70 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)getPicsFans {
 	
 
+	@autoreleasepool {
+
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        for (int i = 0; i < [self.fans count]; i++) {
+            
+            
+            Player *controller = [self.fans objectAtIndex:i];
+            
+            NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :controller.memberId :mainDelegate.token :@""];
+            
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                NSDictionary *memberInfo = [response valueForKey:@"memberInfo"];
+                
+                NSString *profile = [memberInfo valueForKey:@"thumbNail"];
+                
+                if ((profile == nil)  || ([profile isEqualToString:@""])){
+                    
+                    
+                }else {
+                    
+                    [self.fanPics replaceObjectAtIndex:i withObject:profile];
+                    
+                    
+                }
+                
+                
+                [self performSelectorOnMainThread:
+                 @selector(didFinishFans)
+                                       withObject:nil
+                                    waitUntilDone:NO
+                 ];
+                
+            }else{
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //should never get here
+                        self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            
+        }
+
+    }
 	
-	//Create the new player
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	for (int i = 0; i < [self.fans count]; i++) {
-		
-		
-		Player *controller = [self.fans objectAtIndex:i];
-		
-		NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :controller.memberId :mainDelegate.token :@""];
-		
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		
-		
-		if ([status isEqualToString:@"100"]){
-			
-			NSDictionary *memberInfo = [response valueForKey:@"memberInfo"];
-			
-			NSString *profile = [memberInfo valueForKey:@"thumbNail"];
-			
-			if ((profile == nil)  || ([profile isEqualToString:@""])){
-				
-				
-			}else {
-				
-				[self.fanPics replaceObjectAtIndex:i withObject:profile];
-				
-				
-			}
-			
-			
-			[self performSelectorOnMainThread:
-			 @selector(didFinishFans)
-								   withObject:nil
-								waitUntilDone:NO
-			 ];
-			
-		}else{
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.error = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.error = @"*Error connecting to server";
-					break;
-				default:
-					//should never get here
-					self.error = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-		
-	}
 }
 
 - (void)didFinishFans{

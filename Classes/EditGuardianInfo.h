@@ -13,54 +13,26 @@
 
 @interface EditGuardianInfo : UIViewController <UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>  {
     
-	NSArray *guardianArray;
 	
     PhoneNumberFormatter *myPhoneNumberFormatter;
     int myTextFieldSemaphore;
     
-	IBOutlet UITextField *oneFirstName;
-	IBOutlet UITextField *oneLastName;
-	IBOutlet UITextField *oneEmail;
-	IBOutlet UITextField *twoFirstName;
-	IBOutlet UITextField *twoLastName;
-	IBOutlet UITextField *twoEmail;
-    IBOutlet UITextField *onePhone;
-    IBOutlet UITextField *twoPhone;
-	
-	IBOutlet UILabel *errorLabel;
-	
-	IBOutlet UIButton *saveChangesButton;
-	IBOutlet UIButton *removeGuardiansButton;
-	
-	IBOutlet UIActivityIndicatorView *activity;
-	
-	NSString *teamId;
-	NSString *memberId;
-	NSString *errorString;
-    
-    NSString *oneKey;
-    NSString *twoKey;
-    
-    bool guard1Na;
-    bool guard2Na;
-    
-    IBOutlet UILabel *confirmedLabel;
-    
-    NSMutableArray *phoneOnlyArray;
-    
-    NSString *initGuard1Phone;
-    NSString *initGuard2Phone;
-    
-    NSString *teamName;
-    
-    bool guard1isUser;
-    bool guard2isUser;
-    bool guard1EmailConfirmed;
-    bool guard2EmailConfirmed;
-    bool guard1SmsConfirmed;
-    bool guard2SmsConfirmed;
+
 	
 }
+@property (nonatomic, strong) NSString *theOneFirstName;
+@property (nonatomic, strong) NSString *theOneLastName;
+@property (nonatomic, strong) NSString *theOneEmail;
+@property (nonatomic, strong) NSString *theOnePhone;
+
+@property (nonatomic, strong) NSString *theTwoFirstName;
+@property (nonatomic, strong) NSString *theTwoLastName;
+@property (nonatomic, strong) NSString *theTwoEmail;
+@property (nonatomic, strong) NSString *theTwoPhone;
+
+
+
+
 @property bool guard1isUser;
 @property bool guard2isUser;
 @property bool guard1EmailConfirmed;
@@ -72,7 +44,7 @@
 @property (nonatomic, strong) NSString *initGuard1Phone;
 @property (nonatomic, strong) NSString *initGuard2Phone;
 @property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
-@property (nonatomic, strong) UILabel *confirmedLabel;
+@property (nonatomic, strong) IBOutlet UILabel *confirmedLabel;
 
 @property bool guard1Na;
 @property bool guard2Na;
@@ -80,25 +52,25 @@
 @property (nonatomic, strong) NSString *oneKey;
 @property (nonatomic, strong) NSString *twoKey;
 
-@property (nonatomic, strong) UITextField *onePhone;
-@property (nonatomic, strong) UITextField *twoPhone;
+@property (nonatomic, strong) IBOutlet UITextField *onePhone;
+@property (nonatomic, strong) IBOutlet UITextField *twoPhone;
 @property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSString *memberId;
 
-@property (nonatomic, strong) UITextField *oneFirstName;
-@property (nonatomic, strong) UITextField *oneLastName;
-@property (nonatomic, strong) UITextField *oneEmail;
-@property (nonatomic, strong) UITextField *twoFirstName;
-@property (nonatomic, strong) UITextField *twoLastName;
-@property (nonatomic, strong) UITextField *twoEmail;
+@property (nonatomic, strong) IBOutlet UITextField *oneFirstName;
+@property (nonatomic, strong) IBOutlet UITextField *oneLastName;
+@property (nonatomic, strong) IBOutlet UITextField *oneEmail;
+@property (nonatomic, strong) IBOutlet UITextField *twoFirstName;
+@property (nonatomic, strong) IBOutlet UITextField *twoLastName;
+@property (nonatomic, strong) IBOutlet UITextField *twoEmail;
 
 @property (nonatomic, strong) UILabel *errorLabel;
 
-@property (nonatomic, strong) UIButton *saveChangesButton;
-@property (nonatomic, strong) UIButton *removeGuardiansButton;
+@property (nonatomic, strong) IBOutlet UIButton *saveChangesButton;
+@property (nonatomic, strong) IBOutlet UIButton *removeGuardiansButton;
 
-@property (nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activity;
 
 @property (nonatomic, strong) NSArray *guardianArray;
 

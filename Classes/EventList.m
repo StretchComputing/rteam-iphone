@@ -756,6 +756,9 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 			
 			
 			oppLabel.text = theEvent.eventName;
+            NSLog(@"Event Name: %@", theEvent.eventName);
+            NSLog(@"Event Location: %@", theEvent.location);
+            
 			descLabel.text = [@"at " stringByAppendingString:theEvent.location];
 			
 			if (theEvent.isCanceled) {
@@ -912,25 +915,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					currentNotes.description = currentGame.description;
 					currentNotes.startDate = currentGame.startDate;
 					currentNotes.opponentString = currentGame.opponent;
-					
-					/*
-					 TeamActivity *activity = [viewControllers objectAtIndex:1];
-					 activity.teamId = self.teamId;
-					 activity.userRole = self.userRole;
-					 */
-					
+		
 					GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
 					currentAttendance.gameId = currentGame.gameId;
 					currentAttendance.teamId = self.teamId;
 					currentAttendance.startDate = currentGame.startDate;
-					
-                    /*
-					GameChatter *messages = [viewControllers objectAtIndex:1];
-					messages.gameId = currentGame.gameId;
-					messages.teamId = self.teamId;
-					messages.userRole = self.userRole;
-					messages.startDate = currentGame.startDate;
-					*/
+	
                     
 					Vote *fans = [viewControllers objectAtIndex:2];
 					fans.teamId = self.teamId;
@@ -947,27 +937,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					currentGameTab.gameId = currentGame.gameId;
 					currentGameTab.userRole = self.userRole;
 					currentGameTab.teamName = self.teamName;
-					
-					/*
-					 TeamActivity *activity = [viewControllers objectAtIndex:1];
-					 activity.teamId = self.teamId;
-					 activity.userRole = self.userRole;
-					 */
+		
 					
 					Gameday *currentNotes = [viewControllers objectAtIndex:0];
 					currentNotes.gameId = currentGame.gameId;
 					currentNotes.teamId = self.teamId;
 					currentNotes.userRole = self.userRole;
 					currentNotes.sport = self.sport;
-					
-					/*
-					GameChatter *messages = [viewControllers objectAtIndex:1];
-					messages.gameId = currentGame.gameId;
-					messages.teamId = self.teamId;
-					messages.userRole = self.userRole;
-					messages.startDate = currentGame.startDate;
-					*/
-					
+	
                     Vote *fans = [viewControllers objectAtIndex:1];
 					fans.teamId = self.teamId;
 					fans.userRole = self.userRole;

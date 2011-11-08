@@ -13,6 +13,7 @@
     
 
 }
+@property bool fromPost;
 @property (nonatomic, strong) ADBannerView *myAd;
 @property (nonatomic, strong) NSMutableArray *myActivityArray;  //Holds messages sent/received, polls sent/received
 @property bool didInitPhotos;

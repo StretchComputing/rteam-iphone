@@ -13,7 +13,7 @@
 #import "SettingsTabs.h"
 
 @implementation ChangePassword
-@synthesize submitButton, error, password, confirmPassword, activity, changeSuccess, errorString;
+@synthesize submitButton, error, password, confirmPassword, activity, changeSuccess, errorString, thePassword;
 
 -(void)viewDidLoad{
 	
@@ -23,7 +23,7 @@
 	[self.submitButton setBackgroundImage:stretch forState:UIControlStateNormal];
 }
 
--(IBAction)submit{
+-(void)submit{
 	
 	self.error.text = @"";
 	//Validate all fields are entered:
@@ -45,6 +45,8 @@
 		
 		//Register the User in a background thread
 		
+        self.thePassword = [NSString stringWithString:self.password.text];
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 		
@@ -54,51 +56,53 @@
 
 - (void)runRequest {
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSDictionary *response = [ServerAPI updateUser:mainDelegate.token :@"" :@"" :self.password.text :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :[NSData data] :@"" :@"" :@"" :@"" :@"" :@""];
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSDictionary *response = [ServerAPI updateUser:mainDelegate.token :@"" :@"" :self.thePassword :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :[NSData data] :@"" :@"" :@"" :@"" :@"" :@""];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.changeSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.changeSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 500:
+                    //email address already in use
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
+    }
 		
-		self.changeSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.changeSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 500:
-				//email address already in use
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//should never get here
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{

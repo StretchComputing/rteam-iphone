@@ -10,129 +10,79 @@
 #import <CoreLocation/CoreLocation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <iAd/iAd.h>
+#import "NewDefaultScoring.h"
+#import "NewFootballScoring.h"
+#import "NewBasketballScoring.h"
+#import "NewSoccerScoring.h"
+#import "NewLacrosseScoring.h"
+#import "NewHockeyScoring.h"
+#import "NewWaterPoloScoring.h"
+#import "NewUltimateFrisbeeScoring.h"
+#import "NewBaseballScoring.h"
 
 @interface Gameday : UIViewController <CLLocationManagerDelegate, ADBannerViewDelegate> {
     
-	IBOutlet UILabel *opponent;
-	IBOutlet UILabel *day;
-	IBOutlet UILabel *time;
-	IBOutlet UILabel *error;
-    
-	IBOutlet UIActivityIndicatorView *refreshActivity;
-	
-	NSString *teamId;
-	NSString *errorString;
-	NSString *gameId;
-	NSString *latitude;
-	NSString *longitude;
-	
-	UIAlertView *nameGameLocation;
-	NSString *locationName;
-	
-	CLLocationManager *locationManager;
-	
-	bool updateSuccess;
-	bool fromNextUpdate;
-	bool getInfo;
-	
-	IBOutlet UILabel *successMessage;
-	
-	IBOutlet UIButton *moreDetail;
-	IBOutlet UITextView *scoringNotEnabled;
-	IBOutlet UIButton *enableScoring;
-	IBOutlet UIButton *updateLocationButton;
-	
-	bool isScoringEnabled;
-	
-	IBOutlet UILabel *locationLabel;
-	IBOutlet UIButton *mapButton;
-	
-	NSString *scoreUs;
-	NSString *scoreThem;
-	NSString *interval;
-	NSString *userRole;
-	
-	NSString *sport;
-	
-	IBOutlet UIButton *defaultScoringButton;
-	
-	ADBannerView *myAd;
-	
-	BOOL bannerIsVisible;
-	
-	IBOutlet UILabel *usLabel;
-	IBOutlet UILabel *scoreUsLabel;
-	IBOutlet UILabel *themLabel;
-	IBOutlet UILabel *scoreThemLabel;
-	IBOutlet UILabel *scoreDividerLabel;
-	IBOutlet UIButton *keepScoreButton;
-	IBOutlet UILabel *intervalLabel;
-	
-	bool setInfoGame;
-	bool setInfoScore;
-	bool isGameOver;
-	IBOutlet UIButton *editFinalButton;
-	
-	IBOutlet UIActivityIndicatorView *mainActivity;
-	
-	UIBarButtonItem *editDone;
-	NSString *startDate;
-	
-	NSString *description;
-	NSString *opponentString;
-	IBOutlet UILabel *orOtherInterval;
-	bool scoringAdded;
-	
-	IBOutlet UIButton *photoButton;
-	bool showCamera;
+
 }
+@property (nonatomic, strong) NewDefaultScoring *myDefaultScoring;
+@property (nonatomic, strong) NewBaseballScoring *myBaseballScoring;
+@property (nonatomic, strong) NewBasketballScoring *myBasketballScoring;
+@property (nonatomic, strong) NewFootballScoring *myFootballScoring;
+@property (nonatomic, strong) NewUltimateFrisbeeScoring *myUltimateFrisbeeScoring;
+@property (nonatomic, strong) NewWaterPoloScoring *myWaterPoloScoring;
+@property (nonatomic, strong) NewLacrosseScoring *myLacrosseScoring;
+@property (nonatomic, strong) NewHockeyScoring *myHockeyScoring;
+@property (nonatomic, strong) NewSoccerScoring *mySoccerScoring;
+
+
+@property (nonatomic, strong) ADBannerView *myAd;
 @property bool showCamera;
-@property (nonatomic, strong) UIButton *photoButton;
+@property (nonatomic, strong) IBOutlet UIButton *photoButton;
 @property (nonatomic, strong) NSString *errorString;
 @property bool scoringAdded;
-@property (nonatomic, strong) UILabel *orOtherInterval;
+@property (nonatomic, strong) IBOutlet UILabel *orOtherInterval;
 @property (nonatomic, strong) NSString *opponentString;
 @property (nonatomic, strong) NSString *description;
 @property (nonatomic, strong) NSString *startDate;
 @property (nonatomic, strong) UIBarButtonItem *editDone;
-@property (nonatomic, strong) UIActivityIndicatorView *mainActivity;
-@property (nonatomic, strong) UIButton *editFinalButton;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *mainActivity;
+@property (nonatomic, strong) IBOutlet UIButton *editFinalButton;
 @property bool isGameOver;
-@property (nonatomic, strong) UIActivityIndicatorView *refreshActivity;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *refreshActivity;
 @property bool setInfoGame;
 @property bool setInfoScore;
-@property (nonatomic, strong) UILabel *intervalLabel;
-@property (nonatomic, strong)  UILabel *usLabel;
-@property (nonatomic, strong)  UILabel *scoreUsLabel;
-@property (nonatomic, strong)  UILabel *themLabel;
-@property (nonatomic, strong)  UILabel *scoreThemLabel;
-@property (nonatomic, strong)  UILabel *scoreDividerLabel;
-@property (nonatomic, strong)  UIButton *keepScoreButton;
+@property (nonatomic, strong) IBOutlet UILabel *intervalLabel;
+@property (nonatomic, strong)  IBOutlet UILabel *usLabel;
+@property (nonatomic, strong)  IBOutlet UILabel *scoreUsLabel;
+@property (nonatomic, strong) IBOutlet  UILabel *themLabel;
+@property (nonatomic, strong)  IBOutlet UILabel *scoreThemLabel;
+@property (nonatomic, strong)  IBOutlet UILabel *scoreDividerLabel;
+@property (nonatomic, strong)  IBOutlet UIButton *keepScoreButton;
 
 @property BOOL bannerIsVisible;
 @property bool getInfo;
-@property (nonatomic, strong) UIButton *defaultScoringButton;
+@property (nonatomic, strong) IBOutlet UIButton *defaultScoringButton;
 @property (nonatomic, strong) NSString *sport;
-@property (nonatomic, strong) UIButton *updateLocationButton;
+@property (nonatomic, strong) IBOutlet UIButton *updateLocationButton;
 @property (nonatomic, strong) NSString *userRole;
 @property (nonatomic, strong) NSString *scoreUs;
 @property (nonatomic, strong) NSString *scoreThem;
 @property (nonatomic, strong) NSString *interval;
 
-@property (nonatomic, strong) UILabel *locationLabel;
-@property (nonatomic, strong) UIButton *mapButton;
-@property (nonatomic, strong) UILabel *error;
-@property (nonatomic, strong) UIButton *moreDetail;
-@property (nonatomic, strong) UITextView *scoringNotEnabled;
-@property (nonatomic, strong) UIButton *enableScoring;
+@property (nonatomic, strong) IBOutlet UILabel *locationLabel;
+@property (nonatomic, strong) IBOutlet UIButton *mapButton;
+@property (nonatomic, strong) IBOutlet UILabel *error;
+@property (nonatomic, strong) IBOutlet UIButton *moreDetail;
+@property (nonatomic, strong) IBOutlet UITextView *scoringNotEnabled;
+@property (nonatomic, strong) IBOutlet UIButton *enableScoring;
 
 @property bool isScoringEnabled;
 
 @property (nonatomic, strong) UIAlertView *nameGameLocation;
 @property (nonatomic, strong) NSString *locationName;
-@property (nonatomic, strong) UILabel *opponent;
-@property (nonatomic, strong) UILabel *day;
-@property (nonatomic, strong) UILabel *time;
+@property (nonatomic, strong) IBOutlet UILabel *opponent;
+@property (nonatomic, strong) IBOutlet UILabel *day;
+@property (nonatomic, strong) IBOutlet UILabel *time;
 
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSString *gameId;
@@ -143,7 +93,7 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property bool updateSuccess;
 
-@property (nonatomic, strong) UILabel *successMessage;
+@property (nonatomic, strong) IBOutlet UILabel *successMessage;
 @property bool fromNextUpdate;
 
 -(NSString *)getIntervalString;

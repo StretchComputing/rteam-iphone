@@ -53,6 +53,8 @@
 	
 }
 
+@property (nonatomic, strong) NSString *theScoreThem;
+@property (nonatomic, strong) NSString *theScoreUs;
 @property (nonatomic, strong) UIActivityIndicatorView *activity;
 @property (nonatomic, strong) UIButton *cancelScoringButton;
 @property bool isCoord;

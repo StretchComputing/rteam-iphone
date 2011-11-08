@@ -190,58 +190,61 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 
 -(void)getMessageInfo{
 
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	
-	NSDictionary *response = [NSDictionary dictionary];
-	if (![token isEqualToString:@""]){
-		
-		if (self.teamId == nil) {
-			self.teamId = self.origTeamId;
-		}
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        
+        NSDictionary *response = [NSDictionary dictionary];
+        if (![token isEqualToString:@""]){
+            
+            if (self.teamId == nil) {
+                self.teamId = self.origTeamId;
+            }
+            
+            response = [ServerAPI getMessageThreadInfo:token :self.teamId :self.threadId];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
                 
-		response = [ServerAPI getMessageThreadInfo:token :self.teamId :self.threadId];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			self.messageInfo = [NSDictionary dictionary];
-			
-			self.messageInfo = [response valueForKey:@"messageThreadInfo"];
-			
-			self.errorString = @"";
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error retrieving message info.";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error retrieving message info.";
-					break;
-				default:
-					//log status code
-					self.errorString = @"*Error retrieving message info.";
-					break;
-			}
-		}
-		
-	}
-	
-	
+                self.messageInfo = [NSDictionary dictionary];
+                
+                self.messageInfo = [response valueForKey:@"messageThreadInfo"];
+                
+                self.errorString = @"";
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error retrieving message info.";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error retrieving message info.";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error retrieving message info.";
+                        break;
+                }
+            }
+            
+        }
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
 
-	[self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
-	
+    }
+		
 }
 
 -(void)doneInfo{

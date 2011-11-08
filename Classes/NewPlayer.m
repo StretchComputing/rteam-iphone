@@ -28,7 +28,7 @@ phoneOnlyArray, multiplePhoneArray, multipleEmailArray, multiplePhoneAlert, mult
 tmpMiniFirstName, tmpMiniLastName, miniMultiplePhoneAlert, miniMultipleEmailAlert, twoAlerts, guardianOnePhone, guardianTwoPhone, 
 guardianBackground, miniGuardAddButton, miniGuardCancelButton, oneName, oneEmail, onePhone, twoEmail, twoName, twoPhone, currentGuardianSelection,
 miniGuardErrorLabel, removeGuardiansButton, addContactWhere, guard1EmailAlert, guard1PhoneAlert, guard2EmailAlert, guard2PhoneAlert,
-currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinatorSegment;
+currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinatorSegment, theFirstName, theLastName, theEmail, thePhoneNumber;
 
 
 
@@ -240,6 +240,11 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 	
 	//Create the player in a background thread
 	
+        self.theFirstName = [NSString stringWithString:self.firstName.text];
+        self.theLastName = [NSString stringWithString:self.lastName.text];
+        self.thePhoneNumber = [NSString stringWithString:self.phoneNumber.text];
+        self.theEmail = [NSString stringWithString:self.email.text];
+
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 	}
@@ -251,131 +256,133 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 
 - (void)runRequest {
 
-	
-	//Create the new player
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpRoles = [[NSMutableArray alloc] init];
-	NSMutableArray *guardians = [[NSMutableArray alloc] init];
-	
-	NSString *role = @"member";
-	
-
-	NSMutableDictionary *guardianOne = [NSMutableDictionary dictionary];
-	NSMutableDictionary *guardianTwo = [NSMutableDictionary dictionary];
-
-    
-	if (![self.guardianOneFirst isEqualToString:@""]) {
-		
-		NSDictionary *tmpDictionary = [NSDictionary dictionary];
-		[guardianOne setObject:self.guardianOneFirst forKey:@"firstName"];
-		[guardianOne setObject:self.guardianOneLast forKey:@"lastName"];
+	@autoreleasepool {
+        //Create the new player
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        if (![self.guardianOneEmail isEqualToString:@""]) {
-            [guardianOne setObject:self.guardianOneEmail forKey:@"emailAddress"];
+        NSMutableArray *tmpRoles = [[NSMutableArray alloc] init];
+        NSMutableArray *guardians = [[NSMutableArray alloc] init];
+        
+        NSString *role = @"member";
+        
+        
+        NSMutableDictionary *guardianOne = [NSMutableDictionary dictionary];
+        NSMutableDictionary *guardianTwo = [NSMutableDictionary dictionary];
+        
+        
+        if (![self.guardianOneFirst isEqualToString:@""]) {
+            
+            NSDictionary *tmpDictionary = [NSDictionary dictionary];
+            [guardianOne setObject:self.guardianOneFirst forKey:@"firstName"];
+            [guardianOne setObject:self.guardianOneLast forKey:@"lastName"];
+            
+            if (![self.guardianOneEmail isEqualToString:@""]) {
+                [guardianOne setObject:self.guardianOneEmail forKey:@"emailAddress"];
+            }
+            if (![self.guardianOnePhone isEqualToString:@""]) {
+                [guardianOne setObject:self.guardianOnePhone forKey:@"phoneNumber"];
+            }
+            
+            tmpDictionary = guardianOne;
+            [guardians addObject:tmpDictionary];
         }
-        if (![self.guardianOnePhone isEqualToString:@""]) {
-            [guardianOne setObject:self.guardianOnePhone forKey:@"phoneNumber"];
+        
+        if (![self.guardianTwoFirst isEqualToString:@""]) {
+            
+            NSDictionary *tmpDictionary = [NSDictionary dictionary];
+            [guardianTwo setObject:self.guardianTwoFirst forKey:@"firstName"];
+            [guardianTwo setObject:self.guardianTwoLast forKey:@"lastName"];
+            
+            if (![self.guardianTwoEmail isEqualToString:@""]) {
+                [guardianTwo setObject:self.guardianTwoEmail forKey:@"emailAddress"];
+            }
+            if (![self.guardianTwoPhone isEqualToString:@""]) {
+                [guardianTwo setObject:self.guardianTwoPhone forKey:@"phoneNumber"];
+            }
+            
+            
+            tmpDictionary = guardianTwo;
+            [guardians addObject:tmpDictionary];
         }
+        
+        NSArray *guardianArray = guardians;
+        
+        
+        [tmpRoles addObject:role];
+        
+        NSArray *rRoles = tmpRoles;
+        
+        NSString *theRole = @"";
+        if (self.isCoordinator.selectedSegmentIndex == 0) {
+            theRole = @"coordinator";
+        }
+        
+        NSString *phone = @"";
+        
+        if (![self.thePhoneNumber isEqualToString:@""]) {
+            phone = self.phoneNumber.text;
+        }
+        
+        if ([self.theEmail isEqualToString:@""] && ![self.thePhoneNumber isEqualToString:@""]) {
+            
+            
+            [self.phoneOnlyArray addObject:self.thePhoneNumber];
+            
+        }
+        
+        
+        
+        NSDictionary *response = [ServerAPI createMember:self.theFirstName :self.theLastName :self.theEmail
+                                                        :@"" :rRoles :guardianArray :self.teamId :mainDelegate.token :theRole :phone];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
 		
-		tmpDictionary = guardianOne;
-		[guardians addObject:tmpDictionary];
-	}
-	
-	if (![self.guardianTwoFirst isEqualToString:@""]) {
-		
-		NSDictionary *tmpDictionary = [NSDictionary dictionary];
-		[guardianTwo setObject:self.guardianTwoFirst forKey:@"firstName"];
-		[guardianTwo setObject:self.guardianTwoLast forKey:@"lastName"];
-		
-        if (![self.guardianTwoEmail isEqualToString:@""]) {
-            [guardianTwo setObject:self.guardianTwoEmail forKey:@"emailAddress"];
+        if ([status isEqualToString:@"100"]){
+            
+            self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 208:
+                    self.errorString = @"NA";
+                    break;
+                case 209:
+                    self.errorString = @"*Member email address already in use";
+                    break;
+                case 219:
+                    self.errorString = @"*Guardian email address already in use";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
         }
-        if (![self.guardianTwoPhone isEqualToString:@""]) {
-            [guardianTwo setObject:self.guardianTwoPhone forKey:@"phoneNumber"];
-        }
+        
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
+    }
 		
-		tmpDictionary = guardianTwo;
-		[guardians addObject:tmpDictionary];
-	}
-    
-	NSArray *guardianArray = guardians;
-	
-	
-	[tmpRoles addObject:role];
-	
-	NSArray *rRoles = tmpRoles;
-	
-	NSString *theRole = @"";
-	if (self.isCoordinator.selectedSegmentIndex == 0) {
-		theRole = @"coordinator";
-	}
-	
-	NSString *phone = @"";
-	
-	if (![self.phoneNumber.text isEqualToString:@""]) {
-		phone = self.phoneNumber.text;
-	}
-	
-	if ([self.email.text isEqualToString:@""] && ![self.phoneNumber.text isEqualToString:@""]) {
-	
-		
-		[self.phoneOnlyArray addObject:self.phoneNumber.text];
-		
-	}
-    
-	
-
-	NSDictionary *response = [ServerAPI createMember:self.firstName.text :self.lastName.text :self.email.text
-													:@"" :rRoles :guardianArray :self.teamId :mainDelegate.token :theRole :phone];
-	
-	
-	NSString *status = [response valueForKey:@"status"];
-		
-	if ([status isEqualToString:@"100"]){
-		
-		self.createSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 208:
-				self.errorString = @"NA";
-				break;
-			case 209:
-				self.errorString = @"*Member email address already in use";
-				break;
-			case 219:
-				self.errorString = @"*Guardian email address already in use";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{
@@ -1073,89 +1080,56 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 
 -(void)addMembers{
 
-	//Create the new player
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpMemberArray = [NSMutableArray array];
-	NSArray *finalMemberArray = [NSArray array];
-	
-	for (int i = 0; i < [self.emailArray count]; i++) {
-		
-		NSMutableDictionary *tmpDictionary = [[NSMutableDictionary alloc] init];
-		
-		NewMemberObject *tmpMember = [self.emailArray objectAtIndex:i];
-
-		if ([tmpMember.email isEqualToString:@""] && ![tmpMember.phone isEqualToString:@""]) {
-            [self.phoneOnlyArray addObject:tmpMember.phone];
-        }
+    @autoreleasepool {
+        //Create the new player
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        if ([tmpMember.guardianTwoEmail isEqualToString:@""] && ![tmpMember.guardianOnePhone isEqualToString:@""]) {
-            [self.phoneOnlyArray addObject:tmpMember.guardianOnePhone];
-        }
+        NSMutableArray *tmpMemberArray = [NSMutableArray array];
+        NSArray *finalMemberArray = [NSArray array];
         
-        if ([tmpMember.guardianTwoEmail isEqualToString:@""] && ![tmpMember.guardianTwoPhone isEqualToString:@""]) {
-            [self.phoneOnlyArray addObject:tmpMember.guardianTwoPhone];
-        }
-		
-		
-		if (![tmpMember.firstName isEqualToString:@""]) {
-			[tmpDictionary setObject:tmpMember.firstName forKey:@"firstName"];
-		}
-		if (![tmpMember.lastName isEqualToString:@""]) {
-			[tmpDictionary setObject:tmpMember.lastName forKey:@"lastName"];
-		}
-		if (![tmpMember.email isEqualToString:@""]) {
-			[tmpDictionary setObject:tmpMember.email forKey:@"emailAddress"];
-		}
-		if (![tmpMember.phone isEqualToString:@""]) {
-			[tmpDictionary setObject:tmpMember.phone forKey:@"phoneNumber"];
-		}
-		if (![tmpMember.role isEqualToString:@""]) {
-			[tmpDictionary setObject:tmpMember.role forKey:@"participantRole"];
-		}
-        
-        NSMutableArray *guardArray = [NSMutableArray array];
-
-        if (![tmpMember.guardianOneName isEqualToString:@""]) {
+        for (int i = 0; i < [self.emailArray count]; i++) {
             
+            NSMutableDictionary *tmpDictionary = [[NSMutableDictionary alloc] init];
             
-            NSMutableDictionary *guard1 = [NSMutableDictionary dictionary];
+            NewMemberObject *tmpMember = [self.emailArray objectAtIndex:i];
             
-            NSArray *nameArray = [tmpMember.guardianOneName componentsSeparatedByString:@" "];
-            
-            NSString *fName = [nameArray objectAtIndex:0];
-            NSString *lName = @"";
-            
-            for (int i = 1; i < [nameArray count]; i++) {
-                if (i == 1) {
-                    lName = [lName stringByAppendingFormat:@"%@", [nameArray objectAtIndex:i]];
-                }else{
-                    lName = [lName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
-
-                }
+            if ([tmpMember.email isEqualToString:@""] && ![tmpMember.phone isEqualToString:@""]) {
+                [self.phoneOnlyArray addObject:tmpMember.phone];
             }
             
-            if (![fName isEqualToString:@""]) {
-                [guard1 setObject:fName forKey:@"firstName"];
-            }
-            if (![lName isEqualToString:@""]) {
-                [guard1 setObject:lName forKey:@"lastName"];
-            }
-            if (![tmpMember.guardianOneEmail isEqualToString:@""]) {
-                [guard1 setObject:tmpMember.guardianOneEmail forKey:@"emailAddress"];
-            }
-            if (![tmpMember.guardianOnePhone isEqualToString:@""]) {
-                [guard1 setObject:tmpMember.guardianOnePhone forKey:@"phoneNumber"];
+            if ([tmpMember.guardianTwoEmail isEqualToString:@""] && ![tmpMember.guardianOnePhone isEqualToString:@""]) {
+                [self.phoneOnlyArray addObject:tmpMember.guardianOnePhone];
             }
             
-            [guardArray addObject:guard1];
+            if ([tmpMember.guardianTwoEmail isEqualToString:@""] && ![tmpMember.guardianTwoPhone isEqualToString:@""]) {
+                [self.phoneOnlyArray addObject:tmpMember.guardianTwoPhone];
+            }
             
-            if (![tmpMember.guardianTwoName isEqualToString:@""]) {
+            
+            if (![tmpMember.firstName isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.firstName forKey:@"firstName"];
+            }
+            if (![tmpMember.lastName isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.lastName forKey:@"lastName"];
+            }
+            if (![tmpMember.email isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.email forKey:@"emailAddress"];
+            }
+            if (![tmpMember.phone isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.phone forKey:@"phoneNumber"];
+            }
+            if (![tmpMember.role isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.role forKey:@"participantRole"];
+            }
+            
+            NSMutableArray *guardArray = [NSMutableArray array];
+            
+            if (![tmpMember.guardianOneName isEqualToString:@""]) {
                 
                 
-                NSMutableDictionary *guard2 = [NSMutableDictionary dictionary];
+                NSMutableDictionary *guard1 = [NSMutableDictionary dictionary];
                 
-                NSArray *nameArray = [tmpMember.guardianTwoName componentsSeparatedByString:@" "];
+                NSArray *nameArray = [tmpMember.guardianOneName componentsSeparatedByString:@" "];
                 
                 NSString *fName = [nameArray objectAtIndex:0];
                 NSString *lName = @"";
@@ -1170,80 +1144,116 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                 }
                 
                 if (![fName isEqualToString:@""]) {
-                    [guard2 setObject:fName forKey:@"firstName"];
+                    [guard1 setObject:fName forKey:@"firstName"];
                 }
                 if (![lName isEqualToString:@""]) {
-                    [guard2 setObject:lName forKey:@"lastName"];
+                    [guard1 setObject:lName forKey:@"lastName"];
                 }
-                if (![tmpMember.guardianTwoEmail isEqualToString:@""]) {
-                    [guard2 setObject:tmpMember.guardianTwoEmail forKey:@"emailAddress"];
+                if (![tmpMember.guardianOneEmail isEqualToString:@""]) {
+                    [guard1 setObject:tmpMember.guardianOneEmail forKey:@"emailAddress"];
                 }
-                if (![tmpMember.guardianTwoPhone isEqualToString:@""]) {
-                    [guard2 setObject:tmpMember.guardianTwoPhone forKey:@"phoneNumber"];
+                if (![tmpMember.guardianOnePhone isEqualToString:@""]) {
+                    [guard1 setObject:tmpMember.guardianOnePhone forKey:@"phoneNumber"];
                 }
                 
-                [guardArray addObject:guard2];
+                [guardArray addObject:guard1];
+                
+                if (![tmpMember.guardianTwoName isEqualToString:@""]) {
+                    
+                    
+                    NSMutableDictionary *guard2 = [NSMutableDictionary dictionary];
+                    
+                    NSArray *nameArray = [tmpMember.guardianTwoName componentsSeparatedByString:@" "];
+                    
+                    NSString *fName = [nameArray objectAtIndex:0];
+                    NSString *lName = @"";
+                    
+                    for (int i = 1; i < [nameArray count]; i++) {
+                        if (i == 1) {
+                            lName = [lName stringByAppendingFormat:@"%@", [nameArray objectAtIndex:i]];
+                        }else{
+                            lName = [lName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
+                            
+                        }
+                    }
+                    
+                    if (![fName isEqualToString:@""]) {
+                        [guard2 setObject:fName forKey:@"firstName"];
+                    }
+                    if (![lName isEqualToString:@""]) {
+                        [guard2 setObject:lName forKey:@"lastName"];
+                    }
+                    if (![tmpMember.guardianTwoEmail isEqualToString:@""]) {
+                        [guard2 setObject:tmpMember.guardianTwoEmail forKey:@"emailAddress"];
+                    }
+                    if (![tmpMember.guardianTwoPhone isEqualToString:@""]) {
+                        [guard2 setObject:tmpMember.guardianTwoPhone forKey:@"phoneNumber"];
+                    }
+                    
+                    [guardArray addObject:guard2];
+                    
+                }
                 
             }
-
+            
+            if ([guardArray count] > 0) {
+                [tmpDictionary setObject:guardArray forKey:@"guardians"];
+            }
+            
+            [tmpMemberArray addObject:tmpDictionary];
+            
         }
-		
-        if ([guardArray count] > 0) {
-			[tmpDictionary setObject:guardArray forKey:@"guardians"];
-		}
-		
-		[tmpMemberArray addObject:tmpDictionary];
-		
-	}
-	
-	finalMemberArray = tmpMemberArray;
-	
-	NSDictionary *response = [ServerAPI createMultipleMembers:mainDelegate.token :self.teamId :finalMemberArray];
+        
+        finalMemberArray = tmpMemberArray;
+        
+        NSDictionary *response = [ServerAPI createMultipleMembers:mainDelegate.token :self.teamId :finalMemberArray];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]) {
+            
+            self.errorString = @"";
+        }else {
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"There was an error connecting to the server.";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"There was an error connecting to the server.";
+                    break;
+                case 223:
+                    self.errorString = @"NA";
+                    break;
+                case 209:
+                    self.errorString = @"Member emails must be unique.";
+                    break;
+                case 222:
+                    self.errorString = @"Member phone numbers must be unique.";
+                    break;
+                case 219:
+                    self.errorString = @"A Guardian email address is already being used.";
+                    break;
+                case 542:
+                    self.errorString = @"Invalid phone number entered.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"There was an error connecting to the server.";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
 
-	NSString *status = [response valueForKey:@"status"];
-    
-	if ([status isEqualToString:@"100"]) {
+    }
 		
-		self.errorString = @"";
-	}else {
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"There was an error connecting to the server.";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"There was an error connecting to the server.";
-				break;
-			case 223:
-				self.errorString = @"NA";
-				break;
-			case 209:
-				self.errorString = @"Member emails must be unique.";
-				break;
-            case 222:
-				self.errorString = @"Member phone numbers must be unique.";
-				break;
-			case 219:
-				self.errorString = @"A Guardian email address is already being used.";
-				break;
-            case 542:
-				self.errorString = @"Invalid phone number entered.";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"There was an error connecting to the server.";
-				break;
-		}
-	}
-
-	
-	[self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
-	
 }
 
 

@@ -33,7 +33,7 @@ addPhotoButton, activity, messageSent, displayMessage, contactAdded, userRole, c
 changedRole, shouldChangeRole, phone, headUserRole, isEditing, errorLabel, origCompressImage, fromSearch,
 editGuardianInfoButton, guardiansArray, deleteButton, scrollView, alertDelete, deleteSuccess, fromImage, alertCallText, isUser, 
 isNetworkAuthenticated, errorString, deleteActionSheet, roleActionSheet, callTextActionSheet, playerInfo, loadingActivity, loadingLabel,
-changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData, shouldUnload, switchFanLabel, switchFanButton, teamName, profilePhotoButton, isCurrentUser, portrait, guard1NA, guard1Last, guard2Last, guard1Email, guard1First, guard1Phone, guard2Email, guard2First, guard2Phone, guard1SmsConfirmed, guard2SmsConfirmed, guard2NA, guard1Key, guard2Key, isSmsConfirmed, guard1isUser, guard2isUser, phoneOnlyArray, callOrTextWho, callTextWhoAlertView, scenario, initPhone, newPhoneAlert, isEmailConfirmed, guard1EmailConfirmed, guard2EmailConfirmed, didHideMessage;
+changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData, shouldUnload, switchFanLabel, switchFanButton, teamName, profilePhotoButton, isCurrentUser, portrait, guard1NA, guard1Last, guard2Last, guard1Email, guard1First, guard1Phone, guard2Email, guard2First, guard2Phone, guard1SmsConfirmed, guard2SmsConfirmed, guard2NA, guard1Key, guard2Key, isSmsConfirmed, guard1isUser, guard2isUser, phoneOnlyArray, callOrTextWho, callTextWhoAlertView, scenario, initPhone, newPhoneAlert, isEmailConfirmed, guard1EmailConfirmed, guard2EmailConfirmed, didHideMessage, theLastEdit, theEmailEdit, theFirstEdit, theJerseyEdit, theMobileEdit, justChose;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -210,42 +210,44 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 -(void)memberInfo{
 	
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        //self.playerInfo = [NSArray array];
+        
+        NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :self.memberId :mainDelegate.token :@"true"];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.playerInfo = [response valueForKey:@"memberInfo"];
+            self.errorString = @"";
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(getMemberInformation) withObject:nil waitUntilDone:NO];
+    }
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	//self.playerInfo = [NSArray array];
-	
-	NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :self.memberId :mainDelegate.token :@"true"];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
-		
-		self.playerInfo = [response valueForKey:@"memberInfo"];
-		self.errorString = @"";
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	
-	[self performSelectorOnMainThread:@selector(getMemberInformation) withObject:nil waitUntilDone:NO];
 	
 }
 -(void)getMemberInformation{
@@ -339,7 +341,13 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 			self.compressImage = self.selectedData;
 			[self.activity startAnimating];
 			self.isEditing = false;
-		
+            
+		    self.theFirstEdit = [NSString stringWithString:self.firstEdit.text];
+            self.theLastEdit = [NSString stringWithString:self.lastEdit.text];
+            self.theJerseyEdit = [NSString stringWithString:self.jerseyEdit.text];
+            self.theEmailEdit = [NSString stringWithString:self.emailEdit.text];
+            self.theMobileEdit = [NSString stringWithString:self.mobileEdit.text];
+            
 			[self performSelectorInBackground:@selector(runRequest2) withObject:nil];
 		}else {
 			NSString *profile = [playerInfo valueForKey:@"photo"];
@@ -409,7 +417,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		if ([self.headUserRole isEqualToString:@"coordinator"] || [self.headUserRole isEqualToString:@"creator"]) {
 			self.startEditButton.hidden = NO;
             if (!hideButton) {
-                self.sendMessageButton.hidden = NO;
+                self.sendMessageButton.hidden = YES; //*MSGCHG
                 
             }
 
@@ -420,7 +428,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 				self.sendMessageButton.hidden = YES;
 			}else {
                 if (!hideButton) {
-                    self.sendMessageButton.hidden = NO;
+                    self.sendMessageButton.hidden = YES; //*MSGCHG
 
                 }
 			}
@@ -556,7 +564,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		
 
         if (self.didHideMessage) {
-            self.sendMessageButton.hidden = NO;
+            self.sendMessageButton.hidden = YES; //*MSGCHG
             self.didHideMessage = false;
         }
         self.addContactButton.hidden = NO;
@@ -609,6 +617,14 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		[self.changeRoleButton setEnabled:NO];
 		[self.callNumberButton setHidden:YES];
         self.phoneOnlyArray = [NSMutableArray array];
+        
+        self.theFirstEdit = [NSString stringWithString:self.firstEdit.text];
+        self.theLastEdit = [NSString stringWithString:self.lastEdit.text];
+        self.theJerseyEdit = [NSString stringWithString:self.jerseyEdit.text];
+        self.theEmailEdit = [NSString stringWithString:self.emailEdit.text];
+        self.theMobileEdit = [NSString stringWithString:self.mobileEdit.text];
+
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 	}
@@ -875,178 +891,184 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 }
 
 - (void)runRequest{
-	self.errorString = @"";
-
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpRoles = [NSMutableArray array];
-	
-	NSString *role = @"player";
-	
-	[tmpRoles addObject:role];
-	
-	NSArray *rRoles = tmpRoles;
-	
-	NSString *first = @"";
-	NSString *last = @"";
-	NSString *jers = @"";
-	NSString *newEmail = @"";
-	NSString *newMobile = @"";
-    
-	if (![self.firstEdit.text isEqualToString:@""]) {
-		first = self.firstEdit.text;
-	}
-	if (![self.lastEdit.text isEqualToString:@""]) {
-		last = self.lastEdit.text;
-	}
-	if (![self.jerseyEdit.text isEqualToString:@""]) {
-		jers = self.jerseyEdit.text;
-	}
-    
-	if (![self.emailEdit.text isEqualToString:@""]) {
-		newEmail = self.emailEdit.text;
-	}
-    if ([self.emailEdit.text isEqualToString:@""]) {
-		newEmail = @"remove";
-	}
-	
-	if (![self.mobileEdit.text isEqualToString:@""]) {
-		newMobile = self.mobileEdit.text;
+    @autoreleasepool {
+        self.errorString = @"";
         
-        if (![newMobile isEqualToString:self.initPhone] && !self.isEmailConfirmed) {
-            [self.phoneOnlyArray addObject:newMobile];
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpRoles = [NSMutableArray array];
+        
+        NSString *role = @"player";
+        
+        [tmpRoles addObject:role];
+        
+        NSArray *rRoles = tmpRoles;
+        
+        NSString *first = @"";
+        NSString *last = @"";
+        NSString *jers = @"";
+        NSString *newEmail = @"";
+        NSString *newMobile = @"";
+        
+        if (![self.theFirstEdit isEqualToString:@""]) {
+            first = self.theFirstEdit;
         }
-	}
-    if ([self.mobileEdit.text isEqualToString:@""]) {
-        newMobile = @"remove";
-    }
-		
-	NSString *newRole = @"";
-	if (self.shouldChangeRole) {
-		newRole = self.changedRole;
-	}
-	
-	NSData *profile = [NSData data];
-	if (![self.origCompressImage isEqualToData:self.compressImage]) {
-		profile = self.compressImage;
-	}
-
-    NSString *orientation = @"";
-    
-    if ([profile length] > 0) {
+        if (![self.theLastEdit isEqualToString:@""]) {
+            last = self.theLastEdit;
+        }
+        if (![self.theJerseyEdit isEqualToString:@""]) {
+            jers = self.theJerseyEdit;
+        }
         
-        if (self.portrait) {
-            orientation = @"portrait";
+        if (![self.theEmailEdit isEqualToString:@""]) {
+            newEmail = self.theEmailEdit;
+        }
+        if ([self.theEmailEdit isEqualToString:@""]) {
+            newEmail = @"remove";
+        }
+        
+        if (![self.theMobileEdit isEqualToString:@""]) {
+            newMobile = self.mobileEdit.text;
+            
+            if (![newMobile isEqualToString:self.initPhone] && !self.isEmailConfirmed) {
+                [self.phoneOnlyArray addObject:newMobile];
+            }
+        }
+        if ([self.theMobileEdit isEqualToString:@""]) {
+            newMobile = @"remove";
+        }
+		
+        NSString *newRole = @"";
+        if (self.shouldChangeRole) {
+            newRole = self.changedRole;
+        }
+        
+        NSData *profile = [NSData data];
+        if (![self.origCompressImage isEqualToData:self.compressImage]) {
+            profile = self.compressImage;
+        }
+        
+        NSString *orientation = @"";
+        
+        if ([profile length] > 0) {
+            
+            if (self.portrait) {
+                orientation = @"portrait";
+            }else{
+                orientation = @"landscape";
+            }
+        }
+        
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :first :last
+                                                        :jers :rRoles :[NSArray array] :mainDelegate.token :profile :newEmail :newRole :newMobile :orientation];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            [self.errorLabel setHidden:YES];
+            
         }else{
-            orientation = @"landscape";
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            [self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
         }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
     }
-	
-	NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :first :last
-                                                    :jers :rRoles :[NSArray array] :mainDelegate.token :profile :newEmail :newRole :newMobile :orientation];
-	
-	NSString *status = [response valueForKey:@"status"];
-
-	if ([status isEqualToString:@"100"]){
 		
-		[self.errorLabel setHidden:YES];
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		[self.errorLabel setHidden:NO];
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 
 - (void)runRequestRole{
-	self.errorString = @"";
+    
+    @autoreleasepool {
+        self.errorString = @"";
+        
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpRoles = [NSMutableArray array];
+        
+        NSString *role = @"player";
+        
+        [tmpRoles addObject:role];
+        
+        NSArray *rRoles = tmpRoles;
+        
+        NSString *newRole = @"";
+        if (self.shouldChangeRole) {
+            newRole = self.changedRole;
+        }
+        
+        NSData *profile = [NSData data];
+        if (![self.origCompressImage isEqualToData:self.compressImage]) {
+            profile = self.compressImage;
+        }
+        
+        
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@""
+                                                        :@"" :rRoles :[NSArray array] :mainDelegate.token :[NSData data] :@"" :newRole :@"" :@""];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            [self.errorLabel setHidden:YES];
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            [self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpRoles = [NSMutableArray array];
-	
-	NSString *role = @"player";
-	
-	[tmpRoles addObject:role];
-	
-	NSArray *rRoles = tmpRoles;
-    
-	NSString *newRole = @"";
-	if (self.shouldChangeRole) {
-		newRole = self.changedRole;
-	}
-	
-	NSData *profile = [NSData data];
-	if (![self.origCompressImage isEqualToData:self.compressImage]) {
-		profile = self.compressImage;
-	}
-    
-	
-	NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@""
-                                                    :@"" :rRoles :[NSArray array] :mainDelegate.token :[NSData data] :@"" :newRole :@"" :@""];
-	
-	NSString *status = [response valueForKey:@"status"];
-    
-	if ([status isEqualToString:@"100"]){
+    }
 		
-		[self.errorLabel setHidden:YES];
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		[self.errorLabel setHidden:NO];
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-    
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 
@@ -1113,101 +1135,105 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 
 - (void)runRequest2 {
-	self.errorString = @"";
-
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpRoles = [NSMutableArray array];
-	
-	NSString *role = @"player";
-	
-	[tmpRoles addObject:role];
-	
-	NSArray *rRoles = tmpRoles;
-	
-	NSString *first = @"";
-	NSString *last = @"";
-	NSString *jers = @"";
-	NSString *newEmail = @"";
-	NSString *newMobile = @"";
-	if (![self.firstEdit.text isEqualToString:@""]) {
-		first = self.firstEdit.text;
-	}
-	if (![self.lastEdit.text isEqualToString:@""]) {
-		last = self.lastEdit.text;
-	}
-	if (![self.jerseyEdit.text isEqualToString:@""]) {
-		jers = self.jerseyEdit.text;
-	}
-	if (![self.emailEdit.text isEqualToString:@""]) {
-		newEmail = self.emailEdit.text;
-	}
-	
-	if (![self.mobileEdit.text isEqualToString:@""]) {
-		newMobile = self.mobileEdit.text;
-	}
-	
-	NSString *newRole = @"";
-	if (self.shouldChangeRole) {
-		newRole = self.changedRole;
-	}
-	
-	NSData *profile = [NSData data];
-	NSData *newImageData = UIImagePNGRepresentation(self.newImage);
-	if (![self.origCompressImage isEqualToData:newImageData]) {
-		profile = newImageData;
-	}
-	
-    NSString *orientation = @"";
     
-    if ([profile length] > 0) {
+    @autoreleasepool {
+        self.errorString = @"";
         
-        if (self.portrait) {
-            orientation = @"portrait";
-        }else{
-            orientation = @"landscape";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpRoles = [NSMutableArray array];
+        
+        NSString *role = @"player";
+        
+        [tmpRoles addObject:role];
+        
+        NSArray *rRoles = tmpRoles;
+        
+        NSString *first = @"";
+        NSString *last = @"";
+        NSString *jers = @"";
+        NSString *newEmail = @"";
+        NSString *newMobile = @"";
+        if (![self.theFirstEdit isEqualToString:@""]) {
+            first = self.theFirstEdit;
         }
+        if (![self.theLastEdit isEqualToString:@""]) {
+            last = self.theLastEdit;
+        }
+        if (![self.theJerseyEdit isEqualToString:@""]) {
+            jers = self.theJerseyEdit;
+        }
+        if (![self.theEmailEdit isEqualToString:@""]) {
+            newEmail = self.theEmailEdit;
+        }
+        
+        if (![self.theMobileEdit isEqualToString:@""]) {
+            newMobile = self.theMobileEdit;
+        }
+        
+        NSString *newRole = @"";
+        if (self.shouldChangeRole) {
+            newRole = self.changedRole;
+        }
+        
+        NSData *profile = [NSData data];
+        NSData *newImageData = UIImagePNGRepresentation(self.newImage);
+        if (![self.origCompressImage isEqualToData:newImageData]) {
+            profile = newImageData;
+        }
+        
+        NSString *orientation = @"";
+        
+        if ([profile length] > 0) {
+            
+            if (self.portrait) {
+                orientation = @"portrait";
+            }else{
+                orientation = @"landscape";
+            }
+        }
+        
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :first :last
+                                                        :jers :rRoles :[NSArray array] :mainDelegate.token :profile :newEmail :newRole :newMobile :orientation];
+        
+        NSString *status = [response valueForKey:@"status"];
+		
+        if ([status isEqualToString:@"100"]){
+            
+            [self.errorLabel setHidden:YES];
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            [self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish2)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
     }
-    
-	NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :first :last
-													:jers :rRoles :[NSArray array] :mainDelegate.token :profile :newEmail :newRole :newMobile :orientation];
-	
-	NSString *status = [response valueForKey:@"status"];
 		
-	if ([status isEqualToString:@"100"]){
-		
-		[self.errorLabel setHidden:YES];
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		[self.errorLabel setHidden:NO];
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-			
-	[self performSelectorOnMainThread:
-	 @selector(didFinish2)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish2{
@@ -1248,50 +1274,52 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 - (void)runDelete {
 	
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-
-	
-	NSDictionary *response = [ServerAPI deleteMember:self.memberId :self.teamId :mainDelegate.token];
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        
+        NSDictionary *response = [ServerAPI deleteMember:self.memberId :self.teamId :mainDelegate.token];
 	    
-	NSString *status = [response valueForKey:@"status"];
-		    
-	if ([status isEqualToString:@"100"]){
-		
-		self.deleteSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		self.deleteSuccess = false;
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 211:
-				self.errorString = @"*You cannot delete yourself";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.deleteSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            self.deleteSuccess = false;
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 211:
+                    self.errorString = @"*You cannot delete yourself";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinishDelete)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-	[self performSelectorOnMainThread:
-	 @selector(didFinishDelete)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
+    }
+		
 }
 
 - (void)didFinishDelete{
@@ -1431,6 +1459,13 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	[self.emailLabel setHidden:NO];
 	[self.jerseyLabel setHidden:NO];
     justChose = true;
+    
+    self.theFirstEdit = [NSString stringWithString:self.firstEdit.text];
+    self.theLastEdit = [NSString stringWithString:self.lastEdit.text];
+    self.theJerseyEdit = [NSString stringWithString:self.jerseyEdit.text];
+    self.theEmailEdit = [NSString stringWithString:self.emailEdit.text];
+    self.theMobileEdit = [NSString stringWithString:self.mobileEdit.text];
+    
 	[self performSelectorInBackground:@selector(runRequest2) withObject:nil];
 
 	
@@ -2007,48 +2042,51 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 - (void)makeFan {
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	
-	NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :[NSArray array] :mainDelegate.token 
-													:[NSData data] :@"" :@"fan" :@"" :@""];
-	
-	NSString *status = [response valueForKey:@"status"];
+        
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :[NSArray array] :mainDelegate.token 
+                                                        :[NSData data] :@"" :@"fan" :@"" :@""];
+        
+        NSString *status = [response valueForKey:@"status"];
 		
-	if ([status isEqualToString:@"100"]){
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString = @"";
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            [self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(finishedFan)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
 		
-		self.errorString = @"";
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		[self.errorLabel setHidden:NO];
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(finishedFan)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)finishedFan{

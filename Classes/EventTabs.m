@@ -127,18 +127,7 @@
 }
 
 - (void)viewDidUnload {
-	/*
-	startDate = nil;
-	endDate = nil;
-	timeZone = nil;
-	eventId = nil;
-	teamId = nil;
-	description = nil;
-	latitude = nil;
-	longitude = nil;
-	location = nil;
-	userRole = nil;
-	 */
+
 	[super viewDidUnload];
 }
 

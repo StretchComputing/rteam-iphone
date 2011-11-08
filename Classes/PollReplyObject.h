@@ -11,11 +11,6 @@
 
 @interface PollReplyObject : NSObject {
     
-	NSString *name;
-	NSString *dateReplied;
-	NSString *reply;
-	NSString *memberId;
-	NSString *teamId;
 }
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSString *memberId;

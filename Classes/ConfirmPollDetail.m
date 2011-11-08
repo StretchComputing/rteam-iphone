@@ -67,48 +67,50 @@ displayString, messageSent, displayLabel, callTextActionSheet, replyString, repl
 
 -(void)getMemberInfo{
 
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	//self.playerInfo = [NSArray array];
-	
-	NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :self.memberId :mainDelegate.token :@""];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        //self.playerInfo = [NSArray array];
+        
+        NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :self.memberId :mainDelegate.token :@""];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            NSDictionary *playerInfo = [response valueForKey:@"memberInfo"];
+            
+            if ([playerInfo valueForKey:@"phoneNumber"] != nil) {
+                self.phoneNumber = [playerInfo valueForKey:@"phoneNumber"];
+            }
+            self.displayString = @"";
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.displayString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.displayString = @"*Error connecting to server";
+                    break;
+                default:
+                    //Log the status code?
+                    self.displayString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(doneMemberInfo) withObject:nil waitUntilDone:NO];
+
+    }
 		
-		NSDictionary *playerInfo = [response valueForKey:@"memberInfo"];
-		
-		if ([playerInfo valueForKey:@"phoneNumber"] != nil) {
-			self.phoneNumber = [playerInfo valueForKey:@"phoneNumber"];
-		}
-		self.displayString = @"";
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.displayString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.displayString = @"*Error connecting to server";
-				break;
-			default:
-				//Log the status code?
-				self.displayString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	
-	[self performSelectorOnMainThread:@selector(doneMemberInfo) withObject:nil waitUntilDone:NO];
-	
 }
 
 -(void)doneMemberInfo{

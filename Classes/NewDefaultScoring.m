@@ -15,7 +15,7 @@
 @implementation NewDefaultScoring
 @synthesize topOrBottom, subUs, subThem, scoreUs, scoreThem, isGameOver,
 labelUs, labelThem, gameOverButton, gameId, teamId, createSuccess, initScoreUs, initScoreThem, interval,
-isCoord, addThem, addUs, cancelScoringButton, activity;
+isCoord, addThem, addUs, cancelScoringButton, activity, theScoreThem, theScoreUs;
 
 -(void)viewDidLoad{
 	
@@ -67,8 +67,13 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	
 	
 	int us = [self.scoreUs.text intValue];
-	us = us++;
+    
+	us++;
 	self.scoreUs.text = [NSString stringWithFormat:@"%d", us];
+    
+    self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+    self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
+    
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 }
@@ -79,6 +84,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	if (us != 0) {
 		us--;
 		self.scoreUs.text = [NSString stringWithFormat:@"%d", us];
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 	
@@ -88,8 +95,11 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 -(void)addT{
 	
 	int them = [self.scoreThem.text intValue];
-	them = them ++;
+	them++;
 	self.scoreThem.text = [NSString stringWithFormat:@"%d", them];
+    
+    self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+    self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 }
 
@@ -99,6 +109,9 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	if (them != 0) {
 		them--;
 		self.scoreThem.text = [NSString stringWithFormat:@"%d", them];
+        
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}
 	
@@ -131,6 +144,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
         self.gameOverButton.enabled = NO;
         self.cancelScoringButton.enabled = NO;
         
+        self.theScoreUs = [NSString stringWithString:self.scoreUs.text];
+        self.theScoreThem = [NSString stringWithString:self.scoreThem.text];
 		[self performSelectorInBackground:@selector(runRequestOver) withObject:nil];
 		
 		
@@ -141,107 +156,113 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 - (void)runRequest {
 	
 
-	
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	token = mainDelegate.token;
-	
-	NSString *sendInterval = @"";
-	if ([self.interval isEqualToString:@"0"]) {
-		sendInterval = @"-3";
-	}else {
-		sendInterval = self.interval;
-	}
+	@autoreleasepool {
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        token = mainDelegate.token;
+        
+        NSString *sendInterval = @"";
+        if ([self.interval isEqualToString:@"0"]) {
+            sendInterval = @"-3";
+        }else {
+            sendInterval = self.interval;
+        }
+        
+        
+        
+        
+        NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.theScoreUs
+                                                      :self.theScoreThem :sendInterval :@"" :@"" :@""];
+        
+        NSString *status = [response valueForKey:@"status"];
 
-	
+        
+        if ([status isEqualToString:@"100"]){
+            
+            
+            self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                case 1:
+                    ///error connecting to server
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                    
+                default:
+                    //should never get here
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+            }
+        }
 
-	
-	NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.scoreUs.text 
-												  :self.scoreThem.text :sendInterval :@"" :@"" :@""];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
+    }
 		
-		
-		self.createSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				//self.error.text = @"*Error connecting to server";
-				break;
-			case 1:
-				///error connecting to server
-				//self.error.text = @"*Error connecting to server";
-				break;
-				
-			default:
-				//should never get here
-				//self.error.text = @"*Error connecting to server";
-				break;
-		}
-	}
-	
 
 	
 }
 
 - (void)runRequestOver {
 
+    @autoreleasepool {
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        token = mainDelegate.token;
+        
+        
+        NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.theScoreUs
+                                                      :self.theScoreThem :@"-1" :@"" :@"" :@""];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            
+            self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                case 1:
+                    ///error connecting to server
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                    
+                default:
+                    //should never get here
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
 	
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	token = mainDelegate.token;
-	
-	
-	NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.scoreUs.text 
-												  :self.scoreThem.text :@"-1" :@"" :@"" :@""];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
 		
-		
-		self.createSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				//self.error.text = @"*Error connecting to server";
-				break;
-			case 1:
-				///error connecting to server
-				//self.error.text = @"*Error connecting to server";
-				break;
-				
-			default:
-				//should never get here
-				//self.error.text = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 
@@ -353,6 +374,8 @@ isCoord, addThem, addUs, cancelScoringButton, activity;
 	scoreThem = nil;
 	labelThem = nil;
 	gameOverButton = nil;
+    
+    
 	[super viewDidUnload];
 }
 

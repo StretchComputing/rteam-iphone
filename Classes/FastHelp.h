@@ -13,11 +13,10 @@
 
 @interface FastHelp : UIViewController <ADBannerViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>{
 	
-	IBOutlet UIScrollView *scrollView;
-	ADBannerView *myAd;
-	BOOL bannerIsVisible;
 }
+@property (nonatomic, strong) ADBannerView *myAd;
+
 @property BOOL bannerIsVisible;
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @end
 

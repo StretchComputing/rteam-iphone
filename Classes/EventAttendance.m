@@ -12,7 +12,7 @@
 
 @implementation EventAttendance
 @synthesize players, teamId, allSelector, eventId, attMarker, saveAll, select, activity, successLabel, startDate, attReport, attendanceInfo,
-saveSuccess, playerTableView, successString, successNoChoices, barActivity, attActivity, attActivityLabel, lineView, isCoord, userRole, attMarkerTemp;
+saveSuccess, playerTableView, successString, successNoChoices, barActivity, attActivity, attActivityLabel, lineView, isCoord, userRole, attMarkerTemp, errorString;
 
 -(void)viewDidLoad{
 	
@@ -22,15 +22,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	self.attActivityLabel.hidden = NO;
 	
 	self.attMarker = [NSMutableArray array];
-	
-	/*
-	self.barActivity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(80, 32, 20, 20)];
-	//set the initial property
-	self.barActivity.hidesWhenStopped = YES;
-	self.barActivity.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
-	
-	[self.navigationController.view addSubview:self.barActivity];
-	*/
+
 	
 	self.playerTableView.delegate = self;
 	self.playerTableView.dataSource = self;
@@ -75,132 +67,138 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 
 -(void)getAttendanceInfo{
 	
-	self.attMarkerTemp = [[NSMutableArray alloc] init];
+    @autoreleasepool {
+        self.attMarkerTemp = [NSMutableArray array];
+        
+        [self.tabBarController.navigationItem setRightBarButtonItem:nil];
+        
+        NSString *token = @"";
+        NSArray *playerArray = [NSArray array];
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        NSDictionary *response = [NSDictionary dictionary];
+        self.errorString = @"";
+        //If there is a token, do a DB lookup to find the players associated with this team:
+        if (![token isEqualToString:@""]){
+            
+            response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"member" :@""];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                playerArray = [response valueForKey:@"members"];
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Log the status code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            NSDictionary *responseAtt = [ServerAPI getAttendeesGame:token :self.teamId :self.eventId :@"generic"];
+            
+            NSString *statusAtt = [responseAtt valueForKey:@"status"];
+            
+            if ([statusAtt isEqualToString:@"100"]){
+                
+                self.attendanceInfo = true;
+                
+                self.attReport = [responseAtt valueForKey:@"attendance"];
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //Log the status code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+        }
+        
+        self.players = [NSArray arrayWithArray:playerArray];
+        
+        NSInteger numPlayers = [self.players count];
+        //initalize the attendance marker array
+        for (int i = 0; i < numPlayers; i++) {
+            [self.attMarkerTemp addObject:@"-1"];
+        }
+        
+        if (self.attendanceInfo) {
+            
+            for (int i = 0; i < [self.players count]; i++) {
+                
+                Player *tmpPlayer = [self.players objectAtIndex:i];
+                
+                for (int j = 0; j < [self.attReport count]; j++) {
+                    
+                    NSDictionary *memberReport = [self.attReport objectAtIndex:j];
+                    
+                    NSString *memId = [memberReport objectForKey:@"memberId"];
+                    NSString *isPresent = [memberReport objectForKey:@"present"];
+                    
+                    if ([memId isEqualToString:tmpPlayer.memberId]) {
+                        
+                        if ([isPresent isEqualToString:@"yes"]) {
+                            [self.attMarkerTemp replaceObjectAtIndex:i withObject:@"1"];
+                        }else if ([isPresent isEqualToString:@"no"]) {
+                            [self.attMarkerTemp replaceObjectAtIndex:i withObject:@"0"];
+                            
+                        }
+                        
+                    }
+                    
+                }
+            }
+        }
+        
+        
+        
+        [self performSelectorOnMainThread:@selector(finishedAttendance) withObject:nil waitUntilDone:NO];
+
+    }
 	
-	[self.tabBarController.navigationItem setRightBarButtonItem:nil];
-	
-	NSString *token = @"";
-	NSArray *playerArray = [NSArray array];
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-	NSDictionary *response = [NSDictionary dictionary];
-	//If there is a token, do a DB lookup to find the players associated with this team:
-	if (![token isEqualToString:@""]){
-		
-		response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"member" :@""];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			playerArray = [response valueForKey:@"members"];
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.successLabel.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.successLabel.text = @"*Error connecting to server";
-					break;
-				default:
-					//Log the status code?
-					self.successLabel.text = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		NSDictionary *responseAtt = [ServerAPI getAttendeesGame:token :self.teamId :self.eventId :@"generic"];
-		
-		NSString *statusAtt = [responseAtt valueForKey:@"status"];
-		
-		if ([statusAtt isEqualToString:@"100"]){
-			
-			self.attendanceInfo = true;
-			
-			self.attReport = [responseAtt valueForKey:@"attendance"];
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.successLabel.text = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.successLabel.text = @"*Error connecting to server";
-					break;
-				default:
-					//Log the status code?
-					self.successLabel.text = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-		
-	}
-	
-	self.players = playerArray;
-	
-	NSInteger numPlayers = [self.players count];
-	//initalize the attendance marker array
-    for (int i = 0; i < numPlayers; i++) {
-		[self.attMarkerTemp addObject:@"-1"];
-	}
-	
-	if (self.attendanceInfo) {
-		
-		for (int i = 0; i < [self.players count]; i++) {
-			
-			Player *tmpPlayer = [self.players objectAtIndex:i];
-			
-			for (int j = 0; j < [self.attReport count]; j++) {
-				
-				NSDictionary *memberReport = [self.attReport objectAtIndex:j];
-				
-				NSString *memId = [memberReport objectForKey:@"memberId"];
-				NSString *isPresent = [memberReport objectForKey:@"present"];
-				
-				if ([memId isEqualToString:tmpPlayer.memberId]) {
-					
-					if ([isPresent isEqualToString:@"yes"]) {
-						[self.attMarkerTemp replaceObjectAtIndex:i withObject:@"1"];
-					}else if ([isPresent isEqualToString:@"no"]) {
-						[self.attMarkerTemp replaceObjectAtIndex:i withObject:@"0"];
-						
-					}
-					
-				}
-				
-			}
-		}
-	}
-	
-	
-	
-	[self performSelectorOnMainThread:@selector(finishedAttendance) withObject:nil waitUntilDone:NO];
 }
 
 
 -(void)finishedAttendance{
 	
+    self.successLabel.text = self.errorString;
 	self.attMarker = [NSMutableArray arrayWithArray:self.attMarkerTemp];
 	
 	[self.barActivity stopAnimating];
@@ -349,100 +347,102 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 - (void)runRequest {
 	
 
-	
-	//self.players is the array of Player objects
-	//self.attMarker is the corresponding array of whether they were present or absent
-	NSMutableArray *attendance = [[NSMutableArray alloc] init];
-	NSArray *finalAttendance = [[NSArray alloc] init];
-	bool anyselections = false;
-	
+	@autoreleasepool {
+        //self.players is the array of Player objects
+        //self.attMarker is the corresponding array of whether they were present or absent
+        NSMutableArray *attendance = [[NSMutableArray alloc] init];
+        NSArray *finalAttendance = [[NSArray alloc] init];
+        bool anyselections = false;
+        
+        
+        for (int i = 0; i < [self.players count]; i++) {
+            NSMutableDictionary *attList = [[NSMutableDictionary alloc] init];
+            Player *tmpPlayer = [self.players objectAtIndex:i];
+            NSString *marker = [self.attMarker objectAtIndex:i];
+            
+            if ([marker isEqualToString:@"1"]) {
+                //present
+                [attList setObject:tmpPlayer.memberId forKey:@"memberId"];
+                [attList setObject:@"yes" forKey:@"present"];
+                anyselections = true;
+                
+                [attendance addObject:attList];
+            }else if ([marker isEqualToString:@"0"]) {
+                //absent
+                [attList setObject:tmpPlayer.memberId forKey:@"memberId"];
+                [attList setObject:@"no" forKey:@"present"];
+                anyselections = true;
+                
+                [attendance addObject:attList];
+            }
+            
+            
+        }
+        
+        finalAttendance = attendance;
+        
+        if (anyselections) {
+            
+            NSString *token = @"";
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            
+            if (mainDelegate.token != nil){
+                token = mainDelegate.token;
+            }
+            
+            NSDictionary *response = [NSDictionary dictionary];
+            if (![token isEqualToString:@""]){
+                
+                response = [ServerAPI updateAttendees:token :self.teamId :self.eventId :@"generic" :finalAttendance :self.startDate];
+                
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    self.saveSuccess = true;
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    
+                    self.saveSuccess = false;
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.successLabel.text = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //self.successLabel.text = @"*Error connecting to server";
+                            break;
+                        default:
+                            //should never get here
+                            //self.successLabel.text = @"*Error connecting to server";
+                            break;
+                    }
+                }
+                
+            }
+            
+        }else {
+            self.successString = @"*No selections made";
+            self.successNoChoices = true;
+        }
+        
+        
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-	for (int i = 0; i < [self.players count]; i++) {
-		NSMutableDictionary *attList = [[NSMutableDictionary alloc] init];
-		Player *tmpPlayer = [self.players objectAtIndex:i];
-		NSString *marker = [self.attMarker objectAtIndex:i];
+    }
 		
-		if ([marker isEqualToString:@"1"]) {
-			//present
-			[attList setObject:tmpPlayer.memberId forKey:@"memberId"];
-			[attList setObject:@"yes" forKey:@"present"];
-			anyselections = true;
-			
-			[attendance addObject:attList];
-		}else if ([marker isEqualToString:@"0"]) {
-			//absent
-			[attList setObject:tmpPlayer.memberId forKey:@"memberId"];
-			[attList setObject:@"no" forKey:@"present"];
-			anyselections = true;
-			
-			[attendance addObject:attList];
-		}
-		
-		
-	}
-	
-	finalAttendance = attendance;
-	
-	if (anyselections) {
-		
-		NSString *token = @"";
-		
-		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-		
-		
-		if (mainDelegate.token != nil){
-			token = mainDelegate.token;
-		}
-		
-		NSDictionary *response = [NSDictionary dictionary];
-		if (![token isEqualToString:@""]){
-			
-			response = [ServerAPI updateAttendees:token :self.teamId :self.eventId :@"generic" :finalAttendance :self.startDate];
-			
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				self.saveSuccess = true;
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				
-				self.saveSuccess = false;
-				int statusCode = [status intValue];
-				
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						//self.successLabel.text = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						//self.successLabel.text = @"*Error connecting to server";
-						break;
-					default:
-						//should never get here
-						//self.successLabel.text = @"*Error connecting to server";
-						break;
-				}
-			}
-			
-		}
-		
-	}else {
-		self.successString = @"*No selections made";
-		self.successNoChoices = true;
-	}
-	
-	
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{

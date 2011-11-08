@@ -19,39 +19,9 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 	
     HomeScoreView *homeScoreView;
     HomeAttendanceView *homeAttendanceView;
-    
-	NSString *name;
-	NSString *teamId;
-	NSString *userRole;  //The role of the current user for this team;
-	NSString *oneTeamFlag;
-	
-	NSString *didRegister;
-	int numMemberTeams;
-	
-	NSArray *games;
-	NSArray *practices;
-	
-	int eventTodayIndex;
-	NSString *eventToday;
-	    
-	int nextGameIndex;
-	int nextPracticeIndex;
-	int badgeNumber;
-	
-	UIBarButtonItem *inviteFan;
-
-    
-	NSMutableArray *viewControllers;
-	
-	BOOL pageControlUsed;
 	
 	IBOutlet UILabel *serverError;
-	bool alreadyCalled1;
-	bool alreadyCalled2;
-	bool alreadyCalledCreate;
-	
-	bool foundQuick1;
-	bool foundQuick2;
+
 	//Quick Link Buttons
 	UIButton *quickCreateTeam;
 	QuickLinkButton *quickTeamOne;
@@ -61,37 +31,17 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 	IBOutlet UIScrollView *changeQuickLink;
 	IBOutlet UITableView *newQuickLinkTable;
 	IBOutlet UITextField *newQuickLinkAlias;
-	int rowNewQuickTeam;
 	IBOutlet UIActivityIndicatorView *activityGettingTeams;
 	IBOutlet UILabel *selectRowLabel;
-	
-	//Background thread "Get Teams" 
-	bool haveTeamList;
-	bool teamListFailed;
-	NSArray *teamList;
-	
-	//New Messages badge
+
 	IBOutlet UIImageView *messageBadge;
-	int newMessagesCount;
-	bool newMessagesSuccess;
-	
-	//Bottom Half quick links
-	NSMutableArray *eventsToday;
-	NSMutableArray *eventsTomorrow;
-	int numberOfPages;
+
 	IBOutlet UIActivityIndicatorView *eventsNowActivity;
-	bool eventsNowSuccess;
-	bool eventsNowTryAgain;
+
 	IBOutlet UITextView *eventsNowError;
-	NSMutableArray *allBottomButtons;
 	
 	IBOutlet UIButton *eventsButton;
-	
-	
-	//iAd
-	BOOL bannerIsVisible;
-	ADBannerView *myAd;
-	
+
 	IBOutlet UIButton *myTeamsButton;
 	IBOutlet UIButton *activityButton;
 	IBOutlet UIButton *messagesButton;
@@ -101,62 +51,17 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 	IBOutlet UILabel *messageCountLabel;
 	
 	IBOutlet UIScrollView *displayIconsScroll;
-	
-	bool isEditingQuickLinkOne;
-	
-	bool newActivity;
 	IBOutlet UIImageView *newActivityBadge;
 	IBOutlet UIButton *changeIconButton;
-	
-	UIActionSheet *undoCancel;
-	NSString *undoTeamId;
-	NSString *undoEventId;
-	NSString *undoEventType;
-	
-	bool spotOpen;
-	bool oneTeam;
-	
-	UIButton *addMembersButton;
-	
-	NSString *membersUserRole;
-	NSString *membersTeamId;
-    
-	NSMutableArray *phoneOnlyArray;
-	
-	NSString *justAddName;
-	
+
 	IBOutlet UIView *displayIconsScrollBack;
 	IBOutlet UIView *changeQuickLinkBack;
-    
-    bool changingLink;
-    
+        
     IBOutlet UIBarButtonItem *refreshButton;
     IBOutlet UIBarButtonItem *questionButton;
     
     IBOutlet UIView *backHelpView;
-    
-    UIView *backViewTop;
-    UIView *backViewBottom;
-    
-    UIView *transViewTop;
-    UIView *transViewBottom;
-    
-    UIButton *settingQbutton;
-    UIButton *searchQbutton;
-    UIButton *myTeamsQbutton;
-    
-    UIButton *activityQbutton;
-    UIButton *messagesQbutton;
-    UIButton *eventsQbutton;
-    UIButton *quickLinksQbutton;
-    UIButton *happeningNowQbutton;
-    UIButton *helpQbutton;
-    UIButton *inviteFanQbutton;
-    UIButton *refreshQbutton;
-    
-    UIButton *closeQuestionButton;
-    
-    UITextView *helpExplanation;
+
     
     IBOutlet UIImageView *homeDivider;
     IBOutlet UIButton *moveDividerButton;
@@ -164,23 +69,14 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
     
     IBOutlet UIView *moveDividerBackground;
     
-    IBOutlet UIView *moveableView;
-    BOOL isMoreShowing;
-    
+    IBOutlet UIView *moveableView;    
     IBOutlet UIImageView *scrollViewBack;
-    
-    
-    //Registration Message stuff
+
     IBOutlet UIView *registrationBackView;
     IBOutlet UIView *textBackView;
     IBOutlet UIView *textFrontView;
     IBOutlet UITextView *regTextView;
     IBOutlet UIButton *regTextButton;
-    int currentDisplay;
-    
-    UIButton *aboutButton;
-    
-    double numObjects;
     
     IBOutlet QuickLinkButton *shortcutButton;
     
@@ -192,9 +88,10 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
     IBOutlet UIImageView *blueArrow;
     
 }
+@property (nonatomic, strong) ADBannerView *myAd;
 @property (nonatomic, strong) UIImageView *blueArrow;
 @property (nonatomic, strong) UIButton *quickLinkCancelTwoButton;
-
+@property BOOL pageControlUsed;
 @property (nonatomic, strong) UIButton *quickLinkChangeButton;
 @property (nonatomic, strong) UIButton *quickLinkCancelButton;
 @property (nonatomic, strong) UIButton *quickLinkOkButton;

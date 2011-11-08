@@ -197,47 +197,50 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 -(void)getInfo{
 
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (self.teamId == nil) {
-		self.teamId = self.origTeamId;
-	}
-	NSDictionary *response1 = [ServerAPI getMessageThreadInfo:mainDelegate.token :self.teamId :self.messageThreadId];
-	
-	NSString *status1 = [response1 valueForKey:@"status"];
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (self.teamId == nil) {
+            self.teamId = self.origTeamId;
+        }
+        NSDictionary *response1 = [ServerAPI getMessageThreadInfo:mainDelegate.token :self.teamId :self.messageThreadId];
+        
+        NSString *status1 = [response1 valueForKey:@"status"];
 		
-	NSLog(@"Get Status: %@", status1);
-	
-	if ([status1 isEqualToString:@"100"]){
+        NSLog(@"Get Status: %@", status1);
+        
+        if ([status1 isEqualToString:@"100"]){
+            
+            self.response = [NSDictionary dictionary];
+            self.response = [response1 valueForKey:@"messageThreadInfo"];
+            self.errorString = @"";
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error retrieving poll info.";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error retrieving poll info.";
+                    break;
+                default:
+                    //log status code
+                    self.errorString = @"*Error retrieving poll info.";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
+
+    }
 		
-		self.response = [NSDictionary dictionary];
-		self.response = [response1 valueForKey:@"messageThreadInfo"];
-		self.errorString = @"";
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error retrieving poll info.";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error retrieving poll info.";
-				break;
-			default:
-				//log status code
-				self.errorString = @"*Error retrieving poll info.";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:@selector(doneInfo) withObject:nil waitUntilDone:NO];
-	
 }
 
 -(void)doneInfo{

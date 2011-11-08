@@ -9,27 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface Game : NSObject {
-	NSString *startDate;
-	NSString *endDate;
-	NSString *gameId;
-	NSString *teamId;
-	NSString *timeZone;
-	NSString *description;
-	NSString *latitude;
-	NSString *longitude;
-	NSString *opponent;
-	NSString *userRole;
-	
-	NSString *scoreUs;
-	NSString *scoreThem;
-	NSString *interval;
-	
-	NSString *sport;
-	NSString *teamName;
-	NSString *location;
-	
-	NSString *mvp;
-	bool hasMvp;
+
     
 }
 @property bool hasMvp;

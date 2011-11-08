@@ -80,82 +80,85 @@ errorString, dayString, timeString;
 
 -(void)getPracticeInfo{
 
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        NSDictionary *practiceInfo = [NSDictionary dictionary];
+        
+        //If there is a token, do a DB lookup to find the game info 
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI getEventInfo:self.practiceId :self.teamId :token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                practiceInfo = [response valueForKey:@"eventInfo"];
+                
+                NSString *startDate = [practiceInfo valueForKey:@"startDate"];
+                self.startDateString = [practiceInfo valueForKey:@"startDate"];
+                //NSString *endDate = [gameInfo valueForKey:@"endDate"];
+                NSString *desc = [practiceInfo valueForKey:@"description"];
+                NSString *opp = [practiceInfo valueForKey:@"opponent"];
+                
+                if ([practiceInfo valueForKey:@"latitude"] != nil) {
+                    
+                    self.latitude = [[practiceInfo valueForKey:@"latitude"] stringValue];
+                    self.longitude = [[practiceInfo valueForKey:@"longitude"] stringValue];
+                }else{
+                }
+                
+                self.opponentString = opp;
+                self.descriptionString = desc;
+                
+                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+                [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+                NSDate *formatStartDate = [dateFormat dateFromString:startDate];
+                
+                NSDateFormatter *format = [[NSDateFormatter alloc] init];
+                NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+                [format setDateFormat:@"EEE, MMM dd"];
+                [timeFormat setDateFormat:@"hh:mm aa"];
+                
+                self.dayString = [format stringFromDate:formatStartDate];
+                self.timeString = [timeFormat stringFromDate:formatStartDate];
+                
+                
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        
+        [self performSelectorOnMainThread:@selector(finishedInfo) withObject:nil waitUntilDone:NO];
+
+    }
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-	NSString *token = @"";
-	if (mainDelegate.token != nil){
-		token = mainDelegate.token;
-	}
-	
-    NSDictionary *practiceInfo = [NSDictionary dictionary];
-	
-	//If there is a token, do a DB lookup to find the game info 
-	if (![token isEqualToString:@""]){
-		
-		NSDictionary *response = [ServerAPI getEventInfo:self.practiceId :self.teamId :token];
-		
-		NSString *status = [response valueForKey:@"status"];
-		
-		if ([status isEqualToString:@"100"]){
-			
-			practiceInfo = [response valueForKey:@"eventInfo"];
-			
-			NSString *startDate = [practiceInfo valueForKey:@"startDate"];
-			self.startDateString = [practiceInfo valueForKey:@"startDate"];
-			//NSString *endDate = [gameInfo valueForKey:@"endDate"];
-			NSString *desc = [practiceInfo valueForKey:@"description"];
-			NSString *opp = [practiceInfo valueForKey:@"opponent"];
-			
-			if ([practiceInfo valueForKey:@"latitude"] != nil) {
-				
-				self.latitude = [[practiceInfo valueForKey:@"latitude"] stringValue];
-				self.longitude = [[practiceInfo valueForKey:@"longitude"] stringValue];
-			}else{
-			}
-			
-			self.opponentString = opp;
-			self.descriptionString = desc;
-			
-			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-			[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-			NSDate *formatStartDate = [dateFormat dateFromString:startDate];
-			
-			NSDateFormatter *format = [[NSDateFormatter alloc] init];
-			NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-			[format setDateFormat:@"EEE, MMM dd"];
-			[timeFormat setDateFormat:@"hh:mm aa"];
-			
-			self.dayString = [format stringFromDate:formatStartDate];
-			self.timeString = [timeFormat stringFromDate:formatStartDate];
-			
-			
-			
-			
-		}else{
-			
-			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
-			
-			switch (statusCode) {
-				case 0:
-					//null parameter
-					self.errorString = @"*Error connecting to server";
-					break;
-				case 1:
-					//error connecting to server
-					self.errorString = @"*Error connecting to server";
-					break;
-				default:
-					//log status code
-					self.errorString = @"*Error connecting to server";
-					break;
-			}
-		}
-		
-	}
-	
-	[self performSelectorOnMainThread:@selector(finishedInfo) withObject:nil waitUntilDone:NO];
 }
 
 -(void)finishedInfo{
@@ -198,8 +201,7 @@ errorString, dayString, timeString;
 
 
 -(void)viewDidUnload{
-	//practiceId = nil;
-	//teamId = nil;
+
 	opponent = nil;
 	day = nil;
 	time = nil;
@@ -208,17 +210,11 @@ errorString, dayString, timeString;
 	errorLabel = nil;
 	updateLocationButton = nil;
 	viewMapButton = nil;
-	//userRole = nil;
+
 	editDone = nil;
-	//opponentString = nil;
-	//descriptionString = nil;
-	//startDateString = nil;
-	//latitude = nil;
-	//longitude = nil;
+
 	loading = nil;
-	//errorString = nil;
-	//dayString = nil; 
-	//timeString = nil;
+
 	[super viewDidUnload];
 
 }

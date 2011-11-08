@@ -10,50 +10,14 @@
 #import <CoreLocation/CoreLocation.h>
 
 @interface EventNotes : UIViewController <CLLocationManagerDelegate> {
-	
-	IBOutlet UILabel *errorLabel;
-	
-	IBOutlet UILabel *opponent;
-	IBOutlet UILabel *day;
-	IBOutlet UILabel *time;
-	IBOutlet UITextView *description;
-	
-	IBOutlet UIButton *updateLocationButton;	
-	IBOutlet UIButton *viewMapButton;
-	
-	NSString *teamId;
-	NSString *eventId;
-	NSString *latitude;
-	NSString *longitude;
-	
-	CLLocationManager *locationManager;
-	
-	bool updateSuccess;
-	bool fromNextUpdate;
-	
-	IBOutlet UILabel *eventNameLabel;
-	
-	NSString *userRole;
-	
-	
-	UIBarButtonItem *editDone;
-	NSString *opponentString;
-	NSString *descriptionString;
-	NSString *startDateString;
-	
-    
-	IBOutlet UIActivityIndicatorView *loading;
-	NSString *errorString;
-	NSString *dayString;
-	NSString *timeString;
-	NSString *eventNameString;
+
 	
 }
 @property (nonatomic, strong) NSString *eventNameString;
 @property (nonatomic, strong) NSString *dayString;
 @property (nonatomic, strong) NSString *timeString;
 @property (nonatomic, strong) NSString *errorString;
-@property (nonatomic, strong) UIActivityIndicatorView *loading;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *loading;
 
 
 @property (nonatomic, strong) NSString *startDateString;
@@ -63,20 +27,20 @@
 
 
 @property (nonatomic, strong) NSString *userRole;
-@property (nonatomic, strong) UILabel *eventNameLabel;
-@property (nonatomic, strong) UILabel *errorLabel;
-@property (nonatomic, strong) UILabel *opponent;
-@property (nonatomic, strong) UILabel *day;
-@property (nonatomic, strong) UILabel *time;
-@property (nonatomic, strong) UITextView *description;
+@property (nonatomic, strong) IBOutlet UILabel *eventNameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *errorLabel;
+@property (nonatomic, strong) IBOutlet UILabel *opponent;
+@property (nonatomic, strong) IBOutlet UILabel *day;
+@property (nonatomic, strong) IBOutlet UILabel *time;
+@property (nonatomic, strong) IBOutlet UITextView *description;
 
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSString *eventId;
 @property (nonatomic, strong) NSString *latitude;
 @property (nonatomic, strong) NSString *longitude;
 
-@property (nonatomic, strong) UIButton *updateLocationButton;
-@property (nonatomic, strong) UIButton *viewMapButton;
+@property (nonatomic, strong) IBOutlet UIButton *updateLocationButton;
+@property (nonatomic, strong) IBOutlet UIButton *viewMapButton;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property bool updateSuccess;
 
