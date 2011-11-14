@@ -13,6 +13,8 @@
 #import "PracticeTabs.h"
 #import "CurrentTeamTabs.h"
 #import "FastActionSheet.h"
+#import "Fan.h"
+#import "Player.h"
 
 @implementation SendPollOptions
 @synthesize action, question, errorMessage, option1, option2, option3, option4, option5, submitButton, questionText, teamId, createSuccess, 
@@ -102,20 +104,27 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
             self.eventId = @"";
         }
         
-        NSArray *recip = [NSArray array];
-        
-        if (!self.toTeam) {
-            recip = self.recipients;
+        NSMutableArray *recipIds = [NSMutableArray array];
+        for (int i = 0; i < [self.recipients count]; i++) {
+            
+            if ([[self.recipients objectAtIndex:i] class] == [Fan class]) {
+                Fan *tmpFan = [self.recipients objectAtIndex:i];
+                [recipIds addObject:tmpFan.memberId];
+            }else if ([[self.recipients objectAtIndex:i] class] == [Player class]) {
+                Player *tmpPlayer = [self.recipients objectAtIndex:i];
+                [recipIds addObject:tmpPlayer.memberId];
+            }
         }
+        
+        NSArray *recip = [NSArray arrayWithArray:recipIds];
         
         NSDictionary *response = [NSDictionary dictionary];
         if (![token isEqualToString:@""]){	
             
             
-            response = [ServerAPI createMessageThread:token :self.teamId :self.pollSubject :self.questionText :@"poll" :self.eventId :self.eventType :@"false" :choices :recip :self.displayResults :@"false" :@""];
+            response = [ServerAPI createMessageThread:token :self.teamId :self.pollSubject :self.questionText :@"poll" :@"" :@"" :@"false" :choices :recip :self.displayResults :@"false" :@""];
             
             NSString *status = [response valueForKey:@"status"];
-            
             
             if ([status isEqualToString:@"100"]){
                 
@@ -171,75 +180,7 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 	
 	if (self.createSuccess){
 		
-		//team, sent, inbox, game or pracitce
-		NSArray *tempCont = [self.navigationController viewControllers];
-		int tempNum = [tempCont count];
-		tempNum = tempNum - 4;
-		
-		
-		
-		if ([self.origLoc isEqualToString:@"CurrentTeamTabs"]) {
-			
-			if ([[tempCont objectAtIndex:tempNum] class] == [CurrentTeamTabs class]) {
-				CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum];
-				cont.teamId = self.teamId;
-				cont.selectedIndex = 4;
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [CurrentTeamTabs class]) {
-				CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum-1];
-				cont.selectedIndex = 4;
-				cont.teamId = self.teamId;
-				
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-		}
-		
-		if ([self.origLoc isEqualToString:@"GameTabs"]) {
-			
-			if ([[tempCont objectAtIndex:tempNum] class] == [GameTabs class]) {
-				GameTabs *cont = [tempCont objectAtIndex:tempNum];
-				cont.teamId = self.teamId;
-				cont.selectedIndex = 3;
-				cont.userRole = self.userRole;
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [GameTabs class]) {
-				GameTabs *cont = [tempCont objectAtIndex:tempNum-1];
-				cont.selectedIndex = 3;
-				cont.teamId = self.teamId;
-				cont.userRole = self.userRole;
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-		}
-		
-		if ([self.origLoc isEqualToString:@"PracticeTabs"]) {
-			
-			if ([[tempCont objectAtIndex:tempNum] class] == [PracticeTabs class]) {
-				PracticeTabs *cont = [tempCont objectAtIndex:tempNum];
-				cont.teamId = self.teamId;
-				cont.selectedIndex = 1;
-				cont.userRole = self.userRole;
-				
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[tempCont objectAtIndex:tempNum - 1] class] == [PracticeTabs class]) {
-				PracticeTabs *cont = [tempCont objectAtIndex:tempNum-1];
-				cont.selectedIndex = 1;
-				cont.teamId = self.teamId;
-				cont.userRole = self.userRole;
-				
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-		}
-		
-		
+		[self.navigationController dismissModalViewControllerAnimated:YES];		
 	}else{
 		
 		if ([self.errorString isEqualToString:@"NA"]) {

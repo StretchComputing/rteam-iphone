@@ -11,7 +11,6 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "CurrentEvent.h"
-#import "FastRequestSelectRecip.h"
 
 @implementation FastChangeEventStatus
 @synthesize rightArrowButton, leftArrowButton, cancelButton, myTableView, currentEventLabel, currentInterval, loadingLabel, loadingActivity,

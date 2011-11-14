@@ -79,7 +79,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-
+    
 	self.currentMemberId = @"";
 	self.error = @"";
 	
@@ -207,12 +207,12 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
             if ([[playerArray objectAtIndex:i] class] == [Fan class]) {
                 Fan *tmpPlayer = [playerArray objectAtIndex:i];
                 
-                [tmpFans addObject:tmpPlayer];
+                [self.tmpFans addObject:tmpPlayer];
                 [self.fanPics addObject:@""];
             }else {
                 Player *tmpPlayer = [playerArray objectAtIndex:i];
                 
-                [tmpPlayers addObject:tmpPlayer];
+                [self.tmpPlayers addObject:tmpPlayer];
                 [self.playerPics addObject:@""];
             }
             
@@ -227,8 +227,8 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 
 -(void)finishedMembers{
 	
-	self.players = self.tmpPlayers;
-	self.fans = self.tmpFans;
+	self.players = [NSMutableArray arrayWithArray:self.tmpPlayers];
+	self.fans = [NSMutableArray arrayWithArray:self.tmpFans];
 	
 	if ([self.players count] > 0) {
 		[self performSelectorInBackground:@selector(getPicsPlayers) withObject:nil];

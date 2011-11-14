@@ -10,8 +10,6 @@
 #import "FastActionSheet.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "CameraSelectionGame.h"
-#import "VideoSelection.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation AddGamePhoto
@@ -235,22 +233,25 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 	
 }
 -(void)getImageCamera{
+    
+    /*
 	self.hideAction = true;
     
 	CameraSelectionGame *tmp = [[CameraSelectionGame alloc] init];
 	
 	[self.navigationController pushViewController:tmp animated:NO];
 	
-	
+	*/
 }
 
 -(void)getImageVideo{
+    /*
 	self.hideAction = true;
 	
 	VideoSelection *tmp = [[VideoSelection alloc] init];
 	
 	[self.navigationController pushViewController:tmp animated:NO];
-	
+	*/
 	
 }
 

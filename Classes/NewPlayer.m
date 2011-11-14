@@ -1209,7 +1209,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         NSDictionary *response = [ServerAPI createMultipleMembers:mainDelegate.token :self.teamId :finalMemberArray];
         
         NSString *status = [response valueForKey:@"status"];
-        
+                
         if ([status isEqualToString:@"100"]) {
             
             self.errorString = @"";
@@ -1278,9 +1278,9 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		if (theCount >= 0) {
 			if ([CurrentTeamTabs class] == [[tmpViews objectAtIndex:[tmpViews count] - 2] class]) {
 				CurrentTeamTabs *tmpCont = [tmpViews objectAtIndex:[tmpViews count] - 2];
-				tmpCont.selectedIndex = 2;
+				tmpCont.selectedIndex = 1;
 				
-				Players *tmp = [[tmpCont viewControllers] objectAtIndex:2];
+				Players *tmp = [[tmpCont viewControllers] objectAtIndex:1];
 				tmp.phoneOnlyArray = self.phoneOnlyArray;
 				[self.navigationController popToViewController:tmpCont animated:NO];
 			}else{
@@ -1484,6 +1484,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 	}
 	
 	UILabel *dateLabel = (UILabel *)[cell.contentView viewWithTag:dateTag];
+    dateLabel.backgroundColor = [UIColor clearColor];
 	
 	
 	if (isEmpty) {
@@ -1969,9 +1970,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	firstName = nil;
 	lastName = nil;
 	email = nil;
-	//guardianEmail = nil;
-	//roles = nil;
-	//teamId = nil;
+
 	submitButton = nil;
 	serverProcess = nil;
 	error = nil;
@@ -1980,17 +1979,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	closeButton = nil;
 	sendEmailButton = nil;
 	addParentGuardianButton = nil;
-	/*
-	guardianOneFirst = nil;
-	guardianOneLast = nil;
-	guardianOneEmail = nil;
-	guardianTwoFirst = nil;
-	guardianTwoLast = nil;
-	guardianTwoEmail = nil;
-	 */
+
 	errorString = nil;
-	//firstNamePicked = nil;
-	//lastNamePicked = nil;
+
 	addMultipleMembersButton = nil;
 	phoneNumber = nil;
 	addViewBackground = nil;

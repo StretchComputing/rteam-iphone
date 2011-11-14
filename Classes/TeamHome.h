@@ -14,6 +14,9 @@
 @interface TeamHome : UIViewController <UITableViewDelegate, UITableViewDataSource, ADBannerViewDelegate, UIActionSheetDelegate> {
 
 }
+@property bool fromHome;
+@property (nonatomic, strong) IBOutlet UIButton *editButton;
+
 @property bool displayPhoto;
 @property (nonatomic, strong) ADBannerView *myAd;
 @property bool displayWarning;
@@ -75,4 +78,5 @@
 -(IBAction)nextGame;
 -(IBAction)nextEvent;
 -(NSString *)getMvp:(NSArray *)memberTallies;
+-(IBAction)editTeam;
 @end

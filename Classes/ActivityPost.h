@@ -10,7 +10,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "NewActivity.h"
 
-@interface ActivityPost : UIViewController <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ActivityPost : UIViewController <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) NewActivity *fromClass;
 

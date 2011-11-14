@@ -14,7 +14,7 @@
 #import "TeamHome.h"
 
 @implementation TeamNavigation
-@synthesize teamName, teamId, userRole, sport, teamUrl;
+@synthesize teamName, teamId, userRole, sport, teamUrl, fromHome;
 
 -(void)viewDidLoad{
 	
@@ -38,6 +38,7 @@
 	home.teamSport = self.sport;
 	home.teamName = self.teamName;
 	home.teamUrl = self.teamUrl;
+    home.fromHome = self.fromHome;
 	
 	//TeamActivity *activity = [viewControllers objectAtIndex:1];
 	//activity.teamId = self.teamId;

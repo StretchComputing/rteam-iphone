@@ -58,8 +58,10 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 		tmp.numMemberTeams = self.numMemberTeams;
         
         if ((self.numMemberTeams == 0) && ([self.didRegister isEqualToString:@"true"])) {
-            [self performSelectorInBackground:@selector(firstTeam) withObject:nil];
+            //[self performSelectorInBackground:@selector(firstTeam) withObject:nil];
+            [self performSelector:@selector(firstTeam)];
         }
+        
 		UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStyleDone target:nil action:nil];
 		self.navigationItem.backBarButtonItem = temp;
 		[self.navigationController pushViewController:tmp animated:YES];
@@ -68,6 +70,19 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
         
         if ([self.myTableView indexPathForSelectedRow]) {        
             [self.myTableView deselectRowAtIndexPath:[self.myTableView indexPathForSelectedRow] animated:YES];
+        }
+        
+        if (myAd.bannerLoaded) {
+            bannerIsVisible = YES;
+            myAd.hidden = NO;
+            
+            self.myTableView.frame = CGRectMake(0, 50, 320, 366);
+
+        }else{
+            bannerIsVisible = NO;
+            myAd.hidden = YES;
+            self.myTableView.frame = CGRectMake(0, 0, 320, 416);
+
         }
         
     }
@@ -358,7 +373,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			mainDelegate.quickLinkTwoImage = @"";
 			
 			[mainDelegate saveUserInfo];
-			[self.navigationController popToRootViewControllerAnimated:YES];
+			[self.navigationController popToRootViewControllerAnimated:NO];
 		}
 		
 		
@@ -532,10 +547,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		self.bannerIsVisible = YES;
 		myAd.hidden = NO;
 		
-		self.myTableView.frame = CGRectMake(0, 50, 320, 371);
+		self.myTableView.frame = CGRectMake(0, 50, 320, 366);
         
         [self.view bringSubviewToFront:myAd];
-        myAd.frame = CGRectMake(0.0, 0.0, myAd.frame.size.width, myAd.frame.size.height);
         
 		
 	}
@@ -548,7 +562,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		myAd.hidden = YES;
 		self.bannerIsVisible = NO;
 		
-		self.myTableView.frame = CGRectMake(0, 0, 320, 411);
+		self.myTableView.frame = CGRectMake(0, 0, 320, 416);
 		
 		
 	}
@@ -986,7 +1000,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)firstTeam{
 	
 
-	@autoreleasepool {
+
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         NSString *useTwitter = @"";
@@ -1010,19 +1024,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 mainDelegate.quickLinkOneImage = [@"Basketball" lowercaseString];
                 
                 [mainDelegate saveUserInfo];
-            }else if ([mainDelegate.quickLinkOne length] > 0) {
-                //quickLinkOne is a team
-                
-                if ([mainDelegate.quickLinkTwo isEqualToString:@""]) {
-                    mainDelegate.quickLinkTwo = [results valueForKey:@"teamId"];
-                    
-                    
-                    
-                    mainDelegate.quickLinkTwoName = @"Team 1";
-                    mainDelegate.quickLinkTwoImage = [@"Basketball" lowercaseString];
-                    [mainDelegate saveUserInfo];
-                    
-                }
             }
             
         }else{
@@ -1030,13 +1031,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
 
-    }
+    
 	
 }
 
 -(void)viewDidUnload{
-	//fromRegisterFlow = nil;
-	//didRegister = nil;
+	
+    myAd.delegate = nil;
+    myAd = nil;
     myTableView = nil;
 	loadingActivity = nil;
 	loadingLabel = nil;

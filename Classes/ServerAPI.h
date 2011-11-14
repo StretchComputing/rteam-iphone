@@ -16,7 +16,7 @@
 
 //User APIs
 + (NSDictionary *)createUser:(NSString *)firstName :(NSString *)lastName :(NSString *)email :(NSString *)password :(NSString *)alreadyMember
-							:(NSString *)latitude :(NSString *)longitude :(NSString *)phoneNumber :(NSString *)carrierCode; 
+							:(NSString *)latitude :(NSString *)longitude :(NSString *)phoneNumber :(NSString *)carrierCode :(NSString *)location;
 
 + (NSDictionary *)getUserInfo:(NSString *)token :(NSString *)includePhoto;
 

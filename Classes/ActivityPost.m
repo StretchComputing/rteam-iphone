@@ -18,6 +18,8 @@
 @synthesize messageText, postTeamId, teamSelectButton, hasTeams, teams, savedTeams, selectedTeams, keyboardIsUp, keyboardButton, sendPollButton, sendPrivateButton, activity, segControl, theMessageText, previewImage, cameraSaveMessage, cancelImageButton, imageDataToSend, isTakeVideo, isSendVideo, sendOrientation, errorLabel, errorString, videoDataToSend, fromClass;
 
 
+
+
 -(void)viewWillAppear:(BOOL)animated{
     
     if (self.savedTeams) {
@@ -514,15 +516,9 @@
 
 } 
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-	
-	[picker dismissModalViewControllerAnimated:YES];	
-    if ([self.imageDataToSend length] == 0) {
-        self.previewImage.hidden = YES;
-    }
-	
+- (BOOL)canBecomeFirstResponder {
+	return YES;
 }
-
 
 -(void)cancelImage{
     

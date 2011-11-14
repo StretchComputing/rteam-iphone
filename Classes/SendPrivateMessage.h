@@ -10,7 +10,10 @@
 
 @interface SendPrivateMessage : UIViewController <UITextViewDelegate>
 
-@property (nonatomic, retain) NSString *theMessageText;
+@property bool isConfirm;
+@property bool isReply;
+@property (nonatomic, strong) IBOutlet UILabel *descripLabel;
+@property (nonatomic, strong) NSString *theMessageText;
 @property bool keyboardIsUp;
 @property (nonatomic, strong) NSMutableArray *recipients;
 @property (nonatomic, strong) NSArray *recipientObjects;

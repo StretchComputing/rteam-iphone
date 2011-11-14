@@ -13,6 +13,8 @@
     
 
 }
+@property (nonatomic, strong) IBOutlet UIView *swipeAlert;
+@property (nonatomic, strong) IBOutlet UIView *swipeAlertFront;
 @property bool fromPost;
 @property (nonatomic, strong) ADBannerView *myAd;
 @property (nonatomic, strong) NSMutableArray *myActivityArray;  //Holds messages sent/received, polls sent/received
@@ -78,5 +80,5 @@
 -(void)startLoading;
 -(void)refresh;
 -(int)findHeightForString:(NSString *)message withWidth:(int)width;
-
+-(IBAction)cancelSwipe;
 @end

@@ -13,6 +13,7 @@
 #import "GameTabs.h"
 #import "PracticeTabs.h"
 #import "FastActionSheet.h"
+#import "NewActivity.h"
 
 
 @implementation FinalizePoll
@@ -111,7 +112,6 @@
             
             NSString *status = [response valueForKey:@"status"];
             
-            
             if ([status isEqualToString:@"100"]){
                 
                 self.createSuccess = true;
@@ -154,28 +154,15 @@
 		//team, sent, inbox, game or pracitce
 		NSArray *tempCont = [self.navigationController viewControllers];
 		int tempNum = [tempCont count];
-		tempNum = tempNum - 3;
+		tempNum = tempNum - 3;			
 		
-			
-		
-		if ([[tempCont objectAtIndex:tempNum] class] == [CurrentTeamTabs class]) {
-			CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum];
-			cont.selectedIndex = 4;
+		if ([[tempCont objectAtIndex:tempNum] class] == [NewActivity class]) {
+			NewActivity *cont = [tempCont objectAtIndex:tempNum];
+			cont.fromPost = true;
 			
 			[self.navigationController popToViewController:cont animated:YES];
 		}
-		if ([[tempCont objectAtIndex:tempNum] class] == [GameTabs class]) {
-			GameTabs *cont = [tempCont objectAtIndex:tempNum];
-			cont.selectedIndex = 3;
-			
-			[self.navigationController popToViewController:cont animated:YES];
-		}
-		if ([[tempCont objectAtIndex:tempNum] class] == [PracticeTabs class]) {
-			PracticeTabs *cont = [tempCont objectAtIndex:tempNum];
-			cont.selectedIndex = 1;
-			
-			[self.navigationController popToViewController:cont animated:YES];
-		}
+	
 		
 	}else {
 		

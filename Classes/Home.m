@@ -8,7 +8,6 @@
 
 #import "Team.h"
 #import "InviteFan2.h"
-#import "TeamsTabs.h"
 #import "Home.h"
 #import "Practice.h"
 #import "ServerAPI.h"
@@ -61,7 +60,7 @@ myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutt
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation, homeDivider, moveDividerButton, homeDividerLabel,
 moveDividerBackground, isMoreShowing, moveableView, scrollViewBack, regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed;
+blueArrow, myAd, pageControlUsed, createdTeam;
 
 
 
@@ -82,8 +81,22 @@ blueArrow, myAd, pageControlUsed;
 
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
+        bannerIsVisible = YES;
+        
+        self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
+        self.moveableView.frame = CGRectMake(0, 197, 320, 126);
+        self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
+        self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
+        
     }else{
         myAd.hidden = YES;
+        bannerIsVisible = NO;
+        
+        self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
+        self.moveableView.frame = CGRectMake(0, 247, 320, 126);
+        self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
+        self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
+
     }
     
     if (self.isMoreShowing) {
@@ -173,10 +186,6 @@ blueArrow, myAd, pageControlUsed;
 	}
 
 	
-	
-	//rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-
-	
 	if ([mainDelegate.phoneOnlyArray count] > 0) {
 		
 		self.phoneOnlyArray = [NSMutableArray arrayWithArray:mainDelegate.phoneOnlyArray];
@@ -224,33 +233,38 @@ blueArrow, myAd, pageControlUsed;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *quickLinkOne = mainDelegate.quickLinkOne;
 	NSString *quickLinkOneName = mainDelegate.quickLinkOneName;
-	//NSString *quickLinkOneImage = mainDelegate.quickLinkOneImage;
-    
-    //both are teamIds
-    //int height1 = [self getIconHeight:quickLinkOneImage];
-    
-    self.shortcutButton.teamId = quickLinkOne;
-    [self.shortcutButton addLabel];
-    self.shortcutButton.teamName.text = quickLinkOneName;
-    
-    NSString *imageOneName = [self getQuickLinkImageOne];
-    [self.shortcutButton setImage:[UIImage imageNamed:imageOneName] forState:UIControlStateNormal];
-    self.shortcutButton.contentMode = UIViewContentModeScaleToFill;
-    
-    
-    [self.shortcutButton setTitleColor: [UIColor blackColor] forState: UIControlStateNormal];
-    [self.shortcutButton addTarget:self action:@selector(quickTeam:) forControlEvents:UIControlEventTouchUpInside];
-    
-    NSString *ios = [[UIDevice currentDevice] systemVersion];
-	UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(holdDown1)];
 
-	if (![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"]) {
-		longPressRecognizer.minimumPressDuration = 0.7;
-		longPressRecognizer.allowableMovement = 20.0;
+    if ([quickLinkOne isEqualToString:@"create"] || [quickLinkOne isEqualToString:@""]) {
+        self.shortcutButton.hidden = YES;
+        self.createdTeam = false;
+    }else{
+        self.createdTeam = true;
+        self.shortcutButton.hidden = NO;
+        
+        self.shortcutButton.teamId = quickLinkOne;
+        [self.shortcutButton addLabel];
+        self.shortcutButton.teamName.text = quickLinkOneName;
+        
+        NSString *imageOneName = [self getQuickLinkImageOne];
+        [self.shortcutButton setImage:[UIImage imageNamed:imageOneName] forState:UIControlStateNormal];
+        self.shortcutButton.contentMode = UIViewContentModeScaleToFill;
+        
+        
+        [self.shortcutButton setTitleColor: [UIColor blackColor] forState: UIControlStateNormal];
+        [self.shortcutButton addTarget:self action:@selector(quickTeam:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(holdDown1)];
+        
+        
+        longPressRecognizer.minimumPressDuration = 0.7;
+        longPressRecognizer.allowableMovement = 20.0;
         [self.shortcutButton addGestureRecognizer:longPressRecognizer];
+    }
+    
+  
 
 		
-	}
+	
     
 }
 
@@ -289,6 +303,7 @@ blueArrow, myAd, pageControlUsed;
 			tmpNav.teamName = toTeam.name;
 			tmpNav.userRole = toTeam.userRole;
 			tmpNav.sport = toTeam.sport;
+            tmpNav.fromHome = true;
             tmpNav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 			[self.navigationController presentModalViewController:tmpNav animated:YES];
             
@@ -305,22 +320,7 @@ blueArrow, myAd, pageControlUsed;
 	}
 }
 
--(void)quickCreate{
-	self.serverError.text = @"";
 
-	TeamsTabs *tmp = [[TeamsTabs alloc] init];
-	NSArray *views = tmp.viewControllers;
-	MyTeams *tmpTeams = [views objectAtIndex:0];
-	tmpTeams.quickCreate = true;
-    tmpTeams.fromHome = true;
-	tmp.quickCreate = true;
-	
-	UINavigationController *navController = [[UINavigationController alloc] init];
-	[navController pushViewController:tmp animated:NO];
-	
-    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-	[self presentModalViewController:navController animated:YES];
-}
 
 -(void)holdDown1{
 	self.serverError.text = @"";
@@ -1082,10 +1082,25 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		[self.activityGettingTeams stopAnimating];
 		
 	}
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+
 	
-	if (self.oneTeam && self.spotOpen) {
-		self.addMembersButton.hidden = NO;
-	}
+	if ([self.teamList count] > 0) {
+        if ([mainDelegate.quickLinkOne isEqualToString:@"create"] || [mainDelegate.quickLinkOne isEqualToString:@""]) {
+            
+            Team *tmpTeam = [self.teamList objectAtIndex:0];
+            
+            mainDelegate.quickLinkOne = tmpTeam.teamId;
+            mainDelegate.quickLinkOneName = tmpTeam.name;
+            mainDelegate.quickLinkOneImage = tmpTeam.sport;
+            
+            
+            [mainDelegate saveUserInfo];
+            
+            [self addQuickLinks];
+        }
+    }
 		
 }
 -(void)updateUserIcons{
@@ -1320,7 +1335,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	if (self.eventsNowSuccess) {
 		
-		self.numObjects = [self.eventsToday count] + [self.eventsTomorrow count];
+		self.numObjects = [self.eventsToday count] + [self.eventsTomorrow count] + 2;
         
         if (self.numObjects == 0) {
             self.numberOfPages = 1;
@@ -1822,14 +1837,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         [controller.view addSubview:tmp1Button];
                         
                     }else{
-                        
+                         /*
                         NSString *startDate = tmp1.eventDate;
                         
                         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
                         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
                         NSDate *eventDate = [dateFormat dateFromString:startDate];
                         
-                        /*
+                       
                         if (![eventDate isEqualToDate:[eventDate earlierDate:[NSDate date]]]) {
                             
                             
@@ -1907,6 +1922,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         if ([tmp2.eventType isEqualToString:@"game"]) {
                             
                             if ([tmp2.gameInterval isEqualToString:@"0"]) {
+                                
+                                /*
                                 AttendingButton *tmp2Button = [[AttendingButton alloc] initWithFrame:CGRectMake(196, 20, 92, 55)];
                                 tmp2Button.event = tmp2;
                                 tmp2Button.isAttendance = true;
@@ -1940,9 +1957,32 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 //[tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
+                                 */
+                                EventNowButton *tmp2Button = [[EventNowButton alloc] initWithFrame:CGRectMake(216, 25, 50, 50)];
+                                tmp2Button.event = tmp2;
+                                
+                                if (![tmp2.teamName isEqualToString:@""]) {
+                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
+                                }else {
+                                    tmp2Button.teamLabel.text = @"";
+                                }
+                                
+                                
+                                if (tmp2.isCanceled) {
+                                    tmp2Button.canceledLabel.text = @"CANCELED";
+                                }else{
+                                    tmp2Button.canceledLabel.text = @"";
+                                }
+                                
+                                tmp2Button.scoreLabel.text = tmp2.scoreLabel;
+                                tmp2Button.eventLabel.text = tmp2.eventLabel;
+                                [tmp2Button setImage:[UIImage imageNamed:tmp2.imageName] forState:UIControlStateNormal];
+                                [tmp2Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
+                                [controller.view addSubview:tmp2Button];
                                 
                             }else{
                                 //display the score
+                                /*
                                 ScoreButton *tmp2Button = [[ScoreButton alloc] initWithFrame:CGRectMake(196, 20, 92, 55)];
                                 tmp2Button.event = tmp2;
                                 tmp2Button.isAttendance = false;
@@ -2006,6 +2046,28 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 // [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
+                                 */
+                                EventNowButton *tmp2Button = [[EventNowButton alloc] initWithFrame:CGRectMake(216, 25, 50, 50)];
+                                tmp2Button.event = tmp2;
+                                
+                                if (![tmp2.teamName isEqualToString:@""]) {
+                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
+                                }else {
+                                    tmp2Button.teamLabel.text = @"";
+                                }
+                                
+                                
+                                if (tmp2.isCanceled) {
+                                    tmp2Button.canceledLabel.text = @"CANCELED";
+                                }else{
+                                    tmp2Button.canceledLabel.text = @"";
+                                }
+                                
+                                tmp2Button.scoreLabel.text = tmp2.scoreLabel;
+                                tmp2Button.eventLabel.text = tmp2.eventLabel;
+                                [tmp2Button setImage:[UIImage imageNamed:tmp2.imageName] forState:UIControlStateNormal];
+                                [tmp2Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
+                                [controller.view addSubview:tmp2Button];
                                 
                             }
                             
@@ -2035,14 +2097,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             [controller.view addSubview:tmp2Button];
                             
                         }else{
-                            
+                            /*
                             NSString *startDate = tmp2.eventDate;
                             
                             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
                             [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
                             NSDate *eventDate = [dateFormat dateFromString:startDate];
                             
-                            /*
+                            
                             if (![eventDate isEqualToDate:[eventDate earlierDate:[NSDate date]]]) {
                                 //past, display attendance
                                 
@@ -2381,18 +2443,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			[self.navigationController presentModalViewController:navController animated:YES];
 			
 		}else if ([eventType isEqualToString:@"newTeam"]) {
-			TeamsTabs *tmp = [[TeamsTabs alloc] init];
-			NSArray *views = tmp.viewControllers;
-			MyTeams *tmpTeams = [views objectAtIndex:0];
+			//TeamsTabs *tmp = [[TeamsTabs alloc] init];
+			//NSArray *views = tmp.viewControllers;
+			MyTeams *tmpTeams = [[MyTeams alloc] init];
 			tmpTeams.quickCreate = true;
             tmpTeams.fromHome = true;
-			tmp.quickCreate = true;
 			
 			UINavigationController *navController = [[UINavigationController alloc] init];
 			
-			[navController pushViewController:tmp animated:NO];
+			[navController pushViewController:tmpTeams animated:NO];
             navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-			[self.navigationController presentModalViewController:navController animated:YES];
+			[self.navigationController presentModalViewController:navController animated:NO];
 		}
 		
 	}
@@ -2467,13 +2528,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner{
-	
+	    
 	if (!self.bannerIsVisible) {
 		self.bannerIsVisible = YES;
 		myAd.hidden = NO;
-        [self.view bringSubviewToFront:myAd];
-        myAd.frame = CGRectMake(0.0, 366.0, myAd.frame.size.width, myAd.frame.size.height);
-        
+        [self.view bringSubviewToFront:myAd];        
         
         
         [UIView beginAnimations:nil context:NULL];
@@ -2546,11 +2605,22 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
-	
+
+    
     self.myAd.hidden = YES;
 	if (self.bannerIsVisible) {
 
 		self.bannerIsVisible = NO;
+        
+        
+        self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
+        self.moveableView.frame = CGRectMake(0, 247, 320, 126);
+        self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
+        self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
+        
+   
+
+        
 
 	}
 	
@@ -2596,7 +2666,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			mainDelegate.quickLinkOneImage = @"volleyball";
 
 		}else {
-			[self.shortcutButton setImage:[UIImage imageNamed:@"width80genericTeam.png"] forState:UIControlStateNormal];
+			[self.shortcutButton setImage:[UIImage imageNamed:@"gen80.png"] forState:UIControlStateNormal];
 			 mainDelegate.quickLinkOneImage = @"";
 		}
 
@@ -2632,7 +2702,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	tmp = [tmp lowercaseString];
 
 	if ([tmp isEqualToString:@""]) {
-		return @"width80genericTeam.png";
+		return @"gen80.png";
 	}else if ([tmp isEqualToString:@"football"]) {
 		return @"footballOnly.png";
 	}else if ([tmp isEqualToString:@"soccer"]) {
@@ -2651,7 +2721,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		return @"volleyballOnly.png";
 	}
 	
-	return @"width80genericTeam.png";
+	return @"gen80.png";
 }
 
 
@@ -3272,15 +3342,21 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.currentDisplay = 2;
         self.regTextView.text = @"This is your Home screen.  To get back here from anywhere else, just shake your phone to activate the 'Quick Link' menu, then select 'Home'.";
     }else if (self.currentDisplay == 2){
-        self.currentDisplay =3;
-        
-        self.regTextView.text = @"We have created your first team for you!  This shortcut will take you to your team page.  To edit this shortcut, press and hold the icon.";
-        
-        self.textBackView.frame = CGRectMake(10, 10, 170, 200);
-        self.textFrontView.frame = CGRectMake(2, 2, 166, 196);
-        self.blueArrow.hidden = NO;
-        self.blueArrow.frame = CGRectMake(118, 120, 75, 44);
-        self.regTextButton.frame = CGRectMake(20, 145, 67, 37);
+    
+        if (self.createdTeam) {
+            self.currentDisplay =3;
+            
+            self.regTextView.text = @"We have created your first team for you!  This shortcut will take you to your team page.  To edit this shortcut, press and hold the icon.";
+            
+            self.textBackView.frame = CGRectMake(10, 10, 170, 200);
+            self.textFrontView.frame = CGRectMake(2, 2, 166, 196);
+            self.blueArrow.hidden = NO;
+            self.blueArrow.frame = CGRectMake(118, 120, 75, 44);
+            self.regTextButton.frame = CGRectMake(20, 145, 67, 37);
+        }else{
+            self.registrationBackView.hidden = YES;
+        }
+       
  
  
         
@@ -3298,7 +3374,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	quickTeamOne = nil;
 	quickTeamTwo = nil;
 	quickCreateTeam = nil;
-	//teamList = nil;
 	changeQuickLink = nil;
 	newQuickLinkAlias = nil;
 	newQuickLinkTable = nil;
@@ -3311,6 +3386,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	myTeamsButton = nil;
 	activityButton = nil;
 	messagesButton = nil;
+    myAd.delegate = nil;
 	myAd = nil;
 	fastButton = nil;
 	messageCountLabel = nil;

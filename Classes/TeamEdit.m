@@ -9,16 +9,16 @@
 #import "TeamEdit.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "CurrentTeamTabs.h"
 #import "TeamChangeSport.h"
 #import "TwitterAuth.h"
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CurrentTeamTabs.h"
 
 @implementation TeamEdit
 @synthesize teamId, sportLabel, description, teamName, errorLabel, activity, changeSportButton, saveChangesButton, saveSuccess, newTeamName,
 connectTwitterButton, connectTwitterLabel, twitterUser, updateTwitter, twitterUrl, disconnectTwitterButton, errorString, teamInfo, loadingActivity,
-loadingLabel, disconnect, theDescription, theTeamName, theSportLabel;
+loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButton, fromHome;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -34,6 +34,12 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel;
 	[self.saveChangesButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.disconnectTwitterButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	
+    
+    UIImage *buttonImageNormal1 = [UIImage imageNamed:@"redButton.png"];
+	UIImage *stretch1 = [buttonImageNormal1 stretchableImageWithLeftCapWidth:12 topCapHeight:0];
+    [self.deleteButton setBackgroundImage:stretch1 forState:UIControlStateNormal];
+
+    
 	self.disconnectTwitterButton.hidden = YES;
 	self.saveChangesButton.hidden = YES;
 	
@@ -446,7 +452,91 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel;
 	}
 }
 
+
+-(void)deleteTeam{
+    
+    [self.activity startAnimating];
+    [self performSelectorInBackground:@selector(runDelete) withObject:nil];
+}
+
+-(void)runDelete{
+    
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        if (![token isEqualToString:@""]){
+            
+            NSDictionary *response = [ServerAPI deleteTeam:self.teamId :token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+                if ([mainDelegate.quickLinkOne isEqualToString:self.teamId]) {
+                    //if this first quick link team was just deleted
+                    
+                    mainDelegate.quickLinkOne = @"create";
+                    mainDelegate.quickLinkOneName = @"";
+                    
+                    [mainDelegate saveUserInfo];
+                }
+                
+
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+      
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                       self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                       self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //should never get here
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+        }
+
+        [self performSelectorOnMainThread:@selector(doneDelete) withObject:nil waitUntilDone:NO];
+        
+    }
+}
+
+-(void)doneDelete{
+    
+    [self.activity stopAnimating];
+    if ([self.errorString isEqualToString:@""]) {
+        
+        if (self.fromHome) {
+            [self.navigationController dismissModalViewControllerAnimated:YES];
+        }else{
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+       
+    }else{
+        self.errorLabel.text = self.errorString;
+    }
+}
+
+
 -(void)viewDidUnload{
+    deleteButton = nil;
 	sportLabel = nil;
 	description = nil;
 	teamName = nil;

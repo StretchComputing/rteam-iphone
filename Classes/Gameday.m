@@ -47,7 +47,9 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
+        bannerIsVisible = YES;
     }else{
+        bannerIsVisible = NO;
         myAd.hidden = YES;
     }
     
@@ -625,7 +627,6 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 		myAd.hidden = NO;
 		
         [self.view bringSubviewToFront:myAd];
-        myAd.frame = CGRectMake(0.0, 0.0, myAd.frame.size.width, myAd.frame.size.height);
 	}
 }
 
@@ -1115,6 +1116,7 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 	intervalLabel = nil;
 	editFinalButton = nil;
     scoreDividerLabel = nil;
+    myAd.delegate = nil;
 	myAd = nil;
 	mapButton = nil;
 	locationLabel = nil;

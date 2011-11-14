@@ -33,7 +33,7 @@
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront;
 
 
 -(void)home{
@@ -50,25 +50,52 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 	[navController pushViewController:tmp animated:NO];
 	
 	[self.navigationController presentModalViewController:navController animated:YES];	
-    
+
     
 }
 	
-
 -(void)viewWillAppear:(BOOL)animated{
     
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    if (self.fromPost) {
-        self.fromPost = false;
+    if ([mainDelegate.showSwipeAlert isEqualToString:@"true"]) {
+        self.swipeAlert.hidden = NO;
+        mainDelegate.showSwipeAlert = @"false";
+        
+        [mainDelegate saveUserInfo];
+    }else{
+        self.swipeAlert.hidden = YES;
+    }
+   // if (self.fromPost) {
+        //self.fromPost = false;
         [self performSelectorInBackground:@selector(getNewActivity) withObject:nil];
         [self performSelectorInBackground:@selector(getMyActivity) withObject:nil];
-    }
-    
+    //}
+
     
     if (myAd.bannerLoaded) {
+        bannerIsVisible = YES;
         myAd.hidden = NO;
+        
+        CGRect frame = self.allActivityTable.frame;
+        frame.size.height = 341;
+        self.allActivityTable.frame = frame;
+        
+        CGRect frame1 = self.myActivityTable.frame;
+        frame1.size.height = 341;
+        self.myActivityTable.frame = frame1;
     }else{
+        bannerIsVisible = NO;
         myAd.hidden = YES;
+        
+        CGRect frame = self.allActivityTable.frame;
+        frame.size.height = 391;
+        self.allActivityTable.frame = frame;
+        
+        CGRect frame1 = self.myActivityTable.frame;
+        frame1.size.height = 391;
+        self.myActivityTable.frame = frame1;
+        
     }
     
 }
@@ -76,6 +103,11 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     
 - (void)viewDidLoad
 {
+    
+    self.swipeAlertFront.layer.masksToBounds = YES;
+    self.swipeAlertFront.layer.cornerRadius = 4.0;
+    self.swipeAlert.layer.masksToBounds = YES;
+    self.swipeAlert.layer.cornerRadius = 4.0;
     
     self.title = @"Activity";
 
@@ -240,6 +272,8 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     [self setupStrings];
     [self addPullToRefreshHeader];
     
+    self.topScrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"topScrollBack2.png"]];
+    
     
     //iAds
 	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 366, 320, 50)];
@@ -248,7 +282,6 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 	myAd.hidden = YES;
 	[self.view addSubview:myAd];
     
-    self.topScrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"topScrollBack2.png"]];
     
     [super viewDidLoad];
 }
@@ -485,10 +518,19 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 	
 	if (tableView == self.allActivityTable) {
         
+        if ([self.activityArray count] == 0) {
+            return 1;
+        }
+            
         return [self.activityArray count];
+
+        
 	
 	}else if (true) {
 		
+        if ([self.myActivityArray count] == 0) {
+            return 1;
+        }
         return [self.myActivityArray count];
         
 	}else {
@@ -553,7 +595,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 NewActivityDetail *theMessage = [[NewActivityDetail alloc] init];
                 
-                theMessage.displayName = @"NicK Wroblewski";
+            
+            theMessage.displayName = @"rTeam";
+
+            if (tmpActivity.senderName != nil) {
+                theMessage.displayName = tmpActivity.senderName;
+            }
                 theMessage.displayTime = [TableDisplayUtil getDateLabel:tmpActivity.createdDate]; 
                 theMessage.displayMessage = tmpActivity.activityText;
                 theMessage.messageId = tmpActivity.activityId;
@@ -613,17 +660,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				poll.receivedDate = [dateFormat stringFromDate:tmpDate];
 				
 				poll.wasViewed = messageOrPoll.wasViewed;
+
 				poll.status = messageOrPoll.status;
-				
-				
-				
+                poll.fromClass = self;
+
 				[self.navigationController pushViewController:poll animated:YES];
 			}else {
 				
                 
                 
                 ViewMessageReceived *message = [[ViewMessageReceived alloc] init];
-				
+				message.fromClass = self;
                 
                 message.subject = messageOrPoll.subject;
                 message.body = messageOrPoll.body;
@@ -655,7 +702,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([message.messageType isEqualToString:@"poll"]) {
                                 
                 ViewPollSent *tmp = [[ViewPollSent alloc] init];
-                
+                tmp.fromClass = self;
                 tmp.teamId = message.teamId;
                 
                 tmp.messageThreadId = message.threadId;
@@ -686,6 +733,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 ViewMessageSent *viewMessage = [[ViewMessageSent alloc] init];
                 
+                viewMessage.fromClass = self;
                 viewMessage.subject = message.subject;
                 viewMessage.body = message.body;
                 viewMessage.threadId = message.threadId;
@@ -767,11 +815,21 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner{
-	
+    
 	if (!self.bannerIsVisible) {
+                
+        CGRect frame = self.allActivityTable.frame;
+        frame.size.height = 341;
+        self.allActivityTable.frame = frame;
+        
+        CGRect frame1 = self.myActivityTable.frame;
+        frame1.size.height = 341;
+        self.myActivityTable.frame = frame1;
+        
+        
 		self.bannerIsVisible = YES;
 		myAd.hidden = NO;
-		
+        
         [self.view bringSubviewToFront:myAd];
         
 	}
@@ -779,9 +837,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
-	    
+
 	if (self.bannerIsVisible) {
-		
+   
+        CGRect frame = self.allActivityTable.frame;
+        frame.size.height = 391;
+        self.allActivityTable.frame = frame;
+        
+        CGRect frame1 = self.myActivityTable.frame;
+        frame1.size.height = 391;
+        self.myActivityTable.frame = frame1;
+        
 		myAd.hidden = YES;
 		self.bannerIsVisible = NO;
 		
@@ -1147,21 +1213,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
-- (void)viewDidUnload
-{
-    topScrollView = nil;
-    bottomScrollView = nil;
-    [super viewDidUnload];
-
-}
-
-
-    
-    
-
-    
-   
-
 //Finds the height of a string constrained by the input width
 -(int)findHeightForString:(NSString *)message withWidth:(int)width{
     
@@ -1175,9 +1226,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 //For clicking on an image inside the message (company feed)
 -(void)imageSelected:(id)sender{
-    
-    NSLog(@"Image Selected");
-    
+        
     ImageButton *tmpButton = (ImageButton *)sender;
     
     NSString *messageId = [NSString stringWithString:tmpButton.messageId];
@@ -1228,6 +1277,25 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.navigationItem.backBarButtonItem = temp;
     
     [self.navigationController pushViewController:newDisplay animated:NO];    
+    
+}
+
+
+-(void)cancelSwipe{
+    
+    self.swipeAlert.hidden = YES;
+}
+
+
+- (void)viewDidUnload
+{
+    myAd = nil;
+    myAd.delegate = nil;
+    topScrollView = nil;
+    bottomScrollView = nil;
+    swipeAlert = nil;
+    swipeAlertFront = nil;
+    [super viewDidUnload];
     
 }
 

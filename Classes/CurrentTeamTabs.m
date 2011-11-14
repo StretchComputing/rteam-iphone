@@ -46,6 +46,7 @@
 		//TeamActivity *tmp = [self.viewControllers objectAtIndex:1];
 		//[tmp viewWillAppear:NO];
 	}else if (index == 1) {
+        
 		Players *tmp = [self.viewControllers objectAtIndex:1];
 		[tmp viewWillAppear:NO];
 	}else if (index == 2) {
@@ -129,8 +130,8 @@
 	self.navigationItem.title = self.teamName;
 	
 	if ([viewController class] == [TeamHome class]) {
-		TeamHome *tmp = (TeamHome *)viewController;
-		[tmp viewWillAppear:NO];
+		//TeamHome *tmp = (TeamHome *)viewController;
+		//[tmp viewWillAppear:NO];
 		
 	
 		//TeamActivity *teamActivity = (TeamActivity *)[self.viewControllers objectAtIndex:1];
@@ -143,8 +144,8 @@
 		//[teamMessages viewWillDisappear:NO];
 		
 	}else if ([viewController class] == [Players class]) {
-		Players *tmp = (Players *)viewController;
-		[tmp viewWillAppear:NO];
+		//Players *tmp = (Players *)viewController;
+		//[tmp viewWillAppear:NO];
 		
 		TeamHome *teamHome = (TeamHome *)[self.viewControllers objectAtIndex:0];
 		[teamHome viewWillDisappear:NO];
@@ -158,8 +159,8 @@
 		
 	}else if ([viewController class] == [EventList class]) {
 		
-		EventList *tmp = (EventList *)viewController;
-		[tmp viewWillAppear:NO];
+		//EventList *tmp = (EventList *)viewController;
+		//[tmp viewWillAppear:NO];
 		
 		TeamHome *teamHome = (TeamHome *)[self.viewControllers objectAtIndex:0];
 		[teamHome viewWillDisappear:NO];

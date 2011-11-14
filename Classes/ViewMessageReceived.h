@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "NewActivity.h"
 
 @interface ViewMessageReceived : UIViewController <UIActionSheetDelegate> {
 
     
 }
+@property (nonatomic, strong) NewActivity *fromClass;
 @property bool isAlert;
 @property (nonatomic, strong) NSString *origTeamId;
 @property (nonatomic, strong) NSString *teamName;

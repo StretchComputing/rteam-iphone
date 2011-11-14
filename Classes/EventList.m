@@ -756,8 +756,6 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
 			
 			
 			oppLabel.text = theEvent.eventName;
-            NSLog(@"Event Name: %@", theEvent.eventName);
-            NSLog(@"Event Location: %@", theEvent.location);
             
 			descLabel.text = [@"at " stringByAppendingString:theEvent.location];
 			

@@ -19,7 +19,7 @@
 @implementation ViewMessageSent
 @synthesize subject, body, createdDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, threadId, recipients,
 individualReplies, viewMoreDetailButton, confirmString, confirmStringLabel, messageNumber, messageArray, currentMessageNumber, upDown,
-teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel, deleteButton, errorLabel, errorString, nameLabel;
+teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel, deleteButton, errorLabel, errorString, nameLabel, fromClass;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -316,47 +316,35 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 }
 
 -(void)deleteMessage{
+    
+    //[self.respondingActivity startAnimating];
+    [self performSelectorInBackground:@selector(deleteAction) withObject:nil];
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+-(void)deleteAction{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	if (mainDelegate.token != nil){
 		token = mainDelegate.token;
 	}
 	
 	if (![token isEqualToString:@""]){
-		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived"];
-		NSString *status = [response valueForKey:@"status"];
 		
-		if ([status isEqualToString:@"100"]){
-			
-			NSArray *temp = [self.navigationController viewControllers];
-			int num = [temp count];
-			num -= 2;
-			
-			
-			//Could be "MessageTabs", "GameTabs", "PracticeTabs", or "CurrentTeamTabs"
-			
-			if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
-				CurrentTeamTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 4;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [GameTabs class]) {
-				GameTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 3;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [PracticeTabs class]) {
-				PracticeTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 1;
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-			
+		if (self.teamId == nil) {
+			self.teamId = self.origTeamId;
+		}
+		
+		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived"];
+		NSString *status1 = [response valueForKey:@"status"];
+		
+		if ([status1 isEqualToString:@"100"]){
 			
 		}else{
 			
 			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
+			int statusCode = [status1 intValue];
 			
 			switch (statusCode) {
 				case 0:
@@ -374,9 +362,16 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 			}
 		}
 		
+        [self performSelectorOnMainThread:@selector(doneDelete) withObject:nil waitUntilDone:NO];
 	}
-	
-	
+    
+}
+
+-(void)doneDelete{
+    
+    //[self.respondingActivity stopAnimating];
+    self.fromClass.fromPost = true;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 

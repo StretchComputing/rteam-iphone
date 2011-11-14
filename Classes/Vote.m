@@ -245,7 +245,7 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 
 	}
 	
-	
+	dateLabel.backgroundColor = [UIColor clearColor];
 	
 	
 	return cell;

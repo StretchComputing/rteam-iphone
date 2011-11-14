@@ -10,6 +10,8 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "FastActionSheet.h"
+#import "Player.h"
+#import "SendPrivateMessage.h"
 
 @implementation ConfirmMessageDetail
 @synthesize memberId, teamId, confirmDate, memberName, nameLabel, confirmLabel, markConfirmButton, callTextButton, sendMessageButton, phoneNumber,
@@ -117,18 +119,25 @@ displayString, messageSent, displayLabel, callTextActionSheet;
 	
 }
 -(void)sendMessage{
-	/*
-	SendMessage *tmp = [[SendMessage alloc] init];
-	tmp.teamId = self.teamId;
-	tmp.sendTeamId = self.teamId;
-	tmp.isReply = true;
-	tmp.replyTo = self.memberName;
-	tmp.replyToId = self.memberId;
-	tmp.origLoc = @"ConfirmMessageDetail";
-	//tmp.userRole = self.userRole;
-	tmp.includeFans = @"false";
-	[self.navigationController pushViewController:tmp animated:YES];
-	*/
+	UINavigationController *tmpController = [[UINavigationController alloc] init];
+    SendPrivateMessage *tmp = [[SendPrivateMessage alloc] init];
+    
+    tmp.teamId = self.teamId;
+    
+    [tmpController pushViewController:tmp animated:NO];
+    
+    tmp.isReply = true;
+    tmp.isConfirm = true;
+    
+    Player *newPlayer = [[Player alloc] init];
+    newPlayer.firstName = self.memberName;
+    newPlayer.memberId = self.memberId;
+    
+    NSArray *tmpArray = [NSArray arrayWithObject:newPlayer];
+    
+    tmp.recipientObjects = [NSArray arrayWithArray:tmpArray];
+    
+    [self.navigationController presentModalViewController:tmpController animated:YES];
 }
 
 -(void)callText{

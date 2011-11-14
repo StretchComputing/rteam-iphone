@@ -6,8 +6,13 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface FastActionSheetPost : UIViewController
+
+@interface FastActionSheetPost : UIActionSheet <UIActionSheetDelegate> {
+	
+}
+
++(void)doAction:(UIViewController *)sender :(int)buttonIndex;
 
 @end

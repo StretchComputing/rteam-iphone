@@ -26,10 +26,22 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 
 
 -(void)viewWillAppear:(BOOL)animated{
+    
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
+        bannerIsVisible = YES;
+        
+        self.searchBar.frame = CGRectMake(0, 50, 320, 44);
+		self.searchTableView.frame = CGRectMake(8, 94, 304, 386);
+		self.searchActivity.frame = CGRectMake(264, 62, 20, 20);
+        
     }else{
         myAd.hidden = YES;
+        bannerIsVisible = NO;
+        
+        self.searchBar.frame = CGRectMake(0, 0, 320, 44);
+		self.searchTableView.frame = CGRectMake(8, 44, 304, 372);
+		self.searchActivity.frame = CGRectMake(264, 12, 20, 20);
     }
     
 }
@@ -382,11 +394,13 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 	
 	nameLabel.font = [UIFont fontWithName:@"Helvetica" size:16];
 	nameLabel.textColor = [UIColor blackColor];
+    nameLabel.backgroundColor = [UIColor clearColor];
 	
 	teamLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
 	teamLabel.textColor = [UIColor grayColor];
 	teamLabel.textAlignment = UITextAlignmentCenter;
 	teamLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
+    teamLabel.backgroundColor = [UIColor clearColor];
 	
 	NSUInteger row = [indexPath row];
 	NSString *display = @"";
@@ -652,7 +666,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		self.searchActivity.frame = CGRectMake(264, 62, 20, 20);
 
         [self.view bringSubviewToFront:myAd];
-        myAd.frame = CGRectMake(0.0, 0.0, myAd.frame.size.width, myAd.frame.size.height);
 	}
 }
 
@@ -698,14 +711,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	searchBar = nil;
 	searchCriteria = nil;
 	searchTableView = nil;
-	//potentialMatches = nil;
-	//allMatches = nil;
-	//teamsOnly = nil;
-	//potentialMatchesTeamName = nil;
+    myAd.delegate = nil;
 	myAd = nil;
 	errorLabel = nil;
-	//allMatchesTeamName = nil;
-	//error = nil;
 	searchActivity = nil;
 	[super viewDidUnload];
 	

@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "NewActivity.h"
 
 @interface ViewPollSent : UIViewController <UIActionSheetDelegate>{
 
 	
 	
 }
+@property (nonatomic, strong) NewActivity *fromClass;
 @property (nonatomic, strong) IBOutlet  UILabel *errorLabel;
 @property (nonatomic, strong)  NSString *errorString;
 @property (nonatomic, strong) IBOutlet UILabel *resultsLabel;

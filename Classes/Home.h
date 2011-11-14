@@ -88,6 +88,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
     IBOutlet UIImageView *blueArrow;
     
 }
+@property bool createdTeam;
 @property (nonatomic, strong) ADBannerView *myAd;
 @property (nonatomic, strong) UIImageView *blueArrow;
 @property (nonatomic, strong) UIButton *quickLinkCancelTwoButton;

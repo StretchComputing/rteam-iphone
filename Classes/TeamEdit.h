@@ -13,6 +13,8 @@
     
 
 }
+@property bool fromHome;
+@property (nonatomic, strong) IBOutlet UIButton *deleteButton;
 @property (nonatomic, strong) NSString *theDescription;
 @property (nonatomic, strong) NSString *theTeamName;
 @property (nonatomic, strong) NSString *theSportLabel;
@@ -47,4 +49,5 @@
 -(IBAction)endText;
 -(IBAction)connectTwitter;
 -(IBAction)disconnectTwitter;
+-(IBAction)deleteTeam;
 @end

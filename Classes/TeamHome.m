@@ -33,6 +33,7 @@
 #import "NewPlayer.h"
 #import "NewGamePractice.h"
 #import <QuartzCore/QuartzCore.h>
+#import "TeamEdit.h"
 
 @implementation TeamHome
 @synthesize teamId, userRole, teamSport, teamName, nextGameInfoLabel, topRight, topLeft, recentGamesTable, scheduleButton, allScoresButton, 
@@ -40,7 +41,7 @@ webPageButton, nextGameButton, teamNameLabel, gamesArray, pastGamesArray, errorL
 scheduleButtonUnderline, allScoresButtonUnderline, webPageButtonUnderline, nextEventInfoLabel, nextEventButton, eventSuccess, eventsArray,
 futureEventsArray, nextEventArray, bannerIsVisible, eventsActivity, touchUpLocation, gestureStartPoint, nextGameLabel, nextEventLabel,
 teamInfoThumbnail, noEvents, noGames, eventsAlert, membersAlert, noMembers, displayedMemberAlert, displayedEventAlert, gamesArrayTemp, pastGamesArrayTemp,
-displayWarning, myAd, displayPhoto;
+displayWarning, myAd, displayPhoto, editButton, fromHome;
 
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -130,6 +131,8 @@ displayWarning, myAd, displayPhoto;
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.nextGameButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.nextEventButton setBackgroundImage:stretch forState:UIControlStateNormal];
+    [self.editButton setBackgroundImage:stretch forState:UIControlStateNormal];
+
     
     //iAds
 	myAd = [[ADBannerView alloc] initWithFrame:CGRectZero];
@@ -142,6 +145,13 @@ displayWarning, myAd, displayPhoto;
 
 -(void)viewWillAppear:(BOOL)animated{
 
+    
+    if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
+        self.editButton.hidden = NO;
+    }else{
+        self.editButton.hidden = YES;
+    }
+    
 	displayPhoto = true;
 	self.displayWarning = true;
 	[self performSelectorInBackground:@selector(getListOfMembers) withObject:nil];
@@ -1205,7 +1215,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			}
 			
 		}else {
-			[self.tabBarController.navigationItem setLeftBarButtonItem:nil];
+			[self.tabBarController.navigationItem setRightBarButtonItem:nil];
 
 		}
 
@@ -1327,6 +1337,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	}
 }
 
+
+-(void)editTeam{
+        
+    TeamEdit *tmp = [[TeamEdit alloc] init];
+    tmp.teamId = self.teamId;
+    tmp.fromHome = self.fromHome;
+    [self.navigationController pushViewController:tmp animated:YES];
+    
+    
+}
+
+
 -(void)viewDidUnload{
 
 	errorLabel = nil;
@@ -1347,7 +1369,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	eventsActivity = nil;
 	nextGameLabel = nil;
 	nextEventLabel = nil;
-
+    editButton = nil;
+    
 	[super viewDidUnload];
 }
 

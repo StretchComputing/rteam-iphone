@@ -91,6 +91,9 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 	if ([self.barItem.title isEqualToString:@"Help"]) {
 		self.barItem.title = @"Done";
 		[self.helpScreen setHidden:NO];
+        [self.email resignFirstResponder];
+        [self.confirmEmail resignFirstResponder];
+        [self.password resignFirstResponder];
 	}else {
 		self.barItem.title = @"Help";
 		[self.helpScreen setHidden:YES];
@@ -107,7 +110,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 }
 
 
--(IBAction)endText {
+-(void)endText {
 	
 	
 	
@@ -265,7 +268,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
                                                       :self.lastName
                                                       :self.theEmail
                                                       :self.thePassword
-                                                      :@"true" :@"" :@"" :@"" :@""];
+                                                      :@"true" :@"" :@"" :@"" :@"" :@""];
         
         
         NSString *status = [response valueForKey:@"status"];

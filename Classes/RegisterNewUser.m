@@ -28,7 +28,7 @@
 @implementation RegisterNewUser
 @synthesize email, password, firstName, lastName, error, registering, submitButton, createSuccess, firstString, lastString, errorString,
 locationManager, updateLat, updateLong, phoneText, carrierText, carrierLabel, carrierPicker, carrierExplain, phoneExplain, carriers, selectedCarrier,
-selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, hardCarriers, usingHardCarriers;
+selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, hardCarriers, usingHardCarriers, locationString;
 
 
 
@@ -135,16 +135,13 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 
 
 - (void)runRequest {
-	
 
     
-    
-	
-	NSDictionary *response = [ServerAPI createUser:self.firstName.text
+    NSDictionary *response = [ServerAPI createUser:self.firstName.text
 											  :self.lastName.text
 											  :self.email
 											  :self.password
-                                                  :@"" :self.updateLat :self.updateLong :self.phoneText.text :self.carrierCode];
+                                                  :@"" :self.updateLat :self.updateLong :self.phoneText.text :self.carrierCode :self.locationString];
 	
 	NSString *status = [response valueForKey:@"status"];
 	
@@ -311,7 +308,16 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 	self.updateLat = currentLat;
 	self.updateLong = currentLongt;
 	
-	
+    float lat = [self.updateLat floatValue];
+    float lon = [self.updateLong floatValue];
+    
+    CLLocationCoordinate2D coord;
+    coord.longitude = lon;
+    coord.latitude = lat;
+    
+    MKReverseGeocoder *geocoder = [[MKReverseGeocoder alloc] initWithCoordinate:coord];
+    [geocoder setDelegate:self];
+    [geocoder start];
 	
 }
 - (void)locationManager: (CLLocationManager *)manager
@@ -320,9 +326,27 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 	
 }
 
+
+- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFindPlacemark:(MKPlacemark *)placemark
+{        
+    NSString *city = [[placemark addressDictionary] valueForKey:@"City"];
+    NSString *state = [[placemark addressDictionary] valueForKey:@"State"];
+    
+    self.locationString = [NSString stringWithFormat:@"%@,%@", city, state];
+
+}
+
+- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFailWithError:(NSError *)error{
+    
+}
+
+
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	[self.phoneText resignFirstResponder];
+    self.carrierPicker.hidden=YES;
+    self.selectCarrierButton.hidden = YES;
 
 }
 

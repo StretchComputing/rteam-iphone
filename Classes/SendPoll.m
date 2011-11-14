@@ -98,7 +98,7 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
 		nextController.eventId = self.eventId;
 		nextController.eventType = self.eventType;
 		nextController.origLoc = self.origLoc;
-		nextController.recipients = self.recipients;
+		nextController.recipients = [NSArray arrayWithArray:self.recipientObjects];
 		nextController.toTeam = self.toTeam;
 		//nextController.includeFans = self.includeFans;
 		

@@ -39,10 +39,10 @@
 -(void)addLabel{
     //Dynamic label
     [self.teamName removeFromSuperview];
-    self.teamName = [[UILabel alloc] initWithFrame:CGRectMake(-10, 48, 100, 20)];
+    self.teamName = [[UILabel alloc] initWithFrame:CGRectMake(-10, 47, 100, 20)];
     self.teamName.textColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.3 alpha:1.0];
     self.teamName.backgroundColor = [UIColor clearColor];
-    self.teamName.font = [UIFont fontWithName:@"Verdana-Bold" size:13];
+    self.teamName.font = [UIFont fontWithName:@"Verdana-Bold" size:12];
     self.teamName.textAlignment = UITextAlignmentCenter;
     self.teamName.lineBreakMode = UILineBreakModeMiddleTruncation;
     

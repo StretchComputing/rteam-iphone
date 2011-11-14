@@ -12,13 +12,16 @@
 #import "PhoneNumberFormatter.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMessageComposeViewController.h>
+#import <MapKit/MapKit.h>
 
-@interface RegisterNewUser : UIViewController <CLLocationManagerDelegate, UIPickerViewDelegate, MFMessageComposeViewControllerDelegate> {
+
+@interface RegisterNewUser : UIViewController <CLLocationManagerDelegate, UIPickerViewDelegate, MFMessageComposeViewControllerDelegate, MKReverseGeocoderDelegate> {
 	
     PhoneNumberFormatter *myPhoneNumberFormatter;
     int myTextFieldSemaphore;
 	
 }
+@property (nonatomic, retain) NSString *locationString;
 @property bool usingHardCarriers;
 @property (nonatomic, strong) NSArray *hardCarriers;
 @property bool didGetCarrierList;

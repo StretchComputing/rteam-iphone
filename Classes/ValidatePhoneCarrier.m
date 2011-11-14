@@ -19,7 +19,7 @@
     
     self.title = @"Verify";
     
-    [self.navigationItem setHidesBackButton:YES];
+    //[self.navigationItem setHidesBackButton:YES];
     self.carrierPicker.hidden = YES;
     self.selectCarrierButton.hidden = YES;
     self.carrierPicker.delegate = self;

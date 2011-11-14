@@ -53,7 +53,7 @@
 
 @synthesize window;
 @synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName,
-quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName;
+quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert;
 
 - (id) init {
     
@@ -63,6 +63,8 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
     [self setDataFilePath:path];
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    self.showSwipeAlert = @"true";
 	if([fileManager fileExistsAtPath:dataFilePath]){
 		//open it and read it
 		NSMutableData *theData;
@@ -74,6 +76,8 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 		NSString *tempLinkTwoName = @"";
 		NSString *tempLinkOneImage = @"";
 		NSString *tempLinkTwoImage = @"";
+        NSString *tmpSwipeAlert = @"";
+
 		
 		theData = [NSData dataWithContentsOfFile:dataFilePath];
 		decoder = [[NSKeyedUnarchiver alloc] initForReadingWithData:theData];
@@ -84,7 +88,9 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 		tempLinkTwoName = [decoder decodeObjectForKey:@"quickLinkTwoName"];
 		tempLinkOneImage = [decoder decodeObjectForKey:@"quickLinkOneImage"];
 		tempLinkTwoImage = [decoder decodeObjectForKey:@"quickLinkTwoImage"];
-		
+        tmpSwipeAlert = [decoder decodeObjectForKey:@"showSwipeAlert"];
+
+        
 		[self setQuickLinkOne:tempLinkOne];
 		[self setQuickLinkTwo:tempLinkTwo];
 		[self setQuickLinkOneName:tempLinkOneName];
@@ -92,6 +98,7 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 		[self setQuickLinkOneImage:tempLinkOneImage];
 		[self setQuickLinkTwoImage:tempLinkTwoImage];
 		[self setToken:tempToken];
+        [self setShowSwipeAlert:tmpSwipeAlert];
 		[decoder finishDecoding];
         
 		bool reset = false;
@@ -103,6 +110,7 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 			self.quickLinkTwoName = @"";
 			self.quickLinkOneImage = @"";
 			self.quickLinkTwoImage = @"";
+            self.showSwipeAlert = @"true";
 		}
 	} else {
 		self.token = @"";
@@ -215,6 +223,8 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	[encoder encodeObject:quickLinkTwoName forKey:@"quickLinkTwoName"];
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
+    [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+
 	[encoder finishEncoding];
     
 	
@@ -245,6 +255,8 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	[encoder encodeObject:quickLinkTwoName forKey:@"quickLinkTwoName"];
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
+    [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+
 	[encoder finishEncoding];
 	
 	
@@ -268,6 +280,8 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	[encoder encodeObject:quickLinkTwoName forKey:@"quickLinkTwoName"];
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
+    [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+
 	[encoder finishEncoding];
 	
 	

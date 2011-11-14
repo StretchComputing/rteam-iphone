@@ -18,12 +18,14 @@
 #import "MessageThreadInbox.h"
 #import "FastActionSheet.h"
 #import "MessageReply.h"
+#import "SendPrivateMessage.h"
+#import "Player.h"
 
 @implementation ViewMessageReceived
 @synthesize subject, body, receivedDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, wasViewed, threadId,
 senderName, senderId, displaySender, userRole, replyButton, myToolbar, replySuccess, replyMessage, viewMoreDetailButton,
 confirmationsLabel, confirmStatus, individualReplies, messageNumber, messageArray, upDown,
-currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
+currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -270,74 +272,37 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 
 -(void)reply{
 	
-	/*SendMessage *tmp = [[SendMessage alloc] init];
-	
-	MessageReply *tmp = [[MessageReply alloc] init];
-	tmp.teamId = self.teamId;
-	tmp.replyToName = self.senderName;
-	tmp.replyToId = self.senderId;
-	tmp.userRole = self.userRole;
-	tmp.origMessage = self.body;
+    UINavigationController *tmpController = [[UINavigationController alloc] init];
+    SendPrivateMessage *tmp = [[SendPrivateMessage alloc] init];
     
-    if (self.isAlert) {
-        tmp.replyAlert = true;
-    }
-	
-	if (![[self.subject substringToIndex:3] isEqualToString:@"RE:"]) {
-		
-		if ([self.subject isEqualToString:@"(no subject)"]) {
-			tmp.subject = self.subject;
-		}else {
-			tmp.subject = [@"RE: " stringByAppendingString:self.subject];
-		}
+    tmp.teamId = self.teamId;
+    
+    [tmpController pushViewController:tmp animated:NO];
+    
+    tmp.isReply = true;
+    
+    Player *newPlayer = [[Player alloc] init];
+    newPlayer.firstName = self.senderName;
+    newPlayer.memberId = self.senderId;
+    
+    NSArray *tmpArray = [NSArray arrayWithObject:newPlayer];
+    
+    tmp.recipientObjects = [NSArray arrayWithArray:tmpArray];
+    
+    [self.navigationController presentModalViewController:tmpController animated:YES];
 
-	}else {
-		tmp.subject = self.subject;
-	}
-
-	NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-	[dateFormat setDateFormat:@"MMM dd, yyyy hh:mm aa"];
-	NSDate *tmpDate = [dateFormat dateFromString:self.receivedDate];
-	[dateFormat setDateFormat:@"MM/dd"];
-	tmp.origMessageDate = [dateFormat stringFromDate:tmpDate];
-	
-	
-		
-	[self.navigationController pushViewController:tmp animated:YES];
-	
-	
-	///SendMessage *tmp = [[SendMessage alloc] init];
-	 
-	 MessageReply *tmp = [[MessageReply alloc] init];
-	 tmp.teamId = self.teamId;
-	 tmp.sendTeamId = self.teamId;
-	 tmp.isReply = true;
-	 tmp.replyTo = self.senderName;
-	 tmp.replyToId = self.senderId;
-	 tmp.origLoc = @"reply";
-	 tmp.userRole = self.userRole;
-	 tmp.includeFans = @"false";
-	 
-	 if (![[self.subject substringToIndex:3] isEqualToString:@"RE:"]) {
-	 
-	 if ([self.subject isEqualToString:@"(no subject)"]) {
-	 tmp.subject = self.subject;
-	 }else {
-	 tmp.subject = [@"RE: " stringByAppendingString:self.subject];
-	 }
-	 
-	 }else {
-	 tmp.subject = self.subject;
-	 }
-	 
-	 
-	 [self.navigationController pushViewController:tmp animated:YES];
-	 */
 }
 
 -(void)deleteMessage{
+    
+    //[self.respondingActivity startAnimating];
+    [self performSelectorInBackground:@selector(deleteAction) withObject:nil];
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+-(void)deleteAction{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	if (mainDelegate.token != nil){
 		token = mainDelegate.token;
@@ -350,42 +315,14 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 		}
 		
 		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived"];
-		NSString *status = [response valueForKey:@"status"];
+		NSString *status1 = [response valueForKey:@"status"];
 		
-		
-		if ([status isEqualToString:@"100"]){
-			
-			NSArray *temp = [self.navigationController viewControllers];
-			int num = [temp count];
-			num -= 2;
-			
-			//Could be "MessageTabs", "GameTabs", "PracticeTabs", or "CurrentTeamTabs"
-			
-			if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
-				CurrentTeamTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 4;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [GameTabs class]) {
-				GameTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 3;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [PracticeTabs class]) {
-				PracticeTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 1;
-				[self.navigationController popToViewController:cont animated:YES];
-			}else if ([[temp objectAtIndex:num] class] == [GameTabsNoCoord class]) {
-				GameTabsNoCoord *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 3;
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-			
+		if ([status1 isEqualToString:@"100"]){
 			
 		}else{
 			
 			//Server hit failed...get status code out and display error accordingly
-			int statusCode = [status intValue];
+			int statusCode = [status1 intValue];
 			
 			switch (statusCode) {
 				case 0:
@@ -403,11 +340,18 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert;
 			}
 		}
 		
+        [self performSelectorOnMainThread:@selector(doneDelete) withObject:nil waitUntilDone:NO];
 	}
-	
-	
-
+    
 }
+
+-(void)doneDelete{
+    
+    //[self.respondingActivity stopAnimating];
+    self.fromClass.fromPost = true;
+    [self.navigationController popViewControllerAnimated:NO];
+}
+
 
 -(void)viewMoreDetail{
 	

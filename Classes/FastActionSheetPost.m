@@ -7,45 +7,53 @@
 //
 
 #import "FastActionSheetPost.h"
+#import "rTeamAppDelegate.h"
+#import "FastChangeEventStatus.h"
+#import "ActivityPost.h"
 
 @implementation FastActionSheetPost
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+- (id) init {
+    self = [super init];
+	if (self){
+		
+		self =  (FastActionSheetPost *)[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Home", @"Update Event Status", nil];
+        
+        
+	}
+	return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
+
++(void)doAction:(UIViewController *)sender :(int)buttonIndex{
+	
+	if (buttonIndex == 0) {
+		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+		mainDelegate.returnHome = YES;
+		[[sender parentViewController] dismissModalViewControllerAnimated:NO];
+		[sender.navigationController popToRootViewControllerAnimated:NO];
+		
+		
+	}else if (buttonIndex == 1) {
+        FastChangeEventStatus *tmp = [[FastChangeEventStatus alloc] init];
+		[sender.navigationController pushViewController:tmp animated:NO];
+		//FastUpdateStatus *tmp = [[FastUpdateStatus alloc] init];
+		//[sender.navigationController pushViewController:tmp animated:NO];
+	}else if (buttonIndex == 2) {
+
+	}else if (buttonIndex == 3) {
+		//FastChangeEventStatus *tmp = [[FastChangeEventStatus alloc] init];
+		//[sender.navigationController pushViewController:tmp animated:NO];
+	}else if (buttonIndex == 4){
+        //FastSendMessage *tmp = [[FastSendMessage alloc] init];
+        //[sender.navigationController pushViewController:tmp animated:NO];
+		
+	}
     
-    // Release any cached data, images, etc that aren't in use.
-}
-
-#pragma mark - View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	
+    
+	
+	
 }
 
 @end

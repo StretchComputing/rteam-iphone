@@ -21,7 +21,7 @@
 @implementation ViewPollSent
 @synthesize messageThreadId, teamId, subject, body, numReply, option1, option2, option3, option4, option5, replyFraction, individualReplies,
 finalizedMessage, status, finalizeButton, deletePollButton, viewMoreDetailButton, scrollView, followUp, downArrow, teamName, teamNameLabel,
-upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingActivity, loadingLabel, resultsLabel, errorLabel, errorString;
+upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingActivity, loadingLabel, resultsLabel, errorLabel, errorString, fromClass;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -206,9 +206,7 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
         NSDictionary *response1 = [ServerAPI getMessageThreadInfo:mainDelegate.token :self.teamId :self.messageThreadId];
         
         NSString *status1 = [response1 valueForKey:@"status"];
-		
-        NSLog(@"Get Status: %@", status1);
-        
+		        
         if ([status1 isEqualToString:@"100"]){
             
             self.response = [NSDictionary dictionary];
@@ -434,41 +432,34 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 	if (buttonIndex == 1) {
 		
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [self.loadingActivity startAnimating];
+        [self performSelectorInBackground:@selector(deleteAction) withObject:nil];
+        
+		
+	}
+	
+}
+
+
+
+-(void)deleteAction{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	if (mainDelegate.token != nil){
 		token = mainDelegate.token;
 	}
 	
 	if (![token isEqualToString:@""]){
+		
+		if (self.teamId == nil) {
+			self.teamId = self.origTeamId;
+		}
+		
 		NSDictionary *response1 = [ServerAPI updateMessageThread:token :self.teamId :self.messageThreadId :@"" :@"" :@"" :@"archived"];
 		NSString *status1 = [response1 valueForKey:@"status"];
 		
 		if ([status1 isEqualToString:@"100"]){
-			
-			NSArray *temp = [self.navigationController viewControllers];
-			int num = [temp count];
-			num -= 2;
-			
-			
-			//Could be "MessageTabs", "GameTabs", "PracticeTabs", or "CurrentTeamTabs"
-			
-			if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
-				CurrentTeamTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 4;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [GameTabs class]) {
-				GameTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 3;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [PracticeTabs class]) {
-				PracticeTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 1;
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-			
 			
 		}else{
 			
@@ -491,12 +482,17 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 			}
 		}
 		
+        [self performSelectorOnMainThread:@selector(doneDelete) withObject:nil waitUntilDone:NO];
 	}
-	
-	}
-	
+    
 }
 
+-(void)doneDelete{
+    
+    [self.loadingActivity stopAnimating];
+    self.fromClass.fromPost = true;
+    [self.navigationController popViewControllerAnimated:NO];
+}
 
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {

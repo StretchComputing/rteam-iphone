@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "PollResultsView.h"
+#import "NewActivity.h"
 
 @interface ViewPollReceived : UIViewController <UITextViewDelegate, UIActionSheetDelegate> {
 
 	
 }
+@property (nonatomic, strong) NewActivity *fromClass;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *respondingActivity;
 
 @property (nonatomic, strong)  IBOutlet UILabel *errorLabel;

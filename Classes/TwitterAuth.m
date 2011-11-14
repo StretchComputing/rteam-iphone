@@ -7,8 +7,8 @@
 //
 
 #import "TwitterAuth.h"
-#import "TeamsTabs.h"
 #import "NewTeam.h"
+#import "MyTeams.h"
 
 @implementation TwitterAuth
 @synthesize webView, url, fromHome;
@@ -56,14 +56,14 @@
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }else{
         
-        if ([[temp objectAtIndex:num-4] class] == [TeamsTabs class]) {
+        if ([[temp objectAtIndex:num-4] class] == [MyTeams class]) {
             
-            TeamsTabs *tmp = [temp objectAtIndex:num-4];
+            MyTeams *tmp = [temp objectAtIndex:num-4];
             [self.navigationController popToViewController:tmp animated:YES];
             
-        }else if ([[temp objectAtIndex:num-5] class] == [TeamsTabs class]) {
+        }else if ([[temp objectAtIndex:num-5] class] == [MyTeams class]) {
             
-            TeamsTabs *tmp = [temp objectAtIndex:num-5];
+            MyTeams *tmp = [temp objectAtIndex:num-5];
             [self.navigationController popToViewController:tmp animated:YES];
         }
     }

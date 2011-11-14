@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "NewActivity.h"
 
 @interface ViewMessageSent : UIViewController <UIActionSheetDelegate>{
 
 }
+@property (nonatomic, strong) NewActivity *fromClass;
 @property (nonatomic, strong) IBOutlet UILabel *nameLabel;
 @property (nonatomic, strong) IBOutlet UILabel *errorLabel;
 @property (nonatomic, strong) NSString *errorString;

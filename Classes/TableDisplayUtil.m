@@ -133,8 +133,8 @@
         starThree.frame = CGRectMake(300, 5, 15, 14);
 
         NSString *starImageOne = [TableDisplayUtil getStarSize:1 :result.numLikes :result.numDislikes];
-        NSString *starImageTwo = [TableDisplayUtil getStarSize:1 :result.numLikes :result.numDislikes];
-        NSString *starImageThree = [TableDisplayUtil getStarSize:1 :result.numLikes :result.numDislikes];
+        NSString *starImageTwo = [TableDisplayUtil getStarSize:2 :result.numLikes :result.numDislikes];
+        NSString *starImageThree = [TableDisplayUtil getStarSize:3 :result.numLikes :result.numDislikes];
         
         starOne.contentMode = UIViewContentModeScaleAspectFit;
         starThree.contentMode = UIViewContentModeScaleAspectFit;
@@ -150,7 +150,15 @@
         
         //Name Label
         nameLabel.frame = CGRectMake(55, 5, 210, 18);
-        nameLabel.text = @"Nick Wroblewski";
+       // nameLabel.text = @"Nick Wroblewski";
+        
+        NSString *senderString = @"rTeam";
+        
+        if ((result.senderName != nil) && ![result.senderName isEqualToString:@""]) {
+            senderString = result.senderName;
+        }
+      
+        nameLabel.text = senderString;
         
         //Date Label
         dateLabel.frame = CGRectMake(55, 23, 100, 18);
@@ -160,9 +168,10 @@
         teamLabel.frame = CGRectMake(155, 23, 250, 18);
         teamLabel.text = result.teamName;
         
-        //Message Text            
-        messageText.frame = CGRectMake(50, 42, 265, 100);
+        //Message Text       
+        //NSString *theText = result.activityText;
         messageText.text = result.activityText;
+        messageText.frame = CGRectMake(50, 42, 265, 100);
         CGRect frame = messageText.frame;
         frame.size.height = [TableDisplayUtil findHeightForString:result.activityText withWidth:messageText.frame.size.width - 15] + 15;
         messageText.frame = frame;

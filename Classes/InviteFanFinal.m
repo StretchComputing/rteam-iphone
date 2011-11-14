@@ -17,7 +17,7 @@
 #import "FastActionSheet.h"
 #import "NewMemberObject.h"
 #import "Home.h"
-#import "TeamsTabs.h"
+#import "MyTeams.h"
 
 @implementation InviteFanFinal
 @synthesize firstName, lastName, email, roles, teamId, submitButton, serverProcess, error, createSuccess, isCoordinator, 
@@ -322,9 +322,9 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 			if ([CurrentTeamTabs class] == [[tempCont objectAtIndex:tempNum] class]) {
 				CurrentTeamTabs *tmpCont = [tempCont objectAtIndex:tempNum];
 				tmpCont.userRole = self.userRole;
-				tmpCont.selectedIndex = 2;
+				tmpCont.selectedIndex = 1;
 				
-				Players *tmp = [[tmpCont viewControllers] objectAtIndex:2];
+				Players *tmp = [[tmpCont viewControllers] objectAtIndex:1];
 				tmp.phoneOnlyArray = self.phoneOnlyArray;
 				[self.navigationController popToViewController:tmpCont animated:NO];
 			}else if ([Home class] == [[tempCont objectAtIndex:tempNum] class]) {
@@ -862,12 +862,12 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 		if (theCount >= 0) {
 			if ([CurrentTeamTabs class] == [[tmpViews objectAtIndex:[tmpViews count] - 2] class]) {
 				CurrentTeamTabs *tmpCont = [tmpViews objectAtIndex:[tmpViews count] - 2];
-				tmpCont.selectedIndex = 2;
+				tmpCont.selectedIndex = 1;
 				
-				Players *tmp = [[tmpCont viewControllers] objectAtIndex:2];
+				Players *tmp = [[tmpCont viewControllers] objectAtIndex:1];
 				tmp.phoneOnlyArray = self.phoneOnlyArray;
 				[self.navigationController popToViewController:tmpCont animated:NO];
-			}else if ([TeamsTabs class] == [[tmpViews objectAtIndex:[tmpViews count] - 2] class]) {
+			}else if ([MyTeams class] == [[tmpViews objectAtIndex:[tmpViews count] - 2] class]) {
 		
                 
                 if ([self.phoneOnlyArray count] > 0) {
@@ -1109,10 +1109,10 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 	}
 	
 	UILabel *dateLabel = (UILabel *)[cell.contentView viewWithTag:dateTag];
-	
-	
+	dateLabel.backgroundColor = [UIColor clearColor];
+    
 	if (isEmpty) {
-		dateLabel.text = @"No members added...";
+		dateLabel.text = @"No fans added...";
 		dateLabel.textColor = [UIColor grayColor];
 		dateLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
 		dateLabel.textAlignment = UITextAlignmentCenter;

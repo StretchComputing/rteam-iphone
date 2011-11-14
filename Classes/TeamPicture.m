@@ -462,8 +462,8 @@ newImage, dontMove, toOrientation, portrait;
 	
 
         self.allWhiteView.hidden = NO;
-        if (toInterfaceOrientation == UIInterfaceOrientationPortrait) {
-            [[UIApplication sharedApplication] setStatusBarHidden:NO animated:NO];
+        if (toInterfaceOrientation == UIInterfaceOrientationPortrait) {            
+            [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
             self.toOrientation = @"up";
         }else if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft){
             self.toOrientation = @"left";
@@ -487,7 +487,7 @@ newImage, dontMove, toOrientation, portrait;
                 
                 [self.navigationController.view addSubview:self.largeImageView];
                 
-                [[UIApplication sharedApplication] setStatusBarHidden:YES animated:NO];
+                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
                 
             }else {        
                 if(self.profilePic.image.size.height > self.profilePic.image.size.width){
@@ -500,7 +500,7 @@ newImage, dontMove, toOrientation, portrait;
                 }
                 
                 [self.largeImageView removeFromSuperview];
-                [[UIApplication sharedApplication] setStatusBarHidden:NO animated:NO];
+                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
             }
 
         

@@ -21,28 +21,41 @@
 #import "Fans.h"
 #import "EventList.h"
 #import "TeamHome.h"
+#import "FastActionSheet.h"
 
 @implementation MyTeams
 @synthesize teams, header, footer, didRegister, deleteRow, teamsStored, numMemberTeams, fanTeams, memberTeams, noFanTeams,
 deleteMember, deleteFan, noMemberTeams, error, haveTeamList, homeTeamList, bannerIsVisible, createTeamButton, joinTeamButton, quickCreate,
 myTableView, viewLine, myAlertView, phoneOnlyArray, loadingLabel, loadingActivity, gettingTeams, newlyCreatedTeam, allTeamsArray, displayNa, displayError,
-fromHome, myAd, alertOne, alertTwo;
+fromHome, myAd, alertOne, alertTwo, isDelete;
 	
 -(void)viewDidAppear:(BOOL)animated{
 	
-	if (([self.fanTeams count] == 0) && ([self.memberTeams count] == 0) && !(self.quickCreate)) {
-		
-		if (!self.gettingTeams) {
-			NSString *tmp = @"If you believe you are on a team, but you do not see it, please make sure you have confirmed your email address by clicking the link in the email we sent you.";
-			self.myAlertView = [[UIAlertView alloc] initWithTitle:@"No Teams Found." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-			[self.myAlertView show];
-			
-		}
-				
-	}
-	
-	
-	
+    
+    if (self.quickCreate) {
+        self.quickCreate = false;
+        
+        CreateTeam *tmp = [[CreateTeam alloc] init];
+        tmp.fromHome = true;
+        [self.navigationController pushViewController:tmp animated:NO];
+    }else{
+        if (([self.fanTeams count] == 0) && ([self.memberTeams count] == 0) && !(self.quickCreate)) {
+            
+            if (!self.gettingTeams) {
+                NSString *tmp = @"If you believe you are on a team, but you do not see it, please make sure you have confirmed your email address by clicking the link in the email we sent you.";
+                self.myAlertView = [[UIAlertView alloc] initWithTitle:@"No Teams Found." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                //[self.myAlertView show];
+                
+            }
+            
+        }
+        
+        
+        
+        [self becomeFirstResponder];
+        
+
+    }
 
 }
 
@@ -76,8 +89,16 @@ fromHome, myAd, alertOne, alertTwo;
 		
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
+        bannerIsVisible = YES;
+        
+        self.myTableView.frame = CGRectMake(0, 50, 320, 366);
+
     }else{
         myAd.hidden = YES;
+        bannerIsVisible = NO;
+        
+        self.myTableView.frame = CGRectMake(0, 0, 320, 416);
+
     }
     
 	[super setEditing:NO animated:NO];
@@ -89,12 +110,10 @@ fromHome, myAd, alertOne, alertTwo;
 	self.myTableView.delegate = self;
 	self.myTableView.dataSource = self;
 	
-	NSString *ios = [[UIDevice currentDevice] systemVersion];
 	
-	if (![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"]) {
-		UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noLogoNoCrowd.png"]];
-		self.myTableView.backgroundView = imageView;
-	}
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noLogoNoCrowd.png"]];
+    self.myTableView.backgroundView = imageView;
+	
 
 	
 	self.memberTeams = [NSMutableArray array];
@@ -117,6 +136,7 @@ fromHome, myAd, alertOne, alertTwo;
 		[self.myTableView reloadData];
 		self.haveTeamList = false;
 		self.myTableView.hidden =  NO;
+
 	}else {
 		self.myTableView.hidden = YES;
 		self.gettingTeams = true;
@@ -262,11 +282,10 @@ fromHome, myAd, alertOne, alertTwo;
 	[self.loadingActivity stopAnimating];
 	self.loadingLabel.hidden = YES;
 	self.myTableView.hidden = NO;
-	gettingTeams = false;
 	
 	if (([self.fanTeams count] == 0) && ([self.memberTeams count] == 0) && !(self.quickCreate)) {
 		
-		if (!self.gettingTeams) {
+		if (self.gettingTeams) {
 			NSString *tmp = @"If you believe you are on a team, but you do not see it, please make sure you have confirmed your email address by clicking the link in the email we sent you.";
 			self.myAlertView = [[UIAlertView alloc] initWithTitle:@"No Teams Found." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[self.myAlertView show];
@@ -275,6 +294,8 @@ fromHome, myAd, alertOne, alertTwo;
 		
 	}
 	
+    gettingTeams = false;
+
 	int numTeams = [self.fanTeams count] + [self.memberTeams count];
 	if (numTeams > 0) {
 		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(EditTable:)];
@@ -811,15 +832,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (!self.bannerIsVisible) {
 		self.bannerIsVisible = YES;
 		myAd.hidden = NO;
-		
-		//self.createTeamButton.frame = CGRectMake(88, 55, 144, 30);
-		//self.joinTeamButton.frame = CGRectMake(168, 60, 144, 30);
-		
-		//self.viewLine.frame = CGRectMake(0, 90, 320, 1);
+
 		self.myTableView.frame = CGRectMake(0, 50, 320, 366);
 
         [self.view bringSubviewToFront:myAd];
-        myAd.frame = CGRectMake(0.0, 0.0, myAd.frame.size.width, myAd.frame.size.height);
 		
 	}
 }
@@ -843,9 +859,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)deleteActionSheet{
 	
+    isDelete = true;
 	UIActionSheet *deleteNow = [[UIActionSheet alloc] initWithTitle:@"Are you sure?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete Team" otherButtonTitles:nil];
     deleteNow.actionSheetStyle = UIActionSheetStyleDefault;
-    [deleteNow showInView:self.tabBarController.view];
+    [deleteNow showInView:self.view];
 	
 }
 
@@ -853,131 +870,136 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 	
-	
-	//"Delete"
-	if (buttonIndex == 0) {
-		
-		NSString *deleteTeamId = @"";
-		
-		if (self.deleteMember) {
-			Team *tmp = [self.memberTeams objectAtIndex:self.deleteRow];
-			deleteTeamId = tmp.teamId;
-		}else if (self.deleteFan) {
-			Team *tmp = [self.fanTeams objectAtIndex:self.deleteRow];;
-			deleteTeamId = tmp.teamId;
-		}
-				
-		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-		NSString *token = @"";
-		if (mainDelegate.token != nil){
-			token = mainDelegate.token;
-		}
-		
-		if (![token isEqualToString:@""]){
-			
-			NSDictionary *response = [ServerAPI deleteTeam:deleteTeamId :token];
-			
-			NSString *status = [response valueForKey:@"status"];
-			
-			if ([status isEqualToString:@"100"]){
-				
-				
-				if ([mainDelegate.quickLinkOne isEqualToString:deleteTeamId]) {
-					//if this first quick link team was just deleted
-		
-					mainDelegate.quickLinkOne = @"create";
-					mainDelegate.quickLinkOneName = @"";
-					
-					[mainDelegate saveUserInfo];
-				}
-				
-				if ([mainDelegate.quickLinkTwo isEqualToString:deleteTeamId]) {
-					//if the second quick link team was just deleted
-					if ([mainDelegate.quickLinkOne isEqualToString:@"create"]) {
-						mainDelegate.quickLinkTwo = @"";
-						mainDelegate.quickLinkTwoName = @"";
-					}else {
-						//quick 1 is a team, do you
-						mainDelegate.quickLinkTwo = mainDelegate.quickLinkOne;
-						mainDelegate.quickLinkTwoName = mainDelegate.quickLinkOneName;
-						
-						mainDelegate.quickLinkOne = @"create";
-						mainDelegate.quickLinkOneName = @"";
-					}
-					//[self performSelectorInBackground:@selector(updateUserIcons) withObject:nil];
-					[mainDelegate saveUserInfo];
-				}
-				
-				if (self.deleteMember) {
-					for (int i = 0; i < [self.memberTeams count]; i++) {
-						Team *tmp = [self.memberTeams objectAtIndex:i];
-						
-						if ([tmp.teamId isEqualToString:deleteTeamId]) {
-							[self.memberTeams removeObjectAtIndex:i];
-							break;
-						}
-					}
-				}
-				
-				if (self.deleteFan) {
-					for (int i = 0; i < [self.fanTeams count]; i++) {
-						Team *tmp = [self.fanTeams objectAtIndex:i];
-						
-						if ([tmp.teamId isEqualToString:deleteTeamId]) {
-							[self.fanTeams removeObjectAtIndex:i];
-							break;
-						}
-					}
-				}
-				
-				
-			}else{
-				
-				//Server hit failed...get status code out and display error accordingly
-				int statusCode = [status intValue];
-				self.memberTeams = [NSMutableArray array];
-				self.fanTeams = [NSMutableArray array];
-				[self performSelectorInBackground:@selector(getAllTeams) withObject:nil];
-				switch (statusCode) {
-					case 0:
-						//null parameter
-						self.error = @"*Error connecting to server";
-						break;
-					case 1:
-						//error connecting to server
-						self.error = @"*Error connecting to server";
-						break;
-					case 204:
-						//user not member of specified team
-						self.error = @"*Email address is already in use";
-						break;
-					case 305:
-						//team id required
-						self.error = @"*Error connecting to server";
-						break;
-					case 602:
-						//team not found
-						self.error = @"*Email address and password required";
-						break;
-					default:
-						//should never get here
-						self.error = @"*Error connecting to server";
-						break;
-				}
-			}
-			
-			
-		}
-		
-	}
-	[super setEditing:NO animated:NO];
-	[self.myTableView setEditing:NO animated:NO];
-	[self.tabBarController.navigationItem.leftBarButtonItem setTitle:@"Edit"];
-	[self.tabBarController.navigationItem.leftBarButtonItem setStyle:UIBarButtonItemStylePlain];
-	[self.myTableView reloadData];
-	
-	
-	
+    if (!self.isDelete){
+        [FastActionSheet doAction:self :buttonIndex];
+
+    }else{
+        self.isDelete = false;
+        
+        //"Delete"
+        if (buttonIndex == 0) {
+            
+            NSString *deleteTeamId = @"";
+            
+            if (self.deleteMember) {
+                Team *tmp = [self.memberTeams objectAtIndex:self.deleteRow];
+                deleteTeamId = tmp.teamId;
+            }else if (self.deleteFan) {
+                Team *tmp = [self.fanTeams objectAtIndex:self.deleteRow];;
+                deleteTeamId = tmp.teamId;
+            }
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            NSString *token = @"";
+            if (mainDelegate.token != nil){
+                token = mainDelegate.token;
+            }
+            
+            if (![token isEqualToString:@""]){
+                
+                NSDictionary *response = [ServerAPI deleteTeam:deleteTeamId :token];
+                
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    
+                    if ([mainDelegate.quickLinkOne isEqualToString:deleteTeamId]) {
+                        //if this first quick link team was just deleted
+                        
+                        mainDelegate.quickLinkOne = @"create";
+                        mainDelegate.quickLinkOneName = @"";
+                        
+                        [mainDelegate saveUserInfo];
+                    }
+                    
+                    if ([mainDelegate.quickLinkTwo isEqualToString:deleteTeamId]) {
+                        //if the second quick link team was just deleted
+                        if ([mainDelegate.quickLinkOne isEqualToString:@"create"]) {
+                            mainDelegate.quickLinkTwo = @"";
+                            mainDelegate.quickLinkTwoName = @"";
+                        }else {
+                            //quick 1 is a team, do you
+                            mainDelegate.quickLinkTwo = mainDelegate.quickLinkOne;
+                            mainDelegate.quickLinkTwoName = mainDelegate.quickLinkOneName;
+                            
+                            mainDelegate.quickLinkOne = @"create";
+                            mainDelegate.quickLinkOneName = @"";
+                        }
+                        //[self performSelectorInBackground:@selector(updateUserIcons) withObject:nil];
+                        [mainDelegate saveUserInfo];
+                    }
+                    
+                    if (self.deleteMember) {
+                        for (int i = 0; i < [self.memberTeams count]; i++) {
+                            Team *tmp = [self.memberTeams objectAtIndex:i];
+                            
+                            if ([tmp.teamId isEqualToString:deleteTeamId]) {
+                                [self.memberTeams removeObjectAtIndex:i];
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (self.deleteFan) {
+                        for (int i = 0; i < [self.fanTeams count]; i++) {
+                            Team *tmp = [self.fanTeams objectAtIndex:i];
+                            
+                            if ([tmp.teamId isEqualToString:deleteTeamId]) {
+                                [self.fanTeams removeObjectAtIndex:i];
+                                break;
+                            }
+                        }
+                    }
+                    
+                    
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    self.memberTeams = [NSMutableArray array];
+                    self.fanTeams = [NSMutableArray array];
+                    [self performSelectorInBackground:@selector(getAllTeams) withObject:nil];
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            self.error = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            self.error = @"*Error connecting to server";
+                            break;
+                        case 204:
+                            //user not member of specified team
+                            self.error = @"*Email address is already in use";
+                            break;
+                        case 305:
+                            //team id required
+                            self.error = @"*Error connecting to server";
+                            break;
+                        case 602:
+                            //team not found
+                            self.error = @"*Email address and password required";
+                            break;
+                        default:
+                            //should never get here
+                            self.error = @"*Error connecting to server";
+                            break;
+                    }
+                }
+                
+                
+            }
+            
+        }
+        [super setEditing:NO animated:NO];
+        [self.myTableView setEditing:NO animated:NO];
+        [self.tabBarController.navigationItem.leftBarButtonItem setTitle:@"Edit"];
+        [self.tabBarController.navigationItem.leftBarButtonItem setStyle:UIBarButtonItemStylePlain];
+        [self.myTableView reloadData];
+
+    }
+
 	
 }
 
@@ -1067,6 +1089,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+	if (event.type == UIEventSubtypeMotionShake) {
+		
+		FastActionSheet *actionSheet = [[FastActionSheet alloc] init];
+		actionSheet.delegate = self;
+		[actionSheet showInView:self.view];
+	}
+}
+
+- (BOOL)canBecomeFirstResponder {
+	return YES;
+}
+
 
 
 -(void)viewDidUnload{
@@ -1078,6 +1113,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	alertTwo = nil;
 	createTeamButton = nil;
 	joinTeamButton = nil;
+    myAd.delegate = nil;
 	myAd = nil;
 	myTableView = nil;
 	viewLine = nil;

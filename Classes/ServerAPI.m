@@ -28,14 +28,14 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 @implementation ServerAPI
 
 + (NSDictionary *)createUser:(NSString *)firstName :(NSString *)lastName :(NSString *)email :(NSString *)password :(NSString *)alreadyMember
-							:(NSString *)latitude :(NSString *)longitude :(NSString *)phoneNumber :(NSString *)carrierCode{
+							:(NSString *)latitude :(NSString *)longitude :(NSString *)phoneNumber :(NSString *)carrierCode :(NSString *)location{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSString *token = @"";
 	
 	if ((firstName == nil) || (lastName == nil) || (email == nil) || (password == nil) || (alreadyMember == nil)|| (latitude == nil)|| (longitude == nil)
-        || (phoneNumber == nil) || (carrierCode == nil)) {
+        || (phoneNumber == nil) || (carrierCode == nil) || (location == nil)) {
 		statusReturn = @"0";
 		token = @"";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -71,6 +71,10 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		if (![alreadyMember isEqualToString:@""]) {
 			[ tempDictionary setObject:alreadyMember forKey:@"alreadyMember"];
+		}
+        
+        if (![location isEqualToString:@""]) {
+			[ tempDictionary setObject:location forKey:@"location"];
 		}
         
 		loginDict = tempDictionary;
@@ -3426,7 +3430,8 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	
 	if ((token == nil) || (teamId == nil) || (subject == nil) || (body == nil) || (type == nil) || (eventId == nil) || (eventType == nil)
 		|| (isAlert == nil) || (pollChoices == nil) || (recipients == nil) || (displayResults == nil) || (includeFans == nil)) {
-		
+
+
 		statusReturn = @"0";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3597,8 +3602,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSArray *messageArray = [NSArray array];
-	
-	
+
 	if ((token == nil) || (teamId == nil) || (messageGroup == nil) || (eventId == nil) || (eventType == nil)
 		|| (pollOrMsg == nil) || (status == nil)) {
 		
@@ -4518,6 +4522,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
                 
 				tmpActivity.teamId = [tmpDict valueForKey:@"teamId"];
 				tmpActivity.teamName = [tmpDict valueForKey:@"teamName"];
+                tmpActivity.senderName = [tmpDict valueForKey:@"poster"];
 				
 				tmpActivity.activityId = [tmpDict valueForKey:@"activityId"];
                 

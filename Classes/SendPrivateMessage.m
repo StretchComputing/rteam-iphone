@@ -15,7 +15,7 @@
 
 
 @implementation SendPrivateMessage
-@synthesize keyboardIsUp, keyboardButton, recipients, cancelMessageButton, messageText, activity, recipLabel, recipientObjects, errorString, errorLabel, teamId, theMessageText;
+@synthesize keyboardIsUp, keyboardButton, recipients, cancelMessageButton, messageText, activity, recipLabel, recipientObjects, errorString, errorLabel, teamId, theMessageText, isReply, descripLabel, isConfirm;
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -51,7 +51,16 @@
 - (void)viewDidLoad
 {
     self.keyboardIsUp = false;
-    self.title = @"Message";
+    
+    if (self.isReply) {
+        if (self.isConfirm) {
+            self.title = @"Send Message";
+        }else{
+            self.title = @"Reply";
+        }
+    }else{
+        self.title = @"Message";
+    }
     
     
     UIBarButtonItem *postButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(post)];
@@ -60,6 +69,11 @@
     
     self.messageText.delegate = self;
     
+    if (self.isReply) {
+        self.descripLabel.hidden = YES;
+    }else{
+        self.descripLabel.hidden = NO;
+    }
     [super viewDidLoad];
     
 }
@@ -137,7 +151,6 @@
             
         }
         
-        
         [self performSelectorOnMainThread:@selector(donePost) withObject:nil waitUntilDone:NO];
     }
     
@@ -186,7 +199,12 @@
 
 -(void)cancelMessage{
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (self.isReply) {
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+    }else{
+        [self.navigationController popToRootViewControllerAnimated:YES];
+
+    }
 }
 - (void)viewDidUnload
 {
@@ -196,6 +214,7 @@
     activity = nil;
     recipLabel = nil;
     errorLabel = nil;
+    descripLabel = nil;
     [super viewDidUnload];
     
 }

@@ -44,6 +44,7 @@
 	
 	
 }
+@property (nonatomic, strong) NSString *showSwipeAlert;
 @property (nonatomic, strong) NSString *justAddName;
 @property (nonatomic, strong) NSArray *phoneOnlyArray;
 @property (nonatomic, strong) NSString *displayName;

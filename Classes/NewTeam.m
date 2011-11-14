@@ -10,7 +10,6 @@
 #import "Team.h"
 #import "rTeamAppDelegate.h"
 #import "JSON/JSON.h"
-#import "TeamsTabs.h"
 #import "ServerAPI.h"
 #import "TwitterAuth.h"
 #import "FastActionSheet.h"
@@ -186,7 +185,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
                                                      :mainDelegate.token :self.from];
         
         NSString *status = [results valueForKey:@"status"];
-        
+                
         if ([status isEqualToString:@"100"]){
             
             self.createSuccess = true;
@@ -302,25 +301,25 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 				num = num - 3;
 			}
 			
-			
-			TeamsTabs *cont = [temp objectAtIndex:num];
-			MyTeams *tmp = [[cont viewControllers] objectAtIndex:0];
-			tmp.phoneOnlyArray = self.phoneOnlyArray;
+
+            
+			MyTeams *tmp = [temp objectAtIndex:num];
+			tmp.phoneOnlyArray = [NSMutableArray arrayWithArray:self.phoneOnlyArray];
 			tmp.newlyCreatedTeam = self.teamName.text;
 			
 			if (![self.twitterUrl isEqualToString:@""]) {
 				
 				//twitter enabled
-				TwitterAuth *tmp = [[TwitterAuth alloc] init];
-				tmp.url = self.twitterUrl;
+				TwitterAuth *tmp1 = [[TwitterAuth alloc] init];
+				tmp1.url = self.twitterUrl;
                 
                 if (self.fromHome){
-                    tmp.fromHome = true;
+                    tmp1.fromHome = true;
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     mainDelegate.phoneOnlyArray = [NSArray arrayWithArray:self.phoneOnlyArray];
                     
                 }
-				[self.navigationController pushViewController:tmp animated:YES];
+				[self.navigationController pushViewController:tmp1 animated:YES];
 				
 			}else {
                 if (self.fromHome) {
@@ -328,7 +327,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
                     mainDelegate.phoneOnlyArray = [NSArray arrayWithArray:self.phoneOnlyArray];
                     [self.navigationController dismissModalViewControllerAnimated:YES];
                 }else{
-                    [self.navigationController popToViewController:cont animated:YES];
+                    [self.navigationController popToViewController:tmp animated:YES];
                     
                 }
 				
@@ -598,15 +597,14 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	}
 	
 	
-	TeamsTabs *cont = [temp objectAtIndex:num];
-	MyTeams *tmp = [[cont viewControllers] objectAtIndex:0];
-	tmp.phoneOnlyArray = self.phoneOnlyArray;
-	tmp.newlyCreatedTeam = self.teamName.text;
+	MyTeams *cont = [temp objectAtIndex:num];
+	cont.phoneOnlyArray = self.phoneOnlyArray;
+	cont.newlyCreatedTeam = self.teamName.text;
 	if ([self.errorString isEqualToString:@"NA"]){
         
-        tmp.displayNa = true;
+        cont.displayNa = true;
     }else if (![self.errorString isEqualToString:@""]){
-        tmp.displayError = true;
+        cont.displayError = true;
     }
     
 	if (![self.twitterUrl isEqualToString:@""]) {
@@ -823,6 +821,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 		
 		UILabel *dateLabel = [[UILabel alloc] initWithFrame:frame];
 		dateLabel.tag = dateTag;
+        dateLabel.backgroundColor = [UIColor clearColor];
 		[cell.contentView addSubview:dateLabel];
 		//[dateLabel release];
 		

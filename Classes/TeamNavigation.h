@@ -13,7 +13,7 @@
     
 
 }
-
+@property bool fromHome;
 @property (nonatomic, strong) NSString *teamName;
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSString *userRole;

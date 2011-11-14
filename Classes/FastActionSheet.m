@@ -8,9 +8,8 @@
 
 #import "FastActionSheet.h"
 #import "rTeamAppDelegate.h"
-#import "FastUpdateStatus.h"
-#import "FastRequestStatus.h"
 #import "FastChangeEventStatus.h"
+#import "ActivityPost.h"
 
 @implementation FastActionSheet
 
@@ -18,7 +17,7 @@
     self = [super init];
 	if (self){
 		
-		self =  (FastActionSheet *)[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Home", @"Update My Status", @"Request Member Status", @"Update Event Status", @"Send Message", @"Happening Now", nil];
+		self =  (FastActionSheet *)[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Home", @"Update Event Status", @"Send Message", nil];
 
 	
 	}
@@ -36,15 +35,21 @@
 		
 		
 	}else if (buttonIndex == 1) {
-		FastUpdateStatus *tmp = [[FastUpdateStatus alloc] init];
+        FastChangeEventStatus *tmp = [[FastChangeEventStatus alloc] init];
 		[sender.navigationController pushViewController:tmp animated:NO];
+		//FastUpdateStatus *tmp = [[FastUpdateStatus alloc] init];
+		//[sender.navigationController pushViewController:tmp animated:NO];
 	}else if (buttonIndex == 2) {
-			
-		FastRequestStatus *tmp = [[FastRequestStatus alloc] init];
-		[sender.navigationController pushViewController:tmp animated:NO];
+
+		UINavigationController *tmp = [[UINavigationController alloc] init];
+        ActivityPost *act = [[ActivityPost alloc] init];
+        [tmp pushViewController:act animated:NO];
+        [sender.navigationController presentModalViewController:tmp animated:YES];
+        //FastRequestStatus *tmp = [[FastRequestStatus alloc] init];
+		//[sender.navigationController pushViewController:tmp animated:NO];
 	}else if (buttonIndex == 3) {
-		FastChangeEventStatus *tmp = [[FastChangeEventStatus alloc] init];
-		[sender.navigationController pushViewController:tmp animated:NO];
+		//FastChangeEventStatus *tmp = [[FastChangeEventStatus alloc] init];
+		//[sender.navigationController pushViewController:tmp animated:NO];
 	}else if (buttonIndex == 4){
 			//FastSendMessage *tmp = [[FastSendMessage alloc] init];
 			//[sender.navigationController pushViewController:tmp animated:NO];

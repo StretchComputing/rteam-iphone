@@ -16,13 +16,14 @@
 #import "ViewDetailPollReplies.h"
 #import "MessageThreadInbox.h"
 #import "FastActionSheet.h"
+#import "NewActivity.h"
 
 @implementation ViewPollReceived
 @synthesize subject, body, receivedDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, pollChoices, buttonOption1,
 buttonOption2, buttonOption3, buttonOption4, buttonOption5, finalAnswer, threadId, wasViewed, displayFrom, from, status,
 howToRespondMessage, finalizedMessage, displayResults, followUpMessage, ownReply, displayScroll, viewMoreDetailButton,
 individualReplies, downArrow, pollArray, pollNumber, currentPollNumber, upDown, teamName, teamNameLabel, origTeamId, myPollResultsView, myLineView,
-loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, errorString, respondingActivity;
+loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, errorString, respondingActivity, fromClass;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -252,6 +253,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	[self.finalizedMessage setHidden:YES];
 	
 	self.errorLabel.text = @"";
+        
 	if ([self.status isEqualToString:@"replied"] || [self.status isEqualToString:@"finalized"]) {
 		
 		[self.buttonOption1 setHidden:YES];
@@ -662,8 +664,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
             NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :self.finalAnswer :@"" :@"" :@""];
             
             NSString *status1 = [response valueForKey:@"status"];
-            
-            
+                        
             if ([status1 isEqualToString:@"100"]){
                 
                 self.errorString = @"";
@@ -707,51 +708,26 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
     self.buttonOption4.enabled = YES;
     
     if ([self.errorString isEqualToString:@""]) {
-        NSArray *tempCont = [self.navigationController viewControllers];
-        int tempNum = [tempCont count];
-        tempNum = tempNum - 2;
+        
+        self.fromClass.fromPost = true;
+        [self.navigationController popViewControllerAnimated:YES];
+        
     
-        
-        
-        if ([[tempCont objectAtIndex:tempNum] class] == [CurrentTeamTabs class]) {
-            CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum];
-            cont.teamId = self.teamId;
-            cont.selectedIndex = 4;
-            //cont.userRole = self.userRole;
-            
-            
-            [self.navigationController popToViewController:cont animated:YES];
-        }
-        
-        
-        if ([[tempCont objectAtIndex:tempNum] class] == [GameTabs class]) {
-            GameTabs *cont = [tempCont objectAtIndex:tempNum];
-            cont.teamId = self.teamId;
-            cont.selectedIndex = 3;
-            //cont.userRole = self.userRole;
-            
-            
-            [self.navigationController popToViewController:cont animated:YES];
-        }
-        
-        
-        if ([[tempCont objectAtIndex:tempNum] class] == [PracticeTabs class]) {
-            PracticeTabs *cont = [tempCont objectAtIndex:tempNum];
-            cont.teamId = self.teamId;
-            cont.selectedIndex = 1;
-            //cont.userRole = self.userRole;
-            
-            
-            [self.navigationController popToViewController:cont animated:YES];
-        }
     }else{
         self.errorLabel.text = self.errorString;
     }
 
 }
 -(void)deletePoll{
+
+    [self.respondingActivity startAnimating];
+    [self performSelectorInBackground:@selector(deleteAction) withObject:nil];
 	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+-(void)deleteAction{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString *token = @"";
 	if (mainDelegate.token != nil){
 		token = mainDelegate.token;
@@ -767,30 +743,6 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 		NSString *status1 = [response valueForKey:@"status"];
 		
 		if ([status1 isEqualToString:@"100"]){
-			
-			NSArray *temp = [self.navigationController viewControllers];
-			int num = [temp count];
-			num -= 2;
-			
-			
-			//Could be "MessageTabs", "GameTabs", "PracticeTabs", or "CurrentTeamTabs"
-			
-			if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
-				CurrentTeamTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 4;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [GameTabs class]) {
-				GameTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 3;
-				[self.navigationController popToViewController:cont animated:YES];
-				
-			}else if ([[temp objectAtIndex:num] class] == [PracticeTabs class]) {
-				PracticeTabs *cont = [temp objectAtIndex:num];
-				cont.selectedIndex = 1;
-				[self.navigationController popToViewController:cont animated:YES];
-			}
-			
 			
 		}else{
 			
@@ -813,9 +765,16 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 			}
 		}
 		
+        [self performSelectorOnMainThread:@selector(doneDelete) withObject:nil waitUntilDone:NO];
 	}
+    
+}
 
-	
+-(void)doneDelete{
+    
+    [self.respondingActivity stopAnimating];
+    self.fromClass.fromPost = true;
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(void)viewMoreDetail{
@@ -859,48 +818,33 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 -(void)viewDidUnload{
 	
-	//subject = nil;
-	//body = nil;
-	//receivedDate = nil;
 	displayDate = nil;
 	displayBody = nil;
 	displaySubject = nil;
-	//teamId = nil;
-	//eventId = nil;
-	//eventType = nil;
-	//pollChoices = nil;
+
 	buttonOption1 = nil;
 	buttonOption2 = nil;
 	buttonOption3 = nil;
 	buttonOption4 = nil;
 	buttonOption5 = nil;
-	//threadId = nil;
 	displayFrom = nil;
-	//from = nil;
-	//status = nil;
+
 	howToRespondMessage = nil;
     finalizedMessage = nil;
 	followUpMessage = nil;
 	ownReply = nil;
 	displayScroll = nil;
 	viewMoreDetailButton = nil;
-	//individualReplies = nil;
 	downArrow = nil;
-	//pollArray = nil;
 	pollNumber = nil;
 	upDown = nil;
-	//teamName = nil;
-	//origTeamId = nil;
 	teamNameLabel = nil;
-	//finalAnswer = nil;
 	myLineView = nil;
 	myPollResultsView = nil;
 	loadingActivity = nil;
 	loadingLabel = nil;
-	//messageThreadInfo = nil;
 	deleteButton = nil;
 	errorLabel = nil;
-	//errorString = nil;
     respondingActivity = nil;
 	[super viewDidUnload];
 
