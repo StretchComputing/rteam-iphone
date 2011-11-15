@@ -60,7 +60,7 @@ myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutt
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation, homeDivider, moveDividerButton, homeDividerLabel,
 moveDividerBackground, isMoreShowing, moveableView, scrollViewBack, regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 
 
 
@@ -2599,6 +2599,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             self.backViewBottom.frame = frame;
             [self.navigationController.navigationBar bringSubviewToFront:self.backViewTop];
         }
+        
+        [self.view bringSubviewToFront:self.blueArrow];
 	}
     
     
@@ -2860,6 +2862,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             //error connecting to server
                             //self.error.text = @"*Error connecting to server";
                             break;
+                        case 205:
+                            self.errorString = @"NA";
+                            break;
                         default:
                             //log status code
                             //self.error.text = @"*Error connecting to server";
@@ -2893,6 +2898,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             //error connecting to server
                             //self.error.text = @"*Error connecting to server";
                             break;
+                        case 205:
+                            self.errorString = @"NA";
+                            break;
                         default:
                             //log status code
                             //self.error.text = @"*Error connecting to server";
@@ -2922,6 +2930,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         case 1:
                             //error connecting to server
                             //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 205:
+                            self.errorString = @"NA";
                             break;
                         default:
                             //log status code
@@ -3060,6 +3071,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)doneEventEdit{
 	
+    if ([self.errorString isEqualToString:@"NA"]) {
+        self.errorString = @"";
+        NSString *tmp = @"You are not a coordinator, or you have not confirmed your email.  Only User's with confirmed email addresses can delete events.  To confirm your email, please click on the activation link in the email we sent you.";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
 	[self performSelectorInBackground:@selector(getEventsNow) withObject:nil];
 	
 }
@@ -3189,7 +3207,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
     }else if (location == 8){
         
-        self.helpExplanation.text = @"The 'Happening Now' section shows all of the Games, Practices, or Events you have scheduled within the next two days.  Games with a score will be displayed in scoreboard format.";
+        self.helpExplanation.text = @"The 'Happening Now' section shows all of the Games, Practices, or Events you have scheduled within the next two days.  Games will display a current or final score, if there is one.";
         [self.happeningNowQbutton setImage:[UIImage imageNamed:@"qcircleSelected.png"] forState:UIControlStateNormal];
 
         

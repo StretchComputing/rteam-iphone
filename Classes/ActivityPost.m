@@ -72,9 +72,10 @@
 
 -(void)post{
     
-    self.theMessageText = [NSString stringWithString:self.messageText.text];
-
-    
+    if ([self.teams count] > 0) {
+        self.theMessageText = [NSString stringWithString:self.messageText.text];
+        
+        
         [self.activity startAnimating];
         [self.sendPrivateButton setEnabled:NO];
         [self.sendPollButton setEnabled:NO];
@@ -83,6 +84,12 @@
         [self.segControl setEnabled:NO];
         
         [self performSelectorInBackground:@selector(createActivity) withObject:nil];
+    }else{
+        NSString *tmp = @"You must create or join at least one team before posting Activity.";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Teams Found." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
     
 }
 -(void)cancel{
@@ -110,9 +117,7 @@
         
         
         NSString *status = [response valueForKey:@"status"];
-        
-        NSLog(@"Status: %@", status);
-        
+                
         if ([status isEqualToString:@"100"]){
             
             self.errorString=@"";
@@ -135,6 +140,7 @@
                     break;
                 case 208:
                    self.errorString = @"NA";
+                   break;
                 default:
                     //log status code?
                     self.errorString = @"*Error connecting to server";
@@ -164,7 +170,14 @@
         [self.navigationController dismissModalViewControllerAnimated:YES];
 
     }else{
-        self.errorLabel.text = self.errorString;
+                
+        if ([self.errorString isEqualToString:@"NA"]) {
+			NSString *tmp = @"Only User's with confirmed email addresses can post to Activity.  To confirm your email, please click on the activation link in the email we sent you.";
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[alert show];
+		}else{
+            self.errorLabel.text = self.errorString;
+        }
     }
 }
 
@@ -258,7 +271,7 @@
 }
 -(void)sendPoll{
     
-    if (self.teams > 0) {
+    if ([self.teams count] > 0) {
         
         if ([self.teams count] == 1) {
             
@@ -294,7 +307,7 @@
 }
 -(void)privateMessage{
     
-    if (self.teams > 0) {
+    if ([self.teams count] > 0) {
         
         if ([self.teams count] == 1) {
             

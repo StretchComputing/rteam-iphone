@@ -114,6 +114,9 @@
         messageText.hidden = NO;
         insideImageView.hidden = NO;
         imageBack.hidden = NO;
+        starOne.hidden = NO;
+        starTwo.hidden = NO;
+        starThree.hidden = NO;
 
    
         
@@ -136,6 +139,7 @@
         NSString *starImageTwo = [TableDisplayUtil getStarSize:2 :result.numLikes :result.numDislikes];
         NSString *starImageThree = [TableDisplayUtil getStarSize:3 :result.numLikes :result.numDislikes];
         
+
         starOne.contentMode = UIViewContentModeScaleAspectFit;
         starThree.contentMode = UIViewContentModeScaleAspectFit;
         starTwo.contentMode = UIViewContentModeScaleAspectFit;
@@ -150,7 +154,6 @@
         
         //Name Label
         nameLabel.frame = CGRectMake(55, 5, 210, 18);
-       // nameLabel.text = @"Nick Wroblewski";
         
         NSString *senderString = @"rTeam";
         
@@ -464,7 +467,12 @@
         
         //Name Label
         nameLabel.frame = CGRectMake(55, 5, 210, 18);
-        nameLabel.text = senderName;
+        
+        if (![senderName isEqualToString:@""] && (senderName != nil)) {
+            nameLabel.text = senderName;
+        }else{
+            nameLabel.text = @"rTeam";
+        }
         
         //Date Label
         dateLabel.frame = CGRectMake(55, 23, 100, 18);

@@ -345,6 +345,10 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
                         //error connecting to server
                         self.errorString  = @"*Error connecting to server";
                         break;
+                    case 205:
+                        self.errorString = @"NA";
+                        break;
+
                     default:
                         //log status code
                         self.errorString  = @"*Error connecting to server";
@@ -401,6 +405,7 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
                         //error connecting to server
                         self.errorString  = @"*Error connecting to server";
                         break;
+                    
                     default:
                         //log status code
                         self.errorString  = @"*Error connecting to server";
@@ -467,7 +472,15 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 		
 		
 	}else {
-		self.errorMessage.text = self.errorString;
+		if ([self.errorString isEqualToString:@"NA"]) {
+            self.errorString = @"";
+            NSString *tmp = @"You are not a coordinator, or you have not confirmed your email.  Only User's with confirmed email addresses can delete events.  To confirm your email, please click on the activation link in the email we sent you.";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+        }else{
+            self.errorMessage.text = self.errorString;
+            
+        }
 	}
 	
 	

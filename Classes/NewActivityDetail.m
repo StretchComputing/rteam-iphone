@@ -19,16 +19,7 @@
 @synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, isCurrent, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel, isVideo;
 
 
-- (void)viewDidLoad{
-    
-    self.locationText = @"";
-    
-    self.likesLabel.text = [NSString stringWithFormat:@"%d", self.numLikes];
-    self.dislikesLabel.text = [NSString stringWithFormat:@"%d", self.numDislikes];
-
-   // self.likeButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"thumbsUp.png"] style:UIBarButtonItemStylePlain target:self action://@selector(like)];
-    
-    [self initializeView];
+-(void)viewWillAppear:(BOOL)animated{
         
     if ([self.currentVote isEqualToString:@"like"]) {
 		
@@ -50,7 +41,20 @@
         
 		
 	}
+
+}
+- (void)viewDidLoad{
     
+    self.locationText = @"";
+    
+    self.likesLabel.text = [NSString stringWithFormat:@"%d", self.numLikes];
+    self.dislikesLabel.text = [NSString stringWithFormat:@"%d", self.numDislikes];
+
+   // self.likeButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"thumbsUp.png"] style:UIBarButtonItemStylePlain target:self action://@selector(like)];
+    
+    [self initializeView];
+        
+       
     [super viewDidLoad];
 }
 
@@ -155,8 +159,8 @@
     
     //Likes
     NSString *starImageOne = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
-    NSString *starImageTwo = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
-    NSString *starImageThree = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
+    NSString *starImageTwo = [TableDisplayUtil getStarSize:2 :self.numLikes :self.numDislikes];
+    NSString *starImageThree = [TableDisplayUtil getStarSize:3 :self.numLikes :self.numDislikes];
     
     starOne.contentMode = UIViewContentModeScaleAspectFit;
     starThree.contentMode = UIViewContentModeScaleAspectFit;

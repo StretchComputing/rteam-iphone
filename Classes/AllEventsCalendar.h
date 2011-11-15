@@ -19,7 +19,7 @@
 	BOOL shouldPushAnotherView;
 	
 }
-
+@property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) UIActionSheet *canceledAction;
 @property bool gotGames;
 @property bool gotPractices;

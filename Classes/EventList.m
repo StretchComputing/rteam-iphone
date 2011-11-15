@@ -35,7 +35,7 @@
 
 @implementation EventList
 @synthesize events, teamName, teamId, deleteRow, isPastGame, fromEdit, userRole, error, addButton, sport, barActivity, 
-eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy;
+eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, errorString;
 
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -1214,9 +1214,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             //null parameter
                             //self.error.text = @"*Error connecting to server";
                             break;
-                        case 1:
-                            //error connecting to server
-                            //self.error.text = @"*Error connecting to server";
+                        case 205:
+                            self.errorString = @"NA";
                             break;
                         default:
                             //log status code
@@ -1252,6 +1251,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             //error connecting to server
                             //self.error.text = @"*Error connecting to server";
                             break;
+                        case 205:
+                            self.errorString = @"NA";
+                            break;
                         default:
                             //log status code
                             //self.error.text = @"*Error connecting to server";
@@ -1282,6 +1284,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         case 1:
                             //error connecting to server
                             //self.error.text = @"*Error connecting to server";
+                            break;
+                        case 205:
+                            self.errorString = @"NA";
                             break;
                         default:
                             //log status code
@@ -1557,6 +1562,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self.navigationItem.rightBarButtonItem setStyle:UIBarButtonItemStylePlain];
 	[self.barActivity startAnimating];
 	[self performSelectorInBackground:@selector(getAllEvents) withObject:nil];
+    
+    if ([self.errorString isEqualToString:@"NA"]) {
+        self.errorString = @"";
+        NSString *tmp = @"You are not a coordinator, or you have not confirmed your email.  Only User's with confirmed email addresses can delete events.  To confirm your email, please click on the activation link in the email we sent you.";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
 	
 }
 

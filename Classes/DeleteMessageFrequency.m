@@ -99,6 +99,7 @@
 	
 	segControl.hidden = YES;
 	cellLabel.frame = CGRectMake(10, 10, 200, 22);
+    cellLabel.backgroundColor = [UIColor clearColor];
 	
 	NSInteger row = [indexPath row];
 	feedbackLabel.hidden = YES;

@@ -167,7 +167,17 @@
         [self.navigationController dismissModalViewControllerAnimated:YES];
 
     }else{
-        self.errorLabel.text = self.errorString;
+        
+        if ([self.errorString isEqualToString:@"NA"]) {
+			NSString *tmp = @"Only User's with confirmed email addresses can send messages.  To confirm your email, please click on the activation link in the email we sent you.";
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[alert show];
+            
+            [self.messageText resignFirstResponder];
+		}else{
+            self.errorLabel.text = self.errorString;
+        }
+        
     }
 
     

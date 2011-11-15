@@ -28,6 +28,7 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [self.navigationItem setHidesBackButton:YES];
     
     
 	if ([self.fromRegisterFlow isEqualToString:@"true"]) {

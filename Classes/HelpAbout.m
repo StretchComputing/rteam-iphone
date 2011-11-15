@@ -7,15 +7,10 @@
 //
 
 #import "HelpAbout.h"
-#import "CreateTeamHelp.h"
-#import "AddMemberHelp.h"
-#import "AddEventHelp.h"
 #import "Home.h"
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
-#import "FastHelp.h"
-#import "TwitterHelp.h"
-#import "MessageHelp.h"
+
 
 @implementation HelpAbout
 @synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings, myAd;
@@ -76,88 +71,96 @@
 	self.displayLabel.text = @"";
     
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"rTeamWelcomeFinal" ofType:@"m4v"];      
-	if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 3.2)
-	{
-		MPMoviePlayerViewController*tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
-		if (tmpMoviePlayViewController) {
-			[self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
-			[tmpMoviePlayViewController.moviePlayer play];
-		}
-		//[tmpMoviePlayViewController release];
-	}
-	else{
-		MPMoviePlayerController* theMovie=[[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieFinishedCallback:) name:MPMoviePlayerPlaybackDidFinishNotification object:theMovie];
-		[theMovie play];
-	}
+
+    MPMoviePlayerViewController*tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
+    if (tmpMoviePlayViewController) {
+        [self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
+        [tmpMoviePlayViewController.moviePlayer play];
+    }
+    
+		
+
 }
 
 -(void)createTeamHelp{
+    /*
 	self.displayLabel.text = @"";
     
 	CreateTeamHelp *tmp = [[CreateTeamHelp alloc] init];
 	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
 	self.navigationItem.backBarButtonItem = temp;
 	[self.navigationController pushViewController:tmp animated:YES];
-	
+	*/
+    
+    self.displayLabel.text = @"";
+    
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"createTeam" ofType:@"mov"];      
+    
+    MPMoviePlayerViewController*tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
+    if (tmpMoviePlayViewController) {
+        [self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
+        [tmpMoviePlayViewController.moviePlayer play];
+    }
 }
 
 -(void)addMemberHelp{
 	self.displayLabel.text = @"";
     
-	AddMemberHelp *tmp = [[AddMemberHelp alloc] init];
-	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
-	self.navigationItem.backBarButtonItem = temp;
-	[self.navigationController pushViewController:tmp animated:YES];
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"addMember1" ofType:@"mov"];      
+    
+    MPMoviePlayerViewController*tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
+    if (tmpMoviePlayViewController) {
+        [self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
+        [tmpMoviePlayViewController.moviePlayer play];
+    }
 	
 }
 
 -(void)addEventHelp{
 	self.displayLabel.text = @"";
     
-	AddEventHelp *tmp = [[AddEventHelp alloc] init];
-	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
-	self.navigationItem.backBarButtonItem = temp;
-	[self.navigationController pushViewController:tmp animated:YES];
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"addEvent" ofType:@"mov"];      
+        MPMoviePlayerViewController*tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
+    if (tmpMoviePlayViewController) {
+        [self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
+        [tmpMoviePlayViewController.moviePlayer play];
+    }
 	
 }
 
 -(void)fastHelp{
 	
 	self.displayLabel.text = @"";
-	
-	
-	FastHelp *tmp = [[FastHelp alloc] init];
-	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
-	self.navigationItem.backBarButtonItem = temp;
-	[self.navigationController pushViewController:tmp animated:YES];
+    
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"quickLinks" ofType:@"mov"];      
+    
+    MPMoviePlayerViewController*tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
+    if (tmpMoviePlayViewController) {
+        [self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
+        [tmpMoviePlayViewController.moviePlayer play];
+    }
     
     
 }
 
--(void)twitterHelp{
-	
-	self.displayLabel.text = @"";
-	
-	
-	TwitterHelp *tmp = [[TwitterHelp alloc] init];
-	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
-	self.navigationItem.backBarButtonItem = temp;
-	[self.navigationController pushViewController:tmp animated:YES];
-	
-	
-}
 
 -(void)messageHelp{
 	
 	self.displayLabel.text = @"";
-	
-	
-	MessageHelp *tmp = [[MessageHelp alloc] init];
-	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
-	self.navigationItem.backBarButtonItem = temp;
-	[self.navigationController pushViewController:tmp animated:YES];
+    
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"sendMessage" ofType:@"mov"];      
+    
+    MPMoviePlayerViewController*tmpMoviePlayViewController=[[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:path]];
+    if (tmpMoviePlayViewController) {
+        [self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
+        [tmpMoviePlayViewController.moviePlayer play];
+    }
 	
 	
 }

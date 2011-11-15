@@ -13,6 +13,7 @@
     
 
 }
+@property (nonatomic, strong) NSMutableArray *activityImageObjects;
 @property (nonatomic, strong) IBOutlet UIView *swipeAlert;
 @property (nonatomic, strong) IBOutlet UIView *swipeAlertFront;
 @property bool fromPost;

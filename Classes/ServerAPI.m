@@ -4503,7 +4503,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
         
 		SBJSON *jsonParser = [SBJSON new];
-                
+                        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
@@ -4530,6 +4530,8 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				tmpActivity.numDislikes = [[tmpDict valueForKey:@"numberOfDislikeVotes"] intValue];
 				
 				tmpActivity.isVideo = [[tmpDict valueForKey:@"isVideo"] boolValue];
+                
+                
                 tmpActivity.vote = [tmpDict valueForKey:@"vote"];
 				
 				if ([tmpDict valueForKey:@"thumbNail"] != nil) {

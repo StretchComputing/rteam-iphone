@@ -88,6 +88,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
     IBOutlet UIImageView *blueArrow;
     
 }
+@property (nonatomic, strong) NSString *errorString;
 @property bool createdTeam;
 @property (nonatomic, strong) ADBannerView *myAd;
 @property (nonatomic, strong) UIImageView *blueArrow;

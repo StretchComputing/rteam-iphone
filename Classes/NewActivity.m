@@ -28,12 +28,13 @@
 #import "PhotosActivity.h"
 #import "NewActivityDetail.h"
 #import "VideoDisplay.h"
+#import "NewActivityImageObject.h"
 
 #define REFRESH_HEADER_HEIGHT 52.0f
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects;
 
 
 -(void)home{
@@ -55,6 +56,8 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 }
 	
 -(void)viewWillAppear:(BOOL)animated{
+    
+    self.topScrollView.contentOffset = self.bottomScrollView.contentOffset;
     
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -607,9 +610,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 theMessage.teamId = tmpActivity.teamId;
                 theMessage.numLikes = tmpActivity.numLikes;
                 theMessage.numDislikes = tmpActivity.numDislikes;
-                
+                            
                 theMessage.currentVote = tmpActivity.vote;
-            theMessage.isVideo = tmpActivity.isVideo;
+                theMessage.isVideo = tmpActivity.isVideo;
                 //theMessage.likes = [NSArray arrayWithArray:messageSelected.likedBy];
                 //theMessage.replies = [NSArray arrayWithArray:messageSelected.replies];
                 //theMessage.tags = [NSArray arrayWithArray:messageSelected.tags];
@@ -1126,9 +1129,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		self.hasNewActivity = true;
 	}
 	self.activityArray = [NSMutableArray arrayWithArray:self.tmpActivityArray];
-    
+
     self.allActivityTable.hidden = NO;
 	[self.allActivityTable reloadData];
+    
+    [self performSelectorInBackground:@selector(getUserVotes) withObject:nil];
+    //[self performSelectorInBackground:@selector(getUserImages) withObject:nil];
 	
 }
 
@@ -1281,6 +1287,171 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
+-(void)getUserVotes{
+    
+    @autoreleasepool {
+        
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
+            
+            
+            //Build the comma separated list of activity ids
+            NSString *activityIds = @"";
+            for (int i = 0; i < [self.activityArray count]; i++) {
+                
+                Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+                
+                if (i == ([self.activityArray count] - 1)) {
+                    activityIds = [activityIds stringByAppendingFormat:@"%@", tmpActivity.activityId];
+                    
+                }else {
+                    activityIds = [activityIds stringByAppendingFormat:@"%@,", tmpActivity.activityId];
+                    
+                }
+                
+            }
+            
+            
+            NSDictionary *response = [ServerAPI getActivityStatus:token :activityIds];
+            
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                NSArray *activityResponses = [response valueForKey:@"activities"];
+                
+                for (int i = 0; i < [activityResponses count]; i++) {
+                    
+                    NSDictionary *tmpDictionary = [activityResponses objectAtIndex:i];
+                    
+                    NSString *currentActId = [tmpDictionary valueForKey:@"activityId"];
+                    NSString *vote = [tmpDictionary valueForKey:@"vote"];
+                    
+                    
+                    for (int j = 0; j < [self.activityArray count]; j++) {
+                        
+                        Activity *tmpActivity = [self.activityArray objectAtIndex:j];
+                        
+                        if ([tmpActivity.activityId isEqualToString:currentActId]) {
+                            
+                            tmpActivity.vote = vote;
+                            break;
+                        }
+                    }
+                    
+                    
+                }
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        
+    }
+    
+}
+    
+
+
+- (void)getUserImages {
+	/*
+    @autoreleasepool {
+        //Create the new player
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        for (int i = 0; i < [self.players count]; i++) {
+            
+            
+            if ([self.players count] > i) {
+                
+                Player *controller = [self.players objectAtIndex:i];
+                
+                NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :controller.memberId :mainDelegate.token :@""];
+                
+                
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
+                    
+                    NSDictionary *memberInfo = [response valueForKey:@"memberInfo"];
+                    
+                    NSString *profile = [memberInfo valueForKey:@"thumbNail"];
+                    
+                    
+                    if ((profile == nil)  || ([profile isEqualToString:@""])){
+                        
+                        
+                    }else {
+                        
+                        if ([self.playerPics count] > i) {
+                            [self.playerPics replaceObjectAtIndex:i withObject:profile];
+                            
+                        }
+                    }
+                    
+                    [self performSelectorOnMainThread:
+                     @selector(didFinishPlayers)
+                                           withObject:nil
+                                        waitUntilDone:NO
+                     ];
+                    
+                }else{
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            //self.error = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            //self.error = @"*Error connecting to server";
+                            break;
+                        default:
+                            //should never get here
+                            //self.error = @"*Error connecting to server";
+                            break;
+                    }
+                }
+                
+            }
+            
+        }
+        
+    }
+	
+	*/
+}
+
+
+    
 -(void)cancelSwipe{
     
     self.swipeAlert.hidden = YES;

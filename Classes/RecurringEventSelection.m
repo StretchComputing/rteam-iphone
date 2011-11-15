@@ -120,6 +120,7 @@
 	feedbackLabel.hidden = YES;
 	cell.accessoryType = UITableViewCellAccessoryNone;
 	
+    cellLabel.backgroundColor = [UIColor clearColor];
 	if (row == 0) {
 		cellLabel.text = @"Daily";
 	}else if (row == 1) {

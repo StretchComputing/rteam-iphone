@@ -34,7 +34,7 @@
 @implementation AllEventsCalendar
 @synthesize allGames, allPractices, allEvents, eventType, dateSelected, gamesToday, practicesToday, eventsToday, bottomBar, segmentedControl, 
 createdEvent, error, allGenericEvents, loadingActivity, activityLabel, deleteActivity, deleteAction, deleteEventType, deleteEventId,
-deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete, pDelete, eDelete, gotGames, gotPractices, gotEvents, canceledAction;
+deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete, pDelete, eDelete, gotGames, gotPractices, gotEvents, canceledAction, errorString;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -1762,9 +1762,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             //null parameter
                             //self.error.text = @"*Error connecting to server";
                             break;
-                        case 1:
-                            //error connecting to server
-                            //self.error.text = @"*Error connecting to server";
+                        case 205:
+                            self.errorString = @"NA";
                             break;
                         default:
                             //log status code
@@ -1822,6 +1821,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             //error connecting to server
                             //self.error.text = @"*Error connecting to server";
                             break;
+                        case 205:
+                            self.errorString = @"NA";
+                            break;
                         default:
                             //log status code
                             //self.error.text = @"*Error connecting to server";
@@ -1864,6 +1866,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             //error connecting to server
                             //self.error.text = @"*Error connecting to server";
                             break;
+                        case 205:
+                            self.errorString = @"NA";
+                            break;
                         default:
                             //log status code
                             //self.error.text = @"*Error connecting to server";
@@ -1884,6 +1889,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)doneDelete{
 	
+    if ([self.errorString isEqualToString:@"NA"]) {
+        self.errorString = @"";
+        NSString *tmp = @"You are not a coordinator, or you have not confirmed your email.  Only User's with confirmed email addresses can delete events.  To confirm your email, please click on the activation link in the email we sent you.";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
 	if (self.emptyGames) {
 		self.emptyGames = false;
 		[self.gamesToday removeObjectAtIndex:0];

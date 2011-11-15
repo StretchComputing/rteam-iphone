@@ -29,7 +29,6 @@
 -(IBAction)addMemberHelp;
 -(IBAction)addEventHelp;
 -(IBAction)fastHelp;
--(IBAction)twitterHelp;
 -(IBAction)feedback;
 -(IBAction)messageHelp;
 @end

@@ -13,6 +13,7 @@
 
     
 }
+@property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *editEventActiviy;
 @property int actionRow;
 @property (nonatomic, strong) UIActionSheet *undoCancel;

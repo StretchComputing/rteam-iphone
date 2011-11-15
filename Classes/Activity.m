@@ -10,7 +10,7 @@
 
 
 @implementation Activity
-@synthesize activityText, createdDate, cacheId, teamName, teamId, numLikes, numDislikes, activityId, vote, thumbnail, isVideo, senderName;
+@synthesize activityText, createdDate, cacheId, teamName, teamId, numLikes, numDislikes, activityId, vote, thumbnail, isVideo, senderName, profileImage;
 
 
 

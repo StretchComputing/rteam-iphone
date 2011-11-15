@@ -1301,6 +1301,9 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                     //error connecting to server
                     self.errorString = @"*Error connecting to server";
                     break;
+                case 208:
+                    self.errorString = @"NA";
+                    break;
                 case 211:
                     self.errorString = @"*You cannot delete yourself";
                     break;
@@ -1361,7 +1364,15 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		[self.callNumberButton setEnabled:YES];
 		[self.changeRoleButton setEnabled:YES];
 		[self.deleteButton setEnabled:YES];
-		[self.errorLabel setHidden:NO];
+		
+        if ([self.errorString isEqualToString:@"NA"]) {
+			NSString *tmp = @"Only User's with confirmed email addresses can delete other members.  To confirm your email, please click on the activation link in the email we sent you.";
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[alert show];
+		}else{
+            self.errorLabel.text = self.errorString;
+            self.errorLabel.hidden = NO;
+        }
 
 	}
 

@@ -745,8 +745,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
         NSDictionary *response = [ServerAPI deleteMember:self.memberId :self.teamId :mainDelegate.token];
         
         NSString *status = [response valueForKey:@"status"];
-        
-        
+                        
         if ([status isEqualToString:@"100"]){
             
             self.deleteSuccess = true;
@@ -760,18 +759,21 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
             switch (statusCode) {
                 case 0:
                     //null parameter
-                    self.errorLabel.text = @"*Error connecting to server";
+                    self.errorString = @"*Error connecting to server";
                     break;
                 case 1:
                     //error connecting to server
-                    self.errorLabel.text = @"*Error connecting to server";
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 208:
+                    self.errorString = @"NA";
                     break;
                 case 211:
-                    self.errorLabel.text = @"*You cannot delete yourself";
+                    self.errorString = @"*You cannot delete yourself";
                     break;
                 default:
                     //Log the status code?
-                    self.errorLabel.text = @"*Error connecting to server";
+                    self.errorString = @"*Error connecting to server";
                     break;
             }
         }
@@ -819,7 +821,17 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 		[self.navigationItem setHidesBackButton:NO];
 		[self.sendMessageButton setEnabled:YES];
 		
-		[self.errorLabel setHidden:NO];
+        if ([self.errorString isEqualToString:@"NA"]) {
+			NSString *tmp = @"Only User's with confirmed email addresses can delete other members.  To confirm your email, please click on the activation link in the email we sent you.";
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[alert show];
+		}else{
+            self.errorLabel.text = self.errorString;
+            self.errorLabel.hidden = NO;
+        }
+          
+            
+        
 		
 	}
 	

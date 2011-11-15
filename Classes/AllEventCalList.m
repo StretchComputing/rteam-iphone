@@ -347,9 +347,10 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	int todaySection;
 	int scrollSection;
 	
-	
+	bool anyDates = false;
 	for (int i = 0; i < [self.dateArray count]; i++) {
 		
+        anyDates = true;
 		NSArray *tmpArray = [self.dateArray objectAtIndex:i];
 		
 		NSString *cellDate = @"";
@@ -401,30 +402,33 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		
 	}
 	
-	if (todayDates) {
-		//Scroll to today
+    if (anyDates) {
+        if (todayDates) {
+            //Scroll to today
+            
+            NSIndexPath *scrollPath = [NSIndexPath indexPathForRow:0 inSection:todaySection]; 
+            
+            [self.calendarList scrollToRowAtIndexPath:scrollPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            
+        }else if (pastDates && !futureDates) {
+            //All past dates, scroll to the last section
+            scrollSection = [self.dateArray count] - 1;
+            
+            NSIndexPath *scrollPath = [NSIndexPath indexPathForRow:0 inSection:scrollSection]; 
+            [self.calendarList scrollToRowAtIndexPath:scrollPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            
+        }else if (futureDates && !pastDates) {
+            //All future dates
+            //do nothing	
+            
+        }else {
+            //Mix of past and future dates, scroll to first future date
+            NSIndexPath *scrollPath = [NSIndexPath indexPathForRow:0 inSection:scrollSection]; 
+            [self.calendarList scrollToRowAtIndexPath:scrollPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
+
+    }
 		
-		NSIndexPath *scrollPath = [NSIndexPath indexPathForRow:0 inSection:todaySection]; 
-		
-		[self.calendarList scrollToRowAtIndexPath:scrollPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-		
-	}else if (pastDates && !futureDates) {
-		//All past dates, scroll to the last section
-		scrollSection = [self.dateArray count] - 1;
-		
-		NSIndexPath *scrollPath = [NSIndexPath indexPathForRow:0 inSection:scrollSection]; 
-		[self.calendarList scrollToRowAtIndexPath:scrollPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-		
-	}else if (futureDates && !pastDates) {
-		//All future dates
-		//do nothing	
-		
-	}else {
-		//Mix of past and future dates, scroll to first future date
-		NSIndexPath *scrollPath = [NSIndexPath indexPathForRow:0 inSection:scrollSection]; 
-		[self.calendarList scrollToRowAtIndexPath:scrollPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-	}
-	
 }
 -(void)month{
 	

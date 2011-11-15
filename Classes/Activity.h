@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSString *senderName;
 @property bool isVideo;
 @property (nonatomic, strong) NSString *thumbnail;
+@property (nonatomic, strong) NSString *profileImage;
+
 @property (nonatomic, strong) NSString *vote;
 @property (nonatomic, strong) NSString *activityId;
 @property int numLikes;

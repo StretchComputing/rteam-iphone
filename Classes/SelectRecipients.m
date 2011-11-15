@@ -61,57 +61,63 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 
 -(void)save{
 	
-    self.navigationItem.backBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle:@"Back"
-                                     style:UIBarButtonItemStyleBordered
-                                    target:nil
-                                    action:nil];
-    
-	NSMutableArray *justMemberObjects = [NSMutableArray array];
-	
-    
-    if (self.team || self.fans) {
+    if ([self.members count] > 0) {
+        self.navigationItem.backBarButtonItem =
+        [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                         style:UIBarButtonItemStyleBordered
+                                        target:nil
+                                        action:nil];
         
-        if (self.team) {
-            for (int i = 0; i < [self.allMemberObjects count]; i++) {
-                [justMemberObjects addObject:[self.allMemberObjects objectAtIndex:i]];
+        NSMutableArray *justMemberObjects = [NSMutableArray array];
+        
+        
+        if (self.team || self.fans) {
+            
+            if (self.team) {
+                for (int i = 0; i < [self.allMemberObjects count]; i++) {
+                    [justMemberObjects addObject:[self.allMemberObjects objectAtIndex:i]];
+                }
+            }
+            
+            if (self.fans) {
+                for (int i = 0; i < [self.allFansObjects count]; i++) {
+                    [justMemberObjects addObject:[self.allFansObjects objectAtIndex:i]];
+                }
+            }
+            
+        }else{
+            for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
+                
+                if (([[self.selectedMemberObjects objectAtIndex:i] class] == [Fan class]) || ([[self.selectedMemberObjects objectAtIndex:i] class] == [Player class]) ) {
+                    [justMemberObjects addObject:[self.selectedMemberObjects objectAtIndex:i]];
+                    
+                }
+                
+                
             }
         }
         
-        if (self.fans) {
-            for (int i = 0; i < [self.allFansObjects count]; i++) {
-                [justMemberObjects addObject:[self.allFansObjects objectAtIndex:i]];
-            }
-        }
         
+        if (self.isPrivate) {
+            
+            SendPrivateMessage *tmp = [[SendPrivateMessage alloc] init];
+            tmp.recipientObjects = [NSArray arrayWithArray:justMemberObjects];
+            tmp.teamId = self.teamId;
+            [self.navigationController pushViewController:tmp animated:YES];
+            
+        }else if (self.isPoll){
+            
+            SendPoll *tmp = [[SendPoll alloc] init];
+            tmp.recipientObjects = [NSArray arrayWithArray:justMemberObjects];
+            tmp.teamId = self.teamId;
+            [self.navigationController pushViewController:tmp animated:YES];
+        }
+
     }else{
-        for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
-            
-            if (([[self.selectedMemberObjects objectAtIndex:i] class] == [Fan class]) || ([[self.selectedMemberObjects objectAtIndex:i] class] == [Player class]) ) {
-                [justMemberObjects addObject:[self.selectedMemberObjects objectAtIndex:i]];
-
-            }
-
-            
-        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Recipients" message:@"No members of this team can receive messages or polls yet.  Only members that have confirmed their email address or phone number can be recipients." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
     }
-	
-	
-    if (self.isPrivate) {
-        
-        SendPrivateMessage *tmp = [[SendPrivateMessage alloc] init];
-        tmp.recipientObjects = [NSArray arrayWithArray:justMemberObjects];
-        tmp.teamId = self.teamId;
-        [self.navigationController pushViewController:tmp animated:YES];
-        
-    }else if (self.isPoll){
-        
-        SendPoll *tmp = [[SendPoll alloc] init];
-        tmp.recipientObjects = [NSArray arrayWithArray:justMemberObjects];
-        tmp.teamId = self.teamId;
-        [self.navigationController pushViewController:tmp animated:YES];
-    }
-
+    
 
 }
 
@@ -189,7 +195,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
                     [tmpArray addObject:[self.allFansObjects objectAtIndex:i]];
                 }
                 
-                self.members = tmpArray;
+                self.members = [NSArray arrayWithArray:tmpArray];
                 
             }else{
                 
