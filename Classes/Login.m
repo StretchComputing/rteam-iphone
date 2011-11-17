@@ -17,6 +17,7 @@
 #import "Home.h"
 #import "SettingsTabs.h"
 #import "Login.h"
+#import "GANTracker.h"
 
 @implementation Login
 @synthesize email, password, error, registering, submitButton, createSuccess, invalidEmail, isMember, serverError, success, numMemberTeams, 
@@ -190,6 +191,15 @@ resetPasswordButton, errorString, startEmail, theEmail, thePassword;
 	
 	if (self.createSuccess){
 		
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"User Login"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
 		//Then go to the coaches home
 		SettingsTabs *nextController = [[SettingsTabs alloc] init];
 		nextController.fromRegisterFlow = @"true";
