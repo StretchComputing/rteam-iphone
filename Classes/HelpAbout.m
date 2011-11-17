@@ -48,10 +48,10 @@
 	[self.feedbackButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	
     if (self.fromSettings) {
-        [self.navigationItem setRightBarButtonItem:nil];
+        [self.navigationItem setLeftBarButtonItem:nil];
     }else{
         UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-        [self.navigationItem setRightBarButtonItem:homeButton];
+        [self.navigationItem setLeftBarButtonItem:homeButton];
     }
 	
     

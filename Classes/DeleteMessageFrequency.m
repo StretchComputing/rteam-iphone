@@ -27,14 +27,13 @@
 	self.myTableView.dataSource = self;
 	
 	
-	NSString *ios = [[UIDevice currentDevice] systemVersion];
-	if (![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"]) {
+
 		
 		self.myTableView.backgroundColor = [UIColor clearColor];
 		self.myTableView.opaque = NO;
 		self.myTableView.backgroundView = nil;
 		
-	}
+	
 	
 }
 

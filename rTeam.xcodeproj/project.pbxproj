@@ -2841,7 +2841,7 @@
 				GCC_PREFIX_HEADER = rTeam_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "rTeam-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
@@ -2871,7 +2871,7 @@
 				GCC_PREFIX_HEADER = rTeam_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "rTeam-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
@@ -2900,7 +2900,7 @@
 					$SDKROOT/usr/include/libxml2,
 					"\"$SDKROOT/usr/include/libxml2\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "9447D40F-7333-49F4-8BB9-65F2ED17CCCE";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9447D40F-7333-49F4-8BB9-65F2ED17CCCE";
@@ -2928,7 +2928,7 @@
 				GCC_PREFIX_HEADER = rTeam_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "rTeam-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
@@ -2953,7 +2953,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "0D2F78DD-22DE-4496-86FE-7890C8196472";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D2F78DD-22DE-4496-86FE-7890C8196472";
@@ -2978,7 +2978,7 @@
 				GCC_PREFIX_HEADER = rTeam_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "rTeam-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
@@ -3009,7 +3009,7 @@
 					$SDKROOT/usr/include/libxml2,
 					"\"$SDKROOT/usr/include/libxml2\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
@@ -3020,19 +3020,22 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv7,
+					armv6,
+				);
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				CODE_SIGN_ENTITLEMENTS = "~/Desktop/iCoach/Entitlements.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Stretch Computing,Incorporated";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Stretch Computing,Incorporated";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "E283BA18-7C59-4D16-837C-737B5F6E7A4B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "F18F849B-B584-43D0-B9E6-9A7EC164A060";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F18F849B-B584-43D0-B9E6-9A7EC164A060";
 				SDKROOT = iphoneos;
 			};
 			name = Release;

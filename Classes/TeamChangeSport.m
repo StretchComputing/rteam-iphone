@@ -28,7 +28,9 @@
 					  @"Tennis", nil];
 	
 	
-	
+	self.myTableView.backgroundColor = [UIColor clearColor];
+    self.myTableView.opaque = NO;
+    self.myTableView.backgroundView = nil;
 }
 
 -(void)valueChanged{
@@ -111,14 +113,14 @@
 	NSString *theSport = [self.allMatches objectAtIndex:row];
 	cell.textLabel.text = [@" " stringByAppendingString:theSport];
 	cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
-	cell.contentView.backgroundColor = [UIColor grayColor];
+	cell.contentView.backgroundColor = [UIColor clearColor];
 	
 	return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 25;
+    return 35;
 }
 
 - (void)tableView:(UITableView *)tableView
