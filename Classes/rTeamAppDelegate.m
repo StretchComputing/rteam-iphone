@@ -48,6 +48,7 @@
 #import "MyViewController.h"
 #import "ServerAPI.h"
 #import "Reachability.h"
+#import "GANTracker.h"
 
 @implementation rTeamAppDelegate
 
@@ -126,6 +127,10 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
 	
+    [[GANTracker sharedTracker] startTrackerWithAccountID:@"UA-280128-4"
+                                           dispatchPeriod:10
+                                                 delegate:nil];
+    
 	if ([launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey] != nil) {
 		[self.navController dismissModalViewControllerAnimated:NO];
 		[self.navController popToRootViewControllerAnimated:NO];
@@ -185,6 +190,15 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
     
 	
 	
+}
+
+-(void)applicationDidBecomeActive:(UIApplication *)application{
+    NSError *error;
+    if (![[GANTracker sharedTracker] trackPageview:@"/app_opened"
+                                         withError:&error]) {
+        // Handle error here
+    }
+    
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{

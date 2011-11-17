@@ -12,7 +12,7 @@
 #import "Team.h"
 #import "Fan.h"
 #import "Player.h"
-
+#import "GANTracker.h"
 
 @implementation SendPrivateMessage
 @synthesize keyboardIsUp, keyboardButton, recipients, cancelMessageButton, messageText, activity, recipLabel, recipientObjects, errorString, errorLabel, teamId, theMessageText, isReply, descripLabel, isConfirm;
@@ -87,6 +87,15 @@
         [self.activity startAnimating];
         [self.keyboardButton setEnabled:NO];
         [self.cancelMessageButton setEnabled:NO];
+        
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Send Private Message"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
         [self performSelectorInBackground:@selector(createActivity) withObject:nil];
     }

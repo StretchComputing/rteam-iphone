@@ -45,6 +45,7 @@
 #import "ScoreButton.h"
 #import "NewActivity.h"
 #import "SendPoll.h"
+#import "GANTracker.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -297,6 +298,15 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
                     
 				}
 			}
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"View Team from Quick Link"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
             
 			TeamNavigation *tmpNav = [[TeamNavigation alloc] init];
 			tmpNav.teamId = toTeam.teamId;
@@ -690,6 +700,15 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 
 -(void)search{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"View Search Page"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.serverError.text = @"";
 
 	Search *tmp = [[Search alloc] init];
@@ -872,6 +891,15 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 
 -(void)aboutRteam{
     
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Go to Help Page - From Home"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
     [self closeQuestion];
     
 	self.serverError.text = @"";
@@ -891,6 +919,15 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 }
 -(void)myTeams{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"View My Teams"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.serverError.text = @"";
     
     MyTeams *tmp = [[MyTeams alloc] init];
@@ -912,6 +949,17 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 }
 
 -(void)allEvents{
+    
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"View Calendar of Events"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
+    
 	self.serverError.text = @"";
 
 	AllEventsCalendar *nextController = [[AllEventsCalendar alloc] init];
@@ -926,6 +974,15 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 
 -(void)messages{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"View Activity"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.serverError.text = @"";
 	
     NewActivity *tmp = [[NewActivity alloc] init];
@@ -2758,6 +2815,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (buttonIndex == 1) {
 			//Undo cancel
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Activate Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			
 			[self.eventsNowActivity startAnimating];
 			[self performSelectorInBackground:@selector(activateEvent) withObject:nil];			
@@ -2765,6 +2832,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		}else if (buttonIndex == 0) {
 			[self.eventsNowActivity startAnimating];
 			
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Delete Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self performSelectorInBackground:@selector(deleteEvent) withObject:nil];
 			
 		}else {
@@ -3122,6 +3198,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)question{
+    
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Click Help Question Mark"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
     
     if (self.bannerIsVisible) {
         self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);

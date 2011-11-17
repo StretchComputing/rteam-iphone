@@ -23,6 +23,7 @@
 #import "SettingsTabs.h"
 #import "MobileCarrier.h"
 #import "ValidatePhoneCarrier.h"
+#import "GANTracker.h"
 
 
 @implementation RegisterNewUser
@@ -127,6 +128,15 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 		
 		//Register the User in a background thread
 		
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Registe New User"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 		

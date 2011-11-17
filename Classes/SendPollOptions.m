@@ -15,6 +15,7 @@
 #import "FastActionSheet.h"
 #import "Fan.h"
 #import "Player.h"
+#import "GANTracker.h"
 
 @implementation SendPollOptions
 @synthesize action, question, errorMessage, option1, option2, option3, option4, option5, submitButton, questionText, teamId, createSuccess, 
@@ -63,6 +64,15 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
         self.theOption4 = [NSString stringWithString:self.option4.text];
         self.theOption5 = [NSString stringWithString:self.option5.text];
 
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Send Poll - Options"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
         
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	}

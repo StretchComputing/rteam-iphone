@@ -11,6 +11,7 @@
 #import "ServerAPI.h"
 #import "JSON/JSON.h"
 #import "SettingsTabs.h"
+#import "GANTracker.h"
 
 @implementation ChangePassword
 @synthesize submitButton, error, password, confirmPassword, activity, changeSuccess, errorString, thePassword;
@@ -46,6 +47,15 @@
 		//Register the User in a background thread
 		
         self.thePassword = [NSString stringWithString:self.password.text];
+        
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Change Password"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		

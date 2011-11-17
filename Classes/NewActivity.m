@@ -29,6 +29,7 @@
 #import "NewActivityDetail.h"
 #import "VideoDisplay.h"
 #import "NewActivityImageObject.h"
+#import "GANTracker.h"
 
 #define REFRESH_HEADER_HEIGHT 52.0f
 
@@ -586,6 +587,8 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
+   
+    
 	NSUInteger row = [indexPath row];
     
     if (tableView == self.allActivityTable) {
@@ -629,6 +632,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 theMessage.picImageData = [NSData data];
                 
          
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Select Activity Row"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
                 [self.navigationController pushViewController:theMessage animated:YES];
                 
 
@@ -667,6 +679,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				poll.status = messageOrPoll.status;
                 poll.fromClass = self;
 
+                NSError *errors;
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                     action:@"Select Poll Received"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:&errors]) {
+                }
+                
 				[self.navigationController pushViewController:poll animated:YES];
 			}else {
 				
@@ -690,6 +711,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 message.senderName = messageOrPoll.senderName;
                 message.teamName = messageOrPoll.teamName;
               
+                NSError *errors;
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                     action:@"Select Message Received"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:&errors]) {
+                }
                 
                 [self.navigationController pushViewController:message animated:YES];
                 
@@ -726,6 +755,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     tmp.replyFraction = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people have replied."];
                 }
    
+                NSError *errors;
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                     action:@"Select Poll Sent"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:&errors]) {
+                }
+                
                 
                 [self.navigationController pushViewController:tmp animated:YES];
 
@@ -760,6 +798,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 viewMessage.confirmString = replyString;
                 
+                NSError *errors;
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                     action:@"Select Poll Received"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:&errors]) {
+                }
                 
                 [self.navigationController pushViewController:viewMessage animated:YES];
                 
@@ -1233,6 +1279,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 //For clicking on an image inside the message (company feed)
 -(void)imageSelected:(id)sender{
         
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Select Activity Image"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
     ImageButton *tmpButton = (ImageButton *)sender;
     
     NSString *messageId = [NSString stringWithString:tmpButton.messageId];

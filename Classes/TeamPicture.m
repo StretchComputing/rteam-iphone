@@ -14,6 +14,7 @@
 #import "CameraSelectionTeamPicture.h"
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
+#import "GANTracker.h"
 
 @implementation TeamPicture
 @synthesize removeButton, addChangeButton, profilePic, titleLabel, loadingImageLabel, loadingImageActivity, displayLabel, addImage, hasImage,
@@ -331,6 +332,16 @@ newImage, dontMove, toOrientation, portrait;
 	self.titleLabel.text = @"Your current profile picture.";
 	self.newImage = true;
 	[self.activity startAnimating];
+    
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Update Team Picture"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	[self performSelectorInBackground:@selector(updateImage) withObject:nil];
 	
 	

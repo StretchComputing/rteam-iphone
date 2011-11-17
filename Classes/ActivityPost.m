@@ -13,6 +13,7 @@
 #import "SelectTeams.h"
 #import "SelectRecipients.h"
 #import <MobileCoreServices/UTCoreTypes.h> 
+#import "GANTracker.h"
 
 @implementation ActivityPost
 @synthesize messageText, postTeamId, teamSelectButton, hasTeams, teams, savedTeams, selectedTeams, keyboardIsUp, keyboardButton, sendPollButton, sendPrivateButton, activity, segControl, theMessageText, previewImage, cameraSaveMessage, cancelImageButton, imageDataToSend, isTakeVideo, isSendVideo, sendOrientation, errorLabel, errorString, videoDataToSend, fromClass;
@@ -82,6 +83,15 @@
         [self.keyboardButton setEnabled:NO];
         [self.teamSelectButton setEnabled:NO];
         [self.segControl setEnabled:NO];
+        
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Post to Activity"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
         [self performSelectorInBackground:@selector(createActivity) withObject:nil];
     }else{

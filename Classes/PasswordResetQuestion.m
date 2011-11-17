@@ -11,6 +11,7 @@
 #import "ServerAPI.h"
 #import "SettingsTabs.h"
 #import <QuartzCore/QuartzCore.h>
+#import "GANTracker.h"
 
 @implementation PasswordResetQuestion
 @synthesize question, newQuestion, newAnswer, submitButton, errorLabel, activity, errorString, newQuestionString, newAnswerString;
@@ -44,6 +45,16 @@
         
         self.newQuestionString = [NSString stringWithString:self.newQuestion.text];
         self.newAnswerString = [NSString stringWithString:self.newAnswer.text];
+        
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Change Password Reset Question"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
         [self performSelectorInBackground:@selector(runRequest) withObject:nil];
     }
 		

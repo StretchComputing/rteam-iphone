@@ -11,6 +11,8 @@
 #import "Register.h"
 #import "Login.h"
 #import "ResetPasswordWithQuestion.h"
+#import "GANTracker.h"
+#import "rTeamAppDelegate.h"
 
 @implementation ResetPassword
 @synthesize email, activity, error, hasQuestion, resetButton, success, question, errorString, theEmail;
@@ -151,6 +153,15 @@
 		//"Yes"
 	}else if (buttonIndex == 1) {
 		
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Reset Password"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
 		NSDictionary *response = [ServerAPI resetUserPassword:self.email.text :@""];
 		
 			NSString *status = [response valueForKey:@"status"];

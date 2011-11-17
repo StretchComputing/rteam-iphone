@@ -9,6 +9,7 @@
 #import "DeleteMessageFrequency.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
+#import "GANTracker.h"
 
 @implementation DeleteMessageFrequency
 @synthesize myTableView, activity, selectedArray, errorString, displayLabel, newValue;
@@ -135,6 +136,15 @@
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Change Message Delete Frequency"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	NSInteger row = [indexPath row];
 	
 		

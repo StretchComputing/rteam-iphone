@@ -20,6 +20,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Fan.h"
 #import "Player.h"
+#import "GANTracker.h"
 
 @implementation SendPoll
 @synthesize doneButton, activity, pollQuestion, pollType, errorMessage, pollSubject, teamId, createSuccess, eventId, eventType, origLoc, recipients,
@@ -281,6 +282,15 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
 			
             self.thePollSubject = [NSString stringWithString:self.pollSubject.text];
             self.thePollQuestion = [NSString stringWithString:self.pollQuestion.text];
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Send Poll - Yes/No"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
             
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			

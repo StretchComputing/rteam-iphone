@@ -17,6 +17,7 @@
 #import "FastActionSheet.h"
 #import "NewMemberObject.h"
 #import "Home.h"
+#import "GANTracker.h"
 
 @implementation NewPlayer
 @synthesize firstName, lastName, email, guardianEmail, roles, teamId, submitButton, serverProcess, error, createSuccess, isCoordinator, 
@@ -245,6 +246,15 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         self.thePhoneNumber = [NSString stringWithString:self.phoneNumber.text];
         self.theEmail = [NSString stringWithString:self.email.text];
 
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Add Member - Single"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 	}
@@ -1205,6 +1215,15 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         }
         
         finalMemberArray = tmpMemberArray;
+        
+        NSError *errors;
+       // rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Add Members - Multiple"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
         NSDictionary *response = [ServerAPI createMultipleMembers:mainDelegate.token :self.teamId :finalMemberArray];
         

@@ -14,6 +14,7 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "VideoDisplay.h"
+#import "GANTracker.h"
 
 @implementation NewActivityDetail
 @synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, isCurrent, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel, isVideo;
@@ -65,19 +66,21 @@
     
     self.title = self.displayName;
     
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    //UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *replyButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(reply)];
+    //UIBarButtonItem *replyButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(reply)];
     
-    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(delete)];
+    //UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(delete)];
     
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit)];
+    //UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit)];
     
     
     if (self.isCurrent) {
-        self.myToolbar.items = [NSArray arrayWithObjects:replyButton, flexibleSpace, editButton, flexibleSpace, deleteButton, nil];
+        //self.myToolbar.items = [NSArray arrayWithObjects:flexibleSpace, editButton, flexibleSpace, deleteButton, nil];
+        self.myToolbar.items = [NSArray arrayWithObjects:nil];
+
     }else{
-        self.myToolbar.items = [NSArray arrayWithObjects:replyButton, nil];
+        self.myToolbar.items = [NSArray arrayWithObjects:nil];
     }
     
     [self loadScrollView];
@@ -243,6 +246,15 @@
 
 -(void)imageSelected:(id)sender{
         
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Select Activty Detail Image"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
     ImageDisplayMultiple *newDisplay = [[ImageDisplayMultiple alloc] init];
     newDisplay.activityId = self.messageId;
     newDisplay.teamId = self.teamId;
@@ -287,6 +299,15 @@
 
 -(void)voteUp{
 
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Activity Vote - Thumbs Up"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.currentVoteBool = YES;
     
 	[self performSelectorInBackground:@selector(updateTweet) withObject:nil];
@@ -295,6 +316,15 @@
 
 -(void)voteDown{
 
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Activity Vote - Thumbs Down"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+          
 	self.currentVoteBool = NO;
 	
 	[self performSelectorInBackground:@selector(updateTweet) withObject:nil];

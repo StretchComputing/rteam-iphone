@@ -19,6 +19,7 @@
 #import "EventList.h"
 #import "Players.h"
 #import "CurrentTeamTabs.h"
+#import "GANTracker.h"
 
 @implementation Search
 @synthesize searchBar, searchCriteria, searchTableView, potentialMatches, allMatches, teamsOnly, error, potentialMatchesTeamName, 
@@ -462,6 +463,15 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Select Search Row"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	NSUInteger row = [indexPath row];
 	if ([[self.allMatches objectAtIndex:row] class] == [Team class]) {
 		

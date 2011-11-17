@@ -17,6 +17,7 @@
 #import "AllEventCalList.h"
 #import "AllEventsCalendar.h"
 #import "CurrentTeamTabs.h"
+#import "GANTracker.h"
 
 @implementation GameEdit
 @synthesize activity, saveChanges, gameOpponent, gameDate, gameDescription, opponent, stringDate, description, teamId, gameId, gameChangeDate, 
@@ -256,6 +257,16 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 	if (actionSheet == self.deleteActionSheet) {
 		
 		if (buttonIndex == 0) {
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Delete Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			//Remove
 			[self.activity startAnimating];
 			self.deleteButton.enabled = NO;
@@ -263,6 +274,16 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 			[self performSelectorInBackground:@selector(removeGame) withObject:nil];
 		}else if (buttonIndex == 1) {
 			//Cancel
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Cancel Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self.activity startAnimating];
 			self.deleteButton.enabled = NO;
 			self.saveChanges.enabled = NO;

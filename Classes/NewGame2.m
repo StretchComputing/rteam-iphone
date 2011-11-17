@@ -13,7 +13,7 @@
 #import "CurrentTeamTabs.h"
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "GANTracker.h"
 @implementation NewGame2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, opponent, duration, description, start, errorString, theDuration, theOpponent, theDescription;
 
@@ -90,6 +90,15 @@
 			
 			//Create the game in a background thread
 			
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Create Game - Single"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			
 			
@@ -111,6 +120,14 @@
 
 		//Create the game in a background thread
     
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Create Game - Single"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		

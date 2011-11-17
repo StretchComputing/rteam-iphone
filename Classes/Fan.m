@@ -19,6 +19,7 @@
 #import "CameraSelectionProfile.h"
 #import "ProfilePhoto.h"
 #import "FastActionSheet.h"
+#import "GANTracker.h"
 
 static inline double radians (double degrees) {return degrees * M_PI/180;}
 
@@ -658,6 +659,15 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
         
         if ([profile length] > 0) {
             
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Edit Fan Photo"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
             if (self.portrait) {
                 orientation = @"portrait";
             }else{
@@ -1100,6 +1110,14 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 			[self.navigationItem setHidesBackButton:YES];
 			[self.sendMessageButton setEnabled:NO];
 			
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Delete Fan"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
 			[self performSelectorInBackground:@selector(runDelete) withObject:nil];
 			
 		}
@@ -1147,6 +1165,15 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 	self.deleteFanButton.enabled = NO;
 	self.startEditButton.enabled = NO;
 	self.sendMessageButton.enabled = NO;
+    
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Switch Fan to Member"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
 	
 	[self performSelectorInBackground:@selector(makeMember) withObject:nil];
 }

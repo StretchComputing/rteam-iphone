@@ -30,6 +30,7 @@
 #import "Fans.h"
 #import "FastActionSheet.h"
 #import "Vote.h"
+#import "GANTracker.h"
 
 @implementation AllEventsCalendar
 @synthesize allGames, allPractices, allEvents, eventType, dateSelected, gamesToday, practicesToday, eventsToday, bottomBar, segmentedControl, 
@@ -719,6 +720,8 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 
 -(void)deleteEvent:(id)sender{
 	
+   
+    
 	UIButton *tmpbutton = (UIButton *)sender;
 	
 	int cell = tmpbutton.tag - 1;
@@ -1667,11 +1670,29 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (buttonIndex == 0) {
 			
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Delete Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			//run the delete
 			[self.deleteActivity startAnimating];
 			[self performSelectorInBackground:@selector(runDelete) withObject:nil];
 		}else if (buttonIndex == 1) {
 			//Cancel
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Cancel Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self.deleteActivity startAnimating];
 			[self performSelectorInBackground:@selector(cancelEvent) withObject:nil];
 		}else {
@@ -1683,11 +1704,29 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (buttonIndex == 0) {
 			
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Delete Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			//run the delete
 			[self.deleteActivity startAnimating];
 			[self performSelectorInBackground:@selector(runDelete) withObject:nil];
 		}else if (buttonIndex == 1){
 			//Cancel
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Activate Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self.deleteActivity startAnimating];
 			[self performSelectorInBackground:@selector(activateEvent) withObject:nil];
 		}else {

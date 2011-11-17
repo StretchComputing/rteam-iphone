@@ -10,7 +10,7 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "Player.h"
-
+#import "GANTracker.h"
 @implementation GameAttendance
 @synthesize players, teamId, allSelector, gameId, attMarker, saveAll, select, activity, successLabel, startDate, attReport, attendanceInfo,
 saveSuccess, playerTableView, successString, successNoChoices, barActivity, attActivity, attActivityLabel, attMarkerTemp, switchButton, playerTableViewPre, topLabel, errorString;
@@ -462,6 +462,15 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	
 	
 	//Create the player in a background thread
+    
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Take Attendance - Game"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
 	
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	

@@ -17,6 +17,7 @@
 #import "MessageThreadInbox.h"
 #import "FastActionSheet.h"
 #import "NewActivity.h"
+#import "GANTracker.h"
 
 @implementation ViewPollReceived
 @synthesize subject, body, receivedDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, pollChoices, buttonOption1,
@@ -641,6 +642,15 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
         self.buttonOption3.enabled = NO;
         self.buttonOption4.enabled = NO;
 
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Send Poll Response"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
         [self performSelectorInBackground:@selector(sendPollResponse) withObject:nil];
 	}
 

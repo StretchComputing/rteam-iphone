@@ -18,6 +18,7 @@
 #import "NewMemberObject.h"
 #import "Home.h"
 #import "MyTeams.h"
+#import "GANTracker.h"
 
 @implementation InviteFanFinal
 @synthesize firstName, lastName, email, roles, teamId, submitButton, serverProcess, error, createSuccess, isCoordinator, 
@@ -787,6 +788,15 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
         }
         
         finalMemberArray = tmpMemberArray;
+        
+        NSError *errors;
+        //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Invite Fans - Multiple"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
         NSDictionary *response = [ServerAPI createMultipleMembers:mainDelegate.token :self.teamId :finalMemberArray];
         

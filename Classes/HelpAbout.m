@@ -10,6 +10,7 @@
 #import "Home.h"
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
+#import "GANTracker.h"
 
 
 @implementation HelpAbout
@@ -68,6 +69,15 @@
 
 
 -(void)playMovie{
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"rTeam Movie Played"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.displayLabel.text = @"";
     
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"rTeamWelcomeFinal" ofType:@"m4v"];      
@@ -84,14 +94,16 @@
 }
 
 -(void)createTeamHelp{
-    /*
-	self.displayLabel.text = @"";
+   
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Create Team Help Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
     
-	CreateTeamHelp *tmp = [[CreateTeamHelp alloc] init];
-	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleDone target:nil action:nil];
-	self.navigationItem.backBarButtonItem = temp;
-	[self.navigationController pushViewController:tmp animated:YES];
-	*/
     
     self.displayLabel.text = @"";
     
@@ -106,6 +118,14 @@
 }
 
 -(void)addMemberHelp{
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Add Member Help Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
 	self.displayLabel.text = @"";
     
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"addMember1" ofType:@"mov"];      
@@ -120,6 +140,15 @@
 }
 
 -(void)addEventHelp{
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Add Event Help Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.displayLabel.text = @"";
     
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"addEvent" ofType:@"mov"];      
@@ -134,6 +163,15 @@
 
 -(void)fastHelp{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Quick Links Help Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.displayLabel.text = @"";
     
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"quickLinks" ofType:@"mov"];      
@@ -151,6 +189,14 @@
 
 -(void)messageHelp{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Send Message Help Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
 	self.displayLabel.text = @"";
     
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"sendMessage" ofType:@"mov"];      
@@ -203,6 +249,15 @@
 
 -(void)feedback{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Feedback Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.displayLabel.text = @"";
     
 	if ([MFMailComposeViewController canSendMail]) {

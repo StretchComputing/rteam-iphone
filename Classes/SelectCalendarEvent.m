@@ -19,6 +19,8 @@
 #import "CalendarEventObject.h"
 #import "CurrentTeamTabs.h"
 #import "AllEventsCalendar.h"
+#import "rTeamAppDelegate.h"
+#import "GANTracker.h"
 
 @implementation SelectCalendarEvent
 @synthesize shouldPushAnotherView, allEvents, eventType, dateSelected, error, eventLabel, eventTimeField, removeEventButton, errorLabel, activity,
@@ -530,6 +532,16 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	}
 
 	gameArray = tmpGameArray;
+    
+    NSError *errors;
+    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Create Games - Multiple (Calendar)"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	
 	NSDictionary *response = [ServerAPI createMultipleGames:mainDelegate.token :self.teamId :@"plain" :gameArray];
 	
@@ -668,6 +680,15 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	
 	gameArray = tmpGameArray;
 	
+    NSError *errors;
+    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Create Practice - Multiple (Calendar)"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
 	
 	NSString *status = [response valueForKey:@"status"];
@@ -804,6 +825,16 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	}
 	
 	gameArray = tmpGameArray;
+    
+    NSError *errors;
+    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Create Event - Multiple (Calendar)"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	
 	NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
 	

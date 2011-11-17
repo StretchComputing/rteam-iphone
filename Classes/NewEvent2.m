@@ -13,7 +13,7 @@
 #import "CurrentTeamTabs.h"
 #import "FastActionSheet.h"
 #import "QuartzCore/QuartzCore.h"
-
+#import "GANTracker.h"
 
 @implementation NewEvent2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, location, eventName, description, start, errorString, theLocation, theDescription, theEventName;
@@ -87,6 +87,15 @@
         self.theDescription = [NSString stringWithString:self.description.text];
         self.theEventName = [NSString stringWithString:self.eventName.text];
         self.theLocation = [NSString stringWithString:self.location.text];
+        
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Create Event - Single"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		

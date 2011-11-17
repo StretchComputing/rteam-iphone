@@ -9,12 +9,22 @@
 #import "PlayerAttendance.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
+#import "GANTracker.h"
 
 @implementation PlayerAttendance
 @synthesize teamId, memberId, errorMessage, attResults, displayAttResults, eventType, segmentEventType, segChange, fromSearch;
 
 -(void)viewDidLoad{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"View Member Attendance"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	self.title = @"Member Attendance";
 	[self getAttendance];
 	self.displayAttResults = self.attResults;

@@ -32,6 +32,7 @@
 #import "EventEdit.h"
 #import "Fans.h"
 #import "Vote.h"
+#import "GANTracker.h"
 
 @implementation EventList
 @synthesize events, teamName, teamId, deleteRow, isPastGame, fromEdit, userRole, error, addButton, sport, barActivity, 
@@ -1149,13 +1150,30 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (buttonIndex == 1) {
 			//Undo cancel
-			
+			NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Activate Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self.editEventActiviy startAnimating];
 			[self performSelectorInBackground:@selector(activateEvent) withObject:nil];			
 			
 		}else if (buttonIndex == 0) {
 			[self.editEventActiviy startAnimating];
 
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Delete Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self performSelectorInBackground:@selector(deleteEvent) withObject:nil];
 			
 		}else {
@@ -1166,11 +1184,28 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		if (buttonIndex == 0) {
 			[self.editEventActiviy startAnimating];
 
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Delete Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+                  
 			[self performSelectorInBackground:@selector(deleteEvent) withObject:nil];
 			
 		}else if (buttonIndex == 1) {
 			[self.editEventActiviy startAnimating];
 
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Cancel Event"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }                  
 			[self performSelectorInBackground:@selector(cancelEvent) withObject:nil];
 		}else {
 			//Back

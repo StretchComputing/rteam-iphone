@@ -10,6 +10,7 @@
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
 #import "VoteMemberObject.h"
+#import "GANTracker.h"
 
 @implementation Vote
 @synthesize userRole, teamId, loadingLabel, loadingActivity, myTableView, closeVotingButton, errorLabel, activity, memberArray, errorString, myVote,
@@ -272,6 +273,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (self.isOpen) {
 		VoteMemberObject *tmpMember = [self.memberArray objectAtIndex:row];
 		
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"MVP Vote"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
 		[self.votingActivity startAnimating];
 		[self performSelectorInBackground:@selector(castVote:) withObject:tmpMember.memberId];
 	}else {

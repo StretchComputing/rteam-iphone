@@ -13,7 +13,7 @@
 #import "CurrentTeamTabs.h"
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "GANTracker.h"
 @implementation NewPractice2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, location, duration, description, start, errorString, theDuration, theDescription, theLocation;
 
@@ -89,6 +89,15 @@
 			
 			//Create the player in a background thread
 			
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Create Practice - Single"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			
 			
@@ -110,6 +119,15 @@
 		
 		//Create the player in a background thread
 		
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Create Practice - Single"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 	}

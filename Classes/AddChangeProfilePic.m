@@ -11,6 +11,7 @@
 #import "ServerAPI.h"
 #import "Base64.h"
 #import "CameraSelectionUser.h"
+#import "GANTracker.h"
 
 @implementation AddChangeProfilePic
 @synthesize removeButton, addChangeButton, profilePic, titleLabel, loadingImageLabel, loadingImageActivity, displayLabel, addImage, hasImage,
@@ -284,6 +285,15 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
 	self.titleLabel.text = @"Your current profile picture.";
     self.newImage = true;
 	[self.activity startAnimating];
+    
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Change Profile Picture"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
 	[self performSelectorInBackground:@selector(updateImage) withObject:nil];
 	
 	

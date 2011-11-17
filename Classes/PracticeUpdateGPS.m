@@ -14,6 +14,7 @@
 #import "PracticeTabs.h"
 #import "FastActionSheet.h"
 #import "Practice.h"
+#import "GANTracker.h"
 
 @implementation PracticeUpdateGPS
 @synthesize practiceId, teamId, locationName, action, lat, longt, locationManager, saveButton, useCurrentButton, updateSuccess, errorMessage, 
@@ -106,6 +107,16 @@ locationString, errorString,updateAllGames, nameOnly, updateLat, updateLong, all
 - (void)runRequest {
 
 	@autoreleasepool {
+        
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Update Location - Practice"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
         NSString *locationStr = @"";
         NSString *paramLat = @"";
         NSString *paramLong = @"";
@@ -131,7 +142,7 @@ locationString, errorString,updateAllGames, nameOnly, updateLat, updateLong, all
             updateAll = @"true";
         }
         
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         NSString *token = @"";
         if (mainDelegate.token != nil){

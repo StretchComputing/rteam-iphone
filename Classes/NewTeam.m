@@ -16,6 +16,7 @@
 #import "QuartzCore/QuartzCore.h"
 #import "NewMemberObject.h"
 #import "MyTeams.h"
+#import "GANTracker.h"
 
 @implementation NewTeam
 @synthesize teamName, from, oldTeams, errorLabel, serverProcess, submitButton, createSuccess, other, enableTwitter, twitterUrl, errorString,
@@ -148,6 +149,15 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 			//Create the team in a background thread
             self.theTeamName = [NSString stringWithString:self.teamName.text];
 
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Create Team"
+                                                  label:self.from
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			
 		}else {
@@ -532,6 +542,15 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
         }
         
         finalMemberArray = tmpMemberArray;
+        
+        NSError *errors;
+        ///rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Add Members - While Creating Team"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
         NSDictionary *response = [ServerAPI createMultipleMembers:mainDelegate.token :self.teamId :finalMemberArray];
         
@@ -1397,6 +1416,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			//Create the team in a background thread
 			self.theTeamName = [NSString stringWithString:self.teamName.text];
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Create Team"
+                                                  label:self.from
+                                                  value:-1
+                                              withError:&errors]) {
+            }
             
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			

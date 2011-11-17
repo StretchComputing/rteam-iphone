@@ -13,6 +13,8 @@
 #import "CurrentTeamTabs.h"
 #import "FastActionSheet.h"
 #import "AllEventsCalendar.h"
+#import "GANTracker.h"
+#import "rTeamAppDelegate.h"
 
 @implementation DailyWeeklyEvent
 @synthesize frequency, dayPicker, timePicker, startDate, endDate, timeField, dayField, submitButton, okTimeButton, selectDateButton,
@@ -485,6 +487,15 @@ numberOfRowsInComponent:(NSInteger)component{
 	
 	gameArray = tmpGameArray;
 	
+    NSError *errors;
+    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Create Game - Multiple (Daily/Weekly)"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	NSDictionary *response = [ServerAPI createMultipleGames:mainDelegate.token :self.teamId :@"plain" :gameArray];
 	
 	NSString *status = [response valueForKey:@"status"];
@@ -615,6 +626,15 @@ numberOfRowsInComponent:(NSInteger)component{
 	
 	gameArray = tmpGameArray;
 	
+    NSError *errors;
+    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Create Practice - Multiple (Daily/Weekly)"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
 	
 	NSString *status = [response valueForKey:@"status"];
@@ -742,6 +762,15 @@ numberOfRowsInComponent:(NSInteger)component{
 	}	
 	gameArray = tmpGameArray;
 	
+    NSError *errors;
+    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Create Event - Multiple (Daily/Weekly)"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
 	
 	NSString *status = [response valueForKey:@"status"];

@@ -21,6 +21,7 @@
 #import "Event.h"
 #import <EventKit/EventKit.h>
 #import "HelpAbout.h"
+#import "GANTracker.h"
 
 @implementation SettingsTabs
 @synthesize numMemberTeams, fromRegisterFlow, didRegister, displaySuccess, passwordReset, passwordResetQuestion, haveUserInfo, myTableView, loadingLabel, 
@@ -363,8 +364,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}else if (row == 3) {
 			
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Logout"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
+            
 			//Log Out
-			rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+			//rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 			mainDelegate.token = @"logout";
 			mainDelegate.quickLinkOne = @"";
 			mainDelegate.quickLinkTwo = @"";
@@ -413,6 +424,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (row == 0) {
             //Feedback
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Feedback Selected"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
+            
             if ([MFMailComposeViewController canSendMail]) {
                 
                 MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
@@ -430,6 +452,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
         }else if (row == 1){
             //Help
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Go to Help Page - From Settings"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
             HelpAbout *tmp = [[HelpAbout alloc] init];
             //NEW HOME
             //[self.navigationController pushViewController:tmp animated:YES];
@@ -577,6 +608,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (buttonIndex == 0) {
         //Yes
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Synch Events With Calendar"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
+        
         [self.largeActivity startAnimating];
         [self performSelectorInBackground:@selector(getGames) withObject:nil];
         [self performSelectorInBackground:@selector(getEvents) withObject:nil];

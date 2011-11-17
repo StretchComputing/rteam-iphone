@@ -380,6 +380,9 @@
 		9087425812EDCBC900A2CA1D /* ProfilePhoto.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9087425712EDCBC900A2CA1D /* ProfilePhoto.xib */; };
 		9087438012EDDF2400A2CA1D /* CameraSelectionUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9087437F12EDDF2400A2CA1D /* CameraSelectionUser.m */; };
 		908748B912EF331400A2CA1D /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 908748B812EF331400A2CA1D /* camera.png */; };
+		9087534C1474A438000850D4 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9087534B1474A438000850D4 /* libsqlite3.0.dylib */; };
+		908753541474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */; };
+		908753551474A7DB000850D4 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 908753531474A7DB000850D4 /* libGoogleAnalytics.a */; };
 		90877C5113CF3A3D00552AFF /* ScoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 90877C5013CF3A3D00552AFF /* ScoreButton.m */; };
 		90877C5513CF467100552AFF /* HomeScoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90877C5313CF467100552AFF /* HomeScoreView.m */; };
 		90877C5A13CF467E00552AFF /* HomeAttendanceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90877C5813CF467E00552AFF /* HomeAttendanceView.m */; };
@@ -1060,6 +1063,10 @@
 		9087437E12EDDF2400A2CA1D /* CameraSelectionUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraSelectionUser.h; sourceTree = "<group>"; };
 		9087437F12EDDF2400A2CA1D /* CameraSelectionUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraSelectionUser.m; sourceTree = "<group>"; };
 		908748B812EF331400A2CA1D /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = ../images/camera.png; sourceTree = SOURCE_ROOT; };
+		9087534B1474A438000850D4 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		908753511474A7DB000850D4 /* GANTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GANTracker.h; sourceTree = "<group>"; };
+		908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics_NoThumb.a; sourceTree = "<group>"; };
+		908753531474A7DB000850D4 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
 		90877C4F13CF3A3D00552AFF /* ScoreButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreButton.h; sourceTree = "<group>"; };
 		90877C5013CF3A3D00552AFF /* ScoreButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreButton.m; sourceTree = "<group>"; };
 		90877C5213CF467100552AFF /* HomeScoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScoreView.h; sourceTree = "<group>"; };
@@ -1315,6 +1322,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9087534C1474A438000850D4 /* libsqlite3.0.dylib in Frameworks */,
 				9083F891133BB84300972821 /* EventKit.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -1340,6 +1348,8 @@
 				9073B61712988A8E00827073 /* iAd.framework in Frameworks */,
 				90F5FF0112A195F500AF3D03 /* MessageUI.framework in Frameworks */,
 				908A456212DC0BAB000C346A /* MobileCoreServices.framework in Frameworks */,
+				908753541474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a in Frameworks */,
+				908753551474A7DB000850D4 /* libGoogleAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1645,6 +1655,10 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				9087534B1474A438000850D4 /* libsqlite3.0.dylib */,
+				908753511474A7DB000850D4 /* GANTracker.h */,
+				908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */,
+				908753531474A7DB000850D4 /* libGoogleAnalytics.a */,
 				9083F890133BB84200972821 /* EventKit.framework */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -2845,6 +2859,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
+					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = rTeam;
 				PROVISIONING_PROFILE = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
@@ -2875,6 +2890,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
+					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = rTeam;
 				SDKROOT = iphoneos5.0;
@@ -2932,6 +2948,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
+					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = rTeam;
 				PROVISIONING_PROFILE = "9447D40F-7333-49F4-8BB9-65F2ED17CCCE";
@@ -2982,6 +2999,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
+					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = rTeam;
 				PROVISIONING_PROFILE = "E283BA18-7C59-4D16-837C-737B5F6E7A4B";
@@ -2994,7 +3012,10 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				CODE_SIGN_ENTITLEMENTS = "";

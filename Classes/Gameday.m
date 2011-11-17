@@ -16,7 +16,7 @@
 
 #import "AddGamePhoto.h"
 #import "GameEdit.h"
-
+#import "GANTracker.h"
 
 
 
@@ -644,6 +644,15 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
 -(void)keepScore{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Keep Score"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	NSString *lowerSport = [self.sport lowercaseString];
 	self.scoringAdded = true;
 	if ([lowerSport isEqualToString:@"football"] || [lowerSport isEqualToString:@"flag football"]) {

@@ -11,6 +11,7 @@
 #import "ServerAPI.h"
 #import "Login.h"
 #import <QuartzCore/QuartzCore.h>
+#import "GANTracker.h"
 
 @implementation ResetPasswordWithQuestion
 @synthesize question, answerField, questionField, errorLabel, activity, submitButton, success, email, errorString, theAnswerField;
@@ -49,6 +50,15 @@
 		//Register the User in a background thread
 		
         self.theAnswerField = [NSString stringWithString:self.answerField.text];
+        
+        NSError *errors;
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                             action:@"Reset Password With Question"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:&errors]) {
+        }
         
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		

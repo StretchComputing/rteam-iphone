@@ -20,6 +20,7 @@
 #import "FastActionSheet.h"
 #import "ProfilePhoto.h"
 #import "Players.h"
+#import "GANTracker.h"
 
 static inline double radians (double degrees) {return degrees * M_PI/180;}
 
@@ -1187,6 +1188,15 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         
         if ([profile length] > 0) {
             
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Edit Member Photo"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
             if (self.portrait) {
                 orientation = @"portrait";
             }else{
@@ -1495,6 +1505,15 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 -(void)editGuardianInfo{
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Add/Edit Guardian Info"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	EditGuardianInfo *tmp = [[EditGuardianInfo alloc] init];
 	tmp.guardianArray = self.guardiansArray;
 	tmp.teamId = self.teamId;
@@ -1703,6 +1722,14 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 			[self.callNumberButton setHidden:YES];
 			[self.deleteButton setEnabled:NO];
 			
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Delete Member"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
 			[self performSelectorInBackground:@selector(runDelete) withObject:nil];
 			
 			
@@ -2048,6 +2075,15 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	self.startEditButton.enabled = NO;
 	self.sendMessageButton.enabled = NO;
 	
+    NSError *errors;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                         action:@"Switch Member to Fan"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:&errors]) {
+    }
+    
 	[self performSelectorInBackground:@selector(makeFan) withObject:nil];
 }
 
