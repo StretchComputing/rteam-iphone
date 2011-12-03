@@ -700,6 +700,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 
 -(void)search{
 	
+    [self moveDivider];
+    /*
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -719,7 +721,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 	
     navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self.navigationController presentModalViewController:navController animated:YES];
-	
+	*/
 }
 
 
@@ -1392,7 +1394,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	if (self.eventsNowSuccess) {
 		
-		self.numObjects = [self.eventsToday count] + [self.eventsTomorrow count] + 2;
+		self.numObjects = [self.eventsToday count] + [self.eventsTomorrow count];
         
         if (self.numObjects == 0) {
             self.numberOfPages = 1;
@@ -1623,7 +1625,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	scores.eventLabel = @"Scores/Schedule";
 	scores.teamName = @"";
 	
-	[self.allBottomButtons addObject:scores];
+	//[self.allBottomButtons addObject:scores];
 	
 	CurrentEvent *newTeam = [[CurrentEvent alloc] init];
 	newTeam.eventType = @"newTeam";
@@ -1631,7 +1633,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	newTeam.eventLabel = @"New Team";
 	newTeam.teamName = @"";
 	
-	[self.allBottomButtons addObject:newTeam];
+	//[self.allBottomButtons addObject:newTeam];
 	
 	
 	
@@ -1690,10 +1692,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
 		for (int j = 0; j < self.numberOfPages; j++) {
 			
-           /* if (self.numObjects == 0) {
+            if (self.numObjects == 0) {
                 
                 UIButton *tmpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                [tmpButton setTitle:@"No events found, click here to add some!" forState:UIControlStateNormal];
+                [tmpButton setTitle:@"No events found, click 'Gameday' to create one now!" forState:UIControlStateNormal];
+                tmpButton.titleLabel.numberOfLines = 2;
+                tmpButton.titleLabel.textAlignment = UITextAlignmentCenter;
                 [tmpButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
                 tmpButton.frame = CGRectMake(0, 0, 320, 110);
                 tmpButton.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
@@ -1706,7 +1710,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 }else{
                     //self.moveableView.frame = CGRectMake(0, 297, 320, 76);
                 }
-            }else{*/
+            }else{
                 if (page == j) {
                     //want cells j and j+1 from the allBottomButtons array
                     
@@ -1717,7 +1721,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         
                         if ([tmp1.gameInterval isEqualToString:@"0"]) {
                             //Game hasn't started, display Attendance
-                            /*
+                            
                             AttendingButton *tmp1Button = [[AttendingButton alloc] initWithFrame:CGRectMake(36, 20, 92, 55)];
                             tmp1Button.event = tmp1;
                             tmp1Button.isAttendance = true;
@@ -1751,32 +1755,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventLabel.text = tmp1.eventLabel;
                             [tmp1Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                             [controller.view addSubview:tmp1Button];
-                             */
-                            EventNowButton *tmp1Button = [[EventNowButton alloc] initWithFrame:CGRectMake(56, 25, 50, 50)];
-                            tmp1Button.event = tmp1;
-                            
-                            if (![tmp1.teamName isEqualToString:@""]) {
-                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
-                            }else {
-                                tmp1Button.teamLabel.text = @"";
-                            }
-                            
-                            
-                            if (tmp1.isCanceled) {
-                                tmp1Button.canceledLabel.text = @"CANCELED";
-                            }else{
-                                tmp1Button.canceledLabel.text = @"";
-                            }
-                            
-                            tmp1Button.scoreLabel.text = tmp1.scoreLabel;
-                            tmp1Button.eventLabel.text = tmp1.eventLabel;
-                            [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
-                            [tmp1Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
-                            [controller.view addSubview:tmp1Button];
-                            
+                                                       
                         }else{
                             //game has a score, display the score
-                            /*
+                            
                             ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(36, 20, 92, 55)];
                             tmp1Button.event = tmp1;
                             tmp1Button.isAttendance = false;
@@ -1841,29 +1823,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventLabel.text = tmp1.eventLabel;
                             [tmp1Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                             [controller.view addSubview:tmp1Button];
-                            */
-                            EventNowButton *tmp1Button = [[EventNowButton alloc] initWithFrame:CGRectMake(56, 25, 50, 50)];
-                            tmp1Button.event = tmp1;
-                            
-                            if (![tmp1.teamName isEqualToString:@""]) {
-                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
-                            }else {
-                                tmp1Button.teamLabel.text = @"";
-                            }
-                            
-                            
-                            if (tmp1.isCanceled) {
-                                tmp1Button.canceledLabel.text = @"CANCELED";
-                            }else{
-                                tmp1Button.canceledLabel.text = @"";
-                            }
-                            
-                            tmp1Button.scoreLabel.text = tmp1.scoreLabel;
-                            tmp1Button.eventLabel.text = tmp1.eventLabel;
-                            [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
-                            [tmp1Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
-                            [controller.view addSubview:tmp1Button];
-                            
+                                                        
                         }
                         
                             
@@ -1894,7 +1854,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         [controller.view addSubview:tmp1Button];
                         
                     }else{
-                         /*
+                         
                         NSString *startDate = tmp1.eventDate;
                         
                         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
@@ -1942,7 +1902,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             
                             
                             
-                        }else{ */
+                        }else{ 
                             //present, future, display normally
                             EventNowButton *tmp1Button = [[EventNowButton alloc] initWithFrame:CGRectMake(56, 25, 50, 50)];
                             tmp1Button.event = tmp1;
@@ -1980,7 +1940,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             
                             if ([tmp2.gameInterval isEqualToString:@"0"]) {
                                 
-                                /*
+                                
                                 AttendingButton *tmp2Button = [[AttendingButton alloc] initWithFrame:CGRectMake(196, 20, 92, 55)];
                                 tmp2Button.event = tmp2;
                                 tmp2Button.isAttendance = true;
@@ -2014,32 +1974,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 //[tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
-                                 */
-                                EventNowButton *tmp2Button = [[EventNowButton alloc] initWithFrame:CGRectMake(216, 25, 50, 50)];
-                                tmp2Button.event = tmp2;
-                                
-                                if (![tmp2.teamName isEqualToString:@""]) {
-                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
-                                }else {
-                                    tmp2Button.teamLabel.text = @"";
-                                }
-                                
-                                
-                                if (tmp2.isCanceled) {
-                                    tmp2Button.canceledLabel.text = @"CANCELED";
-                                }else{
-                                    tmp2Button.canceledLabel.text = @"";
-                                }
-                                
-                                tmp2Button.scoreLabel.text = tmp2.scoreLabel;
-                                tmp2Button.eventLabel.text = tmp2.eventLabel;
-                                [tmp2Button setImage:[UIImage imageNamed:tmp2.imageName] forState:UIControlStateNormal];
-                                [tmp2Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
-                                [controller.view addSubview:tmp2Button];
-                                
+                            
                             }else{
                                 //display the score
-                                /*
+                                
                                 ScoreButton *tmp2Button = [[ScoreButton alloc] initWithFrame:CGRectMake(196, 20, 92, 55)];
                                 tmp2Button.event = tmp2;
                                 tmp2Button.isAttendance = false;
@@ -2103,29 +2041,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 // [tmp1Button setImage:[UIImage imageNamed:tmp1.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
-                                 */
-                                EventNowButton *tmp2Button = [[EventNowButton alloc] initWithFrame:CGRectMake(216, 25, 50, 50)];
-                                tmp2Button.event = tmp2;
-                                
-                                if (![tmp2.teamName isEqualToString:@""]) {
-                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
-                                }else {
-                                    tmp2Button.teamLabel.text = @"";
-                                }
-                                
-                                
-                                if (tmp2.isCanceled) {
-                                    tmp2Button.canceledLabel.text = @"CANCELED";
-                                }else{
-                                    tmp2Button.canceledLabel.text = @"";
-                                }
-                                
-                                tmp2Button.scoreLabel.text = tmp2.scoreLabel;
-                                tmp2Button.eventLabel.text = tmp2.eventLabel;
-                                [tmp2Button setImage:[UIImage imageNamed:tmp2.imageName] forState:UIControlStateNormal];
-                                [tmp2Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
-                                [controller.view addSubview:tmp2Button];
-                                
+                                                              
                             }
                             
                         }else if ([tmp2.eventType isEqualToString:@"scores"] || [tmp2.eventType isEqualToString:@"newTeam"]){
@@ -2154,7 +2070,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             [controller.view addSubview:tmp2Button];
                             
                         }else{
-                            /*
+                            
                             NSString *startDate = tmp2.eventDate;
                             
                             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
@@ -2202,7 +2118,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 [controller.view addSubview:tmp2Button];
                                 
                                 
-                            }else{*/
+                            }else{
                                 //present, future, display normally
                                 EventNowButton *tmp2Button = [[EventNowButton alloc] initWithFrame:CGRectMake(216, 25, 50, 50)];
                                 tmp2Button.event = tmp2;
@@ -2224,13 +2140,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 [tmp2Button setImage:[UIImage imageNamed:tmp2.imageName] forState:UIControlStateNormal];
                                 [tmp2Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
                                 [controller.view addSubview:tmp2Button];
-                           // }
+                            }
                         }
                         
                         
-                    //}
+                    }
                     
-                    
+                    }
                 }
 
             }
@@ -3355,20 +3271,24 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
 
         CGRect frame = self.moveableView.frame;
-        frame.origin.y = 232;
+        
+        if (self.bannerIsVisible) {
+            frame.origin.y = 197;
+        }else{
+            frame.origin.y = 247;
+        }
+        frame.size.height += 5;
+
         self.moveableView.frame = frame;
         self.moveDividerBackground.frame = CGRectMake(0, 372, 320, 301);
+        [self.view bringSubviewToFront:self.bottomBar];
 
-        CGRect frame2 = self.scrollView.frame;
-        frame2.origin.y += 25;
-        self.scrollView.frame = frame2;
+  
         CGRect frame3 = self.pageControl.frame;
-        frame3.origin.y += 25;
+        frame3.origin.y += 5;
         self.pageControl.frame = frame3;
-        CGRect frame4 = self.scrollViewBack.frame;
-        frame4.size.height += 25;
-        self.scrollViewBack.frame = frame4;
-        
+        [self.moveableView sendSubviewToBack:self.pageControl];
+     
         [UIView commitAnimations];
         
         [self performSelector:@selector(hide) withObject:nil afterDelay:1.0];
@@ -3394,19 +3314,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         CGRect frame = self.moveableView.frame;
         frame.origin.y = 0;
+        frame.size.height -= 5;
         self.moveableView.frame = frame;
         
-        
-        CGRect frame2 = self.scrollView.frame;
-        frame2.origin.y -= 10;
-        self.scrollView.frame = frame2;
         CGRect frame3 = self.pageControl.frame;
-        frame3.origin.y -= 10;
+        frame3.origin.y -= 5;
         self.pageControl.frame = frame3;
-        CGRect frame4 = self.scrollViewBack.frame;
-        frame4.size.height -= 10;
-        self.scrollViewBack.frame = frame4;
-        
         
         self.moveDividerBackground.frame = CGRectMake(0, 115, 320, 301-init);
         //self.moveDividerBackground.clipsToBounds = YES;
