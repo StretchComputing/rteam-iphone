@@ -492,6 +492,8 @@
 		90AB8C3C13DDD8F500515B9F /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AB8C3B13DDD8F500515B9F /* blueArrow.png */; };
 		90AC116A12C1B8D100224865 /* FastHelp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90AC116912C1B8D100224865 /* FastHelp.xib */; };
 		90B5021313D730F700DE887D /* SettingsTabs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90B5021213D730F700DE887D /* SettingsTabs.xib */; };
+		90BD65511489C169002A0789 /* HappeningNowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90BD654F1489C169002A0789 /* HappeningNowView.m */; };
+		90BD65521489C169002A0789 /* HappeningNowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90BD65501489C169002A0789 /* HappeningNowView.xib */; };
 		90C5B55210EA9A8600F40228 /* Player.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90C5B55110EA9A8600F40228 /* Player.xib */; };
 		90C5B57510EA9F3800F40228 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 90C5B57410EA9F3800F40228 /* profile.png */; };
 		90C7408D142ABD9500950B08 /* fullScreen.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 90C7408B142ABD9500950B08 /* fullScreen.jpeg */; };
@@ -1213,6 +1215,9 @@
 		90AB8C3B13DDD8F500515B9F /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blueArrow.png; path = ../blueArrow.png; sourceTree = "<group>"; };
 		90AC116912C1B8D100224865 /* FastHelp.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FastHelp.xib; sourceTree = "<group>"; };
 		90B5021213D730F700DE887D /* SettingsTabs.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsTabs.xib; sourceTree = "<group>"; };
+		90BD654E1489C169002A0789 /* HappeningNowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HappeningNowView.h; sourceTree = "<group>"; };
+		90BD654F1489C169002A0789 /* HappeningNowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HappeningNowView.m; sourceTree = "<group>"; };
+		90BD65501489C169002A0789 /* HappeningNowView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HappeningNowView.xib; sourceTree = "<group>"; };
 		90C5B55110EA9A8600F40228 /* Player.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Player.xib; sourceTree = "<group>"; };
 		90C5B57410EA9F3800F40228 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile.png; path = ../images/profile.png; sourceTree = SOURCE_ROOT; };
 		90C7408B142ABD9500950B08 /* fullScreen.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fullScreen.jpeg; sourceTree = "<group>"; };
@@ -1379,6 +1384,9 @@
 				907DFC09122EE85A00A3D72C /* Login.m */,
 				903A1CCE11F885DD00224F42 /* Home.h */,
 				903A1CCF11F885DD00224F42 /* Home.m */,
+				90BD654E1489C169002A0789 /* HappeningNowView.h */,
+				90BD654F1489C169002A0789 /* HappeningNowView.m */,
+				90BD65501489C169002A0789 /* HappeningNowView.xib */,
 				9091602F13E1B5540073C20A /* NewActivity.h */,
 				9091603013E1B5540073C20A /* NewActivity.m */,
 				9083CD631471AD4B00315792 /* NewActivityImageObject.h */,
@@ -2649,6 +2657,7 @@
 				9083CD6D1471C5E700315792 /* createTeam.mov in Resources */,
 				9083CD6E1471C5E700315792 /* quickLinks.mov in Resources */,
 				9083CD6F1471C5E700315792 /* sendMessage.mov in Resources */,
+				90BD65521489C169002A0789 /* HappeningNowView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2828,6 +2837,7 @@
 				9084783114687A4B002BF668 /* VideoDisplay.m in Sources */,
 				90838F6E1469A03C00893987 /* FastActionSheetPost.m in Sources */,
 				9083CD651471AD4C00315792 /* NewActivityImageObject.m in Sources */,
+				90BD65511489C169002A0789 /* HappeningNowView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

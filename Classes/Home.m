@@ -49,25 +49,21 @@
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
-badgeNumber, didRegister, numMemberTeams, inviteFan, scrollView, pageControl, viewControllers, serverError, alreadyCalled1, quickTeamOne, 
-quickTeamTwo, quickCreateTeam, alreadyCalled2, haveTeamList, teamList, changeQuickLink, newQuickLinkTable, newQuickLinkAlias, rowNewQuickTeam, 
+badgeNumber, didRegister, numMemberTeams, inviteFan, scrollView, pageControl, viewControllers, serverError, alreadyCalled1, alreadyCalled2, haveTeamList, teamList, changeQuickLink, newQuickLinkTable, newQuickLinkAlias, rowNewQuickTeam, 
 teamListFailed, newMessagesSuccess, newMessagesCount, messageBadge, alreadyCalledCreate, activityGettingTeams, eventsNowActivity, eventsToday, 
-eventsTomorrow, numberOfPages, eventsNowSuccess, eventsNowTryAgain, eventsNowError, allBottomButtons, selectRowLabel, eventsButton, 
-bannerIsVisible, myTeamsButton, activityButton, messagesButton, fastButton, messageCountLabel,displayIconsScroll, isEditingQuickLinkOne, 
-newActivityBadge, newActivity, changeIconButton, foundQuick1, foundQuick2, undoCancel, undoTeamId, undoEventType, undoEventId, spotOpen, oneTeam,
+eventsTomorrow, numberOfPages, eventsNowSuccess, eventsNowTryAgain, allBottomButtons, selectRowLabel, eventsButton, 
+bannerIsVisible, myTeamsButton, messagesButton,displayIconsScroll, isEditingQuickLinkOne, newActivity, changeIconButton, foundQuick1, foundQuick2, undoCancel, undoTeamId, undoEventType, undoEventId, spotOpen, oneTeam,
 addMembersButton, membersUserRole, membersTeamId, phoneOnlyArray, justAddName, displayIconsScrollBack, changeQuickLinkBack, changingLink,
 refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, transViewTop, settingQbutton, searchQbutton,
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
-inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation, homeDivider, moveDividerButton, homeDividerLabel,
-moveDividerBackground, isMoreShowing, moveableView, scrollViewBack, regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
+inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, homeAttendanceView, happeningNowView;
 
 
 
 -(void)viewWillDisappear:(BOOL)animated{
     
-    self.eventsNowError.text = @"";
     self.serverError.text = @"";
 }
 
@@ -85,7 +81,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
         bannerIsVisible = YES;
         
         self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
-        self.moveableView.frame = CGRectMake(0, 197, 320, 126);
         self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
         self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
         
@@ -94,7 +89,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
         bannerIsVisible = NO;
         
         self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
-        self.moveableView.frame = CGRectMake(0, 247, 320, 126);
         self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
         self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
 
@@ -103,7 +97,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
     if (self.isMoreShowing) {
         [self moveDivider];
     }
-    self.moveDividerBackground.hidden = YES;
     
 	self.addMembersButton.hidden = YES;
 	
@@ -119,8 +112,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
     self.messageBadge.hidden = YES;
 
 	self.isEditingQuickLinkOne = false;
-	self.fastButton.transform = CGAffineTransformMakeRotation( ( -30 * M_PI ) / 180 );
-	self.fastButton.hidden = YES;
 	
 	self.alreadyCalled1 = false;
 	self.alreadyCalled2 = false;
@@ -133,7 +124,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 	[self performSelectorInBackground:@selector(getUserInfo) withObject:nil];
 	
 	[self.eventsNowActivity startAnimating];
-	[self.eventsNowError setHidden:YES];
 	[self performSelectorInBackground:@selector(getEventsNow) withObject:nil];
 
 	[self.changeQuickLinkBack setHidden:YES];
@@ -446,18 +436,19 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString;
 
 - (void)viewDidLoad {
     
+    self.happeningNowView = [[HappeningNowView alloc] init];
+    self.happeningNowView.view.frame = CGRectMake(0, 200, 320, 121);
+    [self.view addSubview:self.happeningNowView.view];
 
 	self.currentDisplay = 1;
     self.registrationBackView.hidden = YES;
     homeScoreView = [[HomeScoreView alloc] init];
     homeScoreView.view.frame = CGRectMake(0, 0, 320, 301);
     homeScoreView.view.hidden = YES;
-    [self.moveDividerBackground addSubview:homeScoreView.view];
     
     homeAttendanceView = [[HomeAttendanceView alloc] init];
     homeAttendanceView.view.frame = CGRectMake(0, 0, 320, 301);
     homeAttendanceView.view.hidden = YES;
-    [self.moveDividerBackground addSubview:homeAttendanceView.view];
     
 	self.title = @"rTeam";
 		
@@ -1304,7 +1295,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 		}else {
 
-			self.messageCountLabel.text = @"";
 			self.messageBadge.hidden = YES;
 		}
 		
@@ -1412,8 +1402,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			[self.eventsNowActivity startAnimating];
 			[self performSelectorInBackground:@selector(getEventsNow) withObject:nil];
 		}else {
-			[self.eventsNowError setHidden:NO];
-			self.eventsNowError.text = @"*Error connecting to server.  Please make sure you have a valid internet connection.";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Error" message:@"Please make sure you have a valid internet connection." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
 
 		}
 
@@ -2511,12 +2501,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:1.0];
         
-        [self.view bringSubviewToFront:self.moveableView];
         [self.view bringSubviewToFront:self.registrationBackView];
         
         
         self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
-        self.moveableView.frame = CGRectMake(0, 197, 320, 126);
         self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
         self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
         
@@ -2533,32 +2521,22 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
         if (self.isMoreShowing) {
-            [self.view bringSubviewToFront:self.moveDividerBackground];
-            self.moveDividerBackground.hidden = NO;
+
             
             [UIView beginAnimations:nil context:NULL];
             [UIView setAnimationDuration:1.0];
             
-            [self.view bringSubviewToFront:self.moveableView];
             
             
             int init = 0;
             if (self.bannerIsVisible) {
                 init = 50;
             }
-            
-            CGRect frame = self.moveableView.frame;
-            frame.origin.y = 0;
-            self.moveableView.frame = frame;
-            
-            
-            self.moveDividerBackground.frame = CGRectMake(0, 115, 320, 301-init);
-            self.moveDividerBackground.clipsToBounds = YES;
+        
             homeScoreView.view.frame = CGRectMake(0, 0, 320, 301-init);
             homeAttendanceView.view.frame = CGRectMake(0, 0, 320, 301-init);
             
             
-            [self.view bringSubviewToFront:self.moveDividerBackground];
             
             [UIView commitAnimations];
 
@@ -2589,7 +2567,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         
         self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
-        self.moveableView.frame = CGRectMake(0, 247, 320, 126);
         self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
         self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
         
@@ -3106,7 +3083,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)refresh{
     
     [self.eventsNowActivity startAnimating];
-    self.eventsNowError.text = @"";
     self.serverError.text = @"";
     [self viewWillAppear:NO];
     //[self.view bringSubviewToFront:myAd];
@@ -3255,7 +3231,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)hide{
-    self.moveDividerBackground.hidden = YES;
     homeScoreView.view.hidden = YES;
     homeAttendanceView.view.hidden = YES;
 
@@ -3268,26 +3243,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:1.0];
-        
 
-        CGRect frame = self.moveableView.frame;
-        
-        if (self.bannerIsVisible) {
-            frame.origin.y = 197;
-        }else{
-            frame.origin.y = 247;
-        }
-        frame.size.height += 5;
-
-        self.moveableView.frame = frame;
-        self.moveDividerBackground.frame = CGRectMake(0, 372, 320, 301);
+   
         [self.view bringSubviewToFront:self.bottomBar];
 
   
         CGRect frame3 = self.pageControl.frame;
         frame3.origin.y += 5;
         self.pageControl.frame = frame3;
-        [self.moveableView sendSubviewToBack:self.pageControl];
      
         [UIView commitAnimations];
         
@@ -3295,40 +3258,29 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         //self.moveDividerBackground.hidden = YES;
 
         self.isMoreShowing = NO;
-        [self.moveDividerButton setImage:[UIImage imageNamed:@"moreImage.png"] forState:UIControlStateNormal];
 
     }else{
-        [self.view bringSubviewToFront:self.moveDividerBackground];
-        self.moveDividerBackground.hidden = NO;
+   
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:1.0];
         
-        [self.view bringSubviewToFront:self.moveableView];
-
         
         int init = 0;
         if (self.bannerIsVisible) {
             init = 50;
         }
-        
-        CGRect frame = self.moveableView.frame;
-        frame.origin.y = 0;
-        frame.size.height -= 5;
-        self.moveableView.frame = frame;
+  
         
         CGRect frame3 = self.pageControl.frame;
         frame3.origin.y -= 5;
         self.pageControl.frame = frame3;
-        
-        self.moveDividerBackground.frame = CGRectMake(0, 115, 320, 301-init);
         //self.moveDividerBackground.clipsToBounds = YES;
         homeAttendanceView.view.clipsToBounds = YES;
         homeScoreView.view.frame = CGRectMake(0, 0, 320, 301-init);
         homeAttendanceView.view.frame = CGRectMake(0, 0, 320, 301-init);
 
        
-        [self.view bringSubviewToFront:self.moveDividerBackground];
         
         [UIView commitAnimations];
         
@@ -3387,27 +3339,20 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     backHelpView = nil;
 	inviteFan = nil;
 	serverError = nil;
-	quickTeamOne = nil;
-	quickTeamTwo = nil;
-	quickCreateTeam = nil;
+
 	changeQuickLink = nil;
 	newQuickLinkAlias = nil;
 	newQuickLinkTable = nil;
 	messageBadge = nil;
 	activityGettingTeams = nil;
 	eventsNowActivity = nil;
-	eventsNowError = nil;
 	selectRowLabel = nil;
 	eventsButton = nil;
 	myTeamsButton = nil;
-	activityButton = nil;
 	messagesButton = nil;
     myAd.delegate = nil;
 	myAd = nil;
-	fastButton = nil;
-	messageCountLabel = nil;
 	displayIconsScroll = nil;
-	newActivityBadge = nil;
 	changeIconButton = nil;
 	scrollView = nil;
 	pageControl = nil;
@@ -3415,12 +3360,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	changeQuickLinkBack = nil;
     refreshButton = nil;
     questionButton = nil;
-    homeDivider = nil;
-    moveDividerButton = nil;
-    homeDividerLabel = nil;
-    moveDividerBackground = nil;
-    moveableView = nil;
-    scrollViewBack = nil;
+
     registrationBackView = nil;
     regTextButton = nil;
     regTextView = nil;
@@ -3432,6 +3372,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     quickLinkOkButton = nil;
     quickLinkCancelTwoButton = nil;
     blueArrow = nil;
+    
+    homeScoreView = nil;
+    homeAttendanceView = nil;
+    happeningNowView = nil;
+    
 	[super viewDidUnload];
 	
 

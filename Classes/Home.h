@@ -13,107 +13,42 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 #import "HomeScoreView.h"
 #import "HomeAttendanceView.h"
+#import "HappeningNowView.h"
 
 @interface Home : UIViewController <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextFieldDelegate, ADBannerViewDelegate,
 UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
-	
-    HomeScoreView *homeScoreView;
-    HomeAttendanceView *homeAttendanceView;
-	
-	IBOutlet UILabel *serverError;
 
-	//Quick Link Buttons
-	UIButton *quickCreateTeam;
-	QuickLinkButton *quickTeamOne;
-	QuickLinkButton *quickTeamTwo;
-	
-	//Quick Link Edit View
-	IBOutlet UIScrollView *changeQuickLink;
-	IBOutlet UITableView *newQuickLinkTable;
-	IBOutlet UITextField *newQuickLinkAlias;
-	IBOutlet UIActivityIndicatorView *activityGettingTeams;
-	IBOutlet UILabel *selectRowLabel;
 
-	IBOutlet UIImageView *messageBadge;
 
-	IBOutlet UIActivityIndicatorView *eventsNowActivity;
-
-	IBOutlet UITextView *eventsNowError;
-	
-	IBOutlet UIButton *eventsButton;
-
-	IBOutlet UIButton *myTeamsButton;
-	IBOutlet UIButton *activityButton;
-	IBOutlet UIButton *messagesButton;
-	
-	IBOutlet UIButton *fastButton;
-	
-	IBOutlet UILabel *messageCountLabel;
-	
-	IBOutlet UIScrollView *displayIconsScroll;
-	IBOutlet UIImageView *newActivityBadge;
-	IBOutlet UIButton *changeIconButton;
-
-	IBOutlet UIView *displayIconsScrollBack;
-	IBOutlet UIView *changeQuickLinkBack;
-        
-    IBOutlet UIBarButtonItem *refreshButton;
-    IBOutlet UIBarButtonItem *questionButton;
-    
-    IBOutlet UIView *backHelpView;
-
-    
-    IBOutlet UIImageView *homeDivider;
-    IBOutlet UIButton *moveDividerButton;
-    IBOutlet UILabel *homeDividerLabel;
-    
-    IBOutlet UIView *moveDividerBackground;
-    
-    IBOutlet UIView *moveableView;    
-    IBOutlet UIImageView *scrollViewBack;
-
-    IBOutlet UIView *registrationBackView;
-    IBOutlet UIView *textBackView;
-    IBOutlet UIView *textFrontView;
-    IBOutlet UITextView *regTextView;
-    IBOutlet UIButton *regTextButton;
-    
-    IBOutlet QuickLinkButton *shortcutButton;
-    
-    IBOutlet UIButton *quickLinkChangeButton;
-    IBOutlet UIButton *quickLinkCancelButton;
-    IBOutlet UIButton *quickLinkOkButton;
-    IBOutlet UIButton *quickLinkCancelTwoButton;
-    
-    IBOutlet UIImageView *blueArrow;
     
 }
+@property (nonatomic, strong) HomeScoreView *homeScoreView;
+@property (nonatomic, strong) HomeAttendanceView *homeAttendanceView;
+@property (nonatomic, strong) HappeningNowView *happeningNowView;
+@property (nonatomic, strong) IBOutlet UIToolbar *bottomBar;
+
+
 @property (nonatomic, strong) NSString *errorString;
 @property bool createdTeam;
 @property (nonatomic, strong) ADBannerView *myAd;
-@property (nonatomic, strong) UIImageView *blueArrow;
-@property (nonatomic, strong) UIButton *quickLinkCancelTwoButton;
+@property (nonatomic, strong) IBOutlet UIImageView *blueArrow;
+@property (nonatomic, strong) IBOutlet UIButton *quickLinkCancelTwoButton;
 @property BOOL pageControlUsed;
-@property (nonatomic, strong) UIButton *quickLinkChangeButton;
-@property (nonatomic, strong) UIButton *quickLinkCancelButton;
-@property (nonatomic, strong) UIButton *quickLinkOkButton;
-@property (nonatomic, strong) QuickLinkButton *shortcutButton;
+@property (nonatomic, strong) IBOutlet UIButton *quickLinkChangeButton;
+@property (nonatomic, strong) IBOutlet UIButton *quickLinkCancelButton;
+@property (nonatomic, strong) IBOutlet UIButton *quickLinkOkButton;
+@property (nonatomic, strong) IBOutlet QuickLinkButton *shortcutButton;
 @property double numObjects;
 @property (nonatomic, strong) UIButton *aboutButton;
 @property int currentDisplay;
-@property (nonatomic, strong) UIView *registrationBackView;
-@property (nonatomic, strong) UIView *textBackView;
-@property (nonatomic, strong) UIView *textFrontView;
-@property (nonatomic, strong) UITextView *regTextView;
-@property (nonatomic, strong) UIButton *regTextButton;
+@property (nonatomic, strong) IBOutlet UIView *registrationBackView;
+@property (nonatomic, strong) IBOutlet UIView *textBackView;
+@property (nonatomic, strong) IBOutlet UIView *textFrontView;
+@property (nonatomic, strong) IBOutlet UITextView *regTextView;
+@property (nonatomic, strong) IBOutlet UIButton *regTextButton;
 
-@property (nonatomic, strong) IBOutlet UIImageView *scrollViewBack;
-@property (nonatomic, strong) UIView *moveableView;
 @property BOOL isMoreShowing; 
-@property (nonatomic, strong) UIView *moveDividerBackground;
-@property (nonatomic, strong) UILabel *homeDividerLabel;
-@property (nonatomic, strong) UIButton *moveDividerButton;
-@property (nonatomic, strong) UIImageView *homeDivider;
+
 @property (nonatomic, strong) UITextView *helpExplanation;
 @property (nonatomic, strong) UIButton *closeQuestionButton;
 
@@ -136,12 +71,12 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 @property (nonatomic, strong) UIButton *inviteFanQbutton;
 @property (nonatomic, strong) UIButton *refreshQbutton;
 
-@property (nonatomic, strong) UIView *backHelpView;
-@property (nonatomic, strong) UIBarButtonItem *refreshButton;
-@property (nonatomic, strong) UIBarButtonItem *questionButton;
+@property (nonatomic, strong) IBOutlet UIView *backHelpView;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *refreshButton;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *questionButton;
 @property bool changingLink;
-@property (nonatomic, strong) UIView *displayIconsScrollBack;
-@property (nonatomic, strong) UIView *changeQuickLinkBack;
+@property (nonatomic, strong) IBOutlet UIView *displayIconsScrollBack;
+@property (nonatomic, strong) IBOutlet UIView *changeQuickLinkBack;
 @property (nonatomic, strong) NSString *justAddName;
 @property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
 
@@ -157,49 +92,42 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 
 @property bool foundQuick1;
 @property bool foundQuick2;
-@property (nonatomic, strong) UIButton *changeIconButton;
+@property (nonatomic, strong) IBOutlet UIButton *changeIconButton;
 @property bool newActivity;
-@property (nonatomic, strong, getter = theNewActivityBadge) UIImageView *newActivityBadge;
 @property bool isEditingQuickLinkOne;
-@property (nonatomic, strong) UIScrollView *displayIconsScroll;
-@property (nonatomic, strong) UILabel *messageCountLabel;
-@property (nonatomic, strong) UIButton *fastButton;
-@property (nonatomic, strong) UIButton *myTeamsButton;
-@property (nonatomic, strong) UIButton *activityButton;
-@property (nonatomic, strong) UIButton *messagesButton;
+@property (nonatomic, strong) IBOutlet UIScrollView *displayIconsScroll;
+@property (nonatomic, strong) IBOutlet UIButton *myTeamsButton;
+@property (nonatomic, strong) IBOutlet UIButton *messagesButton;
 
 @property BOOL bannerIsVisible;
-@property (nonatomic, strong) UIButton *eventsButton;
+@property (nonatomic, strong) IBOutlet UIButton *eventsButton;
 //Bottom Half quick links
 @property bool eventsNowTryAgain;
-@property (nonatomic, strong) UITextView *eventsNowError;
 @property bool eventsNowSuccess;
 @property (nonatomic, strong) NSMutableArray *eventsToday;
 @property (nonatomic, strong) NSMutableArray *eventsTomorrow;
 @property int numberOfPages;
-@property (nonatomic, strong) UIActivityIndicatorView *eventsNowActivity;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *eventsNowActivity;
 @property (nonatomic, strong) NSMutableArray *allBottomButtons;
 
 //New Messages badge
-@property (nonatomic, strong) UIImageView *messageBadge;
+@property (nonatomic, strong) IBOutlet UIImageView *messageBadge;
 @property int newMessagesCount;
 @property bool newMessagesSuccess;
 //Quick Link Edit View
-@property (nonatomic, strong) UIScrollView *changeQuickLink;
-@property (nonatomic, strong, getter = theNewQuickLinkTable) UITableView *newQuickLinkTable;
-@property (nonatomic, strong, getter = theNewQuickLinkAlias) UITextField *newQuickLinkAlias;
+@property (nonatomic, strong) IBOutlet UIScrollView *changeQuickLink;
+@property (nonatomic, strong, getter = theNewQuickLinkTable) IBOutlet UITableView *newQuickLinkTable;
+@property (nonatomic, strong, getter = theNewQuickLinkAlias) IBOutlet UITextField *newQuickLinkAlias;
 @property int rowNewQuickTeam;
-@property (nonatomic, strong) UIActivityIndicatorView *activityGettingTeams;
-@property (nonatomic, strong) UILabel *selectRowLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityGettingTeams;
+@property (nonatomic, strong) IBOutlet UILabel *selectRowLabel;
 //Background thread "Get Teams"
 @property bool teamListFailed;
 @property bool haveTeamList;
 @property (nonatomic, strong) NSArray *teamList;
 
-//Quick Link Buttons
-@property (nonatomic, strong) UIButton *quickCreateTeam;
-@property (nonatomic, strong) QuickLinkButton *quickTeamOne;
-@property (nonatomic, strong) QuickLinkButton *quickTeamTwo;
+
+
 
 @property bool alreadyCalled1;
 @property bool alreadyCalled2;
@@ -230,10 +158,9 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 @property int nextGameIndex;
 @property int nextPracticeIndex;
 
-@property (nonatomic, strong) IBOutlet UIToolbar *bottomBar;
 
 @property int badgeNumber;
-@property (nonatomic, strong) UILabel *serverError;
+@property (nonatomic, strong) IBOutlet UILabel *serverError;
 
 
 -(IBAction) allEvents;
