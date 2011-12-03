@@ -55,8 +55,8 @@
 					</object>
 					<object class="IBUIImageView" id="676581670">
 						<reference key="NSNextResponder" ref="617669283"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrameSize">{320, 16}</string>
+						<int key="NSvFlags">293</int>
+						<string key="NSFrameSize">{320, 14}</string>
 						<reference key="NSSuperview" ref="617669283"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="118497421"/>
@@ -70,8 +70,8 @@
 					</object>
 					<object class="IBUIScrollView" id="118497421">
 						<reference key="NSNextResponder" ref="617669283"/>
-						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{0, 14}, {320, 107}}</string>
+						<int key="NSvFlags">274</int>
+						<string key="NSFrame">{{0, 14}, {320, 109}}</string>
 						<reference key="NSSuperview" ref="617669283"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="751262573"/>
@@ -82,12 +82,11 @@
 					</object>
 					<object class="IBUIPageControl" id="973249676">
 						<reference key="NSNextResponder" ref="617669283"/>
-						<int key="NSvFlags">1316</int>
+						<int key="NSvFlags">1293</int>
 						<object class="NSPSMatrix" key="NSFrameMatrix"/>
 						<string key="NSFrame">{{0, 93}, {320, 36}}</string>
 						<reference key="NSSuperview" ref="617669283"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:660</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -97,8 +96,8 @@
 					</object>
 					<object class="IBUILabel" id="751262573">
 						<reference key="NSNextResponder" ref="617669283"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{0, -2}, {320, 21}}</string>
+						<int key="NSvFlags">293</int>
+						<string key="NSFrameSize">{320, 16}</string>
 						<reference key="NSSuperview" ref="617669283"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="973249676"/>
@@ -119,11 +118,11 @@
 						<int key="IBUITextAlignment">1</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription">
 							<int key="type">1</int>
-							<double key="pointSize">10</double>
+							<double key="pointSize">9</double>
 						</object>
 						<object class="NSFont" key="IBUIFont">
 							<string key="NSName">Helvetica</string>
-							<double key="NSSize">10</double>
+							<double key="NSSize">9</double>
 							<int key="NSfFlags">16</int>
 						</object>
 					</object>
