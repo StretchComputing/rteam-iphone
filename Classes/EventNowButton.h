@@ -13,6 +13,11 @@
     
 
 }
+@property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) NSString *participantRole;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *eventId;
+
 @property (nonatomic, strong) NSString *eventType;
 @property (nonatomic, strong) NSString *eventDate;
 

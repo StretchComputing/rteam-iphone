@@ -49,7 +49,7 @@
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
-badgeNumber, didRegister, numMemberTeams, inviteFan, scrollView, pageControl, viewControllers, serverError, alreadyCalled1, alreadyCalled2, haveTeamList, teamList, changeQuickLink, newQuickLinkTable, newQuickLinkAlias, rowNewQuickTeam, 
+badgeNumber, didRegister, numMemberTeams, inviteFan, viewControllers, serverError, alreadyCalled1, alreadyCalled2, haveTeamList, teamList, changeQuickLink, newQuickLinkTable, newQuickLinkAlias, rowNewQuickTeam, 
 teamListFailed, newMessagesSuccess, newMessagesCount, messageBadge, alreadyCalledCreate, activityGettingTeams, eventsNowActivity, eventsToday, 
 eventsTomorrow, numberOfPages, eventsNowSuccess, eventsNowTryAgain, allBottomButtons, selectRowLabel, eventsButton, 
 bannerIsVisible, myTeamsButton, messagesButton,displayIconsScroll, isEditingQuickLinkOne, newActivity, changeIconButton, foundQuick1, foundQuick2, undoCancel, undoTeamId, undoEventType, undoEventId, spotOpen, oneTeam,
@@ -58,7 +58,7 @@ refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, trans
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, homeAttendanceView, happeningNowView;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView;
 
 
 
@@ -435,20 +435,21 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, homeA
 }
 
 - (void)viewDidLoad {
-    
-    self.happeningNowView = [[HappeningNowView alloc] init];
-    self.happeningNowView.view.frame = CGRectMake(0, 200, 320, 121);
-    [self.view addSubview:self.happeningNowView.view];
+
 
 	self.currentDisplay = 1;
     self.registrationBackView.hidden = YES;
     homeScoreView = [[HomeScoreView alloc] init];
-    homeScoreView.view.frame = CGRectMake(0, 0, 320, 301);
+    homeScoreView.view.frame = CGRectMake(0, 322, 320, 301);
     homeScoreView.view.hidden = YES;
     
     homeAttendanceView = [[HomeAttendanceView alloc] init];
-    homeAttendanceView.view.frame = CGRectMake(0, 0, 320, 301);
+    //homeAttendanceView.homePage = self;
+    homeAttendanceView.view.frame = CGRectMake(0, 322, 320, 301);
     homeAttendanceView.view.hidden = YES;
+    [self.view addSubview:self.homeAttendanceView.view];
+    [self.view addSubview:self.homeScoreView.view];
+
     
 	self.title = @"rTeam";
 		
@@ -691,7 +692,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, homeA
 
 -(void)search{
 	
-    [self moveDivider];
+   
+    
     /*
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1638,16 +1640,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
     // a page is the width of the scroll view
 	//scrollView.frame = CGRectMake(100, 300, 200, 100);
-    scrollView.pagingEnabled = YES;
-    scrollView.contentSize = CGSizeMake(scrollView.frame.size.width * self.numberOfPages, scrollView.frame.size.height);
-    scrollView.showsHorizontalScrollIndicator = NO;
-    scrollView.showsVerticalScrollIndicator = NO;
-    scrollView.scrollsToTop = NO;
-    scrollView.delegate = self;
-	scrollView.backgroundColor = [UIColor blackColor];
+    self.scrollView.pagingEnabled = YES;
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * self.numberOfPages, self.scrollView.frame.size.height);
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.scrollsToTop = NO;
+    self.scrollView.delegate = self;
+	self.scrollView.backgroundColor = [UIColor blackColor];
 	
-    pageControl.numberOfPages = self.numberOfPages;
-    pageControl.currentPage = 0;
+    self.pageControl.numberOfPages = self.numberOfPages;
+    self.pageControl.currentPage = 0;
 	
     // pages are created on demand
     // load the visible page
@@ -1672,7 +1674,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
     // add the controller's view to the scroll view
     if (nil == controller.view.superview) {
-        CGRect frame = scrollView.frame;
+        CGRect frame = self.scrollView.frame;
         frame.origin.x = frame.size.width * page;
         frame.origin.y = 0;
         controller.view.frame = frame;
@@ -1693,14 +1695,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 tmpButton.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
                 [controller.view addSubview:tmpButton];
                 
-                if (self.bannerIsVisible) {
-                    
-                    //self.moveableView.frame = CGRectMake(0, 247, 320, 76);
-
-                }else{
-                    //self.moveableView.frame = CGRectMake(0, 297, 320, 76);
-                }
+              
             }else{
+                                
+                
                 if (page == j) {
                     //want cells j and j+1 from the allBottomButtons array
                     
@@ -1714,7 +1712,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             
                             AttendingButton *tmp1Button = [[AttendingButton alloc] initWithFrame:CGRectMake(36, 20, 92, 55)];
                             tmp1Button.event = tmp1;
-                            tmp1Button.isAttendance = true;
+                            tmp1Button.isAttendance = true;                            
+                            tmp1Button.participantRole = tmp1.participantRole;
+                            tmp1Button.teamId = tmp1.teamId;
+                            tmp1Button.eventId = tmp1.eventId;
+                            tmp1Button.sport = tmp1.sport;
                             
                             if (![tmp1.teamName isEqualToString:@""]) {
                                 tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
@@ -1857,7 +1859,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             
                             AttendingButton *tmp1Button = [[AttendingButton alloc] initWithFrame:CGRectMake(36, 20, 92, 55)];
                             tmp1Button.event = tmp1;
-                            
+                            tmp1Button.participantRole = tmp1.participantRole;
+                            tmp1Button.teamId = tmp1.teamId;
+                            tmp1Button.eventId = tmp1.eventId;
+                            tmp1Button.sport = tmp1.sport;
+
                             
                             if (![tmp1.teamName isEqualToString:@""]) {
                                 tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
@@ -1916,7 +1922,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             [tmp1Button addTarget:self action:@selector(eventNow:) forControlEvents:UIControlEventTouchUpInside];
                             [controller.view addSubview:tmp1Button];
                             
-                       // }
+                        }
                     }
                     
                     
@@ -1925,7 +1931,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     if ((2*j) + 1 < [self.allBottomButtons count]) {
                         
                         CurrentEvent *tmp2 = [self.allBottomButtons objectAtIndex:(2*j)+1];
-                        
+                                                
                         if ([tmp2.eventType isEqualToString:@"game"]) {
                             
                             if ([tmp2.gameInterval isEqualToString:@"0"]) {
@@ -1934,6 +1940,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 AttendingButton *tmp2Button = [[AttendingButton alloc] initWithFrame:CGRectMake(196, 20, 92, 55)];
                                 tmp2Button.event = tmp2;
                                 tmp2Button.isAttendance = true;
+                                tmp2Button.participantRole = tmp2.participantRole;
+                                tmp2Button.teamId = tmp2.teamId;
+                                tmp2Button.eventId = tmp2.eventId;
+                                tmp2Button.sport = tmp2.sport;
+
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
                                     tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
@@ -2073,6 +2084,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 
                                 AttendingButton *tmp2Button = [[AttendingButton alloc] initWithFrame:CGRectMake(196, 20, 92, 55)];
                                 tmp2Button.event = tmp2;
+                                tmp2Button.participantRole = tmp2.participantRole;
+                                tmp2Button.teamId = tmp2.teamId;
+                                tmp2Button.eventId = tmp2.eventId;
+                                tmp2Button.sport = tmp2.sport;
+
                                 
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
@@ -2136,7 +2152,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         
                     }
                     
-                    }
+                
                 }
 
             }
@@ -2162,10 +2178,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeScoreView.view.hidden = YES;
             
             AttendingButton *tmp = (AttendingButton *)sender;
-
+            
+            
             homeAttendanceView.teamName = tmp.teamName;
             homeAttendanceView.eventDate = tmp.eventDate;
             homeAttendanceView.eventType = tmp.eventType;
+            homeAttendanceView.teamId = tmp.teamId;
+            homeAttendanceView.participantRole = tmp.participantRole;
+            homeAttendanceView.eventId = tmp.eventId;
+            homeAttendanceView.sport = tmp.sport;
+
+        
             
             homeAttendanceView.yesCount = @"12";
             homeAttendanceView.noCount = @"2";
@@ -2189,13 +2212,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }else{
         
         if ([sender class] == [AttendingButton class]) {
-            homeAttendanceView.view.hidden = NO;
+            self.homeAttendanceView.view.hidden = NO;
             
             AttendingButton *tmp = (AttendingButton *)sender;
                         
             homeAttendanceView.teamName = tmp.teamName;
             homeAttendanceView.eventDate = tmp.eventDate;
             homeAttendanceView.eventType = tmp.eventType;
+            homeAttendanceView.teamId = tmp.teamId;
+            homeAttendanceView.participantRole = tmp.participantRole;
+            homeAttendanceView.eventId = tmp.eventId;
+            homeAttendanceView.sport = tmp.sport;
+
             
             homeAttendanceView.yesCount = @"12";
             homeAttendanceView.noCount = @"2";
@@ -2240,7 +2268,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		[self.undoCancel showInView:self.view];
 		
 	}else {
-		
+		        
 		NSString *eventType = tmpEvent.eventType;
 		
 		if ([eventType isEqualToString:@"game"]) {
@@ -2430,9 +2458,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
 	
     // Switch the indicator when more than 50% of the previous/next page is visible
-    CGFloat pageWidth = scrollView.frame.size.width;
-    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    pageControl.currentPage = page;
+    CGFloat pageWidth = self.scrollView.frame.size.width;
+    int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    self.pageControl.currentPage = page;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
     [self loadScrollViewWithPage:page - 1];
@@ -2454,7 +2482,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)changePage:(id)sender {
     
-    int page = pageControl.currentPage;
+    int page = self.pageControl.currentPage;
 	
     
     [self loadScrollViewWithPage:page - 1];
@@ -2462,10 +2490,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self loadScrollViewWithPage:page + 1];
     
 	// update the scroll view to the appropriate page
-    CGRect frame = scrollView.frame;
+    CGRect frame = self.scrollView.frame;
     frame.origin.x = frame.size.width * page;
     frame.origin.y = 0;
-    [scrollView scrollRectToVisible:frame animated:YES];
+    [self.scrollView scrollRectToVisible:frame animated:YES];
     
 	// Set the boolean used when scrolls originate from the UIPageControl. See scrollViewDidScroll: above.
     pageControlUsed = YES;
@@ -2492,57 +2520,72 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner{
 	    
-	if (!self.bannerIsVisible) {
-		self.bannerIsVisible = YES;
-		myAd.hidden = NO;
-        [self.view bringSubviewToFront:myAd];        
+    if (!self.bannerIsVisible) {
         
-        
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:1.0];
-        
-        [self.view bringSubviewToFront:self.registrationBackView];
-        
-        
-        self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
-        self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
-        self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
-        
-        [UIView commitAnimations];
-        
-        [self.view bringSubviewToFront:self.bottomBar];
-        
-        if (!self.changeQuickLinkBack.hidden) {
-            [self.view bringSubviewToFront:self.changeQuickLinkBack];
-            
-            if (!self.displayIconsScroll.hidden) {
-                [self.view bringSubviewToFront:self.displayIconsScroll];
-            }
-        }
+        self.bannerIsVisible = YES;
+        myAd.hidden = NO;
+        [self.view bringSubviewToFront:myAd];  
         
         if (self.isMoreShowing) {
-
+            
             
             [UIView beginAnimations:nil context:NULL];
             [UIView setAnimationDuration:1.0];
             
             
             
-            int init = 0;
-            if (self.bannerIsVisible) {
-                init = 50;
-            }
-        
-            homeScoreView.view.frame = CGRectMake(0, 0, 320, 301-init);
-            homeAttendanceView.view.frame = CGRectMake(0, 0, 320, 301-init);
-            
+            CGRect attFrame;
+            attFrame = self.homeAttendanceView.view.frame;
+            attFrame.size.height -= 50;
+            self.homeAttendanceView.view.frame = attFrame;
             
             
             [UIView commitAnimations];
-
+            
+        }else{
+            
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:1.0];
+            
+            [self.view bringSubviewToFront:self.registrationBackView];
+            
+            CGRect hapFrame;
+            hapFrame = self.happeningNowView.frame;
+            hapFrame.origin.y -= 50;
+            self.happeningNowView.frame = hapFrame;
+            
+            CGRect attFrame;
+            attFrame = self.homeAttendanceView.view.frame;
+            attFrame.origin.y -= 50;
+            self.homeAttendanceView.view.frame = attFrame;
+            
+            CGRect scoreFrame;
+            scoreFrame = self.homeScoreView.view.frame;
+            scoreFrame.origin.y -= 50;
+            self.homeScoreView.view.frame = scoreFrame;
+            
+            self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
+            self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
+            self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
+            
+            [UIView commitAnimations];
+            
+            [self.view bringSubviewToFront:self.bottomBar];
+            
+            if (!self.changeQuickLinkBack.hidden) {
+                [self.view bringSubviewToFront:self.changeQuickLinkBack];
+                
+                if (!self.displayIconsScroll.hidden) {
+                    [self.view bringSubviewToFront:self.displayIconsScroll];
+                }
+            }
+            
         }
-
-
+        
+        
+        
+        
+        
         if (self.backViewBottom.hidden == NO) {
             [self.view bringSubviewToFront:self.backViewBottom];
             CGRect frame = self.backViewBottom.frame;
@@ -2553,6 +2596,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         [self.view bringSubviewToFront:self.blueArrow];
 	}
+
     
     
 }
@@ -3243,19 +3287,40 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:1.0];
-
-   
+        
+        
+        self.bottomBar.hidden = NO;
         [self.view bringSubviewToFront:self.bottomBar];
 
-  
-        CGRect frame3 = self.pageControl.frame;
-        frame3.origin.y += 5;
-        self.pageControl.frame = frame3;
+        CGRect frame = self.happeningNowView.frame;
+        if (self.bannerIsVisible) {
+            frame.origin.y = 201;
+        }else{
+            frame.origin.y = 251;
+        }
+        self.happeningNowView.frame = frame;
+
+        
+        CGRect frame1 = self.homeAttendanceView.view.frame;
+        if (self.bannerIsVisible) {
+            frame1.origin.y = 322;
+        }else{
+            frame1.origin.y = 372;
+        }
+        self.homeAttendanceView.view.frame = frame1;
+        
+        CGRect frame2 = self.homeScoreView.view.frame;
+        if (self.bannerIsVisible) {
+            frame2.origin.y = 322;
+        }else{
+            frame2.origin.y = 372;
+        }
+        self.homeScoreView.view.frame = frame2;
+        
      
         [UIView commitAnimations];
         
         [self performSelector:@selector(hide) withObject:nil afterDelay:1.0];
-        //self.moveDividerBackground.hidden = YES;
 
         self.isMoreShowing = NO;
 
@@ -3267,19 +3332,38 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         
         int init = 0;
+        bool isAd = false;
         if (self.bannerIsVisible) {
             init = 50;
+            isAd = true;
         }
   
-        
-        CGRect frame3 = self.pageControl.frame;
-        frame3.origin.y -= 5;
-        self.pageControl.frame = frame3;
-        //self.moveDividerBackground.clipsToBounds = YES;
         homeAttendanceView.view.clipsToBounds = YES;
-        homeScoreView.view.frame = CGRectMake(0, 0, 320, 301-init);
-        homeAttendanceView.view.frame = CGRectMake(0, 0, 320, 301-init);
+        
+        
+        CGRect frame = self.happeningNowView.frame;
+        frame.origin.y = 0;
+        self.happeningNowView.frame = frame;
+        
+        CGRect frame1 = self.homeAttendanceView.view.frame;
+        frame1.origin.y = 121;
+        if (isAd) {
+            frame1.size.height = 245;
+        }else{
+            frame1.size.height = 295;
+        }
+        self.homeAttendanceView.view.frame = frame1;
+        
+        CGRect frame2 = self.homeScoreView.view.frame;
+        frame2.origin.y = 121;
+        if (isAd) {
+            frame2.size.height = 245;
+        }else{
+            frame2.size.height = 295;
+        }
+        self.homeScoreView.view.frame = frame2;
 
+        self.bottomBar.hidden = YES;
        
         
         [UIView commitAnimations];
@@ -3354,8 +3438,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	myAd = nil;
 	displayIconsScroll = nil;
 	changeIconButton = nil;
-	scrollView = nil;
-	pageControl = nil;
+
 	displayIconsScrollBack = nil;
 	changeQuickLinkBack = nil;
     refreshButton = nil;
@@ -3376,6 +3459,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     homeScoreView = nil;
     homeAttendanceView = nil;
     happeningNowView = nil;
+    scrollView = nil;
+    pageControl = nil;
     
 	[super viewDidUnload];
 	

@@ -35,11 +35,11 @@ teamName, newActivity, fromHome;
 		//GameChatter *tmp = [self.viewControllers objectAtIndex:1];
 		//[tmp viewWillAppear:NO];
 	}else if (index == 1) {
-		GameAttendance *tmp = [self.viewControllers objectAtIndex:1];
-		[tmp viewWillAppear:NO];
+		//GameAttendance *tmp = [self.viewControllers objectAtIndex:1];
+		//[tmp viewWillAppear:NO];
 	}else if (index == 2) {
 		Vote *tmp = [self.viewControllers objectAtIndex:2];
-		[tmp viewWillAppear:NO];
+		//[tmp viewWillAppear:NO];
 	}else {
 		//OBJECT AT INDEX 0
 		Gameday *tmp = [self.viewControllers objectAtIndex:0];

@@ -559,7 +559,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 		typeLabel.hidden = YES;
 		scoreLabel.hidden = YES;
 		
-		noEventsLabel.text = @"No future events found...";
+		noEventsLabel.text = @"No events found...";
         noEventsLabel.backgroundColor = [UIColor clearColor];
 		noEventsLabel.textAlignment = UITextAlignmentCenter;
 		

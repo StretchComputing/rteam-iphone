@@ -13,7 +13,6 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 #import "HomeScoreView.h"
 #import "HomeAttendanceView.h"
-#import "HappeningNowView.h"
 
 @interface Home : UIViewController <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextFieldDelegate, ADBannerViewDelegate,
 UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
@@ -22,9 +21,12 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 
     
 }
+
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, strong) HomeScoreView *homeScoreView;
 @property (nonatomic, strong) HomeAttendanceView *homeAttendanceView;
-@property (nonatomic, strong) HappeningNowView *happeningNowView;
+@property (nonatomic, strong) IBOutlet UIView *happeningNowView;
 @property (nonatomic, strong) IBOutlet UIToolbar *bottomBar;
 
 
@@ -132,8 +134,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 @property bool alreadyCalled1;
 @property bool alreadyCalled2;
 @property bool alreadyCalledCreate;
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
+
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 
 @property (nonatomic, strong) UIBarButtonItem *inviteFan;

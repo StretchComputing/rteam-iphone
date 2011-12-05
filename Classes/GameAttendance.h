@@ -34,6 +34,9 @@
 @property (nonatomic, strong) NSMutableArray *attMarker;
 @property (nonatomic, strong) NSMutableArray *attMarkerTemp;
 
+@property (nonatomic, strong) NSMutableArray *preMarker;
+@property (nonatomic, strong) NSMutableArray *preMarkerTemp;
+
 
 @property (nonatomic, strong) IBOutlet UIButton *saveAll;
 @property (nonatomic, strong) IBOutlet UIButton *select;

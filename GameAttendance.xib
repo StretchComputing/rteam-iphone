@@ -131,7 +131,7 @@
 					<object class="IBUILabel" id="495091619">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 7}, {300, 21}}</string>
+						<string key="NSFrame">{{10, 3}, {300, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSNextKeyView" ref="79525560"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -151,7 +151,7 @@
 					<object class="IBUIActivityIndicatorView" id="79525560">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">-2147483356</int>
-						<string key="NSFrame">{{34, 35}, {20, 20}}</string>
+						<string key="NSFrame">{{150, 33}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSNextKeyView" ref="939493994"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -215,7 +215,7 @@
 					<object class="IBUILabel" id="517196738">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{0, 6}, {320, 21}}</string>
+						<string key="NSFrame">{{0, 3}, {320, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSNextKeyView" ref="495091619"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -383,11 +383,11 @@
 							<reference ref="443651784"/>
 							<reference ref="876577730"/>
 							<reference ref="702342897"/>
-							<reference ref="79525560"/>
 							<reference ref="517196738"/>
 							<reference ref="232373091"/>
 							<reference ref="1069359021"/>
 							<reference ref="939493994"/>
+							<reference ref="79525560"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>

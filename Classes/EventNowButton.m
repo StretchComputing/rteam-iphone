@@ -10,7 +10,7 @@
 
 
 @implementation EventNowButton
-@synthesize event, eventLabel, teamLabel, canceledLabel, scoreLabel, scoreUs, scoreThem, interval, teamName, eventType, eventDate;
+@synthesize event, eventLabel, teamLabel, canceledLabel, scoreLabel, scoreUs, scoreThem, interval, teamName, eventType, eventDate, participantRole, eventId, teamId, sport;
 
 + (id)buttonWithFrame:(CGRect)frame {
 	return [[self alloc] initWithFrame:frame];

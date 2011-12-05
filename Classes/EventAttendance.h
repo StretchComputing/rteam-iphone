@@ -10,20 +10,23 @@
 
 
 @interface EventAttendance : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-
+    
 }
-@property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) IBOutlet UIView *lineView;
 @property (nonatomic, strong) NSString *userRole;
 @property bool isCoord;
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) IBOutlet UILabel *topLabel;
+@property (nonatomic, strong) IBOutlet UITableView *playerTableViewPre;
 
+@property (nonatomic, strong) UIBarButtonItem *switchButton;
 @property (nonatomic, strong) UIActivityIndicatorView *barActivity;
 
 @property (nonatomic, strong) IBOutlet UILabel *attActivityLabel;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *attActivity;
 
-@property (nonatomic, strong) NSString *successString;
 @property bool successNoChoices;
+@property (nonatomic, strong) NSString* successString;
 @property (nonatomic, strong) IBOutlet UITableView *playerTableView;
 @property bool saveSuccess;
 @property bool attendanceInfo;
@@ -33,6 +36,10 @@
 @property (nonatomic, strong) NSString *eventId;
 @property (nonatomic, strong) NSMutableArray *attMarker;
 @property (nonatomic, strong) NSMutableArray *attMarkerTemp;
+
+@property (nonatomic, strong) NSMutableArray *preMarker;
+@property (nonatomic, strong) NSMutableArray *preMarkerTemp;
+
 
 @property (nonatomic, strong) IBOutlet UIButton *saveAll;
 @property (nonatomic, strong) IBOutlet UIButton *select;

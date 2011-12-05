@@ -7,12 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-
+//#import "Home.h"
 
 @interface HomeAttendanceView : UIViewController {
 
     
 }
+@property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *participantRole;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) IBOutlet UIButton *goToButton;
+@property (nonatomic, strong) IBOutlet UIButton *pollButton;
 @property (nonatomic, strong) IBOutlet UILabel *dateLabel;
 @property (nonatomic, strong) NSString *teamName;
 @property (nonatomic, strong) NSString *yesCount;
@@ -28,10 +34,10 @@
 
 
 @property int initY;
-@property bool isFullScreen;
-@property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
 
--(IBAction)fullScreen;
 -(void)setLabels;
+
+-(IBAction)sendPoll;
+-(IBAction)goToPage;
 
 @end

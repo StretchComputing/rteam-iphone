@@ -22,8 +22,8 @@
 #import "Fan.h"
 #import "MobileCarrier.h"
 
-static NSString *baseUrl = @"https://rteamtest.appspot.com";
-//static NSString *baseUrl = @"http://14.latest.rteamtest.appspot.com";
+//static NSString *baseUrl = @"https://rteamtest.appspot.com";
+static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 
 @implementation ServerAPI
 
@@ -3205,7 +3205,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
         
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-		
+		        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
