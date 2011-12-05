@@ -270,13 +270,9 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<int key="IBUIButtonType">1</int>
 						<string key="IBUINormalTitle">Go To Game Page</string>
 						<reference key="IBUIHighlightedTitleColor" ref="1014004196"/>
-						<object class="NSColor" key="IBUINormalTitleColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
-						</object>
+						<reference key="IBUINormalTitleColor" ref="21514219"/>
 						<reference key="IBUINormalTitleShadowColor" ref="939349920"/>
 						<reference key="IBUIFontDescription" ref="889598571"/>
 						<reference key="IBUIFont" ref="656425790"/>
@@ -291,13 +287,9 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<int key="IBUIButtonType">1</int>
 						<string key="IBUINormalTitle">Keep Score</string>
 						<reference key="IBUIHighlightedTitleColor" ref="1014004196"/>
-						<object class="NSColor" key="IBUINormalTitleColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
-						</object>
+						<reference key="IBUINormalTitleColor" ref="21514219"/>
 						<reference key="IBUINormalTitleShadowColor" ref="939349920"/>
 						<reference key="IBUIFontDescription" ref="889598571"/>
 						<reference key="IBUIFont" ref="656425790"/>
@@ -374,7 +366,6 @@
 						<int key="NSvFlags">309</int>
 						<string key="NSFrame">{{319, 0}, {1, 301}}</string>
 						<reference key="NSSuperview" ref="1025116291"/>
-						<reference key="NSNextKeyView"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -525,6 +516,22 @@
 					<int key="connectionID">24</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">goToButton</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="89515161"/>
+					</object>
+					<int key="connectionID">38</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">scoreButton</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="722210064"/>
+					</object>
+					<int key="connectionID">39</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">fullScreen</string>
 						<reference key="source" ref="630321867"/>
@@ -532,6 +539,24 @@
 						<int key="IBEventType">7</int>
 					</object>
 					<int key="connectionID">7</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">goToPage</string>
+						<reference key="source" ref="89515161"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">40</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">keepScore</string>
+						<reference key="source" ref="722210064"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">41</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -564,7 +589,6 @@
 							<reference ref="630321867"/>
 							<reference ref="349018567"/>
 							<reference ref="89515161"/>
-							<reference ref="722210064"/>
 							<reference ref="799469489"/>
 							<reference ref="1061013791"/>
 							<reference ref="825720801"/>
@@ -581,6 +605,7 @@
 							<reference ref="756105074"/>
 							<reference ref="449331112"/>
 							<reference ref="289803580"/>
+							<reference ref="722210064"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -757,7 +782,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">37</int>
+			<int key="maxID">41</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

@@ -98,7 +98,7 @@
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Create Team Help Selected"
+                                         action:@"Help Link - Create Team"
                                           label:mainDelegate.token
                                           value:-1
                                       withError:&errors]) {
@@ -121,7 +121,7 @@
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Add Member Help Selected"
+                                         action:@"Help Link - Add Member"
                                           label:mainDelegate.token
                                           value:-1
                                       withError:&errors]) {
@@ -143,7 +143,7 @@
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Add Event Help Selected"
+                                         action:@"Help Link - Add Event"
                                           label:mainDelegate.token
                                           value:-1
                                       withError:&errors]) {
@@ -166,7 +166,7 @@
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Quick Links Help Selected"
+                                         action:@"Help Link - Quick Links"
                                           label:mainDelegate.token
                                           value:-1
                                       withError:&errors]) {
@@ -192,7 +192,7 @@
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Send Message Help Selected"
+                                         action:@"Help Link - Send Message"
                                           label:mainDelegate.token
                                           value:-1
                                       withError:&errors]) {

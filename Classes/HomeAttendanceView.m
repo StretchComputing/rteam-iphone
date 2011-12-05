@@ -135,7 +135,16 @@
             [navController pushViewController:currentGameTab animated:YES];
             
             navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-            [self.navigationController presentModalViewController:navController animated:YES];
+            
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            
+            id mainViewController = [self.view.superview nextResponder];
+            
+            if ([mainViewController class] == [Home class]) {
+                Home *tmp = (Home *)mainViewController;
+                [tmp.navigationController presentModalViewController:navController animated:YES];
+                
+            }
             
         }
         
@@ -173,8 +182,16 @@
         UINavigationController *navController = [[UINavigationController alloc] init];
         
         [navController pushViewController:currentPracticeTab animated:YES];
+        
         navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self.navigationController presentModalViewController:navController animated:YES];
+        
+        id mainViewController = [self.view.superview nextResponder];
+        
+        if ([mainViewController class] == [Home class]) {
+            Home *tmp = (Home *)mainViewController;
+            [tmp.navigationController presentModalViewController:navController animated:YES];
+            
+        }
         
         
     }else{
@@ -210,8 +227,16 @@
         UINavigationController *navController = [[UINavigationController alloc] init];
         
         [navController pushViewController:currentPracticeTab animated:YES];
+        
         navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self.navigationController presentModalViewController:navController animated:YES];
+        
+        id mainViewController = [self.view.superview nextResponder];
+        
+        if ([mainViewController class] == [Home class]) {
+            Home *tmp = (Home *)mainViewController;
+            [tmp.navigationController presentModalViewController:navController animated:YES];
+            
+        }
         
         
     }

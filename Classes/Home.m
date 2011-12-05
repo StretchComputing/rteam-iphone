@@ -692,9 +692,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 -(void)search{
 	
-   
-    
-    /*
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -714,7 +711,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 	
     navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self.navigationController presentModalViewController:navController animated:YES];
-	*/
+	
 }
 
 
@@ -1754,6 +1751,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(36, 20, 92, 55)];
                             tmp1Button.event = tmp1;
                             tmp1Button.isAttendance = false;
+                            tmp1Button.participantRole = tmp1.participantRole;
+                            tmp1Button.teamId = tmp1.teamId;
+                            tmp1Button.eventId = tmp1.eventId;
+                            tmp1Button.sport = tmp1.sport;
+                            
+                            tmp1Button.eventDate = tmp1.eventDate;
+
                             
                             if (![tmp1.teamName isEqualToString:@""]) {
                                 tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
@@ -1982,6 +1986,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 ScoreButton *tmp2Button = [[ScoreButton alloc] initWithFrame:CGRectMake(196, 20, 92, 55)];
                                 tmp2Button.event = tmp2;
                                 tmp2Button.isAttendance = false;
+                                tmp2Button.participantRole = tmp2.participantRole;
+                                tmp2Button.teamId = tmp2.teamId;
+                                tmp2Button.eventId = tmp2.eventId;
+                                tmp2Button.sport = tmp2.sport;
+                                
+                                tmp2Button.eventDate = tmp2.eventDate;
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
                                     tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
@@ -2206,6 +2216,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeScoreView.scoreUs = tmp.scoreUs;
             homeScoreView.scoreThem = tmp.scoreThem;
             homeScoreView.interval = tmp.interval;
+            
+            homeScoreView.eventDate = tmp.eventDate;
+
+            
+            homeScoreView.teamId = tmp.teamId;
+            homeScoreView.participantRole = tmp.participantRole;
+            homeScoreView.eventId = tmp.eventId;
+            homeScoreView.sport = tmp.sport;
+            
+            
             [homeScoreView setLabels];
         }
         
@@ -2239,6 +2259,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeScoreView.scoreUs = tmp.scoreUs;
             homeScoreView.scoreThem = tmp.scoreThem;
             homeScoreView.interval = tmp.interval;
+            
+            homeScoreView.eventDate = tmp.eventDate;
+
+            homeScoreView.teamId = tmp.teamId;
+            homeScoreView.participantRole = tmp.participantRole;
+            homeScoreView.eventId = tmp.eventId;
+            homeScoreView.sport = tmp.sport;
+            
+            
             [homeScoreView setLabels];
         }
         
@@ -2531,13 +2560,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [UIView beginAnimations:nil context:NULL];
             [UIView setAnimationDuration:1.0];
-            
-            
-            
+                        
             CGRect attFrame;
             attFrame = self.homeAttendanceView.view.frame;
             attFrame.size.height -= 50;
             self.homeAttendanceView.view.frame = attFrame;
+            
+            CGRect attFrame1;
+            attFrame1 = self.homeScoreView.view.frame;
+            attFrame1.size.height -= 50;
+            self.homeScoreView.view.frame = attFrame1;
             
             
             [UIView commitAnimations];

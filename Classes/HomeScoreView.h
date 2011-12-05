@@ -11,8 +11,16 @@
 
 @interface HomeScoreView : UIViewController {
     
-
 }
+@property (nonatomic, strong) NSString *eventDate;
+@property (nonatomic, strong) IBOutlet UIButton *goToButton;
+@property (nonatomic, strong) IBOutlet UIButton *scoreButton;
+@property (nonatomic, strong) NSString *teamId;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *participantRole;
+@property (nonatomic, strong) NSString *sport;
+
+
 @property (nonatomic, strong) NSString *teamName;
 @property (nonatomic, strong) NSString *scoreUs;
 @property (nonatomic, strong) NSString *scoreThem;
@@ -31,4 +39,8 @@
 
 -(IBAction)fullScreen;
 -(void)setLabels;
+
+-(IBAction)goToPage;
+-(IBAction)keepScore;
+
 @end
