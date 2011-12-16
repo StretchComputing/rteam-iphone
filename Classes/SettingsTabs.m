@@ -22,6 +22,7 @@
 #import <EventKit/EventKit.h>
 #import "HelpAbout.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation SettingsTabs
 @synthesize numMemberTeams, fromRegisterFlow, didRegister, displaySuccess, passwordReset, passwordResetQuestion, haveUserInfo, myTableView, loadingLabel, 
@@ -347,16 +348,23 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (row == 0) {
 			
+            [TraceSession addEventToSession:@"Settings Page - Add/Change Profile Pic Button Clicked"];
+
+            
 			AddChangeProfilePic *tmp = [[AddChangeProfilePic alloc] init];
 			[self.navigationController pushViewController:tmp animated:NO];
 			
 		}else if (row == 1) {
 			
+            [TraceSession addEventToSession:@"Settings Page - Change Password Button Clicked"];
+
 			ChangePassword *tmp = [[ChangePassword alloc] init];
 			[self.navigationController pushViewController:tmp animated:YES];
 			
 		}else if (row == 2) {
 			
+            [TraceSession addEventToSession:@"Settings Page - Password Reset Question Button Clicked"];
+
 			PasswordResetQuestion *tmp = [[PasswordResetQuestion alloc] init];
 			tmp.question = self.passwordResetQuestion;
 			
@@ -364,6 +372,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}else if (row == 3) {
 			
+            [TraceSession addEventToSession:@"Settings Page - Logout Button Clicked"];
+
+            
             NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -413,6 +424,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}else if (row == 0)	{
 			
+            [TraceSession addEventToSession:@"Settings Page - Sync Events Button Clicked"];
+
+            
             UIActionSheet *synch = [[UIActionSheet alloc] initWithTitle:@"Do you want to sync your rTeam Events to your iPhone Calendar?" delegate:self cancelButtonTitle:@"No" destructiveButtonTitle:nil otherButtonTitles:@"Yes", nil];
             synch.actionSheetStyle = UIActionSheetStyleDefault;
             [synch showInView:self.view];
@@ -425,6 +439,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if (row == 0) {
             //Feedback
             
+            [TraceSession addEventToSession:@"Settings Page - Feedback Button Clicked"];
+
             NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -452,6 +468,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
         }else if (row == 1){
             //Help
+            
+            [TraceSession addEventToSession:@"Settings Page - Help Button Clicked"];
+
             NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -473,6 +492,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [self.navigationController pushViewController:tmp animated:YES];
         }else{
             //rate
+            [TraceSession addEventToSession:@"Settings Page - Rate rTeam Button Clicked"];
+
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Rate rTeam"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
             NSString *str = @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa";
             str = [NSString stringWithFormat:@"%@/wa/viewContentsUserReviews?", str]; 
             str = [NSString stringWithFormat:@"%@type=Purple+Software&id=", str];

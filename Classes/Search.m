@@ -20,6 +20,7 @@
 #import "Players.h"
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation Search
 @synthesize searchBar, searchCriteria, searchTableView, potentialMatches, allMatches, teamsOnly, error, potentialMatchesTeamName, 
@@ -83,6 +84,9 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 
 -(void)home{
 	
+    [TraceSession addEventToSession:@"Search Page - Home Button Clicked"];
+
+    
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 	
 }
@@ -463,6 +467,9 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    [TraceSession addEventToSession:@"Search Page - Search Result Clicked"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"

@@ -19,6 +19,7 @@
 #import "AllEventsCalendar.h"
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation EventEdit
 @synthesize activity, saveChanges, practiceOpponent, practiceDate, practiceDescription, opponent, stringDate, description, teamId, eventId, 
@@ -95,6 +96,9 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 
 -(void)submit{
 	
+    [TraceSession addEventToSession:@"Event Edit Page - Save Changes Button Clicked"];
+
+    
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Team Alert" message:@"Notify your team of this update?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
 	
@@ -140,6 +144,9 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 
 -(void)changeDate{
 	
+    [TraceSession addEventToSession:@"Event Edit Page - Edit Date Button Clicked"];
+
+    
 	EventEditDate *tmp = [[EventEditDate alloc] init];
 	tmp.practiceDate = self.practiceDateObject;
 	[self.navigationController pushViewController:tmp animated:YES];
@@ -273,6 +280,10 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 		
 		if (buttonIndex == 0) {
 			//Remove
+            
+            [TraceSession addEventToSession:@"Event Edit Page - Delete Event Button Clicked"];
+
+            
             NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -288,6 +299,9 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 			[self performSelectorInBackground:@selector(removeEvent) withObject:nil];
 		}else if (buttonIndex == 1) {
 			//Cancel
+            
+            [TraceSession addEventToSession:@"Event Edit Page - Cancel Event Button Clicked"];
+
             NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"

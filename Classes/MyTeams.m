@@ -22,6 +22,7 @@
 #import "EventList.h"
 #import "TeamHome.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation MyTeams
 @synthesize teams, header, footer, didRegister, deleteRow, teamsStored, numMemberTeams, fanTeams, memberTeams, noFanTeams,
@@ -80,6 +81,9 @@ fromHome, myAd, alertOne, alertTwo, isDelete;
 
 -(void)home{
 	
+    [TraceSession addEventToSession:@"MyTeams Page - Home Button Clicked"];
+
+    
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 	
 }
@@ -459,6 +463,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)create{
 	
+    [TraceSession addEventToSession:@"MyTeams Page - New Team Button Clicked"];
+
+    
 	CreateTeam *nextController = [[CreateTeam alloc] init];
     nextController.fromHome = false;
 	[self.navigationController pushViewController:nextController animated:YES];	
@@ -591,6 +598,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSUInteger section = [indexPath section];
 	
 	if (section == 0) {
+        
+        [TraceSession addEventToSession:@"MyTeams Page - Member Team Clicked"];
+
+        
 		if ([self.memberTeams count] > 0) {
 			
 			
@@ -651,6 +662,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		}
 		
 	}else {
+        
+        [TraceSession addEventToSession:@"MyTeams Page - Fan Team Clicked"];
+
+        
 		if ([self.fanTeams count] > 0) {
 			
 			

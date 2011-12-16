@@ -31,6 +31,7 @@
 #import "FastActionSheet.h"
 #import "Vote.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation AllEventsCalendar
 @synthesize allGames, allPractices, allEvents, eventType, dateSelected, gamesToday, practicesToday, eventsToday, bottomBar, segmentedControl, 
@@ -996,6 +997,9 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 
 -(void)listView{
 	
+    [TraceSession addEventToSession:@"Calendar Month Page - List Clicked"];
+
+    
 	AllEventCalList *tmp = [[AllEventCalList alloc] init];
 	
 	//Sort the games, practices, and all events
@@ -1046,14 +1050,22 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	switch (selection) {
 		case 0:
+            [TraceSession addEventToSession:@"Calendar Month Page - Games Button Clicked"];
+
 			self.eventType = @"game";
 			self.segmentedControl.selectedSegmentIndex = 0;
 			break;
 		case 1:
+            
+            [TraceSession addEventToSession:@"Calendar Month Page - Practices Button Clicked"];
+
 			self.eventType = @"practice";
 			self.segmentedControl.selectedSegmentIndex = 1;
 			break;
 		case 2:
+            
+            [TraceSession addEventToSession:@"Calendar Month Page - All Button Clicked"];
+
 			self.eventType = @"all";
 			self.segmentedControl.selectedSegmentIndex = 2;
 			break;
@@ -1213,12 +1225,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	if (row == 0) {
 		//Create new event
+        [TraceSession addEventToSession:@"Calendar Month Page - Create New Event Clicked"];
+
+        
 		CreateNewEvent *tmp = [[CreateNewEvent alloc] init];
 		tmp.eventDate = self.dateSelected;
 		[self.navigationController pushViewController:tmp animated:YES];
 		
 	}else if ([self.eventType isEqualToString:@"game"]) {
 		
+        [TraceSession addEventToSession:@"Calendar Month Page - Game Clicked"];
+
+        
 		Game *currentGame = [self.gamesToday objectAtIndex:row-1];
 		
 		NSString *userRole = @"";
@@ -1338,6 +1356,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 	}else if ([self.eventType isEqualToString:@"practice"]) {
 		
+        [TraceSession addEventToSession:@"Calendar Month Page - Practice Clicked"];
+
+        
 		PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
 		
 		
@@ -1410,6 +1431,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if ([[self.eventsToday objectAtIndex:row-1] class] == [Game class]) {
 			
+            
+            [TraceSession addEventToSession:@"Calendar Month Page - Game Clicked"];
+
+            
 			Game *currentGame = [self.eventsToday objectAtIndex:row-1];
 			
 			NSString *userRole = @"";
@@ -1521,6 +1546,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}else if ([[self.eventsToday objectAtIndex:row-1] class] == [Practice class]) {
 			
+            
+            [TraceSession addEventToSession:@"Calendar Month Page - Practice Clicked"];
+
+            
 			PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
 			
 			
@@ -1586,6 +1615,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			
 		}else {
+            
+            [TraceSession addEventToSession:@"Calendar Month Page - Event Clicked"];
+
+            
 			EventTabs *currentEventTab = [[EventTabs alloc] init];
 			
 			

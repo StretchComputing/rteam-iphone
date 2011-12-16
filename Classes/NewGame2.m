@@ -14,6 +14,8 @@
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
 #import "GANTracker.h"
+#import "TraceSession.h"
+
 @implementation NewGame2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, opponent, duration, description, start, errorString, theDuration, theOpponent, theDescription;
 
@@ -60,6 +62,9 @@
 
 -(void)createGame {
 	
+    [TraceSession addEventToSession:@"New Single Game Page - Create Game Button Clicked"];
+
+    
 	self.error.text = @"";
 	//Validate all fields are entered:
 	

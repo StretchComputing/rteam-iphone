@@ -13,6 +13,7 @@
 #import "Fan.h"
 #import "Player.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation SendPrivateMessage
 @synthesize keyboardIsUp, keyboardButton, recipients, cancelMessageButton, messageText, activity, recipLabel, recipientObjects, errorString, errorLabel, teamId, theMessageText, isReply, descripLabel, isConfirm;
@@ -80,6 +81,9 @@
 
 -(void)post{
     
+    [TraceSession addEventToSession:@"Private Message Page - Send Button Clicked"];
+
+    
     self.theMessageText = [NSString stringWithString:self.messageText.text];
     
     if ((self.messageText.text != nil) && ![self.messageText.text isEqualToString:@""]) {
@@ -102,6 +106,8 @@
     
 }
 -(void)cancel{
+    [TraceSession addEventToSession:@"Private Message Page - Cancel Button Clicked"];
+
     
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }

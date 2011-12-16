@@ -18,6 +18,7 @@
 #import "NewMemberObject.h"
 #import "Home.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation NewPlayer
 @synthesize firstName, lastName, email, guardianEmail, roles, teamId, submitButton, serverProcess, error, createSuccess, isCoordinator, 
@@ -208,6 +209,9 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 
 -(void)create {
 	
+    [TraceSession addEventToSession:@"New Member(s) Page - Add Members Clicked"];
+
+    
 	if (self.firstName.text == nil) {
 		self.firstName.text = @"";
 	}
@@ -458,6 +462,9 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 
 -(void)addParentGuardian{
 	
+    [TraceSession addEventToSession:@"New Member(s) Page - Add Parent/Guardian Clicked"];
+
+    
 	[self.firstName resignFirstResponder];
 	[self.lastName resignFirstResponder];
 	[self.email resignFirstResponder];
@@ -481,19 +488,30 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 }
 
 - (void)showPicker:(id)sender {
+    
+    
     self.multipleEmailArray = [NSMutableArray array];
 
     UIButton *tmpButton = (UIButton *)sender;
     
     if (tmpButton.tag == 0) {
         //New Member
+        
+        [TraceSession addEventToSession:@"New Member(s) Page - Add Contact Member Clicked"];
+
         self.addContactWhere = @"member";
     }else if (tmpButton.tag == 1){
         //Guardian 1
+        
+        [TraceSession addEventToSession:@"New Member(s) Page - Add Contact Guard1 Clicked"];
+
         self.addContactWhere = @"guard1";
         
     }else{
         //Guardian 2
+        
+        [TraceSession addEventToSession:@"New Member(s) Page - Add Contact Guard2 Clicked"];
+
         self.addContactWhere = @"guard2";
         
     }
@@ -1040,6 +1058,10 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 }
 
 -(void)addNew{
+    
+    [TraceSession addEventToSession:@"New Member(s) Page - Add New Clicked"];
+
+    
     self.coordinatorSegment.selectedSegmentIndex = 1;
 	self.miniErrorLabel.text = @"";
 	

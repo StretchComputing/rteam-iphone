@@ -19,6 +19,7 @@
 #import "Home.h"
 #import "MyTeams.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation InviteFanFinal
 @synthesize firstName, lastName, email, roles, teamId, submitButton, serverProcess, error, createSuccess, isCoordinator, 
@@ -169,6 +170,8 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 
 -(void)create {
 	
+    [TraceSession addEventToSession:@"Invite Fan(s) Page - Invite Fan(s) Button Clicked"];
+
 	if (self.firstName.text == nil) {
 		self.firstName.text = @"";
 	}

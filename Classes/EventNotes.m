@@ -14,6 +14,7 @@
 #import "EventUpdateGPS.h"
 #import "MapLocation.h"
 #import "EventEdit.h"
+#import "TraceSession.h"
 
 @implementation EventNotes
 @synthesize eventId, teamId, opponent, day, time, description, locationManager, updateSuccess, latitude, longitude, 
@@ -50,6 +51,8 @@ startDateString, loading, errorString, dayString, timeString, eventNameString;
 
 -(void)editEvent{
 	
+    [TraceSession addEventToSession:@"EventDay - Edit Button Clicked"];
+
 	
 	EventEdit *editEvent = [[EventEdit alloc] init];
 	

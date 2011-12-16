@@ -30,6 +30,7 @@
 #import "VideoDisplay.h"
 #import "NewActivityImageObject.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 #define REFRESH_HEADER_HEIGHT 52.0f
 
@@ -39,11 +40,17 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 
 
 -(void)home{
+    
+    [TraceSession addEventToSession:@"Activity Page - Home Button Clicked"];
+
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 	
 }
 
 -(void)compose{
+    
+    [TraceSession addEventToSession:@"Activity Page - Compose Button Clicked"];
+
     
     ActivityPost *tmp = [[ActivityPost alloc] init];
 	tmp.fromClass = self;
@@ -337,6 +344,9 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     int y = self.bottomScrollView.frame.size.height;
 
     if (currentMiddle == 1) {
+        
+        [TraceSession addEventToSession:@"Activity Page - Swiped To Photos"];
+
         //Photos
         if (!self.didInitPhotos) {
             self.didInitPhotos = false;
@@ -358,7 +368,8 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     }else if (currentMiddle == 2){
         //Everyone
         
-        
+        [TraceSession addEventToSession:@"Activity Page - Swiped To Everyone"];
+
         self.view1.frame = CGRectMake(0, 0, 320, y);
         self.view1.backgroundColor = [UIColor whiteColor];
         [self.bottomScrollView addSubview:self.view1];
@@ -373,6 +384,10 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         
     }else{
         //Me
+        
+        [TraceSession addEventToSession:@"Activity Page - Swiped To Me"];
+
+        
         if (!self.didInitMyActivity) {
             self.didInitMyActivity = false;
             [self performSelectorInBackground:@selector(getMyActivity) withObject:nil];
@@ -587,11 +602,14 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-   
+
     
 	NSUInteger row = [indexPath row];
     
     if (tableView == self.allActivityTable) {
+        
+        [TraceSession addEventToSession:@"Activity Page - Activity Row Clicked"];
+
         
         if ([[self.activityArray objectAtIndex:row] class] == [Activity class]) {
             
@@ -653,6 +671,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
     }else{
         //my
+        
+        [TraceSession addEventToSession:@"Activity Page - Me Row Clicked"];
+
         
         if ([[self.myActivityArray objectAtIndex:row] class] == [MessageThreadInbox class]) {
 			MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:row];
@@ -1095,10 +1116,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([self.currentTable isEqualToString:@"everyone"]) {
         
+        [TraceSession addEventToSession:@"Activity Page - All Activity Refreshed Clicked"];
+
         [self performSelectorInBackground:@selector(getNewActivity) withObject:nil];
         
     }else if ([self.currentTable isEqualToString:@"me"]){
         
+        [TraceSession addEventToSession:@"Activity Page - My Activity Refreshed Clicked"];
+
         [self performSelectorInBackground:@selector(getMyActivity) withObject:nil];
         
     }else if ([self.currentTable isEqualToString:@"photos"]){
@@ -1278,6 +1303,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 //For clicking on an image inside the message (company feed)
 -(void)imageSelected:(id)sender{
+    
+    [TraceSession addEventToSession:@"Activity Page - Image Clicked"];
+
         
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];

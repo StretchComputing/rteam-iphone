@@ -18,6 +18,7 @@
 #import "AllEventsCalendar.h"
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation GameEdit
 @synthesize activity, saveChanges, gameOpponent, gameDate, gameDescription, opponent, stringDate, description, teamId, gameId, gameChangeDate, 
@@ -88,6 +89,9 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 
 -(void)submit{
 	
+    [TraceSession addEventToSession:@"Game Edit Page - Save Changes Button Clicked"];
+
+    
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Team Alert" message:@"Notify your team of this update?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
 
@@ -132,6 +136,10 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 
 -(void)changeDate{
 	
+
+    [TraceSession addEventToSession:@"Game Edit Page - Edit Date Button Clicked"];
+
+    
 	GameEditDate *tmp = [[GameEditDate alloc] init];
 	tmp.gameDate = self.gameDateObject;
 	[self.navigationController pushViewController:tmp animated:YES];
@@ -258,6 +266,8 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 		
 		if (buttonIndex == 0) {
             
+            [TraceSession addEventToSession:@"Game Edit Page - Delete Game Button Clicked"];
+
             NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -274,6 +284,9 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 			[self performSelectorInBackground:@selector(removeGame) withObject:nil];
 		}else if (buttonIndex == 1) {
 			//Cancel
+            
+            [TraceSession addEventToSession:@"Game Edit Page - Cancel Game Button Clicked"];
+
             
             NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];

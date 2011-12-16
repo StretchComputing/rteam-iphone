@@ -16,6 +16,7 @@
 #import "FastActionSheet.h"
 #import "SendPrivateMessage.h"
 #import "SendPoll.h"
+#import "TraceSession.h"
 
 @implementation SelectRecipients
 @synthesize teamId, members, selectedMembers, selectedMemberObjects, fromWhere, error, messageOrPoll, userRole, eventType, eventId, allFansObjects,
@@ -61,6 +62,9 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 
 -(void)save{
 	
+    [TraceSession addEventToSession:@"Select Recipient(s) Page - Save Button Clicked"];
+
+    
     if ([self.members count] > 0) {
         self.navigationItem.backBarButtonItem =
         [[UIBarButtonItem alloc] initWithTitle:@"Back"

@@ -14,6 +14,7 @@
 #import "SelectRecipients.h"
 #import <MobileCoreServices/UTCoreTypes.h> 
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation ActivityPost
 @synthesize messageText, postTeamId, teamSelectButton, hasTeams, teams, savedTeams, selectedTeams, keyboardIsUp, keyboardButton, sendPollButton, sendPrivateButton, activity, segControl, theMessageText, previewImage, cameraSaveMessage, cancelImageButton, imageDataToSend, isTakeVideo, isSendVideo, sendOrientation, errorLabel, errorString, videoDataToSend, fromClass;
@@ -73,6 +74,8 @@
 
 -(void)post{
     
+    [TraceSession addEventToSession:@"Activity Post Page - Post Button Clicked"];
+
     if ([self.teams count] > 0) {
         self.theMessageText = [NSString stringWithString:self.messageText.text];
         
@@ -104,6 +107,8 @@
 }
 -(void)cancel{
     
+    [TraceSession addEventToSession:@"Activity Post Page - Cancel Button Clicked"];
+
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
@@ -281,6 +286,9 @@
 }
 -(void)sendPoll{
     
+    [TraceSession addEventToSession:@"Activity Post Page - Send Poll Button Clicked"];
+
+    
     if ([self.teams count] > 0) {
         
         if ([self.teams count] == 1) {
@@ -317,6 +325,8 @@
 }
 -(void)privateMessage{
     
+    [TraceSession addEventToSession:@"Activity Post Page - Private Message Button Clicked"];
+
     if ([self.teams count] > 0) {
         
         if ([self.teams count] == 1) {
@@ -377,6 +387,9 @@
 -(void)segmentSelect{
     
     if (self.segControl.selectedSegmentIndex == 2) {
+        
+        [TraceSession addEventToSession:@"Activity Post Page - Video Button Clicked"];
+
         self.isTakeVideo = true;
      
         [self performSelector:@selector(selectVideo) withObject:nil afterDelay:0.2];
@@ -386,6 +399,9 @@
         
     }else if (self.segControl.selectedSegmentIndex == 0){
         
+        [TraceSession addEventToSession:@"Activity Post Page - Camera Button Clicked"];
+
+        
         self.isTakeVideo = false;
         [self performSelector:@selector(selectCamera) withObject:nil afterDelay:0.2];
         [self performSelector:@selector(reset) withObject:nil afterDelay:2.0];
@@ -393,6 +409,9 @@
         
         
     }else if (self.segControl.selectedSegmentIndex == 1){
+        
+        [TraceSession addEventToSession:@"Activity Post Page - Image Library Button Clicked"];
+
         self.isTakeVideo = false;
         [self performSelector:@selector(selectLibrary) withObject:nil afterDelay:0.2];
         [self performSelector:@selector(reset) withObject:nil afterDelay:2.0];

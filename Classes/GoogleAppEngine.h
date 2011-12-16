@@ -1,9 +1,9 @@
 //
 //  GoogleAppEngine.h
-//  ServiceNow LiveFeed
+//  rTeam
 //
 //  Created by Joseph Wroblewski on 9/13/11.
-//  Copyright 2011 Fruition Partners. All rights reserved.
+//  Copyright 2011 Stretch Computing. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

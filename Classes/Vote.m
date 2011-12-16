@@ -11,6 +11,7 @@
 #import "rTeamAppDelegate.h"
 #import "VoteMemberObject.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation Vote
 @synthesize userRole, teamId, loadingLabel, loadingActivity, myTableView, closeVotingButton, errorLabel, activity, memberArray, errorString, myVote,
@@ -143,6 +144,10 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 
 
 -(void)closeVoting{
+    
+    [TraceSession addEventToSession:@"Vote Page - Close Voting Button Clicked"];
+
+    
 	self.errorLabel.text = @"";
 	[self.activity startAnimating];
 	
@@ -268,6 +273,9 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    [TraceSession addEventToSession:@"Vote Page - Member Row Clicked"];
+
+    
 	NSUInteger row = [indexPath row];
 	
 	if (self.isOpen) {

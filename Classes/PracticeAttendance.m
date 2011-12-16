@@ -11,6 +11,7 @@
 #import "ServerAPI.h"
 #import "Player.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation PracticeAttendance
 @synthesize players, teamId, allSelector, practiceId, attMarker, saveAll, select, activity, successLabel, startDate, attReport, attendanceInfo,
@@ -44,6 +45,9 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 }
 
 -(void)switchViews{
+    
+    [TraceSession addEventToSession:@"Practice Attendance Page - Actual/Expected Button Clicked"];
+
     
     if ([self.switchButton.title isEqualToString:@"Practice"]) {
         self.switchButton.title = @"Expected";
@@ -510,6 +514,10 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 }
 
 -(void)save{
+    
+    [TraceSession addEventToSession:@"Practice Attendance Page - Save Button Clicked"];
+
+    
 	[self.activity startAnimating];
 	
 	//Disable the UI buttons and textfields while registering

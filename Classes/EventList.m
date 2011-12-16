@@ -33,6 +33,7 @@
 #import "Fans.h"
 #import "Vote.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation EventList
 @synthesize events, teamName, teamId, deleteRow, isPastGame, fromEdit, userRole, error, addButton, sport, barActivity, 
@@ -885,6 +886,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    [TraceSession addEventToSession:@"Event List Page - Event Clicked"];
+
+    
 	//go to that game profile
 	
 	if ([self.events count] > 0) {

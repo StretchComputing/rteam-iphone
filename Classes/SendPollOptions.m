@@ -16,6 +16,7 @@
 #import "Fan.h"
 #import "Player.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation SendPollOptions
 @synthesize action, question, errorMessage, option1, option2, option3, option4, option5, submitButton, questionText, teamId, createSuccess, 
@@ -39,6 +40,10 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 }
 
 -(void)submit{
+    
+    [TraceSession addEventToSession:@"Send Poll Options Page - Submit Button Clicked"];
+
+    
 	self.errorMessage.text = @"";
 	if ([self.option1.text isEqualToString:@""] || [self.option2.text isEqualToString:@""]) {
 		self.errorMessage.text = @"*You must have options #1 and #2 filled out";

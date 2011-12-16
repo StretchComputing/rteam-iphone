@@ -10,6 +10,7 @@
 #import "Team.h"
 #import "ActivityPost.h"
 #import "SelectRecipients.h"
+#import "TraceSession.h"
 
 @implementation SelectTeams
 @synthesize myTeams, myTableView, rowsSelected, isPoll, isPrivate;
@@ -130,6 +131,8 @@
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    [TraceSession addEventToSession:@"Team Select Page - Team Selected"];
+
     self.navigationItem.backBarButtonItem =
     [[UIBarButtonItem alloc] initWithTitle:@"Back"
                                      style:UIBarButtonItemStyleBordered

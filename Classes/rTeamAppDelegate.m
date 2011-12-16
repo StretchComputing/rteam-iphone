@@ -50,6 +50,7 @@
 #import "Reachability.h"
 #import "GANTracker.h"
 #import "GoogleAppEngine.h"
+#import "TraceSession.h"
 
 @implementation rTeamAppDelegate
 
@@ -57,6 +58,9 @@
 @synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData;
 
 - (id) init {
+    
+    [TraceSession initiateSession];
+
     
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -127,6 +131,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
 	
+    [TraceSession addEventToSession:@"Application Finished Loading"];
+
+    
     [[GANTracker sharedTracker] startTrackerWithAccountID:@"UA-280128-4"
                                            dispatchPeriod:10
                                                  delegate:nil];
@@ -167,15 +174,15 @@
     /////////////////////////
     // Test Code for rSkyBox
     /////////////////////////
-//    self.crashSummary = @"Joe is testing the crash data being sent to GAE";
-//    self.crashDetectDate = [NSDate date];
-//    self.crashUserName = @"wrobjx2";
-//    
-//    NSString *myString = @"0123456789ABCDEF";
-//    const char *utfString = [myString UTF8String];
-//    self.crashStackData = [NSData dataWithBytes:utfString length:strlen(utfString)];
-//    
-//    [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
+    self.crashSummary = @"Joe is testing the crash data being sent to GAE";
+    self.crashDetectDate = [NSDate date];
+    self.crashUserName = @"wrobjx2";
+    
+    NSString *myString = @"0123456789ABCDEF";
+    const char *utfString = [myString UTF8String];
+    self.crashStackData = [NSData dataWithBytes:utfString length:strlen(utfString)];
+    
+    [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
     //////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -199,6 +206,9 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	
+    [TraceSession addEventToSession:@"Application Received Remote Notification"];
+
+    
 	NSDictionary *aps = [userInfo valueForKey:@"aps"];
 	
 	NSString *alertMessage;
@@ -276,6 +286,9 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 	
+    [TraceSession addEventToSession:@"User Closed App"];
+
+    
 	//Set the badge number as we leave the App
 	
 	NSDictionary *response = [ServerAPI getMessageThreadCount:self.token :@"" :@"" :@"" :@"true"];
@@ -335,7 +348,8 @@
 
 -(void)applicationWillEnterForeground:(UIApplication *)application {
     
-    
+    [TraceSession addEventToSession:@"User Opened App"];
+
 }
 
 

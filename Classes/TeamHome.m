@@ -34,6 +34,7 @@
 #import "NewGamePractice.h"
 #import <QuartzCore/QuartzCore.h>
 #import "TeamEdit.h"
+#import "TraceSession.h"
 
 @implementation TeamHome
 @synthesize teamId, userRole, teamSport, teamName, nextGameInfoLabel, topRight, topLeft, recentGamesTable, scheduleButton, allScoresButton, 
@@ -910,6 +911,9 @@ displayWarning, myAd, displayPhoto, editButton, fromHome;
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    [TraceSession addEventToSession:@"Team Home Page - Game Row Clicked"];
+
+    
 	int row = [indexPath row];
 
 	if ([self.pastGamesArray count] > 0) {
@@ -1340,6 +1344,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)editTeam{
         
+    [TraceSession addEventToSession:@"Team Home Page - Edit Team Button Clicked"];
+
+    
     TeamEdit *tmp = [[TeamEdit alloc] init];
     tmp.teamId = self.teamId;
     tmp.fromHome = self.fromHome;

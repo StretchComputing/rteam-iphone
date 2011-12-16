@@ -21,6 +21,7 @@
 #import "ProfilePhoto.h"
 #import "Players.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 static inline double radians (double degrees) {return degrees * M_PI/180;}
 
@@ -454,6 +455,9 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 -(void)editStart{
 	
+    [TraceSession addEventToSession:@"Member Info Page - Edit Button Clicked"];
+
+    
 	if (!self.isEditing) {
 		
         
@@ -641,6 +645,8 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 -(void)addContact{
 	
+    [TraceSession addEventToSession:@"Member Info Page - Attendance Button Clicked"];
+
 
 	PlayerAttendance *tmp = [[PlayerAttendance alloc] init];
 	tmp.memberId = self.memberId;
@@ -654,6 +660,10 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 }
 
 -(void)changeRole{
+    
+    [TraceSession addEventToSession:@"Member Info Page - Change Role Button Clicked"];
+
+    
 	if ([self.userRole isEqualToString:@"coordinator"]) {
 		//message = @"Change this members role to 'participant'?";
 		self.changedRole = @"member";
@@ -1553,6 +1563,9 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 -(void)showActionSheetCallText{
     
+    [TraceSession addEventToSession:@"Member Info Page - Call/Text Button Clicked"];
+
+    
     NSString *g2Phone = @"";
     NSString *g1Phone = @"";
     
@@ -1708,6 +1721,8 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	if (actionSheet == self.deleteActionSheet) {
 		if (buttonIndex == 0) {
 			
+            [TraceSession addEventToSession:@"Member Info Page - Delete Member Button Clicked"];
+
 			[self.activity startAnimating];
 			
 			
@@ -2070,6 +2085,8 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 -(void)switchFan{
 	
+    [TraceSession addEventToSession:@"Member Info Page - Make Fan Button Clicked"];
+
 	[self.activity startAnimating];
 	
 	self.startEditButton.enabled = NO;

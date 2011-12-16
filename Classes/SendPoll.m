@@ -21,6 +21,7 @@
 #import "Fan.h"
 #import "Player.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation SendPoll
 @synthesize doneButton, activity, pollQuestion, pollType, errorMessage, pollSubject, teamId, createSuccess, eventId, eventType, origLoc, recipients,
@@ -83,6 +84,9 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
 	}else{
 		
 	if (self.pollType.selectedSegmentIndex == 0){
+        
+        [TraceSession addEventToSession:@"Private Message Page - Send Yes/No Poll Clicked"];
+
 		//YesNo poll, verify with popup, then hit server
 		self.pollActionSheet =  [[UIActionSheet alloc] initWithTitle:@"Send a Yes/No poll with this question?" delegate:self cancelButtonTitle:@"No" destructiveButtonTitle:nil otherButtonTitles:@"Yes", nil];
 		self.pollActionSheet.delegate = self;
@@ -92,6 +96,9 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
 	}else if (self.pollType.selectedSegmentIndex == 1){
 		//Options poll, send to SendPollOptions
 		
+        [TraceSession addEventToSession:@"Private Message Page - Send Options Poll Clicked"];
+
+        
 		SendPollOptions *nextController = [[SendPollOptions alloc] init];
 		nextController.questionText = self.pollQuestion.text;
 		nextController.teamId = self.teamId;

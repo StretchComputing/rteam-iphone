@@ -46,6 +46,7 @@
 #import "NewActivity.h"
 #import "SendPoll.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -75,6 +76,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+
+    [TraceSession addEventToSession:@"Home Page - View Will Appear"];
 
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
@@ -692,8 +695,10 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 
 -(void)search{
+    
+    [TraceSession addEventToSession:@"Home Page - Search Button Clicked"];
 
-
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -885,6 +890,9 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 -(void)aboutRteam{
     
+    [TraceSession addEventToSession:@"Home Page - Help Screen Button Clicked"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -913,6 +921,9 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 }
 -(void)myTeams{
 	
+    [TraceSession addEventToSession:@"Home Page - My Teams Button Clicked"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -944,6 +955,9 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 -(void)allEvents{
     
+    [TraceSession addEventToSession:@"Home Page - Events Button Clicked"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -968,6 +982,9 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 -(void)messages{
 	
+    [TraceSession addEventToSession:@"Home Page - Activity Button Clicked"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -2183,6 +2200,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)eventNowAttending:(id)sender{
     
+    
+    [TraceSession addEventToSession:@"Home Page - Happening Now Button Clicked"];
+
     if (self.isMoreShowing) {
         
         if ([sender class] == [AttendingButton class]) {
@@ -3209,6 +3229,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)refresh{
     
+    [TraceSession addEventToSession:@"Home Page - Refresh Button Clicked"];
+
+    
     [self.eventsNowActivity startAnimating];
     self.serverError.text = @"";
     [self viewWillAppear:NO];
@@ -3217,6 +3240,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)question{
+    
+    [TraceSession addEventToSession:@"Home Page - Question Mark Button Clicked"];
+
     
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];

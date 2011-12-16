@@ -19,6 +19,7 @@
 #import "AllEventsCalendar.h"
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation PracticeEdit
 @synthesize activity, saveChanges, practiceOpponent, practiceDate, practiceDescription, opponent, stringDate, description, teamId, practiceId, 
@@ -91,6 +92,9 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 
 -(void)submit{
 	
+    [TraceSession addEventToSession:@"Practice Edit Page - Save Changes Button Clicked"];
+
+    
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Team Alert" message:@"Notify your team of this update?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
 	[alert show];
 	
@@ -134,6 +138,9 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 
 -(void)changeDate{
 	
+    [TraceSession addEventToSession:@"Practice Edit Page - Edit Date Button Clicked"];
+
+    
 	PracticeEditDate *tmp = [[PracticeEditDate alloc] init];
 	tmp.practiceDate = self.practiceDateObject;
 	[self.navigationController pushViewController:tmp animated:YES];
@@ -269,6 +276,8 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 		
 		if (buttonIndex == 0) {
 			//Remove
+            [TraceSession addEventToSession:@"Practice Edit Page - Delete Practice Button Clicked"];
+
             NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -284,6 +293,9 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 			[self performSelectorInBackground:@selector(removeEvent) withObject:nil];
 		}else if (buttonIndex == 1) {
 			//Cancel
+            
+            [TraceSession addEventToSession:@"Practice Edit Page - Cancel Practice Button Clicked"];
+
 			[self.activity startAnimating];
 			self.deleteButton.enabled = NO;
 			self.saveChanges.enabled = NO;

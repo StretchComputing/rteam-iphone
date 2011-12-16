@@ -14,6 +14,8 @@
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
 #import "GANTracker.h"
+#import "TraceSession.h"
+
 @implementation NewPractice2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, location, duration, description, start, errorString, theDuration, theDescription, theLocation;
 
@@ -59,6 +61,8 @@
 
 -(void)createPractice{
 	
+    [TraceSession addEventToSession:@"New Single Practice Page - Create Practice Button Clicked"];
+
 	self.error.text = @"";
 	//Validate all fields are entered:
 	

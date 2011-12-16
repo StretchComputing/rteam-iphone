@@ -11,7 +11,7 @@
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
 #import "GANTracker.h"
-
+#import "TraceSession.h"
 
 @implementation HelpAbout
 @synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings, myAd;
@@ -69,6 +69,9 @@
 
 
 -(void)playMovie{
+    
+    [TraceSession addEventToSession:@"Help Page - Play Movie"];
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -95,6 +98,9 @@
 
 -(void)createTeamHelp{
    
+
+    [TraceSession addEventToSession:@"Help Page - Create Team Help"];
+
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -118,6 +124,10 @@
 }
 
 -(void)addMemberHelp{
+    
+    [TraceSession addEventToSession:@"Help Page - Add Member Help"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -140,6 +150,9 @@
 }
 
 -(void)addEventHelp{
+    
+    [TraceSession addEventToSession:@"Help Page - Add Event Help"];
+
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -163,6 +176,9 @@
 
 -(void)fastHelp{
 	
+    [TraceSession addEventToSession:@"Help Page - Quick Links Help"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -189,6 +205,9 @@
 
 -(void)messageHelp{
 	
+    [TraceSession addEventToSession:@"Help Page - Send Message Help"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -249,6 +268,9 @@
 
 -(void)feedback{
 	
+    [TraceSession addEventToSession:@"Help Page - Feedback Selected"];
+
+    
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"

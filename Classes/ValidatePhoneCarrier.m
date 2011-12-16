@@ -11,6 +11,7 @@
 #import "MobileCarrier.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
+#import "TraceSession.h"
 
 @implementation ValidatePhoneCarrier
 @synthesize  phoneNumber, carrierCode, carriers, verifyError, verifyButton, resendError, resendButton, finishButton, phoneNumberText, phoneCarrierText, carrierPicker, activity, selectCarrierButton, selectedCarrier, confirmCode, errorString, carrierCheatButton, sendingText, tryAgainText, carrierPicked, theConfirmCode, thePhoneNumber;
@@ -63,6 +64,9 @@
 
 -(void)verifiy{
     
+    [TraceSession addEventToSession:@"Verify Phone Page - Verify Button Clicked"];
+
+    
     self.verifyError.text = @"";
     self.resendError.text = @"";
 
@@ -92,6 +96,9 @@
     
 }
 -(void)resend{
+    
+    [TraceSession addEventToSession:@"Verify Phone Page - Resend Button Clicked"];
+
     
     self.verifyError.text = @"";
     self.resendError.text = @"";
@@ -159,6 +166,10 @@
 }
 
 -(void)finish{
+    
+    [TraceSession addEventToSession:@"Verify Phone Page - Finish Button Clicked"];
+
+    
     SettingsTabs *nextController = [[SettingsTabs alloc] init];
     nextController.fromRegisterFlow = @"true";
     nextController.didRegister = @"true";

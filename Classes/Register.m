@@ -17,6 +17,7 @@
 #import "SettingsTabs.h"
 #import "Login.h"
 #import "QuartzCore/QuartzCore.h"
+#import "TraceSession.h"
 
 
 @implementation Register
@@ -68,7 +69,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 }
 
 -(void)memberLoginAction{
-	
+    [TraceSession addEventToSession:@"Register Page - Log In Here Button Clicked"];
 	Login *tmp = [[Login alloc] init];
 	[self.navigationController pushViewController:tmp animated:NO];
 }
@@ -86,8 +87,8 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 -(void)about{
 	
-	
-	
+	[TraceSession addEventToSession:@"Register Page - Help Button Clicked"];
+    
 	if ([self.barItem.title isEqualToString:@"Help"]) {
 		self.barItem.title = @"Done";
 		[self.helpScreen setHidden:NO];
@@ -118,6 +119,9 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 -(void)submit{
 	
+    [TraceSession addEventToSession:@"Register Page - Register Button Clicked"];
+
+    
     self.success.text = @"";
 	self.error.text = @"";
 	//Validate all fields are entered:
@@ -380,6 +384,9 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 -(void)watchVideo{
 	
+    [TraceSession addEventToSession:@"Register Page - Watch Video Button Clicked"];
+
+    
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"rTeamWelcomeFinal" ofType:@"m4v"];      
 	if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 3.2)
 	{

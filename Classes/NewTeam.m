@@ -17,6 +17,7 @@
 #import "NewMemberObject.h"
 #import "MyTeams.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation NewTeam
 @synthesize teamName, from, oldTeams, errorLabel, serverProcess, submitButton, createSuccess, other, enableTwitter, twitterUrl, errorString,
@@ -125,6 +126,9 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 }
 
 -(void)create{
+    
+    [TraceSession addEventToSession:@"New Team Page - Create Team Clicked"];
+
     
 	self.errorLabel.text = @"";
     
@@ -391,6 +395,9 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 }
 
 -(void)add{
+    
+    [TraceSession addEventToSession:@"New Team Page - Add Members Clicked"];
+
 	self.addViewBackground.hidden = NO;
 	self.submitButton.enabled = NO;
 	

@@ -20,6 +20,7 @@
 #import "ProfilePhoto.h"
 #import "FastActionSheet.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 static inline double radians (double degrees) {return degrees * M_PI/180;}
 
@@ -1101,6 +1102,9 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 			
 		}else if (buttonIndex == 0) {
 			
+            [TraceSession addEventToSession:@"Fan Info Page - Delete Fan Button Clicked"];
+
+            
 			[self.activity startAnimating];
 			
 			
@@ -1160,6 +1164,9 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 
 -(void)switchToMember{
 	
+    [TraceSession addEventToSession:@"Fan Info Page - Make Member Button Clicked"];
+
+    
 	[self.activity startAnimating];
 	
 	self.deleteFanButton.enabled = NO;
@@ -1306,6 +1313,9 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 }
 
 -(void)callText{
+    
+    [TraceSession addEventToSession:@"Fan Info Page - Call Text Button Clicked"];
+
     
     self.callTextAction = [[UIActionSheet alloc] initWithTitle:@"Call or Text this fan?" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
     self.callTextAction.actionSheetStyle = UIActionSheetStyleDefault;

@@ -14,6 +14,7 @@
 #import "FastActionSheet.h"
 #import "QuartzCore/QuartzCore.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation NewEvent2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, location, eventName, description, start, errorString, theLocation, theDescription, theEventName;
@@ -60,6 +61,8 @@
 
 -(void)createEvent{
 	
+    [TraceSession addEventToSession:@"New Single Event Page - Create Event Button Clicked"];
+
 	error.text = @"";
     
     

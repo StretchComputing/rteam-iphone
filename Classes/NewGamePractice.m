@@ -13,6 +13,7 @@
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
 #import "RecurringEventSelection.h"
+#import "TraceSession.h"
 
 @implementation NewGamePractice
 @synthesize teamId, startDate, practiceOrGame, createButton, recurringEventButton, singleLabel;
@@ -52,17 +53,22 @@
 	
 	if (self.practiceOrGame.selectedSegmentIndex == 0) {
 		//Game
+        [TraceSession addEventToSession:@"New Event Page - Add Single Game"];
 		NewGame2 *nextController = [[NewGame2 alloc] init];
 		nextController.teamId = self.teamId;
 		nextController.start = self.startDate.date;
 		[self.navigationController pushViewController:nextController animated:YES];
 	}else if (self.practiceOrGame.selectedSegmentIndex == 1) {
 		//Practice
+        [TraceSession addEventToSession:@"New Event Page - Add Single Practice"];
+
 		NewPractice2 *nextController = [[NewPractice2 alloc] init];
 		nextController.teamId = self.teamId;
 		nextController.start = self.startDate.date;
 		[self.navigationController pushViewController:nextController animated:YES];
 	}else {
+        [TraceSession addEventToSession:@"New Event Page - Add Single Event"];
+
 		NewEvent2 *nextController = [[NewEvent2 alloc] init];
 		nextController.teamId = self.teamId;
 		nextController.start = self.startDate.date;
@@ -99,6 +105,9 @@
 
 -(void)recurringEvent{
 	
+    [TraceSession addEventToSession:@"New Event Page - Add Multiple Events"];
+
+    
 	RecurringEventSelection *tmp = [[RecurringEventSelection alloc] init];
 	tmp.teamId = self.teamId;
 	if (self.practiceOrGame.selectedSegmentIndex == 0) {

@@ -28,6 +28,7 @@
 #import "Vote.h"
 #import "ServerAPI.h"
 #import <EventKit/EventKit.h>
+#import "TraceSession.h"
 
 @implementation AllEventCalList
 @synthesize events, allGames, allPractices, allEvents, bottomBar, segmentedControl, initialSegment, dateArray, calendarList, scrolledOnce,
@@ -232,27 +233,11 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 
 
 -(void)home{
-	
+    [TraceSession addEventToSession:@"Calendar Month Page - Home Button Clicked"];
+
 	
 	[self.navigationController dismissModalViewControllerAnimated:YES];
-   // EKEventStore *eventStore = [[EKEventStore alloc] init];
-    
-    /*
-    EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
-    event.title     = @"rTeam Event";
-    
-    event.startDate = [NSDate date];
-    event.endDate   = [[NSDate alloc] initWithTimeInterval:600 sinceDate:event.startDate];
-    
-    [event setCalendar:[eventStore defaultCalendarForNewEvents]];
-    NSError *err;
-    [eventStore saveEvent:event span:EKSpanThisEvent error:&err]; 
-    
-	NSLog(@"Event Identifier: %@", event.eventIdentifier);
-     */
-    
-    //EKEvent *tmpEvent = [eventStore eventWithIdentifier:@"BFA21712-76D6-4A31-8327-6i7657657865678291:AC1A1A6F-AB9C-4233-B494-DB33DA34C7C4"];
-    
+
         
 }
 
@@ -765,6 +750,9 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    [TraceSession addEventToSession:@"Calendar List Page - Event Clicked"];
+
+    
 	self.gameIdCanceled = @"";
 	self.practiceIdCanceled = @"";
 	self.eventIdCanceled = @"";

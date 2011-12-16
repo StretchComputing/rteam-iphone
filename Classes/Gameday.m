@@ -17,7 +17,7 @@
 #import "AddGamePhoto.h"
 #import "GameEdit.h"
 #import "GANTracker.h"
-
+#import "TraceSession.h"
 
 
 @implementation Gameday
@@ -31,6 +31,8 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
 -(void)editGame{
 	
+    [TraceSession addEventToSession:@"Gameday Page - Edit Button Clicked"];
+
 	GameEdit *editGame = [[GameEdit alloc] init];
 	
 	editGame.stringDate = self.startDate;
@@ -322,6 +324,9 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 }
 -(void)map{
 	
+    [TraceSession addEventToSession:@"Gameday Page - View Map Location Button Clicked"];
+
+    
 	MapLocation *tmp = [[MapLocation alloc] init];
 	tmp.eventLatCoord = [self.latitude doubleValue];
 	tmp.eventLongCoord = [self.longitude doubleValue];
@@ -330,6 +335,9 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
 -(void)updateGpsAction{
 	
+    [TraceSession addEventToSession:@"Gameday Page - Update Location Button Clicked"];
+
+    
 	GameUpdateGPS *tmp = [[GameUpdateGPS alloc] init];
 	tmp.teamId = self.teamId;
 	tmp.gameId = self.gameId;
@@ -342,6 +350,9 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
 -(void)enableScoringAction{
 	
+    [TraceSession addEventToSession:@"Gameday Page - Enable Scoring Button Clicked"];
+
+    
 	self.scoringNotEnabled.hidden = YES;
 	self.defaultScoringButton.hidden = YES;
 	self.enableScoring.hidden = YES;
@@ -361,252 +372,13 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
 	
 	[self keepScore];
-	/*
-	self.isScoringEnabled = true;
-		
-	if ([self.sport isEqualToString:@"Baseball"] || [self.sport isEqualToString:@"Softball"]) {
-		
-		BaseballScoring *tmp = [[BaseballScoring alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
-		}else {
-			tmp.isCoord = false;
-		}
-		
-		tmp.view.frame = CGRectMake(18, 200, 284, 185);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-		[self.view setNeedsDisplay];
-		
-	}else if ([self.sport isEqualToString:@"Basketball"]) {
-		
-		BasketballScoring *tmp = [[BasketballScoring alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
-		}else {
-			tmp.isCoord = false;
-		}
-		
-		tmp.view.frame = CGRectMake(18, 200, 284, 185);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-		[self.view setNeedsDisplay];
-		
-	} else if ([self.sport isEqualToString:@"Football"] || [self.sport isEqualToString:@"Flag Football"]) {
-		
-		FootballScoring *tmp = [[FootballScoring alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
-		}else {
-			tmp.isCoord = false;
-		}
-		
-		tmp.view.frame = CGRectMake(18, 200, 284, 185);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-		[self.view setNeedsDisplay];
-		
-	}else if ([self.sport isEqualToString:@"Hockey"]) {
-		
-		HockeyScoring *tmp = [[HockeyScoring alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
-		}else {
-			tmp.isCoord = false;
-		}
-		
-		tmp.view.frame = CGRectMake(18, 200, 284, 185);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-		[self.view setNeedsDisplay];
-		
-	}else if ([self.sport isEqualToString:@"Water Polo"]) {
-		
-		WaterPoloScoring *tmp = [[WaterPoloScoring alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
-		}else {
-			tmp.isCoord = false;
-		}
-		
-		tmp.view.frame = CGRectMake(18, 200, 284, 185);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-		[self.view setNeedsDisplay];
-		
-	}else if ([self.sport isEqualToString:@"Lacrosse"] || [self.sport isEqualToString:@"LaCrosse"]) {
-		
-		LacrosseScoring *tmp = [[LacrosseScoring alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
-		
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
-		}else {
-			tmp.isCoord = false;
-		}
-		
-		tmp.view.frame = CGRectMake(18, 200, 284, 185);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
-		
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-		[self.view setNeedsDisplay];
-		
-	}else if ([self.sport isEqualToString:@"Soccer"]) {
-		
-		SoccerScoring *tmp = [[SoccerScoring alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
-		}else {
-			tmp.isCoord = false;
-		}
-		
-		tmp.view.frame = CGRectMake(18, 200, 284, 185);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-		[self.view setNeedsDisplay];
-		
-	}else if ([self.sport isEqualToString:@"Ultimate Frisbee"]) {
-		
-		UltimateFrisbee *tmp = [[UltimateFrisbee alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.gameId = self.gameId;
-		tmp.initScoreUs = self.scoreUs;
-		tmp.initScoreThem = self.scoreThem;
-		tmp.interval = self.interval;
-		
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			tmp.isCoord = true;
-		}else {
-			tmp.isCoord = false;
-		}
-		
-		tmp.view.frame = CGRectMake(18, 200, 284, 185);
-		[self.view addSubview:tmp.view];
-		[self.view bringSubviewToFront:tmp.view];
-		
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-
-		[self.view setNeedsDisplay];
-		
-	}else {
-		self.isScoringEnabled = false;
-		[self.enableScoring setHidden:YES];
-		NSString *message = [NSString stringWithFormat:@"Sorry, but scoring is not currently supported for your sport.  Your current sport is: %@.  To use default scoring, click the button below.", self.sport];
-		self.scoringNotEnabled.text =message;
-		[self.defaultScoringButton setHidden:NO];
-
-		[self.view setNeedsDisplay];
-		
-		if (![self.interval isEqualToString:@"0"]) {
-			[self defaultScoring];
-		}
-	}
-*/
-		
+	
 	
 }
 
 -(void)defaultScoring{
 	
-	/*
-	self.isScoringEnabled = true;
-	
-	DefaultScoring *tmp = [[DefaultScoring alloc] init];
-	tmp.teamId = self.teamId;
-	tmp.gameId = self.gameId;
-	tmp.initScoreUs = self.scoreUs;
-	tmp.initScoreThem = self.scoreThem;
-	tmp.interval = self.interval;
-	
-	if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-		tmp.isCoord = true;
-	}else {
-		tmp.isCoord = false;
-	}
-	
-	tmp.view.frame = CGRectMake(18, 181, 284, 185);
-	[self.view addSubview:tmp.view];
-	[self.view bringSubviewToFront:tmp.view];
-	
-	[self.enableScoring setHidden:YES];
-	[self.scoringNotEnabled setHidden:YES];
-	[self.defaultScoringButton setHidden:YES];
-	[self.view setNeedsDisplay];
 
-	*/
 }
 
 -(void)moreDetailAction{
@@ -644,6 +416,8 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
 -(void)keepScore{
 	
+    [TraceSession addEventToSession:@"Gameday Page - Keep Score Button Clicked"];
+
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"

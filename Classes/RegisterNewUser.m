@@ -24,6 +24,7 @@
 #import "MobileCarrier.h"
 #import "ValidatePhoneCarrier.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 
 @implementation RegisterNewUser
@@ -94,6 +95,9 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 
 -(void)submit{
 	
+    [TraceSession addEventToSession:@"Register 2 Page - Register Button Clicked"];
+
+    
 	self.error.text = @"";
     
     if (self.firstName.text == nil){
@@ -228,6 +232,11 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 	//When background thread is done, return to main thread
 	[registering stopAnimating];
 	
+    [submitButton setEnabled:YES];
+    [self.navigationItem setHidesBackButton:NO];
+    [self.firstName setEnabled:YES];
+    [self.lastName setEnabled:YES];
+    
 	if (self.createSuccess){
 		
         if (![self.phoneText.text isEqualToString:@""]) {
@@ -293,10 +302,7 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 		//if it failed, re-enable all fields so user can make changes
 		
 		self.error.text = self.errorString;
-		[submitButton setEnabled:YES];
-		[self.navigationItem setHidesBackButton:NO];
-		[self.firstName setEnabled:YES];
-		[self.lastName setEnabled:YES];
+	
 		
 	}
 	

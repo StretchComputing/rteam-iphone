@@ -13,6 +13,7 @@
 #import "PracticeUpdateGPS.h"
 #import "MapLocation.h"
 #import "PracticeEdit.h"
+#import "TraceSession.h"
 
 @implementation PracticeNotes
 @synthesize practiceId, teamId, opponent, day, time, description, locationManager, updateSuccess, latitude, longitude, 
@@ -51,6 +52,8 @@ errorString, dayString, timeString;
 
 -(void)editPractice{
 	
+    [TraceSession addEventToSession:@"PracticeDay - Edit Button Clicked"];
+
 	
 	PracticeEdit *editPractice = [[PracticeEdit alloc] init];
 	

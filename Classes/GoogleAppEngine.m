@@ -1,16 +1,16 @@
 //
 //  GoogleAppEngine.m
-//  ServiceNow LiveFeed
+//  rTeam
 //
 //  Created by Joseph Wroblewski on 9/13/11.
-//  Copyright 2011 Fruition Partners. All rights reserved.
+//  Copyright 2011 Stretch Computing. All rights reserved.
 //
 
 #import "GoogleAppEngine.h"
 #import "JSON/JSON.h"
 #import "ServerAPI.h"
 
-static NSString *baseUrl = @"http://rskybox-stretchcom.appspot.com/rest/v1";
+static NSString *baseUrl = @"https://rskybox-stretchcom.appspot.com/rest/v1";
 static NSString *basicAuthUserName = @"token";
 static NSString *basicAuthToken = @"4g1l42pg7sm5o508hmg26ko183";
 static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljYXRpb24Y-dIBDA";
@@ -69,12 +69,15 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         [request setHTTPBody: requestData];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         NSString *basicAuth = [GoogleAppEngine getBasicAuthHeader];
+        
+        
         [request setValue:basicAuth forHTTPHeaderField:@"Authorization"];
+                        
         NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
         
         // parse the returned JSON object
         NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-        //NSLog(@"%@", returnString);
+        
         SBJSON *jsonParser = [SBJSON new];
         NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
         
@@ -95,7 +98,8 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
 }
 
 +(NSString *)getBasicAuthHeader {
-    NSString *stringToEncode = [NSString stringWithFormat:@"%@:%@", basicAuthUserName, basicAuthToken];
+    NSString *stringToEncode = [NSString stringWithFormat:@"%@:%@", basicAuthUserName, basicAuthToken];   
+
     NSString *encodedAuth = [ServerAPI encodeBase64:stringToEncode];
     return encodedAuth;
 }

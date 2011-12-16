@@ -21,6 +21,8 @@
 #import "Activity.h"
 #import "Fan.h"
 #import "MobileCarrier.h"
+#import "GoogleAppEngine.h"
+#import "rTeamAppDelegate.h"
 
 //static NSString *baseUrl = @"https://rteamtest.appspot.com";
 static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
@@ -112,6 +114,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createUser" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		token = @"";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -175,6 +181,9 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getUserInfo" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -251,6 +260,9 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	}
 	@catch (NSException *e){
 		
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getUserToken" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		token = @"";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -315,6 +327,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"resetUserPassword" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -481,6 +497,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateUser" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -586,6 +607,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createTeam" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -609,7 +634,6 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	}
 	
 	@try{
-        
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
         
@@ -617,6 +641,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/teams"];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
+                
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
@@ -671,6 +696,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getListOfTeams" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -733,6 +763,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getTeamInfo" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -851,6 +886,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateTeam" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -899,6 +939,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"deleteTeam" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1003,6 +1048,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createMember" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1071,6 +1120,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createMultipleMembers" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1398,6 +1452,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getListOfTeamMembers" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1465,6 +1524,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getMemberInfo" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1516,6 +1579,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"deleteMember" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1654,6 +1721,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateMember" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1728,6 +1799,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getMembershipStatus" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1820,6 +1895,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createGame" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -1895,6 +1974,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createMultipleGames" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2043,6 +2126,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	}
     
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getListOfGames" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2110,6 +2197,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getGameInfo" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2246,6 +2337,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateGame" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2320,6 +2415,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"castGameVote" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2384,6 +2483,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getGameVoteTallies" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2486,6 +2590,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createEvent" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2563,6 +2671,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createMultipleEvents" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2737,6 +2849,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	}
     
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getListOfEvents" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2905,6 +3022,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	}
 	
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getListOfEventsNow" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -2970,6 +3092,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getEventInfo" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3096,6 +3222,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateEvent" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3163,6 +3293,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateAttendees" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3224,6 +3358,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getAttendeesGame" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3304,6 +3443,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getAttendeesMember" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3357,6 +3501,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"deleteGame" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+    
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3410,6 +3559,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"deleteEvent" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3524,6 +3677,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createMessageThread" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -3589,6 +3746,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getMessageThreadInfo" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4104,6 +4265,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getMessageThreads" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4187,6 +4352,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateMessageThread" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4259,6 +4428,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateMessageThreads" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4345,6 +4518,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getMessageThreadCount" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4396,6 +4573,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getUserPasswordResetQuestion" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4557,6 +4739,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getActivity" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4704,6 +4890,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getActivityTeam" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4795,6 +4986,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"createActivity" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4871,6 +5066,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"updateActivity" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4967,6 +5167,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getActivityStatus" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -5030,6 +5234,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getActivityImage" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -5093,6 +5301,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getActivityVideo" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -5161,6 +5373,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 	}
 	@catch (NSException *e) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"getMobileCarrierList" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
 		statusReturn = @"1";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -5173,38 +5389,58 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 
 + (NSString *)encodeBase64:(NSString *)stringToEncode{
 	
-	NSData *encodeData = [stringToEncode dataUsingEncoding:NSUTF8StringEncoding];
-	char encodeArray[512];
-	
-	memset(encodeArray, '\0', sizeof(encodeArray));
-	
-	// Base64 Encode username and password
-	encode([encodeData length], (char *)[encodeData bytes], sizeof(encodeArray), encodeArray);
-	
-	NSString *dataStr = [NSString stringWithCString:encodeArray length:strlen(encodeArray)];
-	
-	NSString *encodedString =[@"" stringByAppendingFormat:@"Basic %@", dataStr];
-	
-	return encodedString;
+    @try {
+        NSData *encodeData = [stringToEncode dataUsingEncoding:NSUTF8StringEncoding];
+        char encodeArray[512];
+        
+        memset(encodeArray, '\0', sizeof(encodeArray));
+        
+        // Base64 Encode username and password
+        encode([encodeData length], (char *)[encodeData bytes], sizeof(encodeArray), encodeArray);
+        
+        NSString *dataStr = [NSString stringWithCString:encodeArray length:strlen(encodeArray)];
+        
+        NSString *encodedString =[@"" stringByAppendingFormat:@"Basic %@", dataStr];
+        
+        return encodedString;
+    }
+    @catch (NSException *e) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"encodeBase64 - String" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        return @"";
+    }
+  
+
 }
 
 + (NSString *)encodeBase64data:(NSData *)encodeData{
 	
-	//NSData *encodeData = [stringToEncode dataUsingEncoding:NSUTF8StringEncoding]
-	char encodeArray[500000];
-	
-	memset(encodeArray, '\0', sizeof(encodeArray));
-	
-	// Base64 Encode username and password
-	encode([encodeData length], (char *)[encodeData bytes], sizeof(encodeArray), encodeArray);
-	NSString *dataStr = [NSString stringWithCString:encodeArray length:strlen(encodeArray)];
-    
-    // NSString *dataStr = [NSString stringWithCString:encodeArray encoding:NSUTF8StringEncoding];
-	
-	NSString *encodedString =[@"" stringByAppendingFormat:@"%@", dataStr];
-	
-	
-	return encodedString;
+    @try {
+        //NSData *encodeData = [stringToEncode dataUsingEncoding:NSUTF8StringEncoding]
+        char encodeArray[500000];
+        
+        memset(encodeArray, '\0', sizeof(encodeArray));
+        
+        // Base64 Encode username and password
+        encode([encodeData length], (char *)[encodeData bytes], sizeof(encodeArray), encodeArray);
+        NSString *dataStr = [NSString stringWithCString:encodeArray length:strlen(encodeArray)];
+        
+        // NSString *dataStr = [NSString stringWithCString:encodeArray encoding:NSUTF8StringEncoding];
+        
+        NSString *encodedString =[@"" stringByAppendingFormat:@"%@", dataStr];
+        
+        
+        return encodedString;
+    }
+    @catch (NSException *e) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:e inMethod:@"encodeBase64 - Data" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        return @"";
+    }
+   
+
 }
 
 

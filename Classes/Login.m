@@ -18,6 +18,7 @@
 #import "SettingsTabs.h"
 #import "Login.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation Login
 @synthesize email, password, error, registering, submitButton, createSuccess, invalidEmail, isMember, serverError, success, numMemberTeams, 
@@ -52,6 +53,8 @@ resetPasswordButton, errorString, startEmail, theEmail, thePassword;
 
 -(void)submit{
 	
+    [TraceSession addEventToSession:@"Login Page - Login Button Clicked"];
+    
     self.success.text = @"";
 	self.error.text = @"";
 	
@@ -223,6 +226,9 @@ resetPasswordButton, errorString, startEmail, theEmail, thePassword;
 
 -(void)resetPassword{
 	
+    [TraceSession addEventToSession:@"Login Page - Reset Password Button Clicked"];
+
+    
 	ResetPassword *tmp = [[ResetPassword alloc] init];
 	[self.navigationController pushViewController:tmp animated:YES];
 }

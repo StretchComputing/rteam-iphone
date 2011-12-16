@@ -17,6 +17,7 @@
 #import "Fan.h"
 #import "NewMemberObject.h"
 #import "InviteFanFinal.h"
+#import "TraceSession.h"
 
 @implementation Players
 @synthesize players, teamName, teamId, userRole, currentMemberId, isFans, segRosterFans, addButton, error, fans, playerPics,
@@ -278,18 +279,21 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 
 -(void)create{
 	
+
+    
 	if (self.isFans) {	
-        /*
-		InviteFan2 *tmp = [[InviteFan2 alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.userRole = self.userRole;
-		tmp.hideHomeButton = true;
-         */
+        [TraceSession addEventToSession:@"People Page - Invite Fan Clicked"];
+
+        
         InviteFanFinal *tmp = [[InviteFanFinal alloc] init];
         tmp.teamId = self.teamId;
         tmp.userRole = self.userRole;
 		[self.navigationController pushViewController:tmp animated:YES];
 	}else {
+        
+        [TraceSession addEventToSession:@"People Page - Add Member Clicked"];
+
+        
 		NewPlayer *nextController = [[NewPlayer alloc] init];
 		nextController.teamId = self.teamId;
 		nextController.userRole = self.userRole;
@@ -788,6 +792,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	if (self.isFans) {
 		
+        [TraceSession addEventToSession:@"People Page - Fan Row Clicked"];
+
+        
 		if ([self.fans count] > 0) {
 			//go to that player profile
 			NSUInteger row = [indexPath row];
@@ -800,6 +807,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 	}else {
 		
+        [TraceSession addEventToSession:@"People Page - Member Row Clicked"];
+
+        
 		if ([self.players count] > 0) {
 			//go to that player profile
 			NSUInteger row = [indexPath row];

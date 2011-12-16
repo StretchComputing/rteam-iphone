@@ -11,6 +11,7 @@
 #import "DailyWeeklyEvent.h"
 #import "MonthlyEvent.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation RecurringEventSelection
 @synthesize myTableView, calendarButton, eventType, typeLabel, teamId, calendarLabel, orLabel;
@@ -157,6 +158,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (row == 0) {
 			
+            [TraceSession addEventToSession:@"Multiple Events Page - Daily Selected"];
+
 			DailyWeeklyEvent *tmp = [[DailyWeeklyEvent alloc] init];
 			tmp.frequency = @"daily";
 			tmp.eventType = self.eventType;
@@ -165,6 +168,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}else if (row == 1) {
 			
+            [TraceSession addEventToSession:@"Multiple Events Page - Weekly Selected"];
+
 			DailyWeeklyEvent *tmp = [[DailyWeeklyEvent alloc] init];
 			tmp.frequency = @"weekly";
 			tmp.eventType = self.eventType;
@@ -173,6 +178,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}else if (row == 2) {
 			
+            [TraceSession addEventToSession:@"Multiple Events Page - Bi-Weekly Selected"];
+
 			DailyWeeklyEvent *tmp = [[DailyWeeklyEvent alloc] init];
 			tmp.frequency = @"biweekly";
 			tmp.eventType = self.eventType;
@@ -181,6 +188,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}else if (row == 3) {
 			
+            [TraceSession addEventToSession:@"Multiple Events Page - Monthly Selected"];
+
 			MonthlyEvent *tmp = [[MonthlyEvent alloc] init];
 			tmp.frequency = @"monthly";
 			tmp.eventType = self.eventType;
@@ -189,6 +198,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}else if (row == 4) {
 			
+            [TraceSession addEventToSession:@"Multiple Events Page - Bi-Monthly Selected"];
+
 			MonthlyEvent *tmp = [[MonthlyEvent alloc] init];
 			tmp.frequency = @"bimonthly";
 			tmp.eventType = self.eventType;
@@ -221,6 +232,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)calendar{
+    
+    [TraceSession addEventToSession:@"Multiple Events Page - Select From Calendar Selected"];
+
+    
 	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:nil action:nil];
 	self.navigationItem.backBarButtonItem = temp;
 	

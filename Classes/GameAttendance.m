@@ -11,6 +11,8 @@
 #import "ServerAPI.h"
 #import "Player.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
+
 @implementation GameAttendance
 @synthesize players, teamId, allSelector, gameId, attMarker, saveAll, select, activity, successLabel, startDate, attReport, attendanceInfo,
 saveSuccess, playerTableView, successString, successNoChoices, barActivity, attActivity, attActivityLabel, attMarkerTemp, switchButton, playerTableViewPre, topLabel, errorString, preMarker, preMarkerTemp;
@@ -43,6 +45,9 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 }
 
 -(void)switchViews{
+    
+    [TraceSession addEventToSession:@"Game Attendance Page - Game/Pregame Button Clicked"];
+
     
     if ([self.switchButton.title isEqualToString:@"Game"]) {
         self.switchButton.title = @"Pre-game";
@@ -479,6 +484,9 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 }
 
 -(void)save{
+    
+    [TraceSession addEventToSession:@"Game Attendance Page - Save Button Clicked"];
+
 	[self.activity startAnimating];
 	
 	//Disable the UI buttons and textfields while registering
