@@ -21,7 +21,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 
     
 }
-
+@property (nonatomic, strong) IBOutlet UIButton *showLessButton;
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, strong) HomeScoreView *homeScoreView;
@@ -197,5 +197,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 -(IBAction)moveDivider;
 
 -(IBAction)regText;
+
+-(IBAction)showLessAction;
 
 @end

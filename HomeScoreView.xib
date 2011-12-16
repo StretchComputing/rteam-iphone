@@ -350,7 +350,7 @@
 					</object>
 					<object class="IBUIView" id="1061013791">
 						<reference key="NSNextResponder" ref="1025116291"/>
-						<int key="NSvFlags">309</int>
+						<int key="NSvFlags">308</int>
 						<string key="NSFrameSize">{1, 301}</string>
 						<reference key="NSSuperview" ref="1025116291"/>
 						<reference key="NSNextKeyView" ref="349018567"/>
@@ -363,9 +363,10 @@
 					</object>
 					<object class="IBUIView" id="825720801">
 						<reference key="NSNextResponder" ref="1025116291"/>
-						<int key="NSvFlags">309</int>
+						<int key="NSvFlags">305</int>
 						<string key="NSFrame">{{319, 0}, {1, 301}}</string>
 						<reference key="NSSuperview" ref="1025116291"/>
+						<reference key="NSNextKeyView"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>

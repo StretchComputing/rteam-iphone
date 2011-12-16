@@ -58,7 +58,7 @@ refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, trans
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton;
 
 
 
@@ -437,6 +437,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 - (void)viewDidLoad {
 
 
+    self.showLessButton.hidden = YES;
 	self.currentDisplay = 1;
     self.registrationBackView.hidden = YES;
     homeScoreView = [[HomeScoreView alloc] init];
@@ -691,7 +692,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 
 -(void)search{
-	
+
+
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"button_click"
@@ -2641,11 +2643,60 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 		self.bannerIsVisible = NO;
         
-        
-        self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
-        self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
-        self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
-        
+        if (self.isMoreShowing) {
+            
+            
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:1.0];
+            
+            CGRect attFrame;
+            attFrame = self.homeAttendanceView.view.frame;
+            attFrame.size.height += 50;
+            self.homeAttendanceView.view.frame = attFrame;
+            
+            CGRect attFrame1;
+            attFrame1 = self.homeScoreView.view.frame;
+            attFrame1.size.height += 50;
+            self.homeScoreView.view.frame = attFrame1;
+            
+            
+            [UIView commitAnimations];
+            
+        }else{
+            
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:1.0];
+            
+            [self.view bringSubviewToFront:self.registrationBackView];
+            
+            CGRect hapFrame;
+            hapFrame = self.happeningNowView.frame;
+            hapFrame.origin.y += 50;
+            self.happeningNowView.frame = hapFrame;
+            
+            CGRect attFrame;
+            attFrame = self.homeAttendanceView.view.frame;
+            attFrame.origin.y += 50;
+            self.homeAttendanceView.view.frame = attFrame;
+            
+            CGRect scoreFrame;
+            scoreFrame = self.homeScoreView.view.frame;
+            scoreFrame.origin.y += 50;
+            self.homeScoreView.view.frame = scoreFrame;
+            
+            
+            self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
+            self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
+            self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
+    
+            
+            [UIView commitAnimations];
+            
+            [self.view bringSubviewToFront:self.bottomBar];
+            
+            
+        }
+
    
 
         
@@ -3312,11 +3363,20 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 }
 
+-(void)showLessAction{
+    
+    if (self.isMoreShowing) {
+        [self moveDivider];
+    }
+    
+}
+
+
 -(void)moveDivider{
   
     if (self.isMoreShowing) {
         
-        
+        self.showLessButton.hidden = YES;
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:1.0];
         
@@ -3358,7 +3418,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     }else{
    
-        
+        self.showLessButton.hidden = NO;
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:1.0];
         
@@ -3449,6 +3509,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
     
 }
+
+
 - (void)viewDidUnload {
 
 	bottomBar = nil;
@@ -3493,7 +3555,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     happeningNowView = nil;
     scrollView = nil;
     pageControl = nil;
-    
+    showLessButton = nil;
 	[super viewDidUnload];
 	
 
