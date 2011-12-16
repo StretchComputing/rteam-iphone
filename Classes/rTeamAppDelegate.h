@@ -41,7 +41,12 @@
 	
 	NSArray *phoneOnlyArray;
     NSString *justAddName;
-	
+    
+    NSString *crashSummary;
+    NSString *crashUserName;
+    NSDate *crashDetectDate;
+    NSData *crashStackData;
+    NSString *crashInstanceUrl;
 	
 }
 @property (nonatomic, strong) NSString *showSwipeAlert;
@@ -66,6 +71,11 @@
 
 @property (nonatomic, strong) NSString *quickLinkOneImage;
 @property (nonatomic, strong) NSString *quickLinkTwoImage;
+
+@property (nonatomic, strong) NSString *crashSummary;
+@property (nonatomic, strong) NSString *crashUserName;
+@property (nonatomic, strong) NSDate *crashDetectDate;
+@property (nonatomic, strong) NSData *crashStackData;
 
 - (void) updateInterfaceWithReachability: (Reachability*) curReach;
 -(void)saveUserInfo;

@@ -49,12 +49,12 @@
 #import "ServerAPI.h"
 #import "Reachability.h"
 #import "GANTracker.h"
+#import "GoogleAppEngine.h"
 
 @implementation rTeamAppDelegate
 
 @synthesize window;
-@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName,
-quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert;
+@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData;
 
 - (id) init {
     
@@ -163,10 +163,39 @@ quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, disp
 	
 	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge
                                                                            | UIRemoteNotificationTypeSound)];
+    
+    /////////////////////////
+    // Test Code for rSkyBox
+    /////////////////////////
+//    self.crashSummary = @"Joe is testing the crash data being sent to GAE";
+//    self.crashDetectDate = [NSDate date];
+//    self.crashUserName = @"wrobjx2";
+//    
+//    NSString *myString = @"0123456789ABCDEF";
+//    const char *utfString = [myString UTF8String];
+//    self.crashStackData = [NSData dataWithBytes:utfString length:strlen(utfString)];
+//    
+//    [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+
+    
 	return YES;
     
 	
 }
+
+-(void)sendCrashDetect {
+    
+    @autoreleasepool {
+        // send crash detect to GAE
+        [GoogleAppEngine sendCrashDetect:self.crashSummary theStackData:self.crashStackData theDetectedDate:self.crashDetectDate theUserName:self.crashUserName];
+        
+    }
+    
+    
+}
+
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	
