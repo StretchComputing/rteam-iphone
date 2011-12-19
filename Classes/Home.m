@@ -697,7 +697,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 -(void)search{
     
     [TraceSession addEventToSession:@"Home Page - Search Button Clicked"];
-
+    [TraceSession printTraceSession];
     
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
