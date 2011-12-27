@@ -51,14 +51,16 @@
 #import "GANTracker.h"
 #import "GoogleAppEngine.h"
 #import "TraceSession.h"
+#import <CrashReporter/CrashReporter.h>
+
 
 @implementation rTeamAppDelegate
 
 @synthesize window;
-@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData;
+@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData, crashInstanceUrl, lastTwenty, lastTwentyTime;
 
 - (id) init {
-    
+
     [TraceSession initiateSession];
 
     
@@ -82,6 +84,9 @@
 		NSString *tempLinkOneImage = @"";
 		NSString *tempLinkTwoImage = @"";
         NSString *tmpSwipeAlert = @"";
+        NSString *tempLastTwenty = @"";
+        NSString *tempLastTwentyTime = @"";
+
 
 		
 		theData = [NSData dataWithContentsOfFile:dataFilePath];
@@ -94,6 +99,10 @@
 		tempLinkOneImage = [decoder decodeObjectForKey:@"quickLinkOneImage"];
 		tempLinkTwoImage = [decoder decodeObjectForKey:@"quickLinkTwoImage"];
         tmpSwipeAlert = [decoder decodeObjectForKey:@"showSwipeAlert"];
+        tempLastTwenty = [decoder decodeObjectForKey:@"lastTwenty"];
+        tempLastTwentyTime = [decoder decodeObjectForKey:@"lastTwenty"];
+
+
 
         
 		[self setQuickLinkOne:tempLinkOne];
@@ -104,9 +113,40 @@
 		[self setQuickLinkTwoImage:tempLinkTwoImage];
 		[self setToken:tempToken];
         [self setShowSwipeAlert:tmpSwipeAlert];
+        
+        [self setLastTwenty:tempLastTwenty];
+        [self setLastTwentyTime:tempLastTwentyTime];
+
+        
+        if ([self.lastTwenty length] > 0) {
+            //Set the trace session array
+            
+            NSMutableArray *tmpTraceArray = [NSMutableArray arrayWithArray:[self.lastTwenty componentsSeparatedByString:@","]];
+            
+            NSMutableArray *tmpTraceTimeArray = [NSMutableArray arrayWithArray:[self.lastTwentyTime componentsSeparatedByString:@","]];
+            
+            NSMutableArray *tmpDateArray = [NSMutableArray array];
+            for (int i = 0; i < [tmpTraceTimeArray count]; i++) {
+                
+                NSString *tmpTime = [tmpTraceTimeArray objectAtIndex:i];
+                
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
+                NSDate *theDate = [dateFormatter dateFromString:tmpTime];
+                
+                [tmpDateArray addObject:theDate];
+            }
+           
+            [TraceSession setSavedArray:tmpTraceArray :tmpDateArray];
+
+            
+        }
+        
+        
 		[decoder finishDecoding];
         
 		bool reset = false;
+        
 		if (reset) {
 			self.token = @"";
 			self.quickLinkOne = @"create";
@@ -131,6 +171,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
 	
+
     [TraceSession addEventToSession:@"Application Finished Loading"];
 
     
@@ -161,19 +202,31 @@
     wifiReach = [Reachability reachabilityForLocalWiFi];
 	//[wifiReach startNotifier];
 	//[self updateInterfaceWithReachability: wifiReach];
-	
-	
-	// Override point for customization after application launch
-	[window addSubview: navController.view];
-	[window makeKeyAndVisible];
+
     
 	
 	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge
                                                                            | UIRemoteNotificationTypeSound)];
     
+    
+    // JPW added to integrate PLCrashDetector
+    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+    NSError *error;
+    
+    /* Check if we previously crashed */
+    if ([crashReporter hasPendingCrashReport]) {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CRASH!" message:@"Found a crash!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+       
+        [self handleCrashReport];
+    }
+        
+        
     /////////////////////////
     // Test Code for rSkyBox
     /////////////////////////
+        /*
     self.crashSummary = @"Joe is testing the crash data being sent to GAE";
     self.crashDetectDate = [NSDate date];
     self.crashUserName = @"wrobjx2";
@@ -183,20 +236,102 @@
     self.crashStackData = [NSData dataWithBytes:utfString length:strlen(utfString)];
     
     [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
+         */
     //////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
 
+    if (![crashReporter enableCrashReporterAndReturnError: &error]){
+        //NSLog(@"*************************Warning: Could not enable crash reporter: %@", error);
+    }
+    
+    
+    // Override point for customization after application launch
+	[window addSubview: navController.view];
+	[window makeKeyAndVisible];
     
 	return YES;
+   
+}
+
+
+/**
+ * Called to handle a pending crash report.
+ */
+- (void) handleCrashReport {
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-	
+    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+    NSData *crashData;
+    NSError *error;
+    self.crashDetectDate = [NSDate date];
+    self.crashStackData = nil;
+    self.crashUserName = mainDelegate.displayName;
+    //self.crashInstanceUrl = mainDelegate.sncurl;
+    
+    /* Try loading the crash report */
+    bool isNil = false;
+    crashData = [crashReporter loadPendingCrashReportDataAndReturnError: &error];
+    if (crashData == nil) {
+        //NSLog(@"Could not load crash report: %@", error);
+        isNil = true;
+    }
+    
+    if (!isNil) {
+        /* We could send the report from here, but we'll just print out
+         * some debugging info instead */
+        PLCrashReport *report = [[PLCrashReport alloc] initWithData: crashData error: &error];
+        bool thisIsNil = false;
+        if (report == nil) {
+            self.crashSummary = @"Could not parse crash report";
+            //NSLog(@"%@", self.crashSummary);
+            [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
+            thisIsNil = true;
+        }
+        
+        if (!thisIsNil) {
+            
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                   action:@"Crash Reported"
+                                                    label:mainDelegate.token
+                                                    value:-1
+                                                withError:nil]) {
+            }
+            
+            // NSLog(@"Crashed on %@", report.systemInfo.timestamp);
+            self.crashSummary = [NSString stringWithFormat:@"Crashed with signal=%@, app version=%@, os version=%@", report.signalInfo.name,
+                                 report.applicationInfo.applicationVersion, report.systemInfo.operatingSystemVersion];
+            // NSLog(@"%@", self.crashSummary);
+            
+            self.crashStackData = [crashReporter loadPendingCrashReportDataAndReturnError: &error];
+            
+            // send crash detect to GAE
+            [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
+        }else{
+            [crashReporter purgePendingCrashReport];
+            return;
+        }
+        
+    }else{
+        [crashReporter purgePendingCrashReport];
+        return;
+    }
+    
+    
+    
+    
 }
 
 -(void)sendCrashDetect {
     
+  
     @autoreleasepool {
         // send crash detect to GAE
         [GoogleAppEngine sendCrashDetect:self.crashSummary theStackData:self.crashStackData theDetectedDate:self.crashDetectDate theUserName:self.crashUserName];
+        
+        
+        PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+        
+        [crashReporter purgePendingCrashReport];
         
     }
     
@@ -277,6 +412,10 @@
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+    [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
+    [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
+
+
 
 	[encoder finishEncoding];
     
@@ -312,6 +451,8 @@
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+    [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
+    [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
 
 	[encoder finishEncoding];
 	
@@ -337,6 +478,9 @@
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+    [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
+    [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
+
 
 	[encoder finishEncoding];
 	

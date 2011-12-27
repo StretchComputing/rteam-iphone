@@ -696,6 +696,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 -(void)search{
     
+    
+    
     [TraceSession addEventToSession:@"Home Page - Search Button Clicked"];
     [TraceSession printTraceSession];
     

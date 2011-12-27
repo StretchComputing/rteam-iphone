@@ -38,7 +38,7 @@ teamName, newActivity, fromHome;
 		//GameAttendance *tmp = [self.viewControllers objectAtIndex:1];
 		//[tmp viewWillAppear:NO];
 	}else if (index == 2) {
-		Vote *tmp = [self.viewControllers objectAtIndex:2];
+		//Vote *tmp = [self.viewControllers objectAtIndex:2];
 		//[tmp viewWillAppear:NO];
 	}else {
 		//OBJECT AT INDEX 0

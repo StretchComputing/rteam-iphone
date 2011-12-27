@@ -4602,6 +4602,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	
 	@try{
 		
+        NSException *e = [NSException exceptionWithName:@"Testing the exception" reason:@"No Reason" userInfo:[NSDictionary dictionary]];
+        @throw e;
         
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];

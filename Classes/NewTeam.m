@@ -154,7 +154,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
             self.theTeamName = [NSString stringWithString:self.teamName.text];
 
             NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"
                                                  action:@"Create Team"
                                                   label:self.from
@@ -1425,7 +1425,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			self.theTeamName = [NSString stringWithString:self.teamName.text];
             
             NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+
             if (![[GANTracker sharedTracker] trackEvent:@"button_click"
                                                  action:@"Create Team"
                                                   label:self.from

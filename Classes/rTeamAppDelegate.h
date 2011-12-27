@@ -21,7 +21,7 @@
 	NSString *quickLinkTwoName;
 	NSString *quickLinkOneImage;
 	NSString *quickLinkTwoImage;
-	
+    	
 	NSString *displayName;
 	
 	BOOL registered;
@@ -49,6 +49,9 @@
     NSString *crashInstanceUrl;
 	
 }
+@property (nonatomic, strong) NSString *lastTwenty;
+@property (nonatomic, strong) NSString *lastTwentyTime;
+
 @property (nonatomic, strong) NSString *showSwipeAlert;
 @property (nonatomic, strong) NSString *justAddName;
 @property (nonatomic, strong) NSArray *phoneOnlyArray;
@@ -76,8 +79,10 @@
 @property (nonatomic, strong) NSString *crashUserName;
 @property (nonatomic, strong) NSDate *crashDetectDate;
 @property (nonatomic, strong) NSData *crashStackData;
+@property (nonatomic, strong) NSString *crashInstanceUrl;
 
 - (void) updateInterfaceWithReachability: (Reachability*) curReach;
 -(void)saveUserInfo;
+-(void)handleCrashReport;
 @end
 

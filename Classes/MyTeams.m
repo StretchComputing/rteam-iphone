@@ -592,6 +592,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
+    NSException *test = [NSException exceptionWithName:@"Test Crash" reason:@"Testing Crash Detect" userInfo:nil];
+    @throw test;
+    
 	//Get the Team from the array, and forward action to the Teams home page
 	
 	NSUInteger row = [indexPath row];

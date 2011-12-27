@@ -13,5 +13,8 @@
 +(void)initiateSession;
 +(void)addEventToSession:(NSString *)event;
 +(void)printTraceSession;
++(NSMutableArray *)getActions;
++(NSMutableArray *)getTimestamps;
++(void)setSavedArray:(NSMutableArray *)savedArray :(NSMutableArray *)savedArrayTime;
 @end
 

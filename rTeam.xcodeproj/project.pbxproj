@@ -373,6 +373,8 @@
 		9086BF7E12C254F600EA8AC1 /* newleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 9086BF7C12C254F600EA8AC1 /* newleft.png */; };
 		9086BF7F12C254F600EA8AC1 /* newright.png in Resources */ = {isa = PBXBuildFile; fileRef = 9086BF7D12C254F600EA8AC1 /* newright.png */; };
 		9086BF9012C25B4600EA8AC1 /* TwitterHelp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9086BF8F12C25B4600EA8AC1 /* TwitterHelp.xib */; };
+		9086E32314A232B200B349CB /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9086E32214A232B200B349CB /* CrashReporter.framework */; };
+		9086E32514A2335300B349CB /* libCrashReporter-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9086E32414A2335300B349CB /* libCrashReporter-iphoneos.a */; };
 		90873DD312E9E35300A2CA1D /* redButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 90873DD212E9E35300A2CA1D /* redButton.png */; };
 		90873E0E12E9E6B000A2CA1D /* redxsmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 90873E0D12E9E6B000A2CA1D /* redxsmall.png */; };
 		90873FE712EB7FB900A2CA1D /* VoteMemberObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 90873FE612EB7FB900A2CA1D /* VoteMemberObject.m */; };
@@ -1057,6 +1059,8 @@
 		9086BF7C12C254F600EA8AC1 /* newleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = newleft.png; path = ../images/newleft.png; sourceTree = SOURCE_ROOT; };
 		9086BF7D12C254F600EA8AC1 /* newright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = newright.png; path = ../images/newright.png; sourceTree = SOURCE_ROOT; };
 		9086BF8F12C25B4600EA8AC1 /* TwitterHelp.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TwitterHelp.xib; sourceTree = "<group>"; };
+		9086E32214A232B200B349CB /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
+		9086E32414A2335300B349CB /* libCrashReporter-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCrashReporter-iphoneos.a"; sourceTree = "<group>"; };
 		90873DD212E9E35300A2CA1D /* redButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = redButton.png; path = ../images/redButton.png; sourceTree = SOURCE_ROOT; };
 		90873E0D12E9E6B000A2CA1D /* redxsmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = redxsmall.png; path = ../images/redxsmall.png; sourceTree = SOURCE_ROOT; };
 		90873FE512EB7FB900A2CA1D /* VoteMemberObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteMemberObject.h; sourceTree = "<group>"; };
@@ -1333,6 +1337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9087534C1474A438000850D4 /* libsqlite3.0.dylib in Frameworks */,
+				9086E32514A2335300B349CB /* libCrashReporter-iphoneos.a in Frameworks */,
 				9083F891133BB84300972821 /* EventKit.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -1360,6 +1365,7 @@
 				908A456212DC0BAB000C346A /* MobileCoreServices.framework in Frameworks */,
 				908753541474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a in Frameworks */,
 				908753551474A7DB000850D4 /* libGoogleAnalytics.a in Frameworks */,
+				9086E32314A232B200B349CB /* CrashReporter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1670,6 +1676,7 @@
 			isa = PBXGroup;
 			children = (
 				9087534B1474A438000850D4 /* libsqlite3.0.dylib */,
+				9086E32414A2335300B349CB /* libCrashReporter-iphoneos.a */,
 				908753511474A7DB000850D4 /* GANTracker.h */,
 				908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */,
 				908753531474A7DB000850D4 /* libGoogleAnalytics.a */,
@@ -1823,6 +1830,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9086E32214A232B200B349CB /* CrashReporter.framework */,
 				905A677010E15CEB006450BD /* libxml2.dylib */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -2868,6 +2876,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Downloads/CalendarHelloWorldRecurring/build/Debug\"",
+					"\"$(SRCROOT)\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2882,10 +2891,10 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = rTeam;
-				PROVISIONING_PROFILE = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
-				"PROVISIONING_PROFILE[sdk=iphoneos3.1.3]" = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
-				"PROVISIONING_PROFILE[sdk=iphoneos4.1]" = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
-				"PROVISIONING_PROFILE[sdk=iphoneos5.0]" = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
+				PROVISIONING_PROFILE = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
+				"PROVISIONING_PROFILE[sdk=iphoneos3.1.3]" = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
+				"PROVISIONING_PROFILE[sdk=iphoneos4.1]" = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
+				"PROVISIONING_PROFILE[sdk=iphoneos5.0]" = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
 				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2901,6 +2910,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Downloads/CalendarHelloWorldRecurring/build/Debug\"",
+					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = rTeam_Prefix.pch;
@@ -2957,6 +2967,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Downloads/CalendarHelloWorldRecurring/build/Debug\"",
+					"\"$(SRCROOT)\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3010,6 +3021,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Downloads/CalendarHelloWorldRecurring/build/Debug\"",
+					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = rTeam_Prefix.pch;
@@ -3052,8 +3064,8 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9B0982C4-B3B9-4C22-9345-EEF15AB77A9C";
+				PROVISIONING_PROFILE = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;

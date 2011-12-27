@@ -9,6 +9,7 @@
 #import "GoogleAppEngine.h"
 #import "JSON/JSON.h"
 #import "ServerAPI.h"
+#import "TraceSession.h"
 
 static NSString *baseUrl = @"https://rskybox-stretchcom.appspot.com/rest/v1";
 static NSString *basicAuthUserName = @"token";
@@ -31,6 +32,10 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
 + (NSDictionary *)sendCrashDetect:(NSString *)summary theStackData:(NSData *)stackData theDetectedDate:(NSDate *)detectedDate theUserName:(NSString *)userName{
     NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
     NSString *statusReturn = @"";
+    
+    if (userName == nil) {
+        userName = @"";
+    }
     
     if (summary == nil) {
         statusReturn = @"0";
@@ -56,12 +61,37 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
             [tempDictionary setObject:encodedStackData forKey:@"stackData"];
         }
             
+        //Adding the last 20 actions
+        NSMutableArray *finalArray = [NSMutableArray array];
+        NSMutableArray *appActions = [NSMutableArray arrayWithArray:[TraceSession getActions]];
+        NSMutableArray *appTimestamps = [NSMutableArray arrayWithArray:[TraceSession getTimestamps]];
+        
+        NSString *countString = [NSString stringWithFormat:@"Count: %d", [appActions count]];
+
+        
+        for (int i = 0; i < [appActions count]; i++) {
+            NSMutableDictionary *actDictionary = [NSMutableDictionary dictionary];
+            
+            [actDictionary setObject:[appActions objectAtIndex:i] forKey:@"description"];
+            
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
+            NSString *dateString = [dateFormatter stringFromDate:[appTimestamps objectAtIndex:i]];
+            
+            [actDictionary setObject:dateString forKey:@"timestamp"];
+            
+            [finalArray addObject:actDictionary];
+            
+        }
+        
+        [tempDictionary setObject:finalArray forKey:@"appActions"];
+        
         loginDict = tempDictionary;
         NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
         //NSLog(@"%@", requestString);
         
         NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/applications/%@/crashDetects", applicationId];
-        //NSLog(@"%@", tmpUrl);
+       // NSLog(@"%@", tmpUrl);
         NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
         
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
@@ -78,6 +108,8 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         // parse the returned JSON object
         NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
         
+       // NSLog(@"ReturnString: %@", returnString);
+        
         SBJSON *jsonParser = [SBJSON new];
         NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
         
@@ -91,6 +123,7 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
     }
     
     @catch (NSException *e) {
+        
         statusReturn = @"1";
         [returnDictionary setValue:statusReturn forKey:@"status"];
         return returnDictionary;
@@ -202,6 +235,29 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         }
         [tempDictionary setObject:completeStackTrace  forKey:@"stackBackTrace"];
         
+        
+        //Adding the last 20 actions
+        NSMutableArray *finalArray = [NSMutableArray array];
+        NSMutableArray *appActions = [NSMutableArray arrayWithArray:[TraceSession getActions]];
+        NSMutableArray *appTimestamps = [NSMutableArray arrayWithArray:[TraceSession getTimestamps]];
+        
+        for (int i = 0; i < [appActions count]; i++) {
+            NSMutableDictionary *actDictionary = [NSMutableDictionary dictionary];
+            
+            [actDictionary setObject:[appActions objectAtIndex:i] forKey:@"description"];
+            
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
+            NSString *dateString = [dateFormatter stringFromDate:[appTimestamps objectAtIndex:i]];
+            
+            [actDictionary setObject:dateString forKey:@"timestamp"];
+            
+            [finalArray addObject:actDictionary];
+            
+        }
+        
+        [tempDictionary setObject:finalArray forKey:@"appActions"];
+        
         loginDict = tempDictionary;
         NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
         //NSLog(@"%@", requestString);
@@ -220,6 +276,8 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         
         // parse the returned JSON object
         NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+        
+        
         //NSLog(@"%@", returnString);
         SBJSON *jsonParser = [SBJSON new];
         NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
