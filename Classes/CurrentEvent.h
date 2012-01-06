@@ -13,6 +13,14 @@
 
 	
 }
+@property (nonatomic, strong) NSString *messageThreadId;
+@property (nonatomic, strong) NSString *currentMemberId;
+@property (nonatomic, strong) NSString *currentMemberResponse;
+@property int yes;
+@property int no;
+@property int maybe;
+@property int noreply;
+
 @property bool isCanceled;
 @property (nonatomic, strong) NSString *scoreLabel;
 

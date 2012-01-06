@@ -10,11 +10,14 @@
 #import "JSON/JSON.h"
 #import "ServerAPI.h"
 #import "TraceSession.h"
+#import "rTeamAppDelegate.h"
 
 static NSString *baseUrl = @"https://rskybox-stretchcom.appspot.com/rest/v1";
 static NSString *basicAuthUserName = @"token";
-static NSString *basicAuthToken = @"4g1l42pg7sm5o508hmg26ko183";
-static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljYXRpb24Y-dIBDA";
+static NSString *basicAuthToken = @"f59gi8rd80kl3sm94j4hpj33eg";
+//static NSString *basicAuthToken = @"4g1l42pg7sm5o508hmg26ko183";
+static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljYXRpb24Y9agCDA";
+//static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljYXRpb24Y-dIBDA";
 //static NSString *baseUrl = @"http://localhost:8888/rest";
 
 @implementation GoogleAppEngine
@@ -66,8 +69,6 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         NSMutableArray *appActions = [NSMutableArray arrayWithArray:[TraceSession getActions]];
         NSMutableArray *appTimestamps = [NSMutableArray arrayWithArray:[TraceSession getTimestamps]];
         
-        NSString *countString = [NSString stringWithFormat:@"Count: %d", [appActions count]];
-
         
         for (int i = 0; i < [appActions count]; i++) {
             NSMutableDictionary *actDictionary = [NSMutableDictionary dictionary];
@@ -152,11 +153,16 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         NSDictionary *loginDict = [[NSDictionary alloc] init];
         
         // recordedData needs to be base64 encoded before packaged inside JSON
+        
+        if (recordedUserName == nil) {
+            recordedUserName = @"";
+        }
+        
         NSString *encodedRecordedData = [ServerAPI encodeBase64data:recordedData];
         
         [tempDictionary setObject:encodedRecordedData forKey:@"voice"];
         [tempDictionary setObject:recordedUserName forKey:@"userName"];
-        [tempDictionary setObject:instanceUrl forKey:@"instanceUrl"];
+        //[tempDictionary setObject:instanceUrl forKey:@"instanceUrl"];
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
@@ -183,7 +189,8 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         
         // parse the returned JSON object
         NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-       // NSLog(@"%@", returnString);
+        //NSLog(@"%@", returnString);
+        
         SBJSON *jsonParser = [SBJSON new];
         NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
         
@@ -223,6 +230,8 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         [tempDictionary setObject:recordedUserName forKey:@"userName"];
         [tempDictionary setObject:instanceUrl forKey:@"instanceUrl"];
         // logLevel possible values: [debug, info, error, exception]
+        [tempDictionary setObject:methodName  forKey:@"logName"];
+
         [tempDictionary setObject:@"exception" forKey:@"logLevel"];
         [tempDictionary setObject:[exception reason]  forKey:@"message"];
         
@@ -241,6 +250,7 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         NSMutableArray *appActions = [NSMutableArray arrayWithArray:[TraceSession getActions]];
         NSMutableArray *appTimestamps = [NSMutableArray arrayWithArray:[TraceSession getTimestamps]];
         
+        
         for (int i = 0; i < [appActions count]; i++) {
             NSMutableDictionary *actDictionary = [NSMutableDictionary dictionary];
             
@@ -249,20 +259,96 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
             NSString *dateString = [dateFormatter stringFromDate:[appTimestamps objectAtIndex:i]];
-            
+                        
             [actDictionary setObject:dateString forKey:@"timestamp"];
             
             [finalArray addObject:actDictionary];
             
         }
         
-        [tempDictionary setObject:finalArray forKey:@"appActions"];
-        
+        [tempDictionary setObject:finalArray forKey:@"appActions"];        
         loginDict = tempDictionary;
         NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-        //NSLog(@"%@", requestString);
+       // NSLog(@"%@", requestString);
         
         NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/applications/%@/clientLogs", applicationId];
+        //NSLog(@"%@", tmpUrl);
+        NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
+        
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
+        [request setHTTPMethod: @"POST"];
+        [request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        NSString *basicAuth = [GoogleAppEngine getBasicAuthHeader];
+        [request setValue:basicAuth forHTTPHeaderField:@"Authorization"];
+        NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
+        
+        // parse the returned JSON object
+        NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+        
+        
+        //NSLog(@"%@", returnString);
+        
+        SBJSON *jsonParser = [SBJSON new];
+        NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
+        
+        NSString *apiStatus = [response valueForKey:@"apiStatus"];
+        NSString *logStatus = [response valueForKey:@"logStatus"];
+        
+        NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+        NSMutableDictionary *logChecklist = [NSMutableDictionary dictionaryWithDictionary:[standardUserDefaults valueForKey:@"logChecklist"]];
+                        
+        if ([logStatus isEqualToString:@"inactive"]) {
+            
+            [logChecklist setObject:@"off" forKey:methodName];
+            [standardUserDefaults setObject:logChecklist forKey:@"logChecklist"];
+
+            
+        }
+        
+        
+        
+        if ([apiStatus isEqualToString:@"100"]) {
+        }
+        
+        statusReturn = apiStatus;
+        [returnDictionary setValue:statusReturn forKey:@"status"];
+        return returnDictionary;
+    }
+    
+    @catch (NSException *e) {
+        statusReturn = @"1";
+        [returnDictionary setValue:statusReturn forKey:@"status"];
+        return returnDictionary;
+    }
+}
+
++ (NSDictionary *)createEndUser{
+    
+    NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
+    NSString *statusReturn = @"";
+    
+    
+    @try {
+        
+        //NSLog(@"*************METHOD NAME: %@", methodName);
+        NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
+        NSDictionary *loginDict = [[NSDictionary alloc] init];
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+        [tempDictionary setObject:mainDelegate.token forKey:@"userName"];
+        [tempDictionary setObject:@"rTeam" forKey:@"application"];
+        [tempDictionary setObject:@"2.9" forKey:@"version"];
+
+       
+    
+      
+        loginDict = tempDictionary;
+        NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
+        // NSLog(@"%@", requestString);
+                
+        NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/applications/%@/endUsers", applicationId];
         //NSLog(@"%@", tmpUrl);
         NSData *requestData = [NSData dataWithBytes: [requestString UTF8String] length: [requestString length]];
         

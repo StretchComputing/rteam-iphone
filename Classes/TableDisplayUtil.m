@@ -126,7 +126,7 @@
         
         //Profile Image
         profileImageView.frame = CGRectMake(5, 5, 40, 40);
-        profileImageView.image = [UIImage imageNamed:@"profile.png"];
+        profileImageView.image = [UIImage imageNamed:@"profileNew.png"];
             
       
         
@@ -449,7 +449,7 @@
             sentTeam = tmpOutbox.teamName;
             sentMessage = tmpOutbox.body;
             isInbox = false;
-            if ([tmpOutbox.messageType isEqualToString:@"poll"]) {
+            if ([tmpOutbox.messageType isEqualToString:@"poll"] || [tmpOutbox.messageType isEqualToString:@"whoiscoming"]) {
                 isMessage = false;
                 senderName = @"Sent Poll";
             }else{

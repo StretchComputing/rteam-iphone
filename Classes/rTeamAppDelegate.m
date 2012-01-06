@@ -63,7 +63,13 @@
 
     [TraceSession initiateSession];
 
+	NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *logChecklist = [NSMutableDictionary dictionary];
     
+    if ([standardUserDefaults valueForKey:@"logChecklist"] == nil) {
+        [standardUserDefaults setObject:logChecklist forKey:@"logChecklist"];
+    }
+
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	NSString *path = [documentsDirectory stringByAppendingPathComponent:@"teams.dat"];
@@ -100,7 +106,7 @@
 		tempLinkTwoImage = [decoder decodeObjectForKey:@"quickLinkTwoImage"];
         tmpSwipeAlert = [decoder decodeObjectForKey:@"showSwipeAlert"];
         tempLastTwenty = [decoder decodeObjectForKey:@"lastTwenty"];
-        tempLastTwentyTime = [decoder decodeObjectForKey:@"lastTwenty"];
+        tempLastTwentyTime = [decoder decodeObjectForKey:@"lastTwentyTime"];
 
 
 
@@ -118,30 +124,39 @@
         [self setLastTwentyTime:tempLastTwentyTime];
 
         
-        if ([self.lastTwenty length] > 0) {
-            //Set the trace session array
+        @try {
             
-            NSMutableArray *tmpTraceArray = [NSMutableArray arrayWithArray:[self.lastTwenty componentsSeparatedByString:@","]];
-            
-            NSMutableArray *tmpTraceTimeArray = [NSMutableArray arrayWithArray:[self.lastTwentyTime componentsSeparatedByString:@","]];
-            
-            NSMutableArray *tmpDateArray = [NSMutableArray array];
-            for (int i = 0; i < [tmpTraceTimeArray count]; i++) {
+            if ([self.lastTwenty length] > 0) {
+                //Set the trace session array
                 
-                NSString *tmpTime = [tmpTraceTimeArray objectAtIndex:i];
+                NSMutableArray *tmpTraceArray = [NSMutableArray arrayWithArray:[self.lastTwenty componentsSeparatedByString:@","]];
                 
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
-                NSDate *theDate = [dateFormatter dateFromString:tmpTime];
+                NSMutableArray *tmpTraceTimeArray = [NSMutableArray arrayWithArray:[self.lastTwentyTime componentsSeparatedByString:@","]];
                 
-                [tmpDateArray addObject:theDate];
+                NSMutableArray *tmpDateArray = [NSMutableArray array];
+                for (int i = 0; i < [tmpTraceTimeArray count]; i++) {
+                    
+                    NSString *tmpTime = [tmpTraceTimeArray objectAtIndex:i];
+                    
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
+                    NSDate *theDate = [dateFormatter dateFromString:tmpTime];
+                    
+                    [tmpDateArray addObject:theDate];
+                }
+                
+                [TraceSession setSavedArray:tmpTraceArray :tmpDateArray];
+                
+                
             }
-           
-            [TraceSession setSavedArray:tmpTraceArray :tmpDateArray];
 
-            
         }
+        @catch (NSException *exception) {
+            NSLog(@"*Exception*");
+        }
+      
         
+               
         
 		[decoder finishDecoding];
         
@@ -373,8 +388,16 @@
         // Handle error here
     }
     
+    
+    [self performSelectorInBackground:@selector(createEndUser) withObject:nil];
+    
 }
 
+-(void)createEndUser{
+    @autoreleasepool {
+        [GoogleAppEngine createEndUser];
+    }
+}
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
 	
 }

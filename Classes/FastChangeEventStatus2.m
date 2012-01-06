@@ -285,10 +285,9 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 		}else {
 			type = @"generic";
 		}
-		
-		NSDictionary *response = [ServerAPI createMessageThread:token :self.selectedEvent.teamId :@"Event Status" :message :@"plain" 
-															   :self.selectedEvent.eventId :type :@"true" 
-															   :[NSArray array] :recipients :@"" :@"false" :coordsOnly];	
+    
+        
+        NSDictionary *response = [ServerAPI createMessageThread:token teamId:self.selectedEvent.teamId subject:@"Event Status" body:message type:@"plain" eventId:self.selectedEvent.eventId eventType:type isAlert:@"true" pollChoices:[NSArray array] recipients:recipients displayResults:@"" includeFans:@"false" coordinatorsOnly:coordsOnly];
 		
 		NSString *status1 = [response valueForKey:@"status"];
 		

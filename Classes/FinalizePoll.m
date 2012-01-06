@@ -108,7 +108,7 @@
         if (![token isEqualToString:@""]){	
             
             
-            response = [ServerAPI updateMessageThread:token :self.teamId :self.messageThreadId :@"" :@"" :followUp :status];
+            response = [ServerAPI updateMessageThread:token :self.teamId :self.messageThreadId :@"" :@"" :followUp :status :@""];
             
             NSString *status = [response valueForKey:@"status"];
             

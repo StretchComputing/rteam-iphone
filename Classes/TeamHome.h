@@ -14,6 +14,15 @@
 @interface TeamHome : UIViewController <UITableViewDelegate, UITableViewDataSource, ADBannerViewDelegate, UIActionSheetDelegate> {
 
 }
+@property bool doneEvents;
+@property bool doneGames;
+@property bool doneMembers;
+@property (nonatomic, strong) IBOutlet UILabel *noEventsLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *largeActivity;
+@property (nonatomic, strong) IBOutlet UIButton *addEventsButton;
+@property (nonatomic, strong) IBOutlet UIButton *addMembersButton;
+@property (nonatomic, strong) IBOutlet UILabel *recentGamesLabel;
+
 @property bool fromHome;
 @property (nonatomic, strong) IBOutlet UIButton *editButton;
 
@@ -43,9 +52,7 @@
 @property bool eventSuccess;
 @property (nonatomic, strong) IBOutlet UILabel *nextEventInfoLabel;
 @property (nonatomic, strong) IBOutlet UIButton *nextEventButton;
-@property (nonatomic, strong) IBOutlet UIView *scheduleButtonUnderline;
 @property (nonatomic, strong) IBOutlet UIView *allScoresButtonUnderline;
-@property (nonatomic, strong) IBOutlet UIView *webPageButtonUnderline;
 
 @property (nonatomic, strong) NSString *teamUrl;
 @property (nonatomic, strong) NSMutableArray *nextGameArray;
@@ -67,9 +74,7 @@
 
 @property (nonatomic, strong)  IBOutlet UITableView *recentGamesTable;
 
-@property (nonatomic, strong)  IBOutlet UIButton *scheduleButton;
 @property (nonatomic, strong)  IBOutlet UIButton *allScoresButton;
-@property (nonatomic, strong)  IBOutlet UIButton *webPageButton;
 @property (nonatomic, strong)  IBOutlet UIButton *nextGameButton;
 
 -(IBAction)schedule;
@@ -79,4 +84,8 @@
 -(IBAction)nextEvent;
 -(NSString *)getMvp:(NSArray *)memberTallies;
 -(IBAction)editTeam;
+
+-(IBAction)addMembers;
+-(IBAction)addEvents;
+
 @end

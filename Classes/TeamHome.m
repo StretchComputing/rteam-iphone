@@ -37,12 +37,10 @@
 #import "TraceSession.h"
 
 @implementation TeamHome
-@synthesize teamId, userRole, teamSport, teamName, nextGameInfoLabel, topRight, topLeft, recentGamesTable, scheduleButton, allScoresButton, 
-webPageButton, nextGameButton, teamNameLabel, gamesArray, pastGamesArray, errorLabel, gameSuccess, nextGameArray, teamUrl,
-scheduleButtonUnderline, allScoresButtonUnderline, webPageButtonUnderline, nextEventInfoLabel, nextEventButton, eventSuccess, eventsArray,
+@synthesize teamId, userRole, teamSport, teamName, nextGameInfoLabel, topRight, topLeft, recentGamesTable, allScoresButton, nextGameButton, teamNameLabel, gamesArray, pastGamesArray, errorLabel, gameSuccess, nextGameArray, teamUrl, allScoresButtonUnderline, nextEventInfoLabel, nextEventButton, eventSuccess, eventsArray,
 futureEventsArray, nextEventArray, bannerIsVisible, eventsActivity, touchUpLocation, gestureStartPoint, nextGameLabel, nextEventLabel,
 teamInfoThumbnail, noEvents, noGames, eventsAlert, membersAlert, noMembers, displayedMemberAlert, displayedEventAlert, gamesArrayTemp, pastGamesArrayTemp,
-displayWarning, myAd, displayPhoto, editButton, fromHome;
+displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addEventsButton, recentGamesLabel, largeActivity, doneMembers, doneGames, doneEvents, noEventsLabel;
 
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -64,8 +62,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome;
 	self.pastGamesArray = [NSMutableArray array];
 	
 	[self.view setMultipleTouchEnabled:YES];
-	self.scheduleButton.hidden = YES;
-	self.scheduleButtonUnderline.hidden = YES;
+
 	self.teamNameLabel.text = @"Team Home";
 	
 	
@@ -75,15 +72,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome;
     self.recentGamesTable.layer.masksToBounds = YES;
     self.recentGamesTable.layer.cornerRadius = 7.0;
     
-	if (self.teamUrl == nil){
-		[self.webPageButton setHidden:YES];
-		[self.webPageButtonUnderline setHidden:YES];
-	}
-	if ([self.teamUrl isEqualToString:@""]) {
-		[self.webPageButton setHidden:YES];
-		[self.webPageButtonUnderline setHidden:YES];
-		
-	}
+	
 	
 	NSString *theSport = [self.teamSport lowercaseString];
 	
@@ -133,6 +122,9 @@ displayWarning, myAd, displayPhoto, editButton, fromHome;
 	[self.nextGameButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.nextEventButton setBackgroundImage:stretch forState:UIControlStateNormal];
     [self.editButton setBackgroundImage:stretch forState:UIControlStateNormal];
+    [self.addMembersButton setBackgroundImage:stretch forState:UIControlStateNormal];
+    [self.addEventsButton setBackgroundImage:stretch forState:UIControlStateNormal];
+
 
     
     //iAds
@@ -140,6 +132,20 @@ displayWarning, myAd, displayPhoto, editButton, fromHome;
 	myAd.delegate = self;
 	myAd.hidden = YES;
 	[self.view addSubview:myAd];
+    
+    self.allScoresButton.hidden = YES;
+    self.allScoresButtonUnderline.hidden = YES;
+    self.recentGamesLabel.hidden = YES;
+    self.recentGamesTable.hidden = YES;
+    
+    self.addMembersButton.hidden = YES;
+    self.noEventsLabel.hidden = YES;
+
+    self.addEventsButton.hidden = YES;
+    self.doneMembers = false;
+    self.doneGames = false;
+    self.doneEvents = false;
+
     	
 }
 
@@ -170,6 +176,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome;
 	
 	[self.eventsActivity startAnimating];
 	
+    [self.largeActivity startAnimating];
 	[self performSelectorInBackground:@selector(getTeamInfo) withObject:nil];
 	[self performSelectorInBackground:@selector(getListOfGames) withObject:nil];
 	[self performSelectorInBackground:@selector(getListOfEvents) withObject:nil];
@@ -261,29 +268,52 @@ displayWarning, myAd, displayPhoto, editButton, fromHome;
 
 -(void)done{
 	
+    self.doneGames = true;
 	self.gamesArray = self.gamesArrayTemp;
 		
 	[self.eventsActivity stopAnimating];
 
 	if (self.gameSuccess) {
-		
-		if (self.noGames && self.noEvents) {
-			
-			if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
-	
-				if (!self.displayedEventAlert && !self.displayedMemberAlert) {
-					self.displayedEventAlert = true;
-					NSString *message1 = @"You have not created any events yet for this team.  Would you like to get things going by adding some events to your team schedule?";
-					self.eventsAlert = [[UIAlertView alloc] initWithTitle:@"No Team Events" message:message1 delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Add Events", nil];
-                    
-                    if (self.displayWarning){
-                        [self.eventsAlert show];
+		        
+        if (self.doneMembers && self.doneEvents && self.doneGames) {
+            
+            bool orig = false;
+            
+            if (self.noEvents && self.noMembers && self.noEvents) {
+                
+                
+                [self.largeActivity stopAnimating];
+                
+                if (self.noMembers && self.noEvents) {
+                    if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+                        
+                        self.addMembersButton.hidden = NO;
+                        self.noEventsLabel.hidden = NO;
+
+                        self.addEventsButton.hidden = NO;
+                    }else{
+                        orig = true;
                     }
-				}
-				
-			}
-		}
-		
+                    
+                }else{
+                    orig = true;
+                }
+                
+                
+                
+            }else{
+                orig = true;
+            }
+            
+            if (orig) {
+                self.allScoresButtonUnderline.hidden = NO;
+                self.allScoresButton.hidden = NO;
+                self.recentGamesLabel.hidden = NO;
+                self.recentGamesTable.hidden = NO;
+            }
+            
+        }
+        
 		NSDate *dateNow = [NSDate date];
 		NSDateFormatter *format = [[NSDateFormatter alloc] init];
 		[format setDateFormat:@"yyyy-MM-dd HH:mm"]; 
@@ -416,35 +446,56 @@ displayWarning, myAd, displayPhoto, editButton, fromHome;
             
         }
         
-        [self performSelectorOnMainThread:@selector(doneEvents) withObject:nil waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(doneEventsMethod) withObject:nil waitUntilDone:NO];
 
     }
 }
 
--(void)doneEvents{
+-(void)doneEventsMethod{
 	
+    self.doneEvents = true;
+    
 	[self.eventsActivity stopAnimating];
 
 	
 	if (self.eventSuccess) {
-		
-		if (self.noGames && self.noEvents) {
-			
-			if (!self.displayedEventAlert && !self.displayedMemberAlert) {
+		        
+        if (self.doneMembers && self.doneEvents && self.doneGames) {
+            
+            bool orig = false;
+            
+            if (self.noEvents && self.noMembers && self.noEvents) {
                 
-                if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
-                    
-                    self.displayedEventAlert = true;
-                    NSString *message1 = @"You have not created any events yet for this team.  Would you like to get things going by adding some events to your team schedule?";
-                    self.eventsAlert = [[UIAlertView alloc] initWithTitle:@"No Team Events" message:message1 delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Add Events", nil];
-                    if (self.displayWarning){
-                        [self.eventsAlert show];
+                
+                [self.largeActivity stopAnimating];
+                
+                if (self.noMembers && self.noEvents) {
+                    if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+                        
+                        self.addMembersButton.hidden = NO;
+                        self.noEventsLabel.hidden = NO;
+
+                        self.addEventsButton.hidden = NO;
+                    }else{
+                        orig = true;
                     }
                     
+                }else{
+                    orig = true;
                 }
-			
-			}
-		}
+                                
+            }else{
+                orig = true;
+            }
+            
+            if (orig) {
+                self.allScoresButtonUnderline.hidden = NO;
+                self.allScoresButton.hidden = NO;
+                self.recentGamesLabel.hidden = NO;
+                self.recentGamesTable.hidden = NO;
+            }
+            
+        }
 		
 		NSDate *dateNow = [NSDate date];
 		NSDateFormatter *format = [[NSDateFormatter alloc] init];
@@ -1232,35 +1283,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 
-	if (alertView == self.eventsAlert) {
-		
-		if (buttonIndex == 0) {
-			
-		}else {
-			
-			NewGamePractice *nextController = [[NewGamePractice alloc] init];
-			nextController.teamId = self.teamId;
-			[self.navigationController pushViewController:nextController animated:YES];	
-			
-		}
-
-	}else if (alertView == self.membersAlert) {
-		
-		if (buttonIndex == 0) {
-			
-		}else {
-			
-			NewPlayer *nextController = [[NewPlayer alloc] init];
-			nextController.teamId = self.teamId;
-			nextController.userRole = self.userRole;
-			[self.navigationController pushViewController:nextController animated:YES];
-			
-		}
-
-	}
-}
 
 -(void)getListOfMembers{
 	
@@ -1311,7 +1334,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
         
-        [self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(doneMembersMethod) withObject:nil waitUntilDone:NO];
 
     }
 	
@@ -1320,25 +1343,49 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
--(void)doneMembers{
+-(void)doneMembersMethod{
 	
-	if (self.noMembers) {
-		if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
-			
-			if (!self.displayedMemberAlert && !self.displayedEventAlert) {
-				self.displayedMemberAlert = true;
-				NSString *message1 = @"You have not added any Members to this team yet.  Would you like to get things going by adding some members to your team roster?";
-				self.membersAlert = [[UIAlertView alloc] initWithTitle:@"No Team Members" message:message1 delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Add Members", nil];
-				if (self.displayWarning){
-                    [self.membersAlert show];
+    self.doneMembers = true;
+    
+    if (self.doneMembers && self.doneEvents && self.doneGames) {
+        
+        bool orig = false;
+
+        if (self.noEvents && self.noMembers && self.noEvents) {
+            
+        
+            [self.largeActivity stopAnimating];
+            
+            if (self.noMembers && self.noEvents) {
+                if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+                    
+                    self.addMembersButton.hidden = NO;
+                    self.noEventsLabel.hidden = NO;
+
+                    self.addEventsButton.hidden = NO;
+                }else{
+                    orig = true;
                 }
-			}
-			
-		}
-		
-		
-		
-	}
+                
+            }else{
+                orig = true;
+            }
+   
+
+       
+        }else{
+            orig = true;
+        }
+      
+        if (orig) {
+            self.allScoresButtonUnderline.hidden = NO;
+            self.allScoresButton.hidden = NO;
+            self.recentGamesLabel.hidden = NO;
+            self.recentGamesTable.hidden = NO;
+        }
+        
+    }
+	
 }
 
 
@@ -1356,6 +1403,22 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
+-(void)addMembers{
+
+    NewPlayer *nextController = [[NewPlayer alloc] init];
+    nextController.teamId = self.teamId;
+    nextController.userRole = self.userRole;
+    [self.navigationController pushViewController:nextController animated:YES];
+    
+}
+-(void)addEvents{
+    
+    NewGamePractice *nextController = [[NewGamePractice alloc] init];
+    nextController.teamId = self.teamId;
+    [self.navigationController pushViewController:nextController animated:YES];	
+    
+}
+
 -(void)viewDidUnload{
 
 	errorLabel = nil;
@@ -1364,12 +1427,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	topRight = nil;
 	topLeft = nil;
 	recentGamesTable = nil;
-	scheduleButton = nil;
 	allScoresButton = nil;
-	webPageButton = nil;
-	scheduleButtonUnderline = nil;
 	allScoresButtonUnderline = nil;
-	webPageButtonUnderline = nil;
 	nextGameButton = nil;
 	nextEventInfoLabel = nil;
 	nextEventButton = nil;
@@ -1377,7 +1436,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	nextGameLabel = nil;
 	nextEventLabel = nil;
     editButton = nil;
-    
+    largeActivity = nil;
+    recentGamesLabel = nil;
+    addEventsButton = nil;
+    addMembersButton = nil;
+    noEventsLabel = nil;
 	[super viewDidUnload];
 }
 

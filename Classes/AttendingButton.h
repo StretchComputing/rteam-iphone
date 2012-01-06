@@ -12,6 +12,15 @@
 @interface AttendingButton : EventNowButton {
 
 }
+@property (nonatomic, strong) NSString *messageThreadId;
+
+@property (nonatomic, strong) NSString *currentMemberId;
+@property (nonatomic, strong) NSString *currentMemberResponse;
+@property int yes;
+@property int no;
+@property int maybe;
+@property int noreply;
+
 @property bool isAttendance;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UIView *tableLineTop;
@@ -34,5 +43,6 @@
 @property (nonatomic, strong)UIButton *goToPageButton;
 
 
+-(void)setCounts;
 
 @end

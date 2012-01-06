@@ -12,9 +12,10 @@
 #import "FastActionSheet.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "Feedback.h"
 
 @implementation HelpAbout
-@synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings, myAd;
+@synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings, myAd, feedbackAction;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -268,36 +269,10 @@
 
 -(void)feedback{
 	
-    [TraceSession addEventToSession:@"Help Page - Feedback Selected"];
-
-    
-    NSError *errors;
-    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Feedback Selected"
-                                          label:mainDelegate.token
-                                          value:-1
-                                      withError:&errors]) {
-    }
-    
-	self.displayLabel.text = @"";
-    
-	if ([MFMailComposeViewController canSendMail]) {
-		
-		MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
-		mailViewController.mailComposeDelegate = self;
-		[mailViewController setToRecipients:[NSArray arrayWithObject:@"feedback@rteam.com"]];
-		[mailViewController setSubject:@"rTeam FeedBack"];
-		
-		[self presentModalViewController:mailViewController animated:YES];
-		
-	}else {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		[alert show];
-	}
-    
-    
-    
+    self.feedbackAction = [[UIActionSheet alloc] initWithTitle:@"Which type of feedback?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Audio Feedback", @"Email Feedback", nil];
+    self.feedbackAction.delegate = self;
+    [self.feedbackAction showInView:self.view];
+ 
 }
 
 
@@ -312,6 +287,14 @@
 			break;
 		case MFMailComposeResultSent:
 			displayString = @"Feedback sent successfully!";
+
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Audio Feedback Sent"
+                                                  label:@""
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
 			success = YES;
 			break;
 		case MFMailComposeResultFailed:
@@ -353,8 +336,55 @@
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 	
+    if (actionSheet == self.feedbackAction) {
+                
+        if (buttonIndex == 0) {
+            //Audio
+            [TraceSession addEventToSession:@"Help Page - Audio Feedback Selected"];
+            
+            Feedback *tmp = [[Feedback alloc] init];
+            [self.navigationController pushViewController:tmp animated:YES];
+
+        }else if (buttonIndex == 1){
+            //Email
+            
+            [TraceSession addEventToSession:@"Help Page - Email Feedback Selected"];
+            
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Feedback Selected"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
+            self.displayLabel.text = @"";
+            
+            if ([MFMailComposeViewController canSendMail]) {
+                
+                MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+                mailViewController.mailComposeDelegate = self;
+                [mailViewController setToRecipients:[NSArray arrayWithObject:@"feedback@rteam.com"]];
+                [mailViewController setSubject:@"rTeam FeedBack"];
+                
+                [self presentModalViewController:mailViewController animated:YES];
+                
+            }else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [alert show];
+            }
+            
+        }else{
+            //Cancel
+        }
+        
+    }else{
+        [FastActionSheet doAction:self :buttonIndex];
+
+    }
 	
-	[FastActionSheet doAction:self :buttonIndex];
 	
 	
 }

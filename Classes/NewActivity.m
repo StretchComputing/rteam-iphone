@@ -229,7 +229,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     self.tmpActivityArray = [NSMutableArray array];
     self.activityArray = [NSMutableArray array];
     
-    [self performSelectorInBackground:@selector(getNewActivity) withObject:nil];
+    //[self performSelectorInBackground:@selector(getNewActivity) withObject:nil];
     
     self.allActivityTable = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view2.frame.size.width, self.view2.frame.size.height) style:UITableViewStylePlain];
     self.allActivityTable.dataSource = self;
@@ -752,7 +752,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
             MessageThreadOutbox *message = [self.myActivityArray objectAtIndex:row];
                         
-            if ([message.messageType isEqualToString:@"poll"]) {
+            if ([message.messageType isEqualToString:@"poll"] || [message.messageType isEqualToString:@"whoiscoming"]) {
                                 
                 ViewPollSent *tmp = [[ViewPollSent alloc] init];
                 tmp.fromClass = self;

@@ -26,7 +26,7 @@
 
 @implementation SettingsTabs
 @synthesize numMemberTeams, fromRegisterFlow, didRegister, displaySuccess, passwordReset, passwordResetQuestion, haveUserInfo, myTableView, loadingLabel, 
-loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames, allEvents, gamesAndEvents, didSynch, synchSuccess, myAd;
+loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames, allEvents, gamesAndEvents, didSynch, synchSuccess, myAd, feedbackAction;
 
 -(void)viewWillAppear:(BOOL)animated{
 	
@@ -439,33 +439,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if (row == 0) {
             //Feedback
             
-            [TraceSession addEventToSession:@"Settings Page - Feedback Button Clicked"];
-
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Feedback Selected"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+            self.feedbackAction = [[UIActionSheet alloc] initWithTitle:@"Which type of feedback?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Audio Feedback", @"Email Feedback", nil];
+            self.feedbackAction.delegate = self;
+            [self.feedbackAction showInView:self.view];
             
-            
-            if ([MFMailComposeViewController canSendMail]) {
-                
-                MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
-                mailViewController.mailComposeDelegate = self;
-                [mailViewController setToRecipients:[NSArray arrayWithObject:@"feedback@rteam.com"]];
-                [mailViewController setSubject:@"rTeam FeedBack"];
-                
-                [self presentModalViewController:mailViewController animated:YES];
-                
-            }else {
-                
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [alert show];
-            }
 
+           
         }else if (row == 1){
             //Help
             
@@ -528,6 +507,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		case MFMailComposeResultSent:
 			//self.displayLabel.text = @"Feedback sent successfully!";
 			//self.displayLabel.textColor = [UIColor colorWithRed:0.0 green:0.392 blue:0.0 alpha:1.0];
+        
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Email Feedback Sent"
+                                                  label:@""
+                                                  value:-1
+                                              withError:nil]) {
+            }
+                        
 			success = YES;
 			break;
 		case MFMailComposeResultFailed:
@@ -635,26 +622,84 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 	
 	
-    
-    if (buttonIndex == 0) {
-        //Yes
-        NSError *errors;
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Synch Events With Calendar"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:&errors]) {
+    if (actionSheet == self.feedbackAction) {
+        
+        if (buttonIndex == 0) {
+            //Audio
+            [TraceSession addEventToSession:@"Settings Page - Audio Feedback Selected"];
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Aduio Feedback Selected"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
+            Feedback *tmp = [[Feedback alloc] init];
+            [self.navigationController pushViewController:tmp animated:YES];
+            
+        }else if (buttonIndex == 1){
+            //Email
+            
+            [TraceSession addEventToSession:@"Settings Page - Email Feedback Selected"];
+            
+            
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Email Feedback Selected"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
+            
+            if ([MFMailComposeViewController canSendMail]) {
+                
+                MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+                mailViewController.mailComposeDelegate = self;
+                [mailViewController setToRecipients:[NSArray arrayWithObject:@"feedback@rteam.com"]];
+                [mailViewController setSubject:@"rTeam FeedBack"];
+                
+                [self presentModalViewController:mailViewController animated:YES];
+                
+            }else {
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [alert show];
+            }
+
+            
+        }else{
+            //Cancel
         }
         
-        [self.largeActivity startAnimating];
-        [self performSelectorInBackground:@selector(getGames) withObject:nil];
-        [self performSelectorInBackground:@selector(getEvents) withObject:nil];
-    }else if (buttonIndex == 1) {
-        
-        
+    }else{
+        if (buttonIndex == 0) {
+            //Yes
+            NSError *errors;
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+                                                 action:@"Synch Events With Calendar"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:&errors]) {
+            }
+            
+            [self.largeActivity startAnimating];
+            [self performSelectorInBackground:@selector(getGames) withObject:nil];
+            [self performSelectorInBackground:@selector(getEvents) withObject:nil];
+        }else if (buttonIndex == 1) {
+            
+            
+            
+        }
         
     }
+    
+  
 	
 	
 	

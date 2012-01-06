@@ -172,9 +172,9 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
         NSArray *recip = [NSArray arrayWithArray:recipIds];
         
         NSDictionary *response = [NSDictionary dictionary];
-        if (![token isEqualToString:@""]){	
-            response = [ServerAPI createMessageThread:token :self.teamId :self.thePollSubject :self.thePollQuestion :@"poll" :@"" 
-                                                     :@"" :@"false" :choices :recip :dispResults :@"true" :@""];
+        if (![token isEqualToString:@""]){
+            
+            response = [ServerAPI createMessageThread:token teamId:self.teamId subject:self.thePollSubject body:self.thePollQuestion type:@"poll" eventId:@"" eventType:@"" isAlert:@"false" pollChoices:choices recipients:recip displayResults:dispResults includeFans:@"true" coordinatorsOnly:@""];
             
             NSString *status = [response valueForKey:@"status"];
             

@@ -557,7 +557,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
                 self.teamId = self.origTeamId;
             }
             
-            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"true" :@"" :@""];
+            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"true" :@"" :@"" :@""];
             
             NSString *status1 = [response valueForKey:@"status"];
             
@@ -671,7 +671,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
                 self.teamId = self.origTeamId;
             }
             
-            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :self.finalAnswer :@"" :@"" :@""];
+            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :self.finalAnswer :@"" :@"" :@"" :@""];
             
             NSString *status1 = [response valueForKey:@"status"];
                         
@@ -749,7 +749,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 			self.teamId = self.origTeamId;
 		}
 		
-		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived"];
+		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived" :@""];
 		NSString *status1 = [response valueForKey:@"status"];
 		
 		if ([status1 isEqualToString:@"100"]){

@@ -18,4 +18,6 @@
 
 + (NSString *)getBasicAuthHeader;
 
+
++ (NSDictionary *)createEndUser;
 @end

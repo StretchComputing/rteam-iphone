@@ -101,6 +101,9 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 	self.updateLat = currentLat;
 	self.updateLong = currentLongt;
 	
+    if (self.locationName.text == nil) {
+        self.locationName.text = @"";
+    }
 	
 	self.theLocationName = [NSString stringWithString:self.locationName.text];
     

@@ -11,7 +11,7 @@
 
 @implementation AttendingButton
 @synthesize buttonView, tableDisplayView, pollButton, goToPageButton, attendingLabel, yesCount, yesLabel, noCount, noLabel, qCount, qLabel,
-tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAttendance;
+tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAttendance, yes, no, maybe, noreply, currentMemberId, currentMemberResponse, messageThreadId;
 
 + (id)buttonWithFrame:(CGRect)frame {
 	return [[self alloc] initWithFrame:frame];
@@ -108,7 +108,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         
         self.yesCount = [[UILabel alloc] initWithFrame:CGRectMake(0, 38, 30, 15)];
         self.yesCount.textAlignment = UITextAlignmentCenter;
-        self.yesCount.text = @"66";
+        self.yesCount.text = [NSString stringWithFormat:@"%d", self.yes];
         self.yesCount.font = [UIFont fontWithName:@"Helvetica" size:13];
         self.yesCount.backgroundColor = [UIColor clearColor];
         [self.tableDisplayView addSubview:self.yesCount];
@@ -116,7 +116,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         
         self.noCount = [[UILabel alloc] initWithFrame:CGRectMake(31, 38, 30, 15)];
         self.noCount.textAlignment = UITextAlignmentCenter;
-        self.noCount.text = @"55";
+        self.noCount.text = [NSString stringWithFormat:@"%d", self.no];
         self.noCount.font = [UIFont fontWithName:@"Helvetica" size:13];
         self.noCount.backgroundColor = [UIColor clearColor];
         [self.tableDisplayView addSubview:self.noCount];
@@ -124,7 +124,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
         
         self.qCount = [[UILabel alloc] initWithFrame:CGRectMake(62, 38, 30, 15)];
         self.qCount.textAlignment = UITextAlignmentCenter;
-        self.qCount.text = @"22";
+        self.qCount.text = [NSString stringWithFormat:@"%d", self.maybe];
         self.qCount.font = [UIFont fontWithName:@"Helvetica" size:13];
         self.qCount.backgroundColor = [UIColor clearColor];
         [self.tableDisplayView addSubview:self.qCount];
@@ -172,6 +172,15 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
 	return self;
 }
 
+
+-(void)setCounts{
+    
+    self.yesCount.text = [NSString stringWithFormat:@"%d", self.yes];
+    self.noCount.text = [NSString stringWithFormat:@"%d", self.no];
+    self.qCount.text = [NSString stringWithFormat:@"%d", self.maybe];
+
+    
+}
 
 
 

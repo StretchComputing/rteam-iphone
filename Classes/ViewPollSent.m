@@ -456,7 +456,7 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 			self.teamId = self.origTeamId;
 		}
 		
-		NSDictionary *response1 = [ServerAPI updateMessageThread:token :self.teamId :self.messageThreadId :@"" :@"" :@"" :@"archived"];
+		NSDictionary *response1 = [ServerAPI updateMessageThread:token :self.teamId :self.messageThreadId :@"" :@"" :@"" :@"archived" :@""];
 		NSString *status1 = [response1 valueForKey:@"status"];
 		
 		if ([status1 isEqualToString:@"100"]){

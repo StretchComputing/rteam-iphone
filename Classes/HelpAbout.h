@@ -17,6 +17,7 @@
     
 
 }
+@property (nonatomic, strong) UIActionSheet *feedbackAction;
 @property (nonatomic, strong) ADBannerView *myAd;
 @property bool fromSettings;
 @property (nonatomic, strong) IBOutlet UILabel *welcomeLabel;

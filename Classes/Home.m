@@ -695,11 +695,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 
 -(void)search{
-    
-    
-    
+        
     [TraceSession addEventToSession:@"Home Page - Search Button Clicked"];
-    [TraceSession printTraceSession];
     
     NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1004,8 +1001,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 	
 	[navController pushViewController:tmp animated:NO];
 	
-    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-
     navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self.navigationController presentModalViewController:navController animated:YES];	
  
@@ -1422,8 +1417,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			[self.eventsNowActivity startAnimating];
 			[self performSelectorInBackground:@selector(getEventsNow) withObject:nil];
 		}else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Error" message:@"Please make sure you have a valid internet connection." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alert show];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Finding 'Now' Events!" message:@"Please make sure you have a valid internet connection." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            
+            if ([self.navigationController visibleViewController] == self) {
+                [alert show];
+            }
 
 		}
 
@@ -1736,6 +1734,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventId = tmp1.eventId;
                             tmp1Button.sport = tmp1.sport;
                             
+                            tmp1Button.currentMemberId = tmp1.currentMemberId;
+                            tmp1Button.currentMemberResponse = tmp1.currentMemberResponse;
+                            tmp1Button.messageThreadId = tmp1.messageThreadId;
+
+                            
+                            tmp1Button.yes = tmp1.yes;
+                            tmp1Button.no = tmp1.no;
+                            tmp1Button.maybe = tmp1.maybe;
+                            tmp1Button.noreply = tmp1.noreply;
+                            
                             if (![tmp1.teamName isEqualToString:@""]) {
                                 tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
                             }else {
@@ -1760,6 +1768,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             }else{
                                 tmp1Button.canceledLabel.text = @"";
                             }
+                            
+                            [tmp1Button setCounts];
                             
                             // tmp1Button.scoreLabel.text = tmp1.scoreLabel;
                             tmp1Button.eventLabel.text = tmp1.eventLabel;
@@ -1888,8 +1898,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.teamId = tmp1.teamId;
                             tmp1Button.eventId = tmp1.eventId;
                             tmp1Button.sport = tmp1.sport;
+                            
+                            tmp1Button.yes = tmp1.yes;
+                            tmp1Button.no = tmp1.no;
+                            tmp1Button.maybe = tmp1.maybe;
+                            tmp1Button.noreply = tmp1.noreply;
 
                             
+                            tmp1Button.currentMemberId = tmp1.currentMemberId;
+                            tmp1Button.currentMemberResponse = tmp1.currentMemberResponse;
+                            tmp1Button.messageThreadId = tmp1.messageThreadId;
+
                             if (![tmp1.teamName isEqualToString:@""]) {
                                 tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
                             }else {
@@ -1916,6 +1935,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp1Button.canceledLabel.text = @"";
                             }
                             
+                            [tmp1Button setCounts];
+
                             // tmp1Button.scoreLabel.text = tmp1.scoreLabel;
                             tmp1Button.eventLabel.text = tmp1.eventLabel;
                             [tmp1Button addTarget:self action:@selector(eventNowAttending:) forControlEvents:UIControlEventTouchUpInside];
@@ -1969,6 +1990,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.teamId = tmp2.teamId;
                                 tmp2Button.eventId = tmp2.eventId;
                                 tmp2Button.sport = tmp2.sport;
+                                tmp2Button.yes = tmp2.yes;
+                                tmp2Button.no = tmp2.no;
+                                tmp2Button.maybe = tmp2.maybe;
+                                tmp2Button.noreply = tmp2.noreply;
+
+                                
+                                tmp2Button.currentMemberId = tmp2.currentMemberId;
+                                tmp2Button.currentMemberResponse = tmp2.currentMemberResponse;
+                                tmp2Button.messageThreadId = tmp2.messageThreadId;
 
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
@@ -1994,6 +2024,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 }else{
                                     tmp2Button.canceledLabel.text = @"";
                                 }
+                                
+                                [tmp2Button setCounts];
+
                                 
                                 //tmp1Button.scoreLabel.text = tmp1.scoreLabel;
                                 tmp2Button.eventLabel.text = tmp2.eventLabel;
@@ -2120,8 +2153,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.eventId = tmp2.eventId;
                                 tmp2Button.sport = tmp2.sport;
 
+                                tmp2Button.yes = tmp2.yes;
+                                tmp2Button.no = tmp2.no;
+                                tmp2Button.maybe = tmp2.maybe;
+                                tmp2Button.noreply = tmp2.noreply;
                                 
-                                
+                                tmp2Button.currentMemberId = tmp2.currentMemberId;
+                                tmp2Button.currentMemberResponse = tmp2.currentMemberResponse;
+                                tmp2Button.messageThreadId = tmp2.messageThreadId;
+
                                 if (![tmp2.teamName isEqualToString:@""]) {
                                     tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
                                 }else {
@@ -2147,6 +2187,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 }else{
                                     tmp2Button.canceledLabel.text = @"";
                                 }
+                                
+                                [tmp2Button setCounts];
+
                                 
                                 // tmp1Button.scoreLabel.text = tmp1.scoreLabel;
                                 tmp2Button.eventLabel.text = tmp2.eventLabel;
@@ -2221,12 +2264,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeAttendanceView.participantRole = tmp.participantRole;
             homeAttendanceView.eventId = tmp.eventId;
             homeAttendanceView.sport = tmp.sport;
+            
+            
+            homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
+            homeAttendanceView.currentMemberId = tmp.currentMemberId;
+            homeAttendanceView.messageThreadId = tmp.messageThreadId;
 
         
             
-            homeAttendanceView.yesCount = @"12";
-            homeAttendanceView.noCount = @"2";
-            homeAttendanceView.noReplyCount = @"5";
+            homeAttendanceView.yesCount = [NSString stringWithFormat:@"%d", tmp.yes];
+            homeAttendanceView.noCount = [NSString stringWithFormat:@"%d", tmp.no];
+            homeAttendanceView.noReplyCount = [NSString stringWithFormat:@"%d", tmp.noreply];
+            homeAttendanceView.maybeCount = [NSString stringWithFormat:@"%d", tmp.maybe];
             
             [homeAttendanceView setLabels];
 
@@ -2268,10 +2317,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeAttendanceView.eventId = tmp.eventId;
             homeAttendanceView.sport = tmp.sport;
 
-            
-            homeAttendanceView.yesCount = @"12";
-            homeAttendanceView.noCount = @"2";
-            homeAttendanceView.noReplyCount = @"5";
+            homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
+            homeAttendanceView.currentMemberId = tmp.currentMemberId;
+            homeAttendanceView.messageThreadId = tmp.messageThreadId;
+
+            homeAttendanceView.yesCount = [NSString stringWithFormat:@"%d", tmp.yes];
+            homeAttendanceView.noCount = [NSString stringWithFormat:@"%d", tmp.no];
+            homeAttendanceView.noReplyCount = [NSString stringWithFormat:@"%d", tmp.noreply];
+            homeAttendanceView.maybeCount = [NSString stringWithFormat:@"%d", tmp.maybe];
             
             [homeAttendanceView setLabels];
         }else{
@@ -2287,6 +2340,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeScoreView.eventDate = tmp.eventDate;
 
             homeScoreView.teamId = tmp.teamId;
+            
             homeScoreView.participantRole = tmp.participantRole;
             homeScoreView.eventId = tmp.eventId;
             homeScoreView.sport = tmp.sport;
@@ -3395,6 +3449,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (self.isMoreShowing) {
         [self moveDivider];
+        [self refresh];
     }
     
 }
@@ -3436,6 +3491,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             frame2.origin.y = 372;
         }
         self.homeScoreView.view.frame = frame2;
+        [self.homeScoreView doReset];
         
      
         [UIView commitAnimations];

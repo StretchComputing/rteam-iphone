@@ -60,6 +60,7 @@
 		90623465128DB4FA0074610D /* EditGuardianInfo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90623464128DB4FA0074610D /* EditGuardianInfo.xib */; };
 		9062354A128EF1170074610D /* twitterWordmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 90623549128EF1170074610D /* twitterWordmark.png */; };
 		90623B73129234970074610D /* ViewDetailMessageReplies.m in Sources */ = {isa = PBXBuildFile; fileRef = 90623B72129234970074610D /* ViewDetailMessageReplies.m */; };
+		9069C65B14AA2741002934BE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9069C65A14AA2741002934BE /* AVFoundation.framework */; };
 		906A5A301165953900CC8D59 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 906A5A2F1165953900CC8D59 /* Base64.m */; };
 		906B2D4A117F3C770019AECC /* NewGame2.m in Sources */ = {isa = PBXBuildFile; fileRef = 906B2D49117F3C770019AECC /* NewGame2.m */; };
 		906B2D5E117F3DB40019AECC /* NewGame2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 906B2D5D117F3DB40019AECC /* NewGame2.xib */; };
@@ -368,6 +369,9 @@
 		90856BA712A87D5100D3F271 /* volleyballOnly.png in Resources */ = {isa = PBXBuildFile; fileRef = 90856B9F12A87D5100D3F271 /* volleyballOnly.png */; };
 		90856E9312A9C9FB00D3F271 /* NewFootballScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90856E9212A9C9FB00D3F271 /* NewFootballScoring.xib */; };
 		90856E9612A9CA0900D3F271 /* NewFootballScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90856E9512A9CA0900D3F271 /* NewFootballScoring.m */; };
+		908584AA14B4BDC0008AD6A6 /* profileNew.png in Resources */ = {isa = PBXBuildFile; fileRef = 908584A914B4BDC0008AD6A6 /* profileNew.png */; };
+		908584AE14B4C204008AD6A6 /* ReplyEditActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 908584AC14B4C203008AD6A6 /* ReplyEditActivity.m */; };
+		908584AF14B4C204008AD6A6 /* ReplyEditActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 908584AD14B4C203008AD6A6 /* ReplyEditActivity.xib */; };
 		90865F561458E64E00CB130E /* SendPrivateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 90865F541458E64D00CB130E /* SendPrivateMessage.m */; };
 		90865F571458E64E00CB130E /* SendPrivateMessage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90865F551458E64E00CB130E /* SendPrivateMessage.xib */; };
 		9086BF7E12C254F600EA8AC1 /* newleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 9086BF7C12C254F600EA8AC1 /* newleft.png */; };
@@ -657,6 +661,7 @@
 		90623549128EF1170074610D /* twitterWordmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = twitterWordmark.png; path = ../images/twitterWordmark.png; sourceTree = SOURCE_ROOT; };
 		90623B71129234970074610D /* ViewDetailMessageReplies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewDetailMessageReplies.h; sourceTree = "<group>"; };
 		90623B72129234970074610D /* ViewDetailMessageReplies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewDetailMessageReplies.m; sourceTree = "<group>"; };
+		9069C65A14AA2741002934BE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		906A5A2E1165953900CC8D59 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		906A5A2F1165953900CC8D59 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		906B2D48117F3C770019AECC /* NewGame2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGame2.h; sourceTree = "<group>"; };
@@ -1053,6 +1058,10 @@
 		90856E9212A9C9FB00D3F271 /* NewFootballScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewFootballScoring.xib; sourceTree = "<group>"; };
 		90856E9412A9CA0900D3F271 /* NewFootballScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewFootballScoring.h; sourceTree = "<group>"; };
 		90856E9512A9CA0900D3F271 /* NewFootballScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewFootballScoring.m; sourceTree = "<group>"; };
+		908584A914B4BDC0008AD6A6 /* profileNew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profileNew.png; path = ../profileNew.png; sourceTree = "<group>"; };
+		908584AB14B4C203008AD6A6 /* ReplyEditActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplyEditActivity.h; sourceTree = "<group>"; };
+		908584AC14B4C203008AD6A6 /* ReplyEditActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplyEditActivity.m; sourceTree = "<group>"; };
+		908584AD14B4C203008AD6A6 /* ReplyEditActivity.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReplyEditActivity.xib; sourceTree = "<group>"; };
 		90865F531458E64C00CB130E /* SendPrivateMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendPrivateMessage.h; sourceTree = "<group>"; };
 		90865F541458E64D00CB130E /* SendPrivateMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendPrivateMessage.m; sourceTree = "<group>"; };
 		90865F551458E64E00CB130E /* SendPrivateMessage.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendPrivateMessage.xib; sourceTree = "<group>"; };
@@ -1336,6 +1345,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9069C65B14AA2741002934BE /* AVFoundation.framework in Frameworks */,
 				9087534C1474A438000850D4 /* libsqlite3.0.dylib in Frameworks */,
 				9086E32514A2335300B349CB /* libCrashReporter-iphoneos.a in Frameworks */,
 				9083F891133BB84300972821 /* EventKit.framework in Frameworks */,
@@ -1425,6 +1435,9 @@
 				90D70200144872200079AF9E /* ActivityPost.h */,
 				90D70201144872200079AF9E /* ActivityPost.m */,
 				90D70202144872220079AF9E /* ActivityPost.xib */,
+				908584AB14B4C203008AD6A6 /* ReplyEditActivity.h */,
+				908584AC14B4C203008AD6A6 /* ReplyEditActivity.m */,
+				908584AD14B4C203008AD6A6 /* ReplyEditActivity.xib */,
 				908A1AA8144FCC17008A063A /* SelectTeams.h */,
 				908A1AA9144FCC17008A063A /* SelectTeams.m */,
 				908A1AAA144FCC17008A063A /* SelectTeams.xib */,
@@ -1675,6 +1688,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				9069C65A14AA2741002934BE /* AVFoundation.framework */,
 				9087534B1474A438000850D4 /* libsqlite3.0.dylib */,
 				9086E32414A2335300B349CB /* libCrashReporter-iphoneos.a */,
 				908753511474A7DB000850D4 /* GANTracker.h */,
@@ -1877,6 +1891,7 @@
 		907BA79711552A3400604995 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				908584A914B4BDC0008AD6A6 /* profileNew.png */,
 				90879462149906030079A207 /* showLess.png */,
 				90879463149906030079A207 /* showLess@2x.png */,
 				9084781614686E6B002BF668 /* thumbsUpGreen@2x.png */,
@@ -2675,6 +2690,8 @@
 				9083CD6F1471C5E700315792 /* sendMessage.mov in Resources */,
 				90879464149906030079A207 /* showLess.png in Resources */,
 				90879465149906030079A207 /* showLess@2x.png in Resources */,
+				908584AA14B4BDC0008AD6A6 /* profileNew.png in Resources */,
+				908584AF14B4C204008AD6A6 /* ReplyEditActivity.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2856,6 +2873,7 @@
 				9083CD651471AD4C00315792 /* NewActivityImageObject.m in Sources */,
 				9F334075149AE5010052E70E /* GoogleAppEngine.m in Sources */,
 				90879476149BBA3A0079A207 /* TraceSession.m in Sources */,
+				908584AE14B4C204008AD6A6 /* ReplyEditActivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

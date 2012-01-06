@@ -15,6 +15,7 @@
     
 
 }
+@property (nonatomic, strong) UIActionSheet *feedbackAction;
 @property (nonatomic, strong) ADBannerView *myAd;
 @property bool displaySuccess;
 

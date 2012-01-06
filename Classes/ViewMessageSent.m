@@ -336,7 +336,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 			self.teamId = self.origTeamId;
 		}
 		
-		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived"];
+		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived" :@""];
 		NSString *status1 = [response valueForKey:@"status"];
 		
 		if ([status1 isEqualToString:@"100"]){

@@ -34,7 +34,7 @@ teamName, newActivity, fromHome;
 	int index = self.selectedIndex;
 	
 	if (index == 1) {
-		Vote *tmp = [self.viewControllers objectAtIndex:1];
+		//Vote *tmp = [self.viewControllers objectAtIndex:1];
 		//[tmp viewWillAppear:NO];
 	}else {
 		//OBJECT AT INDEX 0

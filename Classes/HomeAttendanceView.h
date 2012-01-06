@@ -9,10 +9,20 @@
 #import <UIKit/UIKit.h>
 //#import "Home.h"
 
-@interface HomeAttendanceView : UIViewController {
+@interface HomeAttendanceView : UIViewController <UIActionSheetDelegate> {
 
     
 }
+@property (nonatomic, strong) NSString *messageThreadId;
+
+@property (nonatomic, strong) IBOutlet UILabel *statusReply;
+@property (nonatomic, strong) IBOutlet UIButton *statusButton;
+@property (nonatomic, strong) NSString *currentMemberId;
+@property (nonatomic, strong) NSString *currentMemberResponse;
+
+@property (nonatomic, strong) IBOutlet UILabel *pollDescription;
+@property (nonatomic, strong) IBOutlet UILabel *pollLabel;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *pollActivity;
 @property (nonatomic, strong) NSString *sport;
 @property (nonatomic, strong) NSString *eventId;
 @property (nonatomic, strong) NSString *participantRole;
@@ -31,6 +41,8 @@
 @property (nonatomic, strong) IBOutlet UILabel *yesLabel;
 @property (nonatomic, strong) IBOutlet UILabel *noLabel;
 @property (nonatomic, strong) IBOutlet UILabel *noReplyLabel;
+@property (nonatomic, strong) IBOutlet UILabel *maybeLabel;
+@property (nonatomic, strong) NSString *maybeCount;
 
 
 @property int initY;
@@ -39,5 +51,8 @@
 
 -(IBAction)sendPoll;
 -(IBAction)goToPage;
+
+-(IBAction)setStatus;
+
 
 @end

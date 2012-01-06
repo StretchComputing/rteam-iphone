@@ -10,6 +10,9 @@
 
 @interface NewActivityDetail : UIViewController
 
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *deleteButton;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *replyButton;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *editButton;
 @property bool isVideo;
 @property (nonatomic, strong) IBOutlet UILabel *voteLabel;
 @property (nonatomic, strong) NSString *currentVote;
@@ -59,5 +62,9 @@
 
 -(IBAction)voteUp;
 -(IBAction)voteDown;
+
+-(IBAction)reply;
+-(IBAction)edit;
+-(IBAction)deleteAction;
 
 @end

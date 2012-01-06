@@ -26,16 +26,22 @@ static NSMutableArray *traceTimeStamps;
 
 +(void)addEventToSession:(NSString *)event{
     
+    NSDate *myDate = [NSDate date];
+    
     if ([traceSession count] < NUMBER_EVENTS_STORED) {
         [traceSession addObject:event];
-        [traceTimeStamps addObject:[NSDate date]];
+        [traceTimeStamps addObject:myDate];
     }else{
         [traceSession removeObjectAtIndex:0];
         [traceSession addObject:event];
         [traceTimeStamps removeObject:0];
-        [traceTimeStamps addObject:[NSDate date]];
+        [traceTimeStamps addObject:myDate];
     }
     
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
+    //NSString *dateString = [dateFormatter stringFromDate:myDate];
+            
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSString *tmpTrace = @"";
@@ -44,18 +50,14 @@ static NSMutableArray *traceTimeStamps;
     
     for (int i = 0; i < [traceSession count]; i++) {
         
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
-        NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
-        
         if (i == ([traceSession count] - 1)) {
             tmpTrace = [tmpTrace stringByAppendingFormat:@"%@", [traceSession objectAtIndex:i]];
             
-            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@", dateString];
+            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@", [traceTimeStamps objectAtIndex:i]];
 
         }else{
             tmpTrace = [tmpTrace stringByAppendingFormat:@"%@,", [traceSession objectAtIndex:i]];
-            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@,", dateString];
+            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@,", [traceTimeStamps objectAtIndex:i]];
 
         }
     }
@@ -63,6 +65,7 @@ static NSMutableArray *traceTimeStamps;
     mainDelegate.lastTwenty = [NSString stringWithString:tmpTrace];
     mainDelegate.lastTwentyTime = [NSString stringWithString:tmpTraceTime];
     [mainDelegate saveUserInfo];
+    
 }
 
 +(NSMutableArray *)getActions{
@@ -83,13 +86,15 @@ static NSMutableArray *traceTimeStamps;
 
 +(void)printTraceSession{
     
+   
     for (int i = 0; i < [traceSession count]; i++) {
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MM/dd/yyyy hh:mm:ss aa"];
+        [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
         NSString *dateString = [dateFormatter stringFromDate:[traceTimeStamps objectAtIndex:i]];
-        
+                
         NSLog(@"%d: %@ - %@", i, [traceSession objectAtIndex:i], dateString);
     }
+     
 }
 @end

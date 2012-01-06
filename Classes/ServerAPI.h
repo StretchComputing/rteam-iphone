@@ -116,9 +116,7 @@
 	:(NSString *)startDate :(NSString *)endDate;
 
 //Message APIs
-+(NSDictionary *)createMessageThread:(NSString *)token :(NSString *)teamId :(NSString *)subject :(NSString *)body :(NSString *)type :(NSString *)eventId 
-									:(NSString *)eventType :(NSString *)isAlert :(NSArray *)pollChoices :(NSArray *)recipients :(NSString *)displayResults
-									:(NSString *)includeFans :(NSString *)coordinatorsOnly;
++(NSDictionary *)createMessageThread:(NSString *)token teamId:(NSString *)teamId subject:(NSString *)subject body:(NSString *)body type:(NSString *)type eventId:(NSString *)eventId eventType:(NSString *)eventType isAlert:(NSString *)isAlert pollChoices:(NSArray *)pollChoices recipients:(NSArray *)recipients displayResults:(NSString *)displayResults includeFans:(NSString *)includeFans coordinatorsOnly:(NSString *)coordinatorsOnly;
 
 +(NSDictionary *)getMessageThreads:(NSString *)token :(NSString *)teamId :(NSString *)messageGroup :(NSString *)eventId :(NSString *)eventType
 							 :(NSString *)pollOrMsg :(NSString *)status;
@@ -126,7 +124,7 @@
 +(NSDictionary *)getMessageThreadInfo:(NSString *)token :(NSString *)teamId :(NSString *)messageThreadId;
 
 +(NSDictionary *)updateMessageThread:(NSString *)token :(NSString *)teamId :(NSString *)messageThreadId :(NSString *)reply :(NSString *)wasViewed 
-									:(NSString *)followupMessage :(NSString *)status;
+									:(NSString *)followupMessage :(NSString *)status :(NSString *)sendReminder;
 
 +(NSDictionary *)updateMessageThreads:(NSString *)token :(NSArray *)threadIds :(NSString *)location;
 
@@ -135,9 +133,6 @@
 //Activity APIs
 +(NSDictionary *)getActivity:(NSString *)token :(NSString *)maxCount :(NSString *)refreshFirst :(NSString *)newOnly
 							:(NSString *)mostCurrentDate :(NSString *)totalNumberOfDays;
-
-+(NSDictionary *)getActivityTeam:(NSString *)token :(NSString *)teamId :(NSString *)maxCount :(NSString *)refreshFirst :(NSString *)newOnly
-							:(NSString *)maxCacheId;
 
 +(NSDictionary *)createActivity:(NSString *)token :(NSString *)teamId :(NSString *)statusUpdate :(NSData *)photo :(NSData *)video :(NSString *)orientation;
 
@@ -156,6 +151,8 @@
 + (NSString *)encodeBase64:(NSString *)stringToEncode;
 
 + (NSString *)encodeBase64data:(NSData *)encodeData;
+
++(NSDictionary *)exceptionReturnValue:(NSString *)methodName :(NSException *)e;
 
 
 

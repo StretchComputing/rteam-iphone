@@ -15,9 +15,10 @@
 #import "ServerAPI.h"
 #import "VideoDisplay.h"
 #import "GANTracker.h"
+#import "ReplyEditActivity.h"
 
 @implementation NewActivityDetail
-@synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, isCurrent, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel, isVideo;
+@synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, isCurrent, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel, isVideo, replyButton, editButton, deleteButton;
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -66,21 +67,15 @@
     
     self.title = self.displayName;
     
-    //UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+
     
-    //UIBarButtonItem *replyButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(reply)];
-    
-    //UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(delete)];
-    
-    //UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit)];
-    
-    
+    self.isCurrent = true;
     if (self.isCurrent) {
-        //self.myToolbar.items = [NSArray arrayWithObjects:flexibleSpace, editButton, flexibleSpace, deleteButton, nil];
-        self.myToolbar.items = [NSArray arrayWithObjects:nil];
+        self.myToolbar.items = [NSArray arrayWithObjects:self.replyButton, flexibleSpace, self.editButton, flexibleSpace, self.deleteButton, nil];
 
     }else{
-        self.myToolbar.items = [NSArray arrayWithObjects:nil];
+        self.myToolbar.items = [NSArray arrayWithObjects:self.replyButton, flexibleSpace, nil];
     }
     
     [self loadScrollView];
@@ -435,6 +430,47 @@
     }
    
 	
+}
+
+
+-(void)edit{
+    
+    ReplyEditActivity *tmp = [[ReplyEditActivity alloc] init];
+    tmp.isReply = false;    
+    tmp.originalMessage = self.displayMessage;
+    UINavigationController *navController = [[UINavigationController alloc] init];
+	[navController pushViewController:tmp animated:NO];
+	[self.navigationController presentModalViewController:navController animated:YES];	
+}
+
+-(void)reply{
+    
+    ReplyEditActivity *tmp = [[ReplyEditActivity alloc] init];
+    tmp.isReply = true;
+    UINavigationController *navController = [[UINavigationController alloc] init];
+	[navController pushViewController:tmp animated:NO];
+	[self.navigationController presentModalViewController:navController animated:YES];}
+
+-(void)deleteAction{
+    
+}
+
+-(void)viewDidUnload{
+    
+    replyButton = nil;
+    editButton = nil;
+    voteLabel = nil;
+    likesLabel = nil;
+    dislikesLabel = nil;
+    thumbsUp = nil;
+    thumbsDown = nil;
+    myScrollView = nil;
+    myToolbar = nil;
+    starOne = nil;
+    starTwo = nil;
+    starThree = nil;
+    deleteButton = nil;
+    [super viewDidUnload];
 }
 
 

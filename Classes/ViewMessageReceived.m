@@ -132,7 +132,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
             if (self.teamId == nil) {
                 self.teamId = self.origTeamId;
             }
-            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"true" :@"" :@""];
+            NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"true" :@"" :@"" :@""];
             NSString *status = [response valueForKey:@"status"];
             
             if ([status isEqualToString:@"100"]){
@@ -314,7 +314,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
 			self.teamId = self.origTeamId;
 		}
 		
-		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived"];
+		NSDictionary *response = [ServerAPI updateMessageThread:token :self.teamId :self.threadId :@"" :@"" :@"" :@"archived" :@""];
 		NSString *status1 = [response valueForKey:@"status"];
 		
 		if ([status1 isEqualToString:@"100"]){

@@ -126,8 +126,7 @@
         
         if (![token isEqualToString:@""]){	
             
-            response = [ServerAPI createMessageThread:token :self.teamId :@"(no subject)" :self.theMessageText :@"confirm" :@""
-                                                     :@"" :@"true" :[NSArray array] :self.recipients :@"" :@"true" :@""];	
+            response = [ServerAPI createMessageThread:token teamId:self.teamId subject:@"(no subject)" body:self.theMessageText type:@"confirm" eventId:@"" eventType:@"" isAlert:@"true" pollChoices:[NSArray array] recipients:self.recipients displayResults:@"" includeFans:@"true" coordinatorsOnly:@""];
             
             NSString *status = [response valueForKey:@"status"];
             

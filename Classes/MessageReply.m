@@ -175,8 +175,12 @@ sendButton, origMessageLabel, origMessageDate, replyAlert, keyboardToolbar, theN
                 doAlert = @"true";
                 
             }
-            response = [ServerAPI createMessageThread:token :self.teamId :self.subject :self.theNewMessage :@"plain" :@"" 
-                                                     :@"" :doAlert :[NSArray array] :recipientMemberIds :@"" :@"false" :@""];
+            
+            
+            response = [ServerAPI createMessageThread:token teamId:self.teamId subject:self.subject body:self.theNewMessage type:@"plain" eventId:@"" eventType:@"" isAlert:doAlert pollChoices:[NSArray array] recipients:recipientMemberIds displayResults:@"" includeFans:@"false" coordinatorsOnly:@""];
+            
+            
+            
             
             NSString *status = [response valueForKey:@"status"];
             

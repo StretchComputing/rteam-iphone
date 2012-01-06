@@ -135,9 +135,9 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
         
         NSDictionary *response = [NSDictionary dictionary];
         if (![token isEqualToString:@""]){	
+      
             
-            
-            response = [ServerAPI createMessageThread:token :self.teamId :self.pollSubject :self.questionText :@"poll" :@"" :@"" :@"false" :choices :recip :self.displayResults :@"false" :@""];
+             response = [ServerAPI createMessageThread:token teamId:self.teamId subject:self.pollSubject body:self.questionText type:@"poll" eventId:@"" eventType:@"" isAlert:@"false" pollChoices:choices recipients:recip displayResults:self.displayResults includeFans:@"true" coordinatorsOnly:@""];
             
             NSString *status = [response valueForKey:@"status"];
             

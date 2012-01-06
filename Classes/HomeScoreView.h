@@ -12,6 +12,13 @@
 @interface HomeScoreView : UIViewController {
     
 }
+@property (nonatomic, strong) IBOutlet UIButton *addIntervalButton;
+@property (nonatomic, strong) IBOutlet UIButton *subIntervalButton;;
+
+@property (nonatomic, strong) IBOutlet UIButton *addUsButton;
+@property (nonatomic, strong) IBOutlet UIButton *addThemButton;
+@property (nonatomic, strong) IBOutlet UIButton *subUsButton;
+@property (nonatomic, strong) IBOutlet UIButton *subThemButton;
 @property (nonatomic, strong) NSString *eventDate;
 @property (nonatomic, strong) IBOutlet UIButton *goToButton;
 @property (nonatomic, strong) IBOutlet UIButton *scoreButton;
@@ -35,12 +42,25 @@
 
 @property int initY;
 @property bool isFullScreen;
+@property bool isKeepingScore;
 @property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
 
 -(IBAction)fullScreen;
 -(void)setLabels;
+-(void)doReset;
 
 -(IBAction)goToPage;
 -(IBAction)keepScore;
+
+
+-(IBAction)addInterval;
+-(IBAction)subInterval;
+-(IBAction)addUs;
+-(IBAction)addThem;
+-(IBAction)subUs;
+-(IBAction)subThem;
+
+-(void)setNewInterval;
+
 
 @end
