@@ -455,12 +455,7 @@
                 }
                 
             }
-            
-     
-        
-        
-        
-        
+
         [self performSelectorOnMainThread:
          @selector(didFinishAtt:)
                                withObject:replyResponse
@@ -473,7 +468,48 @@
     
 -(void)didFinishAtt:(NSString *)response{
     
+    
+    if ([self.currentMemberResponse isEqualToString:@"yes"]) {
+        int count = [self.yesCount intValue];
+        count--;
+        self.yesCount = [NSString stringWithFormat:@"%d", count];
+        
+    }else if ([self.currentMemberResponse isEqualToString:@"no"]){
+        int count = [self.noCount intValue];
+        count--;
+        self.noCount = [NSString stringWithFormat:@"%d", count];
+    }else if ([self.currentMemberResponse isEqualToString:@"maybe"]){
+        int count = [self.maybeCount intValue];
+        count--;
+        self.maybeCount = [NSString stringWithFormat:@"%d", count];
+    }else{
+        int count = [self.noReplyCount intValue];
+        count--;
+        self.noReplyCount = [NSString stringWithFormat:@"%d", count];
+    }
+    
     self.currentMemberResponse = [NSString stringWithString:response];
+    
+    
+    if ([self.currentMemberResponse isEqualToString:@"yes"]) {
+        int count = [self.yesCount intValue];
+        count++;
+        self.yesCount = [NSString stringWithFormat:@"%d", count];
+        
+    }else if ([self.currentMemberResponse isEqualToString:@"no"]){
+        int count = [self.noCount intValue];
+        count++;
+        self.noCount = [NSString stringWithFormat:@"%d", count];
+    }else if ([self.currentMemberResponse isEqualToString:@"maybe"]){
+        int count = [self.maybeCount intValue];
+        count++;
+        self.maybeCount = [NSString stringWithFormat:@"%d", count];
+    }else{
+        int count = [self.noReplyCount intValue];
+        count++;
+        self.noReplyCount = [NSString stringWithFormat:@"%d", count];
+    }
+    
     [self setLabels];
         
 }

@@ -162,7 +162,8 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 
 @property int badgeNumber;
 @property (nonatomic, strong) IBOutlet UILabel *serverError;
-
+@property (nonatomic, strong) UIBarButtonItem *gamedayButton;
+@property (nonatomic, strong) UIActionSheet *gamedayAction;
 
 -(IBAction) allEvents;
 -(IBAction) myTeams;

@@ -47,6 +47,7 @@
 #import "SendPoll.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "AddGamePhoto.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -59,7 +60,7 @@ refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, trans
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction;
 
 
 
@@ -496,8 +497,9 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
                                                                       target:self action:@selector(refresh)];
     
 	refresh.style = UIBarButtonItemStylePlain;
-    
-	NSArray *items1 = [NSArray arrayWithObjects:question, flexibleSpace, refresh, nil];
+    self.gamedayButton = [[UIBarButtonItem alloc] initWithTitle:@"GAMEDAY" style:UIBarButtonItemStyleBordered target:self action:@selector(gameday)];
+    self.gamedayButton.tintColor = [UIColor colorWithRed:30.0/255.0 green:155.0/255.0 blue:30.0/255.0 alpha:1.0];
+	NSArray *items1 = [NSArray arrayWithObjects:question, flexibleSpace, self.gamedayButton, flexibleSpace, refresh, nil];
 	self.bottomBar.items = items1;
 	
 		
@@ -2325,57 +2327,89 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
     }else{
+        bool move = true;
         
         if ([sender class] == [AttendingButton class]) {
-            self.homeAttendanceView.view.hidden = NO;
             
             AttendingButton *tmp = (AttendingButton *)sender;
                         
-            homeAttendanceView.teamName = tmp.teamName;
-            homeAttendanceView.eventDate = tmp.eventDate;
-            homeAttendanceView.eventType = tmp.eventType;
-            homeAttendanceView.teamId = tmp.teamId;
-            homeAttendanceView.participantRole = tmp.participantRole;
-            homeAttendanceView.eventId = tmp.eventId;
-            homeAttendanceView.sport = tmp.sport;
-            homeAttendanceView.eventStringDate = tmp.eventStringDate;
+            if ([tmp.canceledLabel.text isEqualToString:@""] || tmp.canceledLabel.text == nil) {
+                self.homeAttendanceView.view.hidden = NO;
 
-            homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
-            homeAttendanceView.currentMemberId = tmp.currentMemberId;
-            homeAttendanceView.messageThreadId = tmp.messageThreadId;
-            homeAttendanceView.eventDescription = tmp.eventDescription;
-
-            homeAttendanceView.yesCount = [NSString stringWithFormat:@"%d", tmp.yes];
-            homeAttendanceView.noCount = [NSString stringWithFormat:@"%d", tmp.no];
-            homeAttendanceView.noReplyCount = [NSString stringWithFormat:@"%d", tmp.noreply];
-            homeAttendanceView.maybeCount = [NSString stringWithFormat:@"%d", tmp.maybe];
-            
-            [homeAttendanceView setLabels];
+                homeAttendanceView.teamName = tmp.teamName;
+                homeAttendanceView.eventDate = tmp.eventDate;
+                homeAttendanceView.eventType = tmp.eventType;
+                homeAttendanceView.teamId = tmp.teamId;
+                homeAttendanceView.participantRole = tmp.participantRole;
+                homeAttendanceView.eventId = tmp.eventId;
+                homeAttendanceView.sport = tmp.sport;
+                homeAttendanceView.eventStringDate = tmp.eventStringDate;
+                
+                homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
+                homeAttendanceView.currentMemberId = tmp.currentMemberId;
+                homeAttendanceView.messageThreadId = tmp.messageThreadId;
+                homeAttendanceView.eventDescription = tmp.eventDescription;
+                
+                homeAttendanceView.yesCount = [NSString stringWithFormat:@"%d", tmp.yes];
+                homeAttendanceView.noCount = [NSString stringWithFormat:@"%d", tmp.no];
+                homeAttendanceView.noReplyCount = [NSString stringWithFormat:@"%d", tmp.noreply];
+                homeAttendanceView.maybeCount = [NSString stringWithFormat:@"%d", tmp.maybe];
+                
+                [homeAttendanceView setLabels];
+            }else{
+                move = false;
+                self.undoEventType = tmp.eventType;
+                self.undoEventId = tmp.eventId;
+                self.undoTeamId = tmp.teamId;
+                
+                self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+                self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
+                [self.undoCancel showInView:self.view];
+            }
+          
         }else{
             
             ScoreButton *tmp = (ScoreButton *)sender;
             
-            homeScoreView.view.hidden = NO;
-            homeScoreView.teamName = tmp.teamName;
-            homeScoreView.scoreUs = tmp.scoreUs;
-            homeScoreView.scoreThem = tmp.scoreThem;
-            homeScoreView.interval = tmp.interval;
-            
-            homeScoreView.eventDate = tmp.eventDate;
+            if ([tmp.canceledLabel.text isEqualToString:@""] || tmp.canceledLabel.text == nil) {
+                
+                homeScoreView.view.hidden = NO;
+                homeScoreView.teamName = tmp.teamName;
+                homeScoreView.scoreUs = tmp.scoreUs;
+                homeScoreView.scoreThem = tmp.scoreThem;
+                homeScoreView.interval = tmp.interval;
+                
+                homeScoreView.eventDate = tmp.eventDate;
+                
+                homeScoreView.teamId = tmp.teamId;
+                homeScoreView.eventDescription = tmp.eventDescription;
+                
+                homeScoreView.participantRole = tmp.participantRole;
+                homeScoreView.eventId = tmp.eventId;
+                homeScoreView.sport = tmp.sport;
+                
+                homeScoreView.eventStringDate = tmp.eventStringDate;
+                
+                [homeScoreView setLabels];
 
-            homeScoreView.teamId = tmp.teamId;
-            homeScoreView.eventDescription = tmp.eventDescription;
-
-            homeScoreView.participantRole = tmp.participantRole;
-            homeScoreView.eventId = tmp.eventId;
-            homeScoreView.sport = tmp.sport;
-            
-            homeScoreView.eventStringDate = tmp.eventStringDate;
-
-            [homeScoreView setLabels];
+            }else{
+                move = false;
+                
+                self.undoEventType = @"game";
+                self.undoEventId = tmp.eventId;
+                self.undoTeamId = tmp.teamId;
+                
+                self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+                self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
+                [self.undoCancel showInView:self.view];
+            }
         }
         
-        [self moveDivider];
+        if (move) {
+            [self moveDivider];
+
+        }
+        
 
     }
     
@@ -2969,7 +3003,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 		}
 		
-	}else {
+	}else if (actionSheet == self.gamedayAction){
+        
+        if (buttonIndex == 0) {
+            
+        }else if (buttonIndex == 1){
+            
+        }else if (buttonIndex == 2){
+            
+        }else{
+            
+        }
+        
+    }else {
 		[FastActionSheetHome doAction:self :buttonIndex];
 
 	}
@@ -3035,14 +3081,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if (mainDelegate.token != nil){
             token = mainDelegate.token;
         }
-        
+                
         if ([self.undoEventType isEqualToString:@"game"]) {
             
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI deleteGame:token :self.undoTeamId :self.undoEventId];
                 
                 NSString *status = [response valueForKey:@"status"];
-                
+                                
                 if ([status isEqualToString:@"100"]){
                     
                     
@@ -3670,6 +3716,32 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 
 	
+}
+
+-(void)gameday{
+    
+    self.gamedayAction = [[UIActionSheet alloc] initWithTitle:@"*Gameday Actions*" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Score Now!", @"Take a Photo", @"Add An Event", nil];
+
+    UIView *greenView = [[UIView alloc] initWithFrame:CGRectMake(0, 23, 320, 480)]; 
+    greenView.backgroundColor = [UIColor colorWithRed:30.0/255.0 green:155.0/255.0 blue:30.0/255.0 alpha:1.0];
+    greenView.alpha = 1.0; 
+    
+    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 23)];
+    topView.backgroundColor = [UIColor colorWithRed:30.0/255.0 green:185.0/255.0 blue:30.0/255.0 alpha:1.0];
+    topView.alpha = 0.70;
+    
+    for (UIView *view in [self.gamedayAction subviews]) {
+       
+        if ([view class] == [UIView class]) {
+             [view removeFromSuperview];
+        }
+    }
+    
+    [self.gamedayAction addSubview:topView];
+    [self.gamedayAction addSubview:greenView]; 
+    [self.gamedayAction sendSubviewToBack:topView];
+    [self.gamedayAction sendSubviewToBack:greenView];
+    [self.gamedayAction showInView:self.view];
 }
 
 - (void)dealloc {
