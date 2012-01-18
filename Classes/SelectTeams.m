@@ -171,6 +171,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         ActivityPost *tmp = [viewControllers objectAtIndex:[viewControllers count] - 2];
         tmp.savedTeams = true;
         tmp.selectedTeams = [NSMutableArray arrayWithArray:self.rowsSelected];
+        Team *tmpTeam = [self.myTeams objectAtIndex:row];
+        tmp.postTeamId = [NSString stringWithString:tmpTeam.teamId];
         
         [self.navigationController popToViewController:tmp animated:YES];
     }

@@ -25,7 +25,7 @@
 
 
 @implementation HomeAttendanceView
-@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId;
+@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate;
 
 - (void)viewDidLoad
 {
@@ -137,8 +137,10 @@
         if ([status isEqualToString:@"100"]) {
             //success
             didSucceed = @"yes";
+            self.messageThreadId = [response valueForKey:@"messageThreadId"];
         }else{
             didSucceed = @"no";
+            self.messageThreadId = @"";
         }
 
         
@@ -160,6 +162,14 @@
         self.pollLabel.text = @"*Poll Failed to Send*";
     }
     
+    [self performSelector:@selector(resetUi) withObject:nil afterDelay:1.0];
+    
+}
+
+-(void)resetUi{
+    self.pollButton.hidden = NO;
+    self.pollLabel.hidden = YES;
+    [self setLabels];
 }
 -(void)goToPage{
         
@@ -184,14 +194,16 @@
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
             currentNotes.sport = self.sport;
-            //*******currentNotes.description = tmpEvent.description;
-            currentNotes.startDate = self.eventDate;
+            currentNotes.startDate = self.eventStringDate;
             currentNotes.opponentString = @"";
+            currentNotes.description = self.description;
+            
+  
             
             GameAttendance *currentAttendance = [tmpViews objectAtIndex:1];
             currentAttendance.gameId = self.eventId;
             currentAttendance.teamId = tmpTeamId;
-            currentAttendance.startDate = self.eventDate;
+            currentAttendance.startDate = self.eventStringDate;
             
             Vote *fans = [tmpViews objectAtIndex:2];
             fans.teamId = self.teamId;
@@ -228,8 +240,8 @@
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
             currentNotes.sport = self.sport;
-            currentNotes.description = self.description;
-            currentNotes.startDate = self.eventDate;
+            currentNotes.description = self.eventDescription;
+            currentNotes.startDate = self.eventStringDate;
             currentNotes.opponentString = @"";
             
             Vote *fans = [tmpViews objectAtIndex:1];
@@ -278,13 +290,14 @@
         currentNotes.practiceId = self.eventId;
         currentNotes.teamId = tmpTeamId;
         currentNotes.userRole = tmpUserRole;
+        currentNotes.descriptionString = self.eventDescription;
         
         
         PracticeAttendance *currentAttendance = [tmpViews objectAtIndex:1];
         currentAttendance.practiceId = self.eventId;
         currentAttendance.teamId = tmpTeamId;
         currentAttendance.userRole = self.participantRole;
-        currentAttendance.startDate = self.eventDate;
+        currentAttendance.startDate = self.eventStringDate;
         
         UINavigationController *navController = [[UINavigationController alloc] init];
         
@@ -321,14 +334,15 @@
         currentNotes.eventId = self.eventId;
         currentNotes.teamId = tmpTeamId;
         currentNotes.userRole = tmpUserRole;
-        
+        currentNotes.descriptionString = self.eventDescription;
+
         
         EventAttendance *currentAttendance = [tmpViews objectAtIndex:1];
         currentAttendance.eventId = self.eventId;
         currentAttendance.teamId = tmpTeamId;
         currentAttendance.userRole = self.participantRole;
         
-        currentAttendance.startDate = self.eventDate;
+        currentAttendance.startDate = self.eventStringDate;
 		
         
         UINavigationController *navController = [[UINavigationController alloc] init];

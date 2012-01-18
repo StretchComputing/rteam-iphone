@@ -1733,6 +1733,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.teamId = tmp1.teamId;
                             tmp1Button.eventId = tmp1.eventId;
                             tmp1Button.sport = tmp1.sport;
+                            tmp1Button.eventDescription = tmp1.eventDescription;
                             
                             tmp1Button.currentMemberId = tmp1.currentMemberId;
                             tmp1Button.currentMemberResponse = tmp1.currentMemberResponse;
@@ -1751,6 +1752,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             }
                             
                             NSString *startDate = tmp1.eventDate;
+                            tmp1Button.eventStringDate = tmp1.eventDate;
                             
                             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
                             [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
@@ -1786,8 +1788,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.teamId = tmp1.teamId;
                             tmp1Button.eventId = tmp1.eventId;
                             tmp1Button.sport = tmp1.sport;
-                            
+                            tmp1Button.eventDescription = tmp1.eventDescription;
+
                             tmp1Button.eventDate = tmp1.eventDate;
+                            tmp1Button.eventStringDate = tmp1.eventDate;
 
                             
                             if (![tmp1.teamName isEqualToString:@""]) {
@@ -1860,7 +1864,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         
                         EventNowButton *tmp1Button = [[EventNowButton alloc] initWithFrame:CGRectMake(56, 25, 50, 50)];
                         tmp1Button.event = tmp1;
-                        
+                        tmp1Button.eventDescription = tmp1.eventDescription;
+
                         if (![tmp1.teamName isEqualToString:@""]) {
                             tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
                         }else {
@@ -1903,6 +1908,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.no = tmp1.no;
                             tmp1Button.maybe = tmp1.maybe;
                             tmp1Button.noreply = tmp1.noreply;
+                            tmp1Button.eventDescription = tmp1.eventDescription;
+                            tmp1Button.eventStringDate = tmp1.eventDate;
 
                             
                             tmp1Button.currentMemberId = tmp1.currentMemberId;
@@ -1948,7 +1955,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             //present, future, display normally
                             EventNowButton *tmp1Button = [[EventNowButton alloc] initWithFrame:CGRectMake(56, 25, 50, 50)];
                             tmp1Button.event = tmp1;
-                            
+                            tmp1Button.eventDescription = tmp1.eventDescription;
+                            tmp1Button.eventStringDate = tmp1.eventDate;
+
                             if (![tmp1.teamName isEqualToString:@""]) {
                                 tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
                             }else {
@@ -1994,8 +2003,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.no = tmp2.no;
                                 tmp2Button.maybe = tmp2.maybe;
                                 tmp2Button.noreply = tmp2.noreply;
+                                tmp2Button.eventStringDate = tmp2.eventDate;
 
-                                
+                                tmp2Button.eventDescription = tmp2.eventDescription;
+
                                 tmp2Button.currentMemberId = tmp2.currentMemberId;
                                 tmp2Button.currentMemberResponse = tmp2.currentMemberResponse;
                                 tmp2Button.messageThreadId = tmp2.messageThreadId;
@@ -2044,7 +2055,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.teamId = tmp2.teamId;
                                 tmp2Button.eventId = tmp2.eventId;
                                 tmp2Button.sport = tmp2.sport;
-                                
+                                tmp2Button.eventDescription = tmp2.eventDescription;
+                                tmp2Button.eventStringDate = tmp2.eventDate;
+
                                 tmp2Button.eventDate = tmp2.eventDate;
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
@@ -2114,7 +2127,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             
                             EventNowButton *tmp2Button = [[EventNowButton alloc] initWithFrame:CGRectMake(216, 25, 50, 50)];
                             tmp2Button.event = tmp2;
-                            
+                            tmp2Button.eventDescription = tmp2.eventDescription;
+                            tmp2Button.eventStringDate = tmp2.eventDate;
+
                             if (![tmp2.teamName isEqualToString:@""]) {
                                 tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
                             }else {
@@ -2152,6 +2167,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.teamId = tmp2.teamId;
                                 tmp2Button.eventId = tmp2.eventId;
                                 tmp2Button.sport = tmp2.sport;
+                                tmp2Button.eventDescription = tmp2.eventDescription;
+                                tmp2Button.eventStringDate = tmp2.eventDate;
 
                                 tmp2Button.yes = tmp2.yes;
                                 tmp2Button.no = tmp2.no;
@@ -2202,7 +2219,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 //present, future, display normally
                                 EventNowButton *tmp2Button = [[EventNowButton alloc] initWithFrame:CGRectMake(216, 25, 50, 50)];
                                 tmp2Button.event = tmp2;
-                                
+                                tmp2Button.eventDescription = tmp2.eventDescription;
+                                tmp2Button.eventStringDate = tmp2.eventDate;
+
                                 if (![tmp2.teamName isEqualToString:@""]) {
                                     tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
                                 }else {
@@ -2264,7 +2283,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeAttendanceView.participantRole = tmp.participantRole;
             homeAttendanceView.eventId = tmp.eventId;
             homeAttendanceView.sport = tmp.sport;
-            
+            homeAttendanceView.eventDescription = tmp.eventDescription;
+            homeAttendanceView.eventStringDate = tmp.eventStringDate;
             
             homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
             homeAttendanceView.currentMemberId = tmp.currentMemberId;
@@ -2291,6 +2311,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeScoreView.interval = tmp.interval;
             
             homeScoreView.eventDate = tmp.eventDate;
+            homeScoreView.eventDescription = tmp.eventDescription;
+            homeScoreView.eventStringDate = tmp.eventStringDate;
 
             
             homeScoreView.teamId = tmp.teamId;
@@ -2316,10 +2338,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeAttendanceView.participantRole = tmp.participantRole;
             homeAttendanceView.eventId = tmp.eventId;
             homeAttendanceView.sport = tmp.sport;
+            homeAttendanceView.eventStringDate = tmp.eventStringDate;
 
             homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
             homeAttendanceView.currentMemberId = tmp.currentMemberId;
             homeAttendanceView.messageThreadId = tmp.messageThreadId;
+            homeAttendanceView.eventDescription = tmp.eventDescription;
 
             homeAttendanceView.yesCount = [NSString stringWithFormat:@"%d", tmp.yes];
             homeAttendanceView.noCount = [NSString stringWithFormat:@"%d", tmp.no];
@@ -2340,12 +2364,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeScoreView.eventDate = tmp.eventDate;
 
             homeScoreView.teamId = tmp.teamId;
-            
+            homeScoreView.eventDescription = tmp.eventDescription;
+
             homeScoreView.participantRole = tmp.participantRole;
             homeScoreView.eventId = tmp.eventId;
             homeScoreView.sport = tmp.sport;
             
-            
+            homeScoreView.eventStringDate = tmp.eventStringDate;
+
             [homeScoreView setLabels];
         }
         

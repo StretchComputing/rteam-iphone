@@ -34,7 +34,8 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
     [TraceSession addEventToSession:@"Gameday Page - Edit Button Clicked"];
 
 	GameEdit *editGame = [[GameEdit alloc] init];
-	
+
+    
 	editGame.stringDate = self.startDate;
 	editGame.opponent = self.opponentString;
 	editGame.description = self.description;

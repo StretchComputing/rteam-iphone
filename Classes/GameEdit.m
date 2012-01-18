@@ -52,13 +52,17 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 	self.gameOpponent.text = self.opponent;
 	self.gameDescription.text = self.description;
 	self.gameDescription.delegate = self;
-	
-	
+		
 	NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
 	
-	if (self.fromDateChange != YES){
-		self.fromDateChange = NO;
+  
+    if (self.fromDateChange == nil) {
+        self.fromDateChange = @"";
+    }
+    
+	if ([self.fromDateChange isEqualToString:@""]){
+        self.fromDateChange = @"";
 		self.gameDateObject = [dateFormat dateFromString:self.stringDate];
 	}
 	

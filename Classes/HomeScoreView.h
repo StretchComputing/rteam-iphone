@@ -12,6 +12,8 @@
 @interface HomeScoreView : UIViewController {
     
 }
+@property (nonatomic, strong) NSString *eventStringDate;
+@property (nonatomic, strong) NSString *eventDescription;
 @property (nonatomic, strong) IBOutlet UIButton *addIntervalButton;
 @property (nonatomic, strong) IBOutlet UIButton *subIntervalButton;;
 

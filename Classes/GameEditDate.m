@@ -42,7 +42,7 @@
 	
 	GameEdit *cont = [temp objectAtIndex:num];
 	cont.gameDateObject = self.gameDatePicker.date;
-	cont.fromDateChange = YES;
+	cont.fromDateChange = @"yes";
 	[self.navigationController popToViewController:cont animated:YES];
 	
 }

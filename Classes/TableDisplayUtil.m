@@ -117,6 +117,7 @@
         starOne.hidden = NO;
         starTwo.hidden = NO;
         starThree.hidden = NO;
+        teamLabel.hidden = NO;
 
    
         

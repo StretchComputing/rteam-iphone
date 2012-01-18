@@ -12,7 +12,9 @@
 @interface EventNowButton : UIButton {
     
 
-}
+} 
+@property (nonatomic, strong) NSString *eventStringDate;
+@property (nonatomic, strong) NSString *eventDescription;
 @property (nonatomic, strong) NSString *sport;
 @property (nonatomic, strong) NSString *participantRole;
 @property (nonatomic, strong) NSString *teamId;

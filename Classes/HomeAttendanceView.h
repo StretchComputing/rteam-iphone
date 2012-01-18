@@ -13,6 +13,9 @@
 
     
 }
+@property (nonatomic, strong) NSString *eventStringDate;
+
+@property (nonatomic, strong) NSString *eventDescription;
 @property (nonatomic, strong) NSString *messageThreadId;
 
 @property (nonatomic, strong) IBOutlet UILabel *statusReply;

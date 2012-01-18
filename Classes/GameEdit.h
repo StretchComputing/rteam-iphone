@@ -39,7 +39,7 @@
 @property (nonatomic, strong) NSDate *gameDateObject;
 @property (nonatomic, strong) IBOutlet UILabel *errorMessage;
 
-@property bool fromDateChange;
+@property (nonatomic, strong) NSString *fromDateChange;
 @property bool createSuccess;
 
 -(IBAction)deleteGame;

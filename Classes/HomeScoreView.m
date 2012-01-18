@@ -17,7 +17,7 @@
 #import "ServerAPI.h"
 
 @implementation HomeScoreView
-@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore;
+@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate;
 
 - (void)viewDidLoad
 {
@@ -202,14 +202,14 @@
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
             currentNotes.sport = self.sport;
-            //*******currentNotes.description = tmpEvent.description;
-            currentNotes.startDate = self.eventDate;
+            currentNotes.description = self.eventDescription;
+            currentNotes.startDate = self.eventStringDate;
             currentNotes.opponentString = @"";
             
             GameAttendance *currentAttendance = [tmpViews objectAtIndex:1];
             currentAttendance.gameId = self.eventId;
             currentAttendance.teamId = tmpTeamId;
-            currentAttendance.startDate = self.eventDate;
+            currentAttendance.startDate = self.eventStringDate;
             
             Vote *fans = [tmpViews objectAtIndex:2];
             fans.teamId = self.teamId;
@@ -246,8 +246,8 @@
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
             currentNotes.sport = self.sport;
-            currentNotes.description = self.description;
-            currentNotes.startDate = self.eventDate;
+            currentNotes.description = self.eventDescription;
+            currentNotes.startDate = self.eventStringDate;
             currentNotes.opponentString = @"";
             
             Vote *fans = [tmpViews objectAtIndex:1];
