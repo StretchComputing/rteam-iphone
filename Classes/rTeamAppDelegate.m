@@ -57,7 +57,7 @@
 @implementation rTeamAppDelegate
 
 @synthesize window;
-@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData, crashInstanceUrl, lastTwenty, lastTwentyTime;
+@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData, crashInstanceUrl, lastTwenty, lastTwentyTime, messageImageDictionary, replyDictionary;
 
 - (id) init {
 
@@ -179,6 +179,11 @@
 	displayedConnectionError = NO;
     
 	initChange = false;
+    
+    self.messageImageDictionary = [NSMutableDictionary dictionary];
+    self.replyDictionary = [NSMutableDictionary dictionary];
+
+    
 	return self;
 	
 }
@@ -571,5 +576,14 @@
 
 
 
+//On memory warning, reset the image dictionarys to free up memory
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application{
+    
+    self.replyDictionary = [NSMutableDictionary dictionary];
+    self.messageImageDictionary = [NSMutableDictionary dictionary];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object: [UIApplication sharedApplication]];
+    
+}
 
 @end

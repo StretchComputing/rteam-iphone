@@ -15,6 +15,7 @@
 #import "QuartzCore/QuartzCore.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "Home.h"
 
 @implementation NewEvent2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, location, eventName, description, start, errorString, theLocation, theDescription, theEventName;
@@ -215,6 +216,17 @@
                 
             }
 			
+            if ([[tempCont objectAtIndex:tempNum - 1] class] == [Home class]) {
+                
+                Home *cont = [tempCont objectAtIndex:tempNum-1];
+                [self.navigationController popToViewController:cont animated:YES];
+                
+            }else if ([[tempCont objectAtIndex:tempNum] class] == [Home class]) {
+                
+                Home *cont = [tempCont objectAtIndex:tempNum];
+                [self.navigationController popToViewController:cont animated:YES];
+                
+            }
 		}
         
 	}else{

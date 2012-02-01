@@ -13,12 +13,15 @@
 #import "Base64.h"
 #import "MessageThreadInbox.h"
 #import "MessageThreadOutbox.h"
+#import "rTeamAppDelegate.h"
+#import "ReplyButtonBackView.h"
 
 @implementation TableDisplayUtil
 
 //Set up the view for each cell Everyone
 +(UITableViewCell *)setUpTableViewCellWithArray:(NSMutableArray *)messageArray fromClass:(id)sentClass forIndexPath:(NSIndexPath *)indexPath andTableView:(UITableView *)tableView{
     
+    rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
     NSUInteger row = [indexPath row];
         
     NSMutableArray *arrayToUse = [NSMutableArray arrayWithArray:messageArray];
@@ -52,6 +55,14 @@
     UIImageView *starThree = (UIImageView *)[cell.contentView viewWithTag:8];
     UIView *imageBack = (UIView *)[cell.contentView viewWithTag:14];
     ImageButton *insideImageView = (ImageButton *)[cell.contentView viewWithTag:11];
+    
+    UIView *replyBackView = (UIView *)[cell.contentView viewWithTag:15];
+    UIView *replyFrontView = (UIView *)[cell.contentView viewWithTag:16];
+    UILabel *replyLabel = (UILabel *)[cell.contentView viewWithTag:17];
+    UIView *replyTextView = (UIView *)[cell.contentView viewWithTag:18];
+    UIView *replySeparator = (UIView *)[cell.contentView viewWithTag:19];
+    UIImageView *arrowView = (UIImageView *)[cell.contentView viewWithTag:20];
+
 
     
     imageBack.backgroundColor = [UIColor blackColor];
@@ -70,6 +81,12 @@
     starOne.autoresizingMask = UIViewAutoresizingNone;
     starTwo.autoresizingMask = UIViewAutoresizingNone;
     starThree.autoresizingMask = UIViewAutoresizingNone;
+    replyLabel.autoresizingMask = UIViewAutoresizingNone;
+    replyBackView.autoresizingMask = UIViewAutoresizingNone;
+    replyFrontView.autoresizingMask = UIViewAutoresizingNone;
+    replyTextView.autoresizingMask = UIViewAutoresizingNone;
+    replySeparator.autoresizingMask = UIViewAutoresizingNone;
+    arrowView.autoresizingMask = UIViewAutoresizingNone;
 
     
     messageText.font = [UIFont fontWithName:@"Helvetica" size:14];
@@ -89,6 +106,16 @@
     teamLabel.textColor = [UIColor blueColor];
     teamLabel.backgroundColor = [UIColor clearColor];
     
+    replyTextView.backgroundColor = [UIColor clearColor];
+    
+    replyLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    replyLabel.textColor = [UIColor blackColor];
+    replyLabel.backgroundColor = [UIColor clearColor];
+    replyLabel.textAlignment = UITextAlignmentCenter;
+    
+    replySeparator.backgroundColor = [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:190.0/255.0 alpha:1.0];
+
+    
     if ([arrayToUse count] == 0) {
         
         profileImageView.hidden = YES;
@@ -100,7 +127,8 @@
         starTwo.hidden = YES;
         starOne.hidden = YES;
         starThree.hidden = YES;
-    
+        replyBackView.hidden = YES;
+        arrowView.hidden = YES;
         
         nameLabel.frame = CGRectMake(0, 0, 310, 35);
         nameLabel.text = @"No messages found...";
@@ -119,12 +147,13 @@
         starThree.hidden = NO;
         teamLabel.hidden = NO;
 
-   
+        replyBackView.hidden = YES;
+
         
         nameLabel.textAlignment = UITextAlignmentLeft;
         
         Activity *result = [arrayToUse objectAtIndex:row];
-        
+                    
         //Profile Image
         profileImageView.frame = CGRectMake(5, 5, 40, 40);
         profileImageView.image = [UIImage imageNamed:@"profileNew.png"];
@@ -148,10 +177,6 @@
 		starOne.image = [UIImage imageNamed:starImageOne];
         starTwo.image = [UIImage imageNamed:starImageTwo];
         starThree.image = [UIImage imageNamed:starImageThree];
-        
-        
-
-        
         
         //Name Label
         nameLabel.frame = CGRectMake(55, 5, 210, 18);
@@ -177,13 +202,15 @@
         messageText.text = result.activityText;
         messageText.frame = CGRectMake(50, 42, 265, 100);
         CGRect frame = messageText.frame;
-        frame.size.height = [TableDisplayUtil findHeightForString:result.activityText withWidth:messageText.frame.size.width - 15] + 15;
+        frame.size.height = [TableDisplayUtil findHeightForString:result.activityText withWidth:messageText.frame.size.width - 20] + 15;
         messageText.frame = frame;
         int imageStart = 41 + messageText.frame.size.height;
+        int replyStart = 47 + messageText.frame.size.height;
+
         
  
         //Inside Image 
-        NSString *tmpThumbnail = result.thumbnail;
+        NSString *tmpThumbnail = [mainDelegate.messageImageDictionary valueForKey:result.activityId];
         bool isImage = false;
 
         for (UIView *view in [imageBack subviews]) {
@@ -202,6 +229,7 @@
         if ((tmpThumbnail != nil)  && (![tmpThumbnail isEqualToString:@""])){
             isImage = true;
       
+            replyStart += 90;
             NSData *profileData = [Base64 decode:tmpThumbnail];
             insideImageView.hidden = NO;
             insideImageView.messageId = result.activityId;
@@ -252,10 +280,6 @@
             insideImageView.frame = CGRectMake(52, imageStart, 82, 82);
             insideImageView.backgroundColor = [UIColor clearColor];
             
-           
-        
-            
-            
             [cell.contentView bringSubviewToFront:insideImageView];
    
         }else{
@@ -264,7 +288,287 @@
 
         } 
         
+        //Check For Replies
                 
+        //Replies
+        replyBackView.frame = CGRectMake(5, 0, 310, 20);
+        replyLabel.hidden= YES;
+        replySeparator.hidden = YES;
+        replyFrontView.hidden = YES;
+        
+        for (UIView *view in replyBackView.subviews) {
+            [view removeFromSuperview];
+        }
+        
+        arrowView.hidden = YES;
+        
+        bool areOlderReplies = false;
+        
+        
+        NSArray *resultReplies = [mainDelegate.replyDictionary valueForKey:result.activityId];
+        
+        if ([resultReplies count] > 0) {
+            
+            replyBackView.hidden = NO;
+            
+            replyBackView.frame = CGRectMake(5, replyStart, 310, 100);
+            
+            int totalImgAdjust = 0;
+            
+            int totalLoopCount = 0;
+            
+            if ([resultReplies count] > 3) {
+                areOlderReplies = true;
+                totalLoopCount = 3;
+            }else{
+                totalLoopCount = [resultReplies count];
+            }
+            
+            for (int i = 0; i < totalLoopCount; i++) {
+                
+                if (areOlderReplies) {
+                    
+                    UIView *replyBack = [[UIView alloc] initWithFrame:CGRectMake(5, 0, 300, 25)];
+                    replyBack.backgroundColor= [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0];
+                    //replyBackView.contentMode = UIViewContentModeScaleToFill;
+                    //replyBack.image = [UIImage imageNamed:@"middleRow.png"];
+                    totalImgAdjust += 25;
+                    
+                    UIView *replyFront = [[UIView alloc] initWithFrame:CGRectMake(1, 1, 298, 23)];
+                    replyFront.backgroundColor= [UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1.0];
+                    
+                    [replyBack addSubview:replyFront];
+                    
+                    UILabel *otherReplyLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 0, 275, 25)];
+                    otherReplyLabel.textColor = [UIColor darkTextColor];
+                    otherReplyLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+                    otherReplyLabel.backgroundColor = [UIColor clearColor];
+                    int count = [resultReplies count] - 3;
+                    
+                    if (count == 1) {
+                        otherReplyLabel.text = @"1 older reply";
+                    }else{
+                        otherReplyLabel.text = [NSString stringWithFormat:@"%d older replies", count];
+                    }
+                    
+                    [replyBack addSubview:otherReplyLabel];
+                    
+                    [replyBackView addSubview:replyBack];
+                    
+                    areOlderReplies = false;
+                    i--;
+                    
+                }else{
+                    
+                    Activity *theReply = [resultReplies objectAtIndex:i];
+                    
+                    NSString *currentReplyText = [NSString stringWithFormat:@"%@", theReply.activityText];
+                                        
+                    int subHeight = [TableDisplayUtil findHeightForString13:currentReplyText withWidth:260];
+                    //subHeight += 16;
+                    
+                    if (subHeight < 25) {
+                        subHeight = 25;
+                    }
+                    
+                    if (subHeight >= 32) {
+                        subHeight = 45;
+                    }
+                    
+                    
+                    int addImageHeight = 0;
+                    
+                   
+                    if ([mainDelegate.messageImageDictionary valueForKey:theReply.activityId] != nil) {
+                        
+                        NSString *tmpThumbnail = [mainDelegate.messageImageDictionary valueForKey:theReply.activityId];
+                        
+                        if ([tmpThumbnail length] > 0) {
+                                
+                            addImageHeight = 50;
+                        }
+                        
+                    }
+                    
+                    
+                    //Pull the y-origin down if its a one liner
+                    int plusY = 0;
+                    if (subHeight == 25) {
+                        plusY = 2;
+                    }
+                    UIView *replyBack = [[UIView alloc] initWithFrame:CGRectMake(5, totalImgAdjust, 300, 15 + subHeight + addImageHeight)];
+  
+                    replyBack.backgroundColor= [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0];
+                    
+                    totalImgAdjust += subHeight + 15 + addImageHeight;
+                    
+                    UIView *replyFront = [[UIView alloc] initWithFrame:CGRectMake(1, 1, replyBack.frame.size.width -2 , replyBack.frame.size.height - 2)];
+                    replyFront.backgroundColor= [UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1.0];
+                    
+                    [replyBack addSubview:replyFront];
+                    
+                    UIImageView *replyProfile = [[UIImageView alloc] initWithFrame:CGRectMake(3, 5, 30, 30)];
+                    
+                    //if ([mainDelegate.imageDictionary valueForKey:theReply.profile] != nil) {
+                        
+                      //  NSData *tmpData = [mainDelegate.imageDictionary valueForKey:theReply.profile];
+                        //UIImage *myImage = [UIImage imageWithData:tmpData];
+                        //replyProfile.image = myImage;
+                    //}else{
+
+                    replyProfile.image = [UIImage imageNamed:@"profileNew.png"];
+                        
+                    //}
+                    
+                    
+                    UILabel *newReplyTextView = [[UILabel alloc] initWithFrame:CGRectMake(37, 12 + plusY, 261, subHeight)];
+                    newReplyTextView.font = [UIFont fontWithName:@"Helvetica" size:13];
+                    newReplyTextView.textColor = [UIColor blackColor];
+                    newReplyTextView.backgroundColor = [UIColor clearColor];
+                    newReplyTextView.text = currentReplyText;
+                    newReplyTextView.userInteractionEnabled = NO;
+                    newReplyTextView.numberOfLines = 2;
+                    newReplyTextView.adjustsFontSizeToFitWidth = NO;                    
+                    
+                    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 2, 195, 18)];
+                    nameLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
+                    nameLabel.textColor = [UIColor blackColor];
+                    nameLabel.text = theReply.senderName;
+                    nameLabel.backgroundColor = [UIColor clearColor];
+
+                    CGSize constr = CGSizeMake(195, 100);
+                    CGSize sizeForWidth = [nameLabel.text sizeWithFont:[UIFont fontWithName:@"Helvetica-Bold" size:13] constrainedToSize:constr];
+                    UILabel *botDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(35 + sizeForWidth.width + 5, 2, 29, 18)];
+                    botDateLabel.font = [UIFont fontWithName:@"Helvetica" size:11];
+                    botDateLabel.text = [NSString stringWithFormat:@"• %@", [TableDisplayUtil getDateLabelReply:theReply.createdDate]];
+                    botDateLabel.backgroundColor = [UIColor clearColor];
+                    botDateLabel.textColor = [UIColor grayColor];
+                    
+                    
+                    
+                    if ([mainDelegate.messageImageDictionary valueForKey:theReply.activityId] != nil) {
+                        
+                        NSString *tmpThumbnail = [mainDelegate.messageImageDictionary valueForKey:theReply.activityId];
+                        
+                        if ([tmpThumbnail length] > 0) {
+                            
+                                
+                                ReplyButtonBackView *replyBackOne = [[ReplyButtonBackView alloc] initWithFrame:CGRectMake(0, 0, 82, 82)];
+                                replyBackOne.backgroundColor = [UIColor blackColor];
+                                
+                                ImageButton *replyImageOne = [ImageButton buttonWithType:UIButtonTypeCustom];
+                                replyImageOne.messageId = theReply.activityId;
+                                replyImageOne.frame = CGRectMake(1, 1, 48, 48);
+                                
+                                
+                                [replyImageOne setImage:[UIImage imageWithData:[Base64 decode:tmpThumbnail]] forState:UIControlStateNormal];
+                                [replyImageOne addTarget:sentClass action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
+                                
+                                replyBackOne.frame = CGRectMake(38,12 + subHeight, 50, 50);
+                                
+                                [replyBackOne addSubview:replyImageOne];
+                                replyBackOne.autoresizingMask = UIViewAutoresizingNone;
+                                
+                                
+                                replyBackOne.layer.masksToBounds = YES;
+                                replyBackOne.layer.cornerRadius = 4.0;
+                                replyImageOne.layer.masksToBounds = YES;
+                                replyImageOne.layer.cornerRadius = 4.0; 
+                                
+                                [replyBack addSubview:replyBackOne];
+                                
+                                replyImageOne.userInteractionEnabled = YES;
+                                replyBackOne.userInteractionEnabled = YES;
+                                
+                                /*
+                                if ([arrayOfData count] > 1) {
+                                    
+                                    if ([[arrayOfData objectAtIndex:0] length] > 0) {
+                                        
+                                        ReplyButtonBackView *replyBackTwo = [[ReplyButtonBackView alloc] initWithFrame:CGRectMake(0, 0, 82, 82)];
+                                        replyBackTwo.backgroundColor = [UIColor blackColor];
+                                        
+                                        ImageButton *replyImageTwo = [ImageButton buttonWithType:UIButtonTypeCustom];
+                                        replyImageTwo.messageId = theReply.activityId;
+                                        replyImageTwo.frame = CGRectMake(1, 1, 48, 48);
+                                        
+                                        
+                                        
+                                        
+                                        [replyImageTwo setImage:[UIImage imageWithData:[arrayOfData objectAtIndex:1]] forState:UIControlStateNormal];
+                                        [replyImageTwo addTarget:sentClass action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
+                                        
+                                        replyBackTwo.frame = CGRectMake(98,12 + subHeight, 50, 50);
+                                        
+                                        [replyBackTwo addSubview:replyImageTwo];
+                                        replyBackTwo.autoresizingMask = UIViewAutoresizingNone;
+                                        
+                                        
+                                        replyBackTwo.layer.masksToBounds = YES;
+                                        replyBackTwo.layer.cornerRadius = 4.0;
+                                        replyImageTwo.layer.masksToBounds = YES;
+                                        replyImageTwo.layer.cornerRadius = 4.0; 
+                                        
+                                        [replyBack addSubview:replyBackTwo];
+                                        
+                                        replyImageTwo.userInteractionEnabled = YES;
+                                        replyBackTwo.userInteractionEnabled = YES;
+                                        
+                                        
+                                    }
+                                    
+                                }
+                                 */
+                            
+                        }
+                        
+                    }
+                    
+                    [replyBack addSubview:botDateLabel];
+                    [replyBack addSubview:nameLabel];
+                    [replyBack addSubview:newReplyTextView];
+                    [replyBack addSubview:replyProfile];
+                    
+                    [replyBackView addSubview:replyBack];
+                    
+                    replyBack.userInteractionEnabled = YES;
+                    
+                }
+                
+                
+            }
+            
+            CGRect frame3 = replyBackView.frame;
+            
+            
+            frame3.size.height = totalImgAdjust;
+            
+            
+            replyBackView.frame = frame3;
+            
+            replyBackView.userInteractionEnabled = NO;
+            
+            
+            
+            if (isImage) {
+                arrowView.frame = CGRectMake(35, replyStart - 13, 20, 20);
+                
+            }else{
+                arrowView.frame = CGRectMake(43, replyStart - 13, 20, 20);
+            }
+            
+            arrowView.image = [UIImage imageNamed:@"replyArrow.png"];
+            arrowView.hidden = NO;
+            
+            replyBackView.userInteractionEnabled = YES;
+            replyBackView.clipsToBounds = YES;
+        }else{
+            replyBackView.hidden = YES;
+        
+        }
+        
+        
+
     }
     
     
@@ -276,6 +580,7 @@
 //Height for each cell All Activity
 +(CGFloat)getHeightForRowAtIndexPath:(NSIndexPath*)indexPath arrayUsed:(NSMutableArray *)arrayUsed{
     
+    rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
         
     NSUInteger row = [indexPath row];
     
@@ -288,21 +593,70 @@
         
         NSString *lengthMessage = result.activityText;
         
-        int messageHeight = [TableDisplayUtil findHeightForString:lengthMessage withWidth:250];
+        int messageHeight = [TableDisplayUtil findHeightForString:lengthMessage withWidth:245];
         
+      
    
         
         int messageTotal = messageHeight + 15;
         
         int imageHeight = 0;
         
-        if ((result.thumbnail != nil) && (![result.thumbnail isEqualToString:@""])) {
+        
+        NSString *tmpThumbnail = [mainDelegate.messageImageDictionary valueForKey:result.activityId];
+        
+        if ((tmpThumbnail != nil) && (![tmpThumbnail isEqualToString:@""])) {
             
             imageHeight = 90;
         }
      
+        int replyHeight = 0;
         
-        int cellHeight = (42 + messageTotal +  imageHeight);
+        NSArray *resultReplies = [mainDelegate.replyDictionary valueForKey:result.activityId];
+        
+        if ([resultReplies count] > 0) {
+            replyHeight = 10;
+            
+            int totalLoopCount = 0;
+            if ([resultReplies count] > 3) {
+                totalLoopCount = 3;
+                replyHeight +=25;
+            }else{
+                totalLoopCount = [resultReplies count];
+            }
+            
+            for (int i = 0; i < totalLoopCount; i++) {
+                int replyImgAdjust = 0;
+                
+                Activity *theReply = [resultReplies objectAtIndex:i];
+                
+                NSString *replyString = theReply.activityText;
+                int subHeight = [TableDisplayUtil findHeightForString13:replyString withWidth:260];
+                
+                if (subHeight < 25) {
+                    subHeight = 25;
+                }
+                
+                if (subHeight >= 32) {
+                    subHeight = 45;
+                }
+                
+                
+                if ([mainDelegate.messageImageDictionary valueForKey:theReply.activityId] != nil) {
+                    replyImgAdjust = 50;
+                }
+                
+                
+                replyHeight += subHeight + 15 + replyImgAdjust;
+                
+                
+                
+            }
+            
+        }
+
+        
+        int cellHeight = (42 + messageTotal +  imageHeight + replyHeight);
         
         
         return cellHeight;
@@ -463,7 +817,7 @@
         
         //Profile Image
         profileImageView.frame = CGRectMake(5, 5, 40, 40);
-        profileImageView.image = [UIImage imageNamed:@"profile.png"];
+        profileImageView.image = [UIImage imageNamed:@"profileNew.png"];
         
         
         //Name Label
@@ -799,5 +1153,59 @@
 	
 }
 
+
++(int)findHeightForString13:(NSString *)message withWidth:(int)width{
+    
+    
+    CGSize constraints = CGSizeMake(width, 900);
+    CGSize totalSize = [message sizeWithFont:[UIFont fontWithName:@"Helvetica" size:13] constrainedToSize:constraints];
+    
+    return totalSize.height;
+    
+}
+
++(NSString *)getDateLabelReply:(NSString *)dateCreated{
+    //date created format: YYYY-MM-dd HH:mm:ss  
+    
+    NSDate *todaysDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+    //[dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    NSDate *createdDateOrig = [dateFormatter dateFromString:dateCreated];
+    
+    NSTimeInterval interval = [todaysDate timeIntervalSinceDate:createdDateOrig];
+    
+    if (interval <  3600) {
+        //Less than an hour, do minutes
+        
+        int minutes = floor(interval/60.0);
+        
+        if (minutes == 0) {
+            return @"1m";
+        }
+        return [NSString stringWithFormat:@"%dm", minutes];
+        
+    }else if (interval < 86400){
+        //less than a day, do hours
+        
+        int hours = floor(interval/3600.0);
+        
+        if (hours == 1) {
+            return @"1h";
+        }
+        return [NSString stringWithFormat:@"%dh", hours];
+        
+    }else{
+        //do days
+        
+        int days = floor(interval/86400.0);
+        
+        if (days == 1) {
+            return @"1d";
+        }
+        return [NSString stringWithFormat:@"%dd", days];
+    }
+    
+}
 
 @end

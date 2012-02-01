@@ -36,7 +36,7 @@
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray;
 
 
 -(void)home{
@@ -119,6 +119,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     self.swipeAlertFront.layer.cornerRadius = 4.0;
     self.swipeAlert.layer.masksToBounds = YES;
     self.swipeAlert.layer.cornerRadius = 4.0;
+    self.totalReplyArray = [NSMutableArray array];
     
     self.title = @"Activity";
 
@@ -599,10 +600,16 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     
 }
 
+-(void)deselect:(NSIndexPath *)indexPath{
+    [self.allActivityTable deselectRowAtIndexPath:indexPath animated:NO];
+    [self.myActivityTable deselectRowAtIndexPath:indexPath animated:NO];
+}
+
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-
+    
+    
+    [self performSelector:@selector(deselect:) withObject:indexPath afterDelay:1.0];
     
 	NSUInteger row = [indexPath row];
     
@@ -634,13 +641,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             
                 theMessage.currentVote = tmpActivity.vote;
                 theMessage.isVideo = tmpActivity.isVideo;
+            theMessage.isCurrentUser = tmpActivity.isCurrentUser;
                 //theMessage.likes = [NSArray arrayWithArray:messageSelected.likedBy];
                 //theMessage.replies = [NSArray arrayWithArray:messageSelected.replies];
                 //theMessage.tags = [NSArray arrayWithArray:messageSelected.tags];
                 //theMessage.profile = messageSelected.profile;
                 
                 if ([tmpActivity.thumbnail length] > 0) {
-                    theMessage.postImageArray = [NSMutableArray arrayWithObject:[Base64 decode:tmpActivity.thumbnail]];
+                    //theMessage.postImageArray = [NSMutableArray arrayWithObject:[Base64 decode:tmpActivity.thumbnail]];
                 }else{
                     theMessage.postImageArray = [NSMutableArray array];
                 }
@@ -1151,8 +1159,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [format setDateFormat:@"YYYY-MM-dd"];
             NSString *dateString = [format stringFromDate:tomorrow];
             
-            
-            NSDictionary *response = [ServerAPI getActivity:token :@"25" :@"true" :@"" :dateString :@"20"];
+            NSDictionary *response = [ServerAPI getActivity:token maxCount:@"25" refreshFirst:@"true" newOnly:@"" mostCurrentDate:dateString totalNumberOfDays:@"20" includeDetails:@"false"];
             
             NSString *status = [response valueForKey:@"status"];
             
@@ -1192,6 +1199,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)doneNewActivity{
     
+    
     if (self.shouldCallStop) {
         [self performSelector:@selector(stopLoading) withObject:nil afterDelay:1.0];
     }
@@ -1205,10 +1213,180 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self.allActivityTable reloadData];
     
     [self performSelectorInBackground:@selector(getUserVotes) withObject:nil];
+    
+    rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
+
+    NSMutableArray *activityIds = [NSMutableArray array];
+    for (int i = 0; i < [self.activityArray count]; i++) {
+        Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+        
+        if (([mainDelegate.replyDictionary objectForKey:tmpActivity.activityId] == nil) && ([mainDelegate.messageImageDictionary objectForKey:tmpActivity.activityId] == nil)) {
+            [activityIds addObject:tmpActivity.activityId];
+        }else{
+            
+            if ([mainDelegate.replyDictionary objectForKey:tmpActivity.activityId] != nil) {
+                
+                NSArray *replies = [mainDelegate.replyDictionary valueForKey:tmpActivity.activityId];
+                
+                if ([replies count] > 0) {
+                    Activity *tmp = [replies objectAtIndex:0];
+                    
+                    tmpActivity.lastEditDate = [NSString stringWithFormat:tmp.createdDate];
+                }
+            }
+        }
+    }
+    
+    NSArray *idArray = [NSArray arrayWithArray:activityIds];
+    [self performSelectorInBackground:@selector(getActivityDetails:) withObject:idArray];
     //[self performSelectorInBackground:@selector(getUserImages) withObject:nil];
 	
 }
 
+-(void)getActivityDetails:(NSArray *)idArray{
+    
+    
+    @autoreleasepool {
+
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+        NSDictionary *response = [ServerAPI getActivityDetails:mainDelegate.token activityIds:idArray];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        NSArray *details = [NSArray array];
+        if ([status isEqualToString:@"100"]){
+            
+           details = [response valueForKey:@"activities"];
+
+        }else{
+            
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.error = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    //self.error = @"*Error connecting to server";
+                    break;
+                default:
+                    //should never get here
+                    //self.error = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneActivityDetails:) withObject:details waitUntilDone:NO];
+        
+    }
+
+}
+
+-(void)doneActivityDetails:(NSArray *)details{
+    
+    NSMutableArray *totalReplies = [NSMutableArray array];
+    rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
+    if ([details count] > 0) {
+        
+        for (int i = 0; i < [details count]; i++) {
+            
+            NSDictionary *tmpDictionary = [details objectAtIndex:i];
+            
+            NSString *activityId = [tmpDictionary valueForKey:@"activityId"];
+            NSString *thumbnail = [tmpDictionary valueForKey:@"thumbNail"];
+            NSArray *replies = [tmpDictionary valueForKey:@"replies"];
+                        
+            if ([thumbnail length] > 0) {
+                
+                for (int j = 0; j < [self.activityArray count]; j++) {
+                    Activity *tmpActivity = [self.activityArray objectAtIndex:j];
+                    
+                    if ([tmpActivity.activityId isEqualToString:activityId]) {
+
+                        [mainDelegate.messageImageDictionary setValue:thumbnail forKey:tmpActivity.activityId];
+                        break;
+                    }
+                }
+            }
+            
+            
+            if ([replies count] > 0) {
+                
+                totalReplies = [totalReplies arrayByAddingObjectsFromArray:replies];
+
+                for (int j = 0; j < [self.activityArray count]; j++) {
+                    Activity *tmpActivity = [self.activityArray objectAtIndex:j];
+                    NSMutableArray *mutableReplyArray = [NSMutableArray array];
+                    
+                    if ([tmpActivity.activityId isEqualToString:activityId]) {
+                        
+                        for (int k = 0; k < [replies count]; k++) {
+                            
+                            NSDictionary *tmpDict = [replies objectAtIndex:k];
+                            
+                            Activity *tmpReply = [[Activity alloc] init];
+                                                        
+                            tmpReply.activityText = [tmpDict valueForKey:@"text"];
+                            tmpReply.createdDate = [tmpDict valueForKey:@"createdDate"];
+                            tmpReply.cacheId = [tmpDict valueForKey:@"cacheId"];
+                            
+                            
+                            tmpReply.teamId = [tmpDict valueForKey:@"teamId"];
+                            tmpReply.teamName = [tmpDict valueForKey:@"teamName"];
+                            tmpReply.senderName = [tmpDict valueForKey:@"poster"];
+                            
+                            tmpReply.activityId = [tmpDict valueForKey:@"activityId"];
+                            
+                            tmpReply.numLikes = [[tmpDict valueForKey:@"numberOfLikeVotes"] intValue];
+                            tmpReply.numDislikes = [[tmpDict valueForKey:@"numberOfDislikeVotes"] intValue];
+                            
+                            tmpReply.isVideo = [[tmpDict valueForKey:@"isVideo"] boolValue];
+                            tmpReply.isCurrentUser = [[tmpDict valueForKey:@"isCurrentUser"] boolValue];
+                            
+                            tmpReply.vote = [tmpDict valueForKey:@"vote"];
+                            tmpReply.replies = [NSArray array];
+                            
+                            if ([tmpDict valueForKey:@"thumbNail"] != nil) {
+                                tmpReply.thumbnail = [tmpDict valueForKey:@"thumbNail"];
+                            }else {
+                                tmpReply.thumbnail = @"";
+                            }
+                                                
+                            [mutableReplyArray addObject:tmpReply];
+                            [self.totalReplyArray addObject:tmpReply];
+                        }
+                        
+                        NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
+                        [mutableReplyArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+                        
+                        [mainDelegate.replyDictionary setValue:mutableReplyArray forKey:tmpActivity.activityId];
+                                                
+                        if ([mutableReplyArray count] > 0) {
+                            Activity *tmpReply = [mutableReplyArray objectAtIndex:0];
+                            
+                            tmpActivity.lastEditDate = [NSString stringWithFormat:tmpReply.createdDate];
+
+                        }
+
+                        
+                        break;
+                    }
+                }              
+            }
+        }
+        
+    }
+    
+    [self performSelectorInBackground:@selector(getReplyImages:) withObject:totalReplies];
+
+    NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"lastEditDate" ascending:NO];
+    [self.activityArray sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
+    
+    [self.allActivityTable reloadData];
+}
 
 -(void)getMyActivity{
     
@@ -1323,6 +1501,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSMutableArray *arrayOfImageData = [NSMutableArray array];
     for (int i = 0; i < [self.activityArray count]; i++) {
         Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+        
+        if ([tmpActivity.activityId isEqualToString:messageId]) {
+            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+            [arrayOfImageData addObject:profileData];
+            teamId = tmpActivity.teamId;
+            break;
+        }
+    }
+    
+    for (int i = 0; i < [self.totalReplyArray count]; i++) {
+        Activity *tmpActivity = [self.totalReplyArray objectAtIndex:i];
         
         if ([tmpActivity.activityId isEqualToString:messageId]) {
             NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
@@ -1540,6 +1729,88 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.swipeAlert.hidden = YES;
 }
 
+
+-(void)getReplyImages:(NSArray *)repliesArray{
+    
+    
+    @autoreleasepool {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *idArray = [NSMutableArray array];
+        for (int i = 0; i < [repliesArray count]; i++) {
+            
+            NSDictionary *tmpDict = [repliesArray objectAtIndex:i];            
+            NSString *activityId = [tmpDict valueForKey:@"activityId"];
+            
+            if ((activityId != nil) && ![activityId isEqualToString:@""]) {
+                [idArray addObject:activityId];
+            }
+        }
+                                
+        NSDictionary *response = [ServerAPI getActivityDetails:mainDelegate.token activityIds:idArray];
+        
+        NSString *status = [response valueForKey:@"status"];
+                
+        NSArray *details = [NSArray array];
+        if ([status isEqualToString:@"100"]){
+            
+            details = [response valueForKey:@"activities"];
+            
+        }else{
+            
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.error = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    //self.error = @"*Error connecting to server";
+                    break;
+                default:
+                    //should never get here
+                    //self.error = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneReplyImages:) withObject:details waitUntilDone:NO];
+        
+    }
+    
+}
+
+-(void)doneReplyImages:(NSArray *)details{
+    
+    rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
+    if ([details count] > 0) {
+        
+        for (int i = 0; i < [details count]; i++) {
+            
+            NSDictionary *tmpDictionary = [details objectAtIndex:i];
+            
+            NSString *activityId = [tmpDictionary valueForKey:@"activityId"];
+            NSString *thumbnail = [tmpDictionary valueForKey:@"thumbNail"];
+
+            
+            if ([thumbnail length] > 0) {
+                
+                [mainDelegate.messageImageDictionary setValue:thumbnail forKey:activityId];
+
+            }
+                                
+        }
+        
+    }
+
+    
+    [self.allActivityTable reloadData];
+
+    
+}
 
 - (void)viewDidUnload
 {

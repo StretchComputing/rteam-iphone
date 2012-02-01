@@ -15,12 +15,26 @@
 #import "HomeAttendanceView.h"
 
 @interface Home : UIViewController <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextFieldDelegate, ADBannerViewDelegate,
-UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
+UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>{
 
 
 
     
 }
+//Post Image
+@property (nonatomic, strong) IBOutlet UIView *postImageBackView;
+@property (nonatomic, strong) IBOutlet UIView *postImageFrontView;
+@property (nonatomic, strong) IBOutlet UIImageView *postImagePreview;
+@property (nonatomic, strong) IBOutlet UITextView *postImageTextView;
+@property (nonatomic, strong) IBOutlet UITableView *postImageTableView;
+@property (nonatomic, strong) IBOutlet UIButton *postImageSubmitButton;
+@property (nonatomic, strong) IBOutlet UIButton *postImageCancelButton;
+
+
+
+
+@property (nonatomic, strong) NSData *imageDataToSend;
+@property (nonatomic, strong) NSString *sendOrientation;
 @property (nonatomic, strong) IBOutlet UIButton *showLessButton;
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
@@ -200,5 +214,9 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate>{
 -(IBAction)regText;
 
 -(IBAction)showLessAction;
+
+-(IBAction)postImageSubmit;
+-(IBAction)postImageCancel;
+
 
 @end

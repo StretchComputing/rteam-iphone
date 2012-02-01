@@ -58,6 +58,7 @@
 @property (nonatomic, strong) UITableView *allActivityTable;
 @property (nonatomic, strong) NSMutableArray *tmpActivityArray;
 @property (nonatomic, strong) NSMutableArray *activityArray;
+@property (nonatomic, strong) NSMutableArray *totalReplyArray;
 
 @property bool  hasNewActivity;
 @property bool newActivityFailed;

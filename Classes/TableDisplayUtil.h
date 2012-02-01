@@ -22,4 +22,6 @@
 +(NSString *)getDateLabel:(NSString *)dateCreated;
 +(int)findHeightForString:(NSString *)message withWidth:(int)width;
 +(NSString *)getStarSize:(int)starNumber :(int)likes :(int)dislikes;
++(int)findHeightForString13:(NSString *)message withWidth:(int)width;
++(NSString *)getDateLabelReply:(NSString *)dateCreated;
 @end

@@ -166,8 +166,8 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
                     orientation = @"landscape";
                 }
             }
-            
-            NSDictionary *response = [ServerAPI createActivity:token :self.teamId :self.theActivityText :tmpData :tmpMovieData :orientation];
+                        
+            NSDictionary *response = [ServerAPI createActivity:token teamId:self.teamId statusUpdate:self.theActivityText photo:tmpData video:tmpMovieData orientation:orientation replyToId:@""];
             
             NSString *status = [response valueForKey:@"status"];
             

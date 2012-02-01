@@ -35,7 +35,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSString *token = @"";
-	
+    
 	if ((firstName == nil) || (lastName == nil) || (email == nil) || (password == nil) || (alreadyMember == nil)|| (latitude == nil)|| (longitude == nil)
         || (phoneNumber == nil) || (carrierCode == nil) || (location == nil)) {
 		statusReturn = @"0";
@@ -91,10 +91,13 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-		
+        
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -350,6 +353,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -515,6 +520,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -604,6 +611,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
@@ -881,6 +890,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -1030,6 +1041,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -1100,6 +1113,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -1687,6 +1702,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -1848,6 +1865,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -1925,6 +1944,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -2278,6 +2299,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -2347,6 +2370,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		
@@ -2513,6 +2538,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -2591,6 +2618,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -3200,6 +3229,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -3267,6 +3298,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -3621,6 +3654,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -4293,6 +4328,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -4364,6 +4401,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -4526,14 +4565,15 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	
 }
 
-+(NSDictionary *)getActivity:(NSString *)token :(NSString *)maxCount :(NSString *)refreshFirst :(NSString *)newOnly
-							:(NSString *)mostCurrentDate :(NSString *)totalNumberOfDays{
++(NSDictionary *)getActivity:(NSString *)token maxCount:(NSString *)maxCount refreshFirst:(NSString *)refreshFirst newOnly:(NSString *)newOnly
+             mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSMutableArray *activities = [NSMutableArray array];
 	
-	if ((token == nil) || (mostCurrentDate == nil) || (maxCount == nil) || (refreshFirst == nil) || (newOnly == nil) || (totalNumberOfDays == nil)) {
+	if ((token == nil) || (mostCurrentDate == nil) || (maxCount == nil) || (refreshFirst == nil) || (newOnly == nil) || (totalNumberOfDays == nil)
+        || (includeDetails == nil)) {
 		statusReturn = @"0";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4599,7 +4639,18 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 			
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@totalNumberOfDays=%@", symbol, totalNumberOfDays];
 		}
-		
+        
+        if (![includeDetails isEqualToString:@""]){			
+			NSString *symbol;
+			if (firstParam) {
+				symbol = @"&";
+			}else {
+				symbol = @"?";
+			}
+			
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@includeDetails=%@", symbol, includeDetails];
+		}
+		        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
@@ -4607,7 +4658,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-                
+                        
 		SBJSON *jsonParser = [SBJSON new];
                         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -4623,6 +4674,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 				
 				tmpActivity.activityText = [tmpDict valueForKey:@"text"];
 				tmpActivity.createdDate = [tmpDict valueForKey:@"createdDate"];
+                tmpActivity.lastEditDate = [tmpDict valueForKey:@"createdDate"];
+
 				tmpActivity.cacheId = [tmpDict valueForKey:@"cacheId"];
 				
                 
@@ -4636,9 +4689,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 				tmpActivity.numDislikes = [[tmpDict valueForKey:@"numberOfDislikeVotes"] intValue];
 				
 				tmpActivity.isVideo = [[tmpDict valueForKey:@"isVideo"] boolValue];
+                tmpActivity.isCurrentUser = [[tmpDict valueForKey:@"isCurrentUser"] boolValue];
                 
                 tmpActivity.vote = [tmpDict valueForKey:@"vote"];
-				
+				tmpActivity.replies = [NSArray array];
+                
 				if ([tmpDict valueForKey:@"thumbNail"] != nil) {
 					tmpActivity.thumbnail = [tmpDict valueForKey:@"thumbNail"];
 				}else {
@@ -4664,14 +4719,89 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	
 }
 
++(NSDictionary *)getActivityDetails:(NSString *)token activityIds:(NSArray *)activityIds{
+    
+    NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
+	NSString *statusReturn = @"";
+	
+	if ((token == nil) || (activityIds == nil)) {
+		statusReturn = @"0";
+		[returnDictionary setValue:statusReturn forKey:@"status"];
+		return returnDictionary;
+	}
+	
+	@try{
+                
+		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
+		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
+		
+		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
+		NSString *timeZone = [tmp1 name];
+		
+		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
+		
+		NSString *tmpUrl = @"";
+		
+		tmpUrl = [NSString stringWithFormat:@"%@/activities/details/%@", baseUrl, timeZone];
+		
+		if ([activityIds count] > 0){
+         
+            NSString *activityString = @"";
+            
+            for (int i = 0; i < [activityIds count]; i++) {
+                
+                if (i == [activityIds count] - 1) {
+                    activityString = [activityString stringByAppendingFormat:@"%@", [activityIds objectAtIndex:i]];
+                }else{
+                    activityString = [activityString stringByAppendingFormat:@"%@,", [activityIds objectAtIndex:i]];
 
+                }
+            }
+			
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"?activityIds=%@", activityString];
+			
+		}
+		
+		        
+		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
+		
+		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
+		[request setHTTPMethod: @"GET"];
+		
+		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
+		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+                   
+		SBJSON *jsonParser = [SBJSON new];
+        
+		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
+        
+		NSString *apiStatus = [response valueForKey:@"apiStatus"];
+		
+		if ([apiStatus isEqualToString:@"100"]) {
+			[returnDictionary setValue:[response valueForKey:@"activities"] forKey:@"activities"];
+		}
+		statusReturn = apiStatus;
+		
+		[returnDictionary setValue:statusReturn forKey:@"status"];
+		return returnDictionary;
+		
+	}
+	@catch (NSException *e) {
+        
+        return [ServerAPI exceptionReturnValue:@"getActivityDetails" :e];
+        
+	}
 
-+(NSDictionary *)createActivity:(NSString *)token :(NSString *)teamId :(NSString *)statusUpdate :(NSData *)photo :(NSData *)video :(NSString *)orientation{
+    
+    
+}
+
++(NSDictionary *)createActivity:(NSString *)token teamId:(NSString *)teamId statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation replyToId:(NSString *)replyToId{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	
-	if ((token == nil) || (teamId == nil) || (statusUpdate == nil) || (photo == nil) || (video == nil) || (orientation == nil)) {
+	if ((token == nil) || (teamId == nil) || (statusUpdate == nil) || (photo == nil) || (video == nil) || (orientation == nil) || (replyToId == nil)) {
 		
 		statusReturn = @"0";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -4704,6 +4834,10 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 			[tempDictionary setObject:videoString forKey:@"video"];
 		}
         
+        if (![replyToId isEqualToString:@""]) {
+			[tempDictionary setObject:replyToId forKey:@"parentActivityId"];
+		}
+        
         if (![orientation isEqualToString:@""]){
             NSNumber *isPortrait;
             
@@ -4732,10 +4866,12 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-		
+        
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -4757,12 +4893,12 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	
 }
 
-+(NSDictionary *)updateActivity:(NSString *)token :(NSString *)teamId :(NSString *)activityId :(NSString *)likeDislike{
++(NSDictionary *)updateActivity:(NSString *)token teamId:(NSString *)teamId activityId:(NSString *)activityId likeDislike:(NSString *)likeDislike statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation cancelAttachment:(NSString *)cancelAttachment{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	
-	if ((token == nil) || (teamId == nil) || (activityId == nil) || (likeDislike == nil)) {
+	if ((token == nil) || (teamId == nil) || (activityId == nil) || (likeDislike == nil) || (statusUpdate == nil) || (photo == nil) || (video == nil) || (orientation == nil) || (cancelAttachment == nil)) {
 		
 		statusReturn = @"0";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -4775,22 +4911,62 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
 		
+        if (![likeDislike isEqualToString:@""]) {
+            [tempDictionary setObject:likeDislike forKey:@"vote"];
+        }
+        
+        if (![statusUpdate isEqualToString:@""]) {
+            [tempDictionary setObject:statusUpdate forKey:@"statusUpdate"];
+        }
 		
-		[tempDictionary setObject:likeDislike forKey:@"vote"];
+        NSString *photoString = [ServerAPI encodeBase64data:photo];
+        
+		NSString *videoString = [Base64 encode:video];
 		
+
+        
+		if (![photoString isEqualToString:@""]) {
+			[tempDictionary setObject:photoString forKey:@"photo"];
+		}
 		
+		if (![videoString isEqualToString:@""]) {
+			[tempDictionary setObject:videoString forKey:@"video"];
+		}
+        
+        if (([photoString length] > 0) && ([videoString length] == 0)) {
+            [tempDictionary setObject:@"" forKey:@"video"];
+        }
+        
+        if (![orientation isEqualToString:@""]){
+            NSNumber *isPortrait;
+            
+            if ([orientation isEqualToString:@"portrait"]) {
+                isPortrait = [NSNumber numberWithBool:1];
+            }else{
+                isPortrait = [NSNumber numberWithBool:0];
+            }
+            [tempDictionary setObject:isPortrait forKey:@"isPortrait"];
+        }		
+		
+        
+        if ([cancelAttachment isEqualToString:@"true"]) {
+            if (([photo length] > 0) || ([video length] > 0)) {
+                
+            }else{
+                [tempDictionary setObject:@"" forKey:@"video"];
+                [tempDictionary setObject:@"" forKey:@"photo"];
+
+
+            }
+        }
+        
 		loginDict = tempDictionary;
 		
-		
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-		
-		
-		
 		
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
-        
 		
 		NSString *tmpUrl = [NSString stringWithFormat:@"%@/team/%@/activity/%@", baseUrl, teamId, activityId];
 		
@@ -4801,6 +4977,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"PUT"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
@@ -4831,6 +5009,55 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	}
 	
 	
+}
+
++(NSDictionary *)deleteActivity:(NSString *)token activityId:(NSString *)activityId teamId:(NSString *)teamId{
+    
+    NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
+	NSString *statusReturn = @"";
+	
+	if ((token == nil) || (teamId == nil) || (activityId == nil)) {
+		
+		statusReturn = @"0";
+		[returnDictionary setValue:statusReturn forKey:@"status"];
+		return returnDictionary;
+	}
+	
+	@try{
+		
+            
+		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
+		
+		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
+		
+		NSString *tmpUrl = [NSString stringWithFormat:@"%@/team/%@/activity/%@", baseUrl, teamId, activityId];
+		
+        
+		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
+		
+		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
+		[request setHTTPMethod: @"DELETE"];
+        
+		
+		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
+		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+        
+		SBJSON *jsonParser = [SBJSON new];
+		
+		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
+		
+		NSString *apiStatus = [response valueForKey:@"apiStatus"];
+		
+		[returnDictionary setValue:apiStatus forKey:@"status"];
+		return returnDictionary;
+		
+	}
+	@catch (NSException *e) {
+        
+        return [ServerAPI exceptionReturnValue:@"deleteActivity" :e];
+        
+	}
+    
 }
 
 
@@ -4894,6 +5121,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
 		[request setHTTPMethod: @"POST"];
 		[request setHTTPBody: requestData];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
         
 		
 		

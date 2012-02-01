@@ -15,7 +15,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "GANTracker.h"
 #import "TraceSession.h"
-
+#import "Home.h"
 @implementation NewPractice2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, location, duration, description, start, errorString, theDuration, theDescription, theLocation;
 
@@ -268,6 +268,18 @@
                 
                 AllEventsCalendar *cont = [tempCont objectAtIndex:tempNum-1];
                 cont.createdEvent = true;
+                [self.navigationController popToViewController:cont animated:YES];
+                
+            }
+            
+            if ([[tempCont objectAtIndex:tempNum - 1] class] == [Home class]) {
+                
+                Home *cont = [tempCont objectAtIndex:tempNum-1];
+                [self.navigationController popToViewController:cont animated:YES];
+                
+            }else if ([[tempCont objectAtIndex:tempNum] class] == [Home class]) {
+                
+                Home *cont = [tempCont objectAtIndex:tempNum];
                 [self.navigationController popToViewController:cont animated:YES];
                 
             }

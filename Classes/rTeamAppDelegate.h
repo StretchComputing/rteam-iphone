@@ -49,6 +49,10 @@
     NSString *crashInstanceUrl;
 	
 }
+
+@property (nonatomic, strong) NSMutableDictionary *replyDictionary;
+@property (nonatomic, strong) NSMutableDictionary *messageImageDictionary;
+
 @property (nonatomic, strong) NSString *lastTwenty;
 @property (nonatomic, strong) NSString *lastTwentyTime;
 

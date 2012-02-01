@@ -126,9 +126,8 @@
         }
         tmpData = [NSData dataWithData:self.imageDataToSend];
 
- 
         
-        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token :self.postTeamId :self.theMessageText :tmpData :tmpMovieData :self.sendOrientation];
+        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token teamId:self.postTeamId statusUpdate:self.theMessageText photo:tmpData video:tmpMovieData orientation:sendOrientation replyToId:@""];
         
         
         NSString *status = [response valueForKey:@"status"];

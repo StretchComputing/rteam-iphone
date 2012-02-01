@@ -131,18 +131,22 @@
 +(NSDictionary *)getMessageThreadCount:(NSString *)token :(NSString *)teamId :(NSString *)eventId :(NSString *)eventType :(NSString *)resynch;
 
 //Activity APIs
-+(NSDictionary *)getActivity:(NSString *)token :(NSString *)maxCount :(NSString *)refreshFirst :(NSString *)newOnly
-							:(NSString *)mostCurrentDate :(NSString *)totalNumberOfDays;
++(NSDictionary *)getActivity:(NSString *)token maxCount:(NSString *)maxCount refreshFirst:(NSString *)refreshFirst newOnly:(NSString *)newOnly
+                        mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails;
 
-+(NSDictionary *)createActivity:(NSString *)token :(NSString *)teamId :(NSString *)statusUpdate :(NSData *)photo :(NSData *)video :(NSString *)orientation;
++(NSDictionary *)createActivity:(NSString *)token teamId:(NSString *)teamId statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation replyToId:(NSString *)replyToId;
 
-+(NSDictionary *)updateActivity:(NSString *)token :(NSString *)teamId :(NSString *)activityId :(NSString *)likeDislike;
++(NSDictionary *)updateActivity:(NSString *)token teamId:(NSString *)teamId activityId:(NSString *)activityId likeDislike:(NSString *)likeDislike statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation cancelAttachment:(NSString *)cancelAttachment;
 
 +(NSDictionary *)getActivityStatus:(NSString *)token :(NSString *)activityIds;
 
 +(NSDictionary *)getActivityImage:(NSString *)token :(NSString *)activityId :(NSString *)teamId;
 
 +(NSDictionary *)getActivityVideo:(NSString *)token :(NSString *)activityId :(NSString *)teamId;
+
++(NSDictionary *)deleteActivity:(NSString *)token activityId:(NSString *)activityId teamId:(NSString *)teamId;
+
++(NSDictionary *)getActivityDetails:(NSString *)token activityIds:(NSArray *)activityIds;
 
 //Misc
 +(NSDictionary *)getMobileCarrierList;

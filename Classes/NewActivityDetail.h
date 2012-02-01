@@ -10,6 +10,7 @@
 
 @interface NewActivityDetail : UIViewController
 
+@property (nonatomic, strong) NSString *fromReplyEdit;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *deleteButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *replyButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *editButton;
@@ -43,7 +44,6 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activity;
 @property (nonatomic, strong) NSString *messageId;
 @property (nonatomic, strong) NSString *displayTime;
-@property bool isCurrent;
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, strong) IBOutlet UIScrollView *myScrollView;
 @property (nonatomic, strong) IBOutlet UIToolbar *myToolbar;
@@ -54,7 +54,8 @@
 @property (nonatomic, strong) IBOutlet UIImageView *starTwo;
 @property (nonatomic, strong) IBOutlet UIImageView *starThree;
 
-
+@property (nonatomic, strong) IBOutlet UILabel *errorLabel;
+@property bool isCurrentUser;
 -(void)loadScrollView;
 -(void)initializeView;
 -(int)findHeightForString:(NSString *)message withWidth:(int)width;
@@ -66,5 +67,7 @@
 -(IBAction)reply;
 -(IBAction)edit;
 -(IBAction)deleteAction;
++(NSString *)getDateLabelReply:(NSString *)dateCreated;
+
 
 @end

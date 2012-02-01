@@ -15,6 +15,7 @@
 #import "AllEventsCalendar.h"
 #import "GANTracker.h"
 #import "rTeamAppDelegate.h"
+#import "Home.h"
 
 @implementation DailyWeeklyEvent
 @synthesize frequency, dayPicker, timePicker, startDate, endDate, timeField, dayField, submitButton, okTimeButton, selectDateButton,
@@ -570,6 +571,14 @@ numberOfRowsInComponent:(NSInteger)component{
             tmp.createdEvent = true;
 
 			[self.navigationController popToViewController:tmp animated:NO];
+		}else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
+			Home *tmp = [views objectAtIndex:[views count] - 5];
+            
+			[self.navigationController popToViewController:tmp animated:NO];
+		}else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
+			Home *tmp = [views objectAtIndex:[views count] - 4];
+            
+			[self.navigationController popToViewController:tmp animated:NO];
 		}
 		
 	}else {
@@ -708,6 +717,14 @@ numberOfRowsInComponent:(NSInteger)component{
             tmp.createdEvent = true;
 
 			[self.navigationController popToViewController:tmp animated:NO];
+		}else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
+			Home *tmp = [views objectAtIndex:[views count] - 5];
+            
+			[self.navigationController popToViewController:tmp animated:NO];
+		}else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
+			Home *tmp = [views objectAtIndex:[views count] - 4];
+            
+			[self.navigationController popToViewController:tmp animated:NO];
 		}
 		
 	}else {
@@ -842,6 +859,14 @@ numberOfRowsInComponent:(NSInteger)component{
 			AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
             tmp.createdEvent = true;
 
+			[self.navigationController popToViewController:tmp animated:NO];
+		}else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
+			Home *tmp = [views objectAtIndex:[views count] - 5];
+            
+			[self.navigationController popToViewController:tmp animated:NO];
+		}else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
+			Home *tmp = [views objectAtIndex:[views count] - 4];
+            
 			[self.navigationController popToViewController:tmp animated:NO];
 		}
 		

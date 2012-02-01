@@ -277,6 +277,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
         
         NSString *status = [response valueForKey:@"status"];
 		
+        
         if ([status isEqualToString:@"100"]){
             
             NSString *token = [response valueForKey:@"token"];

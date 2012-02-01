@@ -13,6 +13,7 @@
 
 	
 }
+@property bool isCurrentUser;
 @property (nonatomic, strong) NSString *senderName;
 @property bool isVideo;
 @property (nonatomic, strong) NSString *thumbnail;
@@ -27,6 +28,8 @@
 @property (nonatomic,strong) NSString *cacheId;
 @property (nonatomic,strong) NSString *teamId;
 @property (nonatomic,strong) NSString *teamName;
+@property (nonatomic, strong) NSArray *replies;
+@property (nonatomic, strong) NSString *lastEditDate;
 
 
 @end

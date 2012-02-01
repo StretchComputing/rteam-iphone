@@ -48,6 +48,7 @@
 #import "GANTracker.h"
 #import "TraceSession.h"
 #import "AddGamePhoto.h"
+#import "CreateNewEventGameday.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -60,7 +61,7 @@ refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, trans
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview;
 
 
 
@@ -1705,7 +1706,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if (self.numObjects == 0) {
                 
                 UIButton *tmpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                [tmpButton setTitle:@"No events found, click 'Gameday' to create one now!" forState:UIControlStateNormal];
+                [tmpButton setTitle:@"No upcoming events found, click 'Gameday' to create one now!" forState:UIControlStateNormal];
                 tmpButton.titleLabel.numberOfLines = 2;
                 tmpButton.titleLabel.textAlignment = UITextAlignmentCenter;
                 [tmpButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
@@ -3009,7 +3010,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
         }else if (buttonIndex == 1){
             
+            UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+            picker.delegate = self;
+            
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            
+            [self presentModalViewController:picker animated:YES];
+            
         }else if (buttonIndex == 2){
+            
+            CreateNewEventGameday *tmp = [[CreateNewEventGameday alloc] init];
+            [self.navigationController pushViewController:tmp animated:YES];
             
         }else{
             
@@ -3744,7 +3755,67 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.gamedayAction showInView:self.view];
 }
 
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+	
+        [picker dismissModalViewControllerAnimated:YES];	
+        
+        UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        
+        float xVal;
+        float yVal;
+        
+        bool isPort = true;
+        
+        if (tmpImage.size.height > tmpImage.size.width) {
+            //Portrait
+            
+            xVal = 210.0;
+            yVal = 280.0;
+            isPort = true;
+            self.sendOrientation = @"portrait";
+        }else{
+            //Landscape
+            xVal = 280.0;
+            yVal = 210.0;
+            isPort = false;
+            self.sendOrientation = @"landscape";
+        }
+        
+        NSData *jpegImage = UIImageJPEGRepresentation(tmpImage, 1.0);
+        
+        UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
+        
+        UIGraphicsBeginImageContext(CGSizeMake(xVal, yVal));
+        
+        [myThumbNail drawInRect:CGRectMake(0.0, 0.0, xVal, yVal)];
+        
+        UIImage *newImage    = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+        
+        
+        self.imageDataToSend = UIImageJPEGRepresentation(newImage, 0.90);
+        
+    
+} 
+
+-(void)postImageSubmit{
+    
+}
+
+-(void)postImageCancel{
+    
+}
+
 - (void)dealloc {
+    postImagePreview = nil;
+    postImageBackView = nil;
+    postImageCancelButton = nil;
+    postImageFrontView = nil;
+    postImageSubmitButton = nil;
+    postImageTableView = nil;
+    postImageTextView = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
