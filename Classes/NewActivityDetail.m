@@ -362,7 +362,7 @@
                         
                         
                         [replyImageOne setImage:[UIImage imageWithData:[Base64 decode:tmpThumbnail]] forState:UIControlStateNormal];
-                        [replyImageOne addTarget:self action:@selector(imageSelectedReply:) forControlEvents:UIControlEventTouchUpInside];
+                        //[replyImageOne addTarget:self action:@selector(imageSelectedReply:) forControlEvents:UIControlEventTouchUpInside];
                         
                         replyBackOne.frame = CGRectMake(38,10 + subHeight, 50, 50);
                         
@@ -379,6 +379,16 @@
                         
                         replyImageOne.userInteractionEnabled = YES;
                         replyBackOne.userInteractionEnabled = YES;
+                        
+                        if (theReply.isVideo) {
+                            UIImageView *playButton = [[UIImageView alloc] initWithFrame:CGRectMake(replyBackOne.frame.size.width/2 - 9, replyBackOne.frame.size.height/2 - 9, 18, 18)];
+                            playButton.image = [UIImage imageNamed:@"playButtonSmall.png"];
+                            [replyBackOne addSubview:playButton];
+                            [replyImageOne addTarget:self action:@selector(videoSelectedReply:) forControlEvents:UIControlEventTouchUpInside];
+                            
+                        }else{
+                            [replyImageOne addTarget:self action:@selector(imageSelectedReply:) forControlEvents:UIControlEventTouchUpInside];
+                        }
                         
                         /*
                         if ([arrayOfData count] > 1) {
@@ -523,6 +533,32 @@
     
 }
 
+-(void)videoSelectedReply:(id)sender{
+    
+    
+    ImageButton *tmpButton = (ImageButton *)sender;
+    
+    NSString *msgId = [NSString stringWithString:tmpButton.messageId];
+    
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    //Go to a multi image display page
+    VideoDisplay *newDisplay = [[VideoDisplay alloc] init];
+    newDisplay.activityId = msgId;
+    NSArray *replyArray = [mainDelegate.replyDictionary valueForKey:self.messageId];
+    
+    for (int i = 0; i < [replyArray count]; i++) {
+        Activity *tmp = [replyArray objectAtIndex:i];
+        
+        if ([tmp.activityId isEqualToString:msgId]) {
+            newDisplay.teamId = tmp.teamId;
+            break;
+        }
+    }
+    [self.navigationController pushViewController:newDisplay animated:YES];    
+    
+}
 
 -(void)videoSelected:(id)sender{
     
@@ -976,6 +1012,7 @@
                 }
                 
                 [mutableReplyArray addObject:tmpReply];
+                [totalReplies addObject:tmpReply];
             }
             
             NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
@@ -1002,6 +1039,7 @@
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         NSMutableArray *idArray = [NSMutableArray array];
+                
         for (int i = 0; i < [repliesArray count]; i++) {
             
             NSDictionary *tmpDict = [repliesArray objectAtIndex:i];            
@@ -1015,7 +1053,7 @@
         NSDictionary *response = [ServerAPI getActivityDetails:mainDelegate.token activityIds:idArray];
         
         NSString *status = [response valueForKey:@"status"];
-        
+                
         NSArray *details = [NSArray array];
         if ([status isEqualToString:@"100"]){
             
@@ -1058,7 +1096,6 @@
             
             NSString *activityId = [tmpDictionary valueForKey:@"activityId"];
             NSString *thumbnail = [tmpDictionary valueForKey:@"thumbNail"];
-            
             
             if ([thumbnail length] > 0) {
                 

@@ -60,10 +60,7 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 		tmp.didRegister = self.didRegister;
 		tmp.numMemberTeams = self.numMemberTeams;
         
-        if ((self.numMemberTeams == 0) && ([self.didRegister isEqualToString:@"true"])) {
-            //[self performSelectorInBackground:@selector(firstTeam) withObject:nil];
-            [self performSelector:@selector(firstTeam)];
-        }
+ 
         
 		UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStyleDone target:nil action:nil];
 		self.navigationItem.backBarButtonItem = temp;
@@ -1113,43 +1110,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
-- (void)firstTeam{
-	
-
-
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        NSString *useTwitter = @"";
-        
-        
-        
-        NSDictionary *results = [ServerAPI createTeam:@"Team 1" :@"" :@"No description entered..." :useTwitter
-                                                     :mainDelegate.token :@"No Sport"];
-        
-        NSString *status = [results valueForKey:@"status"];
-	    
-        if ([status isEqualToString:@"100"]){
-            
-            
-            if ([mainDelegate.quickLinkOne isEqualToString:@"create"]) {
-                
-                mainDelegate.quickLinkOne = [results valueForKey:@"teamId"];
-                
-                
-                mainDelegate.quickLinkOneName = @"Team 1";
-                mainDelegate.quickLinkOneImage = [@"Basketball" lowercaseString];
-                
-                [mainDelegate saveUserInfo];
-            }
-            
-        }else{
-            
-        }
-        
-
-    
-	
-}
 
 -(void)viewDidUnload{
 	

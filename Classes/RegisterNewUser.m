@@ -166,12 +166,20 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 		
 		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 		mainDelegate.token = token;
-		mainDelegate.quickLinkOne = @"create";
+		mainDelegate.quickLinkOne = @"";
 		mainDelegate.quickLinkTwo = @"";
 		mainDelegate.quickLinkOneName = @"";
 		mainDelegate.quickLinkTwoName = @"";
 		mainDelegate.quickLinkOneImage = @"";
 		mainDelegate.quickLinkTwoImage = @"";
+                
+        if (([response valueForKey:@"teamId"] != nil) && ([[response valueForKey:@"teamId"] length] > 0)) {
+            mainDelegate.quickLinkOne = [response valueForKey:@"teamId"];
+            
+            
+            mainDelegate.quickLinkOneName = @"Team 1";
+            mainDelegate.quickLinkOneImage = [@"Basketball" lowercaseString];
+        }
 		
 		[mainDelegate saveUserInfo];
 		

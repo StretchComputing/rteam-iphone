@@ -58,7 +58,7 @@
     
     UIView *replyBackView = (UIView *)[cell.contentView viewWithTag:15];
     UIView *replyFrontView = (UIView *)[cell.contentView viewWithTag:16];
-    UILabel *replyLabel = (UILabel *)[cell.contentView viewWithTag:17];
+    UILabel *replyLabel = (UILabel *)[cell.contentView viewWithTag:25];
     UIView *replyTextView = (UIView *)[cell.contentView viewWithTag:18];
     UIView *replySeparator = (UIView *)[cell.contentView viewWithTag:19];
     UIImageView *arrowView = (UIImageView *)[cell.contentView viewWithTag:20];
@@ -129,6 +129,8 @@
         starThree.hidden = YES;
         replyBackView.hidden = YES;
         arrowView.hidden = YES;
+ 
+        
         
         nameLabel.frame = CGRectMake(0, 0, 310, 35);
         nameLabel.text = @"No messages found...";
@@ -233,18 +235,7 @@
             NSData *profileData = [Base64 decode:tmpThumbnail];
             insideImageView.hidden = NO;
             insideImageView.messageId = result.activityId;
-            
-         
-  
-
-            if (result.isVideo) {
-                [insideImageView addTarget:sentClass action:@selector(videoSelected:) forControlEvents:UIControlEventTouchUpInside];
-
-            }else{
-                [insideImageView addTarget:sentClass action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
-
-            }
-            
+   
             imageBack.hidden = NO;
             imageBack.backgroundColor = [UIColor blackColor];
             
@@ -267,6 +258,10 @@
                 UIImageView *playButton = [[UIImageView alloc] initWithFrame:CGRectMake(myImage.frame.size.width/2 - 15, myImage.frame.size.height/2 -15, 30, 30)];
                 playButton.image = [UIImage imageNamed:@"playButtonSmall.png"];
                 [myImage addSubview:playButton];
+                [insideImageView addTarget:sentClass action:@selector(videoSelected:) forControlEvents:UIControlEventTouchUpInside];
+
+            }else{
+                [insideImageView addTarget:sentClass action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
             }
             
             [imageBack addSubview:myImage];
@@ -289,7 +284,7 @@
         } 
         
         //Check For Replies
-                
+        
         //Replies
         replyBackView.frame = CGRectMake(5, 0, 310, 20);
         replyLabel.hidden= YES;
@@ -462,7 +457,6 @@
                                 
                                 
                                 [replyImageOne setImage:[UIImage imageWithData:[Base64 decode:tmpThumbnail]] forState:UIControlStateNormal];
-                                [replyImageOne addTarget:sentClass action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
                                 
                                 replyBackOne.frame = CGRectMake(38,12 + subHeight, 50, 50);
                                 
@@ -480,6 +474,16 @@
                                 replyImageOne.userInteractionEnabled = YES;
                                 replyBackOne.userInteractionEnabled = YES;
                                 
+                            if (theReply.isVideo) {
+                                UIImageView *playButton = [[UIImageView alloc] initWithFrame:CGRectMake(replyBackOne.frame.size.width/2 - 9, replyBackOne.frame.size.height/2 - 9, 18, 18)];
+                                playButton.image = [UIImage imageNamed:@"playButtonSmall.png"];
+                                [replyBackOne addSubview:playButton];
+                                [replyImageOne addTarget:sentClass action:@selector(videoSelected:) forControlEvents:UIControlEventTouchUpInside];
+                                
+                            }else{
+                                [replyImageOne addTarget:sentClass action:@selector(imageSelected:) forControlEvents:UIControlEventTouchUpInside];
+                            }
+                            
                                 /*
                                 if ([arrayOfData count] > 1) {
                                     
@@ -518,7 +522,7 @@
                                     }
                                     
                                 }
-                                 */
+                                 */ 
                             
                         }
                         
@@ -570,8 +574,7 @@
         
 
     }
-    
-    
+
     return cell;
     
     
@@ -703,6 +706,12 @@
     UIImageView *starThree = (UIImageView *)[cell.contentView viewWithTag:8];
     UIView *imageBack = (UIView *)[cell.contentView viewWithTag:14];
     ImageButton *insideImageView = (ImageButton *)[cell.contentView viewWithTag:11];
+    
+    UIView *replyBackView = (UIView *)[cell.contentView viewWithTag:15];
+
+    
+    replyBackView.hidden = YES;
+
     
     
     imageBack.backgroundColor = [UIColor blackColor];

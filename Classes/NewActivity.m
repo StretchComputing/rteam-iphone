@@ -36,7 +36,7 @@
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString;
 
 
 -(void)home{
@@ -1180,9 +1180,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         //null parameter
                         //self.errorLabel.text = @"*Error connecting to server";
                         break;
-                    case 1:
-                        //error connecting to server
-                        //self.errorLabel.text = @"*Error connecting to server";
+                    case 208:
+                        self.errorString = @"NA";
                         break;
                     default:
                         //log status code?
@@ -1200,22 +1199,28 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)doneNewActivity{
     
     
+    if ([self.errorString isEqualToString:@"NA"]) {
+        NSString *tmp = @"Only User's with confirmed email addresses can access Activity.  To confirm your email, please click on the activation link in the email we sent you.";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
     if (self.shouldCallStop) {
         [self performSelector:@selector(stopLoading) withObject:nil afterDelay:1.0];
     }
     
-	if (!self.newActivityFailed) {
-		self.hasNewActivity = true;
-	}
-	self.activityArray = [NSMutableArray arrayWithArray:self.tmpActivityArray];
-
+    if (!self.newActivityFailed) {
+        self.hasNewActivity = true;
+    }
+    self.activityArray = [NSMutableArray arrayWithArray:self.tmpActivityArray];
+    
     self.allActivityTable.hidden = NO;
-	[self.allActivityTable reloadData];
+    [self.allActivityTable reloadData];
     
     [self performSelectorInBackground:@selector(getUserVotes) withObject:nil];
     
     rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
-
+    
     NSMutableArray *activityIds = [NSMutableArray array];
     for (int i = 0; i < [self.activityArray count]; i++) {
         Activity *tmpActivity = [self.activityArray objectAtIndex:i];
@@ -1240,7 +1245,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *idArray = [NSArray arrayWithArray:activityIds];
     [self performSelectorInBackground:@selector(getActivityDetails:) withObject:idArray];
     //[self performSelectorInBackground:@selector(getUserImages) withObject:nil];
-	
+
+    
+    self.errorString = @"";
+   	
 }
 
 -(void)getActivityDetails:(NSArray *)idArray{
@@ -1536,8 +1544,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *messageId = [NSString stringWithString:tmpButton.messageId];
     NSString *teamId = @"";
     NSMutableArray *arrayOfImageData = [NSMutableArray array];
+    
     for (int i = 0; i < [self.activityArray count]; i++) {
         Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+        
+        if ([tmpActivity.activityId isEqualToString:messageId]) {
+            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+            [arrayOfImageData addObject:profileData];
+            teamId = tmpActivity.teamId;
+            break;
+        }
+    }
+    for (int i = 0; i < [self.totalReplyArray count]; i++) {
+        Activity *tmpActivity = [self.totalReplyArray objectAtIndex:i];
         
         if ([tmpActivity.activityId isEqualToString:messageId]) {
             NSData *profileData = [Base64 decode:tmpActivity.thumbnail];

@@ -489,6 +489,16 @@
 		90AB8C3A13DDC07400515B9F /* greenbackSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AB8C3913DDC07400515B9F /* greenbackSmall.png */; };
 		90AB8C3C13DDD8F500515B9F /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AB8C3B13DDD8F500515B9F /* blueArrow.png */; };
 		90AC116A12C1B8D100224865 /* FastHelp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90AC116912C1B8D100224865 /* FastHelp.xib */; };
+		90B1387314DF2DB7000FB81E /* ScoreNowTeamSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 90B1387114DF2DB7000FB81E /* ScoreNowTeamSelect.m */; };
+		90B1387414DF2DB7000FB81E /* ScoreNowTeamSelect.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90B1387214DF2DB7000FB81E /* ScoreNowTeamSelect.xib */; };
+		90B1387814DF2DC3000FB81E /* ScoreNowGameSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 90B1387614DF2DC3000FB81E /* ScoreNowGameSelect.m */; };
+		90B1387914DF2DC3000FB81E /* ScoreNowGameSelect.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90B1387714DF2DC3000FB81E /* ScoreNowGameSelect.xib */; };
+		90B1387D14DF2DDF000FB81E /* ScoreNowSportSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 90B1387B14DF2DDF000FB81E /* ScoreNowSportSelect.m */; };
+		90B1387E14DF2DDF000FB81E /* ScoreNowSportSelect.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90B1387C14DF2DDF000FB81E /* ScoreNowSportSelect.xib */; };
+		90B1388214DF2E20000FB81E /* ScoreNowAddMembers.m in Sources */ = {isa = PBXBuildFile; fileRef = 90B1388014DF2E1F000FB81E /* ScoreNowAddMembers.m */; };
+		90B1388314DF2E20000FB81E /* ScoreNowAddMembers.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90B1388114DF2E1F000FB81E /* ScoreNowAddMembers.xib */; };
+		90B1388714DF2E2A000FB81E /* ScoreNowScorePage.m in Sources */ = {isa = PBXBuildFile; fileRef = 90B1388514DF2E2A000FB81E /* ScoreNowScorePage.m */; };
+		90B1388814DF2E2A000FB81E /* ScoreNowScorePage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90B1388614DF2E2A000FB81E /* ScoreNowScorePage.xib */; };
 		90B5021313D730F700DE887D /* SettingsTabs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90B5021213D730F700DE887D /* SettingsTabs.xib */; };
 		90C5B55210EA9A8600F40228 /* Player.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90C5B55110EA9A8600F40228 /* Player.xib */; };
 		90C5B57510EA9F3800F40228 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 90C5B57410EA9F3800F40228 /* profile.png */; };
@@ -1227,6 +1237,21 @@
 		90AB8C3913DDC07400515B9F /* greenbackSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenbackSmall.png; sourceTree = "<group>"; };
 		90AB8C3B13DDD8F500515B9F /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blueArrow.png; path = ../blueArrow.png; sourceTree = "<group>"; };
 		90AC116912C1B8D100224865 /* FastHelp.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FastHelp.xib; sourceTree = "<group>"; };
+		90B1387014DF2DB7000FB81E /* ScoreNowTeamSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreNowTeamSelect.h; sourceTree = "<group>"; };
+		90B1387114DF2DB7000FB81E /* ScoreNowTeamSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreNowTeamSelect.m; sourceTree = "<group>"; };
+		90B1387214DF2DB7000FB81E /* ScoreNowTeamSelect.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScoreNowTeamSelect.xib; sourceTree = "<group>"; };
+		90B1387514DF2DC3000FB81E /* ScoreNowGameSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreNowGameSelect.h; sourceTree = "<group>"; };
+		90B1387614DF2DC3000FB81E /* ScoreNowGameSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreNowGameSelect.m; sourceTree = "<group>"; };
+		90B1387714DF2DC3000FB81E /* ScoreNowGameSelect.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScoreNowGameSelect.xib; sourceTree = "<group>"; };
+		90B1387A14DF2DDF000FB81E /* ScoreNowSportSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreNowSportSelect.h; sourceTree = "<group>"; };
+		90B1387B14DF2DDF000FB81E /* ScoreNowSportSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreNowSportSelect.m; sourceTree = "<group>"; };
+		90B1387C14DF2DDF000FB81E /* ScoreNowSportSelect.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScoreNowSportSelect.xib; sourceTree = "<group>"; };
+		90B1387F14DF2E1F000FB81E /* ScoreNowAddMembers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreNowAddMembers.h; sourceTree = "<group>"; };
+		90B1388014DF2E1F000FB81E /* ScoreNowAddMembers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreNowAddMembers.m; sourceTree = "<group>"; };
+		90B1388114DF2E1F000FB81E /* ScoreNowAddMembers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScoreNowAddMembers.xib; sourceTree = "<group>"; };
+		90B1388414DF2E2A000FB81E /* ScoreNowScorePage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreNowScorePage.h; sourceTree = "<group>"; };
+		90B1388514DF2E2A000FB81E /* ScoreNowScorePage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreNowScorePage.m; sourceTree = "<group>"; };
+		90B1388614DF2E2A000FB81E /* ScoreNowScorePage.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScoreNowScorePage.xib; sourceTree = "<group>"; };
 		90B5021213D730F700DE887D /* SettingsTabs.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsTabs.xib; sourceTree = "<group>"; };
 		90C5B55110EA9A8600F40228 /* Player.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Player.xib; sourceTree = "<group>"; };
 		90C5B57410EA9F3800F40228 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile.png; path = ../images/profile.png; sourceTree = SOURCE_ROOT; };
@@ -1382,6 +1407,7 @@
 				902F389C121E237800CA50EF /* Scoring */,
 				907DEAC912C157A300BCEAF0 /* FAST */,
 				9081D82612DEBAB700E134EB /* RecurringEvents */,
+				90B1386F14DF2D88000FB81E /* ScoreNow */,
 				1D3623240D0F684500981E51 /* rTeamAppDelegate.h */,
 				1D3623250D0F684500981E51 /* rTeamAppDelegate.m */,
 				90CA2F8F14D8FBF6009316F4 /* ReplyButtonBackView.h */,
@@ -2255,6 +2281,28 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
+		90B1386F14DF2D88000FB81E /* ScoreNow */ = {
+			isa = PBXGroup;
+			children = (
+				90B1387014DF2DB7000FB81E /* ScoreNowTeamSelect.h */,
+				90B1387114DF2DB7000FB81E /* ScoreNowTeamSelect.m */,
+				90B1387214DF2DB7000FB81E /* ScoreNowTeamSelect.xib */,
+				90B1387514DF2DC3000FB81E /* ScoreNowGameSelect.h */,
+				90B1387614DF2DC3000FB81E /* ScoreNowGameSelect.m */,
+				90B1387714DF2DC3000FB81E /* ScoreNowGameSelect.xib */,
+				90B1387A14DF2DDF000FB81E /* ScoreNowSportSelect.h */,
+				90B1387B14DF2DDF000FB81E /* ScoreNowSportSelect.m */,
+				90B1387C14DF2DDF000FB81E /* ScoreNowSportSelect.xib */,
+				90B1387F14DF2E1F000FB81E /* ScoreNowAddMembers.h */,
+				90B1388014DF2E1F000FB81E /* ScoreNowAddMembers.m */,
+				90B1388114DF2E1F000FB81E /* ScoreNowAddMembers.xib */,
+				90B1388414DF2E2A000FB81E /* ScoreNowScorePage.h */,
+				90B1388514DF2E2A000FB81E /* ScoreNowScorePage.m */,
+				90B1388614DF2E2A000FB81E /* ScoreNowScorePage.xib */,
+			);
+			name = ScoreNow;
+			sourceTree = "<group>";
+		};
 		90CCF480122DF862004577AA /* Scoring xibs */ = {
 			isa = PBXGroup;
 			children = (
@@ -2693,6 +2741,11 @@
 				90837EDF14CB33B0000F2375 /* profileNew.png in Resources */,
 				90E5425414D0E26600C59A07 /* CreateNewEventGameday.xib in Resources */,
 				90CA2F8E14D8CC7B009316F4 /* replyArrow.png in Resources */,
+				90B1387414DF2DB7000FB81E /* ScoreNowTeamSelect.xib in Resources */,
+				90B1387914DF2DC3000FB81E /* ScoreNowGameSelect.xib in Resources */,
+				90B1387E14DF2DDF000FB81E /* ScoreNowSportSelect.xib in Resources */,
+				90B1388314DF2E20000FB81E /* ScoreNowAddMembers.xib in Resources */,
+				90B1388814DF2E2A000FB81E /* ScoreNowScorePage.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2877,6 +2930,11 @@
 				908584AE14B4C204008AD6A6 /* ReplyEditActivity.m in Sources */,
 				90E5425314D0E26600C59A07 /* CreateNewEventGameday.m in Sources */,
 				90CA2F9114D8FBF6009316F4 /* ReplyButtonBackView.m in Sources */,
+				90B1387314DF2DB7000FB81E /* ScoreNowTeamSelect.m in Sources */,
+				90B1387814DF2DC3000FB81E /* ScoreNowGameSelect.m in Sources */,
+				90B1387D14DF2DDF000FB81E /* ScoreNowSportSelect.m in Sources */,
+				90B1388214DF2E20000FB81E /* ScoreNowAddMembers.m in Sources */,
+				90B1388714DF2E2A000FB81E /* ScoreNowScorePage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2969,7 +3027,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PROVISIONING_PROFILE = "9D2F692B-415C-474D-B420-E27A9FABE465";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9447D40F-7333-49F4-8BB9-65F2ED17CCCE";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9D2F692B-415C-474D-B420-E27A9FABE465";
 				SDKROOT = iphoneos;
 			};
 			name = AdHoc;

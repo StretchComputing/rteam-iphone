@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <iAd/iAd.h>
 
-@interface NewActivity : UIViewController <UIScrollViewDelegate, ADBannerViewDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface NewActivity : UIViewController <UIScrollViewDelegate, ADBannerViewDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource>{
     
 
 }
+
+@property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) NSMutableArray *activityImageObjects;
 @property (nonatomic, strong) IBOutlet UIView *swipeAlert;
 @property (nonatomic, strong) IBOutlet UIView *swipeAlertFront;

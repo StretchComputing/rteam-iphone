@@ -35,6 +35,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSString *token = @"";
+    NSString *teamId = @"";
     
 	if ((firstName == nil) || (lastName == nil) || (email == nil) || (password == nil) || (alreadyMember == nil)|| (latitude == nil)|| (longitude == nil)
         || (phoneNumber == nil) || (carrierCode == nil) || (location == nil)) {
@@ -97,7 +98,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-        
+                
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -107,12 +108,14 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 		if ([apiStatus isEqualToString:@"100"]) {
 			token = [response valueForKey:@"token"];
+            teamId = [response valueForKey:@"teamId"];
 		}
 		
 		statusReturn = apiStatus;
 		
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		[returnDictionary setValue:token forKey:@"token"];
+        [returnDictionary setValue:teamId forKey:@"teamId"];
 		return returnDictionary;
 		
 	}
@@ -4658,7 +4661,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-                        
+                                
 		SBJSON *jsonParser = [SBJSON new];
                         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];

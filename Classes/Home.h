@@ -25,11 +25,14 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 @property (nonatomic, strong) IBOutlet UIView *postImageBackView;
 @property (nonatomic, strong) IBOutlet UIView *postImageFrontView;
 @property (nonatomic, strong) IBOutlet UIImageView *postImagePreview;
-@property (nonatomic, strong) IBOutlet UITextView *postImageTextView;
+@property (nonatomic, strong) IBOutlet UITextField *postImageTextView;
 @property (nonatomic, strong) IBOutlet UITableView *postImageTableView;
 @property (nonatomic, strong) IBOutlet UIButton *postImageSubmitButton;
 @property (nonatomic, strong) IBOutlet UIButton *postImageCancelButton;
-
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *postImageActivity;
+@property (nonatomic, strong) IBOutlet UILabel *postImageErrorLabel;
+@property (nonatomic, strong) NSString *postImageTeamId;
+@property (nonatomic, strong) NSString *postImageText;
 
 
 

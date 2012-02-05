@@ -61,7 +61,7 @@ refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, trans
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview, postImageTeamId, postImageActivity, postImageErrorLabel, postImageText;
 
 
 
@@ -81,6 +81,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
     [TraceSession addEventToSession:@"Home Page - View Will Appear"];
 
+    self.postImageTeamId = @"";
+    self.postImageBackView.hidden = YES;
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
         bannerIsVisible = YES;
@@ -170,6 +172,11 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 	self.newQuickLinkTable.dataSource = self;
 	self.newQuickLinkTable.backgroundColor = [UIColor clearColor];
 
+    self.postImageBackView.layer.masksToBounds = YES;
+	self.postImageBackView.layer.cornerRadius = 7.0;
+	self.postImageFrontView.layer.masksToBounds = YES;
+	self.postImageFrontView.layer.cornerRadius = 7.0;
+    
 
 	[self addQuickLinks];
 
@@ -441,6 +448,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 - (void)viewDidLoad {
 
+    self.postImageTableView.dataSource = self;
+    self.postImageTableView.delegate = self;
 
     self.showLessButton.hidden = YES;
 	self.currentDisplay = 1;
@@ -647,6 +656,9 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     [self.quickLinkOkButton setBackgroundImage:stretch forState:UIControlStateNormal];
     [self.quickLinkCancelTwoButton setBackgroundImage:stretch forState:UIControlStateNormal];
     [self.regTextButton setBackgroundImage:stretch forState:UIControlStateNormal];
+    [self.postImageSubmitButton setBackgroundImage:stretch forState:UIControlStateNormal];
+    [self.postImageCancelButton setBackgroundImage:stretch forState:UIControlStateNormal];
+
 
 
     [self.backViewBottom addSubview:self.transViewBottom];
@@ -1047,9 +1059,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	NSInteger row = [indexPath row];
 	
-	[self.selectRowLabel setHidden:YES];
-
-	self.rowNewQuickTeam = row;
+    if (tableView == self.postImageTableView) {
+        
+        Team *tmpTeam = [self.teamList objectAtIndex:row];
+        self.postImageTeamId = tmpTeam.teamId;
+        
+    }else{
+        [self.selectRowLabel setHidden:YES];
+        
+        self.rowNewQuickTeam = row;
+    }
+	
 	
 	
 }
@@ -1309,7 +1329,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 		if (self.newMessagesCount > 0) {
 
-            self.messageBadge.hidden = NO;
+            self.messageBadge.hidden = YES;
 
 		}else {
 
@@ -1317,8 +1337,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		}
 		
 		if (self.newActivity) {
-			
+			self.messageBadge.hidden = NO;
 		}else {
+            self.messageBadge.hidden = YES;
 		}
 
 	}else {
@@ -3680,6 +3701,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)viewDidUnload {
 
+    postImageActivity  = nil;
+    postImageErrorLabel = nil;
 	bottomBar = nil;
     backHelpView = nil;
 	inviteFan = nil;
@@ -3723,6 +3746,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     scrollView = nil;
     pageControl = nil;
     showLessButton = nil;
+    postImagePreview = nil;
+    postImageBackView = nil;
+    postImageCancelButton = nil;
+    postImageFrontView = nil;
+    postImageSubmitButton = nil;
+    postImageTableView = nil;
+    postImageTextView = nil;
+    
 	[super viewDidUnload];
 	
 
@@ -3796,26 +3827,124 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         
         self.imageDataToSend = UIImageJPEGRepresentation(newImage, 0.90);
+    
+    self.postImageBackView.hidden = NO;
+    self.postImagePreview.image = [UIImage imageWithData:self.imageDataToSend];
+    
+    [self.postImageTableView reloadData];
         
     
 } 
 
 -(void)postImageSubmit{
     
+    self.postImageErrorLabel.text = @"";
+    self.postImageText = self.postImageTextView.text;
+    if (self.postImageText == nil) {
+        self.postImageText = @"";
+    }
+    
+    if (![self.postImageTeamId isEqualToString:@""]) {
+        [self.postImageActivity startAnimating];
+        [self performSelectorInBackground:@selector(postImage) withObject:nil];
+    }else{
+        
+        if ([self.teamList count] ==1) {
+            Team *tmpTeam = [self.teamList objectAtIndex:0];
+            self.postImageTeamId = tmpTeam.teamId;
+            [self performSelectorInBackground:@selector(postImage) withObject:nil];
+        }else{
+            self.postImageErrorLabel.text = @"*Select a post team.";
+        }
+    }
 }
 
 -(void)postImageCancel{
     
+    self.postImageErrorLabel.text = @"";
+    self.postImageBackView.hidden = YES;
+}
+
+
+-(void)postImage{
+    
+    @autoreleasepool {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSData *tmpData = [NSData data];
+
+        tmpData = [NSData dataWithData:self.imageDataToSend];
+        
+        
+        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token teamId:self.postImageTeamId statusUpdate:self.postImageText photo:tmpData video:[NSData data] orientation:self.sendOrientation replyToId:@""];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString=@"";
+            
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            //[self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 208:
+                    self.errorString = @"NA";
+                    break;
+                default:
+                    //log status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:@selector(donePostImage) withObject:nil waitUntilDone:NO];
+        
+    }
+    
+    
+}
+
+-(void)donePostImage{
+    
+    [self.postImageActivity stopAnimating];
+    
+    if ([self.errorString isEqualToString:@""]) {
+        self.postImageErrorLabel.text = @"Post Successful!";
+        self.postImageErrorLabel.textColor = [UIColor colorWithRed:0.0 green:100.0 blue:0.0 alpha:1.0];
+        [self performSelector:@selector(hidePost) withObject:nil afterDelay:0.5];
+    }else{
+        if ([self.errorString isEqualToString:@"NA"]) {
+			NSString *tmp = @"Only User's with confirmed email addresses can post to Activity.  To confirm your email, please click on the activation link in the email we sent you.";
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[alert show];
+		}else{
+            self.postImageErrorLabel.text = self.errorString;
+        }
+    }
+}
+
+
+-(void)hidePost{
+    self.postImageBackView.hidden = YES;
 }
 
 - (void)dealloc {
-    postImagePreview = nil;
-    postImageBackView = nil;
-    postImageCancelButton = nil;
-    postImageFrontView = nil;
-    postImageSubmitButton = nil;
-    postImageTableView = nil;
-    postImageTextView = nil;
+    
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
