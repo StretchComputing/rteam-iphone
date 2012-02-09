@@ -1888,6 +1888,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		statusReturn = apiStatus;
 		
 		[returnDictionary setValue:statusReturn forKey:@"status"];
+        [returnDictionary setValue:gameId forKey:@"gameId"];
 		
 		return returnDictionary;
 		
@@ -2307,8 +2308,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-        
-        
+                
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -2323,7 +2323,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
-        
+                
         return [ServerAPI exceptionReturnValue:@"updateGame" :e];
 
 	}
@@ -4339,6 +4339,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
                 
 		SBJSON *jsonParser = [SBJSON new];
 		
+        NSLog(@"Response: %@", returnString);
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];

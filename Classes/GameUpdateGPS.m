@@ -39,7 +39,6 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 	[self performSelectorInBackground:@selector(getAllGames) withObject:nil];
 	self.title = @"Game Location";
 	self.locationName.text = self.locationString;
-	self.errorMessage.enabled = NO;
 	
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
@@ -49,17 +48,26 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 
 -(void)save{
 
+    self.errorMessage.text = @"";
+    
+    if ((self.locationName.text == nil) || [self.locationName.text isEqualToString:@""]) {
+        self.errorMessage.text = @"*Enter a new location first.";
+        self.errorMessage.textColor = [UIColor redColor];
+    }else{
+        self.nameOnly = true;
+        
+        [action startAnimating];
+        [self.navigationItem setHidesBackButton:YES];
+        self.saveButton.enabled = NO;
+        self.useCurrentButton.enabled = NO;
+        
+        self.theLocationName = [NSString stringWithString:self.locationName.text];
+        
+        
+        [self performSelectorInBackground:@selector(runRequest) withObject:nil];
+    }
 	
-	self.nameOnly = true;
 	
-	[action startAnimating];
-	[self.navigationItem setHidesBackButton:YES];
-	self.saveButton.enabled = NO;
-	self.useCurrentButton.enabled = NO;
-    self.theLocationName = [NSString stringWithString:self.locationName.text];
-
-	
-	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 
 	
 }
@@ -230,6 +238,7 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 	}else {
 		//if it failed, re-enable all fields so user can make changes
 		self.errorMessage.text = self.errorString;
+        self.errorMessage.textColor = [UIColor redColor];
 		self.errorMessage.enabled = YES;
 		self.saveButton.enabled = YES;
 		self.useCurrentButton.enabled = YES;

@@ -48,6 +48,19 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 }
 -(void)viewWillAppear:(BOOL)animated{
 
+    if (self.getInfo) {
+		[self.mainActivity startAnimating];
+		[self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
+	}else {
+        self.getInfo = true;
+        
+        float tmpFloat = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if (tmpFloat < 5.0) {
+            [self.mainActivity startAnimating];
+            [self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
+        }
+	}
+        
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
         bannerIsVisible = YES;
@@ -71,12 +84,8 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 	self.scoreDividerLabel.hidden = YES;
 	self.intervalLabel.hidden = YES;
 	
-	if (self.getInfo) {
-		[self.mainActivity startAnimating];
-		[self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
-	}else {
-        self.getInfo = true;
-	}
+    
+	
 	
     
 	if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
@@ -113,7 +122,7 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 	
 
     //iAds
-	myAd = [[ADBannerView alloc] initWithFrame:CGRectZero];
+	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 	myAd.delegate = self;
 	myAd.hidden = YES;
 	[self.view addSubview:myAd];
@@ -879,9 +888,16 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
 	
 }
+
+-(void)dealloc{
+    
+    myAd.delegate = nil;
+	myAd = nil;
+    
+}
+
 -(void)viewDidUnload{
 	
-
 	opponent = nil;
 	day = nil;
 	time = nil;

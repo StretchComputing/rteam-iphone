@@ -63,10 +63,10 @@ fromHome, myAd, alertOne, alertTwo, isDelete;
 -(void)viewDidLoad{
 	
 	//iAds
-	myAd = [[ADBannerView alloc] initWithFrame:CGRectZero];
-	//myAd.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
+	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 	myAd.delegate = self;
 	myAd.hidden = YES;
+    self.bannerIsVisible = NO;
 	[self.view addSubview:myAd];
 	
 	
@@ -850,13 +850,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 		self.myTableView.frame = CGRectMake(0, 50, 320, 366);
 
+        
         [self.view bringSubviewToFront:myAd];
-		
+    
+    
 	}
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
 	
+    
 	if (self.bannerIsVisible) {
 		
 		myAd.hidden = YES;
@@ -867,6 +870,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 		
 	}
+     
 	
 	
 }
@@ -1138,4 +1142,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 	
+-(void)dealloc{
+    myAd.delegate = nil;
+    myAd = nil;
+}
+
 @end

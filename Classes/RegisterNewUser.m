@@ -30,13 +30,14 @@
 @implementation RegisterNewUser
 @synthesize email, password, firstName, lastName, error, registering, submitButton, createSuccess, firstString, lastString, errorString,
 locationManager, updateLat, updateLong, phoneText, carrierText, carrierLabel, carrierPicker, carrierExplain, phoneExplain, carriers, selectedCarrier,
-selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, hardCarriers, usingHardCarriers, locationString;
+selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, hardCarriers, usingHardCarriers, locationString, theFirstName, theLastName, thePhoneNumber;
 
 
 
 - (void)viewDidLoad {
     
     [self buildTempArray];
+    self.locationString = @"";
     self.usingHardCarriers = false;
     self.didGetCarrierList = false;
 	self.title = @"Register";
@@ -141,6 +142,9 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
                                           withError:&errors]) {
         }
         
+        self.theLastName = self.lastName.text;
+        self.theFirstName = self.firstName.text;
+        self.thePhoneNumber = self.phoneText.text;
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 		
@@ -150,89 +154,91 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 
 - (void)runRequest {
 
+    @autoreleasepool {
+        NSDictionary *response = [ServerAPI createUser:self.theFirstName
+                                                      :self.theLastName
+                                                      :self.email
+                                                      :self.password
+                                                      :@"" :self.updateLat :self.updateLong :self.thePhoneNumber :self.carrierCode :self.locationString];
     
-    NSDictionary *response = [ServerAPI createUser:self.firstName.text
-											  :self.lastName.text
-											  :self.email
-											  :self.password
-                                                  :@"" :self.updateLat :self.updateLong :self.phoneText.text :self.carrierCode :self.locationString];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-    
-	if ([status isEqualToString:@"100"]){
-		
-		NSString *token = [response valueForKey:@"token"];
-		
-		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-		mainDelegate.token = token;
-		mainDelegate.quickLinkOne = @"";
-		mainDelegate.quickLinkTwo = @"";
-		mainDelegate.quickLinkOneName = @"";
-		mainDelegate.quickLinkTwoName = @"";
-		mainDelegate.quickLinkOneImage = @"";
-		mainDelegate.quickLinkTwoImage = @"";
-                
-        if (([response valueForKey:@"teamId"] != nil) && ([[response valueForKey:@"teamId"] length] > 0)) {
-            mainDelegate.quickLinkOne = [response valueForKey:@"teamId"];
-            
-            
-            mainDelegate.quickLinkOneName = @"Team 1";
-            mainDelegate.quickLinkOneImage = [@"Basketball" lowercaseString];
-        }
-		
-		[mainDelegate saveUserInfo];
-		
-		self.createSuccess = true;
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server.";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server.";
-				break;
-			case 201:
-				//email address already in use
-				self.errorString = @"*Email address is already in use.";
-				break;
-			case 300:
-				//first and last names required
-				self.errorString = @"*Error connecting to server.";
-				break;
-			case 303:
-				//email address and password required
-				self.errorString = @"*Email address and password required.";
-				break;
-			case 518:
-				//invalid already member parameter
-				self.errorString = @"*Error connecting to server.";
-				break;
-            case 542:
-				//invalid already member parameter
-				self.errorString = @"*Invalid phone number.";
-				break;
-			default:
-				//should never get here
-				self.errorString = @"*Error connecting to server.";
-				break;
 
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
+        NSString *status = [response valueForKey:@"status"];
+                
+        if ([status isEqualToString:@"100"]){
+            
+            NSString *token = [response valueForKey:@"token"];
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            mainDelegate.token = token;
+            mainDelegate.quickLinkOne = @"";
+            mainDelegate.quickLinkTwo = @"";
+            mainDelegate.quickLinkOneName = @"";
+            mainDelegate.quickLinkTwoName = @"";
+            mainDelegate.quickLinkOneImage = @"";
+            mainDelegate.quickLinkTwoImage = @"";
+            
+            if (([response valueForKey:@"teamId"] != nil) && ([[response valueForKey:@"teamId"] length] > 0)) {
+                mainDelegate.quickLinkOne = [response valueForKey:@"teamId"];
+                
+                
+                mainDelegate.quickLinkOneName = @"Team 1";
+                mainDelegate.quickLinkOneImage = [@"Basketball" lowercaseString];
+            }
+            
+            [mainDelegate saveUserInfo];
+            
+            self.createSuccess = true;
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                case 201:
+                    //email address already in use
+                    self.errorString = @"*Email address is already in use.";
+                    break;
+                case 300:
+                    //first and last names required
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                case 303:
+                    //email address and password required
+                    self.errorString = @"*Email address and password required.";
+                    break;
+                case 518:
+                    //invalid already member parameter
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                case 542:
+                    //invalid already member parameter
+                    self.errorString = @"*Invalid phone number.";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server.";
+                    break;
+                    
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+    }
+    
 }
 
 - (void)didFinish{
@@ -357,6 +363,10 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
     NSString *state = [[placemark addressDictionary] valueForKey:@"State"];
     
     self.locationString = [NSString stringWithFormat:@"%@,%@", city, state];
+    
+    if (self.locationString == nil) {
+        self.locationString = @"";
+    }
 
 }
 

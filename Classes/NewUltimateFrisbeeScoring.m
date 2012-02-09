@@ -162,118 +162,124 @@ isCoord, addThem, addUs, cancelScoringButton, activity, theScoreUs, theScoreThem
 }
 
 - (void)runRequest {
-	
-	//NSAutoreleasePool * pool;
-	
-    //pool = [[NSAutoreleasePool alloc] init];
-    //assert(pool != nil);
-	
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	token = mainDelegate.token;
-	
-	NSString *sendInterval = @"";
-	if ([self.interval isEqualToString:@"0"]) {
-		sendInterval = @"-3";
-	}else {
-		sendInterval = self.interval;
-	}
 
-	
-	
-	
-	NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.scoreUs.text 
-												  :self.scoreThem.text :sendInterval :@"" :@"" :@""];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
-		
-		
-		self.createSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				//self.error.text = @"*Error connecting to server";
-				break;
-			case 1:
-				///error connecting to server
-				//self.error.text = @"*Error connecting to server";
-				break;
-				
-			default:
-				//should never get here
-				//self.error.text = @"*Error connecting to server";
-				break;
-		}
-	}
-	
+	@autoreleasepool {
+        //NSAutoreleasePool * pool;
+        
+        //pool = [[NSAutoreleasePool alloc] init];
+        //assert(pool != nil);
+        
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        token = mainDelegate.token;
+        
+        NSString *sendInterval = @"";
+        if ([self.interval isEqualToString:@"0"]) {
+            sendInterval = @"-3";
+        }else {
+            sendInterval = self.interval;
+        }
+        
+        
+        
+        
+        NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.scoreUs.text 
+                                                      :self.scoreThem.text :sendInterval :@"" :@"" :@""];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            
+            self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                case 1:
+                    ///error connecting to server
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                    
+                default:
+                    //should never get here
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        
+        //[pool drain];
 
-	
-    //[pool drain];
+    }
 }
 
 - (void)runRequestOver {
-	
-	//NSAutoreleasePool * pool;
-	
-   /// pool = [[NSAutoreleasePool alloc] init];
-    //assert(pool != nil);
-	
-	NSString *token = @"";
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	token = mainDelegate.token;
-	
-	
-	NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.scoreUs.text 
-												  :self.scoreThem.text :@"-1" :@"" :@"" :@""];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	if ([status isEqualToString:@"100"]){
-		
-		
-		self.createSuccess = true;
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.createSuccess = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				//self.error.text = @"*Error connecting to server";
-				break;
-			case 1:
-				///error connecting to server
-				//self.error.text = @"*Error connecting to server";
-				break;
-				
-			default:
-				//should never get here
-				//self.error.text = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
-    //[pool drain];
+
+	@autoreleasepool {
+        //NSAutoreleasePool * pool;
+        
+        /// pool = [[NSAutoreleasePool alloc] init];
+        //assert(pool != nil);
+        
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        token = mainDelegate.token;
+        
+        
+        NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.scoreUs.text 
+                                                      :self.scoreThem.text :@"-1" :@"" :@"" :@""];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            
+            self.createSuccess = true;
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.createSuccess = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                case 1:
+                    ///error connecting to server
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                    
+                default:
+                    //should never get here
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+        
+        //[pool drain];
+
+    }
 }
 
 

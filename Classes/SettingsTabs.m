@@ -102,7 +102,7 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
     self.title = @"Settings";
     
     //iAds
-    myAd = [[ADBannerView alloc] initWithFrame:CGRectZero];
+	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
     myAd.delegate = self;
     myAd.hidden = YES;
     [self.view addSubview:myAd];
@@ -1123,6 +1123,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
-
+-(void)dealloc{
+    myAd.delegate = nil;
+    myAd = nil;
+}
 
 @end

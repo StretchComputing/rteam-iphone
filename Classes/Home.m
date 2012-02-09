@@ -49,7 +49,7 @@
 #import "TraceSession.h"
 #import "AddGamePhoto.h"
 #import "CreateNewEventGameday.h"
-
+#import "ScoreNowScorePage.h"
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
 badgeNumber, didRegister, numMemberTeams, inviteFan, viewControllers, serverError, alreadyCalled1, alreadyCalled2, haveTeamList, teamList, changeQuickLink, newQuickLinkTable, newQuickLinkAlias, rowNewQuickTeam, 
@@ -508,7 +508,21 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     
 	refresh.style = UIBarButtonItemStylePlain;
     self.gamedayButton = [[UIBarButtonItem alloc] initWithTitle:@"GAMEDAY" style:UIBarButtonItemStyleBordered target:self action:@selector(gameday)];
-    self.gamedayButton.tintColor = [UIColor colorWithRed:30.0/255.0 green:155.0/255.0 blue:30.0/255.0 alpha:1.0];
+    
+    @try {
+        
+        float tmpFloat = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if (tmpFloat < 5.0) {
+            
+        }else{
+            self.gamedayButton.tintColor = [UIColor colorWithRed:30.0/255.0 green:155.0/255.0 blue:30.0/255.0 alpha:1.0];
+
+        }
+    }
+    @catch (NSException *exception) {
+
+    }
+ 
 	NSArray *items1 = [NSArray arrayWithObjects:question, flexibleSpace, self.gamedayButton, flexibleSpace, refresh, nil];
 	self.bottomBar.items = items1;
 	
@@ -1729,6 +1743,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 UIButton *tmpButton = [UIButton buttonWithType:UIButtonTypeCustom];
                 [tmpButton setTitle:@"No upcoming events found, click 'Gameday' to create one now!" forState:UIControlStateNormal];
                 tmpButton.titleLabel.numberOfLines = 2;
+                tmpButton.lineBreakMode = UILineBreakModeWordWrap;
                 tmpButton.titleLabel.textAlignment = UITextAlignmentCenter;
                 [tmpButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
                 tmpButton.frame = CGRectMake(0, 0, 320, 110);
@@ -3029,6 +3044,20 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex == 0) {
             
+            bool hasTeams = false;
+            if ([self.teamList count] > 0) {
+                
+                hasTeams = true;
+            }
+            
+            ScoreNowScorePage *tmp = [[ScoreNowScorePage alloc] init];
+            tmp.hasTeams = hasTeams;
+            tmp.teamList = [NSArray arrayWithArray:self.teamList];
+            UINavigationController *navController = [[UINavigationController alloc] init];
+            [navController pushViewController:tmp animated:NO];
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self.navigationController presentModalViewController:navController animated:YES];
+
         }else if (buttonIndex == 1){
             
             UIImagePickerController * picker = [[UIImagePickerController alloc] init];
@@ -3945,6 +3974,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)dealloc {
     
+    myAd.delegate = nil;
+    myAd = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

@@ -1323,7 +1323,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             if ([replies count] > 0) {
                 
-                totalReplies = [totalReplies arrayByAddingObjectsFromArray:replies];
+                totalReplies = [NSMutableArray arrayWithArray:[totalReplies arrayByAddingObjectsFromArray:replies]];
 
                 for (int j = 0; j < [self.activityArray count]; j++) {
                     Activity *tmpActivity = [self.activityArray objectAtIndex:j];
@@ -1843,5 +1843,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
+-(void)dealloc{
+    myAd.delegate = nil;
+    myAd = nil;
+}
 
 @end

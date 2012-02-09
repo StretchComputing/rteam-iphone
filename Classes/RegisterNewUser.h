@@ -21,6 +21,9 @@
     int myTextFieldSemaphore;
 	
 }
+@property (nonatomic, strong) NSString *thePhoneNumber;
+@property (nonatomic, strong) NSString *theFirstName;
+@property (nonatomic, strong) NSString *theLastName;
 @property (nonatomic, retain) NSString *locationString;
 @property bool usingHardCarriers;
 @property (nonatomic, strong) NSArray *hardCarriers;

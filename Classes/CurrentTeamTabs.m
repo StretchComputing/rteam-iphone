@@ -128,10 +128,20 @@
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
 
 	self.navigationItem.title = self.teamName;
-	
+    
+    float tmpFloat = [[[UIDevice currentDevice] systemVersion] floatValue];
+    bool shouldCall = false;
+    if (tmpFloat < 5.0) {
+        shouldCall = true;
+    }
+    
 	if ([viewController class] == [TeamHome class]) {
-		//TeamHome *tmp = (TeamHome *)viewController;
-		//[tmp viewWillAppear:NO];
+        
+        if (shouldCall) {
+            TeamHome *tmp = (TeamHome *)viewController;
+            [tmp viewWillAppear:NO];
+        }
+		
 		
 	
 		//TeamActivity *teamActivity = (TeamActivity *)[self.viewControllers objectAtIndex:1];
@@ -144,8 +154,12 @@
 		//[teamMessages viewWillDisappear:NO];
 		
 	}else if ([viewController class] == [Players class]) {
-		//Players *tmp = (Players *)viewController;
-		//[tmp viewWillAppear:NO];
+        
+        if (shouldCall) {
+            Players *tmp = (Players *)viewController;
+            [tmp viewWillAppear:NO];
+        }
+		
 		
 		TeamHome *teamHome = (TeamHome *)[self.viewControllers objectAtIndex:0];
 		[teamHome viewWillDisappear:NO];
@@ -159,8 +173,11 @@
 		
 	}else if ([viewController class] == [EventList class]) {
 		
-		//EventList *tmp = (EventList *)viewController;
-		//[tmp viewWillAppear:NO];
+        if (shouldCall) {
+            EventList *tmp = (EventList *)viewController;
+            [tmp viewWillAppear:NO];
+        }
+		
 		
 		TeamHome *teamHome = (TeamHome *)[self.viewControllers objectAtIndex:0];
 		[teamHome viewWillDisappear:NO];

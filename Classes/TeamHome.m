@@ -128,7 +128,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 
     
     //iAds
-	myAd = [[ADBannerView alloc] initWithFrame:CGRectZero];
+	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 	myAd.delegate = self;
 	myAd.hidden = YES;
 	[self.view addSubview:myAd];
@@ -1419,6 +1419,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
+-(void)dealloc{
+    
+    myAd.delegate = nil;
+	myAd = nil;
+
+}
 -(void)viewDidUnload{
 
 	errorLabel = nil;
@@ -1441,6 +1447,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     addEventsButton = nil;
     addMembersButton = nil;
     noEventsLabel = nil;
+    myAd.delegate = nil;
+	myAd = nil;
 	[super viewDidUnload];
 }
 
