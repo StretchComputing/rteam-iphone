@@ -9,7 +9,7 @@
 #import "Event.h"
 
 @implementation Event
-@synthesize startDate, endDate, timeZone, eventId, teamId, description, latitude, longitude, location, userRole, eventName, teamName, isCanceled;
+@synthesize startDate, endDate, timeZone, eventId, teamId, description, latitude, longitude, location, userRole, eventName, teamName, isCanceled, messageThreadId;
 
 
 

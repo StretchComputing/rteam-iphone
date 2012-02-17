@@ -50,6 +50,8 @@
 #import "AddGamePhoto.h"
 #import "CreateNewEventGameday.h"
 #import "ScoreNowScorePage.h"
+#import "WhosComingPoll.h"
+
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
 badgeNumber, didRegister, numMemberTeams, inviteFan, viewControllers, serverError, alreadyCalled1, alreadyCalled2, haveTeamList, teamList, changeQuickLink, newQuickLinkTable, newQuickLinkAlias, rowNewQuickTeam, 
@@ -3069,11 +3071,21 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
         }else if (buttonIndex == 2){
             
+          
+            WhosComingPoll *tmp = [[WhosComingPoll alloc] init];
+            tmp.teamList = [NSArray arrayWithArray:self.teamList];
+            UINavigationController *navController = [[UINavigationController alloc] init];
+            [navController pushViewController:tmp animated:NO];
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self.navigationController presentModalViewController:navController animated:YES];
+            
+        }else if (buttonIndex == 3){
+            
             CreateNewEventGameday *tmp = [[CreateNewEventGameday alloc] init];
-            [self.navigationController pushViewController:tmp animated:YES];
-            
-        }else{
-            
+            UINavigationController *navController = [[UINavigationController alloc] init];
+            [navController pushViewController:tmp animated:NO];
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self.navigationController presentModalViewController:navController animated:YES];
         }
         
     }else {
@@ -3791,7 +3803,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)gameday{
     
-    self.gamedayAction = [[UIActionSheet alloc] initWithTitle:@"*Gameday Actions*" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Score Now!", @"Take a Photo", @"Add An Event", nil];
+    self.gamedayAction = [[UIActionSheet alloc] initWithTitle:@"*Gameday Actions*" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Score Now!", @"Take a Photo", @"Who's Coming Poll", @"Add An Event", nil];
 
     UIView *greenView = [[UIView alloc] initWithFrame:CGRectMake(0, 23, 320, 480)]; 
     greenView.backgroundColor = [UIColor colorWithRed:30.0/255.0 green:155.0/255.0 blue:30.0/255.0 alpha:1.0];

@@ -223,6 +223,8 @@
 		907DEAD512C1581F00BCEAF0 /* Vote.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907DEAD412C1581F00BCEAF0 /* Vote.xib */; };
 		907DFC0A122EE85A00A3D72C /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = 907DFC09122EE85A00A3D72C /* Login.m */; };
 		907DFC11122EE8EE00A3D72C /* Login.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907DFC10122EE8EE00A3D72C /* Login.xib */; };
+		907FC9CE14EC584400B08599 /* WhosComingPoll.m in Sources */ = {isa = PBXBuildFile; fileRef = 907FC9CC14EC584300B08599 /* WhosComingPoll.m */; };
+		907FC9CF14EC584400B08599 /* WhosComingPoll.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907FC9CD14EC584300B08599 /* WhosComingPoll.xib */; };
 		9080702A12DFB00C00196AAC /* CalendarEventObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9080702912DFB00C00196AAC /* CalendarEventObject.m */; };
 		908072AA119642D5005294EA /* PlayerAttendance.m in Sources */ = {isa = PBXBuildFile; fileRef = 908072A9119642D5005294EA /* PlayerAttendance.m */; };
 		90807357119657BC005294EA /* absent.png in Resources */ = {isa = PBXBuildFile; fileRef = 90807355119657BC005294EA /* absent.png */; };
@@ -238,9 +240,7 @@
 		90816DBE12ADA3D100C0D577 /* NewHockeyScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816DBD12ADA3D100C0D577 /* NewHockeyScoring.xib */; };
 		90816DC012ADA3D900C0D577 /* NewWaterPoloScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816DBF12ADA3D900C0D577 /* NewWaterPoloScoring.xib */; };
 		90816DD612ADA66E00C0D577 /* NewDefaultScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816DD512ADA66E00C0D577 /* NewDefaultScoring.xib */; };
-		90816DD812ADA67700C0D577 /* NewUltimateFrisbeeScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816DD712ADA67700C0D577 /* NewUltimateFrisbeeScoring.xib */; };
 		90816DDB12ADA68000C0D577 /* NewDefaultScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816DDA12ADA68000C0D577 /* NewDefaultScoring.m */; };
-		90816DDE12ADA68800C0D577 /* NewUltimateFrisbeeScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816DDD12ADA68800C0D577 /* NewUltimateFrisbeeScoring.m */; };
 		90816E1F12ADD85200C0D577 /* NewBaseballScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816E1E12ADD85200C0D577 /* NewBaseballScoring.m */; };
 		90816E5512ADDC5700C0D577 /* NewBaseballScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816E5412ADDC5700C0D577 /* NewBaseballScoring.xib */; };
 		9081D7AB12DEA62C00E134EB /* DeleteMessageFrequency.m in Sources */ = {isa = PBXBuildFile; fileRef = 9081D7AA12DEA62C00E134EB /* DeleteMessageFrequency.m */; };
@@ -895,6 +895,9 @@
 		907DFC08122EE85A00A3D72C /* Login.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Login.h; sourceTree = "<group>"; };
 		907DFC09122EE85A00A3D72C /* Login.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Login.m; sourceTree = "<group>"; };
 		907DFC10122EE8EE00A3D72C /* Login.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Login.xib; sourceTree = "<group>"; };
+		907FC9CB14EC584300B08599 /* WhosComingPoll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhosComingPoll.h; sourceTree = "<group>"; };
+		907FC9CC14EC584300B08599 /* WhosComingPoll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhosComingPoll.m; sourceTree = "<group>"; };
+		907FC9CD14EC584300B08599 /* WhosComingPoll.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhosComingPoll.xib; sourceTree = "<group>"; };
 		9080702812DFB00C00196AAC /* CalendarEventObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarEventObject.h; sourceTree = "<group>"; };
 		9080702912DFB00C00196AAC /* CalendarEventObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarEventObject.m; sourceTree = "<group>"; };
 		908072A8119642D5005294EA /* PlayerAttendance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerAttendance.h; sourceTree = "<group>"; };
@@ -917,11 +920,8 @@
 		90816DBD12ADA3D100C0D577 /* NewHockeyScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewHockeyScoring.xib; sourceTree = "<group>"; };
 		90816DBF12ADA3D900C0D577 /* NewWaterPoloScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewWaterPoloScoring.xib; sourceTree = "<group>"; };
 		90816DD512ADA66E00C0D577 /* NewDefaultScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewDefaultScoring.xib; sourceTree = "<group>"; };
-		90816DD712ADA67700C0D577 /* NewUltimateFrisbeeScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewUltimateFrisbeeScoring.xib; sourceTree = "<group>"; };
 		90816DD912ADA68000C0D577 /* NewDefaultScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDefaultScoring.h; sourceTree = "<group>"; };
 		90816DDA12ADA68000C0D577 /* NewDefaultScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewDefaultScoring.m; sourceTree = "<group>"; };
-		90816DDC12ADA68800C0D577 /* NewUltimateFrisbeeScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewUltimateFrisbeeScoring.h; sourceTree = "<group>"; };
-		90816DDD12ADA68800C0D577 /* NewUltimateFrisbeeScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewUltimateFrisbeeScoring.m; sourceTree = "<group>"; };
 		90816E1D12ADD85200C0D577 /* NewBaseballScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewBaseballScoring.h; sourceTree = "<group>"; };
 		90816E1E12ADD85200C0D577 /* NewBaseballScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewBaseballScoring.m; sourceTree = "<group>"; };
 		90816E5412ADDC5700C0D577 /* NewBaseballScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewBaseballScoring.xib; sourceTree = "<group>"; };
@@ -1416,6 +1416,9 @@
 				907DFC09122EE85A00A3D72C /* Login.m */,
 				903A1CCE11F885DD00224F42 /* Home.h */,
 				903A1CCF11F885DD00224F42 /* Home.m */,
+				907FC9CB14EC584300B08599 /* WhosComingPoll.h */,
+				907FC9CC14EC584300B08599 /* WhosComingPoll.m */,
+				907FC9CD14EC584300B08599 /* WhosComingPoll.xib */,
 				9091602F13E1B5540073C20A /* NewActivity.h */,
 				9091603013E1B5540073C20A /* NewActivity.m */,
 				9083CD631471AD4B00315792 /* NewActivityImageObject.h */,
@@ -1892,8 +1895,6 @@
 				90816DBB12ADA3C500C0D577 /* NewWaterPoloScoring.m */,
 				90816DD912ADA68000C0D577 /* NewDefaultScoring.h */,
 				90816DDA12ADA68000C0D577 /* NewDefaultScoring.m */,
-				90816DDC12ADA68800C0D577 /* NewUltimateFrisbeeScoring.h */,
-				90816DDD12ADA68800C0D577 /* NewUltimateFrisbeeScoring.m */,
 				90816E1D12ADD85200C0D577 /* NewBaseballScoring.h */,
 				90816E1E12ADD85200C0D577 /* NewBaseballScoring.m */,
 				9086977614E36F9E005B686D /* ScoreNowScoring.h */,
@@ -2297,7 +2298,6 @@
 				90816DBD12ADA3D100C0D577 /* NewHockeyScoring.xib */,
 				90816DBF12ADA3D900C0D577 /* NewWaterPoloScoring.xib */,
 				90816DD512ADA66E00C0D577 /* NewDefaultScoring.xib */,
-				90816DD712ADA67700C0D577 /* NewUltimateFrisbeeScoring.xib */,
 				90816E5412ADDC5700C0D577 /* NewBaseballScoring.xib */,
 			);
 			name = "Scoring xibs";
@@ -2555,7 +2555,6 @@
 				90816DBE12ADA3D100C0D577 /* NewHockeyScoring.xib in Resources */,
 				90816DC012ADA3D900C0D577 /* NewWaterPoloScoring.xib in Resources */,
 				90816DD612ADA66E00C0D577 /* NewDefaultScoring.xib in Resources */,
-				90816DD812ADA67700C0D577 /* NewUltimateFrisbeeScoring.xib in Resources */,
 				90816E5512ADDC5700C0D577 /* NewBaseballScoring.xib in Resources */,
 				907A5DD912AEAFAE0002C04E /* freeAdd.png in Resources */,
 				9081DA4912B00D5F0031BB6C /* Feedback.xib in Resources */,
@@ -2728,6 +2727,7 @@
 				90B1388314DF2E20000FB81E /* ScoreNowAddMembers.xib in Resources */,
 				90B1388814DF2E2A000FB81E /* ScoreNowScorePage.xib in Resources */,
 				9086977A14E36F9E005B686D /* ScoreNowScoring.xib in Resources */,
+				907FC9CF14EC584400B08599 /* WhosComingPoll.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2857,7 +2857,6 @@
 				90816DB912ADA3BE00C0D577 /* NewHockeyScoring.m in Sources */,
 				90816DBC12ADA3C500C0D577 /* NewWaterPoloScoring.m in Sources */,
 				90816DDB12ADA68000C0D577 /* NewDefaultScoring.m in Sources */,
-				90816DDE12ADA68800C0D577 /* NewUltimateFrisbeeScoring.m in Sources */,
 				90816E1F12ADD85200C0D577 /* NewBaseballScoring.m in Sources */,
 				907A5E2712AEC29C0002C04E /* Reachability.m in Sources */,
 				9081E84112B68EB90031BB6C /* DeleteSelectButton.m in Sources */,
@@ -2915,6 +2914,7 @@
 				90B1388214DF2E20000FB81E /* ScoreNowAddMembers.m in Sources */,
 				90B1388714DF2E2A000FB81E /* ScoreNowScorePage.m in Sources */,
 				9086977914E36F9E005B686D /* ScoreNowScoring.m in Sources */,
+				907FC9CE14EC584400B08599 /* WhosComingPoll.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

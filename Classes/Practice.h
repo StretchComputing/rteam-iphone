@@ -14,6 +14,7 @@
 	
 }
 @property bool isCanceled;
+@property (nonatomic, strong) NSString *messageThreadId;
 @property (nonatomic, strong )NSString *teamName;
 @property (nonatomic, strong) NSString *startDate;
 @property (nonatomic, strong) NSString *endDate;

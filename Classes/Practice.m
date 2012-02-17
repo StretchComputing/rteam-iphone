@@ -10,7 +10,7 @@
 #import "Practice.h"
 
 @implementation Practice
-@synthesize startDate, endDate, timeZone, practiceId, ppteamId, description, latitude, longitude, location, userRole, teamName, isCanceled;
+@synthesize startDate, endDate, timeZone, practiceId, ppteamId, description, latitude, longitude, location, userRole, teamName, isCanceled, messageThreadId;
 
 
 

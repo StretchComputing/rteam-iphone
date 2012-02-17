@@ -1236,7 +1236,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
             
         }
         
-        finalMemberArray = tmpMemberArray;
+        finalMemberArray = [NSArray arrayWithArray:tmpMemberArray];
         
         NSError *errors;
        // rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];

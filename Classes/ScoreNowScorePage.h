@@ -13,6 +13,7 @@
 
 @interface ScoreNowScorePage : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) NSArray *emailArray;
 @property bool isNewTeam;
 @property (nonatomic, strong) ScoreNowScoring *theScoreView;
@@ -40,6 +41,7 @@
 
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *gameActivity;
 @property (nonatomic, strong) NSDate *initialDate;
+@property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
 
 @property (nonatomic, strong) UIAlertView *addMembersAlert;
 @property (nonatomic, strong) NSString *sendScoreUs;
@@ -49,6 +51,9 @@
 @property (nonatomic, strong) NSString *sendTeamName;
 @property (nonatomic, strong) NSString *sendSport;
 @property bool gameIsOver;
+
+@property (nonatomic, strong) UIBarButtonItem *doneButton;
+@property (nonatomic, strong) UIBarButtonItem *cancelButton;
 
 
 -(IBAction)endText;

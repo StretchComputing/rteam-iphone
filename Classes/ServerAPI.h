@@ -106,6 +106,7 @@
 +(NSDictionary *)deleteEvent:(NSString *)token :(NSString *)teamId :(NSString *)practiceId;
 
 +(NSDictionary *)getListOfEventsNow:(NSString *)token;
++(NSDictionary *)getListOfWhosComingEvents:(NSString *)teamId :(NSString *)token;
 
 //Attendance APIs
 +(NSDictionary *)updateAttendees:(NSString *)token :(NSString *)teamId :(NSString *)eventId :(NSString *)eventType :(NSArray *)attList :(NSString *)startDate;

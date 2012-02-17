@@ -200,8 +200,7 @@
         }else {
             newOpp = self.theOpponent;
         }
-        
-        
+                
         NSDictionary *response = [ServerAPI createGame:self.teamId :mainDelegate.token :startDateString :endDateString 
                                                       :newDescription :timeZone :latitude :longitude
                                                       :newOpp];

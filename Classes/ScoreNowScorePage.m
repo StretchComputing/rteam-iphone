@@ -12,18 +12,38 @@
 #import "ServerAPI.h"
 #import "Game.h"
 #import "ScoreNowAddMembers.h"
+#import "NewMemberObject.h"
+
 @implementation ScoreNowScorePage
-@synthesize noTeamsView, currentTeamsView, teamSelectButton, teamNameField, sportField, gameSelectButton, teamList, hasTeams, gameList, selectView,selectLabel, selectTable, isTeamTable, gameActivity, initialDate, selectedGameId, selectedTeamId, gameTableActivity, theScoreView, addMembersAlert, isNewTeam, mainActivity, sendScoreUs, sendInterval, sendScoreThem, sendSport, sendTeamName, gameIsOver, emailArray;
+@synthesize noTeamsView, currentTeamsView, teamSelectButton, teamNameField, sportField, gameSelectButton, teamList, hasTeams, gameList, selectView,selectLabel, selectTable, isTeamTable, gameActivity, initialDate, selectedGameId, selectedTeamId, gameTableActivity, theScoreView, addMembersAlert, isNewTeam, mainActivity, sendScoreUs, sendInterval, sendScoreThem, sendSport, sendTeamName, gameIsOver, emailArray, phoneOnlyArray, errorString, doneButton, cancelButton;
 
 -(void)viewWillAppear:(BOOL)animated{
     
     if ([self.emailArray count] > 0) {
         //Members ahve been added, continue
+        //create team
+        self.sendScoreUs = self.theScoreView.scoreUs.text;
+        self.sendScoreThem = self.theScoreView.scoreThem.text;
+        
+        if (self.gameIsOver) {
+            self.sendInterval = @"-1";
+        }else{
+            self.sendInterval = self.theScoreView.quarter.text;
+        }
+        
+        self.sendTeamName = self.teamNameField.text;
+        self.sendSport = self.sportField.text;
+        [self.mainActivity startAnimating];
+        [self performSelectorInBackground:@selector(createTeam) withObject:nil];
         
     }
     
 }
 -(void)done{
+    
+    self.theScoreView.gameOverButton.enabled = NO;
+    self.doneButton.enabled = NO;
+    self.cancelButton.enabled = NO;
     
     if (self.noTeamsView.hidden == NO) {
         
@@ -46,9 +66,42 @@
         
     }else{
         
-        self.addMembersAlert = [[UIAlertView alloc] initWithTitle:@"Add Members?" message:@"Would you like to add any members to your new team before saving?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", @"No", nil];
-        self.isNewTeam = false;
-        [self.addMembersAlert show];
+        if (self.isNewTeam) {
+            
+            self.addMembersAlert = [[UIAlertView alloc] initWithTitle:@"Add Members?" message:@"Would you like to add any members to your new team before saving?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", @"No", nil];
+            self.isNewTeam = false;
+            [self.addMembersAlert show];
+            
+        }else{
+                
+                if ([self.selectedGameId isEqualToString:@""]) {
+                    //create game, then update game with score
+                    self.sendScoreUs = self.theScoreView.scoreUs.text;
+                    self.sendScoreThem = self.theScoreView.scoreThem.text;
+                    if (self.gameIsOver) {
+                        self.sendInterval = @"-1";
+                    }else{
+                        self.sendInterval = self.theScoreView.quarter.text;
+                    }
+                    
+                    [self.mainActivity startAnimating];
+                    [self performSelectorInBackground:@selector(createGame) withObject:nil];
+                }else{
+                    //update game with score
+                    self.sendScoreUs = self.theScoreView.scoreUs.text;
+                    self.sendScoreThem = self.theScoreView.scoreThem.text;
+                    if (self.gameIsOver) {
+                        self.sendInterval = @"-1";
+                    }else{
+                        self.sendInterval = self.theScoreView.quarter.text;
+                    }
+                    
+                    [self.mainActivity startAnimating];
+                    [self performSelectorInBackground:@selector(updateGameScore) withObject:nil];
+                }
+
+        }
+       
         
     }
 }
@@ -56,8 +109,10 @@
 -(void)cancel{
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }
+
 -(void)viewDidLoad{
     
+    self.phoneOnlyArray = [NSMutableArray array];
     self.emailArray = [NSArray array];
     self.gameIsOver = false;
     
@@ -73,12 +128,12 @@
     self.teamList = [NSArray arrayWithArray:coordTeamList];
     
     self.selectView.hidden = YES;
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancel)];
-	[self.navigationItem setLeftBarButtonItem:addButton];
+    self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancel)];
+	[self.navigationItem setLeftBarButtonItem:self.cancelButton];
     
     
-    UIBarButtonItem *postButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(done)];
-	[self.navigationItem setRightBarButtonItem:postButton];
+    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(done)];
+	[self.navigationItem setRightBarButtonItem:self.doneButton];
     
     self.selectTable.delegate = self;
     self.selectTable.dataSource = self;
@@ -127,7 +182,7 @@
         
         NSString *dateString = [dateFormatter stringFromDate:self.initialDate];
         
-        NSString *nowString = [NSString stringWithFormat:@"%@ (now)", dateString];
+        NSString *nowString = [NSString stringWithFormat:@"%@ (new game)", dateString];
         [self.gameSelectButton setTitle:nowString forState:UIControlStateNormal];
         
         self.selectedGameId = @"";
@@ -142,6 +197,8 @@
 -(void)teamSelect{
     
     self.selectView.hidden = NO;
+    self.noTeamsView.hidden = YES;
+    self.currentTeamsView.hidden = YES;
     [self.view bringSubviewToFront:self.selectView];
     self.isTeamTable = true;
     [self.selectTable reloadData];
@@ -152,6 +209,8 @@
 -(void)gameSelect{
     
     self.selectView.hidden = NO;
+    self.noTeamsView.hidden = YES;
+    self.currentTeamsView.hidden = YES;
     [self.view bringSubviewToFront:self.selectView];
     self.isTeamTable = false;
     [self.selectTable reloadData];
@@ -339,13 +398,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"MM/dd hh:mm"];
             NSString *dateString = [dateFormatter stringFromDate:self.initialDate];
-            NSString *nowString = [NSString stringWithFormat:@"%@ (now)", dateString];
+            NSString *nowString = [NSString stringWithFormat:@"%@ (new game)", dateString];
             
             [self.gameSelectButton setTitle:nowString forState:UIControlStateNormal];
             
             [self performSelectorInBackground:@selector(getGameList:) withObject:tmpTeam.teamId];
             self.selectedTeamId = tmpTeam.teamId;
+            
+            
             self.selectedGameId = @"";
+            self.currentTeamsView.hidden = NO;
+
         }
     }else{
         
@@ -353,11 +416,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"MM/dd hh:mm"];
             NSString *dateString = [dateFormatter stringFromDate:self.initialDate];
-            NSString *nowString = [NSString stringWithFormat:@"%@ (now)", dateString];
+            NSString *nowString = [NSString stringWithFormat:@"%@ (new game)", dateString];
             
             [self.gameSelectButton setTitle:nowString forState:UIControlStateNormal];
                     
             self.selectView.hidden = YES;
+            self.currentTeamsView.hidden = NO;
+
             
             self.selectedGameId = @"";
         }else{
@@ -376,6 +441,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [self.gameSelectButton setTitle:gameDateString forState:UIControlStateNormal];
             
             self.selectView.hidden = YES;
+            self.currentTeamsView.hidden = NO;
         }
     }
 			
@@ -416,34 +482,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 self.sendSport = self.sportField.text;
                 [self.mainActivity startAnimating];
                 [self performSelectorInBackground:@selector(createTeam) withObject:nil];
-            }else{
-                
-                if ([self.selectedGameId isEqualToString:@""]) {
-                    //create game, then update game with score
-                    self.sendScoreUs = self.theScoreView.scoreUs.text;
-                    self.sendScoreThem = self.theScoreView.scoreThem.text;
-                    if (self.gameIsOver) {
-                        self.sendInterval = @"-1";
-                    }else{
-                        self.sendInterval = self.theScoreView.quarter.text;
-                    }
-                    
-                    [self.mainActivity startAnimating];
-                    [self performSelectorInBackground:@selector(createGame) withObject:nil];
-                }else{
-                    //update game with score
-                    self.sendScoreUs = self.theScoreView.scoreUs.text;
-                    self.sendScoreThem = self.theScoreView.scoreThem.text;
-                    if (self.gameIsOver) {
-                        self.sendInterval = @"-1";
-                    }else{
-                        self.sendInterval = self.theScoreView.quarter.text;
-                    }
-                    
-                    [self.mainActivity startAnimating];
-                    [self performSelectorInBackground:@selector(updateGameScore) withObject:nil];
-                }
             }
+            
+     
         }
         
     }
@@ -505,10 +546,36 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (![teamId isEqualToString:@""]) {
         self.selectedTeamId = [NSString stringWithString:teamId];
-        [self performSelectorInBackground:@selector(createGame) withObject:nil];
+        
+        if ([self.emailArray count] > 0) {
+            
+
+            [self performSelector:@selector(runCreateGame) withObject:nil afterDelay:1.0];
+            [self performSelectorInBackground:@selector(addMembersToTeam:) withObject:teamId];
+            
+        }else{
+            
+            [self performSelectorInBackground:@selector(createGame) withObject:nil];
+
+        }
+    }else{
+        [self.mainActivity stopAnimating];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Creating new team failed.  Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        
+        self.theScoreView.gameOverButton.enabled = YES;
+        self.doneButton.enabled = YES;
+        self.cancelButton.enabled = YES;
     }
     
 }
+
+-(void)runCreateGame{
+
+    [self performSelectorInBackground:@selector(createGame) withObject:nil];
+
+}
+
 - (void)createGame {
     
 	@autoreleasepool {
@@ -535,14 +602,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSString *newDescription = @"No description entered...";        
         NSString *newOpp =  @"Opponent TBD";
-        
-        
+                
         NSDictionary *response = [ServerAPI createGame:self.selectedTeamId :mainDelegate.token :startDateString :@"" 
                                                       :newDescription :timeZone :latitude :longitude
                                                       :newOpp];
         
         NSString *status = [response valueForKey:@"status"];
-                
+                   
         if ([status isEqualToString:@"100"]){
             
 			gameId = [response valueForKey:@"gameId"];
@@ -584,6 +650,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (![gameId isEqualToString:@""]) {
         self.selectedGameId = [NSString stringWithString:gameId];
         [self performSelectorInBackground:@selector(updateGameScore) withObject:nil];
+    }else{
+        [self.mainActivity stopAnimating];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Creating new game failed.  Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        
+        self.theScoreView.gameOverButton.enabled = YES;
+        self.doneButton.enabled = YES;
+        self.cancelButton.enabled = YES;
     }
 }
 
@@ -591,7 +665,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     @autoreleasepool {
         NSString *token = @"";
-        
+        NSString *sendError = @"";
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         token = mainDelegate.token;
         
@@ -599,9 +673,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         NSDictionary *response = [ServerAPI updateGame:token :self.selectedTeamId :self.selectedGameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.sendScoreUs :self.sendScoreThem :self.sendInterval :@"" :@"" :@""];
         
         NSString *status = [response valueForKey:@"status"];
-        
+                
         if ([status isEqualToString:@"100"]){
-            
+            sendError = @"";
         }else{
             
             //Server hit failed...get status code out and display error accordingly
@@ -610,23 +684,23 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             switch (statusCode) {
                 case 0:
                     //null parameter
-                    //self.error.text = @"*Error connecting to server";
+                    sendError = @"*Error connecting to server";
                     break;
                 case 1:
                     ///error connecting to server
-                    //self.error.text = @"*Error connecting to server";
+                    sendError = @"*Error connecting to server";
                     break;
                     
                 default:
                     //should never get here
-                    //self.error.text = @"*Error connecting to server";
+                    sendError = @"*Error connecting to server";
                     break;
             }
         }
         
         [self performSelectorOnMainThread:
-         @selector(doneUpdate)
-                               withObject:nil
+         @selector(doneUpdate:)
+                               withObject:sendError
                             waitUntilDone:NO
          ];
         
@@ -635,12 +709,28 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
--(void)doneUpdate{
+-(void)doneUpdate:(NSString *)sendError{
+       
+    if (![sendError isEqualToString:@""]) {
+        [self.mainActivity stopAnimating];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Game score failed to update.  Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
+    self.theScoreView.gameOverButton.enabled = YES;
+    self.doneButton.enabled = YES;
+    self.cancelButton.enabled = YES;
+    
     [self.mainActivity stopAnimating];
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 -(void)gameOver{
+    
+    self.theScoreView.gameOverButton.enabled = NO;
+    self.doneButton.enabled = NO;
+    self.cancelButton.enabled = NO;
+    
     self.gameIsOver = true;
     
     if (self.noTeamsView.hidden == NO) {
@@ -672,6 +762,221 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     
 }
+
+
+-(void)addMembersToTeam:(NSString *)teamId{
+    
+    @autoreleasepool {
+        //Create the new player
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpMemberArray = [NSMutableArray array];
+        NSArray *finalMemberArray = [NSArray array];
+        
+        for (int i = 0; i < [self.emailArray count]; i++) {
+            
+            NSMutableDictionary *tmpDictionary = [[NSMutableDictionary alloc] init];
+            
+            NewMemberObject *tmpMember = [self.emailArray objectAtIndex:i];
+            
+            if ([tmpMember.email isEqualToString:@""] && ![tmpMember.phone isEqualToString:@""]) {
+                [self.phoneOnlyArray addObject:tmpMember.phone];
+            }
+            
+            if ([tmpMember.guardianTwoEmail isEqualToString:@""] && ![tmpMember.guardianOnePhone isEqualToString:@""]) {
+                [self.phoneOnlyArray addObject:tmpMember.guardianOnePhone];
+            }
+            
+            if ([tmpMember.guardianTwoEmail isEqualToString:@""] && ![tmpMember.guardianTwoPhone isEqualToString:@""]) {
+                [self.phoneOnlyArray addObject:tmpMember.guardianTwoPhone];
+            }
+            
+            
+            if (![tmpMember.firstName isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.firstName forKey:@"firstName"];
+            }
+            if (![tmpMember.lastName isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.lastName forKey:@"lastName"];
+            }
+            if (![tmpMember.email isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.email forKey:@"emailAddress"];
+            }
+            if (![tmpMember.phone isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.phone forKey:@"phoneNumber"];
+            }
+            if (![tmpMember.role isEqualToString:@""]) {
+                [tmpDictionary setObject:tmpMember.role forKey:@"participantRole"];
+            }
+            
+            NSMutableArray *guardArray = [NSMutableArray array];
+            
+            if (![tmpMember.guardianOneName isEqualToString:@""]) {
+                
+                
+                NSMutableDictionary *guard1 = [NSMutableDictionary dictionary];
+                
+                NSArray *nameArray = [tmpMember.guardianOneName componentsSeparatedByString:@" "];
+                
+                NSString *fName = [nameArray objectAtIndex:0];
+                NSString *lName = @"";
+                
+                for (int i = 1; i < [nameArray count]; i++) {
+                    if (i == 1) {
+                        lName = [lName stringByAppendingFormat:@"%@", [nameArray objectAtIndex:i]];
+                    }else{
+                        lName = [lName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
+                        
+                    }
+                }
+                
+                if (![fName isEqualToString:@""]) {
+                    [guard1 setObject:fName forKey:@"firstName"];
+                }
+                if (![lName isEqualToString:@""]) {
+                    [guard1 setObject:lName forKey:@"lastName"];
+                }
+                if (![tmpMember.guardianOneEmail isEqualToString:@""]) {
+                    [guard1 setObject:tmpMember.guardianOneEmail forKey:@"emailAddress"];
+                }
+                if (![tmpMember.guardianOnePhone isEqualToString:@""]) {
+                    [guard1 setObject:tmpMember.guardianOnePhone forKey:@"phoneNumber"];
+                }
+                
+                [guardArray addObject:guard1];
+                
+                if (![tmpMember.guardianTwoName isEqualToString:@""]) {
+                    
+                    
+                    NSMutableDictionary *guard2 = [NSMutableDictionary dictionary];
+                    
+                    NSArray *nameArray = [tmpMember.guardianTwoName componentsSeparatedByString:@" "];
+                    
+                    NSString *fName = [nameArray objectAtIndex:0];
+                    NSString *lName = @"";
+                    
+                    for (int i = 1; i < [nameArray count]; i++) {
+                        if (i == 1) {
+                            lName = [lName stringByAppendingFormat:@"%@", [nameArray objectAtIndex:i]];
+                        }else{
+                            lName = [lName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
+                            
+                        }
+                    }
+                    
+                    if (![fName isEqualToString:@""]) {
+                        [guard2 setObject:fName forKey:@"firstName"];
+                    }
+                    if (![lName isEqualToString:@""]) {
+                        [guard2 setObject:lName forKey:@"lastName"];
+                    }
+                    if (![tmpMember.guardianTwoEmail isEqualToString:@""]) {
+                        [guard2 setObject:tmpMember.guardianTwoEmail forKey:@"emailAddress"];
+                    }
+                    if (![tmpMember.guardianTwoPhone isEqualToString:@""]) {
+                        [guard2 setObject:tmpMember.guardianTwoPhone forKey:@"phoneNumber"];
+                    }
+                    
+                    [guardArray addObject:guard2];
+                    
+                }
+                
+            }
+            
+            if ([guardArray count] > 0) {
+                [tmpDictionary setObject:guardArray forKey:@"guardians"];
+            }
+            
+            [tmpMemberArray addObject:tmpDictionary];
+            
+        }
+        
+        finalMemberArray = [NSArray arrayWithArray:tmpMemberArray];
+                
+        NSDictionary *response = [ServerAPI createMultipleMembers:mainDelegate.token :teamId :finalMemberArray];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        
+        if ([status isEqualToString:@"100"]) {
+            
+            self.errorString = @"";
+        }else {
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"There was an error connecting to the server.";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"There was an error connecting to the server.";
+                    break;
+                case 223:
+                    self.errorString = @"NA";
+                    break;
+                case 209:
+                    self.errorString = @"Member emails must be unique.";
+                    break;
+                case 222:
+                    self.errorString = @"Member phone numbers must be unique.";
+                    break;
+                case 219:
+                    self.errorString = @"A Guardian email address is already being used.";
+                    break;
+                case 542:
+                    self.errorString = @"Invalid phone number entered.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"There was an error connecting to the server.";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(doneMembers) withObject:nil waitUntilDone:NO];
+        
+    }
+    
+}
+
+
+-(void)doneMembers{
+    
+	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+	
+	if ([self.errorString isEqualToString:@""]) {
+		
+		NSArray *tmpViews = [self.navigationController viewControllers];
+		
+		int theCount = [tmpViews count];
+		theCount = theCount - 2;
+        
+		
+        mainDelegate.phoneOnlyArray = [NSArray arrayWithArray:self.phoneOnlyArray];
+        
+	}else {
+		if ([self.errorString isEqualToString:@"NA"]) {
+			//Alert
+			NSString *tmp = @"Only User's with confirmed email addresses can add new team members.  To confirm your email, please click on the activation link in the email we sent you.";
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[alert show];
+		}else {
+            
+			NSString *tmp = self.errorString;
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add Members Failed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[alert show];
+		}
+	}
+    
+}
+
+
+
+
 -(void)endText{
     
 }

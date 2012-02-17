@@ -19,16 +19,8 @@ isCoord, addThem1, addThem3, addThem6, addUs1, addUs3, addUs6, hideGameScoringBu
 
 -(void)viewDidLoad{
 	
-	CAGradientLayer *gradient = [CAGradientLayer layer];
-	gradient.frame = self.view.bounds;
-	UIColor *color1 =  [UIColor colorWithRed:109/255.0 green:132/255.0 blue:162/255.0 alpha:1];
-	UIColor *color2 = [UIColor colorWithRed:0.69 green:0.769 blue:0.871 alpha:1.0];
-	gradient.colors = [NSArray arrayWithObjects:(id)[color1 CGColor], (id)[color2 CGColor], nil];
-	[self.view.layer insertSublayer:gradient atIndex:0];
-	
+    self.view.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
 
-	
-	
 	self.scoreUs.text = self.initScoreUs;
 	self.scoreThem.text = self.initScoreThem;
 	self.quarter.text = self.interval;
@@ -339,6 +331,10 @@ isCoord, addThem1, addThem3, addThem6, addUs1, addUs3, addUs6, hideGameScoringBu
     }	
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	
+}
 
 - (void)didFinish{
 	

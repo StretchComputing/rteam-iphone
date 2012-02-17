@@ -26,8 +26,15 @@ createSingleLabel;
 	[self performSelectorInBackground:@selector(getTeamList) withObject:nil];
     
 }
+
+-(void)cancel{
+    [self.navigationController dismissModalViewControllerAnimated:YES];
+}
 -(void)viewDidLoad{
 	
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancel)];
+	[self.navigationItem setLeftBarButtonItem:addButton];
+    
 	self.error.textColor = [UIColor redColor];
 	
 	self.title = @"New Event";

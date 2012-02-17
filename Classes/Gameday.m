@@ -26,7 +26,7 @@ successMessage, latitude, longitude, fromNextUpdate, nameGameLocation, locationN
 enableScoring, isScoringEnabled, error, scoreUs, scoreThem, interval, userRole, updateLocationButton, sport, defaultScoringButton, getInfo,
 bannerIsVisible, usLabel, scoreUsLabel, themLabel, scoreThemLabel, scoreDividerLabel, keepScoreButton, intervalLabel, setInfoGame, setInfoScore,
 refreshActivity, isGameOver, editFinalButton, mainActivity, editDone, startDate, description, opponentString, orOtherInterval, scoringAdded,
-errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, mySoccerScoring, myBaseballScoring, myFootballScoring, myLacrosseScoring, myWaterPoloScoring, myBasketballScoring, myUltimateFrisbeeScoring;
+errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, mySoccerScoring, myBaseballScoring, myFootballScoring, myLacrosseScoring, myWaterPoloScoring, myBasketballScoring, greenBackView;
 
 
 -(void)editGame{
@@ -77,12 +77,12 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 
 
 	self.keepScoreButton.hidden = YES;
-	self.usLabel.hidden = YES;
-	self.scoreUsLabel.hidden = YES;
-	self.themLabel.hidden = YES;
-	self.scoreThemLabel.hidden = YES;
-	self.scoreDividerLabel.hidden = YES;
-	self.intervalLabel.hidden = YES;
+	//self.usLabel.hidden = YES;
+	//self.scoreUsLabel.hidden = YES;
+	//self.themLabel.hidden = YES;
+	//self.scoreThemLabel.hidden = YES;
+	//self.scoreDividerLabel.hidden = YES;
+	//self.intervalLabel.hidden = YES;
 	
     
 	
@@ -96,6 +96,8 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 }
 -(void)viewDidLoad{
 		
+    self.greenBackView.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
+
     self.editDone = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editGame)];
 
 	self.scoringAdded = false;
@@ -235,7 +237,7 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
             self.interval = [[gameInfo valueForKey:@"interval"] stringValue];
             self.scoreUs = [[gameInfo valueForKey:@"scoreUs"] stringValue];
             self.scoreThem = [[gameInfo valueForKey:@"scoreThem"] stringValue];
-            
+                        
             if ([self.interval isEqualToString:@"-1"]) {
                 //Game is over
                 self.isGameOver = true;
@@ -247,12 +249,16 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
                 
             }else if ([formatStartDate isEqualToDate:[todaysDate earlierDate:formatStartDate]]) {
                 //By date, game is already in progress
-                self.setInfoGame = true; 
-                self.setInfoScore = false;
+                self.setInfoGame = false; 
+                self.setInfoScore = true;
                 
                 
+            }else{
+                self.setInfoGame = false; 
+                self.setInfoScore = true;
             }
             
+         
         }
         
         
@@ -291,7 +297,7 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 			self.editFinalButton.hidden = YES;
 		}
 		[self setInfoScoringStarted]; 
-		self.intervalLabel.text = @"Final";
+		self.intervalLabel.text = @"F";
 		self.intervalLabel.hidden = NO;
 		self.keepScoreButton.hidden = YES;
 		self.orOtherInterval.hidden = YES;
@@ -589,31 +595,6 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 		[self.defaultScoringButton setHidden:YES];
 		[self.view setNeedsDisplay];
 		
-	}else if ([lowerSport isEqualToString:@"ultimate frisbee"]) {
-		
-		self.myUltimateFrisbeeScoring = [[NewUltimateFrisbeeScoring alloc] init];
-		
-		self.myUltimateFrisbeeScoring.teamId = self.teamId;
-		self.myUltimateFrisbeeScoring.gameId = self.gameId;
-		self.myUltimateFrisbeeScoring.initScoreUs = self.scoreUs;
-		self.myUltimateFrisbeeScoring.initScoreThem = self.scoreThem;
-		self.myUltimateFrisbeeScoring.interval = self.interval;
-		
-		if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-			self.myUltimateFrisbeeScoring.isCoord = true;
-		}else {
-			self.myUltimateFrisbeeScoring.isCoord = false;
-		}
-		
-		self.myUltimateFrisbeeScoring.view.frame = CGRectMake(0, 142, 320, 225);
-		[self.view addSubview:self.myUltimateFrisbeeScoring.view];
-		[self.view bringSubviewToFront:self.myUltimateFrisbeeScoring.view];
-		
-		[self.enableScoring setHidden:YES];
-		[self.scoringNotEnabled setHidden:YES];
-		[self.defaultScoringButton setHidden:YES];
-		[self.view setNeedsDisplay];
-		
 	}else if (([lowerSport isEqualToString:@"baseball"]) || ([lowerSport isEqualToString:@"softball"])) {
 		
 		self.myBaseballScoring = [[NewBaseballScoring alloc] init];
@@ -686,25 +667,46 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 	self.scoreThemLabel.hidden = NO;
 	self.scoreDividerLabel.hidden = NO;
 	self.intervalLabel.hidden = NO;
-	
+
+    
 	self.scoreUsLabel.text = self.scoreUs;
 	self.scoreThemLabel.text = self.scoreThem;
 	
-	NSString *intervalString = [self getIntervalString];
-	
-	if ([intervalString isEqualToString:@""]) {
-		self.intervalLabel.hidden = YES;
-	}else {
-		
-		if ([self.interval isEqualToString:@"-2"]) {
-			self.interval = @"OT";
-		}
-		self.intervalLabel.text = [NSString stringWithFormat:@"%@: %@", intervalString, self.interval];
-		self.intervalLabel.hidden = NO;
+    if ([self.interval isEqualToString:@"-2"]) {
+        self.interval = @"OT";
+    }
+    NSString *time1 = @"";
+    int interval1 = [self.interval intValue];
+    
+    if (interval1 == 1) {
+        time1 = @"1st";
+    }
+    
+    if (interval1 == 2) {
+        time1 = @"2nd";
+    }
+    
+    if (interval1 == 3) {
+        time1 = @"3rd";
+    }
+    
+    if (interval1 >= 4) {
+        time1 = [NSString stringWithFormat:@"%@th", self.interval];
+    }
+    
+    if (interval1 == -2) {
+        time1 = @"OT";
+    }
+    
+    
+    if (interval1 == -3) {
+        time1 = @"";
+    }
+    
+    self.intervalLabel.text = time1;
 
-	}
-
-	
+	[self.view bringSubviewToFront:self.intervalLabel];
+    
 	if ([[self.sport lowercaseString] isEqualToString:@"lacrosse"]) {
 		self.orOtherInterval.hidden = NO;
 		self.orOtherInterval.text = @"(or Period)";
@@ -738,7 +740,7 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
 	NSString *intervalString = [self getIntervalString];
 	
 	if ([intervalString isEqualToString:@""]) {
-		self.intervalLabel.hidden = YES;
+		//self.intervalLabel.hidden = YES;
 	}else {
 		self.intervalLabel.text = [NSString stringWithFormat:@"%@: %@", intervalString, self.interval];
 		self.intervalLabel.hidden = NO;
@@ -925,6 +927,7 @@ errorString, photoButton, showCamera, myAd, myDefaultScoring, myHockeyScoring, m
     moreDetail = nil;
 	scoringNotEnabled = nil;
 	editDone = nil;
+    greenBackView = nil;
 
 	[super viewDidUnload];
 

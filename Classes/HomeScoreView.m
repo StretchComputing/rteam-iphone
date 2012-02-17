@@ -17,7 +17,7 @@
 #import "ServerAPI.h"
 
 @implementation HomeScoreView
-@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate;
+@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity;
 
 - (void)viewDidLoad
 {
@@ -27,6 +27,8 @@
     self.subThemButton.hidden = YES;
     self.addIntervalButton.hidden = YES;
     self.subIntervalButton.hidden = YES;
+    self.gameOverButton.hidden = YES;
+
 
     //To make this view go full screen:         
     self.isFullScreen = false;
@@ -43,12 +45,8 @@
     [self.subThemButton setBackgroundImage:stretch forState:UIControlStateNormal];
     [self.addIntervalButton setBackgroundImage:stretch forState:UIControlStateNormal];
     [self.subIntervalButton setBackgroundImage:stretch forState:UIControlStateNormal];
-    
-    
-   
+    [self.gameOverButton setBackgroundImage:stretch forState:UIControlStateNormal];
 
-
-    
 }
 
 -(void)setLabels{
@@ -153,6 +151,8 @@
         self.isKeepingScore = false;
         
         self.addUsButton.hidden = YES;
+        self.gameOverButton.hidden = YES;
+
         self.subUsButton.hidden = YES;
         self.addThemButton.hidden = YES;
         self.subThemButton.hidden = YES;
@@ -170,6 +170,8 @@
         self.isKeepingScore = true;
         
         self.addUsButton.hidden = NO;
+        self.gameOverButton.hidden = NO;
+
         self.subUsButton.hidden = NO;
         self.addThemButton.hidden = NO;
         self.subThemButton.hidden = NO;
@@ -421,14 +423,124 @@
     self.isKeepingScore = false;
     [self.scoreButton setTitle:@"Keep Score" forState:UIControlStateNormal];
     self.addUsButton.hidden = YES;
+    self.gameOverButton.hidden = YES;
     self.subUsButton.hidden = YES;
     self.addThemButton.hidden = YES;
     self.subThemButton.hidden = YES;
     self.addIntervalButton.hidden = YES;
     self.subIntervalButton.hidden = YES;
 }
+
+-(void)gameOver{
+	
+	NSString *message = [NSString stringWithFormat:@"Was the final score %@-%@?", self.scoreUs, self.scoreThem];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Over?" message:message delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes",nil];
+	[alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	
+	//"No"
+	if(buttonIndex == 0) {	
+		
+		
+		
+		//"Yes"
+	}else if (buttonIndex == 1) {
+		self.interval = @"-1";
+
+        self.gameOverButton.enabled = NO;
+        self.addUsButton.enabled = NO;
+        self.addThemButton.enabled = NO;
+        self.addIntervalButton.enabled = NO;
+        self.subIntervalButton.enabled = NO;
+        self.subUsButton.enabled = NO;
+        self.subThemButton.enabled = NO;
+        
+        [self.overActivity startAnimating];
+		[self performSelectorInBackground:@selector(runRequestOver) withObject:nil];
+		
+		
+	}
+	
+}
+
+- (void)runRequestOver {
+    
+	
+	NSString *token = @"";
+    NSString *responseString = @"";
+	
+	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+	token = mainDelegate.token;
+    
+	NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.scoreUs 
+												  :self.scoreThem :self.interval :@"" :@"" :@""];
+	
+	NSString *status = [response valueForKey:@"status"];
+    
+	if ([status isEqualToString:@"100"]){
+		
+		responseString = @"";
+		
+	}else{
+		responseString = @"error";
+		//Server hit failed...get status code out and display error accordingly
+		int statusCode = [status intValue];
+		
+		switch (statusCode) {
+			case 0:
+				//null parameter
+				//self.error.text = @"*Error connecting to server";
+				break;
+			case 1:
+				//error connecting to server
+				///self.error.text = @"*Error connecting to server";
+				break;
+				
+			default:
+				//should never get here
+				//self.error.text = @"*Error connecting to server";
+				break;
+		}
+	}
+	
+	[self performSelectorOnMainThread:@selector(doneOver:) withObject:responseString waitUntilDone:NO];
+	
+}
+
+-(void)doneOver:(NSString *)responseString{
+    
+    [self.overActivity stopAnimating];
+    self.gameOverButton.enabled = YES;
+    self.addUsButton.enabled = YES;
+    self.addThemButton.enabled = YES;
+    self.addIntervalButton.enabled = YES;
+    self.subIntervalButton.enabled = YES;
+    self.subUsButton.enabled = YES;
+    self.subThemButton.enabled = YES;
+    
+    if ([responseString isEqualToString:@""]) {
+        
+        [self setLabels];
+        
+        id mainViewController = [self.view.superview nextResponder];
+        
+        if ([mainViewController class] == [Home class]) {
+            Home *tmp = (Home *)mainViewController;
+            [tmp performSelectorInBackground:@selector(showLessAction) withObject:nil];
+            
+        }
+        
+    }else{
+  
+    }
+}
+
+
 - (void)viewDidUnload
 {
+    overActivity = nil;
     fullScreenButton = nil;
     scoreUsLabel = nil;
     scoreThemLabel = nil;
@@ -444,6 +556,7 @@
     subThemButton = nil;
     addIntervalButton = nil;
     subIntervalButton = nil;
+    gameOverButton = nil;
     [super viewDidUnload];
 
 }

@@ -12,7 +12,7 @@
 
 @implementation Game
 @synthesize startDate, endDate, timeZone, gameId, teamId, description, latitude, longitude, opponent, userRole, scoreUs, scoreThem, interval, 
-sport, teamName, location, mvp, hasMvp;
+sport, teamName, location, mvp, hasMvp, messageThreadId;
 
 
 

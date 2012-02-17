@@ -13,6 +13,7 @@
     
 }
 @property bool hasMvp;
+@property (nonatomic, strong) NSString *messageThreadId;
 @property (nonatomic, strong) NSString *mvp;
 @property (nonatomic, strong) NSString *location;
 @property (nonatomic, strong) NSString *teamName;

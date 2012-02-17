@@ -17,7 +17,6 @@
 #import "NewLacrosseScoring.h"
 #import "NewHockeyScoring.h"
 #import "NewWaterPoloScoring.h"
-#import "NewUltimateFrisbeeScoring.h"
 #import "NewBaseballScoring.h"
 
 @interface Gameday : UIViewController <CLLocationManagerDelegate, ADBannerViewDelegate> {
@@ -28,7 +27,6 @@
 @property (nonatomic, strong) NewBaseballScoring *myBaseballScoring;
 @property (nonatomic, strong) NewBasketballScoring *myBasketballScoring;
 @property (nonatomic, strong) NewFootballScoring *myFootballScoring;
-@property (nonatomic, strong) NewUltimateFrisbeeScoring *myUltimateFrisbeeScoring;
 @property (nonatomic, strong) NewWaterPoloScoring *myWaterPoloScoring;
 @property (nonatomic, strong) NewLacrosseScoring *myLacrosseScoring;
 @property (nonatomic, strong) NewHockeyScoring *myHockeyScoring;
@@ -95,6 +93,7 @@
 
 @property (nonatomic, strong) IBOutlet UILabel *successMessage;
 @property bool fromNextUpdate;
+@property (nonatomic, strong) IBOutlet UIView *greenBackView;
 
 -(NSString *)getIntervalString;
 

@@ -12,6 +12,8 @@
 @interface HomeScoreView : UIViewController {
     
 }
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *overActivity;
+@property (nonatomic, strong) IBOutlet UIButton *gameOverButton;
 @property (nonatomic, strong) NSString *eventStringDate;
 @property (nonatomic, strong) NSString *eventDescription;
 @property (nonatomic, strong) IBOutlet UIButton *addIntervalButton;
@@ -61,6 +63,8 @@
 -(IBAction)addThem;
 -(IBAction)subUs;
 -(IBAction)subThem;
+
+-(IBAction)gameOver;
 
 -(void)setNewInterval;
 

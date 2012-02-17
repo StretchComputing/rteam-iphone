@@ -2056,6 +2056,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 				tmpGame.gameId = [thisGame valueForKey:@"gameId"];
 				tmpGame.opponent = [thisGame valueForKey:@"opponent"];
 				tmpGame.teamName = [thisGame valueForKey:@"teamName"];
+                tmpGame.messageThreadId = [thisGame valueForKey:@"messageThreadId"];
 				
 				if ([thisGame valueForKey:@"mvpDisplayName"] != nil) {
 					tmpGame.mvp = [thisGame valueForKey:@"mvpDisplayName"];
@@ -2705,7 +2706,6 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
         
-		
 		SBJSON *jsonParser = [SBJSON new];
 		        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
@@ -2734,6 +2734,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
                     tmpPractice.startDate = [thisPractice valueForKey:@"startDate"];
                     tmpPractice.practiceId = [thisPractice valueForKey:@"practiceId"];
                     tmpPractice.location = [thisPractice valueForKey:@"opponent"];
+                    tmpPractice.messageThreadId = [thisPractice valueForKey:@"messageThreadId"];
+
                     
                     if ([thisPractice valueForKey:@"latitude"] != nil) {
                         tmpPractice.latitude = [thisPractice valueForKey:@"latitude"];
@@ -2768,6 +2770,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
                     tmpEvent.startDate = [thisEvent valueForKey:@"startDate"];
                     tmpEvent.eventId = [thisEvent valueForKey:@"practiceId"];
                     tmpEvent.location = [thisEvent valueForKey:@"opponent"];
+                    tmpEvent.messageThreadId = [thisEvent valueForKey:@"messageThreadId"];
+
                     
                     if ([thisEvent valueForKey:@"eventName"] != nil) {
                         tmpEvent.eventName = [thisEvent valueForKey:@"eventName"];
@@ -2826,6 +2830,231 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 	}	
 	
 }
+
+
++(NSDictionary *)getListOfWhosComingEvents:(NSString *)teamId :(NSString *)token{
+	
+	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
+	NSString *statusReturn = @"";
+	NSMutableArray *events = [NSMutableArray array];
+	
+	
+	if ((token == nil) || (teamId == nil)) {
+		
+		statusReturn = @"0";
+		[returnDictionary setValue:statusReturn forKey:@"status"];
+		return returnDictionary;
+	}
+	
+	@try{
+		
+		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
+        
+		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
+		
+		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
+		NSString *timeZone = [tmp1 name];
+        
+		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
+        
+        
+		NSString *tmpUrl = baseUrl;
+		if (![teamId isEqualToString:@""]) {
+			tmpUrl = [[tmpUrl stringByAppendingFormat:@"/team/"] stringByAppendingString:teamId];
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"/practices/"];
+			tmpUrl = [tmpUrl stringByAppendingString:timeZone];
+		}
+        
+        
+        tmpUrl = [tmpUrl stringByAppendingFormat:@"?whoIsComing=%@", @"true"];
+		
+		
+		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString:tmpUrl]];
+		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
+        
+		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
+        
+        
+		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+
+		SBJSON *jsonParser = [SBJSON new];
+        
+		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
+		
+		
+		NSString *apiStatus = [response valueForKey:@"apiStatus"];
+		
+		//NOT necessarily going to be practice objects
+		if ([apiStatus isEqualToString:@"100"]) {
+            
+			NSArray *eventJsonObjects = [response valueForKey:@"events"];
+            
+			int size = [eventJsonObjects count];
+            
+			for (int i = 0; i < size; i++){
+                
+                NSDictionary *thisEvent = [eventJsonObjects objectAtIndex:i];
+                
+                if ([[thisEvent valueForKey:@"eventType"] isEqualToString:@"practice"]) {
+                    
+                    Practice *tmpPractice = [[Practice alloc] init];
+                    
+                    NSDictionary *thisPractice = [eventJsonObjects objectAtIndex:i];
+                    
+                    tmpPractice.description = [thisPractice valueForKey:@"description"];
+                    tmpPractice.startDate = [thisPractice valueForKey:@"startDate"];
+                    tmpPractice.practiceId = [thisPractice valueForKey:@"eventId"];
+                    tmpPractice.location = [thisPractice valueForKey:@"opponent"];
+                    tmpPractice.messageThreadId = [thisPractice valueForKey:@"messageThreadId"];
+                    
+                    
+                    if ([thisPractice valueForKey:@"latitude"] != nil) {
+                        tmpPractice.latitude = [thisPractice valueForKey:@"latitude"];
+                    }
+                    if ([thisPractice valueForKey:@"longitude"] != nil) {
+                        tmpPractice.longitude = [thisPractice valueForKey:@"longitude"];
+                    }
+                    
+                    if ([teamId isEqualToString:@""]) {
+                        tmpPractice.ppteamId = [thisPractice valueForKey:@"teamId"];
+                        tmpPractice.userRole = [thisPractice valueForKey:@"participantRole"];
+                    }else {
+                        tmpPractice.ppteamId = [teamId copy];
+                    }
+                    
+                    if ([thisPractice valueForKey:@"teamName"] != nil) {
+                        tmpPractice.teamName = [thisPractice valueForKey:@"teamName"];
+                    }
+                    
+                    if ([thisPractice valueForKey:@"isCanceled"] != nil) {
+                        tmpPractice.isCanceled = [[thisPractice valueForKey:@"isCanceled"] boolValue];
+                    }
+                    
+                    [events addObject:tmpPractice];
+                    
+                    
+                    
+                }else if ([[thisEvent valueForKey:@"eventType"] isEqualToString:@"generic"]){
+                    
+                    Event *tmpEvent = [[Event alloc] init];
+                    
+                    tmpEvent.description = [thisEvent valueForKey:@"description"];
+                    tmpEvent.startDate = [thisEvent valueForKey:@"startDate"];
+                    tmpEvent.eventId = [thisEvent valueForKey:@"eventId"];
+                    tmpEvent.location = [thisEvent valueForKey:@"opponent"];
+                    tmpEvent.messageThreadId = [thisEvent valueForKey:@"messageThreadId"];
+                    
+                    
+                    if ([thisEvent valueForKey:@"eventName"] != nil) {
+                        tmpEvent.eventName = [thisEvent valueForKey:@"eventName"];
+                    }
+                    if ([teamId isEqualToString:@""]) {
+                        tmpEvent.teamId = [thisEvent valueForKey:@"teamId"];
+                        tmpEvent.userRole = [thisEvent valueForKey:@"participantRole"];
+                    }else {
+                        tmpEvent.teamId = [teamId copy];
+                    }
+                    
+                    if ([thisEvent valueForKey:@"teamName"] != nil) {
+                        tmpEvent.teamName = [thisEvent valueForKey:@"teamName"];
+                    }
+                    
+                    if ([thisEvent valueForKey:@"latitude"] != nil) {
+                        tmpEvent.latitude = [thisEvent valueForKey:@"latitude"];
+                    }
+                    if ([thisEvent valueForKey:@"longitude"] != nil) {
+                        tmpEvent.longitude = [thisEvent valueForKey:@"longitude"];
+                    }
+                    
+                    if ([thisEvent valueForKey:@"isCanceled"] != nil) {
+                        tmpEvent.isCanceled = [[thisEvent valueForKey:@"isCanceled"] boolValue];
+                    }
+                    
+                    [events addObject:tmpEvent];
+                    
+                    
+                }else{
+                    
+                    Game *tmpGame = [[Game alloc] init];
+                                        
+                    tmpGame.description = [thisEvent valueForKey:@"description"];
+                    tmpGame.startDate = [thisEvent valueForKey:@"startDate"];
+                    tmpGame.gameId = [thisEvent valueForKey:@"eventId"];
+                    tmpGame.opponent = [thisEvent valueForKey:@"opponent"];
+                    tmpGame.teamName = [thisEvent valueForKey:@"teamName"];
+                    tmpGame.messageThreadId = [thisEvent valueForKey:@"messageThreadId"];
+                    
+                    if ([thisEvent valueForKey:@"mvpDisplayName"] != nil) {
+                        tmpGame.mvp = [thisEvent valueForKey:@"mvpDisplayName"];
+                        tmpGame.hasMvp = true;
+                    }else {
+                        tmpGame.hasMvp = false;
+                        tmpGame.mvp = @"";
+                    }
+                    
+                    
+                    if ([thisEvent valueForKey:@"location"] != nil) {
+                        tmpGame.location = [thisEvent valueForKey:@"location"];
+                    }
+                    if ([thisEvent valueForKey:@"sport"]) {
+                        tmpGame.sport = [thisEvent valueForKey:@"sport"];
+                    }
+                    
+                    if ([teamId isEqualToString:@""]) {
+                        tmpGame.teamId = [thisEvent valueForKey:@"teamId"];
+                        tmpGame.userRole = [thisEvent valueForKey:@"participantRole"];
+                    }else {
+                        tmpGame.teamId = [teamId copy];
+                    }
+                    
+                    
+                    if ([thisEvent valueForKey:@"latitude"] != nil) {
+                        tmpGame.latitude = [thisEvent valueForKey:@"latitude"];
+                    }
+                    if ([thisEvent valueForKey:@"longitude"] != nil) {
+                        tmpGame.longitude = [thisEvent valueForKey:@"longitude"];
+                    }
+                    
+                    if ([thisEvent valueForKey:@"interval"] != nil) {
+                        tmpGame.interval = [[thisEvent valueForKey:@"interval"] stringValue];
+                        tmpGame.scoreUs = [[thisEvent valueForKey:@"scoreUs"] stringValue];
+                        tmpGame.scoreThem = [[thisEvent valueForKey:@"scoreThem"] stringValue];
+                    }
+                    
+                    
+                    [events addObject:tmpGame];
+
+                    
+                }
+                
+                
+				
+			}
+            
+			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
+			[events sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+            
+			statusReturn = apiStatus;
+			[returnDictionary setValue:statusReturn forKey:@"status"];
+			[returnDictionary setValue:events forKey:@"events"];
+			return returnDictionary;
+            
+		}else {
+			statusReturn = apiStatus;
+			[returnDictionary setValue:statusReturn forKey:@"status"];
+			return returnDictionary;
+		}
+        
+	}
+    
+	@catch (NSException *e) {
+        
+        return [ServerAPI exceptionReturnValue:@"getListOfEventsWhosComing" :e];
+        
+	}	
+	
+}
+
 
 
 +(NSDictionary *)getListOfEventsNow:(NSString *)token{
@@ -4338,9 +4567,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
                 
 		SBJSON *jsonParser = [SBJSON new];
-		
-        NSLog(@"Response: %@", returnString);
-        
+		        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
