@@ -47,7 +47,10 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 
 - (void)viewDidLoad {
     
-    self.addButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(EditTable:)];
+    //self.addButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(EditTable:)];
+    
+    self.addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTeam)];
+
 
 	self.eventsTableView.dataSource = self;
 	self.eventsTableView.delegate = self;
@@ -107,7 +110,8 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 	headerView.backgroundColor = [UIColor whiteColor];
 	
 	if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-		[headerView addSubview:b];
+		//[headerView addSubview:b];
+        headerView = nil;
 		
 		if (numEvents > 0) {
 			
@@ -338,6 +342,12 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 	nextController.teamId = self.teamId;
 	[self.navigationController pushViewController:nextController animated:YES];	
 	
+}
+
+-(void)addTeam{
+    NewGamePractice *nextController = [[NewGamePractice alloc] init];
+	nextController.teamId = self.teamId;
+	[self.navigationController pushViewController:nextController animated:YES];	
 }
 
 

@@ -135,7 +135,7 @@
 +(NSDictionary *)getActivity:(NSString *)token maxCount:(NSString *)maxCount refreshFirst:(NSString *)refreshFirst newOnly:(NSString *)newOnly
                         mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails;
 
-+(NSDictionary *)createActivity:(NSString *)token teamId:(NSString *)teamId statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation replyToId:(NSString *)replyToId;
++(NSDictionary *)createActivity:(NSString *)token teamId:(NSString *)teamId statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation replyToId:(NSString *)replyToId eventId:(NSString *)eventId newGame:(NSString *)gameday;
 
 +(NSDictionary *)updateActivity:(NSString *)token teamId:(NSString *)teamId activityId:(NSString *)activityId likeDislike:(NSString *)likeDislike statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation cancelAttachment:(NSString *)cancelAttachment;
 

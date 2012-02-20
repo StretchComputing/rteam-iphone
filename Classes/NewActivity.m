@@ -1222,6 +1222,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
     
     NSMutableArray *activityIds = [NSMutableArray array];
+    
+    
     for (int i = 0; i < [self.activityArray count]; i++) {
         Activity *tmpActivity = [self.activityArray objectAtIndex:i];
         
@@ -1229,6 +1231,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [activityIds addObject:tmpActivity.activityId];
         }else{
             
+            [activityIds addObject:tmpActivity.activityId];
+
             if ([mainDelegate.replyDictionary objectForKey:tmpActivity.activityId] != nil) {
                 
                 NSArray *replies = [mainDelegate.replyDictionary valueForKey:tmpActivity.activityId];
@@ -1239,6 +1243,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     tmpActivity.lastEditDate = [NSString stringWithFormat:tmp.createdDate];
                 }
             }
+            
+
         }
     }
     

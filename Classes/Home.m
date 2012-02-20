@@ -63,7 +63,7 @@ refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, trans
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview, postImageTeamId, postImageActivity, postImageErrorLabel, postImageText;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview, postImageTeamId, postImageActivity, postImageErrorLabel, postImageText, activityPhotoEventId, postImageLabel, activityPhotoTeamId, postImageCreateGameSegment, postImageAlert, postImageIsCoord, postImageEvents;
 
 
 
@@ -450,6 +450,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 - (void)viewDidLoad {
 
+    self.postImageEvents = [NSMutableArray array];
+    self.activityPhotoEventId = @"";
     self.postImageTableView.dataSource = self;
     self.postImageTableView.delegate = self;
 
@@ -810,103 +812,123 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	
-	self.alreadyCalled1 = false;
-	self.alreadyCalled2 = false;
-	
-	if(buttonIndex == 1){
-		
-		//Text
-		@try{
-			
-			NSMutableArray *numbersToCall = [NSMutableArray array];
-			bool call = false;
-			
-			for (int i = 0; i < [self.phoneOnlyArray count]; i++) {
-				
-				NSString *numberToCall = @"";
-				
-				NSString *tmpPhone = [self.phoneOnlyArray objectAtIndex:i];
-				
-				if ([tmpPhone length] == 16) {
-					call = true;
-					
-					NSRange first3 = NSMakeRange(3, 3);
-					NSRange sec3 = NSMakeRange(8, 3);
-					NSRange end4 = NSMakeRange(12, 4);
-					numberToCall = [NSString stringWithFormat:@"%@%@%@", [tmpPhone substringWithRange:first3], [tmpPhone substringWithRange:sec3],
-									[tmpPhone substringWithRange:end4]];
-					
-				}else if ([tmpPhone length] == 14) {
-					call = true;
-					
-					NSRange first3 = NSMakeRange(1, 3);
-					NSRange sec3 = NSMakeRange(6, 3);
-					NSRange end4 = NSMakeRange(10, 4);
-					numberToCall = [NSString stringWithFormat:@"%@%@%@", [tmpPhone substringWithRange:first3], [tmpPhone substringWithRange:sec3],
-									[tmpPhone substringWithRange:end4]];
-					
-				}else if (([tmpPhone length] == 10) || ([tmpPhone length] == 11)) {
-					call = true;
-					numberToCall = tmpPhone;
-				}
-				
-				[numbersToCall addObject:numberToCall];
-			}
-			
-			if (call) {
-				
-				NSString *ios = [[UIDevice currentDevice] systemVersion];
-				
-				if ((![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"])) {
-					
-					if ([MFMessageComposeViewController canSendText]) {
-						
-						MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
-						messageViewController.messageComposeDelegate = self;
-						[messageViewController setRecipients:numbersToCall];
-						
-						rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-						
-						mainDelegate.displayName = @"";
-						
-						NSString *addition = @"";
-						
-						if (![mainDelegate.displayName isEqualToString:@""]) {
-							addition = [NSString stringWithFormat:@" by %@", mainDelegate.displayName];
-						}
-						
-						NSString *teamNameShort = self.justAddName;
-                        int strLength = [self.justAddName length];
+    
+    if (alertView == self.postImageAlert) {
+        
+        if (buttonIndex == 0) {
+           //Cancel
+        }else if (buttonIndex == 1){
+            //Yes
+            [self.postImageActivity startAnimating];
+            [self performSelectorInBackground:@selector(postImage:) withObject:@"gameday"];
+        }else{
+            //No
+            [self.postImageActivity startAnimating];
+            [self performSelectorInBackground:@selector(postImage:) withObject:@""];
+        }
+        
+    }else{
+        self.alreadyCalled1 = false;
+        self.alreadyCalled2 = false;
+        
+        if(buttonIndex == 1){
+            
+            //Text
+            @try{
+                
+                NSMutableArray *numbersToCall = [NSMutableArray array];
+                bool call = false;
+                
+                for (int i = 0; i < [self.phoneOnlyArray count]; i++) {
+                    
+                    NSString *numberToCall = @"";
+                    
+                    NSString *tmpPhone = [self.phoneOnlyArray objectAtIndex:i];
+                    
+                    if ([tmpPhone length] == 16) {
+                        call = true;
                         
-                        if (strLength > 13){
-                            teamNameShort = [[self.justAddName substringToIndex:10] stringByAppendingString:@".."];
+                        NSRange first3 = NSMakeRange(3, 3);
+                        NSRange sec3 = NSMakeRange(8, 3);
+                        NSRange end4 = NSMakeRange(12, 4);
+                        numberToCall = [NSString stringWithFormat:@"%@%@%@", [tmpPhone substringWithRange:first3], [tmpPhone substringWithRange:sec3],
+                                        [tmpPhone substringWithRange:end4]];
+                        
+                    }else if ([tmpPhone length] == 14) {
+                        call = true;
+                        
+                        NSRange first3 = NSMakeRange(1, 3);
+                        NSRange sec3 = NSMakeRange(6, 3);
+                        NSRange end4 = NSMakeRange(10, 4);
+                        numberToCall = [NSString stringWithFormat:@"%@%@%@", [tmpPhone substringWithRange:first3], [tmpPhone substringWithRange:sec3],
+                                        [tmpPhone substringWithRange:end4]];
+                        
+                    }else if (([tmpPhone length] == 10) || ([tmpPhone length] == 11)) {
+                        call = true;
+                        numberToCall = tmpPhone;
+                    }
+                    
+                    [numbersToCall addObject:numberToCall];
+                }
+                
+                if (call) {
+                    
+                    NSString *ios = [[UIDevice currentDevice] systemVersion];
+                    
+                    if ((![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"])) {
+                        
+                        if ([MFMessageComposeViewController canSendText]) {
+                            
+                            MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
+                            messageViewController.messageComposeDelegate = self;
+                            [messageViewController setRecipients:numbersToCall];
+                            
+                            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                            
+                            mainDelegate.displayName = @"";
+                            
+                            NSString *addition = @"";
+                            
+                            if (![mainDelegate.displayName isEqualToString:@""]) {
+                                addition = [NSString stringWithFormat:@" by %@", mainDelegate.displayName];
+                            }
+                            
+                            NSString *teamNameShort = self.justAddName;
+                            int strLength = [self.justAddName length];
+                            
+                            if (strLength > 13){
+                                teamNameShort = [[self.justAddName substringToIndex:10] stringByAppendingString:@".."];
+                            }
+                            
+                            NSString *bodyMessage = [NSString stringWithFormat:@"Hi, you have been added via rTeam to the team '%@'. To sign up for our free texting service, send a text to 'join@rteam.com' with the message 'yes'.", teamNameShort];
+                            
+                            [messageViewController setBody:bodyMessage];
+                            messageViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                            [self presentModalViewController:messageViewController animated:YES];
+                            
                         }
+                    }else {
                         
-                        NSString *bodyMessage = [NSString stringWithFormat:@"Hi, you have been added via rTeam to the team '%@'. To sign up for our free texting service, send a text to 'join@rteam.com' with the message 'yes'.", teamNameShort];
-                        
-						[messageViewController setBody:bodyMessage];
-                        messageViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-						[self presentModalViewController:messageViewController animated:YES];
-						
-					}
-				}else {
-					
-					NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
-					[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-				}
-				
-				
-			}
-			
-		}@catch (NSException *e) {
-			
-		}
+                        NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                    }
+                    
+                    
+                }
+                
+            }@catch (NSException *e) {
+                
+            }
+            
+            
+            
+        }
+        
+        self.phoneOnlyArray = [NSMutableArray array];
 
-		
-		
-	}
+        
+    }
 	
-	self.phoneOnlyArray = [NSMutableArray array];
 }
 
 
@@ -1067,7 +1089,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 25;
+    return 35;
 }
 
 - (void)tableView:(UITableView *)tableView
@@ -1079,6 +1101,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         Team *tmpTeam = [self.teamList objectAtIndex:row];
         self.postImageTeamId = tmpTeam.teamId;
+        
+        if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
+            self.postImageIsCoord = true;
+        }else{
+            self.postImageIsCoord = false;
+        }
         
     }else{
         [self.selectRowLabel setHidden:YES];
@@ -1391,7 +1419,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             if ([status isEqualToString:@"100"]){
                 self.eventsNowSuccess = true;
-                self.eventsToday = [response valueForKey:@"eventsToday"];
+                self.eventsToday = [response valueForKey:@"eventsToday"];                
                 self.eventsTomorrow = [response valueForKey:@"eventsTomorrow"];
                 
                 
@@ -1439,6 +1467,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	if (self.eventsNowSuccess) {
 		
+        NSArray *tmpArray = [NSArray arrayWithArray:self.eventsToday];
+        tmpArray = [tmpArray arrayByAddingObjectsFromArray:self.eventsTomorrow];
+        self.postImageEvents = [NSMutableArray arrayWithArray:tmpArray];
+                
 		self.numObjects = [self.eventsToday count] + [self.eventsTomorrow count];
         
         if (self.numObjects == 0) {
@@ -1449,6 +1481,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				
 		[self setBottomArray];
 		[self setUpScrollView];
+        
+    
+       
 		
 	}else {
 		
@@ -3062,12 +3097,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
         }else if (buttonIndex == 1){
             
-            UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-            picker.delegate = self;
-            
-            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            
-            [self presentModalViewController:picker animated:YES];
+            self.activityPhotoEventId = @"";
+            [self displayCamera];
             
         }else if (buttonIndex == 2){
             
@@ -3740,66 +3771,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
-- (void)viewDidUnload {
-
-    postImageActivity  = nil;
-    postImageErrorLabel = nil;
-	bottomBar = nil;
-    backHelpView = nil;
-	inviteFan = nil;
-	serverError = nil;
-
-	changeQuickLink = nil;
-	newQuickLinkAlias = nil;
-	newQuickLinkTable = nil;
-	messageBadge = nil;
-	activityGettingTeams = nil;
-	eventsNowActivity = nil;
-	selectRowLabel = nil;
-	eventsButton = nil;
-	myTeamsButton = nil;
-	messagesButton = nil;
-    myAd.delegate = nil;
-	myAd = nil;
-	displayIconsScroll = nil;
-	changeIconButton = nil;
-
-	displayIconsScrollBack = nil;
-	changeQuickLinkBack = nil;
-    refreshButton = nil;
-    questionButton = nil;
-
-    registrationBackView = nil;
-    regTextButton = nil;
-    regTextView = nil;
-    textBackView = nil;
-    textFrontView = nil;
-    shortcutButton = nil;
-    quickLinkChangeButton = nil;
-    quickLinkCancelButton = nil;
-    quickLinkOkButton = nil;
-    quickLinkCancelTwoButton = nil;
-    blueArrow = nil;
-    
-    homeScoreView = nil;
-    homeAttendanceView = nil;
-    happeningNowView = nil;
-    scrollView = nil;
-    pageControl = nil;
-    showLessButton = nil;
-    postImagePreview = nil;
-    postImageBackView = nil;
-    postImageCancelButton = nil;
-    postImageFrontView = nil;
-    postImageSubmitButton = nil;
-    postImageTableView = nil;
-    postImageTextView = nil;
-    
-	[super viewDidUnload];
-	
-
-	
-}
 
 -(void)gameday{
     
@@ -3827,6 +3798,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.gamedayAction showInView:self.view];
 }
 
+-(void)displayCamera{
+    
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self presentModalViewController:picker animated:YES];
+    
+}
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	
@@ -3870,7 +3851,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.imageDataToSend = UIImageJPEGRepresentation(newImage, 0.90);
     
     self.postImageBackView.hidden = NO;
+    [self.view bringSubviewToFront:self.postImageBackView];
     self.postImagePreview.image = [UIImage imageWithData:self.imageDataToSend];
+
+    
+    if (![self.activityPhotoEventId isEqualToString:@""]) {
+        self.postImageTableView.hidden = YES;
+        self.postImageLabel.hidden = YES;
+        self.postImageTeamId = [NSString stringWithString:self.activityPhotoTeamId];
+    }else{
+        self.postImageTableView.hidden = NO;
+        self.postImageLabel.hidden = NO;
+    }
     
     [self.postImageTableView reloadData];
         
@@ -3885,19 +3877,61 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.postImageText = @"";
     }
     
-    if (![self.postImageTeamId isEqualToString:@""]) {
+    if (![self.activityPhotoEventId isEqualToString:@""]) {
         [self.postImageActivity startAnimating];
-        [self performSelectorInBackground:@selector(postImage) withObject:nil];
+        [self performSelectorInBackground:@selector(postImage:) withObject:@""];
+
     }else{
         
-        if ([self.teamList count] ==1) {
-            Team *tmpTeam = [self.teamList objectAtIndex:0];
-            self.postImageTeamId = tmpTeam.teamId;
-            [self performSelectorInBackground:@selector(postImage) withObject:nil];
+        if (![self.postImageTeamId isEqualToString:@""]) {
+            
+            bool foundEvent = false;
+            
+            if (!self.postImageIsCoord) {
+                foundEvent = true;
+            }
+            
+ 
+            if (!foundEvent) {
+                for (int i = 0; i < [self.postImageEvents count]; i++) {
+                    CurrentEvent *tmpEvent = [self.postImageEvents objectAtIndex:i];
+
+                    if ([tmpEvent.eventType isEqualToString:@"game"]) {
+                        if ([tmpEvent.teamId isEqualToString:self.postImageTeamId]) {
+                            foundEvent = true;
+                            break;
+                        }
+                    }
+                    
+                }
+            }
+            
+            
+            
+            if (foundEvent) {
+                [self.postImageActivity startAnimating];
+                [self performSelectorInBackground:@selector(postImage:) withObject:@""];
+            }else{
+                
+               self.postImageAlert = [[UIAlertView alloc] initWithTitle:@"Create New Game?" message:@"Would you like to create a new game to associate with your photo?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", @"No", nil];
+                [self.postImageAlert show];
+            }
+    
         }else{
-            self.postImageErrorLabel.text = @"*Select a post team.";
+            
+            if ([self.teamList count] ==1) {
+                Team *tmpTeam = [self.teamList objectAtIndex:0];
+                self.postImageTeamId = tmpTeam.teamId;
+                [self performSelectorInBackground:@selector(postImage) withObject:nil];
+            }else{
+                self.postImageErrorLabel.text = @"*Select a post team.";
+            }
         }
+
+        
     }
+    
+   
 }
 
 -(void)postImageCancel{
@@ -3907,8 +3941,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
--(void)postImage{
-    
+-(void)postImage:(NSString *)gameday{
+        
     @autoreleasepool {
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -3918,7 +3952,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         tmpData = [NSData dataWithData:self.imageDataToSend];
         
         
-        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token teamId:self.postImageTeamId statusUpdate:self.postImageText photo:tmpData video:[NSData data] orientation:self.sendOrientation replyToId:@""];
+        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token teamId:self.postImageTeamId statusUpdate:self.postImageText photo:tmpData video:[NSData data] orientation:self.sendOrientation replyToId:@"" eventId:self.activityPhotoEventId newGame:gameday];
         
         
         NSString *status = [response valueForKey:@"status"];
@@ -3981,8 +4015,73 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)hidePost{
+    self.postImageErrorLabel.text = @"";
     self.postImageBackView.hidden = YES;
 }
+
+
+- (void)viewDidUnload {
+    
+    postImageCreateGameSegment = nil;
+    postImageActivity  = nil;
+    postImageErrorLabel = nil;
+	bottomBar = nil;
+    backHelpView = nil;
+	inviteFan = nil;
+	serverError = nil;
+    postImageLabel = nil;
+	changeQuickLink = nil;
+	newQuickLinkAlias = nil;
+	newQuickLinkTable = nil;
+	messageBadge = nil;
+	activityGettingTeams = nil;
+	eventsNowActivity = nil;
+	selectRowLabel = nil;
+	eventsButton = nil;
+	myTeamsButton = nil;
+	messagesButton = nil;
+    myAd.delegate = nil;
+	myAd = nil;
+	displayIconsScroll = nil;
+	changeIconButton = nil;
+    
+	displayIconsScrollBack = nil;
+	changeQuickLinkBack = nil;
+    refreshButton = nil;
+    questionButton = nil;
+    
+    registrationBackView = nil;
+    regTextButton = nil;
+    regTextView = nil;
+    textBackView = nil;
+    textFrontView = nil;
+    shortcutButton = nil;
+    quickLinkChangeButton = nil;
+    quickLinkCancelButton = nil;
+    quickLinkOkButton = nil;
+    quickLinkCancelTwoButton = nil;
+    blueArrow = nil;
+    
+    homeScoreView = nil;
+    homeAttendanceView = nil;
+    happeningNowView = nil;
+    scrollView = nil;
+    pageControl = nil;
+    showLessButton = nil;
+    postImagePreview = nil;
+    postImageBackView = nil;
+    postImageCancelButton = nil;
+    postImageFrontView = nil;
+    postImageSubmitButton = nil;
+    postImageTableView = nil;
+    postImageTextView = nil;
+    
+	[super viewDidUnload];
+	
+    
+	
+}
+
 
 - (void)dealloc {
     

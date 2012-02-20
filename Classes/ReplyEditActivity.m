@@ -226,7 +226,7 @@
         }
         
         
-        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token teamId:self.teamId statusUpdate:self.theMessageText photo:tmpData video:tmpMovieData orientation:self.sendOrientation replyToId:self.activityId];
+        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token teamId:self.teamId statusUpdate:self.theMessageText photo:tmpData video:tmpMovieData orientation:self.sendOrientation replyToId:self.activityId eventId:@"" newGame:@""];
         
         NSString *status = [response valueForKey:@"status"];
         

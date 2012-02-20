@@ -65,6 +65,7 @@
 -(IBAction)subThem;
 
 -(IBAction)gameOver;
+-(IBAction)takePhoto;
 
 -(void)setNewInterval;
 

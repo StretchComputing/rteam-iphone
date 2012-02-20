@@ -44,7 +44,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 	
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-    self.nameLabel.text = mainDelegate.displayName;
+    //self.nameLabel.text = mainDelegate.displayName;
     self.nameLabel.textColor = [UIColor blueColor];
     
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
@@ -306,7 +306,8 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 		
 	}
 	
-	recipients.text = recipNames;
+	self.recipients.text = recipNames;
+        self.nameLabel.text = [NSString stringWithFormat:@"To: %@", recipNames];
 		
 	}else {
 		self.errorLabel.text = self.errorString;

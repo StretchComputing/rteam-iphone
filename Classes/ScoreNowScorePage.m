@@ -224,7 +224,7 @@
     @autoreleasepool {
         
         NSString *token = @"";
-        NSArray *gameArray = [NSArray array];
+        NSMutableArray *gameArray = [NSMutableArray array];
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
@@ -244,7 +244,7 @@
             
             if ([status isEqualToString:@"100"]){
                 
-                gameArray = [response valueForKey:@"games"];
+                gameArray = [NSMutableArray arrayWithArray:[response valueForKey:@"games"]];
                 
             }else{
                 
@@ -270,10 +270,30 @@
         }
         
         
-        //check for  old games;
+        //remove games more than 36 hrs into future
+        for (int i = 0; i < [gameArray count]; i++) {
+            
+            Game *tmpGame = [gameArray objectAtIndex:i];
+            
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+            [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+            
+            NSDate *gameDate = [dateFormat dateFromString:tmpGame.startDate];
+            NSDate *today = [NSDate date];
+            NSDate *tomorrow = [today dateByAddingTimeInterval:129600];
+            
+            if ([tomorrow isEqualToDate:[tomorrow earlierDate:gameDate]]) {
+                [gameArray removeObjectAtIndex:i];
+                i--;
+            }
+            
+        }
+        
+        
+        
         NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:gameArray];
    
-        
+       
    
         
         NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
@@ -442,6 +462,31 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             self.selectView.hidden = YES;
             self.currentTeamsView.hidden = NO;
+            
+            NSString *time = @"";
+            int interval = [tmpGame.interval intValue];
+            
+            bool showScore = false;
+            if (interval >= 1) {
+                self.theScoreView.quarter.text = [NSString stringWithString:tmpGame.interval];
+                showScore = true;
+            }
+            
+            if (interval == -2) {
+                self.theScoreView.quarter.text = @"OT";
+                showScore = true;
+            }
+            
+            if (interval == -3) {
+                time = @"";
+                showScore = true;
+            }
+            
+            if (showScore) {
+                self.theScoreView.scoreUs.text = [NSString stringWithString:tmpGame.scoreUs];
+                self.theScoreView.scoreThem.text = [NSString stringWithString:tmpGame.scoreThem];
+            }
+            
         }
     }
 			
@@ -449,7 +494,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath: (NSIndexPath *) indexPath {
 
-    return 30;
+    return 40;
 }
 
 

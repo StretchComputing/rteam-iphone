@@ -537,6 +537,18 @@
     }
 }
 
+-(void)takePhoto{
+    
+    id mainViewController = [self.view.superview nextResponder];
+    
+    if ([mainViewController class] == [Home class]) {
+        Home *tmp = (Home *)mainViewController;
+        tmp.activityPhotoEventId = self.eventId;
+        tmp.activityPhotoTeamId = self.teamId;
+        [tmp displayCamera];
+        
+    }
+}
 
 - (void)viewDidUnload
 {

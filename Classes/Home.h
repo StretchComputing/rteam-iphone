@@ -31,9 +31,14 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 @property (nonatomic, strong) IBOutlet UIButton *postImageCancelButton;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *postImageActivity;
 @property (nonatomic, strong) IBOutlet UILabel *postImageErrorLabel;
+@property (nonatomic, strong) IBOutlet UILabel *postImageLabel;
+@property (nonatomic, strong) NSString *activityPhotoTeamId;
 @property (nonatomic, strong) NSString *postImageTeamId;
 @property (nonatomic, strong) NSString *postImageText;
-
+@property (nonatomic, strong) IBOutlet UISegmentedControl *postImageCreateGameSegment;
+@property (nonatomic, strong) UIAlertView *postImageAlert;
+@property bool postImageIsCoord;
+@property (nonatomic, strong) NSMutableArray *postImageEvents;
 
 
 @property (nonatomic, strong) NSData *imageDataToSend;
@@ -144,6 +149,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 @property bool teamListFailed;
 @property bool haveTeamList;
 @property (nonatomic, strong) NSArray *teamList;
+@property (nonatomic, strong) NSString *activityPhotoEventId;
 
 
 
@@ -204,6 +210,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 
 -(void)closeQuestion;
 
+-(void)displayCamera;
 -(NSString *)getQuickLinkImageOne;
 
 -(IBAction)newIconSelected:(id)sender;

@@ -167,7 +167,7 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
                 }
             }
                         
-            NSDictionary *response = [ServerAPI createActivity:token teamId:self.teamId statusUpdate:self.theActivityText photo:tmpData video:tmpMovieData orientation:orientation replyToId:@""];
+            NSDictionary *response = [ServerAPI createActivity:token teamId:self.teamId statusUpdate:self.theActivityText photo:tmpData video:tmpMovieData orientation:orientation replyToId:@"" eventId:@"" newGame:@""];
             
             NSString *status = [response valueForKey:@"status"];
             

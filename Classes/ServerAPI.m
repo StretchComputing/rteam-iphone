@@ -5028,12 +5028,12 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
     
 }
 
-+(NSDictionary *)createActivity:(NSString *)token teamId:(NSString *)teamId statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation replyToId:(NSString *)replyToId{
++(NSDictionary *)createActivity:(NSString *)token teamId:(NSString *)teamId statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation replyToId:(NSString *)replyToId eventId:(NSString *)eventId newGame:(NSString *)gameday{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	
-	if ((token == nil) || (teamId == nil) || (statusUpdate == nil) || (photo == nil) || (video == nil) || (orientation == nil) || (replyToId == nil)) {
+	if ((token == nil) || (teamId == nil) || (eventId == nil) || (statusUpdate == nil) || (photo == nil) || (video == nil) || (orientation == nil) || (replyToId == nil) || (gameday == nil)) {
 		
 		statusReturn = @"0";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -5070,6 +5070,17 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 			[tempDictionary setObject:replyToId forKey:@"parentActivityId"];
 		}
         
+        if (![gameday isEqualToString:@""]) {
+			[tempDictionary setObject:gameday forKey:@"gameDay"];
+		}
+        
+        
+        if (![eventId isEqualToString:@""]) {
+			[tempDictionary setObject:eventId forKey:@"eventId"];
+            [tempDictionary setObject:@"game" forKey:@"eventType"];
+
+		}
+        
         if (![orientation isEqualToString:@""]){
             NSNumber *isPortrait;
             
@@ -5081,6 +5092,11 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
             [tempDictionary setObject:isPortrait forKey:@"isPortrait"];
         }
 		
+        NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
+		NSString *timeZone = [tmp1 name];
+		
+		[tempDictionary setObject:timeZone forKey:@"timeZone"];
+        
 		loginDict = tempDictionary;
 		
 		

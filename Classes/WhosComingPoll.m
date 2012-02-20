@@ -383,7 +383,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath: (NSIndexPath *) indexPath {
     
-    return 30;
+    return 40;
 }
 
 
