@@ -333,13 +333,12 @@ newImage, dontMove, toOrientation, portrait;
 	self.newImage = true;
 	[self.activity startAnimating];
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Update Team Picture"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Team Picture Changed"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	[self performSelectorInBackground:@selector(updateImage) withObject:nil];

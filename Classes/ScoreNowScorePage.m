@@ -13,6 +13,7 @@
 #import "Game.h"
 #import "ScoreNowAddMembers.h"
 #import "NewMemberObject.h"
+#import "GANTracker.h"
 
 @implementation ScoreNowScorePage
 @synthesize noTeamsView, currentTeamsView, teamSelectButton, teamNameField, sportField, gameSelectButton, teamList, hasTeams, gameList, selectView,selectLabel, selectTable, isTeamTable, gameActivity, initialDate, selectedGameId, selectedTeamId, gameTableActivity, theScoreView, addMembersAlert, isNewTeam, mainActivity, sendScoreUs, sendInterval, sendScoreThem, sendSport, sendTeamName, gameIsOver, emailArray, phoneOnlyArray, errorString, doneButton, cancelButton;
@@ -40,6 +41,14 @@
     
 }
 -(void)done{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Score Now Saved - Gameday"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     self.theScoreView.gameOverButton.enabled = NO;
     self.doneButton.enabled = NO;
@@ -395,6 +404,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	//Get the Team from the array, and forward action to the Teams home page
 	
+    self.theScoreView.scoreUs.text = @"0";
+    self.theScoreView.scoreThem.text = @"0";
+    self.theScoreView.quarter.text = @"1";
 	NSUInteger row = [indexPath row];
 
 	if (self.isTeamTable) {
@@ -771,6 +783,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)gameOver{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Score Now Saved - Gameday"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
     
     self.theScoreView.gameOverButton.enabled = NO;
     self.doneButton.enabled = NO;

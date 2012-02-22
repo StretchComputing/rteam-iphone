@@ -35,12 +35,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import "TeamEdit.h"
 #import "TraceSession.h"
+#import "TeamEditFan.h"
 
 @implementation TeamHome
 @synthesize teamId, userRole, teamSport, teamName, nextGameInfoLabel, topRight, topLeft, recentGamesTable, allScoresButton, nextGameButton, teamNameLabel, gamesArray, pastGamesArray, errorLabel, gameSuccess, nextGameArray, teamUrl, allScoresButtonUnderline, nextEventInfoLabel, nextEventButton, eventSuccess, eventsArray,
 futureEventsArray, nextEventArray, bannerIsVisible, eventsActivity, touchUpLocation, gestureStartPoint, nextGameLabel, nextEventLabel,
 teamInfoThumbnail, noEvents, noGames, eventsAlert, membersAlert, noMembers, displayedMemberAlert, displayedEventAlert, gamesArrayTemp, pastGamesArrayTemp,
-displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addEventsButton, recentGamesLabel, largeActivity, doneMembers, doneGames, doneEvents, noEventsLabel;
+displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addEventsButton, recentGamesLabel, largeActivity, doneMembers, doneGames, doneEvents, noEventsLabel, recordLabel, recordString;
 
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -55,6 +56,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 	self.noEvents = false;
 	self.noGames = false;
 	self.noMembers = false;
+    
 	self.displayedEventAlert = false;
 	self.displayedMemberAlert = false;
 	
@@ -152,12 +154,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 
 -(void)viewWillAppear:(BOOL)animated{
 
-    
-    if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
-        self.editButton.hidden = NO;
-    }else{
-        self.editButton.hidden = YES;
-    }
+   
     
 	displayPhoto = true;
 	self.displayWarning = true;
@@ -178,6 +175,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 	
     [self.largeActivity startAnimating];
 	[self performSelectorInBackground:@selector(getTeamInfo) withObject:nil];
+    self.recordLabel.hidden = YES;
 	[self performSelectorInBackground:@selector(getListOfGames) withObject:nil];
 	[self performSelectorInBackground:@selector(getListOfEvents) withObject:nil];
 	
@@ -219,12 +217,14 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                 self.gameSuccess = true;
                 self.gamesArrayTemp = [response valueForKey:@"games"];
                 
-                
-                
-                
                 if ([self.gamesArrayTemp count] == 0) {
                     self.noGames = true;
                 }
+                
+                int win = 0;
+                int loss = 0;
+                int tie = 0;
+                self.recordString = @"";
                 
                 for (int i = 0; i < [self.gamesArrayTemp count]; i++) {
                     
@@ -234,6 +234,25 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                         [self.gamesArrayTemp removeObjectAtIndex:i];
                         i--;
                     }
+                    
+                    if ([tmpGame.interval isEqualToString:@"-1"]) {
+                        
+                        if ([tmpGame.scoreUs intValue] > [tmpGame.scoreThem intValue]) {
+                            win++;
+                        }else if ([tmpGame.scoreThem intValue] > [tmpGame.scoreUs intValue]) {
+                            loss++;
+                        }else{
+                            tie++;
+                        }
+                    }
+                }
+                
+                if (tie > 0) {
+                    self.recordString = [NSString stringWithFormat:@"Record: %d-%d-%d", win, loss, tie];
+
+                }else{
+                    self.recordString = [NSString stringWithFormat:@"Record: %d-%d", win, loss];
+
                 }
                 
                 
@@ -269,17 +288,23 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 -(void)done{
 	
     self.doneGames = true;
-	self.gamesArray = self.gamesArrayTemp;
+	self.gamesArray = [NSMutableArray arrayWithArray:self.gamesArrayTemp];
 		
 	[self.eventsActivity stopAnimating];
 
 	if (self.gameSuccess) {
 		        
+        if ([self.gamesArray count] > 0) {
+            self.recordLabel.hidden = NO;
+            self.recordLabel.text = [NSString stringWithFormat:self.recordString];
+        }
+      
+        
         if (self.doneMembers && self.doneEvents && self.doneGames) {
             
             bool orig = false;
             
-            if (self.noEvents && self.noMembers && self.noEvents) {
+            if (self.noEvents && self.noMembers && self.noGames) {
                 
                 
                 [self.largeActivity stopAnimating];
@@ -464,7 +489,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             
             bool orig = false;
             
-            if (self.noEvents && self.noMembers && self.noEvents) {
+            if (self.noEvents && self.noMembers && self.noGames) {
                 
                 
                 [self.largeActivity stopAnimating];
@@ -1351,7 +1376,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         bool orig = false;
 
-        if (self.noEvents && self.noMembers && self.noEvents) {
+        if (self.noEvents && self.noMembers && self.noGames) {
             
         
             [self.largeActivity stopAnimating];
@@ -1391,13 +1416,30 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)editTeam{
         
-    [TraceSession addEventToSession:@"Team Home Page - Edit Team Button Clicked"];
 
     
-    TeamEdit *tmp = [[TeamEdit alloc] init];
-    tmp.teamId = self.teamId;
-    tmp.fromHome = self.fromHome;
-    [self.navigationController pushViewController:tmp animated:YES];
+    if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
+        [TraceSession addEventToSession:@"Team Home Page - Edit Team Button Clicked"];
+
+        TeamEdit *tmp = [[TeamEdit alloc] init];
+        tmp.teamId = self.teamId;
+        tmp.fromHome = self.fromHome;
+        [self.navigationController pushViewController:tmp animated:YES];
+        
+    }else{
+        
+        [TraceSession addEventToSession:@"Team Home Page - Edit Team (Fan) Button Clicked"];
+
+
+        TeamEditFan *tmp = [[TeamEditFan alloc] init];
+        tmp.teamId = self.teamId;
+        tmp.fromHome = self.fromHome;
+        [self.navigationController pushViewController:tmp animated:YES];
+        
+    }
+    
+    
+  
     
     
 }
@@ -1449,6 +1491,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     noEventsLabel = nil;
     myAd.delegate = nil;
 	myAd = nil;
+    recordLabel = nil;
 	[super viewDidUnload];
 }
 

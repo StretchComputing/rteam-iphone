@@ -13,10 +13,12 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMessageComposeViewController.h>
 
-@interface HelpAbout : UIViewController <ADBannerViewDelegate, MFMailComposeViewControllerDelegate, UIActionSheetDelegate> {
+@interface HelpAbout : UIViewController <ADBannerViewDelegate, MFMailComposeViewControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate> {
     
 
 }
+@property (nonatomic, strong) IBOutlet UIImageView *downArrow;
+@property (nonatomic, strong) IBOutlet UIButton *gamedayHelpButton;
 @property (nonatomic, strong) UIActionSheet *feedbackAction;
 @property (nonatomic, strong) ADBannerView *myAd;
 @property bool fromSettings;
@@ -32,4 +34,5 @@
 -(IBAction)fastHelp;
 -(IBAction)feedback;
 -(IBAction)messageHelp;
+-(IBAction)gamedayHelp;
 @end

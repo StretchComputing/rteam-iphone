@@ -188,8 +188,10 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
         if (![token isEqualToString:@""]){
             
             NSDictionary *response = [ServerAPI getListOfGames:@"" :token];
-            
+                        
             NSString *status = [response valueForKey:@"status"];
+            
+            NSLog(@"Games Status: %@", status);
             
             if ([status isEqualToString:@"100"]){
                 
@@ -219,7 +221,11 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
         }
         
         self.allGames = [NSMutableArray arrayWithArray:games];
+        
+        NSLog(@"Games Count: %d", [self.allGames count]);
         [self filterGames];
+        NSLog(@"Games Count2: %d", [self.allGames count]);
+
         [self performSelectorOnMainThread:@selector(finishedGames) withObject:nil waitUntilDone:NO];
 
     }
@@ -999,6 +1005,13 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
     [TraceSession addEventToSession:@"Calendar Month Page - List Clicked"];
 
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Calendar List"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
 	AllEventCalList *tmp = [[AllEventCalList alloc] init];
 	
@@ -1236,6 +1249,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
         [TraceSession addEventToSession:@"Calendar Month Page - Game Clicked"];
 
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"View Event - From Calendar"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
         
 		Game *currentGame = [self.gamesToday objectAtIndex:row-1];
 		
@@ -1358,6 +1378,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
         [TraceSession addEventToSession:@"Calendar Month Page - Practice Clicked"];
 
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"View Event - From Calendar"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
         
 		PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
 		
@@ -1428,7 +1455,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 	}else if ([self.eventType isEqualToString:@"all"]) {
 		
-		
+		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"View Event - From Calendar"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
 		if ([[self.eventsToday objectAtIndex:row-1] class] == [Game class]) {
 			
             
@@ -1703,28 +1737,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (buttonIndex == 0) {
 			
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Delete Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
-            
 			//run the delete
 			[self.deleteActivity startAnimating];
 			[self performSelectorInBackground:@selector(runDelete) withObject:nil];
 		}else if (buttonIndex == 1) {
 			//Cancel
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Cancel Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+           
             
 			[self.deleteActivity startAnimating];
 			[self performSelectorInBackground:@selector(cancelEvent) withObject:nil];
@@ -1737,28 +1755,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (buttonIndex == 0) {
 			
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Delete Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+           
             
 			//run the delete
 			[self.deleteActivity startAnimating];
 			[self performSelectorInBackground:@selector(runDelete) withObject:nil];
 		}else if (buttonIndex == 1){
 			//Cancel
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Activate Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+          
             
 			[self.deleteActivity startAnimating];
 			[self performSelectorInBackground:@selector(activateEvent) withObject:nil];

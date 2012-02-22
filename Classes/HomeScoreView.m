@@ -15,9 +15,10 @@
 #import "Home.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
+#import "GANTracker.h"
 
 @implementation HomeScoreView
-@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity;
+@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView;
 
 - (void)viewDidLoad
 {
@@ -161,6 +162,14 @@
         
     }else{
         
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Keep Score - Happening Now"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
         [self.scoreButton setTitle:@"Save Score" forState:UIControlStateNormal];
 
         
@@ -186,6 +195,14 @@
 
 -(void)goToPage{
         
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Go To Event Page - Happening Now"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
         NSString *tmpUserRole = self.participantRole;
         NSString *tmpTeamId = self.teamId;
         
@@ -538,16 +555,18 @@
 }
 
 -(void)takePhoto{
-    
-    id mainViewController = [self.view.superview nextResponder];
-    
-    if ([mainViewController class] == [Home class]) {
-        Home *tmp = (Home *)mainViewController;
-        tmp.activityPhotoEventId = self.eventId;
-        tmp.activityPhotoTeamId = self.teamId;
-        [tmp displayCamera];
-        
+   
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Take Game Photo - Happening Now"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
     }
+    
+    self.homeSuperView.activityPhotoEventId = [NSString stringWithString:self.eventId];
+    self.homeSuperView.activityPhotoTeamId = [NSString stringWithString:self.teamId];
+    [self.homeSuperView displayCamera];
 }
 
 - (void)viewDidUnload

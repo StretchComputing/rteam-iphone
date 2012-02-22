@@ -131,7 +131,7 @@
     [TraceSession addEventToSession:@"Audio Feedback - Submit Button Selected"];
     
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"Audio Feedback Sent"
                                           label:mainDelegate.token
                                           value:-1

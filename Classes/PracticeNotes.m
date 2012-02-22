@@ -14,6 +14,7 @@
 #import "MapLocation.h"
 #import "PracticeEdit.h"
 #import "TraceSession.h"
+#import "GANTracker.h"
 
 @implementation PracticeNotes
 @synthesize practiceId, teamId, opponent, day, time, description, locationManager, updateSuccess, latitude, longitude, 
@@ -54,7 +55,14 @@ errorString, dayString, timeString;
 	
     [TraceSession addEventToSession:@"PracticeDay - Edit Button Clicked"];
 
-	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Edit Practice"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	PracticeEdit *editPractice = [[PracticeEdit alloc] init];
 	
 	editPractice.stringDate = self.startDateString;

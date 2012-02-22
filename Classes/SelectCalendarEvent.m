@@ -22,6 +22,7 @@
 #import "rTeamAppDelegate.h"
 #import "GANTracker.h"
 #import "Home.h"
+#import "CreateNewEventGameday.h"
 
 @implementation SelectCalendarEvent
 @synthesize shouldPushAnotherView, allEvents, eventType, dateSelected, error, eventLabel, eventTimeField, removeEventButton, errorLabel, activity,
@@ -487,104 +488,98 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 -(void)createGames{
 
 	
-	//Create the new game
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpGameArray = [NSMutableArray array];
-	NSArray *gameArray = [NSArray array];
-	
-	//Not using lat/long right now
-	NSString *theDescription = @"No description entered...";
-	NSString *theOpponent = @"Opponent TBD";
-	
-	
-	for(int i = 0; i < [self.allEvents count]; i++){
-		
-		NSString *dateString = @"";
-		NSString *timeString = @"";
-		
-		NSString *startDateString = @"";
-		
-		CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
-		
-		NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
-		
-		[tmpGame setObject:theDescription forKey:@"description"];
-		[tmpGame setObject:theOpponent forKey:@"opponent"];
-		
-		
-		NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
-		
-		[tmpFormatter setDateFormat:@"yyyy-MM-dd"];
-		dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
-		
-		[tmpFormatter setDateFormat:@"HH:mm"];
-		timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
-		
-		startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
-				
-		[tmpGame setObject:startDateString forKey:@"startDate"];
-		
-		NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
-		
-		[tmpGameArray addObject:tmpGame1];
-		
+	@autoreleasepool {
+        //Create the new game
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpGameArray = [NSMutableArray array];
+        NSArray *gameArray = [NSArray array];
+        
+        //Not using lat/long right now
+        NSString *theDescription = @"No description entered...";
+        NSString *theOpponent = @"Opponent TBD";
+        
+        
+        for(int i = 0; i < [self.allEvents count]; i++){
+            
+            NSString *dateString = @"";
+            NSString *timeString = @"";
+            
+            NSString *startDateString = @"";
+            
+            CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+            
+            NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
+            
+            [tmpGame setObject:theDescription forKey:@"description"];
+            [tmpGame setObject:theOpponent forKey:@"opponent"];
+            
+            
+            NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
+            
+            [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
+            dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
+            
+            [tmpFormatter setDateFormat:@"HH:mm"];
+            timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
+            
+            startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
+            
+            [tmpGame setObject:startDateString forKey:@"startDate"];
+            
+            NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
+            
+            [tmpGameArray addObject:tmpGame1];
+            
+            
+        }
+        
+        gameArray = tmpGameArray;
+        
+        
+        NSDictionary *response = [ServerAPI createMultipleGames:mainDelegate.token :self.teamId :@"plain" :gameArray];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString = @"";
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 205:
+                    //error connecting to server
+                    self.errorString = @"*You must be a coordinator to add events.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(doneCreate)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-	}
-
-	gameArray = tmpGameArray;
-    
-    NSError *errors;
-    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Create Games - Multiple (Calendar)"
-                                          label:mainDelegate.token
-                                          value:-1
-                                      withError:&errors]) {
-    }
-    
-	
-	NSDictionary *response = [ServerAPI createMultipleGames:mainDelegate.token :self.teamId :@"plain" :gameArray];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	
-	if ([status isEqualToString:@"100"]){
-		
-		self.errorString = @"";
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-            case 205:
-				//error connecting to server
-				self.errorString = @"*You must be a coordinator to add events.";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(doneCreate)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
+        
+    }	
 	
 	
 	
@@ -603,29 +598,77 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		
 		NSArray *views = [self.navigationController viewControllers];
 		
-		if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
-			CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
-			tmp.selectedIndex = 3;
-			
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
-			AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
-			tmp.createdEvent = true;
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
-			AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
-			tmp.createdEvent = true;
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
-			Home *tmp = [views objectAtIndex:[views count] - 5];
+        
+        if ([views count] == 3) {
             
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
-			Home *tmp = [views objectAtIndex:[views count] - 4];
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Create Multiple Games - Gameday"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
             
-			[self.navigationController popToViewController:tmp animated:NO];
-		}
-		
+            [self.navigationController dismissModalViewControllerAnimated:YES];
+        }else{
+            
+            if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Games - Event List"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
+                tmp.selectedIndex = 3;
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [CreateNewEventGameday class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Games - Gameday"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                [self.navigationController dismissModalViewControllerAnimated:YES];
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Games - Calendar"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
+                tmp.createdEvent = true;
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Games - Calendar"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
+                tmp.createdEvent = true;
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
+                Home *tmp = [views objectAtIndex:[views count] - 5];
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
+                Home *tmp = [views objectAtIndex:[views count] - 4];
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }
+
+            
+        }
+        
+				
 	}else {
 		
 		NSString *message = @"Error creating events.  Please make sure you have a valid internet conneciton.";
@@ -641,104 +684,100 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 -(void)createPractices{
 
 	
-	//Create the new game
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpGameArray = [NSMutableArray array];
-	NSArray *gameArray = [NSArray array];
-	
-	//Not using lat/long right now
-	NSString *theDescription = @"No description entered...";
-	NSString *theLocation = @"Location TBD";
-	
-	
-	for(int i = 0; i < [self.allEvents count]; i++){
-		
-		NSString *dateString = @"";
-		NSString *timeString = @"";
-		
-		NSString *startDateString = @"";
-		
-		CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
-		
-		NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
-		
-		[tmpGame setObject:theDescription forKey:@"description"];
-		[tmpGame setObject:theLocation forKey:@"opponent"];
-		[tmpGame setObject:@"practice" forKey:@"eventType"];
+	@autoreleasepool {
+        //Create the new game
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpGameArray = [NSMutableArray array];
+        NSArray *gameArray = [NSArray array];
+        
+        //Not using lat/long right now
+        NSString *theDescription = @"No description entered...";
+        NSString *theLocation = @"Location TBD";
+        
+        
+        for(int i = 0; i < [self.allEvents count]; i++){
+            
+            NSString *dateString = @"";
+            NSString *timeString = @"";
+            
+            NSString *startDateString = @"";
+            
+            CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+            
+            NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
+            
+            [tmpGame setObject:theDescription forKey:@"description"];
+            [tmpGame setObject:theLocation forKey:@"opponent"];
+            [tmpGame setObject:@"practice" forKey:@"eventType"];
+            
+            
+            
+            NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
+            
+            [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
+            dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
+            
+            [tmpFormatter setDateFormat:@"HH:mm"];
+            timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
+            
+            startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
+            
+            [tmpGame setObject:startDateString forKey:@"startDate"];
+            
+            NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];		
+            [tmpGameArray addObject:tmpGame1];
+            
+            
+        }
+        
+        gameArray = tmpGameArray;
+        
+     
+        
+        NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString = @"";
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 205:
+                    //error connecting to server
+                    self.errorString = @"*You must be a coordinator to add events.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(donePractices)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-		
-		
-		NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
-		
-		[tmpFormatter setDateFormat:@"yyyy-MM-dd"];
-		dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
-		
-		[tmpFormatter setDateFormat:@"HH:mm"];
-		timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
-		
-		startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
-		
-		[tmpGame setObject:startDateString forKey:@"startDate"];
-		
-		NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];		
-		[tmpGameArray addObject:tmpGame1];
-		
-		
-	}
-	
-	gameArray = tmpGameArray;
-	
-    NSError *errors;
-    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Create Practice - Multiple (Calendar)"
-                                          label:mainDelegate.token
-                                          value:-1
-                                      withError:&errors]) {
+        
     }
-    
-	NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	
-	if ([status isEqualToString:@"100"]){
-		
-		self.errorString = @"";
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-            case 205:
-				//error connecting to server
-				self.errorString = @"*You must be a coordinator to add events.";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(donePractices)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-
 }
 
 
@@ -754,29 +793,75 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		
 		NSArray *views = [self.navigationController viewControllers];
 		
-		if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
-			CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
-			
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
-			AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
-			tmp.createdEvent = true;
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
-			AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
-            tmp.createdEvent = true;
+        if ([views count] == 3) {
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Create Multiple Practices - Gameday"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            [self.navigationController dismissModalViewControllerAnimated:YES];
+        }else{
+            if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Practices - Event List"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [CreateNewEventGameday class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Practices - Gameday"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                
+                [self.navigationController dismissModalViewControllerAnimated:YES];
+                
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Practices - Calendar"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                
+                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
+                tmp.createdEvent = true;
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Practices - Calendar"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
+                tmp.createdEvent = true;
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
+                Home *tmp = [views objectAtIndex:[views count] - 5];
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
+                Home *tmp = [views objectAtIndex:[views count] - 4];
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }
 
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
-			Home *tmp = [views objectAtIndex:[views count] - 5];
-            
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
-			Home *tmp = [views objectAtIndex:[views count] - 4];
-            
-			[self.navigationController popToViewController:tmp animated:NO];
-		}
-		
+        }
+				
 	}else {
 		
 		NSString *message = @"Error creating events.  Please make sure you have a valid internet conneciton.";
@@ -793,107 +878,103 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 -(void)createEvents{
 	
 	
-	//Create the new game
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	NSMutableArray *tmpGameArray = [NSMutableArray array];
-	NSArray *gameArray = [NSArray array];
-	
-	//Not using lat/long right now
-	NSString *theDescription = @"No description entered...";
-	NSString *theLocation = @"Location TBD";
-	
-	
-	for(int i = 0; i < [self.allEvents count]; i++){
-		
-		NSString *dateString = @"";
-		NSString *timeString = @"";
-		
-		NSString *startDateString = @"";
-		
-		CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
-		
-		NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
-		
-		[tmpGame setObject:theDescription forKey:@"description"];
-		[tmpGame setObject:theLocation forKey:@"opponent"];
-		[tmpGame setObject:@"generic" forKey:@"eventType"];
-		[tmpGame setObject:@"No Event Name" forKey:@"eventName"];
+	@autoreleasepool {
+        //Create the new game
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSMutableArray *tmpGameArray = [NSMutableArray array];
+        NSArray *gameArray = [NSArray array];
+        
+        //Not using lat/long right now
+        NSString *theDescription = @"No description entered...";
+        NSString *theLocation = @"Location TBD";
+        
+        
+        for(int i = 0; i < [self.allEvents count]; i++){
+            
+            NSString *dateString = @"";
+            NSString *timeString = @"";
+            
+            NSString *startDateString = @"";
+            
+            CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+            
+            NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
+            
+            [tmpGame setObject:theDescription forKey:@"description"];
+            [tmpGame setObject:theLocation forKey:@"opponent"];
+            [tmpGame setObject:@"generic" forKey:@"eventType"];
+            [tmpGame setObject:@"No Event Name" forKey:@"eventName"];
+            
+            
+            
+            NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
+            
+            [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
+            dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
+            
+            [tmpFormatter setDateFormat:@"HH:mm"];
+            timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
+            
+            startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
+            
+            [tmpGame setObject:startDateString forKey:@"startDate"];
+            
+            NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
+            
+            [tmpGameArray addObject:tmpGame1];
+            
+            
+        }
+        
+        gameArray = tmpGameArray;
+        
+      
+        
+        
+        NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString = @"";
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 205:
+                    //error connecting to server
+                    self.errorString = @"*You must be a coordinator to add events.";
+                    break;
+                default:
+                    //Log the status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        
+        [self performSelectorOnMainThread:
+         @selector(doneEvents)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
 
-		
-		
-		NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
-		
-		[tmpFormatter setDateFormat:@"yyyy-MM-dd"];
-		dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
-		
-		[tmpFormatter setDateFormat:@"HH:mm"];
-		timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
-		
-		startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
-		
-		[tmpGame setObject:startDateString forKey:@"startDate"];
-		
-		NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
-		
-		[tmpGameArray addObject:tmpGame1];
-		
-		
-	}
-	
-	gameArray = tmpGameArray;
-    
-    NSError *errors;
-    //rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Create Event - Multiple (Calendar)"
-                                          label:mainDelegate.token
-                                          value:-1
-                                      withError:&errors]) {
-    }
-    
-	
-	NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
-	
-	NSString *status = [response valueForKey:@"status"];
-	
-	
-	if ([status isEqualToString:@"100"]){
-		
-		self.errorString = @"";
-		
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-            case 205:
-				//error connecting to server
-				self.errorString = @"*You must be a coordinator to add events.";
-				break;
-			default:
-				//Log the status code?
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	
-	[self performSelectorOnMainThread:
-	 @selector(doneEvents)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-    
+        
+    }    
 	
 	
 }
@@ -911,31 +992,75 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		
 		NSArray *views = [self.navigationController viewControllers];
 		
-		if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
-			CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
-			tmp.selectedIndex = 3;
-			
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
-			AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
-            tmp.createdEvent = true;
-
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
-			AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
-            tmp.createdEvent = true;
-
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
-			Home *tmp = [views objectAtIndex:[views count] - 5];
+        if ([views count] == 3) {
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Create Multiple Events - Gameday"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
             
-			[self.navigationController popToViewController:tmp animated:NO];
-		}else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
-			Home *tmp = [views objectAtIndex:[views count] - 4];
-            
-			[self.navigationController popToViewController:tmp animated:NO];
-		}
+            [self.navigationController dismissModalViewControllerAnimated:YES];
+        }else{
+            if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Events - Event List"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
+                tmp.selectedIndex = 3;
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [CreateNewEventGameday class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Events - Gameday"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                
+                [self.navigationController dismissModalViewControllerAnimated:YES];
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Events - Calendar"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
+                tmp.createdEvent = true;
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Multiple Events - Calendar"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
+                tmp.createdEvent = true;
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
+                Home *tmp = [views objectAtIndex:[views count] - 5];
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
+                Home *tmp = [views objectAtIndex:[views count] - 4];
+                
+                [self.navigationController popToViewController:tmp animated:NO];
+            }
 
+        }
+		
 		
 		
 	}else {

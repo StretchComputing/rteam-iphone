@@ -806,6 +806,14 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 -(void)viewMap:(id)sender{
 	
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Event Map"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	UIButton *tmp = (UIButton *)sender;
 	
 	int row = tmp.tag;
@@ -898,7 +906,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
     [TraceSession addEventToSession:@"Event List Page - Event Clicked"];
 
-    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Event - From Event List"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
 	//go to that game profile
 	
 	if ([self.events count] > 0) {
@@ -1164,29 +1178,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (buttonIndex == 1) {
 			//Undo cancel
-			NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Activate Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
-            
+			
 			[self.editEventActiviy startAnimating];
 			[self performSelectorInBackground:@selector(activateEvent) withObject:nil];			
 			
 		}else if (buttonIndex == 0) {
 			[self.editEventActiviy startAnimating];
 
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Delete Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+         
             
 			[self performSelectorInBackground:@selector(deleteEvent) withObject:nil];
 			
@@ -1198,28 +1197,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		if (buttonIndex == 0) {
 			[self.editEventActiviy startAnimating];
 
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Delete Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+          
                   
 			[self performSelectorInBackground:@selector(deleteEvent) withObject:nil];
 			
 		}else if (buttonIndex == 1) {
 			[self.editEventActiviy startAnimating];
 
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Cancel Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }                  
+                         
 			[self performSelectorInBackground:@selector(cancelEvent) withObject:nil];
 		}else {
 			//Back

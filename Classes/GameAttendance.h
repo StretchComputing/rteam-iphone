@@ -30,6 +30,7 @@
 @property (nonatomic, strong) NSArray *players;
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSString *allSelector;
+
 @property (nonatomic, strong) NSString *gameId;
 @property (nonatomic, strong) NSMutableArray *attMarker;
 @property (nonatomic, strong) NSMutableArray *attMarkerTemp;
@@ -40,6 +41,7 @@
 
 @property (nonatomic, strong) IBOutlet UIButton *saveAll;
 @property (nonatomic, strong) IBOutlet UIButton *select;
+
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activity;
 @property (nonatomic, strong) IBOutlet UILabel *successLabel;
 @property (nonatomic, strong) NSString *startDate;
@@ -48,5 +50,11 @@
 -(void)getAttendanceInfo;
 
 -(IBAction)selectAllNone;
+-(IBAction)selectAllNonePre;
+@property (nonatomic, strong) NSString *allSelectorPre;
+@property (nonatomic, strong) IBOutlet UIButton *selectPre;
+
+
+
 -(IBAction)save;
 @end

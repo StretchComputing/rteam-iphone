@@ -21,6 +21,7 @@
 #import "Home.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
+#import "GANTracker.h"
 
 
 
@@ -155,6 +156,14 @@
     
     if ([didSucceed isEqualToString:@"yes"]) {
         
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Who's Coming Poll Sent - Happening Now"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
         self.pollLabel.textColor = [UIColor colorWithRed:0.0 green:100.0/255.0 blue:0.0 alpha:1.0];
         self.pollLabel.text = @"Poll Sent!";
     }else{
@@ -173,6 +182,14 @@
 }
 -(void)goToPage{
         
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Go To Event Page - Happening Now"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
     if ([self.eventType isEqualToString:@"Game"]) {
         
         
@@ -364,6 +381,15 @@
 }
 
 -(void)resenedPoll{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Who's Coming Poll Resent - Happening Now"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
     @autoreleasepool {
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -467,6 +493,14 @@
 }
     
 -(void)didFinishAtt:(NSString *)response{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Update Own Attendance Status - Happening Now"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     
     if ([self.currentMemberResponse isEqualToString:@"yes"]) {

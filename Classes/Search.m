@@ -470,13 +470,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [TraceSession addEventToSession:@"Search Page - Search Result Clicked"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Select Search Row"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Search Result Selected"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	NSUInteger row = [indexPath row];

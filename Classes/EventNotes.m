@@ -15,6 +15,7 @@
 #import "MapLocation.h"
 #import "EventEdit.h"
 #import "TraceSession.h"
+#import "GANTracker.h"
 
 @implementation EventNotes
 @synthesize eventId, teamId, opponent, day, time, description, locationManager, updateSuccess, latitude, longitude, 
@@ -53,6 +54,14 @@ startDateString, loading, errorString, dayString, timeString, eventNameString;
 	
     [TraceSession addEventToSession:@"EventDay - Edit Button Clicked"];
 
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Edit Event"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	
 	EventEdit *editEvent = [[EventEdit alloc] init];
 	

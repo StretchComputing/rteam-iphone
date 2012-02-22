@@ -1710,7 +1710,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-		
+        
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -4075,7 +4075,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
         
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-                
+                        
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -4123,7 +4123,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 						tmp.teamId = [message valueForKey:@"teamId"];
 						tmp.teamName = [message valueForKey:@"teamName"];
                         
-                        
+                        /*
 						if (isPoll) {
 							if ([tmp.messageType isEqualToString:@"poll"]) {
 								[returnThreads addObject:tmp];
@@ -4134,7 +4134,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 							}else if ([pollOrMsg isEqualToString:@"both"]) {
 								[returnThreads addObject:tmp];
 							}
-						}
+						}*/
+                        [returnThreads addObject:tmp];
 						
                         
 					}else if ([message valueForKey:@"practiceId"] == nil) {

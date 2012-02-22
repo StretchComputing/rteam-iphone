@@ -20,6 +20,7 @@
 #import "MessageReply.h"
 #import "SendPrivateMessage.h"
 #import "Player.h"
+#import "GANTracker.h"
 
 @implementation ViewMessageReceived
 @synthesize subject, body, receivedDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, wasViewed, threadId,
@@ -272,6 +273,14 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
 
 -(void)reply{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Reply To Message Received"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
     UINavigationController *tmpController = [[UINavigationController alloc] init];
     SendPrivateMessage *tmp = [[SendPrivateMessage alloc] init];
     
@@ -346,6 +355,14 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
 }
 
 -(void)doneDelete{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Delete Message Received"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     //[self.respondingActivity stopAnimating];
     self.fromClass.fromPost = true;

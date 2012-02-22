@@ -289,7 +289,6 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     
     //iAds
 	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 366, 320, 50)];
-	//myAd.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
 	myAd.delegate = self;
 	myAd.hidden = YES;
 	[self.view addSubview:myAd];
@@ -348,6 +347,15 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         
         [TraceSession addEventToSession:@"Activity Page - Swiped To Photos"];
 
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Activitiy Swipe - To Photos"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
+        
         //Photos
         if (!self.didInitPhotos) {
             self.didInitPhotos = false;
@@ -371,6 +379,14 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         
         [TraceSession addEventToSession:@"Activity Page - Swiped To Everyone"];
 
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Activitiy Swipe - To Everyone"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
         self.view1.frame = CGRectMake(0, 0, 320, y);
         self.view1.backgroundColor = [UIColor whiteColor];
         [self.bottomScrollView addSubview:self.view1];
@@ -385,6 +401,14 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         
     }else{
         //Me
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Activitiy Swipe - To Me"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
         
         [TraceSession addEventToSession:@"Activity Page - Swiped To Me"];
 
@@ -658,13 +682,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 theMessage.picImageData = [NSData data];
                 
          
-            NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Select Activity Row"
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Activity Everyone - Row Selected"
                                                   label:mainDelegate.token
                                                   value:-1
-                                              withError:&errors]) {
+                                              withError:nil]) {
             }
             
                 [self.navigationController pushViewController:theMessage animated:YES];
@@ -682,6 +705,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         [TraceSession addEventToSession:@"Activity Page - Me Row Clicked"];
 
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"My Activity - Row Selected"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
         
         if ([[self.myActivityArray objectAtIndex:row] class] == [MessageThreadInbox class]) {
 			MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:row];
@@ -708,14 +739,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				poll.status = messageOrPoll.status;
                 poll.fromClass = self;
 
-                NSError *errors;
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                     action:@"Select Poll Received"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:&errors]) {
-                }
+               
                 
 				[self.navigationController pushViewController:poll animated:YES];
 			}else {
@@ -740,14 +764,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 message.senderName = messageOrPoll.senderName;
                 message.teamName = messageOrPoll.teamName;
               
-                NSError *errors;
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                     action:@"Select Message Received"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:&errors]) {
-                }
+                
                 
                 [self.navigationController pushViewController:message animated:YES];
                 
@@ -784,14 +801,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     tmp.replyFraction = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people have replied."];
                 }
    
-                NSError *errors;
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                     action:@"Select Poll Sent"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:&errors]) {
-                }
+             
                 
                 
                 [self.navigationController pushViewController:tmp animated:YES];
@@ -827,14 +837,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 viewMessage.confirmString = replyString;
                 
-                NSError *errors;
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                     action:@"Select Poll Received"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:&errors]) {
-                }
+             
                 
                 [self.navigationController pushViewController:viewMessage animated:YES];
                 
@@ -1214,8 +1217,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
     self.activityArray = [NSMutableArray arrayWithArray:self.tmpActivityArray];
     
-    self.allActivityTable.hidden = NO;
-    [self.allActivityTable reloadData];
+ 
     
     [self performSelectorInBackground:@selector(getUserVotes) withObject:nil];
     
@@ -1247,6 +1249,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
         }
     }
+    
+    NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"lastEditDate" ascending:NO];
+    [self.activityArray sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
+    
+    self.allActivityTable.hidden = NO;
+    [self.allActivityTable reloadData];
     
     NSArray *idArray = [NSArray arrayWithArray:activityIds];
     [self performSelectorInBackground:@selector(getActivityDetails:) withObject:idArray];
@@ -1499,14 +1507,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [TraceSession addEventToSession:@"Activity Page - Image Clicked"];
 
         
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Select Activity Image"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Image Selected - Activity"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
+    
     
     ImageButton *tmpButton = (ImageButton *)sender;
     

@@ -16,6 +16,7 @@ MFMessageComposeViewControllerDelegate> {
 	
 
 }
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *deleteActivity;
 @property bool isDelete;
 @property (nonatomic, retain) UIAlertView *alertOne;
 @property (nonatomic, retain) UIAlertView *alertTwo;

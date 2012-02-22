@@ -194,13 +194,13 @@ resetPasswordButton, errorString, startEmail, theEmail, thePassword;
 	
 	if (self.createSuccess){
 		
-        NSError *errors;
+        
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"User Login"
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"User Logged In"
                                               label:mainDelegate.token
                                               value:-1
-                                          withError:&errors]) {
+                                          withError:nil]) {
         }
         
 		//Then go to the coaches home

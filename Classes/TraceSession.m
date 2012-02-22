@@ -40,7 +40,6 @@ static NSMutableArray *traceTimeStamps;
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
-    //NSString *dateString = [dateFormatter stringFromDate:myDate];
             
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -53,11 +52,11 @@ static NSMutableArray *traceTimeStamps;
         if (i == ([traceSession count] - 1)) {
             tmpTrace = [tmpTrace stringByAppendingFormat:@"%@", [traceSession objectAtIndex:i]];
             
-            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@", [traceTimeStamps objectAtIndex:i]];
+            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@", [dateFormatter stringFromDate:[traceTimeStamps objectAtIndex:i]]];
 
         }else{
             tmpTrace = [tmpTrace stringByAppendingFormat:@"%@,", [traceSession objectAtIndex:i]];
-            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@,", [traceTimeStamps objectAtIndex:i]];
+            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@,", [dateFormatter stringFromDate:[traceTimeStamps objectAtIndex:i]]];
 
         }
     }

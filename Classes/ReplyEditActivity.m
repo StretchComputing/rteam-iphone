@@ -10,7 +10,7 @@
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
 #import <MobileCoreServices/UTCoreTypes.h> 
-
+#import "GANTracker.h"
 
 @implementation ReplyEditActivity
 @synthesize segControl, messageText, activity, messageImage, cancelImageButton, errorLabel, isReply, originalMessage, errorString, imageDataToSend, videoDataToSend, isSendVideo, teamId, activityId, theMessageText, sendOrientation, previewImageData, cancelImageVideo, isTakeVideo, cameraSaveMessage, displayClass;
@@ -170,8 +170,14 @@
     
     if ([self.errorString isEqualToString:@""]) {
                 
-        rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
-        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Edit Activity"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+                
         [mainDelegate.replyDictionary setValue:nil forKey:self.activityId];
         [mainDelegate.messageImageDictionary setValue:nil forKey:self.activityId];
         
@@ -275,7 +281,14 @@
     
     if ([self.errorString isEqualToString:@""]) {
         
-        rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Reply To Activity"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
         
         [mainDelegate.replyDictionary setValue:nil forKey:self.activityId];
         [mainDelegate.messageImageDictionary setValue:nil forKey:self.activityId];

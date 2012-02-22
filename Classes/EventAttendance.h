@@ -51,5 +51,9 @@
 -(void)getAttendanceInfo;
 
 -(IBAction)selectAllNone;
+-(IBAction)selectAllNonePre;
+@property (nonatomic, strong) NSString *allSelectorPre;
+@property (nonatomic, strong) IBOutlet UIButton *selectPre;
+
 -(IBAction)save;
 @end

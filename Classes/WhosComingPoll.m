@@ -13,6 +13,7 @@
 #import "Game.h"
 #import "Practice.h"
 #import "Event.h"
+#import "GANTracker.h"
 
 @implementation WhosComingPoll
 @synthesize  teamList, cancelButton, selectView, selectTable, teamSelectButton, currentTeamsView, initialDate, selectedGameId, selectedTeamId, eventList, eventActivity, eventPicker, areNoEvents, eventType, eventId, mainActivity, displayLabel, sendButton, selectedMessageThreadId, isGettingEvents, newGame, createEventView, createEventSegment, createEventDatePicker, createEventCancelButton, createEventSubmitButton, createEventType, createEventDate;
@@ -28,6 +29,14 @@
 }
 
 -(void)done{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Who's Coming Poll Sent/Resent - Gameday"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     if (![self.selectedTeamId isEqualToString:@""]) {
         

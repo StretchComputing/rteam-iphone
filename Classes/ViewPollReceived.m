@@ -642,13 +642,12 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
         self.buttonOption3.enabled = NO;
         self.buttonOption4.enabled = NO;
 
-        NSError *errors;
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Send Poll Response"
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Respond To Poll"
                                               label:mainDelegate.token
                                               value:-1
-                                          withError:&errors]) {
+                                          withError:nil]) {
         }
         
         [self performSelectorInBackground:@selector(sendPollResponse) withObject:nil];
@@ -789,6 +788,14 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 -(void)viewMoreDetail{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View More Detail - Poll Received"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	ViewDetailPollReplies *tmp = [[ViewDetailPollReplies alloc] init];
 	tmp.replyArray = self.individualReplies;
 	tmp.teamId = self.teamId;

@@ -14,6 +14,8 @@
 #import "HomeScoreView.h"
 #import "HomeAttendanceView.h"
 
+@class HomeScoreView;
+
 @interface Home : UIViewController <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextFieldDelegate, ADBannerViewDelegate,
 UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>{
 

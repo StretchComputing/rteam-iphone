@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Home.h"
 
+@class Home;
 
 @interface HomeScoreView : UIViewController {
     
 }
+@property (nonatomic, strong) Home *homeSuperView;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *overActivity;
 @property (nonatomic, strong) IBOutlet UIButton *gameOverButton;
 @property (nonatomic, strong) NSString *eventStringDate;

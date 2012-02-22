@@ -139,7 +139,7 @@
     [self.myScrollView addSubview:timeLabel];
     
     //Display Message   
-    int height = [self findHeightForStringBigger:self.displayMessage withWidth:230];
+    int height = [self findHeightForStringBigger:self.displayMessage withWidth:225];
     
     UITextView *displayText = [[UITextView alloc] initWithFrame:CGRectMake(65, timeY + 13, 245, height+20)];
     displayText.editable = NO;
@@ -490,13 +490,12 @@
 
 -(void)imageSelected:(id)sender{
         
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Select Activty Detail Image"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Image Selected - Activity Detail"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
     ImageDisplayMultiple *newDisplay = [[ImageDisplayMultiple alloc] init];
@@ -597,13 +596,12 @@
 
 -(void)voteUp{
 
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Activity Vote - Thumbs Up"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Vote Like - Activity Detail"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	self.currentVoteBool = YES;
@@ -614,13 +612,12 @@
 
 -(void)voteDown{
 
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Activity Vote - Thumbs Down"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Vote Dislike - Activity Detail"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
           
 	self.currentVoteBool = NO;
@@ -779,6 +776,14 @@
 	[self.navigationController presentModalViewController:navController animated:YES];}
 
 -(void)deleteAction{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Delete Activity Post"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     self.errorLabel.text = @"";
     [self.activity startAnimating];

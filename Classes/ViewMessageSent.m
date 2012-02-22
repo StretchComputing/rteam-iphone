@@ -15,6 +15,7 @@
 #import "ViewDetailMessageReplies.h"
 #import "MessageThreadOutbox.h"
 #import "FastActionSheet.h"
+#import "GANTracker.h"
 
 @implementation ViewMessageSent
 @synthesize subject, body, createdDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, threadId, recipients,
@@ -370,6 +371,14 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 
 -(void)doneDelete{
     
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Delete Message Sent"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
     //[self.respondingActivity stopAnimating];
     self.fromClass.fromPost = true;
     [self.navigationController popViewControllerAnimated:NO];
@@ -378,6 +387,14 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 
 -(void)ViewDetailMessageReplies{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View More Detail - Message Sent"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	ViewDetailMessageReplies *tmp = [[ViewDetailMessageReplies alloc] init];
 	tmp.replyArray = self.individualReplies;
 	tmp.teamId = self.teamId;

@@ -14,6 +14,7 @@
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CurrentTeamTabs.h"
+#import "GANTracker.h"
 
 @implementation TeamEdit
 @synthesize teamId, sportLabel, description, teamName, errorLabel, activity, changeSportButton, saveChangesButton, saveSuccess, newTeamName,
@@ -80,6 +81,24 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 	[self.description setEditable:NO];
 	[self.saveChangesButton setEnabled:NO];
 	[self.changeSportButton setEnabled:NO];
+    
+    self.theDescription = [NSString stringWithString:self.description.text];
+    self.theTeamName = [NSString stringWithString:self.teamName.text];
+    
+    if (self.sportLabel.text == nil) {
+        self.theSportLabel = @"other";
+    }else{
+        self.theSportLabel = [NSString stringWithString:self.sportLabel.text];
+    }
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Team Edit - Connect Twitter"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 
 	
@@ -179,6 +198,14 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 
 	TeamChangeSport *tmp = [[TeamChangeSport alloc] init];
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Team Edit - Change Sport"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	[self.navigationController pushViewController:tmp animated:YES];
 }
 
@@ -193,9 +220,23 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
     
     self.theDescription = [NSString stringWithString:self.description.text];
     self.theTeamName = [NSString stringWithString:self.teamName.text];
-    self.theSportLabel = [NSString stringWithString:self.sportLabel.text];
+    
+    if (self.sportLabel.text == nil) {
+        self.theSportLabel = @"other";
+    }else{
+        self.theSportLabel = [NSString stringWithString:self.sportLabel.text];
+    }
+    
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Team Edit - Save Changes"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	
 	
 }
@@ -223,6 +264,9 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
         NSDictionary *results = [ServerAPI updateTeam:mainDelegate.token :self.teamId :self.theTeamName :newDesc :@"" :twitterParam :self.theSportLabel :[NSData data] :@""];
         
         NSString *status = [results valueForKey:@"status"];
+        
+        NSLog(@"Status: %@", status);
+
         
         if ([status isEqualToString:@"100"]){
             
@@ -436,6 +480,14 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 
 -(void)doneRemoveTwitter{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Team Edit - Remove Twitter"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	[self.activity stopAnimating];
 	
 	[self.loadingActivity startAnimating];
@@ -519,6 +571,14 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 }
 
 -(void)doneDelete{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Team Edit - Delete Team"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     [self.activity stopAnimating];
     if ([self.errorString isEqualToString:@""]) {

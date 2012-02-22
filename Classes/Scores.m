@@ -36,7 +36,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 -(void)viewDidLoad{
 	
 	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-	[self.navigationItem setLeftBarButtonItem:homeButton];
+	//[self.navigationItem setLeftBarButtonItem:homeButton];
 	
 	//iAds
 	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
@@ -810,10 +810,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	refreshActivity = nil;
 	cancelButton = nil;
 	insideView = nil;
+    myAd.delegate = nil;
+    myAd = nil;
 	[super viewDidUnload];
 	
 }
 
+- (void)dealloc {
+    
+    myAd.delegate = nil;
+    myAd = nil;
+}
 
 
 @end

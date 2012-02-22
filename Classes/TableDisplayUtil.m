@@ -864,7 +864,7 @@
             }
         }
         CGRect frame = messageText.frame;
-        frame.size.height = [TableDisplayUtil findHeightForString:messageText.text withWidth:messageText.frame.size.width - 15] + 15;
+        frame.size.height = [TableDisplayUtil findHeightForString:messageText.text withWidth:messageText.frame.size.width - 20] + 15;
         messageText.frame = frame;
         //int imageStart = 41 + messageText.frame.size.height;
         
@@ -993,7 +993,7 @@
             }
         }
         
-        int messageHeight = [TableDisplayUtil findHeightForString:lengthMessage withWidth:250];
+        int messageHeight = [TableDisplayUtil findHeightForString:lengthMessage withWidth:245];
         
         
         

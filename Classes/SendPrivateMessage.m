@@ -92,14 +92,7 @@
         [self.keyboardButton setEnabled:NO];
         [self.cancelMessageButton setEnabled:NO];
         
-        NSError *errors;
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Send Private Message"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:&errors]) {
-        }
+    
         
         [self performSelectorInBackground:@selector(createActivity) withObject:nil];
     }
@@ -177,6 +170,14 @@
     [self.cancelMessageButton setEnabled:YES];
     
     if ([self.errorString isEqualToString:@""]) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Send Private Message"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
         
         [self.navigationController dismissModalViewControllerAnimated:YES];
 

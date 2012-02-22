@@ -133,14 +133,6 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
 		
 		//Register the User in a background thread
 		
-        NSError *errors;
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Registe New User"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:&errors]) {
-        }
         
         self.theLastName = self.lastName.text;
         self.theFirstName = self.firstName.text;
@@ -257,6 +249,14 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
             
             if ([self.carrierText.text isEqualToString:@"I don't know."]) {
                 
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"User Registered - With Phone Number, Unknown Carrier"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                
                 NSString *ios = [[UIDevice currentDevice] systemVersion];
                 
                 bool canText = false;
@@ -289,6 +289,14 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
                 }
             }else{
                 
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"User Registerd - With Phone Number"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                
                 ValidatePhoneCarrier *tmp = [[ValidatePhoneCarrier alloc]  init];
                 tmp.phoneNumber = self.phoneText.text;
                 
@@ -304,6 +312,14 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
             }
             
         }else{
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"User Registered - No Phone Number"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
             
             SettingsTabs *nextController = [[SettingsTabs alloc] init];
             nextController.fromRegisterFlow = @"true";

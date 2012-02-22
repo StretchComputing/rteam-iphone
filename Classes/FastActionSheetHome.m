@@ -10,6 +10,7 @@
 #import "rTeamAppDelegate.h"
 #import "FastChangeEventStatus.h"
 #import "ActivityPost.h"
+#import "GANTracker.h"
 
 @implementation FastActionSheetHome
 
@@ -27,6 +28,14 @@
 
 +(void)doAction:(UIViewController *)sender :(int)buttonIndex{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"FAST Action Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	if (buttonIndex == 0) {
         FastChangeEventStatus *tmp = [[FastChangeEventStatus alloc] init];
 		[sender.navigationController pushViewController:tmp animated:NO];

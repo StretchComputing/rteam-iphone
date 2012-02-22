@@ -286,13 +286,12 @@ imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, 
     self.newImage = true;
 	[self.activity startAnimating];
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Change Profile Picture"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Add/Change Profile Picture"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
 	[self performSelectorInBackground:@selector(updateImage) withObject:nil];
 	

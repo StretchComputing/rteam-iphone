@@ -18,6 +18,7 @@
 #import "NewMemberObject.h"
 #import "InviteFanFinal.h"
 #import "TraceSession.h"
+#import "GANTracker.h"
 
 @implementation Players
 @synthesize players, teamName, teamId, userRole, currentMemberId, isFans, segRosterFans, addButton, error, fans, playerPics,
@@ -417,10 +418,15 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			descLabel.text = @"";
 			imageView.image = nil;
 			imageView = nil;
+            
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
 		
 			return cell;
 		}else {
-			
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+
 			descLabel.backgroundColor = [UIColor clearColor];
 			descLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
 			
@@ -548,10 +554,14 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			imageView.image = nil;
 			imageView = nil;
 			
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
 			return cell;
 		}else {
 			
-						
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+
 			descLabel.backgroundColor = [UIColor clearColor];
 			descLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
             descLabel1.font = [UIFont fontWithName:@"Helvetica" size:13];
@@ -794,6 +804,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
         [TraceSession addEventToSession:@"People Page - Fan Row Clicked"];
 
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"View Fan Profile"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
         
 		if ([self.fans count] > 0) {
 			//go to that player profile
@@ -809,6 +827,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
         [TraceSession addEventToSession:@"People Page - Member Row Clicked"];
 
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"View Member Profile"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
         
 		if ([self.players count] > 0) {
 			//go to that player profile

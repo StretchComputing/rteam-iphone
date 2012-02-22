@@ -15,7 +15,7 @@
 
 @implementation EventAttendance
 @synthesize players, teamId, allSelector, eventId, attMarker, saveAll, select, activity, successLabel, startDate, attReport, attendanceInfo,
-saveSuccess, playerTableView, successString, successNoChoices, barActivity, attActivity, attActivityLabel, attMarkerTemp, switchButton, playerTableViewPre, topLabel, errorString, preMarker, preMarkerTemp, isCoord, userRole, lineView;
+saveSuccess, playerTableView, successString, successNoChoices, barActivity, attActivity, attActivityLabel, attMarkerTemp, switchButton, playerTableViewPre, topLabel, errorString, preMarker, preMarkerTemp, isCoord, userRole, lineView, allSelectorPre, selectPre;
 
 -(void)viewDidLoad{
 	
@@ -39,6 +39,8 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.select setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
 	[self.saveAll setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
+    [self.selectPre setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
+
     
     self.switchButton = [[UIBarButtonItem alloc] initWithTitle:@"Event" style:UIBarButtonItemStyleBordered target:self action:@selector(switchViews)];
 	
@@ -54,11 +56,17 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         self.topLabel.text = @"Actual event attendance";
         self.playerTableView.hidden = NO;
         self.playerTableViewPre.hidden = YES;
+        
+        self.selectPre.hidden = YES;
+        self.select.hidden = NO;
     }else{
         self.switchButton.title = @"Event";
         self.topLabel.text = @"Pre-event expected attendance";
         self.playerTableView.hidden = YES;
         self.playerTableViewPre.hidden = NO;
+        
+        self.selectPre.hidden = NO;
+        self.select.hidden = YES;
     }
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -86,6 +94,9 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         self.playerTableView.hidden = YES;
         self.playerTableViewPre.hidden = NO;
         
+        self.selectPre.hidden = NO;
+        self.select.hidden = YES;
+        
     }else{
         
         //show regular attendance view
@@ -96,6 +107,8 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         
         [self.attActivity startAnimating];
         
+        self.selectPre.hidden = YES;
+        self.select.hidden = NO;
         //[self performSelectorInBackground:@selector(getAttendanceInfo) withObject:nil];
     }
     
@@ -310,6 +323,35 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	
 	[self.playerTableView reloadData];
 }
+
+-(void)selectAllNonePre{
+    
+    
+    if ((self.allSelectorPre == nil) || ([self.allSelectorPre isEqualToString:@"none"])){
+        self.allSelectorPre = @"all";
+        [self.selectPre setTitle:@"Select None" forState:UIControlStateNormal];
+        for (int i = 0; i < [self.players count]; i++) {
+            
+            if ([self.preMarker count] > i) {
+                [self.preMarker replaceObjectAtIndex:i withObject:@"1"];
+            }
+        }
+    }else if ([self.allSelectorPre isEqualToString:@"all"]){
+        self.allSelectorPre = @"none";
+        [self.selectPre setTitle:@"Select All" forState:UIControlStateNormal];
+        for (int i = 0; i < [self.players count]; i++) {
+            
+            if ([self.preMarker count] > i) {
+                [self.preMarker replaceObjectAtIndex:i withObject:@"0"];
+            }
+            
+        }
+    }
+    
+    [self.playerTableViewPre reloadData];    
+	
+}
+
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section {
     
@@ -528,15 +570,13 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	
 	//Create the player in a background thread
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Take Attendance - Event"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Take Event Attendance"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
-	
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
 	
@@ -727,6 +767,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 	attActivityLabel = nil;
     playerTableViewPre = nil;
     topLabel = nil;
+    selectPre = nil;
 	[super viewDidUnload];
 	
 }

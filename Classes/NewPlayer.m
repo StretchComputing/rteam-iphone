@@ -20,6 +20,7 @@
 #import "GANTracker.h"
 #import "TraceSession.h"
 
+
 @implementation NewPlayer
 @synthesize firstName, lastName, email, guardianEmail, roles, teamId, submitButton, serverProcess, error, createSuccess, isCoordinator, 
 helpScreen, barItem, userRole, closeButton, sendEmailButton, addParentGuardianButton, useGuardians, guardianOneFirst, multipleActivity,
@@ -250,14 +251,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         self.thePhoneNumber = [NSString stringWithString:self.phoneNumber.text];
         self.theEmail = [NSString stringWithString:self.email.text];
 
-        NSError *errors;
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Add Member - Single"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:&errors]) {
-        }
+     
         
 	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 	
@@ -490,6 +484,14 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 - (void)showPicker:(id)sender {
     
     
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"New Member(s) - Add From Contacts"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
     self.multipleEmailArray = [NSMutableArray array];
 
     UIButton *tmpButton = (UIButton *)sender;
@@ -534,436 +536,439 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 (ABPeoplePickerNavigationController *)peoplePicker
       shouldContinueAfterSelectingPerson:(ABRecordRef)person {
 	
-    self.multiplePhoneArray = [NSMutableArray array];
-    self.multipleEmailArray = [NSMutableArray array];
-    self.multipleEmailArrayLabels = [NSMutableArray array];
-    self.multiplePhoneArrayLabels = [NSMutableArray array];
-    
-    self.twoAlerts = false;
-    
-    self.tmpMiniEmail = @"";
-    self.tmpMiniLastName = @"";
-    self.tmpMiniPhone = @"";
-    self.tmpMiniFirstName = @"";
-    
-    self.currentGuardName = @"";
-    self.currentGuardEmail = @"";
-    self.currentGuardPhone = @"";
-    
-    NSString* fName = (__bridge NSString *)ABRecordCopyValue(person,
-												   kABPersonFirstNameProperty);
-	
-	NSString *lName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-
-	
-	ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
-	
-	NSArray *emailArray1 = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
-	NSString *emailAddress = @"";
-	if ([emailArray1 count] > 0) {
-		emailAddress = [emailArray1 objectAtIndex:0];
-        self.multipleEmailArray = [NSMutableArray arrayWithArray:emailArray1];
+    @try {
+        self.multiplePhoneArray = [NSMutableArray array];
+        self.multipleEmailArray = [NSMutableArray array];
+        self.multipleEmailArrayLabels = [NSMutableArray array];
+        self.multiplePhoneArrayLabels = [NSMutableArray array];
         
-        for(int i = 0; i < ABMultiValueGetCount(emails); i++)
-        {
-            NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
-            
-            NSString *final = [self getType:test];
-            
-            [self.multipleEmailArrayLabels addObject:final];
-            
-        }
-
-	}
-	
-	
-	ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
-	
-	NSArray *phoneArray = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
-	NSString *phoneString = @"";
-	if ([phoneArray count] > 0) {
-		phoneString = [phoneArray objectAtIndex:0];
-        self.multiplePhoneArray = [NSMutableArray arrayWithArray:phoneArray];
+        self.twoAlerts = false;
         
-        for(int i = 0; i < ABMultiValueGetCount(phone); i++)
-        {
-            NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
-            
-            NSString *final = [self getType:test];
-            
-            [self.multiplePhoneArrayLabels addObject:final];
-            
-        }
-	}
-
-	
-
-
-    if (fName == nil) {
-        fName = @"";
-    }
-    if (lName == nil) {
-        lName = @"";
-    }
-    if (emailAddress == nil) {
-        emailAddress = @"";
-    }
-    if (phoneString == nil) {
-        phoneString = @"";
-    }
-    
-    self.currentGuardName = @"";
-    if (![fName isEqualToString:@""]) {
-        self.currentGuardName = fName;
+        self.tmpMiniEmail = @"";
+        self.tmpMiniLastName = @"";
+        self.tmpMiniPhone = @"";
+        self.tmpMiniFirstName = @"";
         
-        if (![lName isEqualToString:@""]){
-            self.currentGuardName = [self.currentGuardName stringByAppendingFormat:@" %@", lName];
-        }
-    }
-    
-	if (self.isMiniAdd) {
-		
-        bool isEmail = false;
-        bool isPhone = false;
-        if ([self.multipleEmailArray count] > 1){
+        self.currentGuardName = @"";
+        self.currentGuardEmail = @"";
+        self.currentGuardPhone = @"";
+        
+        NSString* fName = (__bridge NSString *)ABRecordCopyValue(person,
+                                                                 kABPersonFirstNameProperty);
+        
+        NSString *lName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        
+        
+        ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
+        
+        NSArray *emailArray1 = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
+        NSString *emailAddress = @"";
+        if ([emailArray1 count] > 0) {
+            emailAddress = [emailArray1 objectAtIndex:0];
+            self.multipleEmailArray = [NSMutableArray arrayWithArray:emailArray1];
             
-            isEmail = true;
-            
-            if ([self.multipleEmailArray count] > 4) {
+            for(int i = 0; i < ABMultiValueGetCount(emails); i++)
+            {
+                NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
                 
-                NSMutableArray *tmpArray = [NSMutableArray array];
+                NSString *final = [self getType:test];
                 
-                for (int i = 0; i < 4 ; i++) {
-                    [tmpArray addObject:[self.multipleEmailArray objectAtIndex:i]];
+                [self.multipleEmailArrayLabels addObject:final];
+                
+            }
+            
+        }
+        
+        
+        ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
+        
+        NSArray *phoneArray = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
+        NSString *phoneString = @"";
+        if ([phoneArray count] > 0) {
+            phoneString = [phoneArray objectAtIndex:0];
+            self.multiplePhoneArray = [NSMutableArray arrayWithArray:phoneArray];
+            
+            for(int i = 0; i < ABMultiValueGetCount(phone); i++)
+            {
+                NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
+                
+                NSString *final = [self getType:test];
+                
+                [self.multiplePhoneArrayLabels addObject:final];
+                
+            }
+        }
+        
+        
+        
+        
+        if (fName == nil) {
+            fName = @"";
+        }
+        if (lName == nil) {
+            lName = @"";
+        }
+        if (emailAddress == nil) {
+            emailAddress = @"";
+        }
+        if (phoneString == nil) {
+            phoneString = @"";
+        }
+        
+        self.currentGuardName = @"";
+        if (![fName isEqualToString:@""]) {
+            self.currentGuardName = fName;
+            
+            if (![lName isEqualToString:@""]){
+                self.currentGuardName = [self.currentGuardName stringByAppendingFormat:@" %@", lName];
+            }
+        }
+        
+        if (self.isMiniAdd) {
+            
+            bool isEmail = false;
+            bool isPhone = false;
+            if ([self.multipleEmailArray count] > 1){
+                
+                isEmail = true;
+                
+                if ([self.multipleEmailArray count] > 4) {
+                    
+                    NSMutableArray *tmpArray = [NSMutableArray array];
+                    
+                    for (int i = 0; i < 4 ; i++) {
+                        [tmpArray addObject:[self.multipleEmailArray objectAtIndex:i]];
+                    }
+                    
+                    self.multipleEmailArray = [NSMutableArray arrayWithArray:tmpArray];
                 }
                 
-                self.multipleEmailArray = [NSMutableArray arrayWithArray:tmpArray];
-            }
-            
-            NSString *message = @"";
-            if ([self.multipleEmailArray count] == 4) {
-                message = @"Please Choose One.";
-            }else{
-                message = @"Please pick which email address you would like to use.";
-            }
-
-            
-            if ([self.addContactWhere isEqualToString:@"member"]) {
+                NSString *message = @"";
+                if ([self.multipleEmailArray count] == 4) {
+                    message = @"Please Choose One.";
+                }else{
+                    message = @"Please pick which email address you would like to use.";
+                }
                 
-                self.miniMultipleEmailAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Emails Found" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                
+                if ([self.addContactWhere isEqualToString:@"member"]) {
+                    
+                    self.miniMultipleEmailAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Emails Found" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                    
+                    for (int i = 0; i < [self.multipleEmailArray count]; i++) {
+                        
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
+                                           [self.multipleEmailArray objectAtIndex:i]];
+                        [self.miniMultipleEmailAlert addButtonWithTitle:title];
+                    }
+                    
+                }else if ([self.addContactWhere isEqualToString:@"guard1"]){
+                    
+                    self.guard1EmailAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Emails Found" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                    
+                    for (int i = 0; i < [self.multipleEmailArray count]; i++) {
+                        
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
+                                           [self.multipleEmailArray objectAtIndex:i]];
+                        [self.guard1EmailAlert addButtonWithTitle:title];
+                    }
+                    
+                }else{
+                    
+                    self.guard2EmailAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Emails Found" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                    
+                    for (int i = 0; i < [self.multipleEmailArray count]; i++) {
+                        
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
+                                           [self.multipleEmailArray objectAtIndex:i]];
+                        [self.guard2EmailAlert addButtonWithTitle:title];
+                    }
+                    
+                }
+                
+                
+            }
+            
+            if ([self.multiplePhoneArray count] > 1) {
+                
+                isPhone = true;
+                
+                if ([self.multiplePhoneArray count] > 4) {
+                    
+                    NSMutableArray *tmpArray = [NSMutableArray array];
+                    
+                    for (int i = 0; i < 4 ; i++) {
+                        [tmpArray addObject:[self.multiplePhoneArray objectAtIndex:i]];
+                    }
+                    
+                    self.multiplePhoneArray = [NSMutableArray arrayWithArray:tmpArray];
+                }
+                
+                NSString *message = @"";
+                if ([self.multiplePhoneArray count] == 4) {
+                    message = @"Please Choose One.";
+                }else{
+                    message = @"Please pick which phone number you would like to use.";
+                }
+                
+                
+                if ([self.addContactWhere isEqualToString:@"member"]) {
+                    
+                    self.miniMultiplePhoneAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Phone Numbers" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                    
+                    for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
+                        
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
+                                           [self.multiplePhoneArray objectAtIndex:i]];
+                        [self.miniMultiplePhoneAlert addButtonWithTitle:title];
+                    }
+                    
+                }else if ([self.addContactWhere isEqualToString:@"guard1"]){
+                    
+                    self.guard1PhoneAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Phone Numbers" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                    
+                    for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
+                        
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
+                                           [self.multiplePhoneArray objectAtIndex:i]];
+                        [self.guard1PhoneAlert addButtonWithTitle:title];
+                    }
+                    
+                }else{
+                    
+                    self.guard2PhoneAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Phone Numbers" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                    
+                    for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
+                        
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
+                                           [self.multiplePhoneArray objectAtIndex:i]];
+                        [self.guard2PhoneAlert addButtonWithTitle:title];
+                    }
+                }
+                
+                
+            }
+            
+            
+            
+            if (isEmail && isPhone){
+                
+                self.twoAlerts = true;
+                self.miniMultiple = @"both";
+                self.tmpMiniFirstName = fName;
+                self.tmpMiniLastName = lName;
+                
+                if ([self.addContactWhere isEqualToString:@"member"]){
+                    
+                    [self.miniMultipleEmailAlert show];
+                    
+                }else if ([self.addContactWhere isEqualToString:@"guard1"]){
+                    
+                    [self.guard1EmailAlert show];
+                }else{
+                    
+                    [self.guard2EmailAlert show];
+                }
+                
+                
+            }else if (isEmail){
+                
+                self.miniMultiple = @"email";
+                
+                self.tmpMiniFirstName = fName;
+                self.tmpMiniLastName = lName;
+                self.tmpMiniPhone = phoneString;
+                self.currentGuardPhone = phoneString;
+                
+                if ([self.addContactWhere isEqualToString:@"member"]){
+                    
+                    [self.miniMultipleEmailAlert show];
+                    
+                }else if ([self.addContactWhere isEqualToString:@"guard1"]){
+                    
+                    [self.guard1EmailAlert show];
+                }else{
+                    
+                    [self.guard2EmailAlert show];
+                }
+                
+                
+            }else if (isPhone){
+                
+                self.miniMultiple = @"phone";
+                
+                self.tmpMiniFirstName = fName;
+                self.tmpMiniLastName = lName;
+                self.tmpMiniEmail = emailAddress;
+                self.currentGuardEmail = emailAddress;
+                
+                if ([self.addContactWhere isEqualToString:@"member"]){
+                    
+                    [self.miniMultiplePhoneAlert show];
+                    
+                }else if ([self.addContactWhere isEqualToString:@"guard1"]){
+                    
+                    [self.guard1PhoneAlert show];
+                }else{
+                    
+                    [self.guard2PhoneAlert show];
+                    
+                }
+                
+                
+                
+            }else{
+                
+                if ([self.addContactWhere isEqualToString:@"member"]){
+                    NewMemberObject *tmpObject = [[NewMemberObject alloc] init];
+                    tmpObject.firstName = @"";
+                    tmpObject.lastName = @"";
+                    tmpObject.email = @"";
+                    tmpObject.phone = @"";
+                    tmpObject.role = @"";
+                    tmpObject.guardianOneName = @"";
+                    tmpObject.guardianOneEmail = @"";
+                    tmpObject.guardianOnePhone = @"";
+                    tmpObject.guardianTwoName = @"";
+                    tmpObject.guardianTwoEmail = @"";
+                    tmpObject.guardianTwoPhone = @"";
+                    
+                    if (fName != nil) {
+                        tmpObject.firstName = fName;
+                        
+                    }
+                    if (lName != nil) {
+                        tmpObject.lastName = lName;
+                        
+                    }
+                    if (emailAddress != nil) {
+                        tmpObject.email = emailAddress;
+                        
+                    }
+                    if (phoneString != nil) {
+                        tmpObject.phone = phoneString;
+                        
+                    }
+                    
+                    [self.emailArray addObject:tmpObject];
+                    
+                    [self.myTableView reloadData];
+                    
+                    
+                }else if ([self.addContactWhere isEqualToString:@"guard1"]){
+                    
+                    self.oneName.text = self.currentGuardName;
+                    self.oneEmail.text = emailAddress;
+                    self.onePhone.text = phoneString;
+                }else{
+                    self.twoName.text = self.currentGuardName;
+                    self.twoEmail.text = emailAddress;
+                    self.twoPhone.text = phoneString;
+                }
+                
+                
+            }
+            
+            
+        }else {
+            
+            bool showEmail = false;
+            bool showPhone = false;
+            self.firstName.text = fName;
+            
+            self.lastName.text = lName;
+            
+            
+            
+            if ([self.multipleEmailArray count] > 1){
+                
+                if ([self.multipleEmailArray count] > 4) {
+                    
+                    NSMutableArray *tmpArray = [NSMutableArray array];
+                    
+                    for (int i = 0; i < 4 ; i++) {
+                        [tmpArray addObject:[self.multipleEmailArray objectAtIndex:i]];
+                    }
+                    
+                    self.multipleEmailArray = [NSMutableArray arrayWithArray:tmpArray];
+                }
+                
+                NSString *message = @"";
+                if ([self.multipleEmailArray count] == 4) {
+                    message = @"Please Choose One.";
+                }else{
+                    message = @"Please pick which email address you would like to use.";
+                }
+                
+                self.multipleEmailAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Emails Found" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
                 
                 for (int i = 0; i < [self.multipleEmailArray count]; i++) {
                     
                     NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
                                        [self.multipleEmailArray objectAtIndex:i]];
-                    [self.miniMultipleEmailAlert addButtonWithTitle:title];
+                    [self.multipleEmailAlert addButtonWithTitle:title];
                 }
-                
-            }else if ([self.addContactWhere isEqualToString:@"guard1"]){
-                
-                self.guard1EmailAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Emails Found" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-                
-                for (int i = 0; i < [self.multipleEmailArray count]; i++) {
-                    
-                    NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
-                                       [self.multipleEmailArray objectAtIndex:i]];
-                    [self.guard1EmailAlert addButtonWithTitle:title];
-                }
+                showEmail = true;
                 
             }else{
+                self.email.text = emailAddress;
                 
-                self.guard2EmailAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Emails Found" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            }
+            
+            if ([self.multiplePhoneArray count] > 1){
                 
-                for (int i = 0; i < [self.multipleEmailArray count]; i++) {
+                if ([self.multiplePhoneArray count] > 4) {
                     
-                    NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
-                                       [self.multipleEmailArray objectAtIndex:i]];
-                    [self.guard2EmailAlert addButtonWithTitle:title];
+                    NSMutableArray *tmpArray = [NSMutableArray array];
+                    
+                    for (int i = 0; i < 4 ; i++) {
+                        [tmpArray addObject:[self.multiplePhoneArray objectAtIndex:i]];
+                    }
+                    
+                    self.multiplePhoneArray = [NSMutableArray arrayWithArray:tmpArray];
                 }
                 
-            }
-
-            
-        }
-        
-        if ([self.multiplePhoneArray count] > 1) {
-            
-            isPhone = true;
-            
-            if ([self.multiplePhoneArray count] > 4) {
-                
-                NSMutableArray *tmpArray = [NSMutableArray array];
-                
-                for (int i = 0; i < 4 ; i++) {
-                    [tmpArray addObject:[self.multiplePhoneArray objectAtIndex:i]];
+                NSString *message = @"";
+                if ([self.multiplePhoneArray count] == 4) {
+                    message = @"Please Choose One.";
+                }else{
+                    message = @"Please pick which phone number you would like to use.";
                 }
                 
-                self.multiplePhoneArray = [NSMutableArray arrayWithArray:tmpArray];
-            }
-            
-            NSString *message = @"";
-            if ([self.multiplePhoneArray count] == 4) {
-                message = @"Please Choose One.";
-            }else{
-                message = @"Please pick which phone number you would like to use.";
-            }
-
-            
-            if ([self.addContactWhere isEqualToString:@"member"]) {
-                
-                self.miniMultiplePhoneAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Phone Numbers" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                self.multiplePhoneAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Phone Numbers" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
                 
                 for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
                     
                     NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
                                        [self.multiplePhoneArray objectAtIndex:i]];
-                    [self.miniMultiplePhoneAlert addButtonWithTitle:title];
+                    [self.multiplePhoneAlert addButtonWithTitle:title];
                 }
+                showPhone = true;
                 
-            }else if ([self.addContactWhere isEqualToString:@"guard1"]){
-                
-                self.guard1PhoneAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Phone Numbers" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-                
-                for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
-                    
-                    NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
-                                       [self.multiplePhoneArray objectAtIndex:i]];
-                    [self.guard1PhoneAlert addButtonWithTitle:title];
-                }
                 
             }else{
-                
-                self.guard2PhoneAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Phone Numbers" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-                
-                for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
-                    
-                    NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
-                                       [self.multiplePhoneArray objectAtIndex:i]];
-                    [self.guard2PhoneAlert addButtonWithTitle:title];
-                }
+                self.phoneNumber.text = phoneString;
             }
+            
+            if (showEmail && showPhone) {
+                self.twoAlerts = true;
+                [self.multipleEmailAlert show];
+                
+            }else if (showEmail){
+                [self.multipleEmailAlert show];
+                
+            }else if (showPhone){
+                
+                [self.multiplePhoneAlert show];
+            }
+            
             
             
         }
+    }
+    @catch (NSException *exception) {
         
-       
-        
-        if (isEmail && isPhone){
-            
-            self.twoAlerts = true;
-            self.miniMultiple = @"both";
-            self.tmpMiniFirstName = fName;
-            self.tmpMiniLastName = lName;
-            
-            if ([self.addContactWhere isEqualToString:@"member"]){
-                
-                [self.miniMultipleEmailAlert show];
-                
-            }else if ([self.addContactWhere isEqualToString:@"guard1"]){
-                
-                [self.guard1EmailAlert show];
-            }else{
-                
-                [self.guard2EmailAlert show];
-            }
-
-            
-        }else if (isEmail){
-            
-            self.miniMultiple = @"email";
-            
-            self.tmpMiniFirstName = fName;
-            self.tmpMiniLastName = lName;
-            self.tmpMiniPhone = phoneString;
-            self.currentGuardPhone = phoneString;
-            
-            if ([self.addContactWhere isEqualToString:@"member"]){
-                
-                [self.miniMultipleEmailAlert show];
-                
-            }else if ([self.addContactWhere isEqualToString:@"guard1"]){
-                
-                [self.guard1EmailAlert show];
-            }else{
-                
-                [self.guard2EmailAlert show];
-            }
-
-            
-        }else if (isPhone){
-            
-            self.miniMultiple = @"phone";
-            
-            self.tmpMiniFirstName = fName;
-            self.tmpMiniLastName = lName;
-            self.tmpMiniEmail = emailAddress;
-            self.currentGuardEmail = emailAddress;
-            
-            if ([self.addContactWhere isEqualToString:@"member"]){
-                
-                [self.miniMultiplePhoneAlert show];
-                
-            }else if ([self.addContactWhere isEqualToString:@"guard1"]){
-                
-                [self.guard1PhoneAlert show];
-            }else{
-                
-                [self.guard2PhoneAlert show];
-                
-            }
-
-
-            
-        }else{
-            
-            if ([self.addContactWhere isEqualToString:@"member"]){
-                NewMemberObject *tmpObject = [[NewMemberObject alloc] init];
-                tmpObject.firstName = @"";
-                tmpObject.lastName = @"";
-                tmpObject.email = @"";
-                tmpObject.phone = @"";
-                tmpObject.role = @"";
-                tmpObject.guardianOneName = @"";
-                tmpObject.guardianOneEmail = @"";
-                tmpObject.guardianOnePhone = @"";
-                tmpObject.guardianTwoName = @"";
-                tmpObject.guardianTwoEmail = @"";
-                tmpObject.guardianTwoPhone = @"";
-                
-                if (fName != nil) {
-                    tmpObject.firstName = fName;
-                    
-                }
-                if (lName != nil) {
-                    tmpObject.lastName = lName;
-                    
-                }
-                if (emailAddress != nil) {
-                    tmpObject.email = emailAddress;
-                    
-                }
-                if (phoneString != nil) {
-                    tmpObject.phone = phoneString;
-                    
-                }
-                
-                [self.emailArray addObject:tmpObject];
-                
-                [self.myTableView reloadData];
-                
-                
-            }else if ([self.addContactWhere isEqualToString:@"guard1"]){
-                
-                self.oneName.text = self.currentGuardName;
-                self.oneEmail.text = emailAddress;
-                self.onePhone.text = phoneString;
-            }else{
-                self.twoName.text = self.currentGuardName;
-                self.twoEmail.text = emailAddress;
-                self.twoPhone.text = phoneString;
-            }
-
-            
-        }
-        
-		
-	}else {
-		
-        bool showEmail = false;
-        bool showPhone = false;
-		self.firstName.text = fName;
-		
-		self.lastName.text = lName;
-		
-        
-        
-        if ([self.multipleEmailArray count] > 1){
-            
-            if ([self.multipleEmailArray count] > 4) {
-                
-                NSMutableArray *tmpArray = [NSMutableArray array];
-                
-                for (int i = 0; i < 4 ; i++) {
-                    [tmpArray addObject:[self.multipleEmailArray objectAtIndex:i]];
-                }
-                
-                self.multipleEmailArray = [NSMutableArray arrayWithArray:tmpArray];
-            }
-            
-            NSString *message = @"";
-            if ([self.multipleEmailArray count] == 4) {
-                message = @"Please Choose One.";
-            }else{
-                message = @"Please pick which email address you would like to use.";
-            }
-            
-            self.multipleEmailAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Emails Found" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-            
-            for (int i = 0; i < [self.multipleEmailArray count]; i++) {
-                
-                NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
-                                   [self.multipleEmailArray objectAtIndex:i]];
-                [self.multipleEmailAlert addButtonWithTitle:title];
-            }
-            showEmail = true;
-            
-        }else{
-            self.email.text = emailAddress;
-
-        }
-        
-        if ([self.multiplePhoneArray count] > 1){
-            
-            if ([self.multiplePhoneArray count] > 4) {
-                
-                NSMutableArray *tmpArray = [NSMutableArray array];
-                
-                for (int i = 0; i < 4 ; i++) {
-                    [tmpArray addObject:[self.multiplePhoneArray objectAtIndex:i]];
-                }
-                
-                self.multiplePhoneArray = [NSMutableArray arrayWithArray:tmpArray];
-            }
-            
-            NSString *message = @"";
-            if ([self.multiplePhoneArray count] == 4) {
-                message = @"Please Choose One.";
-            }else{
-                message = @"Please pick which phone number you would like to use.";
-            }
-            
-            self.multiplePhoneAlert = [[UIAlertView alloc] initWithTitle:@"Multiple Phone Numbers" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-            
-            for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
-                
-                NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
-                                   [self.multiplePhoneArray objectAtIndex:i]];
-                [self.multiplePhoneAlert addButtonWithTitle:title];
-            }
-            showPhone = true;
-            
-            
-        }else{
-            self.phoneNumber.text = phoneString;
-        }
-        
-        if (showEmail && showPhone) {
-            self.twoAlerts = true;
-            [self.multipleEmailAlert show];
-
-        }else if (showEmail){
-            [self.multipleEmailAlert show];
-
-        }else if (showPhone){
-            
-            [self.multiplePhoneAlert show];
-        }
-
-		
-		
-	}
-
-
+    }
 
     [self dismissModalViewControllerAnimated:YES];
 	
@@ -1061,6 +1066,13 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
     
     [TraceSession addEventToSession:@"New Member(s) Page - Add New Clicked"];
 
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"New Member(s) - Add NOT Contacts"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     self.coordinatorSegment.selectedSegmentIndex = 1;
 	self.miniErrorLabel.text = @"";
@@ -1238,13 +1250,11 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         
         finalMemberArray = [NSArray arrayWithArray:tmpMemberArray];
         
-        NSError *errors;
-       // rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Add Members - Multiple"
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"New Member(s) - Add Multiple Members"
                                               label:mainDelegate.token
                                               value:-1
-                                          withError:&errors]) {
+                                          withError:nil]) {
         }
         
         NSDictionary *response = [ServerAPI createMultipleMembers:mainDelegate.token :self.teamId :finalMemberArray];

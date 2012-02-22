@@ -372,13 +372,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [TraceSession addEventToSession:@"Settings Page - Logout Button Clicked"];
 
             
-            NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Logout"
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"User Logged Out"
                                                   label:mainDelegate.token
                                                   value:-1
-                                              withError:&errors]) {
+                                              withError:nil]) {
             }
             
             
@@ -447,13 +446,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [TraceSession addEventToSession:@"Settings Page - Help Button Clicked"];
 
-            NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Go to Help Page - From Settings"
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"View Help Page - From Settings"
                                                   label:mainDelegate.token
                                                   value:-1
-                                              withError:&errors]) {
+                                              withError:nil]) {
             }
             
             HelpAbout *tmp = [[HelpAbout alloc] init];
@@ -470,13 +468,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             //rate
             [TraceSession addEventToSession:@"Settings Page - Rate rTeam Button Clicked"];
 
-            NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                  action:@"Rate rTeam"
                                                   label:mainDelegate.token
                                                   value:-1
-                                              withError:&errors]) {
+                                              withError:nil]) {
             }
             
             NSString *str = @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa";
@@ -505,9 +502,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			//self.displayLabel.text = @"Feedback sent successfully!";
 			//self.displayLabel.textColor = [UIColor colorWithRed:0.0 green:0.392 blue:0.0 alpha:1.0];
         
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                  action:@"Email Feedback Sent"
-                                                  label:@""
+                                                  label:nil
                                                   value:-1
                                               withError:nil]) {
             }
@@ -625,14 +622,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             //Audio
             [TraceSession addEventToSession:@"Settings Page - Audio Feedback Selected"];
             
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Aduio Feedback Selected"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+         
             
             Feedback *tmp = [[Feedback alloc] init];
             [self.navigationController pushViewController:tmp animated:YES];
@@ -643,14 +633,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [TraceSession addEventToSession:@"Settings Page - Email Feedback Selected"];
             
             
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Email Feedback Selected"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+            
             
             
             if ([MFMailComposeViewController canSendMail]) {
@@ -676,13 +659,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }else{
         if (buttonIndex == 0) {
             //Yes
-            NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Synch Events With Calendar"
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Sync Events With Calendar"
                                                   label:mainDelegate.token
                                                   value:-1
-                                              withError:&errors]) {
+                                              withError:nil]) {
             }
             
             [self.largeActivity startAnimating];

@@ -16,6 +16,7 @@
 #import "GANTracker.h"
 #import "TraceSession.h"
 #import "Home.h"
+#import "CreateNewEventGameday.h"
 
 @implementation NewGame2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, opponent, duration, description, start, errorString, theDuration, theOpponent, theDescription;
@@ -95,15 +96,7 @@
 			
 			
 			//Create the game in a background thread
-			
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Create Game - Single"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+    
             
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			
@@ -126,15 +119,7 @@
 
 		//Create the game in a background thread
     
-        NSError *errors;
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Create Game - Single"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:&errors]) {
-        }
-        
+      
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 		
 	}
@@ -259,38 +244,91 @@
 		int tempNum = [tempCont count];
 		tempNum = tempNum - 3;
 		
-        if ([[tempCont objectAtIndex:tempNum] class] == [CurrentTeamTabs class]) {
-			CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum];
-			cont.selectedIndex = 3;
-			[self.navigationController popToViewController:cont animated:YES];
-		}else if([[tempCont objectAtIndex:tempNum] class] == [AllEventsCalendar class]){
-			
-		    AllEventsCalendar *cont = [tempCont objectAtIndex:tempNum];
-			cont.createdEvent = true;
-		    [self.navigationController popToViewController:cont animated:YES];
-		}else if (tempNum > 0){
-			
-            if ([[tempCont objectAtIndex:tempNum - 1] class] == [AllEventsCalendar class]) {
+        if (tempNum == -1) {
+            //From Gameday, go home
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Create Game - Gameday"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            [self.navigationController dismissModalViewControllerAnimated:YES];
+        }else{
+            if ([[tempCont objectAtIndex:tempNum] class] == [CurrentTeamTabs class]) {
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Game - Event List"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+    
                 
-                AllEventsCalendar *cont = [tempCont objectAtIndex:tempNum-1];
+                CurrentTeamTabs *cont = [tempCont objectAtIndex:tempNum];
+                cont.selectedIndex = 3;
+                [self.navigationController popToViewController:cont animated:YES];
+            }else if([[tempCont objectAtIndex:tempNum] class] == [AllEventsCalendar class]){
+                
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Game - Calendar"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+    
+                
+                AllEventsCalendar *cont = [tempCont objectAtIndex:tempNum];
                 cont.createdEvent = true;
                 [self.navigationController popToViewController:cont animated:YES];
+            }else if([[tempCont objectAtIndex:tempNum] class] == [CreateNewEventGameday class]){
                 
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Create Game - Gameday"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                //Go back home
+                [self.navigationController dismissModalViewControllerAnimated:YES];
+                
+            }else if (tempNum > 0){
+                
+                if ([[tempCont objectAtIndex:tempNum - 1] class] == [AllEventsCalendar class]) {
+                    
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Game - Calendar"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    
+                    AllEventsCalendar *cont = [tempCont objectAtIndex:tempNum-1];
+                    cont.createdEvent = true;
+                    [self.navigationController popToViewController:cont animated:YES];
+                    
+                }
+                
+                if ([[tempCont objectAtIndex:tempNum - 1] class] == [Home class]) {
+                    
+                    Home *cont = [tempCont objectAtIndex:tempNum-1];
+                    [self.navigationController popToViewController:cont animated:YES];
+                    
+                }else if ([[tempCont objectAtIndex:tempNum] class] == [Home class]) {
+                    
+                    Home *cont = [tempCont objectAtIndex:tempNum];
+                    [self.navigationController popToViewController:cont animated:YES];
+                    
+                }
             }
-			
-            if ([[tempCont objectAtIndex:tempNum - 1] class] == [Home class]) {
-                
-                Home *cont = [tempCont objectAtIndex:tempNum-1];
-                [self.navigationController popToViewController:cont animated:YES];
-                
-            }else if ([[tempCont objectAtIndex:tempNum] class] == [Home class]) {
-                
-                Home *cont = [tempCont objectAtIndex:tempNum];
-                [self.navigationController popToViewController:cont animated:YES];
-                
-            }
-		}
 
+        }
+        
+        
 	}else{
 		
 		self.error.text = self.errorString;

@@ -69,51 +69,54 @@
 
 - (void)runRequest {
 
-	
-	NSDictionary *response = [ServerAPI resetUserPassword:self.email :self.theAnswerField];
-	
-	
-	NSString *status = [response valueForKey:@"status"];
+	@autoreleasepool {
+        NSDictionary *response = [ServerAPI resetUserPassword:self.email :self.theAnswerField];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
 		
-	if ([status isEqualToString:@"100"]){
+        if ([status isEqualToString:@"100"]){
+            
+            self.success = true;
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            self.success = false;
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 215:
+                    //error connecting to server
+                    self.errorString = @"*Invalid reset question/answer.";
+                    break;
+                case 600:
+                    //error connecting to server
+                    self.errorString = @"*Invalid reset question/answer.";
+                    break;
+                default:
+                    //should never get here
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:
+         @selector(didFinish)
+                               withObject:nil
+                            waitUntilDone:NO
+         ];
+
+        
+    }
 		
-		self.success = true;
-	}else{
-		
-		//Server hit failed...get status code out and display error accordingly
-		self.success = false;
-		int statusCode = [status intValue];
-		
-		switch (statusCode) {
-			case 0:
-				//null parameter
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 1:
-				//error connecting to server
-				self.errorString = @"*Error connecting to server";
-				break;
-			case 215:
-				//error connecting to server
-				self.errorString = @"*Invalid reset question/answer.";
-				break;
-			case 600:
-				//error connecting to server
-				self.errorString = @"*Invalid reset question/answer.";
-				break;
-			default:
-				//should never get here
-				self.errorString = @"*Error connecting to server";
-				break;
-		}
-	}
-	
-	[self performSelectorOnMainThread:
-	 @selector(didFinish)
-						   withObject:nil
-						waitUntilDone:NO
-	 ];
-	
 }
 
 - (void)didFinish{

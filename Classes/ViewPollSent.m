@@ -17,6 +17,7 @@
 #import "PracticeTabs.h"
 #import "MessageThreadOutbox.h"
 #import "FastActionSheet.h"
+#import "GANTracker.h"
 
 @implementation ViewPollSent
 @synthesize messageThreadId, teamId, subject, body, numReply, option1, option2, option3, option4, option5, replyFraction, individualReplies,
@@ -399,6 +400,14 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 -(void)viewDetailReplies{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View More Detail - Poll Sent"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	ViewDetailPollReplies *tmp = [[ViewDetailPollReplies alloc] init];
 	tmp.replyArray = self.individualReplies;
 	tmp.teamId = self.teamId;
@@ -412,6 +421,14 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 -(void)finalizePoll{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Finalize Poll"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	FinalizePoll *tmp = [[FinalizePoll alloc] init];
 	tmp.teamId = self.teamId;
 	tmp.messageThreadId = self.messageThreadId;

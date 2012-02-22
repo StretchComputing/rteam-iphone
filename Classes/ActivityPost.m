@@ -87,14 +87,7 @@
         [self.teamSelectButton setEnabled:NO];
         [self.segControl setEnabled:NO];
         
-        NSError *errors;
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Post to Activity"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:&errors]) {
-        }
+        
         
         [self performSelectorInBackground:@selector(createActivity) withObject:nil];
     }else{
@@ -180,6 +173,33 @@
 
     if ([self.errorString isEqualToString:@""]) {
         
+        
+        
+        if ([self.videoDataToSend length] > 0) {
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Post To Activity - With Video"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+        }else if ([self.imageDataToSend length] > 0){
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Post To Activity - With Image"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+        }else{
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Post To Activity"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+        }
         fromClass.fromPost = true;
         [self.navigationController dismissModalViewControllerAnimated:YES];
 
@@ -269,6 +289,14 @@
 }
 
 -(void)teamSelect{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Change Activity Post Team"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     if (self.hasTeams) {
         self.navigationItem.backBarButtonItem =

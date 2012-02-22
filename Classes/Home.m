@@ -159,14 +159,14 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 	self.rowNewQuickTeam = -1;
 	
 	self.changeQuickLink.layer.masksToBounds = YES;
-	self.changeQuickLink.layer.cornerRadius = 25.0;
+	self.changeQuickLink.layer.cornerRadius = 7.0;
 	self.displayIconsScroll.layer.masksToBounds = YES;
-	self.displayIconsScroll.layer.cornerRadius = 25.0;
+	self.displayIconsScroll.layer.cornerRadius = 7.0;
 	
 	self.changeQuickLinkBack.layer.masksToBounds = YES;
-	self.changeQuickLinkBack.layer.cornerRadius = 25.0;
+	self.changeQuickLinkBack.layer.cornerRadius = 7.0;
 	self.displayIconsScrollBack.layer.masksToBounds = YES;
-	self.displayIconsScrollBack.layer.cornerRadius = 25.0;
+	self.displayIconsScrollBack.layer.cornerRadius = 7.0;
 	
 	self.newQuickLinkAlias.delegate = self;
 	
@@ -230,6 +230,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
   
 	[self.view bringSubviewToFront:myAd];
     [self.view bringSubviewToFront:self.bottomBar];
+    [self.view bringSubviewToFront:self.postImageBackView];
+
 	
 }
 
@@ -303,13 +305,12 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 				}
 			}
             
-            NSError *errors;
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"View Team from Quick Link"
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"View Team Page - From Home Quick Link"
                                                   label:mainDelegate.token
                                                   value:-1
-                                              withError:&errors]) {
+                                              withError:nil]) {
             }
             
 			TeamNavigation *tmpNav = [[TeamNavigation alloc] init];
@@ -337,6 +338,16 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 
 -(void)holdDown1{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Edit Quick Link Team/Icon"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
+    
 	self.serverError.text = @"";
 	self.isEditingQuickLinkOne = true;
 	self.changeIconButton.hidden = NO;
@@ -400,6 +411,14 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 -(void)okNewQuickLink{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"New Quick Link Team Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	if (self.rowNewQuickTeam != -1) {
 		
 		Team *tmpTeam = [self.teamList objectAtIndex:self.rowNewQuickTeam];
@@ -461,9 +480,9 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     homeScoreView = [[HomeScoreView alloc] init];
     homeScoreView.view.frame = CGRectMake(0, 322, 320, 301);
     homeScoreView.view.hidden = YES;
+    homeScoreView.homeSuperView = self;
     
     homeAttendanceView = [[HomeAttendanceView alloc] init];
-    //homeAttendanceView.homePage = self;
     homeAttendanceView.view.frame = CGRectMake(0, 322, 320, 301);
     homeAttendanceView.view.hidden = YES;
     [self.view addSubview:self.homeAttendanceView.view];
@@ -730,14 +749,13 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 -(void)search{
         
     [TraceSession addEventToSession:@"Home Page - Search Button Clicked"];
-    
-    NSError *errors;
+
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"View Search Page"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	self.serverError.text = @"";
@@ -945,13 +963,12 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     [TraceSession addEventToSession:@"Home Page - Help Screen Button Clicked"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Go to Help Page - From Home"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Help Page - From Home"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
     [self closeQuestion];
@@ -976,13 +993,12 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     [TraceSession addEventToSession:@"Home Page - My Teams Button Clicked"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"View My Teams"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	self.serverError.text = @"";
@@ -1010,13 +1026,12 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     [TraceSession addEventToSession:@"Home Page - Events Button Clicked"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"View Calendar of Events"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Calendar"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
     
@@ -1037,13 +1052,12 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     [TraceSession addEventToSession:@"Home Page - Activity Button Clicked"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"View Activity"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	self.serverError.text = @"";
@@ -2815,6 +2829,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [UIView commitAnimations];
             
             [self.view bringSubviewToFront:self.bottomBar];
+            [self.view bringSubviewToFront:self.postImageBackView];
+
             
             if (!self.changeQuickLinkBack.hidden) {
                 [self.view bringSubviewToFront:self.changeQuickLinkBack];
@@ -2903,6 +2919,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [UIView commitAnimations];
             
             [self.view bringSubviewToFront:self.bottomBar];
+            [self.view bringSubviewToFront:self.postImageBackView];
+
             
             
         }
@@ -2917,7 +2935,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)newIconSelected:(id)sender{
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"New Quick Link Icon Selected"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	UIButton *tmp = (UIButton *)sender;
 	int buttonTag = tmp.tag;
 	
@@ -3045,32 +3071,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (buttonIndex == 1) {
 			//Undo cancel
-            
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Activate Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
-            
+        
 			
 			[self.eventsNowActivity startAnimating];
 			[self performSelectorInBackground:@selector(activateEvent) withObject:nil];			
 			
 		}else if (buttonIndex == 0) {
 			[self.eventsNowActivity startAnimating];
-			
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Delete Event"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
-            
+		
 			[self performSelectorInBackground:@selector(deleteEvent) withObject:nil];
 			
 		}else {
@@ -3463,6 +3471,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [TraceSession addEventToSession:@"Home Page - Refresh Button Clicked"];
 
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Refresh Home Page"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     [self.eventsNowActivity startAnimating];
     self.serverError.text = @"";
@@ -3476,13 +3491,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [TraceSession addEventToSession:@"Home Page - Question Mark Button Clicked"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Click Help Question Mark"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Home Page Help"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
     if (self.bannerIsVisible) {
@@ -3642,6 +3656,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         self.bottomBar.hidden = NO;
         [self.view bringSubviewToFront:self.bottomBar];
+        [self.view bringSubviewToFront:self.postImageBackView];
+
 
         CGRect frame = self.happeningNowView.frame;
         if (self.bannerIsVisible) {
@@ -3851,10 +3867,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.imageDataToSend = UIImageJPEGRepresentation(newImage, 0.90);
     
     self.postImageBackView.hidden = NO;
+    self.postImageErrorLabel.text = @"";
+    self.postImageTextView.text = @"";
     [self.view bringSubviewToFront:self.postImageBackView];
     self.postImagePreview.image = [UIImage imageWithData:self.imageDataToSend];
 
-    
     if (![self.activityPhotoEventId isEqualToString:@""]) {
         self.postImageTableView.hidden = YES;
         self.postImageLabel.hidden = YES;
@@ -3870,6 +3887,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 } 
 
 -(void)postImageSubmit{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Image Posted to Actiivty - Gameday"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     self.postImageErrorLabel.text = @"";
     self.postImageText = self.postImageTextView.text;

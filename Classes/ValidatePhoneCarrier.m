@@ -12,6 +12,7 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "TraceSession.h"
+#import "GANTracker.h"
 
 @implementation ValidatePhoneCarrier
 @synthesize  phoneNumber, carrierCode, carriers, verifyError, verifyButton, resendError, resendButton, finishButton, phoneNumberText, phoneCarrierText, carrierPicker, activity, selectCarrierButton, selectedCarrier, confirmCode, errorString, carrierCheatButton, sendingText, tryAgainText, carrierPicked, theConfirmCode, thePhoneNumber;
@@ -99,6 +100,13 @@
     
     [TraceSession addEventToSession:@"Verify Phone Page - Resend Button Clicked"];
 
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"User Phone Verification Resent"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     self.verifyError.text = @"";
     self.resendError.text = @"";
@@ -169,6 +177,13 @@
     
     [TraceSession addEventToSession:@"Verify Phone Page - Finish Button Clicked"];
 
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"User Phone Verification Skipped"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
     SettingsTabs *nextController = [[SettingsTabs alloc] init];
     nextController.fromRegisterFlow = @"true";
@@ -326,6 +341,14 @@ numberOfRowsInComponent:(NSInteger)component{
     self.finishButton.enabled = YES;
     
     if ([self.errorString isEqualToString:@""]) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"User Phone Number Verified"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
         
         SettingsTabs *nextController = [[SettingsTabs alloc] init];
         nextController.fromRegisterFlow = @"true";

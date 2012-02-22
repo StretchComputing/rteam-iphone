@@ -14,6 +14,8 @@
 @interface TeamHome : UIViewController <UITableViewDelegate, UITableViewDataSource, ADBannerViewDelegate, UIActionSheetDelegate> {
 
 }
+@property (nonatomic, strong) IBOutlet UILabel *recordLabel;
+@property (nonatomic, strong) NSString *recordString;
 @property bool doneEvents;
 @property bool doneGames;
 @property bool doneMembers;

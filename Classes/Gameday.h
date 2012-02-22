@@ -10,26 +10,19 @@
 #import <CoreLocation/CoreLocation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <iAd/iAd.h>
-#import "NewDefaultScoring.h"
 #import "NewFootballScoring.h"
 #import "NewBasketballScoring.h"
 #import "NewSoccerScoring.h"
-#import "NewLacrosseScoring.h"
-#import "NewHockeyScoring.h"
-#import "NewWaterPoloScoring.h"
 #import "NewBaseballScoring.h"
 
 @interface Gameday : UIViewController <CLLocationManagerDelegate, ADBannerViewDelegate> {
     
 
 }
-@property (nonatomic, strong) NewDefaultScoring *myDefaultScoring;
 @property (nonatomic, strong) NewBaseballScoring *myBaseballScoring;
 @property (nonatomic, strong) NewBasketballScoring *myBasketballScoring;
 @property (nonatomic, strong) NewFootballScoring *myFootballScoring;
-@property (nonatomic, strong) NewWaterPoloScoring *myWaterPoloScoring;
-@property (nonatomic, strong) NewLacrosseScoring *myLacrosseScoring;
-@property (nonatomic, strong) NewHockeyScoring *myHockeyScoring;
+
 @property (nonatomic, strong) NewSoccerScoring *mySoccerScoring;
 
 

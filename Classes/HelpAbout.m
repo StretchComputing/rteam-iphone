@@ -13,9 +13,11 @@
 #import "GANTracker.h"
 #import "TraceSession.h"
 #import "Feedback.h"
+#import "HelpGameday.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation HelpAbout
-@synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings, myAd, feedbackAction;
+@synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings, myAd, feedbackAction, gamedayHelpButton, downArrow;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -29,6 +31,25 @@
 	myAd.delegate = self;
 	myAd.hidden = YES;
 	[self.view addSubview:myAd];
+    
+    self.gamedayHelpButton.layer.masksToBounds = YES;
+    self.gamedayHelpButton.layer.cornerRadius = 7.0;
+    
+    self.scrollView.delegate = self;
+}
+
+-(void)gamedayHelp{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Help Tutorial - Gameday"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
+    HelpGameday *tmp = [[HelpGameday alloc] init];
+    [self.navigationController pushViewController:tmp animated:YES];
 }
 
 -(void)myMovieFinishedCallback:(NSNotification*)aNotification
@@ -44,7 +65,7 @@
 	
 	self.title = @"About rTeam";
 	[self.scrollView
-	 setContentSize:CGSizeMake(320,600)];
+	 setContentSize:CGSizeMake(320,500)];
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.feedbackButton setBackgroundImage:stretch forState:UIControlStateNormal];
@@ -73,13 +94,12 @@
     
     [TraceSession addEventToSession:@"Help Page - Play Movie"];
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"rTeam Movie Played"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Welcome Video Viewed - Help Page"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	self.displayLabel.text = @"";
@@ -102,13 +122,12 @@
 
     [TraceSession addEventToSession:@"Help Page - Create Team Help"];
 
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Help Link - Create Team"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Help Video - Create Team"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
     
@@ -129,13 +148,12 @@
     [TraceSession addEventToSession:@"Help Page - Add Member Help"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Help Link - Add Member"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Help Video - Add Member"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
 	self.displayLabel.text = @"";
     
@@ -154,13 +172,12 @@
     
     [TraceSession addEventToSession:@"Help Page - Add Event Help"];
 
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Help Link - Add Event"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Help Video - Add Event"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	self.displayLabel.text = @"";
@@ -180,13 +197,12 @@
     [TraceSession addEventToSession:@"Help Page - Quick Links Help"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Help Link - Quick Links"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Help Video - Quick Links"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
     
 	self.displayLabel.text = @"";
@@ -209,14 +225,14 @@
     [TraceSession addEventToSession:@"Help Page - Send Message Help"];
 
     
-    NSError *errors;
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                         action:@"Help Link - Send Message"
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Help Video - Send Message"
                                           label:mainDelegate.token
                                           value:-1
-                                      withError:&errors]) {
+                                      withError:nil]) {
     }
+    
 	self.displayLabel.text = @"";
     
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"sendMessage" ofType:@"mov"];      
@@ -288,9 +304,9 @@
 		case MFMailComposeResultSent:
 			displayString = @"Feedback sent successfully!";
 
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Audio Feedback Sent"
-                                                  label:@""
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Email Feedback Sent"
+                                                  label:nil
                                                   value:-1
                                               withError:nil]) {
             }
@@ -350,15 +366,7 @@
             
             [TraceSession addEventToSession:@"Help Page - Email Feedback Selected"];
             
-            
-            NSError *errors;
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                                 action:@"Feedback Selected"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:&errors]) {
-            }
+          
             
             self.displayLabel.text = @"";
             
@@ -393,10 +401,32 @@
 	return YES;
 }
 
+
+- (void)scrollViewDidScroll:(UIScrollView *)sender {
+    
+    
+    if (sender == self.scrollView) {
+      
+        
+        UIScrollView *tmp = (UIScrollView *)sender;
+        
+        if (tmp.contentOffset.y < 32.0) {
+            self.downArrow.hidden = NO;
+        }else{
+            self.downArrow.hidden = YES;
+        }
+        
+    }
+    
+    
+}
+
+
 -(void)viewDidUnload{
 	
 	scrollView = nil;
 	feedbackButton = nil;
+    myAd.delegate = nil;
 	myAd = nil;
 	displayLabel = nil;
 	welcomeLabel = nil;
@@ -406,5 +436,6 @@
 
 -(void)dealloc{
     myAd.delegate = nil;
+    myAd = nil;
 }
 @end

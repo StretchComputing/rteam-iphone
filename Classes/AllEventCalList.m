@@ -29,6 +29,7 @@
 #import "ServerAPI.h"
 #import <EventKit/EventKit.h>
 #import "TraceSession.h"
+#import "GANTracker.h"
 
 @implementation AllEventCalList
 @synthesize events, allGames, allPractices, allEvents, bottomBar, segmentedControl, initialSegment, dateArray, calendarList, scrolledOnce,
@@ -752,6 +753,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
     [TraceSession addEventToSession:@"Calendar List Page - Event Clicked"];
 
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Event - From Calendar List"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
 	self.gameIdCanceled = @"";
 	self.practiceIdCanceled = @"";

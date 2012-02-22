@@ -15,6 +15,15 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		90140A1713CE02F2007849B3 /* AttendingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 90140A1613CE02F2007849B3 /* AttendingButton.m */; };
 		90140A1B13CE4949007849B3 /* closeAttending.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 90140A1A13CE4949007849B3 /* closeAttending.jpg */; };
+		901D46F214F481890061B5BE /* TeamEditFan.m in Sources */ = {isa = PBXBuildFile; fileRef = 901D46F014F481820061B5BE /* TeamEditFan.m */; };
+		901D46F314F481890061B5BE /* TeamEditFan.xib in Resources */ = {isa = PBXBuildFile; fileRef = 901D46F114F481850061B5BE /* TeamEditFan.xib */; };
+		901D46F714F48EEF0061B5BE /* HelpGameday.m in Sources */ = {isa = PBXBuildFile; fileRef = 901D46F514F48EE60061B5BE /* HelpGameday.m */; };
+		901D46F814F48EEF0061B5BE /* HelpGameday.xib in Resources */ = {isa = PBXBuildFile; fileRef = 901D46F614F48EEB0061B5BE /* HelpGameday.xib */; };
+		901D470114F493C70061B5BE /* gamedayMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 901D46FF14F493C70061B5BE /* gamedayMenu.png */; };
+		901D470214F493C70061B5BE /* gamedayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 901D470014F493C70061B5BE /* gamedayButton.png */; };
+		901D470414F498380061B5BE /* libCrashReporter-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 901D470314F498360061B5BE /* libCrashReporter-iphoneos.a */; };
+		901D470714F49AF80061B5BE /* gamedayMenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 901D470514F49AF80061B5BE /* gamedayMenu@2x.png */; };
+		901D470A14F49B7C0061B5BE /* gamedayButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 901D470914F49B7C0061B5BE /* gamedayButton@2x.png */; };
 		9021637D11F735EA0041A5C6 /* grassplusblue.png in Resources */ = {isa = PBXBuildFile; fileRef = 9021637C11F735EA0041A5C6 /* grassplusblue.png */; };
 		902163A511F7456F0041A5C6 /* logoCrowdConf.png in Resources */ = {isa = PBXBuildFile; fileRef = 902163A411F7456F0041A5C6 /* logoCrowdConf.png */; };
 		902163C211F74FF70041A5C6 /* noLogoCrowdConf.png in Resources */ = {isa = PBXBuildFile; fileRef = 902163C011F74FF70041A5C6 /* noLogoCrowdConf.png */; };
@@ -232,15 +241,7 @@
 		90816D3A12AD9AA800C0D577 /* NewBasketballScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816D3912AD9AA800C0D577 /* NewBasketballScoring.m */; };
 		90816D4412AD9B6000C0D577 /* NewBasketballScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816D4312AD9B6000C0D577 /* NewBasketballScoring.xib */; };
 		90816D7E12AD9FC800C0D577 /* NewSoccerScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816D7D12AD9FC800C0D577 /* NewSoccerScoring.xib */; };
-		90816D8112AD9FD900C0D577 /* NewLacrosseScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816D8012AD9FD900C0D577 /* NewLacrosseScoring.xib */; };
 		90816D8612AD9FED00C0D577 /* NewSoccerScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816D8512AD9FED00C0D577 /* NewSoccerScoring.m */; };
-		90816D8912AD9FF500C0D577 /* NewLacrosseScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816D8812AD9FF500C0D577 /* NewLacrosseScoring.m */; };
-		90816DB912ADA3BE00C0D577 /* NewHockeyScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816DB812ADA3BE00C0D577 /* NewHockeyScoring.m */; };
-		90816DBC12ADA3C500C0D577 /* NewWaterPoloScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816DBB12ADA3C500C0D577 /* NewWaterPoloScoring.m */; };
-		90816DBE12ADA3D100C0D577 /* NewHockeyScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816DBD12ADA3D100C0D577 /* NewHockeyScoring.xib */; };
-		90816DC012ADA3D900C0D577 /* NewWaterPoloScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816DBF12ADA3D900C0D577 /* NewWaterPoloScoring.xib */; };
-		90816DD612ADA66E00C0D577 /* NewDefaultScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816DD512ADA66E00C0D577 /* NewDefaultScoring.xib */; };
-		90816DDB12ADA68000C0D577 /* NewDefaultScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816DDA12ADA68000C0D577 /* NewDefaultScoring.m */; };
 		90816E1F12ADD85200C0D577 /* NewBaseballScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 90816E1E12ADD85200C0D577 /* NewBaseballScoring.m */; };
 		90816E5512ADDC5700C0D577 /* NewBaseballScoring.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90816E5412ADDC5700C0D577 /* NewBaseballScoring.xib */; };
 		9081D7AB12DEA62C00E134EB /* DeleteMessageFrequency.m in Sources */ = {isa = PBXBuildFile; fileRef = 9081D7AA12DEA62C00E134EB /* DeleteMessageFrequency.m */; };
@@ -264,7 +265,6 @@
 		90821CBF11873D22005411DF /* PracticeTabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 90821CBE11873D22005411DF /* PracticeTabs.m */; };
 		90821D681187474F005411DF /* GameTabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 90821D671187474F005411DF /* GameTabs.m */; };
 		90821EDB118A1ADF005411DF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90821EDA118A1ADF005411DF /* CoreLocation.framework */; };
-		90822C3D14E17DFF00AD4587 /* libCrashReporter-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90822C3C14E17DFE00AD4587 /* libCrashReporter-iphoneos.a */; };
 		9082AB7A12D572180054DF3C /* redx.png in Resources */ = {isa = PBXBuildFile; fileRef = 9082AB7912D572180054DF3C /* redx.png */; };
 		9082AB9912D575FD0054DF3C /* CameraSelectionTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 9082AB9812D575FD0054DF3C /* CameraSelectionTeam.m */; };
 		9082AB9F12D576800054DF3C /* CameraSelectionTeam.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9082AB9E12D576800054DF3C /* CameraSelectionTeam.xib */; };
@@ -595,6 +595,17 @@
 		90140A1513CE02F2007849B3 /* AttendingButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttendingButton.h; sourceTree = "<group>"; };
 		90140A1613CE02F2007849B3 /* AttendingButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttendingButton.m; sourceTree = "<group>"; };
 		90140A1A13CE4949007849B3 /* closeAttending.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = closeAttending.jpg; sourceTree = "<group>"; };
+		901D46EF14F4817E0061B5BE /* TeamEditFan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamEditFan.h; sourceTree = "<group>"; };
+		901D46F014F481820061B5BE /* TeamEditFan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamEditFan.m; sourceTree = "<group>"; };
+		901D46F114F481850061B5BE /* TeamEditFan.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamEditFan.xib; sourceTree = "<group>"; };
+		901D46F414F48EE20061B5BE /* HelpGameday.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpGameday.h; sourceTree = "<group>"; };
+		901D46F514F48EE60061B5BE /* HelpGameday.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpGameday.m; sourceTree = "<group>"; };
+		901D46F614F48EEB0061B5BE /* HelpGameday.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpGameday.xib; sourceTree = "<group>"; };
+		901D46FF14F493C70061B5BE /* gamedayMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gamedayMenu.png; sourceTree = "<group>"; };
+		901D470014F493C70061B5BE /* gamedayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gamedayButton.png; sourceTree = "<group>"; };
+		901D470314F498360061B5BE /* libCrashReporter-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCrashReporter-iphoneos.a"; sourceTree = "<group>"; };
+		901D470514F49AF80061B5BE /* gamedayMenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gamedayMenu@2x.png"; sourceTree = "<group>"; };
+		901D470914F49B7C0061B5BE /* gamedayButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gamedayButton@2x.png"; sourceTree = "<group>"; };
 		9021637C11F735EA0041A5C6 /* grassplusblue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = grassplusblue.png; path = ../images/grassplusblue.png; sourceTree = SOURCE_ROOT; };
 		902163A411F7456F0041A5C6 /* logoCrowdConf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logoCrowdConf.png; path = ../images/logoCrowdConf.png; sourceTree = SOURCE_ROOT; };
 		902163C011F74FF70041A5C6 /* noLogoCrowdConf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = noLogoCrowdConf.png; path = ../images/noLogoCrowdConf.png; sourceTree = SOURCE_ROOT; };
@@ -908,20 +919,8 @@
 		90816D3912AD9AA800C0D577 /* NewBasketballScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewBasketballScoring.m; sourceTree = "<group>"; };
 		90816D4312AD9B6000C0D577 /* NewBasketballScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewBasketballScoring.xib; sourceTree = "<group>"; };
 		90816D7D12AD9FC800C0D577 /* NewSoccerScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewSoccerScoring.xib; sourceTree = "<group>"; };
-		90816D8012AD9FD900C0D577 /* NewLacrosseScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewLacrosseScoring.xib; sourceTree = "<group>"; };
 		90816D8412AD9FED00C0D577 /* NewSoccerScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewSoccerScoring.h; sourceTree = "<group>"; };
 		90816D8512AD9FED00C0D577 /* NewSoccerScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewSoccerScoring.m; sourceTree = "<group>"; };
-		90816D8712AD9FF400C0D577 /* NewLacrosseScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLacrosseScoring.h; sourceTree = "<group>"; };
-		90816D8812AD9FF500C0D577 /* NewLacrosseScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLacrosseScoring.m; sourceTree = "<group>"; };
-		90816DB712ADA3BE00C0D577 /* NewHockeyScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewHockeyScoring.h; sourceTree = "<group>"; };
-		90816DB812ADA3BE00C0D577 /* NewHockeyScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewHockeyScoring.m; sourceTree = "<group>"; };
-		90816DBA12ADA3C500C0D577 /* NewWaterPoloScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewWaterPoloScoring.h; sourceTree = "<group>"; };
-		90816DBB12ADA3C500C0D577 /* NewWaterPoloScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewWaterPoloScoring.m; sourceTree = "<group>"; };
-		90816DBD12ADA3D100C0D577 /* NewHockeyScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewHockeyScoring.xib; sourceTree = "<group>"; };
-		90816DBF12ADA3D900C0D577 /* NewWaterPoloScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewWaterPoloScoring.xib; sourceTree = "<group>"; };
-		90816DD512ADA66E00C0D577 /* NewDefaultScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewDefaultScoring.xib; sourceTree = "<group>"; };
-		90816DD912ADA68000C0D577 /* NewDefaultScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDefaultScoring.h; sourceTree = "<group>"; };
-		90816DDA12ADA68000C0D577 /* NewDefaultScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewDefaultScoring.m; sourceTree = "<group>"; };
 		90816E1D12ADD85200C0D577 /* NewBaseballScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewBaseballScoring.h; sourceTree = "<group>"; };
 		90816E1E12ADD85200C0D577 /* NewBaseballScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewBaseballScoring.m; sourceTree = "<group>"; };
 		90816E5412ADDC5700C0D577 /* NewBaseballScoring.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewBaseballScoring.xib; sourceTree = "<group>"; };
@@ -955,7 +954,6 @@
 		90821D661187474F005411DF /* GameTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTabs.h; sourceTree = "<group>"; };
 		90821D671187474F005411DF /* GameTabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameTabs.m; sourceTree = "<group>"; };
 		90821EDA118A1ADF005411DF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		90822C3C14E17DFE00AD4587 /* libCrashReporter-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCrashReporter-iphoneos.a"; sourceTree = "<group>"; };
 		90822ECC12CA48A1009F74E2 /* rightArrowFast.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rightArrowFast.png; path = ../images/rightArrowFast.png; sourceTree = SOURCE_ROOT; };
 		90822ECE12CA48A8009F74E2 /* leftArrowFast.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leftArrowFast.png; path = ../images/leftArrowFast.png; sourceTree = SOURCE_ROOT; };
 		9082AB7912D572180054DF3C /* redx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = redx.png; path = ../images/redx.png; sourceTree = SOURCE_ROOT; };
@@ -1360,7 +1358,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90822C3D14E17DFF00AD4587 /* libCrashReporter-iphoneos.a in Frameworks */,
+				901D470414F498380061B5BE /* libCrashReporter-iphoneos.a in Frameworks */,
 				9069C65B14AA2741002934BE /* AVFoundation.framework in Frameworks */,
 				9087534C1474A438000850D4 /* libsqlite3.0.dylib in Frameworks */,
 				9083F891133BB84300972821 /* EventKit.framework in Frameworks */,
@@ -1546,6 +1544,9 @@
 				907A6AC31284BAEA000BC8CF /* TwitterSignUp.m */,
 				9074469D1288F2260083FBDB /* TeamHome.h */,
 				9074469E1288F2260083FBDB /* TeamHome.m */,
+				901D46EF14F4817E0061B5BE /* TeamEditFan.h */,
+				901D46F014F481820061B5BE /* TeamEditFan.m */,
+				901D46F114F481850061B5BE /* TeamEditFan.xib */,
 				907448D612891C920083FBDB /* TeamUrl.h */,
 				907448D712891C920083FBDB /* TeamUrl.m */,
 				90745074128CAE5C0083FBDB /* AddGuardian.h */,
@@ -1683,6 +1684,9 @@
 				907A258C1265361800385A39 /* EventUpdateGPS.m */,
 				907A258112652BB600385A39 /* EventAttendance.h */,
 				907A258212652BB600385A39 /* EventAttendance.m */,
+				901D46F414F48EE20061B5BE /* HelpGameday.h */,
+				901D46F514F48EE60061B5BE /* HelpGameday.m */,
+				901D46F614F48EEB0061B5BE /* HelpGameday.xib */,
 				90849BCF1137897A007CC7D2 /* Encoder.h */,
 				90849BD01137897A007CC7D2 /* Encoder.c */,
 				906EF21B1097478100FB14F7 /* SecondLevelViewController.h */,
@@ -1705,8 +1709,8 @@
 			children = (
 				9069C65A14AA2741002934BE /* AVFoundation.framework */,
 				9087534B1474A438000850D4 /* libsqlite3.0.dylib */,
+				901D470314F498360061B5BE /* libCrashReporter-iphoneos.a */,
 				908753511474A7DB000850D4 /* GANTracker.h */,
-				90822C3C14E17DFE00AD4587 /* libCrashReporter-iphoneos.a */,
 				908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */,
 				908753531474A7DB000850D4 /* libGoogleAnalytics.a */,
 				9083F890133BB84200972821 /* EventKit.framework */,
@@ -1887,14 +1891,6 @@
 				90816D3912AD9AA800C0D577 /* NewBasketballScoring.m */,
 				90816D8412AD9FED00C0D577 /* NewSoccerScoring.h */,
 				90816D8512AD9FED00C0D577 /* NewSoccerScoring.m */,
-				90816D8712AD9FF400C0D577 /* NewLacrosseScoring.h */,
-				90816D8812AD9FF500C0D577 /* NewLacrosseScoring.m */,
-				90816DB712ADA3BE00C0D577 /* NewHockeyScoring.h */,
-				90816DB812ADA3BE00C0D577 /* NewHockeyScoring.m */,
-				90816DBA12ADA3C500C0D577 /* NewWaterPoloScoring.h */,
-				90816DBB12ADA3C500C0D577 /* NewWaterPoloScoring.m */,
-				90816DD912ADA68000C0D577 /* NewDefaultScoring.h */,
-				90816DDA12ADA68000C0D577 /* NewDefaultScoring.m */,
 				90816E1D12ADD85200C0D577 /* NewBaseballScoring.h */,
 				90816E1E12ADD85200C0D577 /* NewBaseballScoring.m */,
 				9086977614E36F9E005B686D /* ScoreNowScoring.h */,
@@ -1907,9 +1903,13 @@
 		907BA79711552A3400604995 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				901D470514F49AF80061B5BE /* gamedayMenu@2x.png */,
+				901D470914F49B7C0061B5BE /* gamedayButton@2x.png */,
 				90CA2F8D14D8CC7B009316F4 /* replyArrow.png */,
 				908584A914B4BDC0008AD6A6 /* profileNew.png */,
 				90879462149906030079A207 /* showLess.png */,
+				901D46FF14F493C70061B5BE /* gamedayMenu.png */,
+				901D470014F493C70061B5BE /* gamedayButton.png */,
 				90879463149906030079A207 /* showLess@2x.png */,
 				9084781614686E6B002BF668 /* thumbsUpGreen@2x.png */,
 				9084781714686E6B002BF668 /* thumbsDownGreen@2x.png */,
@@ -2294,10 +2294,6 @@
 				90856E9212A9C9FB00D3F271 /* NewFootballScoring.xib */,
 				90816D4312AD9B6000C0D577 /* NewBasketballScoring.xib */,
 				90816D7D12AD9FC800C0D577 /* NewSoccerScoring.xib */,
-				90816D8012AD9FD900C0D577 /* NewLacrosseScoring.xib */,
-				90816DBD12ADA3D100C0D577 /* NewHockeyScoring.xib */,
-				90816DBF12ADA3D900C0D577 /* NewWaterPoloScoring.xib */,
-				90816DD512ADA66E00C0D577 /* NewDefaultScoring.xib */,
 				90816E5412ADDC5700C0D577 /* NewBaseballScoring.xib */,
 			);
 			name = "Scoring xibs";
@@ -2551,10 +2547,6 @@
 				90856E9312A9C9FB00D3F271 /* NewFootballScoring.xib in Resources */,
 				90816D4412AD9B6000C0D577 /* NewBasketballScoring.xib in Resources */,
 				90816D7E12AD9FC800C0D577 /* NewSoccerScoring.xib in Resources */,
-				90816D8112AD9FD900C0D577 /* NewLacrosseScoring.xib in Resources */,
-				90816DBE12ADA3D100C0D577 /* NewHockeyScoring.xib in Resources */,
-				90816DC012ADA3D900C0D577 /* NewWaterPoloScoring.xib in Resources */,
-				90816DD612ADA66E00C0D577 /* NewDefaultScoring.xib in Resources */,
 				90816E5512ADDC5700C0D577 /* NewBaseballScoring.xib in Resources */,
 				907A5DD912AEAFAE0002C04E /* freeAdd.png in Resources */,
 				9081DA4912B00D5F0031BB6C /* Feedback.xib in Resources */,
@@ -2728,6 +2720,12 @@
 				90B1388814DF2E2A000FB81E /* ScoreNowScorePage.xib in Resources */,
 				9086977A14E36F9E005B686D /* ScoreNowScoring.xib in Resources */,
 				907FC9CF14EC584400B08599 /* WhosComingPoll.xib in Resources */,
+				901D46F314F481890061B5BE /* TeamEditFan.xib in Resources */,
+				901D46F814F48EEF0061B5BE /* HelpGameday.xib in Resources */,
+				901D470114F493C70061B5BE /* gamedayMenu.png in Resources */,
+				901D470214F493C70061B5BE /* gamedayButton.png in Resources */,
+				901D470714F49AF80061B5BE /* gamedayMenu@2x.png in Resources */,
+				901D470A14F49B7C0061B5BE /* gamedayButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2853,10 +2851,6 @@
 				90856E9612A9CA0900D3F271 /* NewFootballScoring.m in Sources */,
 				90816D3A12AD9AA800C0D577 /* NewBasketballScoring.m in Sources */,
 				90816D8612AD9FED00C0D577 /* NewSoccerScoring.m in Sources */,
-				90816D8912AD9FF500C0D577 /* NewLacrosseScoring.m in Sources */,
-				90816DB912ADA3BE00C0D577 /* NewHockeyScoring.m in Sources */,
-				90816DBC12ADA3C500C0D577 /* NewWaterPoloScoring.m in Sources */,
-				90816DDB12ADA68000C0D577 /* NewDefaultScoring.m in Sources */,
 				90816E1F12ADD85200C0D577 /* NewBaseballScoring.m in Sources */,
 				907A5E2712AEC29C0002C04E /* Reachability.m in Sources */,
 				9081E84112B68EB90031BB6C /* DeleteSelectButton.m in Sources */,
@@ -2915,6 +2909,8 @@
 				90B1388714DF2E2A000FB81E /* ScoreNowScorePage.m in Sources */,
 				9086977914E36F9E005B686D /* ScoreNowScoring.m in Sources */,
 				907FC9CE14EC584400B08599 /* WhosComingPoll.m in Sources */,
+				901D46F214F481890061B5BE /* TeamEditFan.m in Sources */,
+				901D46F714F48EEF0061B5BE /* HelpGameday.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

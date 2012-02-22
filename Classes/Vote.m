@@ -281,13 +281,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (self.isOpen) {
 		VoteMemberObject *tmpMember = [self.memberArray objectAtIndex:row];
 		
-        NSError *errors;
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
                                              action:@"MVP Vote"
                                               label:mainDelegate.token
                                               value:-1
-                                          withError:&errors]) {
+                                          withError:nil]) {
         }
         
 		[self.votingActivity startAnimating];

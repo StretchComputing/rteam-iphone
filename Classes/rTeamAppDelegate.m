@@ -122,20 +122,18 @@
         
         [self setLastTwenty:tempLastTwenty];
         [self setLastTwentyTime:tempLastTwentyTime];
-
         
         @try {
             
             if ([self.lastTwenty length] > 0) {
                 //Set the trace session array
-                
                 NSMutableArray *tmpTraceArray = [NSMutableArray arrayWithArray:[self.lastTwenty componentsSeparatedByString:@","]];
-                
+
                 NSMutableArray *tmpTraceTimeArray = [NSMutableArray arrayWithArray:[self.lastTwentyTime componentsSeparatedByString:@","]];
-                
+
                 NSMutableArray *tmpDateArray = [NSMutableArray array];
+
                 for (int i = 0; i < [tmpTraceTimeArray count]; i++) {
-                    
                     NSString *tmpTime = [tmpTraceTimeArray objectAtIndex:i];
                     
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -147,12 +145,11 @@
                 
                 [TraceSession setSavedArray:tmpTraceArray :tmpDateArray];
                 
-                
             }
 
         }
         @catch (NSException *exception) {
-            NSLog(@"*Exception*");
+            NSLog(@"*Exception - You did this.*");
         }
       
         
@@ -236,9 +233,6 @@
     /* Check if we previously crashed */
     if ([crashReporter hasPendingCrashReport]) {
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CRASH!" message:@"Found a crash!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-       
         [self handleCrashReport];
     }
         
@@ -346,6 +340,8 @@
   
     @autoreleasepool {
         // send crash detect to GAE
+
+        
         [GoogleAppEngine sendCrashDetect:self.crashSummary theStackData:self.crashStackData theDetectedDate:self.crashDetectDate theUserName:self.crashUserName];
         
         

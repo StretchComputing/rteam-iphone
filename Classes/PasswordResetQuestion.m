@@ -46,13 +46,12 @@
         self.newQuestionString = [NSString stringWithString:self.newQuestion.text];
         self.newAnswerString = [NSString stringWithString:self.newAnswer.text];
         
-        NSError *errors;
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
                                              action:@"Change Password Reset Question"
                                               label:mainDelegate.token
                                               value:-1
-                                          withError:&errors]) {
+                                          withError:nil]) {
         }
         
         [self performSelectorInBackground:@selector(runRequest) withObject:nil];

@@ -18,7 +18,7 @@
 #import "Login.h"
 #import "QuartzCore/QuartzCore.h"
 #import "TraceSession.h"
-
+#import "GANTracker.h"
 
 @implementation Register
 @synthesize email, password, error, registering, submitButton, createSuccess, invalidEmail, isMember, serverError, success, numMemberTeams, helpScreen,
@@ -62,9 +62,9 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 	
 	self.helpScreen.layer.masksToBounds = YES;
-	self.helpScreen.layer.cornerRadius = 15.0;
+	self.helpScreen.layer.cornerRadius = 6.0;
 	self.middleView.layer.masksToBounds = YES;
-	self.middleView.layer.cornerRadius = 15.0;
+	self.middleView.layer.cornerRadius = 6.0;
 	
 }
 
@@ -88,6 +88,14 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 -(void)about{
 	
 	[TraceSession addEventToSession:@"Register Page - Help Button Clicked"];
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Register Help Viewed"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
 	if ([self.barItem.title isEqualToString:@"Help"]) {
 		self.barItem.title = @"Done";
@@ -122,6 +130,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
     [TraceSession addEventToSession:@"Register Page - Register Button Clicked"];
 
     
+    
     self.success.text = @"";
 	self.error.text = @"";
 	//Validate all fields are entered:
@@ -132,6 +141,14 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 		error.text = @"*Email and Confirm Email must match";
 	}else{
 		
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Registration Process Started"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
 		[registering startAnimating];
 
 		//Disable the UI buttons and textfields while registering
@@ -387,6 +404,14 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 	
     [TraceSession addEventToSession:@"Register Page - Watch Video Button Clicked"];
 
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Welcome Video Viewed - Register Page"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
     
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"rTeamWelcomeFinal" ofType:@"m4v"];      
 	if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 3.2)

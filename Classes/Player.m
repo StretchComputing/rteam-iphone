@@ -945,6 +945,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                 [self.phoneOnlyArray addObject:newMobile];
             }
         }
+        
         if ([self.theMobileEdit isEqualToString:@""]) {
             newMobile = @"remove";
         }

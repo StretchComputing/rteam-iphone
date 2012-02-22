@@ -68,15 +68,6 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
         self.theOption3 = [NSString stringWithString:self.option3.text];
         self.theOption4 = [NSString stringWithString:self.option4.text];
         self.theOption5 = [NSString stringWithString:self.option5.text];
-
-        NSError *errors;
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Send Poll - Options"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:&errors]) {
-        }
         
         
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
@@ -195,6 +186,14 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
 	
 	if (self.createSuccess){
 		
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Send Poll - Options"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
 		[self.navigationController dismissModalViewControllerAnimated:YES];		
 	}else{
 		

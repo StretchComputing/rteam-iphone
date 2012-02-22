@@ -11,6 +11,7 @@
 #import <MapKit/MapKit.h>
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
+#import "GANTracker.h"
 
 @implementation MapLocation
 @synthesize map, locationManager, latCoord, longCoord, eventLatCoord, eventLongCoord, directionsButton;
@@ -82,6 +83,14 @@
 
 -(void)getDirections{
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"View Event Directions"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
 	self.locationManager = [[CLLocationManager alloc] init];
 	self.locationManager.delegate = self; // Tells the location manager to send updates to this object
 	[locationManager startUpdatingLocation];
