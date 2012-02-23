@@ -11,7 +11,7 @@
 
 @implementation AttendingButton
 @synthesize buttonView, tableDisplayView, pollButton, goToPageButton, attendingLabel, yesCount, yesLabel, noCount, noLabel, qCount, qLabel,
-tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAttendance, yes, no, maybe, noreply, currentMemberId, currentMemberResponse, messageThreadId;
+tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAttendance, yes, no, maybe, noreply, currentMemberId, currentMemberResponse, messageThreadId, attendees;
 
 + (id)buttonWithFrame:(CGRect)frame {
 	return [[self alloc] initWithFrame:frame];

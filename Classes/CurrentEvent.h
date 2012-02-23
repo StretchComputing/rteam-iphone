@@ -13,6 +13,7 @@
 
 	
 }
+@property (nonatomic, strong) NSArray *attendees;
 @property (nonatomic, strong) NSString *messageThreadId;
 @property (nonatomic, strong) NSString *currentMemberId;
 @property (nonatomic, strong) NSString *currentMemberResponse;

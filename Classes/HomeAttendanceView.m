@@ -22,11 +22,12 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "GANTracker.h"
+#import "ViewDetailPollRepliesNow.h"
 
 
 
 @implementation HomeAttendanceView
-@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate;
+@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees;
 
 - (void)viewDidLoad
 {
@@ -62,7 +63,7 @@
     self.teamLabel.text = [NSString stringWithFormat:@"%@", self.teamName];
     self.dateLabel.text = [NSString stringWithFormat:@"(expected attendance for %@ on %@)", self.eventType, self.eventDate];
     
-    [self.goToButton setTitle:[NSString stringWithFormat:@"Event Page", self.eventType] forState:UIControlStateNormal];
+    [self.goToButton setTitle:[NSString stringWithFormat:@"Poll Details", self.eventType] forState:UIControlStateNormal];
     self.yesLabel.text = self.yesCount;
     self.noLabel.text = self.noCount;
     self.noReplyLabel.text = noReplyCount;
@@ -92,7 +93,7 @@
         self.statusButton.frame = CGRectMake(20, totalHeight - 57, 129, 35);
         self.statusReply.frame = CGRectMake(-6, totalHeight - 27, 180, 21);
        
-        [self.goToButton setTitle:[NSString stringWithFormat:@"Event Page", self.eventType] forState:UIControlStateNormal];
+        [self.goToButton setTitle:[NSString stringWithFormat:@"Poll Details", self.eventType] forState:UIControlStateNormal];
 
         
     }else{
@@ -103,7 +104,7 @@
         self.statusButton.frame = CGRectMake(95, totalHeight - 109, 130, 35);
         self.statusReply.frame = CGRectMake(0, totalHeight - 79, 320, 21);
         
-        [self.goToButton setTitle:[NSString stringWithFormat:@"Go To %@ Page", self.eventType] forState:UIControlStateNormal];
+        [self.goToButton setTitle:[NSString stringWithFormat:@"Poll Details", self.eventType] forState:UIControlStateNormal];
 
 
     }
@@ -179,6 +180,34 @@
     self.pollButton.hidden = NO;
     self.pollLabel.hidden = YES;
     [self setLabels];
+}
+
+
+-(void)pollDetails{
+    
+    ViewDetailPollRepliesNow *tmp = [[ViewDetailPollRepliesNow alloc] init];
+	tmp.replyArray = [NSArray arrayWithArray:self.attendees];
+	tmp.teamId = self.teamId;
+	tmp.isSender = true;
+	
+    tmp.finalized = false;
+	
+    
+    UINavigationController *navController = [[UINavigationController alloc] init];
+    
+    [navController pushViewController:tmp animated:YES];
+    
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    id mainViewController = [self.view.superview nextResponder];
+    
+    if ([mainViewController class] == [Home class]) {
+        Home *tmp = (Home *)mainViewController;
+        [tmp.navigationController presentModalViewController:navController animated:YES];
+        
+    }
+    
+    
 }
 -(void)goToPage{
         

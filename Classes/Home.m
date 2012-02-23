@@ -1824,6 +1824,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventId = tmp1.eventId;
                             tmp1Button.sport = tmp1.sport;
                             tmp1Button.eventDescription = tmp1.eventDescription;
+                            tmp1Button.attendees = [NSArray arrayWithArray:tmp1.attendees];
                             
                             tmp1Button.currentMemberId = tmp1.currentMemberId;
                             tmp1Button.currentMemberResponse = tmp1.currentMemberResponse;
@@ -1994,6 +1995,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventId = tmp1.eventId;
                             tmp1Button.sport = tmp1.sport;
                             
+                            tmp1Button.attendees = [NSArray arrayWithArray:tmp1.attendees];
+
+                            
                             tmp1Button.yes = tmp1.yes;
                             tmp1Button.no = tmp1.no;
                             tmp1Button.maybe = tmp1.maybe;
@@ -2094,6 +2098,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.maybe = tmp2.maybe;
                                 tmp2Button.noreply = tmp2.noreply;
                                 tmp2Button.eventStringDate = tmp2.eventDate;
+                                tmp2Button.attendees = [NSArray arrayWithArray:tmp2.attendees];
 
                                 tmp2Button.eventDescription = tmp2.eventDescription;
 
@@ -2259,6 +2264,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.sport = tmp2.sport;
                                 tmp2Button.eventDescription = tmp2.eventDescription;
                                 tmp2Button.eventStringDate = tmp2.eventDate;
+                                tmp2Button.attendees = [NSArray arrayWithArray:tmp2.attendees];
 
                                 tmp2Button.yes = tmp2.yes;
                                 tmp2Button.no = tmp2.no;
@@ -2375,6 +2381,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeAttendanceView.sport = tmp.sport;
             homeAttendanceView.eventDescription = tmp.eventDescription;
             homeAttendanceView.eventStringDate = tmp.eventStringDate;
+            homeAttendanceView.attendees = [NSArray arrayWithArray:tmp.attendees];
             
             homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
             homeAttendanceView.currentMemberId = tmp.currentMemberId;
@@ -2432,6 +2439,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 homeAttendanceView.eventId = tmp.eventId;
                 homeAttendanceView.sport = tmp.sport;
                 homeAttendanceView.eventStringDate = tmp.eventStringDate;
+                homeAttendanceView.attendees = [NSArray arrayWithArray:tmp.attendees];
+
                 
                 homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
                 homeAttendanceView.currentMemberId = tmp.currentMemberId;
@@ -3947,7 +3956,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([self.teamList count] ==1) {
                 Team *tmpTeam = [self.teamList objectAtIndex:0];
                 self.postImageTeamId = tmpTeam.teamId;
-                [self performSelectorInBackground:@selector(postImage) withObject:nil];
+                [self.postImageActivity startAnimating];
+                [self performSelectorInBackground:@selector(postImage:) withObject:@""];
             }else{
                 self.postImageErrorLabel.text = @"*Select a post team.";
             }

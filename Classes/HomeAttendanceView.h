@@ -13,6 +13,7 @@
 
     
 }
+@property (nonatomic, strong) NSArray *attendees;
 @property (nonatomic, strong) NSString *eventStringDate;
 
 @property (nonatomic, strong) NSString *eventDescription;
@@ -54,6 +55,7 @@
 
 -(IBAction)sendPoll;
 -(IBAction)goToPage;
+-(IBAction)pollDetails;
 
 -(IBAction)setStatus;
 

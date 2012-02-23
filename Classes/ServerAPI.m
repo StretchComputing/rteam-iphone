@@ -3147,6 +3147,7 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
                     
                     NSArray *attendees = [todaysEvent valueForKey:@"attendees"];
                     
+                    tmpEvent.attendees = [NSArray arrayWithArray:attendees];
                     tmpEvent.yes = 0;
                     tmpEvent.noreply = 0;
                     tmpEvent.no = 0;
@@ -3226,7 +3227,8 @@ static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 					}
                     
                     NSArray *attendees = [tomorrowsEvent valueForKey:@"attendees"];
-                    
+                    tmpEvent.attendees = [NSArray arrayWithArray:attendees];
+
                     tmpEvent.messageThreadId = @"";
                     
                     if ([tomorrowsEvent valueForKey:@"messageThreadId"] != nil) {

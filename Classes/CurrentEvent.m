@@ -11,7 +11,7 @@
 
 @implementation CurrentEvent
 @synthesize eventName, eventType, eventId, eventDescription, eventDate, teamName, teamId, participantRole, imageName, eventLabel, gameInterval,
-sport, opponent, scoreUs, scoreThem, latitude, longitude, isCanceled, scoreLabel, yes, noreply, maybe, no, currentMemberId, currentMemberResponse, messageThreadId;
+sport, opponent, scoreUs, scoreThem, latitude, longitude, isCanceled, scoreLabel, yes, noreply, maybe, no, currentMemberId, currentMemberResponse, messageThreadId, attendees;
 
 
 

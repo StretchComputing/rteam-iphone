@@ -21,7 +21,6 @@
 		901D46F814F48EEF0061B5BE /* HelpGameday.xib in Resources */ = {isa = PBXBuildFile; fileRef = 901D46F614F48EEB0061B5BE /* HelpGameday.xib */; };
 		901D470114F493C70061B5BE /* gamedayMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 901D46FF14F493C70061B5BE /* gamedayMenu.png */; };
 		901D470214F493C70061B5BE /* gamedayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 901D470014F493C70061B5BE /* gamedayButton.png */; };
-		901D470414F498380061B5BE /* libCrashReporter-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 901D470314F498360061B5BE /* libCrashReporter-iphoneos.a */; };
 		901D470714F49AF80061B5BE /* gamedayMenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 901D470514F49AF80061B5BE /* gamedayMenu@2x.png */; };
 		901D470A14F49B7C0061B5BE /* gamedayButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 901D470914F49B7C0061B5BE /* gamedayButton@2x.png */; };
 		9021637D11F735EA0041A5C6 /* grassplusblue.png in Resources */ = {isa = PBXBuildFile; fileRef = 9021637C11F735EA0041A5C6 /* grassplusblue.png */; };
@@ -232,6 +231,9 @@
 		907DEAD512C1581F00BCEAF0 /* Vote.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907DEAD412C1581F00BCEAF0 /* Vote.xib */; };
 		907DFC0A122EE85A00A3D72C /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = 907DFC09122EE85A00A3D72C /* Login.m */; };
 		907DFC11122EE8EE00A3D72C /* Login.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907DFC10122EE8EE00A3D72C /* Login.xib */; };
+		907E667F14F6824300D32986 /* libCrashReporter-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 907E667E14F6824300D32986 /* libCrashReporter-iphoneos.a */; };
+		907E668314F6956D00D32986 /* ViewDetailPollRepliesNow.m in Sources */ = {isa = PBXBuildFile; fileRef = 907E668114F6956C00D32986 /* ViewDetailPollRepliesNow.m */; };
+		907E668414F6956D00D32986 /* ViewDetailPollRepliesNow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907E668214F6956C00D32986 /* ViewDetailPollRepliesNow.xib */; };
 		907FC9CE14EC584400B08599 /* WhosComingPoll.m in Sources */ = {isa = PBXBuildFile; fileRef = 907FC9CC14EC584300B08599 /* WhosComingPoll.m */; };
 		907FC9CF14EC584400B08599 /* WhosComingPoll.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907FC9CD14EC584300B08599 /* WhosComingPoll.xib */; };
 		9080702A12DFB00C00196AAC /* CalendarEventObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9080702912DFB00C00196AAC /* CalendarEventObject.m */; };
@@ -603,7 +605,6 @@
 		901D46F614F48EEB0061B5BE /* HelpGameday.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpGameday.xib; sourceTree = "<group>"; };
 		901D46FF14F493C70061B5BE /* gamedayMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gamedayMenu.png; sourceTree = "<group>"; };
 		901D470014F493C70061B5BE /* gamedayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gamedayButton.png; sourceTree = "<group>"; };
-		901D470314F498360061B5BE /* libCrashReporter-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCrashReporter-iphoneos.a"; sourceTree = "<group>"; };
 		901D470514F49AF80061B5BE /* gamedayMenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gamedayMenu@2x.png"; sourceTree = "<group>"; };
 		901D470914F49B7C0061B5BE /* gamedayButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gamedayButton@2x.png"; sourceTree = "<group>"; };
 		9021637C11F735EA0041A5C6 /* grassplusblue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = grassplusblue.png; path = ../images/grassplusblue.png; sourceTree = SOURCE_ROOT; };
@@ -906,6 +907,10 @@
 		907DFC08122EE85A00A3D72C /* Login.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Login.h; sourceTree = "<group>"; };
 		907DFC09122EE85A00A3D72C /* Login.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Login.m; sourceTree = "<group>"; };
 		907DFC10122EE8EE00A3D72C /* Login.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Login.xib; sourceTree = "<group>"; };
+		907E667E14F6824300D32986 /* libCrashReporter-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCrashReporter-iphoneos.a"; sourceTree = "<group>"; };
+		907E668014F6956B00D32986 /* ViewDetailPollRepliesNow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewDetailPollRepliesNow.h; sourceTree = "<group>"; };
+		907E668114F6956C00D32986 /* ViewDetailPollRepliesNow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewDetailPollRepliesNow.m; sourceTree = "<group>"; };
+		907E668214F6956C00D32986 /* ViewDetailPollRepliesNow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewDetailPollRepliesNow.xib; sourceTree = "<group>"; };
 		907FC9CB14EC584300B08599 /* WhosComingPoll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhosComingPoll.h; sourceTree = "<group>"; };
 		907FC9CC14EC584300B08599 /* WhosComingPoll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhosComingPoll.m; sourceTree = "<group>"; };
 		907FC9CD14EC584300B08599 /* WhosComingPoll.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhosComingPoll.xib; sourceTree = "<group>"; };
@@ -1358,7 +1363,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				901D470414F498380061B5BE /* libCrashReporter-iphoneos.a in Frameworks */,
+				907E667F14F6824300D32986 /* libCrashReporter-iphoneos.a in Frameworks */,
 				9069C65B14AA2741002934BE /* AVFoundation.framework in Frameworks */,
 				9087534C1474A438000850D4 /* libsqlite3.0.dylib in Frameworks */,
 				9083F891133BB84300972821 /* EventKit.framework in Frameworks */,
@@ -1622,6 +1627,9 @@
 				90FEFBA911C1809800F684CD /* ViewPollSent.m */,
 				90FEFDCB11C271D400F684CD /* ViewDetailPollReplies.h */,
 				90FEFDCC11C271D400F684CD /* ViewDetailPollReplies.m */,
+				907E668014F6956B00D32986 /* ViewDetailPollRepliesNow.h */,
+				907E668114F6956C00D32986 /* ViewDetailPollRepliesNow.m */,
+				907E668214F6956C00D32986 /* ViewDetailPollRepliesNow.xib */,
 				90623B71129234970074610D /* ViewDetailMessageReplies.h */,
 				90623B72129234970074610D /* ViewDetailMessageReplies.m */,
 				908A42AE12DB7203000C346A /* ConfirmMessageDetail.h */,
@@ -1709,7 +1717,7 @@
 			children = (
 				9069C65A14AA2741002934BE /* AVFoundation.framework */,
 				9087534B1474A438000850D4 /* libsqlite3.0.dylib */,
-				901D470314F498360061B5BE /* libCrashReporter-iphoneos.a */,
+				907E667E14F6824300D32986 /* libCrashReporter-iphoneos.a */,
 				908753511474A7DB000850D4 /* GANTracker.h */,
 				908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */,
 				908753531474A7DB000850D4 /* libGoogleAnalytics.a */,
@@ -2726,6 +2734,7 @@
 				901D470214F493C70061B5BE /* gamedayButton.png in Resources */,
 				901D470714F49AF80061B5BE /* gamedayMenu@2x.png in Resources */,
 				901D470A14F49B7C0061B5BE /* gamedayButton@2x.png in Resources */,
+				907E668414F6956D00D32986 /* ViewDetailPollRepliesNow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2911,6 +2920,7 @@
 				907FC9CE14EC584400B08599 /* WhosComingPoll.m in Sources */,
 				901D46F214F481890061B5BE /* TeamEditFan.m in Sources */,
 				901D46F714F48EEF0061B5BE /* HelpGameday.m in Sources */,
+				907E668314F6956D00D32986 /* ViewDetailPollRepliesNow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

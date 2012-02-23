@@ -878,7 +878,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
             
             UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
             deleteButton.frame = CGRectMake(5, 1, 27, 27);
-            deleteButton.tag = row;
+            deleteButton.tag = row/2;
             [deleteButton setImage:[UIImage imageNamed:@"redxsmall.png"] forState:UIControlStateNormal];
             [deleteButton addTarget:self action:@selector(deleteEvent:) forControlEvents:UIControlEventTouchUpInside];
             [cell.contentView addSubview:deleteButton];
@@ -967,12 +967,15 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	
 }
 
+
+
+
 //Method that gets called when a row is selected
 #pragma mark -
 #pragma mark Table View Delegate Methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 30;
+    return 35;
 }
 
 //Method that gets called when a row is selected

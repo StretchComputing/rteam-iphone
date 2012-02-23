@@ -1212,7 +1212,7 @@
 									<object class="IBUIActivityIndicatorView" id="443942832">
 										<reference key="NSNextResponder" ref="969211270"/>
 										<int key="NSvFlags">-2147483356</int>
-										<string key="NSFrame">{{128, 293}, {20, 20}}</string>
+										<string key="NSFrame">{{128, 280}, {20, 20}}</string>
 										<reference key="NSSuperview" ref="969211270"/>
 										<reference key="NSNextKeyView" ref="387025724"/>
 										<string key="NSReuseIdentifierKey">_NS:1030</string>
@@ -2163,7 +2163,6 @@
 						<reference key="object" ref="969211270"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="443942832"/>
 							<reference ref="687219487"/>
 							<reference ref="453979694"/>
 							<reference ref="488149383"/>
@@ -2172,6 +2171,7 @@
 							<reference ref="770643996"/>
 							<reference ref="387025724"/>
 							<reference ref="666444860"/>
+							<reference ref="443942832"/>
 						</object>
 						<reference key="parent" ref="946343002"/>
 					</object>

@@ -369,10 +369,21 @@
 	
 	if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
 		//App is running
-		
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New Message" message:alertMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-		
+        
+        @try {
+            if ([alertMessage isEqualToString:@""] || (alertMessage == nil)) {
+                alertMessage = @"To view your message, go to the Activity screen, and swipe to the 'Me' page.";
+            }
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New Message" message:alertMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+
+        }
+        @catch (NSException *exception) {
+            
+        }
+        
+     		
 	}else {
 		[self.navController dismissModalViewControllerAnimated:NO];
 		[self.navController popToRootViewControllerAnimated:NO];

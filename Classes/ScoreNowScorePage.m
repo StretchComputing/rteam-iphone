@@ -21,6 +21,11 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     if ([self.emailArray count] > 0) {
+        
+        self.theScoreView.gameOverButton.enabled = NO;
+        self.doneButton.enabled = NO;
+        self.cancelButton.enabled = NO;
+        
         //Members ahve been added, continue
         //create team
         self.sendScoreUs = self.theScoreView.scoreUs.text;
@@ -50,9 +55,7 @@
                                       withError:nil]) {
     }
     
-    self.theScoreView.gameOverButton.enabled = NO;
-    self.doneButton.enabled = NO;
-    self.cancelButton.enabled = NO;
+   
     
     if (self.noTeamsView.hidden == NO) {
         
@@ -83,6 +86,10 @@
             
         }else{
                 
+            self.theScoreView.gameOverButton.enabled = NO;
+            self.doneButton.enabled = NO;
+            self.cancelButton.enabled = NO;
+            
                 if ([self.selectedGameId isEqualToString:@""]) {
                     //create game, then update game with score
                     self.sendScoreUs = self.theScoreView.scoreUs.text;
@@ -523,6 +530,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }else if (buttonIndex == 2){
            //no 
             
+            self.theScoreView.gameOverButton.enabled = NO;
+            self.doneButton.enabled = NO;
+            self.cancelButton.enabled = NO;
+            
             if (self.isNewTeam) {
                 //- create team, then create game, and update game with score
                 //create game, then update game with score
@@ -792,10 +803,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                       withError:nil]) {
     }
     
-    
-    self.theScoreView.gameOverButton.enabled = NO;
-    self.doneButton.enabled = NO;
-    self.cancelButton.enabled = NO;
+
     
     self.gameIsOver = true;
     
@@ -820,9 +828,47 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
     }else{
         
-        self.addMembersAlert = [[UIAlertView alloc] initWithTitle:@"Add Members?" message:@"Would you like to add any members to your new team before saving?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", @"No", nil];
-        self.isNewTeam = false;
-        [self.addMembersAlert show];
+        if (self.isNewTeam) {
+            
+            self.addMembersAlert = [[UIAlertView alloc] initWithTitle:@"Add Members?" message:@"Would you like to add any members to your new team before saving?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", @"No", nil];
+            self.isNewTeam = false;
+            [self.addMembersAlert show];
+            
+        }else{
+            
+            self.theScoreView.gameOverButton.enabled = NO;
+            self.doneButton.enabled = NO;
+            self.cancelButton.enabled = NO;
+            
+            if ([self.selectedGameId isEqualToString:@""]) {
+                //create game, then update game with score
+                self.sendScoreUs = self.theScoreView.scoreUs.text;
+                self.sendScoreThem = self.theScoreView.scoreThem.text;
+                if (self.gameIsOver) {
+                    self.sendInterval = @"-1";
+                }else{
+                    self.sendInterval = self.theScoreView.quarter.text;
+                }
+                
+                [self.mainActivity startAnimating];
+                [self performSelectorInBackground:@selector(createGame) withObject:nil];
+            }else{
+                //update game with score
+                self.sendScoreUs = self.theScoreView.scoreUs.text;
+                self.sendScoreThem = self.theScoreView.scoreThem.text;
+                if (self.gameIsOver) {
+                    self.sendInterval = @"-1";
+                }else{
+                    self.sendInterval = self.theScoreView.quarter.text;
+                }
+                
+                [self.mainActivity startAnimating];
+                [self performSelectorInBackground:@selector(updateGameScore) withObject:nil];
+            }
+            
+        }
+        
+
         
     }
 

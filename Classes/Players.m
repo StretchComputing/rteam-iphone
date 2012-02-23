@@ -437,7 +437,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			Fan *controller = [self.fans objectAtIndex:row];
 						
 				if (controller.isUser) {
-					descLabel.text = @"User";
+					descLabel.text = @"Active - rTeam App";
 				}else {
 					if (controller.isNetworkAuthenticated) {
 						
@@ -680,7 +680,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
                 }else{
                     
                     if (controller.isUser) {
-                        descLabel.text = @"User";
+                        descLabel.text = @"Active - rTeam App";
                     }else {
                         if (controller.isNetworkAuthenticated) {
                             

@@ -45,13 +45,17 @@ displayString, messageSent, displayLabel, callTextActionSheet, replyString, repl
 	
 	self.phoneNumber = @"";
 	self.callTextButton.hidden = YES;
-	
+	self.confirmLabel.hidden = NO;
 	if ([self.confirmDate isEqualToString:@""]) {
 		
 		self.confirmLabel.text = @"Did Not Reply Yet.";
 		self.confirmLabel.textColor = [UIColor grayColor];
 		self.markConfirmButton.hidden = YES;
-	}else {
+	}else if ([self.confirmDate isEqualToString:@"happening"]){
+        
+        self.markConfirmButton.hidden = YES;
+        self.confirmLabel.hidden = YES;
+    }else {
 		self.confirmLabel.text = self.confirmDate;
 		self.confirmLabel.textColor = [UIColor blueColor];
 		self.markConfirmButton.hidden = YES;
