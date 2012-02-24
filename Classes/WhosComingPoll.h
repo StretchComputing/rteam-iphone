@@ -10,6 +10,7 @@
 
 @interface WhosComingPoll : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) UIAlertView *noCoordAlert;
 @property bool isGettingEvents;
 @property bool newGame;
 @property (nonatomic, strong) NSString *selectedMessageThreadId;

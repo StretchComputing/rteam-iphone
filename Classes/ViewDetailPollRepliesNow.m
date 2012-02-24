@@ -54,7 +54,7 @@
         NSDictionary *response;
         if (mainDelegate.token != nil) {
             
-            response = [ServerAPI getListOfTeamMembers:self.teamId :mainDelegate.token :@"all" :@""];
+            response = [ServerAPI getListOfTeamMembers:self.teamId :mainDelegate.token :@"member" :@""];
             
             NSString *status = [response valueForKey:@"status"];
             

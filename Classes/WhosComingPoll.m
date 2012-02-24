@@ -16,16 +16,19 @@
 #import "GANTracker.h"
 
 @implementation WhosComingPoll
-@synthesize  teamList, cancelButton, selectView, selectTable, teamSelectButton, currentTeamsView, initialDate, selectedGameId, selectedTeamId, eventList, eventActivity, eventPicker, areNoEvents, eventType, eventId, mainActivity, displayLabel, sendButton, selectedMessageThreadId, isGettingEvents, newGame, createEventView, createEventSegment, createEventDatePicker, createEventCancelButton, createEventSubmitButton, createEventType, createEventDate;
+@synthesize  teamList, cancelButton, selectView, selectTable, teamSelectButton, currentTeamsView, initialDate, selectedGameId, selectedTeamId, eventList, eventActivity, eventPicker, areNoEvents, eventType, eventId, mainActivity, displayLabel, sendButton, selectedMessageThreadId, isGettingEvents, newGame, createEventView, createEventSegment, createEventDatePicker, createEventCancelButton, createEventSubmitButton, createEventType, createEventDate, noCoordAlert;
 
 
 
 -(void)viewWillAppear:(BOOL)animated{
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Who's Coming Poll" message:@"To send a poll to your team asking if they will attend, first select a team, then select an event." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert show];
-    
-    [self.view bringSubviewToFront:self.eventPicker];
+    if ([self.teamList count] > 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Who's Coming Poll" message:@"To send a poll to your team asking if they will attend, first select a team, then select an event." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        
+        [self.view bringSubviewToFront:self.eventPicker];
+    }
+   
 }
 
 -(void)done{
@@ -177,41 +180,55 @@
     }
     
     self.teamList = [NSArray arrayWithArray:coordTeamList];
-    
-    self.selectView.hidden = YES;
-    self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancel)];
-	[self.navigationItem setLeftBarButtonItem:self.cancelButton];
-    
-    
-    self.sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(done)];
-	[self.navigationItem setRightBarButtonItem:self.sendButton];
-    
-    self.selectTable.delegate = self;
-    self.selectTable.dataSource = self;
-    
-    self.title = @"Who's Coming";
-    
-    self.eventList = [NSMutableArray array];
 
-
-    
-    self.currentTeamsView.hidden = NO;
-    
-    Team *tmpTeam = [self.teamList objectAtIndex:0];
-    [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
-  
-    
-    
-    [self performSelectorInBackground:@selector(getGameList:) withObject:tmpTeam.teamId];
-    
-    self.initialDate = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MM/dd hh:mm"];
+    if ([self.teamList count] == 0) {
+        self.selectView.hidden = YES;
+        self.currentTeamsView.hidden = YES;
+        self.noCoordAlert = [[UIAlertView alloc] initWithTitle:@"Coordinators Only" message:@"You must be the creator or a coordinator of at least one team to send this poll." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [self.noCoordAlert show];
         
+        self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancel)];
+        [self.navigationItem setLeftBarButtonItem:self.cancelButton];
+    }else{
+        
+        
+        self.selectView.hidden = YES;
+        self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancel)];
+        [self.navigationItem setLeftBarButtonItem:self.cancelButton];
+        
+        
+        self.sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(done)];
+        [self.navigationItem setRightBarButtonItem:self.sendButton];
+        
+        self.selectTable.delegate = self;
+        self.selectTable.dataSource = self;
+        
+        self.title = @"Who's Coming";
+        
+        self.eventList = [NSMutableArray array];
+        
+        
+        
+        self.currentTeamsView.hidden = NO;
+        
+        Team *tmpTeam = [self.teamList objectAtIndex:0];
+        [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
+        
+        
+        
+        [self performSelectorInBackground:@selector(getGameList:) withObject:tmpTeam.teamId];
+        
+        self.initialDate = [NSDate date];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MM/dd hh:mm"];
+        
+        
+        self.eventId = @"";
+        self.selectedTeamId = tmpTeam.teamId;
 
-    self.eventId = @"";
-    self.selectedTeamId = tmpTeam.teamId;
-
+    }
+    
+    
     
 }
 
@@ -716,6 +733,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+
+ 
+    if (alertView == self.noCoordAlert) {
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+    }
+}
 -(void)viewDidUnload{
     
 

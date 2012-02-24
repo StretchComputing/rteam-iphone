@@ -3182,10 +3182,11 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
                             tmpEvent.noreply++;
                         }
                     }
-                    
+
 					[eventsToday addObject:tmpEvent];
 					
 				}
+                
 				
 			}
 			

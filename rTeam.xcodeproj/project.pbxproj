@@ -273,7 +273,6 @@
 		9082AB9912D575FD0054DF3C /* CameraSelectionTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 9082AB9812D575FD0054DF3C /* CameraSelectionTeam.m */; };
 		9082AB9F12D576800054DF3C /* CameraSelectionTeam.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9082AB9E12D576800054DF3C /* CameraSelectionTeam.xib */; };
 		9082D544144FAD3C00A95FEE /* rowButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 9082D543144FAD3C00A95FEE /* rowButton.png */; };
-		90837EDF14CB33B0000F2375 /* profileNew.png in Resources */ = {isa = PBXBuildFile; fileRef = 90837EDE14CB33B0000F2375 /* profileNew.png */; };
 		90838F6E1469A03C00893987 /* FastActionSheetPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 90838F6C1469A03C00893987 /* FastActionSheetPost.m */; };
 		90838F86146AF50500893987 /* width80genericTeam.png in Resources */ = {isa = PBXBuildFile; fileRef = 90838F85146AF50500893987 /* width80genericTeam.png */; };
 		90838F88146AF5C100893987 /* finalHomeGenericTeamGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 90838F87146AF5C100893987 /* finalHomeGenericTeamGreen.png */; };
@@ -968,7 +967,6 @@
 		9082AB9812D575FD0054DF3C /* CameraSelectionTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraSelectionTeam.m; sourceTree = "<group>"; };
 		9082AB9E12D576800054DF3C /* CameraSelectionTeam.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CameraSelectionTeam.xib; sourceTree = "<group>"; };
 		9082D543144FAD3C00A95FEE /* rowButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rowButton.png; sourceTree = "<group>"; };
-		90837EDE14CB33B0000F2375 /* profileNew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profileNew.png; sourceTree = "<group>"; };
 		90838F6B1469A03C00893987 /* FastActionSheetPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastActionSheetPost.h; sourceTree = "<group>"; };
 		90838F6C1469A03C00893987 /* FastActionSheetPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastActionSheetPost.m; sourceTree = "<group>"; };
 		90838F85146AF50500893987 /* width80genericTeam.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = width80genericTeam.png; sourceTree = "<group>"; };
@@ -2103,7 +2101,6 @@
 				90CCF4D1122E058D004577AA /* cellBaseball.png */,
 				90CCF4D2122E058D004577AA /* cellFootball.png */,
 				906F0AE2125C0AD5000FBC72 /* pseudoNotSelected.png */,
-				90837EDE14CB33B0000F2375 /* profileNew.png */,
 				906F0AE3125C0AD5000FBC72 /* pseudoSelected.png */,
 				90CCF4D3122E058D004577AA /* cellHockey.png */,
 				90CCF4D4122E058D004577AA /* cellSoccerball.png */,
@@ -2719,7 +2716,6 @@
 				90879465149906030079A207 /* showLess@2x.png in Resources */,
 				908584AA14B4BDC0008AD6A6 /* profileNew.png in Resources */,
 				908584AF14B4C204008AD6A6 /* ReplyEditActivity.xib in Resources */,
-				90837EDF14CB33B0000F2375 /* profileNew.png in Resources */,
 				90E5425414D0E26600C59A07 /* CreateNewEventGameday.xib in Resources */,
 				90CA2F8E14D8CC7B009316F4 /* replyArrow.png in Resources */,
 				90B1388314DF2E20000FB81E /* ScoreNowAddMembers.xib in Resources */,

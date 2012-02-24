@@ -77,7 +77,7 @@ createSingleLabel;
 			
 		}else if ([self.teamList count] > 1){
 			//Go to a "select team" page
-			bool coordTeam;
+			bool coordTeam = false;
 			NSMutableArray *coordTeams = [NSMutableArray array];
 			
 			for (int i = 0; i < [self.teamList count]; i++) {
@@ -305,7 +305,7 @@ createSingleLabel;
 			
 		}else if ([self.teamList count] > 1){
 			//Go to a "select team" page
-			bool coordTeam;
+			bool coordTeam = false;
 			NSMutableArray *coordTeams = [NSMutableArray array];
 			
 			for (int i = 0; i < [self.teamList count]; i++) {

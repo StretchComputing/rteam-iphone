@@ -180,6 +180,10 @@
     [self.view addSubview:self.theScoreView.view];
     [self.view bringSubviewToFront:self.theScoreView.view];
     
+    if ([self.teamList count] == 0) {
+        self.hasTeams = false;
+    }
+    
     if (self.hasTeams) {
         self.currentTeamsView.hidden = NO;
         self.noTeamsView.hidden = YES;
