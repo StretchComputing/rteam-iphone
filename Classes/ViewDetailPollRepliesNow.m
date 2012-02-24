@@ -105,19 +105,19 @@
 		for (int i = 0; i < [self.replyArray count]; i++) {
 			
 			NSDictionary *memberReplyObject = [self.replyArray objectAtIndex:i];
-			
+			            
 			NSString *memberReplyID = [memberReplyObject valueForKey:@"memberId"];
+            			
 			
-			
-			for (int j = 0; j < [members count]; j++) {
+			for (int j = 0; j < [self.members count]; j++) {
 				
 				
-				if ([[members objectAtIndex:j] class] == [Player class]) {
-					Player *tmpPlayer = [members objectAtIndex:j];
-					
+				if ([[self.members objectAtIndex:j] class] == [Player class]) {
+					Player *tmpPlayer = [self.members objectAtIndex:j];
+				
 					if ([memberReplyID isEqualToString:tmpPlayer.memberId]) {
 						//Add that player to the list
-						
+		
 						PollReplyObject *tmpReplyObject = [[PollReplyObject alloc] init];
 						tmpReplyObject.name = tmpPlayer.firstName;
 						
@@ -136,15 +136,16 @@
 							tmpReplyObject.dateReplied = @"";
 						}
 						
-						tmpReplyObject.memberId = tmpPlayer.memberId;
-						tmpReplyObject.teamId = self.teamId;
+						tmpReplyObject.memberId = [NSString stringWithString:tmpPlayer.memberId];
+                        tmpReplyObject.teamId = self.teamId;
 						[allReplyObjectsMutable addObject:tmpReplyObject];
 						
 					}
 					
 				}else {
 					//Fan
-					Fan *tmpPlayer = [members objectAtIndex:j];
+                    
+					Fan *tmpPlayer = [self.members objectAtIndex:j];
 					
 					if ([memberReplyID isEqualToString:tmpPlayer.memberId]) {
 						//Add that player to the list
@@ -167,6 +168,8 @@
 							tmpReplyObject.dateReplied = @"";
 						}
 						
+                        tmpReplyObject.memberId = [NSString stringWithString:tmpPlayer.memberId];
+                        tmpReplyObject.teamId = self.teamId;
 						[allReplyObjectsMutable addObject:tmpReplyObject];
 						
 					}
@@ -181,7 +184,8 @@
 			
 		}
 		
-		self.allReplyObjects = allReplyObjectsMutable;
+		self.allReplyObjects = [NSArray arrayWithArray:allReplyObjectsMutable];
+
 	}
 	[self.myTableView reloadData];
     
@@ -244,6 +248,7 @@
     NSUInteger row = [indexPath row];
 	
 	PollReplyObject *reply = [self.allReplyObjects objectAtIndex:row];
+
     
 	if ([reply.dateReplied isEqualToString:@""]) {
 		
@@ -307,7 +312,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 		
 		PollReplyObject *reply = [self.allReplyObjects objectAtIndex:[indexPath row]];
-		
+
 		NSString *nameString = @"";
 		
 			

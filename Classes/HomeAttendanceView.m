@@ -27,7 +27,7 @@
 
 
 @implementation HomeAttendanceView
-@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees;
+@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView;
 
 - (void)viewDidLoad
 {
@@ -61,7 +61,37 @@
 
     }
     self.teamLabel.text = [NSString stringWithFormat:@"%@", self.teamName];
-    self.dateLabel.text = [NSString stringWithFormat:@"(expected attendance for %@ on %@)", self.eventType, self.eventDate];
+    
+
+    self.eventLinkLabel.frame = CGRectMake(189, 25, 175, 21);
+    self.eventLinkLabel.backgroundColor = [UIColor clearColor];
+    self.eventLinkLabel.text = [NSString stringWithFormat:@"%@ on %@", self.eventType, self.eventDate];
+    self.eventLinkLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
+    self.eventLinkLabel.textColor = [UIColor blueColor];
+    
+    if ([self.eventType isEqualToString:@"Practice"]) {
+        self.dateLabel.text = [NSString stringWithFormat:@"(expected attendance for                               )", self.eventType, self.eventDate];
+        
+        CGRect frame = self.eventLinkLabel.frame;
+        frame.origin.x -= 10;
+        self.eventLinkLabel.frame = frame;
+
+    }else{
+        self.dateLabel.text = [NSString stringWithFormat:@"(expected attendance for                           )", self.eventType, self.eventDate];
+
+
+    }
+    
+    self.lineView.backgroundColor = [UIColor blueColor];
+    int x = self.eventLinkLabel.frame.origin.x;
+    
+    CGSize constraints = CGSizeMake(900, 900);
+    CGSize totalSize = [self.eventLinkLabel.text sizeWithFont:[UIFont fontWithName:@"Helvetica-Bold" size:15] constrainedToSize:constraints];
+    
+    
+    int width = totalSize.width;
+    
+    self.lineView.frame = CGRectMake(x+1, 43, width-2, 2);
     
     [self.goToButton setTitle:[NSString stringWithFormat:@"Poll Details", self.eventType] forState:UIControlStateNormal];
     self.yesLabel.text = self.yesCount;
@@ -423,9 +453,61 @@
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-        [ServerAPI updateMessageThread:mainDelegate.token :self.teamId :self.messageThreadId :@"" :@"" :@"" :@"" :@"true"];
+        
+        
+        NSDictionary *response = [ServerAPI updateMessageThread:mainDelegate.token :self.teamId :self.messageThreadId :@"" :@"" :@"" :@"" :@"true"];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        NSString *didSucceed;
+        if ([status isEqualToString:@"100"]) {
+            //success
+            didSucceed = @"yes";
+            self.messageThreadId = [response valueForKey:@"messageThreadId"];
+        }else{
+            didSucceed = @"no";
+            self.messageThreadId = @"";
+        }
+        
+        
+        [self performSelectorOnMainThread:@selector(donePollRe:) withObject:didSucceed waitUntilDone:NO];
     }
          
+}
+
+-(void)donePollRe:(NSString *)didSucceed{
+    
+    [self.pollActivity stopAnimating];
+    
+    if ([didSucceed isEqualToString:@"yes"]) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Who's Coming Poll Sent - Happening Now"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
+        self.pollLabel.textColor = [UIColor colorWithRed:0.0 green:100.0/255.0 blue:0.0 alpha:1.0];
+        self.pollLabel.text = @"Poll Sent!";
+    }else{
+        self.pollLabel.textColor = [UIColor redColor];
+        self.pollLabel.text = @"*Poll Failed to Send*";
+    }
+    
+    [self performSelector:@selector(resetUiResend) withObject:nil afterDelay:1.0];
+
+}
+
+-(void)resetUiResend{
+    
+    [self.pollButton setTitle:@"Re-Send Attendance Poll" forState:UIControlStateNormal];
+    
+    self.pollButton.hidden = NO;
+    self.pollLabel.hidden = YES;
+
+    
 }
 -(void)setStatus{
     
@@ -591,6 +673,8 @@
     pollDescription = nil;
     statusReply = nil;
     statusButton = nil;
+    eventLinkLabel = nil;
+    lineView = nil;
     [super viewDidUnload];
     
 }

@@ -143,6 +143,9 @@ displayString, messageSent, displayLabel, callTextActionSheet, replyString, repl
     tmp.isReply = true;
     tmp.isConfirm = true;
     
+    NSLog(@"MemberID: %@", self.memberId);
+    NSLog(@"MemberName: %@", self.memberName);
+    
     Player *newPlayer = [[Player alloc] init];
     newPlayer.firstName = self.memberName;
     newPlayer.memberId = self.memberId;

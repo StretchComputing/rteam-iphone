@@ -13,6 +13,8 @@
 
     
 }
+@property (nonatomic, strong) IBOutlet UIView *lineView;
+@property (nonatomic, strong) IBOutlet UILabel *eventLinkLabel;
 @property (nonatomic, strong) NSArray *attendees;
 @property (nonatomic, strong) NSString *eventStringDate;
 

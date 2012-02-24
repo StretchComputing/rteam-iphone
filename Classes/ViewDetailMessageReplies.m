@@ -169,6 +169,9 @@
 							tmpReplyObject.dateReplied = @"";
 						}
 						
+                        tmpReplyObject.memberId = [NSString stringWithString:tmpPlayer.memberId];
+                        tmpReplyObject.teamId = self.teamId;
+                        
 						[allReplyObjectsMutable addObject:tmpReplyObject];
 						
 					}

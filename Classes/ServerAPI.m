@@ -24,8 +24,8 @@
 #import "GoogleAppEngine.h"
 #import "rTeamAppDelegate.h"
 
-//static NSString *baseUrl = @"https://rteamtest.appspot.com";
-static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
+static NSString *baseUrl = @"https://rteamtest.appspot.com";
+//static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
 
 @implementation ServerAPI
 
