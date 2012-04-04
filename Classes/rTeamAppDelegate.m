@@ -57,7 +57,7 @@
 @implementation rTeamAppDelegate
 
 @synthesize window;
-@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData, crashInstanceUrl, lastTwenty, lastTwentyTime, messageImageDictionary, replyDictionary;
+@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData, crashInstanceUrl, lastTwenty, lastTwentyTime, messageImageDictionary, replyDictionary, lastPostTeamId;
 
 - (id) init {
 
@@ -92,6 +92,8 @@
         NSString *tmpSwipeAlert = @"";
         NSString *tempLastTwenty = @"";
         NSString *tempLastTwentyTime = @"";
+        NSString *tmpLastPostTeamId = @"";
+
 
 
 		
@@ -107,6 +109,8 @@
         tmpSwipeAlert = [decoder decodeObjectForKey:@"showSwipeAlert"];
         tempLastTwenty = [decoder decodeObjectForKey:@"lastTwenty"];
         tempLastTwentyTime = [decoder decodeObjectForKey:@"lastTwentyTime"];
+        tmpLastPostTeamId = [decoder decodeObjectForKey:@"lastPostTeamId"];
+
 
 
 
@@ -119,6 +123,8 @@
 		[self setQuickLinkTwoImage:tempLinkTwoImage];
 		[self setToken:tempToken];
         [self setShowSwipeAlert:tmpSwipeAlert];
+        [self setLastPostTeamId:tmpLastPostTeamId];
+
         
         [self setLastTwenty:tempLastTwenty];
         [self setLastTwentyTime:tempLastTwentyTime];
@@ -168,6 +174,7 @@
 			self.quickLinkOneImage = @"";
 			self.quickLinkTwoImage = @"";
             self.showSwipeAlert = @"true";
+            self.lastPostTeamId = @"";
 		}
 	} else {
 		self.token = @"";
@@ -279,7 +286,7 @@
     NSError *error;
     self.crashDetectDate = [NSDate date];
     self.crashStackData = nil;
-    self.crashUserName = mainDelegate.displayName;
+    self.crashUserName = mainDelegate.token;
     //self.crashInstanceUrl = mainDelegate.sncurl;
     
     /* Try loading the crash report */
@@ -449,6 +456,8 @@
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
     [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
     [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
+    [encoder encodeObject:lastPostTeamId forKey:@"lastPostTeamId"];
+
 
 
 
@@ -488,6 +497,8 @@
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
     [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
     [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
+    [encoder encodeObject:lastPostTeamId forKey:@"lastPostTeamId"];
+
 
 	[encoder finishEncoding];
 	
@@ -515,6 +526,7 @@
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
     [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
     [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
+    [encoder encodeObject:lastPostTeamId forKey:@"lastPostTeamId"];
 
 
 	[encoder finishEncoding];
@@ -572,11 +584,16 @@
 //Called by Reachability whenever status changes.
 - (void) reachabilityChanged: (NSNotification* )note
 {
-	
-	Reachability* curReach = [note object];
-	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
-	
-	[self updateInterfaceWithReachability: curReach];
+    @try {
+        Reachability* curReach = [note object];
+        NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+        
+        [self updateInterfaceWithReachability: curReach];
+    }
+    @catch (NSException *exception) {
+        
+    }
+ 
 	
 }
 

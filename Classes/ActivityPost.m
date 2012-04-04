@@ -174,6 +174,10 @@
     if ([self.errorString isEqualToString:@""]) {
         
         
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        mainDelegate.lastPostTeamId = [NSString stringWithString:self.postTeamId];
+        [mainDelegate saveUserInfo];
+
         
         if ([self.videoDataToSend length] > 0) {
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -271,16 +275,61 @@
 -(void)doneTeams{
     
     if ([self.teams count] > 0) {
-        Team *tmpTeam = [self.teams objectAtIndex:0];
-        hasTeams = true;
-        [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
-        self.postTeamId = tmpTeam.teamId;  
         
-        self.selectedTeams = [NSMutableArray array];
-        for (int i = 0; i < [self.teams count]; i++) {
-            [self.selectedTeams addObject:@""];
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+        if (![mainDelegate.lastPostTeamId isEqualToString:@""] && mainDelegate.lastPostTeamId != nil) {
+            
+            bool found = false;
+            for (int i = 0; i < [self.teams count]; i++) {
+                
+                Team *tmpTeam = [self.teams objectAtIndex:i];
+                if ([tmpTeam.teamId isEqualToString:mainDelegate.lastPostTeamId]) {
+                    
+                    hasTeams = true;
+                    [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
+                    self.postTeamId = tmpTeam.teamId;  
+                    
+                    self.selectedTeams = [NSMutableArray array];
+                    for (int i = 0; i < [self.teams count]; i++) {
+                        [self.selectedTeams addObject:@""];
+                    }
+                    [self.selectedTeams replaceObjectAtIndex:i withObject:@"s"];
+                    
+                    found = true; 
+                    break;
+                }
+            }
+            
+            
+            if (!found) {
+                Team *tmpTeam = [self.teams objectAtIndex:0];
+                hasTeams = true;
+                [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
+                self.postTeamId = tmpTeam.teamId;  
+                
+                self.selectedTeams = [NSMutableArray array];
+                for (int i = 0; i < [self.teams count]; i++) {
+                    [self.selectedTeams addObject:@""];
+                }
+                [self.selectedTeams replaceObjectAtIndex:0 withObject:@"s"];
+            }
+            
+            
+        }else{
+            Team *tmpTeam = [self.teams objectAtIndex:0];
+            hasTeams = true;
+            [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
+            self.postTeamId = tmpTeam.teamId;  
+            
+            self.selectedTeams = [NSMutableArray array];
+            for (int i = 0; i < [self.teams count]; i++) {
+                [self.selectedTeams addObject:@""];
+            }
+            [self.selectedTeams replaceObjectAtIndex:0 withObject:@"s"];
+
         }
-        [self.selectedTeams replaceObjectAtIndex:0 withObject:@"s"];
+       
     }else{
         [self.teamSelectButton setTitle:@"No Teams Found..." forState:UIControlStateNormal];
 
@@ -450,24 +499,40 @@
 
 
 -(void)selectCamera{
-    self.cameraSaveMessage = self.messageText.text;
     
-    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    
-    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    
-    [self presentModalViewController:picker animated:YES];
+    @try {
+        self.cameraSaveMessage = self.messageText.text;
+        
+        UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        [self presentModalViewController:picker animated:YES];
+    }
+    @catch (NSException *exception) {
+        
+    }
+   
+
     
 }
 
 -(void)selectLibrary{
-    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
     
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    
-    [self presentModalViewController:picker animated:YES];
+    @try {
+        UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        
+        [self presentModalViewController:picker animated:YES];
+    }
+    @catch (NSException *exception) {
+        
+    }
+   
+  
     
 }
 

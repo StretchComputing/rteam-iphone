@@ -63,7 +63,7 @@ refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, trans
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview, postImageTeamId, postImageActivity, postImageErrorLabel, postImageText, activityPhotoEventId, postImageLabel, activityPhotoTeamId, postImageCreateGameSegment, postImageAlert, postImageIsCoord, postImageEvents;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview, postImageTeamId, postImageActivity, postImageErrorLabel, postImageText, activityPhotoEventId, postImageLabel, activityPhotoTeamId, postImageCreateGameSegment, postImageAlert, postImageIsCoord, postImageEvents, isGameVisible;
 
 
 
@@ -480,6 +480,8 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     homeScoreView = [[HomeScoreView alloc] init];
     homeScoreView.view.frame = CGRectMake(0, 322, 320, 301);
     homeScoreView.view.hidden = YES;
+    self.isGameVisible = false;
+
     homeScoreView.homeSuperView = self;
     
     homeAttendanceView = [[HomeAttendanceView alloc] init];
@@ -739,7 +741,9 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 	
 	if (self == self.navigationController.visibleViewController) {
 		
-		[self viewWillAppear:NO];
+        if (!self.isGameVisible) {
+            [self viewWillAppear:NO];
+        }
 	}
 	
 }
@@ -747,7 +751,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 
 -(void)search{
-        
+    
     [TraceSession addEventToSession:@"Home Page - Search Button Clicked"];
 
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -2368,7 +2372,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if ([sender class] == [AttendingButton class]) {
             homeAttendanceView.view.hidden = NO;
             homeScoreView.view.hidden = YES;
-            
+            self.isGameVisible = false;
+
             AttendingButton *tmp = (AttendingButton *)sender;
             
             
@@ -2401,6 +2406,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             ScoreButton *tmp = (ScoreButton *)sender;
             
             homeScoreView.view.hidden = NO;
+            self.isGameVisible = true;
+            
             homeAttendanceView.view.hidden = YES;
             homeScoreView.teamName = tmp.teamName;
             homeScoreView.scoreUs = tmp.scoreUs;
@@ -2471,6 +2478,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([tmp.canceledLabel.text isEqualToString:@""] || tmp.canceledLabel.text == nil) {
                 
                 homeScoreView.view.hidden = NO;
+                self.isGameVisible = true;
+
                 homeScoreView.teamName = tmp.teamName;
                 homeScoreView.scoreUs = tmp.scoreUs;
                 homeScoreView.scoreThem = tmp.scoreThem;
@@ -3641,6 +3650,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)hide{
     homeScoreView.view.hidden = YES;
     homeAttendanceView.view.hidden = YES;
+    self.isGameVisible = false;
+
 
 }
 
@@ -3700,6 +3711,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         [self performSelector:@selector(hide) withObject:nil afterDelay:1.0];
 
         self.isMoreShowing = NO;
+        
+        self.isGameVisible = false;
 
     }else{
    
@@ -3731,6 +3744,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         self.homeAttendanceView.view.frame = frame1;
         
+        
+        
+        
+        
         CGRect frame2 = self.homeScoreView.view.frame;
         frame2.origin.y = 121;
         if (isAd) {
@@ -3740,6 +3757,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         self.homeScoreView.view.frame = frame2;
 
+        if (self.homeScoreView.view.hidden == NO) {
+            
+            self.homeScoreView.isFullScreen = true;
+            [self.homeScoreView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
+            
+            CGRect frame = self.homeScoreView.view.frame;
+            frame.origin.y = 0;
+            frame.size.height += 121;
+            self.homeScoreView.view.frame = frame;
+            
+        }
+        
+        
         self.bottomBar.hidden = YES;
        
         

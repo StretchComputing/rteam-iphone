@@ -582,7 +582,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
                     descLabel1.hidden = NO;
                     
                     if (controller.isUser) {
-                        descLabel.text = @"Member: User";
+                        descLabel.text = @"Member: Active - rTeam App";
                     }else {
                         if (controller.isNetworkAuthenticated) {
                             
@@ -612,7 +612,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
                     }
                     
                     if (controller.guard1isUser) { //If Guardian1 is a User
-                        descLabel1.text = @"Guardian 1: User";
+                        descLabel1.text = @"Guardian 1: Active - rTeam App";
                     }else {
                         if (controller.guard1NA) {
                             
@@ -645,7 +645,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
                         descLabel2.hidden = NO;
                         
                         if (controller.guard2isUser) { //If Guardian2 is a User
-                            descLabel2.text = @"Guardian 2: User";
+                            descLabel2.text = @"Guardian 2: Active - rTeam App";
                         }else {
                             if (controller.guard2NA) {
                                 

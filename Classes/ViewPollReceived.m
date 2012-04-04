@@ -197,7 +197,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	self.finalizedMessage.text = @"";
 	if (!self.wasViewed) {
 		
-		[self performSelectorInBackground:@selector(updateWasViewed) withObject:nil];	 	
+		//[self performSelectorInBackground:@selector(updateWasViewed) withObject:nil];	 	
 	}
 	
 	

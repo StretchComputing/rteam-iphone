@@ -493,6 +493,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 				 initWithStyle:UITableViewCellStyleDefault
 				 reuseIdentifier: FirstLevelCell];
 	}
+    
+    
 	
 	//Configure the cell
 	NSUInteger row = [indexPath row];
@@ -515,25 +517,36 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			NSString *theSport = [team.sport lowercaseString];
 			
+            UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(2, -3, 20, 20)];
+            myImageView.contentMode = UIViewContentModeScaleAspectFit;            
+            
+            
 			if ([theSport isEqualToString:@"basketball"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellBasketball.png"];
+				myImageView.image = [UIImage imageNamed:@"basketballOnly.png"];
+                
 			}else if ([theSport isEqualToString:@"baseball"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellBaseball.png"];
+				myImageView.image = [UIImage imageNamed:@"baseballOnly.png"];
 			}else if ([theSport isEqualToString:@"soccer"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellSoccer.png"];
+				myImageView.image = [UIImage imageNamed:@"soccerOnly.png"];
 			}else if ([theSport isEqualToString:@"football"] || [team.sport isEqualToString:@"flag football"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellFootball.png"];
+				myImageView.image = [UIImage imageNamed:@"footballOnly.png"];
 			}else if ([theSport isEqualToString:@"hockey"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellHockey.png"];
+				myImageView.image = [UIImage imageNamed:@"hockeyOnly.png"];
 			}else if ([theSport isEqualToString:@"lacrosse"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellLacrosse.png"];
+				myImageView.image = [UIImage imageNamed:@"lacrosseOnly.png"];
 			}else if ([theSport isEqualToString:@"tennis"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellTennis.png"];
+				myImageView.image = [UIImage imageNamed:@"tennisOnly.png"];
 			}else if ([theSport isEqualToString:@"volleyball"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellVolleyball.png"];
+				myImageView.image = [UIImage imageNamed:@"volleyballOnly.png"];
 			}else {
-				cell.imageView.image = [UIImage imageNamed:@"cellOther.png"];
+				myImageView.image = [UIImage imageNamed:@"gen80.png"];
 			}
+            
+            for (UIView *myView in [cell.imageView subviews]) {
+                [myView removeFromSuperview];
+            }
+            cell.imageView.image = [UIImage imageNamed:@"cellOther.png"];
+            [cell.imageView addSubview:myImageView];
 			
 		}
 		
@@ -555,28 +568,40 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 			cell.textLabel.text = team.name;
 			
 			
-			if ([team.sport isEqualToString:@"Basketball"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellBasketball.png"];
-			}else if ([team.sport isEqualToString:@"Baseball"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellBaseball.png"];
-			}else if ([team.sport isEqualToString:@"Soccer"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellSoccer.png"];
-			}else if ([team.sport isEqualToString:@"Football"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellFootball.png"];
-			}else if ([team.sport isEqualToString:@"Hockey"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellHockey.png"];
-			}else if ([team.sport isEqualToString:@"Lacrosse"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellLacrosse.png"];
-			}else if ([team.sport isEqualToString:@"Tennis"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellTennis.png"];
-			}else if ([team.sport isEqualToString:@"Volleyball"]) {
-				cell.imageView.image = [UIImage imageNamed:@"cellVolleyball.png"];
-			}else if ([team.sport isEqualToString:@"Development"]) {
-				cell.imageView.image = [UIImage imageNamed:@"computerCell.png"];
-			}else {
-				cell.imageView.image = [UIImage imageNamed:@"cellOther.png"];
-			}
+			NSString *theSport = [team.sport lowercaseString];
 			
+            UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(2, -3, 20, 20)];
+            myImageView.contentMode = UIViewContentModeScaleAspectFit;            
+            
+            
+			if ([theSport isEqualToString:@"basketball"]) {
+				myImageView.image = [UIImage imageNamed:@"basketballOnly.png"];
+                
+			}else if ([theSport isEqualToString:@"baseball"]) {
+				myImageView.image = [UIImage imageNamed:@"baseballOnly.png"];
+			}else if ([theSport isEqualToString:@"soccer"]) {
+				myImageView.image = [UIImage imageNamed:@"soccerOnly.png"];
+			}else if ([theSport isEqualToString:@"football"] || [team.sport isEqualToString:@"flag football"]) {
+				myImageView.image = [UIImage imageNamed:@"footballOnly.png"];
+			}else if ([theSport isEqualToString:@"hockey"]) {
+				myImageView.image = [UIImage imageNamed:@"hockeyOnly.png"];
+			}else if ([theSport isEqualToString:@"lacrosse"]) {
+				myImageView.image = [UIImage imageNamed:@"lacrosseOnly.png"];
+			}else if ([theSport isEqualToString:@"tennis"]) {
+				myImageView.image = [UIImage imageNamed:@"tennisOnly.png"];
+			}else if ([theSport isEqualToString:@"volleyball"]) {
+				myImageView.image = [UIImage imageNamed:@"volleyballOnly.png"];
+			}else {
+				myImageView.image = [UIImage imageNamed:@"gen80.png"];
+			}
+            
+            for (UIView *myView in [cell.imageView subviews]) {
+                [myView removeFromSuperview];
+            }
+            cell.imageView.image = [UIImage imageNamed:@"cellOther.png"];
+            [cell.imageView addSubview:myImageView];
+			
+		
 			
 		}
 	}
@@ -640,6 +665,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			TeamHome *home = [viewControllers objectAtIndex:0];
 			home.teamId = coachTeam.teamId;
+            
 			home.userRole = coachTeam.userRole;
 			home.teamSport = coachTeam.sport;
 			home.teamName = coachTeam.name;

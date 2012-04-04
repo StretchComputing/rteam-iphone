@@ -27,6 +27,16 @@ isCoord, addThem1, addThem2, addThem3, addUs1, addUs2, addUs3, cancelScoringButt
 	self.quarter.text = self.interval;
 
 	
+    if (self.scoreUs.text == nil) {
+        self.scoreUs.text = @"0";
+    }
+    if (self.scoreThem.text == nil) {
+        self.scoreThem.text = @"0";
+    }
+    if (self.quarter.text == nil) {
+        self.quarter.text = @"0";
+    }
+    
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.gameOverButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];

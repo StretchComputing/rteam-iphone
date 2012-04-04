@@ -43,8 +43,6 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 
 -(void)viewDidLoad{
 	
-    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-
     //self.nameLabel.text = mainDelegate.displayName;
     self.nameLabel.textColor = [UIColor blueColor];
     

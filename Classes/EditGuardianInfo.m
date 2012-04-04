@@ -173,6 +173,33 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 	self.errorLabel.text = @"";
 	self.phoneOnlyArray = [NSMutableArray array];
     
+    if (self.oneFirstName.text == nil) {
+        self.oneFirstName.text = @"";
+    }
+    if (self.oneLastName.text == nil) {
+        self.oneLastName.text = @"";
+    }
+    if (self.oneEmail.text == nil) {
+        self.oneEmail.text = @"";
+    }
+    if (self.onePhone.text == nil) {
+        self.onePhone.text = @"";
+    }
+    
+    if (self.twoFirstName.text == nil) {
+        self.twoFirstName.text = @"";
+    }
+    if (self.twoLastName.text == nil) {
+        self.twoLastName.text = @"";
+    }
+    if (self.twoEmail.text == nil) {
+        self.twoEmail.text = @"";
+    }
+    if (self.twoPhone.text == nil) {
+        self.twoPhone.text = @"";
+    }
+    
+    
     self.theOneFirstName = [NSString stringWithString:self.oneFirstName.text];
     self.theOneLastName = [NSString stringWithString:self.oneLastName.text];
     self.theOneEmail = [NSString stringWithString:self.oneEmail.text];

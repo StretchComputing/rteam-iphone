@@ -86,7 +86,7 @@ teamName, newActivity, fromHome;
 	tab3.gameId = self.gameId;
 	//tab3.startDate = self.startDate;
 	tab3.title = @"Attendance";
-	tab3.tabBarItem.image = [UIImage imageNamed:@"attendance.png"];
+	tab3.tabBarItem.image = [UIImage imageNamed:@"attendance_small.png"];
 	
 
 	//tab5.teamId = self.teamId;

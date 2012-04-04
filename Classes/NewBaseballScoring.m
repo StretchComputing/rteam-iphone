@@ -21,10 +21,20 @@ isCoord, addThem, addUs, cancelScoringButton, activity, theScoreUs, theScoreThem
 	
     self.view.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
 	
+    
 	self.scoreUs.text = self.initScoreUs;
 	self.scoreThem.text = self.initScoreThem;
 	self.quarter.text = self.interval;
 	
+    if (self.scoreUs.text == nil) {
+        self.scoreUs.text = @"0";
+    }
+    if (self.scoreThem.text == nil) {
+        self.scoreThem.text = @"0";
+    }
+    if (self.quarter.text == nil) {
+        self.quarter.text = @"0";
+    }
 	
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];

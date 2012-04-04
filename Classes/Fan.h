@@ -33,7 +33,7 @@ MFMessageComposeViewControllerDelegate> {
 @property (nonatomic, strong) IBOutlet UIButton *callTextButton;
 @property (nonatomic, strong) UIActionSheet *callTextAction;
 @property (nonatomic, strong, getter = theNewPhoneAlert) UIAlertView *newPhoneAlert;
-@property (nonatomic, strong) NSString *initPhone;
+@property (nonatomic, strong, getter = initialPhone, setter = initialPhone:) NSString *initPhone;
 @property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
 @property (nonatomic, strong) IBOutlet UITextField *mobileEdit;
 @property bool isSmsConfirmed;

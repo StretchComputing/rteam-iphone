@@ -36,7 +36,7 @@
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString, homeScoreView;
 
 
 -(void)home{
@@ -114,6 +114,12 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     
 - (void)viewDidLoad
 {
+    
+    homeScoreView = [[HomeScoreView alloc] init];
+    homeScoreView.view.frame = CGRectMake(0, 322, 320, 301);
+    homeScoreView.view.hidden = YES;
+
+    [self.view addSubview:self.homeScoreView.view];
     
     self.swipeAlertFront.layer.masksToBounds = YES;
     self.swipeAlertFront.layer.cornerRadius = 4.0;
@@ -343,7 +349,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
    
     int y = self.bottomScrollView.frame.size.height;
 
-    if (currentMiddle == 1) {
+    if (self.currentMiddle == 1) {
         
         [TraceSession addEventToSession:@"Activity Page - Swiped To Photos"];
 
@@ -374,7 +380,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         self.view3.backgroundColor = [UIColor whiteColor];
         [self.bottomScrollView addSubview:self.view3];
         
-    }else if (currentMiddle == 2){
+    }else if (self.currentMiddle == 2){
         //Everyone
         
         [TraceSession addEventToSession:@"Activity Page - Swiped To Everyone"];
@@ -429,6 +435,10 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         self.view3.frame = CGRectMake(320, 0, 320, y);
         self.view3.backgroundColor = [UIColor whiteColor];
         [self.bottomScrollView addSubview:self.view3];
+        
+        if ([self.myActivityArray count] > 0) {
+            [self performSelectorInBackground:@selector(updateWasViewed) withObject:nil];
+        }
          
     }
        
@@ -660,6 +670,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 theMessage.displayMessage = tmpActivity.activityText;
                 theMessage.messageId = tmpActivity.activityId;
                 theMessage.teamId = tmpActivity.teamId;
+            theMessage.teamName = tmpActivity.teamName;
                 theMessage.numLikes = tmpActivity.numLikes;
                 theMessage.numDislikes = tmpActivity.numDislikes;
                             
@@ -1452,7 +1463,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)doneMyActivity:(NSMutableArray *)messages{
     
-    
+    self.didInitMyActivity = true;
     if (self.shouldCallStop) {
         [self performSelector:@selector(stopLoading) withObject:nil afterDelay:1.0];
     }
@@ -1478,6 +1489,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.myActivityArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
     
     [self.myActivityTable reloadData];
+    
+    if (self.currentMiddle == 3) {
+        if ([self.myActivityArray count] > 0) {
+            [self performSelectorInBackground:@selector(updateWasViewed) withObject:nil];
+        }
+    }
 }
 
 
@@ -1844,6 +1861,183 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     
 }
+
+
+-(void)updateWasViewed{
+    
+	@autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        
+        for (int i = 0; i < [self.myActivityArray count]; i++) {
+            
+            NSString *sendTeamId = @"";
+            NSString *sendThreadId = @"";
+            
+            if ([[self.myActivityArray objectAtIndex:i] class] == [MessageThreadInbox class]) {
+                MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:i];
+                
+                sendTeamId = messageOrPoll.teamId;
+                sendThreadId = messageOrPoll.threadId;
+                
+                if (!messageOrPoll.wasViewed) {
+                    NSDictionary *response = [ServerAPI updateMessageThread:token :sendTeamId :sendThreadId :@"" :@"true" :@"" :@"" :@""];
+                    if ([response valueForKey:@"status"] != nil) {
+                        
+                    }
+                }
+            }
+            
+
+          
+            
+        }
+        
+    }
+
+	
+}
+
+-(void)viewScore{
+    
+    homeScoreView.view.hidden = NO;
+    
+    homeScoreView.homeSuperView = nil;
+    homeScoreView.teamName = @"Team Name";
+    homeScoreView.scoreUs = @"15";
+    homeScoreView.scoreThem = @"13";
+    homeScoreView.interval = @"-1";
+    
+    homeScoreView.eventDate = @"";
+    homeScoreView.eventDescription = @"";
+    homeScoreView.eventStringDate = @"";
+    
+    
+    //homeScoreView.teamId = tmp.teamId;
+    homeScoreView.participantRole = @"creator";
+    //homeScoreView.eventId = tmp.eventId;
+    homeScoreView.sport = @"Basketball";
+    
+    
+    [homeScoreView setLabels];
+    
+    [self moveDivider];
+
+    
+}
+
+-(void)moveDivider{
+    
+    //if (self.isMoreShowing) {
+        /*
+        self.showLessButton.hidden = YES;
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        
+        self.bottomBar.hidden = NO;
+        [self.view bringSubviewToFront:self.bottomBar];
+        [self.view bringSubviewToFront:self.postImageBackView];
+        
+        
+        CGRect frame = self.happeningNowView.frame;
+        if (self.bannerIsVisible) {
+            frame.origin.y = 201;
+        }else{
+            frame.origin.y = 251;
+        }
+        self.happeningNowView.frame = frame;
+        
+        
+        CGRect frame1 = self.homeAttendanceView.view.frame;
+        if (self.bannerIsVisible) {
+            frame1.origin.y = 322;
+        }else{
+            frame1.origin.y = 372;
+        }
+        self.homeAttendanceView.view.frame = frame1;
+        
+        CGRect frame2 = self.homeScoreView.view.frame;
+        if (self.bannerIsVisible) {
+            frame2.origin.y = 322;
+        }else{
+            frame2.origin.y = 372;
+        }
+        self.homeScoreView.view.frame = frame2;
+        [self.homeScoreView doReset];
+        
+        
+        [UIView commitAnimations];
+        
+        [self performSelector:@selector(hide) withObject:nil afterDelay:1.0];
+        
+        self.isMoreShowing = NO;
+        
+        self.isGameVisible = false;
+        */
+    //}else{
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        
+        int init = 0;
+        bool isAd = false;
+        if (self.bannerIsVisible) {
+            init = 50;
+            isAd = true;
+        }
+        
+ 
+        
+        
+        
+        
+        
+        CGRect frame2 = self.homeScoreView.view.frame;
+        frame2.origin.y = 121;
+        if (isAd) {
+            frame2.size.height = 245;
+        }else{
+            frame2.size.height = 295;
+        }
+        self.homeScoreView.view.frame = frame2;
+        
+        if (self.homeScoreView.view.hidden == NO) {
+            
+            self.homeScoreView.isFullScreen = true;
+            [self.homeScoreView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
+            
+            CGRect frame = self.homeScoreView.view.frame;
+            frame.origin.y = 0;
+            frame.size.height += 121;
+            self.homeScoreView.view.frame = frame;
+            
+        }
+        
+        
+        
+        
+        [UIView commitAnimations];
+        
+        homeScoreView.initY = init;
+        
+        if (self.bannerIsVisible){
+            [self.view bringSubviewToFront:myAd];
+            
+        }
+        
+        
+        
+   // }
+    
+    
+}
+
 
 - (void)viewDidUnload
 {

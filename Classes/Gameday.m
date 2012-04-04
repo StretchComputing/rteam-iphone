@@ -611,7 +611,7 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
     
     self.intervalLabel.text = time1;
 
-	[self.view bringSubviewToFront:self.intervalLabel];
+	//[self.view bringSubviewToFront:self.intervalLabel];
     
 	if ([[self.sport lowercaseString] isEqualToString:@"lacrosse"]) {
 		self.orOtherInterval.hidden = NO;

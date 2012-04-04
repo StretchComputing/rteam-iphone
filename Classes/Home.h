@@ -42,6 +42,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 @property bool postImageIsCoord;
 @property (nonatomic, strong) NSMutableArray *postImageEvents;
 
+@property bool isGameVisible;
 
 @property (nonatomic, strong) NSData *imageDataToSend;
 @property (nonatomic, strong) NSString *sendOrientation;

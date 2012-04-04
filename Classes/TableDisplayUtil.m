@@ -15,6 +15,7 @@
 #import "MessageThreadOutbox.h"
 #import "rTeamAppDelegate.h"
 #import "ReplyButtonBackView.h"
+#import "ScoreButton.h"
 
 @implementation TableDisplayUtil
 
@@ -62,6 +63,8 @@
     UIView *replyTextView = (UIView *)[cell.contentView viewWithTag:18];
     UIView *replySeparator = (UIView *)[cell.contentView viewWithTag:19];
     UIImageView *arrowView = (UIImageView *)[cell.contentView viewWithTag:20];
+    UIView *scoreView = (UIImageView *)[cell.contentView viewWithTag:21];
+
 
 
     
@@ -87,6 +90,7 @@
     replyTextView.autoresizingMask = UIViewAutoresizingNone;
     replySeparator.autoresizingMask = UIViewAutoresizingNone;
     arrowView.autoresizingMask = UIViewAutoresizingNone;
+    scoreView.autoresizingMask = UIViewAutoresizingNone;
 
     
     messageText.font = [UIFont fontWithName:@"Helvetica" size:14];
@@ -115,6 +119,7 @@
     
     replySeparator.backgroundColor = [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:190.0/255.0 alpha:1.0];
 
+    scoreView.backgroundColor = [UIColor clearColor];
     
     if ([arrayToUse count] == 0) {
         
@@ -129,6 +134,7 @@
         starThree.hidden = YES;
         replyBackView.hidden = YES;
         arrowView.hidden = YES;
+        scoreView.hidden = YES;
  
         
         
@@ -148,6 +154,7 @@
         starTwo.hidden = NO;
         starThree.hidden = NO;
         teamLabel.hidden = NO;
+        scoreView.hidden = NO;
 
         replyBackView.hidden = YES;
 
@@ -209,7 +216,12 @@
         int imageStart = 41 + messageText.frame.size.height;
         int replyStart = 47 + messageText.frame.size.height;
 
-        
+        if ([result.activityText length] > 12) {
+            if ([[result.activityText substringToIndex:11] isEqualToString:@"Final score"]) {
+                imageStart = 41 + 90;
+                replyStart = 47 + 90;
+            }
+        }
  
         //Inside Image 
         NSString *tmpThumbnail = [mainDelegate.messageImageDictionary valueForKey:result.activityId];
@@ -571,10 +583,58 @@
         
         }
         
+
+        scoreView.hidden = YES;
+        
+        for (UIView *subview in [scoreView subviews]) {
+            [subview removeFromSuperview];
+        }
+        
+        if ([result.activityText length] > 12) {
+            if ([[result.activityText substringToIndex:11] isEqualToString:@"Final score"]) {
+                scoreView.hidden = NO;
+                messageText.text = @"Game Over!  Final Score:";
+                                
+                NSRange first = [result.activityText rangeOfString:@"="];
+                first.location++;
+                first.length++;
+                
+                NSRange second = [result.activityText rangeOfString:@"=" options:NSBackwardsSearch];
+                second.location++;
+                second.length++;
+                
+                if ((second.location + second.length) > [result.activityText length]) {
+                    second.length = [result.activityText length] - second.location;
+                }
+                
+                NSString *scoreUs = [result.activityText substringWithRange:first];
+                NSString *scoreThem = [result.activityText substringWithRange:second];
+                
+
+
+                
+                scoreUs =  [scoreUs stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                scoreThem = [scoreThem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
+                scoreView.frame = CGRectMake(55, 70, 92, 55);
+                
+                ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(0, 0, 92, 55)];
+                
+                [tmp1Button addTarget:sentClass action:@selector(viewScore) forControlEvents:UIControlEventTouchUpInside];
+
+                tmp1Button.yesCount.text = scoreUs;
+                tmp1Button.noCount.text = scoreThem;
+                                        
+                tmp1Button.qLabel.text = @"F";
+                
+                [scoreView addSubview:tmp1Button];
+            }
+        }
         
 
     }
 
+    
     return cell;
     
     
@@ -596,12 +656,16 @@
         
         NSString *lengthMessage = result.activityText;
         
-        int messageHeight = [TableDisplayUtil findHeightForString:lengthMessage withWidth:245];
-        
-      
+        int messageHeight = [TableDisplayUtil findHeightForString:lengthMessage withWidth:245];      
    
         
         int messageTotal = messageHeight + 15;
+        
+        if ([result.activityText length] > 12) {
+            if ([[result.activityText substringToIndex:11] isEqualToString:@"Final score"]) {
+                messageTotal = 90;
+            }
+        }
         
         int imageHeight = 0;
         
@@ -706,6 +770,9 @@
     UIImageView *starThree = (UIImageView *)[cell.contentView viewWithTag:8];
     UIView *imageBack = (UIView *)[cell.contentView viewWithTag:14];
     ImageButton *insideImageView = (ImageButton *)[cell.contentView viewWithTag:11];
+    UIView *scoreView = (UIImageView *)[cell.contentView viewWithTag:21];
+
+    scoreView.hidden = YES;
     
     UIView *replyBackView = (UIView *)[cell.contentView viewWithTag:15];
 
@@ -1216,5 +1283,9 @@
     }
     
 }
+
+
+
+
 
 @end

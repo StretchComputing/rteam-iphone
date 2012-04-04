@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <iAd/iAd.h>
+#import "HomeScoreView.h"
 
 @interface NewActivity : UIViewController <UIScrollViewDelegate, ADBannerViewDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource>{
     
 
 }
-
+@property (nonatomic, strong) HomeScoreView *homeScoreView;
 @property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) NSMutableArray *activityImageObjects;
 @property (nonatomic, strong) IBOutlet UIView *swipeAlert;
@@ -85,4 +86,6 @@
 -(void)refresh;
 -(int)findHeightForString:(NSString *)message withWidth:(int)width;
 -(IBAction)cancelSwipe;
+
+-(void)moveDivider;
 @end

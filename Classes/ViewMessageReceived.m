@@ -84,7 +84,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
 	
 	if (!self.wasViewed) {
 		
-		[self performSelectorInBackground:@selector(updateWasViewed) withObject:nil];	 	
+		//[self performSelectorInBackground:@selector(updateWasViewed) withObject:nil];	 	
 	}
 	
 	self.title = @"Message";

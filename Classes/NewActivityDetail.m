@@ -19,9 +19,10 @@
 #import "Activity.h"
 #import "Base64.h"
 #import "ReplyButtonBackView.h"
+#import "ScoreButton.h"
 
 @implementation NewActivityDetail
-@synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel, isVideo, replyButton, editButton, deleteButton, errorLabel, isCurrentUser, fromReplyEdit;
+@synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel, isVideo, replyButton, editButton, deleteButton, errorLabel, isCurrentUser, fromReplyEdit, teamName;
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -138,10 +139,18 @@
     timeLabel.textAlignment = UITextAlignmentCenter;
     [self.myScrollView addSubview:timeLabel];
     
+    //TeamNae
+    UILabel *teamLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, timeY + 20, 255, 17)];
+    teamLabel.font = [UIFont fontWithName:@"Helvetica" size:16];
+    teamLabel.text = self.teamName;
+    teamLabel.textColor = [UIColor blueColor];
+    teamLabel.textAlignment = UITextAlignmentCenter;
+    [self.myScrollView addSubview:teamLabel];
+    
     //Display Message   
     int height = [self findHeightForStringBigger:self.displayMessage withWidth:225];
     
-    UITextView *displayText = [[UITextView alloc] initWithFrame:CGRectMake(65, timeY + 13, 245, height+20)];
+    UITextView *displayText = [[UITextView alloc] initWithFrame:CGRectMake(65, timeY + 33, 245, height+20)];
     displayText.editable = NO;
     displayText.scrollEnabled = NO;
     displayText.textColor = [UIColor blackColor];
@@ -163,14 +172,29 @@
         currentHeight = 90;
     }else{
         //currentHeight = height + 51;
-        currentHeight = height + timeY + 33;
+        currentHeight = height + timeY + 33 + 20;
         
     }
     
+    NSString *starImageOne = @"";
+    NSString *starImageTwo = @"";
+    NSString *starImageThree = @"";
+    
+    
     //Likes
-    NSString *starImageOne = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
-    NSString *starImageTwo = [TableDisplayUtil getStarSize:2 :self.numLikes :self.numDislikes];
-    NSString *starImageThree = [TableDisplayUtil getStarSize:3 :self.numLikes :self.numDislikes];
+    @try {
+        starImageOne = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
+        starImageTwo = [TableDisplayUtil getStarSize:2 :self.numLikes :self.numDislikes];
+        starImageThree = [TableDisplayUtil getStarSize:3 :self.numLikes :self.numDislikes];
+    }
+    @catch (NSException *exception) {
+       starImageOne = @"emptyStar.png";
+       starImageTwo = @"emptyStar.png";
+       starImageThree = @"emptyStar.png";
+
+    }
+   
+   
     
     starOne.contentMode = UIViewContentModeScaleAspectFit;
     starThree.contentMode = UIViewContentModeScaleAspectFit;
@@ -243,7 +267,6 @@
         myImage.layer.masksToBounds = YES;
         myImage.layer.cornerRadius = 4.0;
         
-        
         insideImageView.frame = CGRectMake(52, currentHeight, 82, 82);
         insideImageView.backgroundColor = [UIColor clearColor];
         
@@ -254,6 +277,13 @@
         currentHeight += 90;
     }
 
+    if ([self.displayMessage length] > 12) {
+        if ([[self.displayMessage substringToIndex:11] isEqualToString:@"Final score"]) {
+            
+            currentHeight+=50;
+        }
+    }
+    
     //Replies
     self.commentBackground = [[UIView alloc] initWithFrame:CGRectMake(10, currentHeight, 300, 23)];
     
@@ -264,12 +294,13 @@
     
     NSArray *replyArray = [mainDelegate.replyDictionary valueForKey:self.messageId];
     
+    int totalImgAdjust = 0;
+
+    
     if ([replyArray count] > 0) {
         
         self.commentBackground.hidden = NO;
-        
-        int totalImgAdjust = 0;
-        
+                
         for (int i = 0; i < [replyArray count]; i++) {
             
             Activity *theReply = [replyArray objectAtIndex:i];
@@ -476,11 +507,58 @@
         
         currentHeight += self.commentBackground.frame.size.height + 5;
         
+  
+
+        
+        
+        
     }else{
         self.commentBackground.hidden = YES;
         
     }
 
+    if ([self.displayMessage length] > 12) {
+        if ([[self.displayMessage substringToIndex:11] isEqualToString:@"Final score"]) {
+            
+            displayText.text = @"Game Over!  Final Score:";
+            
+            NSRange first = [self.displayMessage rangeOfString:@"="];
+            first.location++;
+            first.length++;
+            
+            NSRange second = [self.displayMessage rangeOfString:@"=" options:NSBackwardsSearch];
+            second.location++;
+            second.length++;
+            
+            if ((second.location + second.length) > [self.displayMessage length]) {
+                second.length = [self.displayMessage length] - second.location;
+            }
+            
+            NSString *scoreUs = [self.displayMessage substringWithRange:first];
+            NSString *scoreThem = [self.displayMessage substringWithRange:second];
+            
+            
+            UIView *scoreView = [[UIView alloc] initWithFrame:CGRectMake(110, 75, 92, 55)];
+            
+            scoreUs =  [scoreUs stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            scoreThem = [scoreThem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                        
+            ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(0, 0, 92, 55)];
+            
+            //[tmp1Button addTarget:sentClass action:@selector(viewScore) forControlEvents:UIControlEventTouchUpInside];
+            
+            tmp1Button.yesCount.text = scoreUs;
+            tmp1Button.noCount.text = scoreThem;
+            
+            tmp1Button.qLabel.text = @"F";
+            
+            [scoreView addSubview:tmp1Button];
+            
+            [self.myScrollView addSubview:scoreView];
+            
+        }
+    }
+    
     
     currentHeight = currentHeight + 20;
     [self.myScrollView setContentSize:CGSizeMake(320, currentHeight)];
@@ -696,9 +774,23 @@
 	
 	if (self.voteSuccess) {
 		
-        NSString *starImageOne = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
-        NSString *starImageTwo = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
-        NSString *starImageThree = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
+        NSString *starImageOne = @"";
+        NSString *starImageTwo = @"";
+        NSString *starImageThree = @"";
+        
+        
+        //Likes
+        @try {
+            starImageOne = [TableDisplayUtil getStarSize:1 :self.numLikes :self.numDislikes];
+            starImageTwo = [TableDisplayUtil getStarSize:2 :self.numLikes :self.numDislikes];
+            starImageThree = [TableDisplayUtil getStarSize:3 :self.numLikes :self.numDislikes];
+        }
+        @catch (NSException *exception) {
+            starImageOne = @"emptyStar.png";
+            starImageTwo = @"emptyStar.png";
+            starImageThree = @"emptyStar.png";
+            
+        }
         
         starOne.contentMode = UIViewContentModeScaleAspectFit;
         starThree.contentMode = UIViewContentModeScaleAspectFit;

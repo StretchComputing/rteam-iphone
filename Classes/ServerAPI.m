@@ -3595,7 +3595,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
         
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-		        
+		                
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -3878,6 +3878,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
         
         
 		NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
+                
                 
 		NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/team/"];
 		tmpUrl = [tmpUrl stringByAppendingString:teamId];

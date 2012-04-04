@@ -139,6 +139,15 @@
 
     }
     
+    if ([self.participantRole isEqualToString:@"fan"]) {
+        self.statusReply.hidden = YES;
+        self.statusButton.hidden = YES;
+        
+    }else{
+        self.statusButton.hidden = NO;
+        self.statusReply.hidden = NO;
+    }
+    
 }
 
 

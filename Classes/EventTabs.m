@@ -68,7 +68,7 @@
 	tab3.teamId = self.teamId;
 	tab3.eventId = self.eventId;
 	tab3.title = @"Attendance";
-	tab3.tabBarItem.image = [UIImage imageNamed:@"attendance.png"];
+	tab3.tabBarItem.image = [UIImage imageNamed:@"attendance_small.png"];
 	
 	
 	self.viewControllers = [NSArray arrayWithObjects:tab1, tab3, nil]; 

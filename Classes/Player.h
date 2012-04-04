@@ -34,7 +34,7 @@ MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
 @property bool didHideMessage;
 @property bool isEmailConfirmed;
 @property (nonatomic, strong, getter = theNewPhoneAlert) UIAlertView *newPhoneAlert;
-@property (nonatomic, strong) NSString *initPhone;
+@property (nonatomic, strong, getter = initialPhone, setter = initialPhone:) NSString *initPhone;
 @property int scenario;
 @property (nonatomic, strong) UIAlertView *callTextWhoAlertView;
 @property (nonatomic, strong) NSString *callOrTextWho;

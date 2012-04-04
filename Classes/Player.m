@@ -46,7 +46,15 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 
 -(void)viewDidLoad{
-
+    
+    
+    self.firstEdit.text = @"";
+    self.lastEdit.text = @"";
+    self.jerseyEdit.text = @"";
+    self.emailEdit.text = @"";
+    self.mobileEdit.text = @"";
+    
+    
     self.initPhone = @"";
 	self.playerInfo = [NSDictionary dictionary];
     self.phoneOnlyArray = [NSMutableArray array];

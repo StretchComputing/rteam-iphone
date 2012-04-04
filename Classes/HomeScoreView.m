@@ -16,6 +16,7 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "GANTracker.h"
+#import "NewActivity.h"
 
 @implementation HomeScoreView
 @synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView;
@@ -111,34 +112,42 @@
 -(void)fullScreen{
     
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:1.0];
-        
-    if (self.isFullScreen) {
-        self.isFullScreen = false;
-        [self.fullScreenButton setImage:[UIImage imageNamed:@"fullScreen.jpeg"] forState:UIControlStateNormal];
-
-        CGRect frame = self.view.frame;
-        frame.origin.y = 121;
-        frame.size.height -= 121;
-        self.view.frame = frame;
-        
-        if (self.isKeepingScore) {
-            [self keepScore];
-        }
-
-
+    if (self.homeSuperView == nil) {
+        self.view.hidden = YES;
     }else{
-        self.isFullScreen = true;
-        [self.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        if (self.isFullScreen) {
+            self.isFullScreen = false;
+            [self.fullScreenButton setImage:[UIImage imageNamed:@"fullScreen.jpeg"] forState:UIControlStateNormal];
+            
+            CGRect frame = self.view.frame;
+            frame.origin.y = 121;
+            frame.size.height -= 121;
+            self.view.frame = frame;
+            
+            if (self.isKeepingScore) {
+                [self keepScore];
+            }
+            
+            
+        }else{
+            self.isFullScreen = true;
+            [self.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
+            
+            CGRect frame = self.view.frame;
+            frame.origin.y = 0;
+            frame.size.height += 121;
+            self.view.frame = frame;
+        }
+        
+        [UIView commitAnimations];
 
-        CGRect frame = self.view.frame;
-        frame.origin.y = 0;
-        frame.size.height += 121;
-        self.view.frame = frame;
+        
     }
-    
-    [UIView commitAnimations];
+   
 }
 
 -(void)keepScore{
@@ -234,8 +243,7 @@
             fans.teamId = self.teamId;
             fans.userRole = self.participantRole;
             fans.gameId = self.eventId;
-            
-            
+                        
             UINavigationController *navController = [[UINavigationController alloc] init];
             
             [navController pushViewController:currentGameTab animated:YES];
@@ -246,6 +254,11 @@
             
             if ([mainViewController class] == [Home class]) {
                 Home *tmp = (Home *)mainViewController;
+                [tmp.navigationController presentModalViewController:navController animated:YES];
+                
+            }
+            if ([mainViewController class] == [NewActivity class]) {
+                NewActivity *tmp = (NewActivity *)mainViewController;
                 [tmp.navigationController presentModalViewController:navController animated:YES];
                 
             }
@@ -279,17 +292,20 @@
             [navController pushViewController:currentGameTab animated:YES];
             
             navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-            
-            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-            
+                    
             id mainViewController = [self.view.superview nextResponder];
             
             if ([mainViewController class] == [Home class]) {
                 Home *tmp = (Home *)mainViewController;
                 [tmp.navigationController presentModalViewController:navController animated:YES];
                 
-            }
+            } 
             
+            if ([mainViewController class] == [NewActivity class]) {
+                NewActivity *tmp = (NewActivity *)mainViewController;
+                [tmp.navigationController presentModalViewController:navController animated:YES];
+                
+            }
         }
         
         

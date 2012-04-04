@@ -47,9 +47,11 @@
     NSDate *crashDetectDate;
     NSData *crashStackData;
     NSString *crashInstanceUrl;
+    
 	
 }
 
+@property (nonatomic, strong) NSString *lastPostTeamId;
 @property (nonatomic, strong) NSMutableDictionary *replyDictionary;
 @property (nonatomic, strong) NSMutableDictionary *messageImageDictionary;
 

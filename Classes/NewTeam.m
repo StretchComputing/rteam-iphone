@@ -1448,9 +1448,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			//Create the team in a background thread
 			self.theTeamName = [NSString stringWithString:self.teamName.text];
-            
-            NSError *errors;
-            
+                        
 			[self performSelectorInBackground:@selector(runRequest) withObject:nil];
 			
 		}else {

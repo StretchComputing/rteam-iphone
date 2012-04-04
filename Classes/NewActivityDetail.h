@@ -10,6 +10,7 @@
 
 @interface NewActivityDetail : UIViewController
 
+@property (nonatomic, strong) NSString *teamName;
 @property (nonatomic, strong) NSString *fromReplyEdit;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *deleteButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *replyButton;

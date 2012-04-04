@@ -41,8 +41,8 @@
 @property bool guard2SmsConfirmed;
 
 @property (nonatomic, strong) NSString *teamName;
-@property (nonatomic, strong) NSString *initGuard1Phone;
-@property (nonatomic, strong) NSString *initGuard2Phone;
+@property (nonatomic, strong, getter = initialGuard1Phone, setter = initialGuard1Phone:) NSString *initGuard1Phone;
+@property (nonatomic, strong, getter = initialGuard2Phone, setter = initialGuard2Phone:) NSString *initGuard2Phone;
 @property (nonatomic, strong) NSMutableArray *phoneOnlyArray;
 @property (nonatomic, strong) IBOutlet UILabel *confirmedLabel;
 

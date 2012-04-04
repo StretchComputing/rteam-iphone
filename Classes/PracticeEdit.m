@@ -66,7 +66,13 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 	
 	[dateFormat setDateFormat:@"MMM dd, hh:mm aa"];
 	
-	self.practiceDate.text = [@"Date: " stringByAppendingString:[dateFormat stringFromDate:self.practiceDateObject]];
+    @try {
+        self.practiceDate.text = [@"Date: " stringByAppendingString:[dateFormat stringFromDate:self.practiceDateObject]];
+    }
+    @catch (NSException *exception) {
+        self.practiceDate.text = @"";
+    }
+  
 	
 }
 

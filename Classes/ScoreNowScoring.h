@@ -60,8 +60,8 @@
 @property (nonatomic, strong) NSString *theScoreUs;
 
 @property bool isCoord;
-@property (nonatomic, strong) NSString *initScoreUs;
-@property (nonatomic, strong) NSString *initScoreThem;
+@property (nonatomic, strong, getter = initialScoreUs, setter = initialScoreUs:) NSString *initScoreUs;
+@property (nonatomic, strong, getter = initialScoreThem, setter = initialScoreThem:) NSString *initScoreThem;
 @property (nonatomic, strong) NSString *interval;
 @property bool createSuccess;
 
