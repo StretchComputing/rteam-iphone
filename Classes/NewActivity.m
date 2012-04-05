@@ -2060,8 +2060,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)dealloc{
-    myAd.delegate = nil;
-    myAd = nil;
+    @try {
+        myAd.delegate = nil;
+        myAd = nil;
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"NewActivity.m - dealloc()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+   
+  
 }
 
 @end
