@@ -31,6 +31,7 @@
 #import "NewActivityImageObject.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "GoogleAppEngine.h"
 
 #define REFRESH_HEADER_HEIGHT 52.0f
 
@@ -645,38 +646,38 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [self performSelector:@selector(deselect:) withObject:indexPath afterDelay:1.0];
     
-	NSUInteger row = [indexPath row];
-    
-    if (tableView == self.allActivityTable) {
+	@try {
+        NSUInteger row = [indexPath row];
         
-        [TraceSession addEventToSession:@"Activity Page - Activity Row Clicked"];
-
-        
-        if ([[self.activityArray objectAtIndex:row] class] == [Activity class]) {
+        if (tableView == self.allActivityTable) {
             
-            Activity *tmpActivity = [self.activityArray objectAtIndex:row];
-			
-
+            [TraceSession addEventToSession:@"Activity Page - Activity Row Clicked"];
+            
+            if ([[self.activityArray objectAtIndex:row] class] == [Activity class]) {
+                
+                Activity *tmpActivity = [self.activityArray objectAtIndex:row];
+                
+                
                 
                 NewActivityDetail *theMessage = [[NewActivityDetail alloc] init];
                 
-            
-            theMessage.displayName = @"rTeam";
-
-            if (tmpActivity.senderName != nil) {
-                theMessage.displayName = tmpActivity.senderName;
-            }
+                
+                theMessage.displayName = @"rTeam";
+                
+                if (tmpActivity.senderName != nil) {
+                    theMessage.displayName = tmpActivity.senderName;
+                }
                 theMessage.displayTime = [TableDisplayUtil getDateLabel:tmpActivity.createdDate]; 
                 theMessage.displayMessage = tmpActivity.activityText;
                 theMessage.messageId = tmpActivity.activityId;
                 theMessage.teamId = tmpActivity.teamId;
-            theMessage.teamName = tmpActivity.teamName;
+                theMessage.teamName = tmpActivity.teamName;
                 theMessage.numLikes = tmpActivity.numLikes;
                 theMessage.numDislikes = tmpActivity.numDislikes;
-                            
+                
                 theMessage.currentVote = tmpActivity.vote;
                 theMessage.isVideo = tmpActivity.isVideo;
-            theMessage.isCurrentUser = tmpActivity.isCurrentUser;
+                theMessage.isCurrentUser = tmpActivity.isCurrentUser;
                 //theMessage.likes = [NSArray arrayWithArray:messageSelected.likedBy];
                 //theMessage.replies = [NSArray arrayWithArray:messageSelected.replies];
                 //theMessage.tags = [NSArray arrayWithArray:messageSelected.tags];
@@ -687,177 +688,184 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 }else{
                     theMessage.postImageArray = [NSMutableArray array];
                 }
-          
+                
                 
                 //Profile Image
                 theMessage.picImageData = [NSData data];
                 
-         
+                
+                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Activity Everyone - Row Selected"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                
+                [self.navigationController pushViewController:theMessage animated:YES];
+                
+                
+                
+                
+            }else{
+                //Polls
+                
+            }
+            
+        }else{
+            //my
+            
+            [TraceSession addEventToSession:@"Activity Page - Me Row Clicked"];
+            
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                 action:@"Activity Everyone - Row Selected"
+                                                 action:@"My Activity - Row Selected"
                                                   label:mainDelegate.token
                                                   value:-1
                                               withError:nil]) {
             }
             
-                [self.navigationController pushViewController:theMessage animated:YES];
-                
-
-    
             
-        }else{
-            //Polls
-            
-        }
-        
-    }else{
-        //my
-        
-        [TraceSession addEventToSession:@"Activity Page - Me Row Clicked"];
-
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                             action:@"My Activity - Row Selected"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:nil]) {
-        }
-        
-        
-        if ([[self.myActivityArray objectAtIndex:row] class] == [MessageThreadInbox class]) {
-			MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:row];
-			
-			if ([messageOrPoll.pollChoices count] > 0) {
-				ViewPollReceived *poll = [[ViewPollReceived alloc] init];
+            if ([[self.myActivityArray objectAtIndex:row] class] == [MessageThreadInbox class]) {
+                MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:row];
                 
-				poll.teamId = messageOrPoll.teamId;
-				poll.threadId = messageOrPoll.threadId;
-				poll.pollChoices = messageOrPoll.pollChoices;
-				poll.from = messageOrPoll.senderName;
-				poll.subject = messageOrPoll.subject;
-				poll.body = messageOrPoll.body;
-				poll.teamName = messageOrPoll.teamName;
-				
-				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-				[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-				NSDate *tmpDate = [dateFormat dateFromString:messageOrPoll.createdDate];
-				[dateFormat setDateFormat:@"MMM dd, yyyy hh:mm aa"];
-				poll.receivedDate = [dateFormat stringFromDate:tmpDate];
-				
-				poll.wasViewed = messageOrPoll.wasViewed;
-
-				poll.status = messageOrPoll.status;
-                poll.fromClass = self;
-
-               
-                
-				[self.navigationController pushViewController:poll animated:YES];
-			}else {
-				
-                
-                
-                ViewMessageReceived *message = [[ViewMessageReceived alloc] init];
-				message.fromClass = self;
-                
-                message.subject = messageOrPoll.subject;
-                message.body = messageOrPoll.body;
-                message.userRole = messageOrPoll.participantRole;
-                message.teamId = messageOrPoll.teamId;
-                
-                message.confirmStatus = messageOrPoll.status;
-
-                message.receivedDate = messageOrPoll.createdDate;
-                
-                message.wasViewed = messageOrPoll.wasViewed;
-                message.threadId = messageOrPoll.threadId;
-                message.senderId = messageOrPoll.senderId;
-                message.senderName = messageOrPoll.senderName;
-                message.teamName = messageOrPoll.teamName;
-              
-                
-                
-                [self.navigationController pushViewController:message animated:YES];
-                
-				
-				
-			}
-            
-        }else{
-            //Outbox
-        
-            MessageThreadOutbox *message = [self.myActivityArray objectAtIndex:row];
-                        
-            if ([message.messageType isEqualToString:@"poll"] || [message.messageType isEqualToString:@"whoiscoming"]) {
-                                
-                ViewPollSent *tmp = [[ViewPollSent alloc] init];
-                tmp.fromClass = self;
-                tmp.teamId = message.teamId;
-                
-                tmp.messageThreadId = message.threadId;
-                tmp.teamName = message.teamName;
-                NSString *recipients = message.numRecipients;
-                NSString *replies = message.numReplies;
-                
-                if (recipients == nil) {
-                    recipients = @"0";
-                }
-                if (replies == nil) {
-                    replies = @"0";
-                }
-                
-                if ([message.status isEqualToString:@"finalized"]) {
-                    tmp.replyFraction = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people replied."];
+                if ([messageOrPoll.pollChoices count] > 0) {
+                    ViewPollReceived *poll = [[ViewPollReceived alloc] init];
+                    
+                    poll.teamId = messageOrPoll.teamId;
+                    poll.threadId = messageOrPoll.threadId;
+                    poll.pollChoices = messageOrPoll.pollChoices;
+                    poll.from = messageOrPoll.senderName;
+                    poll.subject = messageOrPoll.subject;
+                    poll.body = messageOrPoll.body;
+                    poll.teamName = messageOrPoll.teamName;
+                    
+                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+                    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+                    NSDate *tmpDate = [dateFormat dateFromString:messageOrPoll.createdDate];
+                    [dateFormat setDateFormat:@"MMM dd, yyyy hh:mm aa"];
+                    poll.receivedDate = [dateFormat stringFromDate:tmpDate];
+                    
+                    poll.wasViewed = messageOrPoll.wasViewed;
+                    
+                    poll.status = messageOrPoll.status;
+                    poll.fromClass = self;
+                    
+                    
+                    
+                    [self.navigationController pushViewController:poll animated:YES];
                 }else {
-                    tmp.replyFraction = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people have replied."];
-                }
-   
-             
-                
-                
-                [self.navigationController pushViewController:tmp animated:YES];
-
-                
-                
-                
-            }else {
-                
-                ViewMessageSent *viewMessage = [[ViewMessageSent alloc] init];
-                
-                viewMessage.fromClass = self;
-                viewMessage.subject = message.subject;
-                viewMessage.body = message.body;
-                viewMessage.threadId = message.threadId;
-                viewMessage.createdDate = message.createdDate;
-                viewMessage.teamName = message.teamName;
-                viewMessage.teamId = message.teamId;
-
-                
-                NSString *recipients = message.numRecipients;
-                NSString *replies = message.numReplies;
-                
-                
-                if (recipients == nil) {
-                    recipients = @"0";
-                }
-                if (replies == nil) {
-                    replies = @"0";
+                    
+                    
+                    
+                    ViewMessageReceived *message = [[ViewMessageReceived alloc] init];
+                    message.fromClass = self;
+                    
+                    message.subject = messageOrPoll.subject;
+                    message.body = messageOrPoll.body;
+                    message.userRole = messageOrPoll.participantRole;
+                    message.teamId = messageOrPoll.teamId;
+                    
+                    message.confirmStatus = messageOrPoll.status;
+                    
+                    message.receivedDate = messageOrPoll.createdDate;
+                    
+                    message.wasViewed = messageOrPoll.wasViewed;
+                    message.threadId = messageOrPoll.threadId;
+                    message.senderId = messageOrPoll.senderId;
+                    message.senderName = messageOrPoll.senderName;
+                    message.teamName = messageOrPoll.teamName;
+                    
+                    
+                    
+                    [self.navigationController pushViewController:message animated:YES];
+                    
+                    
+                    
                 }
                 
-                NSString *replyString = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people have confirmed."];
+            }else{
+                //Outbox
                 
-                viewMessage.confirmString = replyString;
+                MessageThreadOutbox *message = [self.myActivityArray objectAtIndex:row];
                 
-             
-                
-                [self.navigationController pushViewController:viewMessage animated:YES];
+                if ([message.messageType isEqualToString:@"poll"] || [message.messageType isEqualToString:@"whoiscoming"]) {
+                    
+                    ViewPollSent *tmp = [[ViewPollSent alloc] init];
+                    tmp.fromClass = self;
+                    tmp.teamId = message.teamId;
+                    
+                    tmp.messageThreadId = message.threadId;
+                    tmp.teamName = message.teamName;
+                    NSString *recipients = message.numRecipients;
+                    NSString *replies = message.numReplies;
+                    
+                    if (recipients == nil) {
+                        recipients = @"0";
+                    }
+                    if (replies == nil) {
+                        replies = @"0";
+                    }
+                    
+                    if ([message.status isEqualToString:@"finalized"]) {
+                        tmp.replyFraction = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people replied."];
+                    }else {
+                        tmp.replyFraction = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people have replied."];
+                    }
+                    
+                    
+                    
+                    
+                    [self.navigationController pushViewController:tmp animated:YES];
+                    
+                    
+                    
+                    
+                }else {
+                    
+                    ViewMessageSent *viewMessage = [[ViewMessageSent alloc] init];
+                    
+                    viewMessage.fromClass = self;
+                    viewMessage.subject = message.subject;
+                    viewMessage.body = message.body;
+                    viewMessage.threadId = message.threadId;
+                    viewMessage.createdDate = message.createdDate;
+                    viewMessage.teamName = message.teamName;
+                    viewMessage.teamId = message.teamId;
+                    
+                    
+                    NSString *recipients = message.numRecipients;
+                    NSString *replies = message.numReplies;
+                    
+                    
+                    if (recipients == nil) {
+                        recipients = @"0";
+                    }
+                    if (replies == nil) {
+                        replies = @"0";
+                    }
+                    
+                    NSString *replyString = [[[replies stringByAppendingString:@"/"] stringByAppendingString:recipients] stringByAppendingString:@" people have confirmed."];
+                    
+                    viewMessage.confirmString = replyString;
+                    
+                    
+                    
+                    [self.navigationController pushViewController:viewMessage animated:YES];
+                    
+                }
                 
             }
-   
+            
         }
-        
+
     }
-    
+    @catch (NSException *exception) {
+       
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"NewActivity.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+      
 }
 
 -(NSString *)formatDateString:(NSString *)dateSent{

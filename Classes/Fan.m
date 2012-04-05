@@ -38,6 +38,11 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 
 -(void)viewDidLoad{
 	
+    self.firstEdit.text = @"";
+    self.lastEdit.text = @"";
+    self.mobileEdit.text = @"";
+    self.emailEdit.text = @"";
+    
     self.initPhone = @"";
 	self.playerInfo = [NSDictionary dictionary];
 	
@@ -128,6 +133,13 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 			}
 			
 		}
+        
+        if (self.firstName == nil) {
+            self.firstName = @"";
+        }
+        if (self.lastName == nil) {
+            self.lastName = @"";
+        }
 		
 	
         if ([playerInfo valueForKey:@"emailAddress"] != nil) {
@@ -1041,8 +1053,11 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
                         }
                     }else {
                         
-                        NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                        if ([numbersToCall objectAtIndex:0] != nil) {
+                            NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+                            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                        }
+                      
                     }
                     
                     
@@ -1366,8 +1381,12 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
             }
             
             if (call) {
-                NSString *url = [@"tel://" stringByAppendingString:numberToCall];
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                
+                if (numberToCall != nil) {
+                    NSString *url = [@"tel://" stringByAppendingString:numberToCall];
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                }
+               
                 
             }
             
@@ -1456,8 +1475,11 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
                         
                     }
                 }else { 
-                    NSString *url = [@"sms://" stringByAppendingString:numberToCall];
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                    if (numberToCall != nil) {
+                        NSString *url = [@"sms://" stringByAppendingString:numberToCall];
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                    }
+                   
                 }
                 
                 

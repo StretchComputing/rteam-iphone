@@ -288,6 +288,8 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	NSString *jerseyNumber = [playerInfo valueForKey:@"jerseyNumber"];
 	self.firstName = [playerInfo valueForKey:@"firstName"];
 	self.lastName = [playerInfo valueForKey:@"lastName"];
+        
+     
 		
 	self.nameLabel.text = @"";
 		
@@ -301,6 +303,12 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 		}
 	
+        if (self.firstName == nil) {
+            self.firstName = @"";
+        }
+        if (self.lastName == nil) {
+            self.lastName = @"";
+        }
 	
 	
 	
@@ -819,8 +827,11 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                         }
                     }else {
                         
-                        NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                        if ([numbersToCall objectAtIndex:0] != nil) {
+                            NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+                            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                        }
+                      
                     }
                     
                     
@@ -1957,8 +1968,11 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
             }
             
             if (call) {
-                NSString *url = [@"tel://" stringByAppendingString:numberToCall];
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                if (numberToCall != nil) {
+                    NSString *url = [@"tel://" stringByAppendingString:numberToCall];
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                }
+               
                 
             }
             
@@ -2053,8 +2067,12 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                         
                     }
                 }else { 
-                    NSString *url = [@"sms://" stringByAppendingString:numberToCall];
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                    
+                    if (numberToCall != nil) {
+                        NSString *url = [@"sms://" stringByAppendingString:numberToCall];
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                    }
+                   
                 }
                 
                 
