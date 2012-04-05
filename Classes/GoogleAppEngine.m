@@ -52,7 +52,7 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         
         [tempDictionary setObject:summary forKey:@"summary"];
         [tempDictionary setObject:userName forKey:@"userName"];
-        [tempDictionary setObject:@"3.0" forKey:@"version"];
+        [tempDictionary setObject:@"3.1" forKey:@"version"];
 
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -164,7 +164,7 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         
         [tempDictionary setObject:encodedRecordedData forKey:@"voice"];
         [tempDictionary setObject:recordedUserName forKey:@"userName"];
-        [tempDictionary setObject:@"3.0" forKey:@"version"];
+        [tempDictionary setObject:@"3.1" forKey:@"version"];
 
         //[tempDictionary setObject:instanceUrl forKey:@"instanceUrl"];
         
@@ -238,7 +238,7 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
 
         [tempDictionary setObject:@"exception" forKey:@"logLevel"];
         [tempDictionary setObject:[exception reason]  forKey:@"message"];
-        [tempDictionary setObject:@"3.0" forKey:@"version"];
+        [tempDictionary setObject:@"3.1" forKey:@"version"];
 
         
         NSString *completeStackTrace = @"";
@@ -345,7 +345,7 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
 
         [tempDictionary setObject:mainDelegate.token forKey:@"userName"];
         [tempDictionary setObject:@"rTeam" forKey:@"application"];
-        [tempDictionary setObject:@"3.0" forKey:@"version"];
+        [tempDictionary setObject:@"3.1" forKey:@"version"];
 
        
     

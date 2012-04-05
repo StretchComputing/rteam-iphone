@@ -20,12 +20,19 @@
 
 -(void)viewDidAppear:(BOOL)animated{
 	
-	UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-	picker.delegate = self;
-    
-	picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    @try {
+        UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        [self presentModalViewController:picker animated:YES];
+    }
+    @catch (NSException *exception) {
+        
+    }
+  
 	
-	[self presentModalViewController:picker animated:YES];
 	
 	
 	

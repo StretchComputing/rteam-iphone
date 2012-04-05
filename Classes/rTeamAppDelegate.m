@@ -52,6 +52,7 @@
 #import "GoogleAppEngine.h"
 #import "TraceSession.h"
 #import <CrashReporter/CrashReporter.h>
+#import "GoogleAppEngine.h"
 
 
 @implementation rTeamAppDelegate
@@ -228,9 +229,19 @@
 	//[self updateInterfaceWithReachability: wifiReach];
 
     
+	@try {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge
+                                                                               | UIRemoteNotificationTypeSound)];
+    }
+    @catch (NSException *exception) {
+        if (self.token == nil) {
+            self.token = @"";
+        }
+        
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"rTeamAppDelegate.m - didFinishLaunchingWithOptions" theRecordedDate:[NSDate date] theRecordedUserName:self.token theInstanceUrl:@""];
+        
+    }
 	
-	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge
-                                                                           | UIRemoteNotificationTypeSound)];
     
     
     // JPW added to integrate PLCrashDetector
@@ -311,22 +322,33 @@
         
         if (!thisIsNil) {
             
-            if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                   action:@"Crash Reported"
-                                                    label:mainDelegate.token
-                                                    value:-1
-                                                withError:nil]) {
+            @try {
+                if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                     action:@"Crash Reported"
+                                                      label:mainDelegate.token
+                                                      value:-1
+                                                  withError:nil]) {
+                }
+                
+                // NSLog(@"Crashed on %@", report.systemInfo.timestamp);
+                self.crashSummary = [NSString stringWithFormat:@"Crashed with signal=%@, app version=%@, os version=%@", report.signalInfo.name,
+                                     report.applicationInfo.applicationVersion, report.systemInfo.operatingSystemVersion];
+                // NSLog(@"%@", self.crashSummary);
+                
+                self.crashStackData = [crashReporter loadPendingCrashReportDataAndReturnError: &error];
+                
+                // send crash detect to GAE
+                [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
             }
-            
-            // NSLog(@"Crashed on %@", report.systemInfo.timestamp);
-            self.crashSummary = [NSString stringWithFormat:@"Crashed with signal=%@, app version=%@, os version=%@", report.signalInfo.name,
-                                 report.applicationInfo.applicationVersion, report.systemInfo.operatingSystemVersion];
-            // NSLog(@"%@", self.crashSummary);
-            
-            self.crashStackData = [crashReporter loadPendingCrashReportDataAndReturnError: &error];
-            
-            // send crash detect to GAE
-            [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
+            @catch (NSException *exception) {
+                if (self.token == nil) {
+                    self.token = @"";
+                }
+                
+                [GoogleAppEngine sendExceptionCaught:exception inMethod:@"rTeamAppDelegate.m - handleCrashReport" theRecordedDate:[NSDate date] theRecordedUserName:self.token theInstanceUrl:@""];
+            }
+          
+         
         }else{
             [crashReporter purgePendingCrashReport];
             return;
@@ -387,7 +409,11 @@
 
         }
         @catch (NSException *exception) {
+            if (self.token == nil) {
+                self.token = @"";
+            }
             
+            [GoogleAppEngine sendExceptionCaught:exception inMethod:@"rTeamAppDelegate.m - didReceiveRemoteNotification" theRecordedDate:[NSDate date] theRecordedUserName:self.token theInstanceUrl:@""];
         }
         
      		
@@ -606,7 +632,18 @@
     self.replyDictionary = [NSMutableDictionary dictionary];
     self.messageImageDictionary = [NSMutableDictionary dictionary];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object: [UIApplication sharedApplication]];
+    @try {
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object: [UIApplication sharedApplication]];
+    }
+    @catch (NSException *exception) {
+        if (self.token == nil) {
+            self.token = @"";
+        }
+        
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"rTeamAppDelegate.m - applicationDidReceiveMemoryWarning" theRecordedDate:[NSDate date] theRecordedUserName:self.token theInstanceUrl:@""];
+
+    }
+  
     
 }
 
