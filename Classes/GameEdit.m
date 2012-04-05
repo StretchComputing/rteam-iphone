@@ -19,6 +19,7 @@
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "GoogleAppEngine.h"
 
 @implementation GameEdit
 @synthesize activity, saveChanges, gameOpponent, gameDate, gameDescription, opponent, stringDate, description, teamId, gameId, gameChangeDate, 
@@ -116,23 +117,37 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 		
 	}
 	
-	[activity startAnimating];
-	
-	//Disable the UI buttons and textfields while registering
-	
-	[self.saveChanges setEnabled:NO];
-	[self.gameChangeDate setEnabled:NO];
-	[self.navigationItem.leftBarButtonItem setEnabled:NO];
-	[self.gameOpponent setEnabled:NO];
-	[self.gameDescription setEditable:NO];
-	
-	//Create the team in a background thread
-	
-    self.theGameDescription = [NSString stringWithString:self.gameDescription.text];
-    self.theGameOpponent = [NSString stringWithString:self.gameOpponent.text];
+    @try {
+        [self.activity startAnimating];
+        
+        //Disable the UI buttons and textfields while registering
+        
+        [self.saveChanges setEnabled:NO];
+        [self.gameChangeDate setEnabled:NO];
+        [self.navigationItem.leftBarButtonItem setEnabled:NO];
+        [self.gameOpponent setEnabled:NO];
+        [self.gameDescription setEditable:NO];
+        
+        //Create the team in a background thread
+        
+        if (self.gameDescription.text == nil) {
+            self.gameDescription.text = @"";
+        }
+        if (self.gameOpponent.text == nil) {
+            self.gameOpponent.text = @"";
+        }
+        self.theGameDescription = [NSString stringWithString:self.gameDescription.text];
+        self.theGameOpponent = [NSString stringWithString:self.gameOpponent.text];
+        
+        [self performSelectorInBackground:@selector(runRequest) withObject:nil];
 
-	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
-	
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"GameEdit.m - clickedButtonAtIndex" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+   
+		
 	
 }
 
@@ -222,7 +237,7 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 - (void)didFinish{
 	
 	//When background thread is done, return to main thread
-	[activity stopAnimating];
+	[self.activity stopAnimating];
 	
 	if (self.createSuccess){
 		//team, sent, inbox, game or pracitce

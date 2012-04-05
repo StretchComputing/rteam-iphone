@@ -2389,7 +2389,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeAttendanceView.attendees = [NSArray arrayWithArray:tmp.attendees];
             
             homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
-            homeAttendanceView.currentMemberId = tmp.currentMemberId;
+            
+            if (tmp.currentMemberId == nil) {
+                tmp.currentMemberId = @"";
+            }
+            homeAttendanceView.currentMemberId = [NSString stringWithString:tmp.currentMemberId];
             homeAttendanceView.messageThreadId = tmp.messageThreadId;
 
         
@@ -2450,7 +2454,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
                 
                 homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
-                homeAttendanceView.currentMemberId = tmp.currentMemberId;
+                
+                if (tmp.currentMemberId == nil) {
+                    tmp.currentMemberId = @"";
+                }
+                homeAttendanceView.currentMemberId = [NSString stringWithString:tmp.currentMemberId];
+                
                 homeAttendanceView.messageThreadId = tmp.messageThreadId;
                 homeAttendanceView.eventDescription = tmp.eventDescription;
                 

@@ -23,6 +23,7 @@
 #import "GANTracker.h"
 #import "Home.h"
 #import "CreateNewEventGameday.h"
+#import "GoogleAppEngine.h"
 
 @implementation SelectCalendarEvent
 @synthesize shouldPushAnotherView, allEvents, eventType, dateSelected, error, eventLabel, eventTimeField, removeEventButton, errorLabel, activity,
@@ -69,6 +70,8 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 -(void)viewDidLoad{
 	
+   
+   
 	if ([self.eventType isEqualToString:@"game"]) {
 		self.title = @"Add Game(s)";
 	}else if ([self.eventType isEqualToString:@"practice"]) {
@@ -78,11 +81,19 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 	}
 
-	NSDateFormatter *tmp = [[NSDateFormatter alloc] init];
-	[tmp setDateFormat:@"hh:mm aa"];
-	NSString *tmpDate = @"10:00 AM";
-	NSDate *theDate = [tmp dateFromString:tmpDate];
-	self.timePicker.date = theDate;
+    
+    @try {
+        NSDateFormatter *tmp = [[NSDateFormatter alloc] init];
+        [tmp setDateFormat:@"hh:mm aa"];
+        NSString *tmpDate = @"10:00 AM";
+        NSDate *theDate = [tmp dateFromString:tmpDate];
+        self.timePicker.date = theDate;
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - viewDidLoad" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+	
 
 	NSString *message = @"To add an Event, click a date on the calendar, then enter the Event time.  When you are done, click 'Create' in the upper right corner to create the Events.";
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Creating Events" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -124,100 +135,108 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 - (void)calendarView:(KLCalendarView *)calendarView tappedTile:(KLTile *)aTile{
 	
-	[aTile flash];
-	
-	if(tile == nil){
-		tile = aTile;
-	}
-	else{
-	    //[tile restoreBackgroundColor];
-        [tile performSelector:@selector(restoreBackgroundColor)];
-		tile = aTile;
-	}
-	
-	KLDate *klDateSelected = [aTile date];
-	
-	NSInteger intYear = [klDateSelected yearOfCommonEra];
-	NSInteger intMonth = [klDateSelected monthOfYear];
-	NSInteger intDay = [klDateSelected dayOfMonth];
-	
-	NSString *year = [NSString stringWithFormat:@"%d", intYear];
-	NSString *month = [NSString stringWithFormat:@"%d", intMonth];
-	NSString *day = [NSString stringWithFormat:@"%d", intDay];
-	
-	if ([month length] == 1) {
-		month = [@"0" stringByAppendingString:month];
-	}
-	
-	if ([day length] == 1) {
-		day = [@"0" stringByAppendingString:day];
-	}
-	
-	NSString *stringDate = [NSString stringWithFormat:@"%@-%@-%@", year, month, day];
-	
-	NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-	[dateFormat setDateFormat:@"yyyy-MM-dd"]; 
-	NSDate *formatedDate = [dateFormat dateFromString:stringDate];
-	self.dateSelected = formatedDate;
-	
-	NSDate *todaysDate = [NSDate date];
-    NSString *tempDateToday = [dateFormat stringFromDate:todaysDate];
+    @try {
+        [aTile flash];
+        
+        if(tile == nil){
+            tile = aTile;
+        }
+        else{
+            //[tile restoreBackgroundColor];
+            [tile performSelector:@selector(restoreBackgroundColor)];
+            tile = aTile;
+        }
+        
+        KLDate *klDateSelected = [aTile date];
+        
+        NSInteger intYear = [klDateSelected yearOfCommonEra];
+        NSInteger intMonth = [klDateSelected monthOfYear];
+        NSInteger intDay = [klDateSelected dayOfMonth];
+        
+        NSString *year = [NSString stringWithFormat:@"%d", intYear];
+        NSString *month = [NSString stringWithFormat:@"%d", intMonth];
+        NSString *day = [NSString stringWithFormat:@"%d", intDay];
+        
+        if ([month length] == 1) {
+            month = [@"0" stringByAppendingString:month];
+        }
+        
+        if ([day length] == 1) {
+            day = [@"0" stringByAppendingString:day];
+        }
+        
+        NSString *stringDate = [NSString stringWithFormat:@"%@-%@-%@", year, month, day];
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+        [dateFormat setDateFormat:@"yyyy-MM-dd"]; 
+        NSDate *formatedDate = [dateFormat dateFromString:stringDate];
+        self.dateSelected = formatedDate;
+        
+        NSDate *todaysDate = [NSDate date];
+        NSString *tempDateToday = [dateFormat stringFromDate:todaysDate];
+        
+        
+        if ([todaysDate isEqualToDate:[todaysDate earlierDate:self.dateSelected]] || [tempDateToday isEqualToString:stringDate]) {
+            
+            self.dateSelected = formatedDate;
+            
+            //Check to see if there is already an Event on this date
+            
+            self.isEventToday = false;
+            
+            NSString *timeEventToday = @"";
+            for (int i = 0; i < [self.allEvents count]; i++){
+                
+                CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+                
+                if ([tmp.eventDate isEqualToDate:formatedDate]){
+                    //There is an event today
+                    self.isEventToday = true;
+                    
+                    NSDate *tmpTime = tmp.eventTime;
+                    NSDateFormatter *tmpFormat = [[NSDateFormatter alloc] init];
+                    [tmpFormat setDateFormat:@"hh:mm aa"];
+                    timeEventToday = [tmpFormat stringFromDate:tmpTime];
+                    
+                    break;
+                }
+            }
+            
+            if (self.isEventToday) {
+                
+                self.eventLabel.hidden = NO;
+                self.eventLabel.text = [NSString stringWithFormat:@"Time for Event on %@/%@", month, day];
+                self.addEventButton.hidden = YES;
+                self.removeEventButton.hidden = NO;
+                self.eventTimeField.text = timeEventToday;
+                self.eventTimeField.hidden = NO;
+                
+            }else {
+                
+                self.timePicker.hidden = NO;
+                self.cancelTimeButton.hidden = NO;
+                self.okTimeButton.hidden = NO;
+                self.explainPickerView.hidden = NO;
+                self.explainPickerLabel.hidden = NO;
+                self.explainPickerLabel.text = [NSString stringWithFormat:@"Select the time for the Event on %@/%@", month, day];
+                
+                self.eventLabel.hidden = NO;
+                self.eventLabel.text = [NSString stringWithFormat:@"No Event currently on %@/%@", month, day];
+                self.eventTimeField.hidden = YES;
+                
+            }
+            
+            
+            
+        }
 
-    
-	if ([todaysDate isEqualToDate:[todaysDate earlierDate:self.dateSelected]] || [tempDateToday isEqualToString:stringDate]) {
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - tappedTile:()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+  
 		
-		self.dateSelected = formatedDate;
-
-		//Check to see if there is already an Event on this date
-		
-		self.isEventToday = false;
-		
-		NSString *timeEventToday = @"";
-		for (int i = 0; i < [self.allEvents count]; i++){
-			
-			CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
-			
-			if ([tmp.eventDate isEqualToDate:formatedDate]){
-				//There is an event today
-				self.isEventToday = true;
-				
-				NSDate *tmpTime = tmp.eventTime;
-				NSDateFormatter *tmpFormat = [[NSDateFormatter alloc] init];
-				[tmpFormat setDateFormat:@"hh:mm aa"];
-				timeEventToday = [tmpFormat stringFromDate:tmpTime];
-				
-				break;
-			}
-		}
-		
-		if (self.isEventToday) {
-			
-			self.eventLabel.hidden = NO;
-			self.eventLabel.text = [NSString stringWithFormat:@"Time for Event on %@/%@", month, day];
-			self.addEventButton.hidden = YES;
-			self.removeEventButton.hidden = NO;
-			self.eventTimeField.text = timeEventToday;
-			self.eventTimeField.hidden = NO;
-			
-		}else {
-			
-			self.timePicker.hidden = NO;
-			self.cancelTimeButton.hidden = NO;
-			self.okTimeButton.hidden = NO;
-			self.explainPickerView.hidden = NO;
-			self.explainPickerLabel.hidden = NO;
-			self.explainPickerLabel.text = [NSString stringWithFormat:@"Select the time for the Event on %@/%@", month, day];
-			
-			self.eventLabel.hidden = NO;
-			self.eventLabel.text = [NSString stringWithFormat:@"No Event currently on %@/%@", month, day];
-			self.eventTimeField.hidden = YES;
-			
-		}
-
-		
-
-	}
-	
 	
 }
 
@@ -235,7 +254,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	
 }
 
--(IBAction)timeEditStart{
+-(void)timeEditStart{
 	
 	[self.eventTimeField resignFirstResponder];
 	self.timePicker.hidden = NO;
@@ -245,71 +264,79 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	self.explainPickerLabel.hidden = NO;
 }
 
--(IBAction)okTime{
+-(void)okTime{
 	
-	NSString *timeEventToday = @"";
-	NSDate *tmpTime = self.timePicker.date;
-	NSDateFormatter *tmpFormat = [[NSDateFormatter alloc] init];
-	[tmpFormat setDateFormat:@"hh:mm aa"];
-	timeEventToday = [tmpFormat stringFromDate:tmpTime];
-	
-	NSString *dateTodayString = @"";
-	[tmpFormat setDateFormat:@"MM/dd"];
-	dateTodayString = [tmpFormat stringFromDate:self.dateSelected];
-	
-	if (self.isEventToday) {
-		//Replace the Time of the Event that is today with the new time;
-		int eventIndex;
-		NSDate *tmpDate = [NSDate date];
-		
-		for (int i = 0; i < [self.allEvents count]; i++){
-			
-			CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
-			
-			if ([tmp.eventDate isEqualToDate:self.dateSelected]){
-				//found the event today
-				eventIndex = i;
-				tmpDate = tmp.eventDate;
-				break;
-			}
-		}
-		
-		CalendarEventObject *newObject = [[CalendarEventObject alloc] init];
-		newObject.eventDate = tmpDate;
-		newObject.eventTime = tmpTime;
-		[self.allEvents replaceObjectAtIndex:eventIndex withObject:newObject];
-		
-	}else {
-	
-		CalendarEventObject *tmp = [[CalendarEventObject alloc] init];
-		
-		tmp.eventDate = [self.dateSelected copy];
-		tmp.eventTime = tmpTime;
-		
-		[self.allEvents addObject:tmp];
-		
-		
-		//[calendarView refreshViewWithPushDirection:nil];
-        [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
-		
-	}
+    @try {
+        NSString *timeEventToday = @"";
+        NSDate *tmpTime = self.timePicker.date;
+        NSDateFormatter *tmpFormat = [[NSDateFormatter alloc] init];
+        [tmpFormat setDateFormat:@"hh:mm aa"];
+        timeEventToday = [tmpFormat stringFromDate:tmpTime];
+        
+        NSString *dateTodayString = @"";
+        [tmpFormat setDateFormat:@"MM/dd"];
+        dateTodayString = [tmpFormat stringFromDate:self.dateSelected];
+        
+        if (self.isEventToday) {
+            //Replace the Time of the Event that is today with the new time;
+            int eventIndex;
+            NSDate *tmpDate = [NSDate date];
+            
+            for (int i = 0; i < [self.allEvents count]; i++){
+                
+                CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+                
+                if ([tmp.eventDate isEqualToDate:self.dateSelected]){
+                    //found the event today
+                    eventIndex = i;
+                    tmpDate = tmp.eventDate;
+                    break;
+                }
+            }
+            
+            CalendarEventObject *newObject = [[CalendarEventObject alloc] init];
+            newObject.eventDate = tmpDate;
+            newObject.eventTime = tmpTime;
+            [self.allEvents replaceObjectAtIndex:eventIndex withObject:newObject];
+            
+        }else {
+            
+            CalendarEventObject *tmp = [[CalendarEventObject alloc] init];
+            
+            tmp.eventDate = [self.dateSelected copy];
+            tmp.eventTime = tmpTime;
+            
+            [self.allEvents addObject:tmp];
+            
+            
+            //[calendarView refreshViewWithPushDirection:nil];
+            [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
+            
+        }
+        
+        
+        self.eventTimeField.text = timeEventToday;
+        self.eventTimeField.hidden = NO;
+        self.eventLabel.text = [NSString stringWithFormat:@"Time for Event on %@", dateTodayString];
+        self.removeEventButton.hidden = NO;
+        self.addEventButton.hidden = YES;
+        self.explainPickerView.hidden = YES;
+        self.explainPickerLabel.hidden = YES;
+        self.okTimeButton.hidden = YES;
+        self.cancelTimeButton.hidden = YES;
+        self.timePicker.hidden = YES;
 
-	
-	self.eventTimeField.text = timeEventToday;
-	self.eventTimeField.hidden = NO;
-	self.eventLabel.text = [NSString stringWithFormat:@"Time for Event on %@", dateTodayString];
-	self.removeEventButton.hidden = NO;
-	self.addEventButton.hidden = YES;
-	self.explainPickerView.hidden = YES;
-	self.explainPickerLabel.hidden = YES;
-	self.okTimeButton.hidden = YES;
-	self.cancelTimeButton.hidden = YES;
-	self.timePicker.hidden = YES;
-	
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - okTime:()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+  
+		
 }
 
 
--(IBAction)cancelTime{
+-(void)cancelTime{
 	
 	if (!self.isEventToday) {
 		self.addEventButton.hidden = NO;
@@ -329,35 +356,43 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 }
 
 
--(IBAction)removeEvent{
-	
-	int eventIndex;
-	NSString *todayTimeString = @"";
-	
-	for (int i = 0; i < [self.allEvents count]; i++){
-		
-		CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
-		
-		if ([tmp.eventDate isEqualToDate:self.dateSelected]){
-			//found the event today
-			eventIndex = i;			
-			NSDateFormatter *tmp = [[NSDateFormatter alloc] init];
-			[tmp setDateFormat:@"MM/dd"];
-			todayTimeString = [tmp stringFromDate:self.dateSelected];
-			break;
-		}
-	}
-	
-	[self.allEvents removeObjectAtIndex:eventIndex];
-	
-	self.eventTimeField.hidden = YES;
-	self.removeEventButton.hidden = YES;
-	self.addEventButton.hidden = NO;
-	self.eventLabel.text = [NSString stringWithFormat:@"No Event currently on %@", todayTimeString];
-	
-	//[calendarView refreshViewWithPushDirection:nil];
-    [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
+-(void)removeEvent{
+    
+	@try {
+        int eventIndex;
+        NSString *todayTimeString = @"";
+        
+        for (int i = 0; i < [self.allEvents count]; i++){
+            
+            CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+            
+            if ([tmp.eventDate isEqualToDate:self.dateSelected]){
+                //found the event today
+                eventIndex = i;			
+                NSDateFormatter *tmp = [[NSDateFormatter alloc] init];
+                [tmp setDateFormat:@"MM/dd"];
+                todayTimeString = [tmp stringFromDate:self.dateSelected];
+                break;
+            }
+        }
+        
+        [self.allEvents removeObjectAtIndex:eventIndex];
+        
+        self.eventTimeField.hidden = YES;
+        self.removeEventButton.hidden = YES;
+        self.addEventButton.hidden = NO;
+        self.eventLabel.text = [NSString stringWithFormat:@"No Event currently on %@", todayTimeString];
+        
+        //[calendarView refreshViewWithPushDirection:nil];
+        [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
 
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - removeEvent:()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+  
+	
 	
 }
 
@@ -369,42 +404,42 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 - (KLTile *)calendarView:(KLCalendarView *)calendarView1 createTileForDate:(KLDate *)date{
 	
-	
-	CheckmarkTile *thisTile = [[CheckmarkTile alloc] init];
-	
-	NSInteger intYear = [date yearOfCommonEra];
-	NSInteger intMonth = [date monthOfYear];
-	NSInteger intDay = [date dayOfMonth];
-	
-	NSString *year = [NSString stringWithFormat:@"%d", intYear];
-	NSString *month = [NSString stringWithFormat:@"%d", intMonth];
-	NSString *day = [NSString stringWithFormat:@"%d", intDay];
-	
-	if ([month length] == 1) {
-		month = [@"0" stringByAppendingString:month];
-	}
-	
-	if ([day length] == 1) {
-		day = [@"0" stringByAppendingString:day];
-	}
-	
-	NSString *stringDate = [NSString stringWithFormat:@"%@-%@-%@", year, month, day];
-	
-	bool check = false;
-	
+	@try {
+        CheckmarkTile *thisTile = [[CheckmarkTile alloc] init];
+        
+        NSInteger intYear = [date yearOfCommonEra];
+        NSInteger intMonth = [date monthOfYear];
+        NSInteger intDay = [date dayOfMonth];
+        
+        NSString *year = [NSString stringWithFormat:@"%d", intYear];
+        NSString *month = [NSString stringWithFormat:@"%d", intMonth];
+        NSString *day = [NSString stringWithFormat:@"%d", intDay];
+        
+        if ([month length] == 1) {
+            month = [@"0" stringByAppendingString:month];
+        }
+        
+        if ([day length] == 1) {
+            day = [@"0" stringByAppendingString:day];
+        }
+        
+        NSString *stringDate = [NSString stringWithFormat:@"%@-%@-%@", year, month, day];
+        
+        bool check = false;
+        
 		
 		for (int i = 0; i < [self.allEvents count]; i++){
 			
 			CalendarEventObject *tmpEvent = [self.allEvents objectAtIndex:i];
-				
+            
 			NSDate *tmpEventDate = tmpEvent.eventDate;
-				
+            
 			NSDateFormatter *format = [[NSDateFormatter alloc] init];
 			[format setDateFormat:@"yyyy-MM-dd"];
 			
 			NSString *testDate = [format stringFromDate:tmpEventDate];
 			
-	
+            
 			
 			if ([testDate isEqualToString:stringDate]) {
 				
@@ -413,20 +448,27 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 				
 			}
 			
-
+            
 			
 		}
-	
-	if (check) {
-		thisTile.checkmarked = true;
+        
+        if (check) {
+            thisTile.checkmarked = true;
+            
+        }else {
+            thisTile.checkmarked = false;
+        }
+        
+        
+        return thisTile;
 
-	}else {
-		thisTile.checkmarked = false;
-	}
-	
-	
-	return thisTile;
-	
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - createTileForDate:()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+  
+		
 }
 
 - (void)didChangeMonths{
@@ -485,102 +527,113 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 
 
+
 -(void)createGames{
+    
+    @autoreleasepool {
 
-	
-	@autoreleasepool {
-        //Create the new game
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        NSMutableArray *tmpGameArray = [NSMutableArray array];
-        NSArray *gameArray = [NSArray array];
-        
-        //Not using lat/long right now
-        NSString *theDescription = @"No description entered...";
-        NSString *theOpponent = @"Opponent TBD";
-        
-        
-        for(int i = 0; i < [self.allEvents count]; i++){
+	@try {
+            //Create the new game
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
-            NSString *dateString = @"";
-            NSString *timeString = @"";
+            NSMutableArray *tmpGameArray = [NSMutableArray array];
+            NSArray *gameArray = [NSArray array];
             
-            NSString *startDateString = @"";
-            
-            CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
-            
-            NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
-            
-            [tmpGame setObject:theDescription forKey:@"description"];
-            [tmpGame setObject:theOpponent forKey:@"opponent"];
+            //Not using lat/long right now
+            NSString *theDescription = @"No description entered...";
+            NSString *theOpponent = @"Opponent TBD";
             
             
-            NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
-            
-            [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
-            dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
-            
-            [tmpFormatter setDateFormat:@"HH:mm"];
-            timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
-            
-            startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
-            
-            [tmpGame setObject:startDateString forKey:@"startDate"];
-            
-            NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
-            
-            [tmpGameArray addObject:tmpGame1];
-            
-            
-        }
-        
-        gameArray = tmpGameArray;
-        
-        
-        NSDictionary *response = [ServerAPI createMultipleGames:mainDelegate.token :self.teamId :@"plain" :gameArray];
-        
-        NSString *status = [response valueForKey:@"status"];
-        
-        
-        if ([status isEqualToString:@"100"]){
-            
-            self.errorString = @"";
-            
-        }else{
-            
-            //Server hit failed...get status code out and display error accordingly
-            int statusCode = [status intValue];
-            
-            switch (statusCode) {
-                case 0:
-                    //null parameter
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 1:
-                    //error connecting to server
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 205:
-                    //error connecting to server
-                    self.errorString = @"*You must be a coordinator to add events.";
-                    break;
-                default:
-                    //Log the status code?
-                    self.errorString = @"*Error connecting to server";
-                    break;
+            for(int i = 0; i < [self.allEvents count]; i++){
+                
+                NSString *dateString = @"";
+                NSString *timeString = @"";
+                
+                NSString *startDateString = @"";
+                
+                CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+                
+                NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
+                
+                [tmpGame setObject:theDescription forKey:@"description"];
+                [tmpGame setObject:theOpponent forKey:@"opponent"];
+                
+                
+                NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
+                
+                [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
+                dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
+                
+                [tmpFormatter setDateFormat:@"HH:mm"];
+                timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
+                
+                startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
+                
+                [tmpGame setObject:startDateString forKey:@"startDate"];
+                
+                NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
+                
+                [tmpGameArray addObject:tmpGame1];
+                
+                
             }
-        }
-        
-        
-        [self performSelectorOnMainThread:
-         @selector(doneCreate)
-                               withObject:nil
-                            waitUntilDone:NO
-         ];
+            
+            gameArray = tmpGameArray;
+            
+            
+            NSDictionary *response = [ServerAPI createMultipleGames:mainDelegate.token :self.teamId :@"plain" :gameArray];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 205:
+                        //error connecting to server
+                        self.errorString = @"*You must be a coordinator to add events.";
+                        break;
+                    default:
+                        //Log the status code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            [self performSelectorOnMainThread:
+             @selector(doneCreate)
+                                   withObject:nil
+                                waitUntilDone:NO
+             ];
+            
+            
+        }	
 
+    
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - createGames" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
         
-    }	
-	
+    }
+   
+		
 	
 	
 }
@@ -685,97 +738,106 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 	
 	@autoreleasepool {
-        //Create the new game
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        NSMutableArray *tmpGameArray = [NSMutableArray array];
-        NSArray *gameArray = [NSArray array];
-        
-        //Not using lat/long right now
-        NSString *theDescription = @"No description entered...";
-        NSString *theLocation = @"Location TBD";
-        
-        
-        for(int i = 0; i < [self.allEvents count]; i++){
+        @try {
+            //Create the new game
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
-            NSString *dateString = @"";
-            NSString *timeString = @"";
+            NSMutableArray *tmpGameArray = [NSMutableArray array];
+            NSArray *gameArray = [NSArray array];
             
-            NSString *startDateString = @"";
-            
-            CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
-            
-            NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
-            
-            [tmpGame setObject:theDescription forKey:@"description"];
-            [tmpGame setObject:theLocation forKey:@"opponent"];
-            [tmpGame setObject:@"practice" forKey:@"eventType"];
+            //Not using lat/long right now
+            NSString *theDescription = @"No description entered...";
+            NSString *theLocation = @"Location TBD";
             
             
-            
-            NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
-            
-            [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
-            dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
-            
-            [tmpFormatter setDateFormat:@"HH:mm"];
-            timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
-            
-            startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
-            
-            [tmpGame setObject:startDateString forKey:@"startDate"];
-            
-            NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];		
-            [tmpGameArray addObject:tmpGame1];
-            
-            
-        }
-        
-        gameArray = tmpGameArray;
-        
-     
-        
-        NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
-        
-        NSString *status = [response valueForKey:@"status"];
-        
-        
-        if ([status isEqualToString:@"100"]){
-            
-            self.errorString = @"";
-            
-        }else{
-            
-            //Server hit failed...get status code out and display error accordingly
-            int statusCode = [status intValue];
-            
-            switch (statusCode) {
-                case 0:
-                    //null parameter
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 1:
-                    //error connecting to server
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 205:
-                    //error connecting to server
-                    self.errorString = @"*You must be a coordinator to add events.";
-                    break;
-                default:
-                    //Log the status code?
-                    self.errorString = @"*Error connecting to server";
-                    break;
+            for(int i = 0; i < [self.allEvents count]; i++){
+                
+                NSString *dateString = @"";
+                NSString *timeString = @"";
+                
+                NSString *startDateString = @"";
+                
+                CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+                
+                NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
+                
+                [tmpGame setObject:theDescription forKey:@"description"];
+                [tmpGame setObject:theLocation forKey:@"opponent"];
+                [tmpGame setObject:@"practice" forKey:@"eventType"];
+                
+                
+                
+                NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
+                
+                [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
+                dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
+                
+                [tmpFormatter setDateFormat:@"HH:mm"];
+                timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
+                
+                startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
+                
+                [tmpGame setObject:startDateString forKey:@"startDate"];
+                
+                NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];		
+                [tmpGameArray addObject:tmpGame1];
+                
+                
             }
-        }
-        
-        
-        [self performSelectorOnMainThread:
-         @selector(donePractices)
-                               withObject:nil
-                            waitUntilDone:NO
-         ];
+            
+            gameArray = tmpGameArray;
+            
+            
+            
+            NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 205:
+                        //error connecting to server
+                        self.errorString = @"*You must be a coordinator to add events.";
+                        break;
+                    default:
+                        //Log the status code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            [self performSelectorOnMainThread:
+             @selector(donePractices)
+                                   withObject:nil
+                                waitUntilDone:NO
+             ];
 
+        }
+        @catch (NSException *exception) {
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - createPractices" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        }
+       
+       
         
     }
 }
@@ -879,101 +941,110 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	
 	
 	@autoreleasepool {
-        //Create the new game
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        NSMutableArray *tmpGameArray = [NSMutableArray array];
-        NSArray *gameArray = [NSArray array];
-        
-        //Not using lat/long right now
-        NSString *theDescription = @"No description entered...";
-        NSString *theLocation = @"Location TBD";
-        
-        
-        for(int i = 0; i < [self.allEvents count]; i++){
+        @try {
+            //Create the new game
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
-            NSString *dateString = @"";
-            NSString *timeString = @"";
+            NSMutableArray *tmpGameArray = [NSMutableArray array];
+            NSArray *gameArray = [NSArray array];
             
-            NSString *startDateString = @"";
-            
-            CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
-            
-            NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
-            
-            [tmpGame setObject:theDescription forKey:@"description"];
-            [tmpGame setObject:theLocation forKey:@"opponent"];
-            [tmpGame setObject:@"generic" forKey:@"eventType"];
-            [tmpGame setObject:@"No Event Name" forKey:@"eventName"];
+            //Not using lat/long right now
+            NSString *theDescription = @"No description entered...";
+            NSString *theLocation = @"Location TBD";
             
             
-            
-            NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
-            
-            [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
-            dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
-            
-            [tmpFormatter setDateFormat:@"HH:mm"];
-            timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
-            
-            startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
-            
-            [tmpGame setObject:startDateString forKey:@"startDate"];
-            
-            NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
-            
-            [tmpGameArray addObject:tmpGame1];
-            
-            
-        }
-        
-        gameArray = tmpGameArray;
-        
-      
-        
-        
-        NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
-        
-        NSString *status = [response valueForKey:@"status"];
-        
-        
-        if ([status isEqualToString:@"100"]){
-            
-            self.errorString = @"";
-            
-        }else{
-            
-            //Server hit failed...get status code out and display error accordingly
-            int statusCode = [status intValue];
-            
-            switch (statusCode) {
-                case 0:
-                    //null parameter
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 1:
-                    //error connecting to server
-                    self.errorString = @"*Error connecting to server";
-                    break;
-                case 205:
-                    //error connecting to server
-                    self.errorString = @"*You must be a coordinator to add events.";
-                    break;
-                default:
-                    //Log the status code?
-                    self.errorString = @"*Error connecting to server";
-                    break;
+            for(int i = 0; i < [self.allEvents count]; i++){
+                
+                NSString *dateString = @"";
+                NSString *timeString = @"";
+                
+                NSString *startDateString = @"";
+                
+                CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+                
+                NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
+                
+                [tmpGame setObject:theDescription forKey:@"description"];
+                [tmpGame setObject:theLocation forKey:@"opponent"];
+                [tmpGame setObject:@"generic" forKey:@"eventType"];
+                [tmpGame setObject:@"No Event Name" forKey:@"eventName"];
+                
+                
+                
+                NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
+                
+                [tmpFormatter setDateFormat:@"yyyy-MM-dd"];
+                dateString = [tmpFormatter stringFromDate:tmpGameObject.eventDate];
+                
+                [tmpFormatter setDateFormat:@"HH:mm"];
+                timeString = [tmpFormatter stringFromDate:tmpGameObject.eventTime];
+                
+                startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
+                
+                [tmpGame setObject:startDateString forKey:@"startDate"];
+                
+                NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
+                
+                [tmpGameArray addObject:tmpGame1];
+                
+                
             }
-        }
-        
-        
-        [self performSelectorOnMainThread:
-         @selector(doneEvents)
-                               withObject:nil
-                            waitUntilDone:NO
-         ];
+            
+            gameArray = tmpGameArray;
+            
+            
+            
+            
+            NSDictionary *response = [ServerAPI createMultipleEvents:mainDelegate.token :self.teamId :@"plain" :gameArray];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.errorString = @"";
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                    case 205:
+                        //error connecting to server
+                        self.errorString = @"*You must be a coordinator to add events.";
+                        break;
+                    default:
+                        //Log the status code?
+                        self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+            [self performSelectorOnMainThread:
+             @selector(doneEvents)
+                                   withObject:nil
+                                waitUntilDone:NO
+             ];
+            
 
-        
+        }
+        @catch (NSException *exception) {
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - createEvents" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        }
+      
+                
     }    
 	
 	

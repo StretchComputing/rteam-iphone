@@ -23,6 +23,7 @@
 #import "ServerAPI.h"
 #import "GANTracker.h"
 #import "ViewDetailPollRepliesNow.h"
+#import "GoogleAppEngine.h"
 
 
 
@@ -550,7 +551,16 @@
         NSMutableArray *attendance = [NSMutableArray array];
         NSArray *finalAttendance = [NSArray array];
         NSMutableDictionary *attList = [NSMutableDictionary dictionary];
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 
+        if (self.currentMemberId == nil) {
+            self.currentMemberId = @"";
+            
+            NSException *exception = [NSException exceptionWithName:@"Nil Argument" reason:@"nullPointer" userInfo:nil];
+            [GoogleAppEngine sendExceptionCaught:exception inMethod:@"HomeAttendanceView.m - currentMemberId = nil" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+
+        }
     
         [attList setObject:self.currentMemberId forKey:@"memberId"];
         [attList setObject:replyResponse forKey:@"preGameStatus"];
@@ -562,7 +572,6 @@
             
             NSString *token = @"";
             
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
             
             if (mainDelegate.token != nil){

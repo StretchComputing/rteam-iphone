@@ -592,42 +592,51 @@
         
         if ([result.activityText length] > 12) {
             if ([[result.activityText substringToIndex:11] isEqualToString:@"Final score"]) {
-                scoreView.hidden = NO;
-                messageText.text = @"Game Over!  Final Score:";
-                                
-                NSRange first = [result.activityText rangeOfString:@"="];
-                first.location++;
-                first.length++;
                 
-                NSRange second = [result.activityText rangeOfString:@"=" options:NSBackwardsSearch];
-                second.location++;
-                second.length++;
-                
-                if ((second.location + second.length) > [result.activityText length]) {
-                    second.length = [result.activityText length] - second.location;
+                @try {
+                    scoreView.hidden = NO;
+                    messageText.text = @"Game Over!  Final Score:";
+                    
+                    NSRange first = [result.activityText rangeOfString:@"="];
+                    first.location++;
+                    first.length++;
+                    
+                    NSRange second = [result.activityText rangeOfString:@"=" options:NSBackwardsSearch];
+                    second.location++;
+                    second.length++;
+                    
+                    if ((second.location + second.length) > [result.activityText length]) {
+                        second.length = [result.activityText length] - second.location;
+                    }
+                    
+                    NSString *scoreUs = [result.activityText substringWithRange:first];
+                    NSString *scoreThem = [result.activityText substringWithRange:second];
+                    
+                    
+                    
+                    
+                    scoreUs =  [scoreUs stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    scoreThem = [scoreThem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    
+                    scoreView.frame = CGRectMake(55, 70, 92, 55);
+                    
+                    ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(0, 0, 92, 55)];
+                    
+                    [tmp1Button addTarget:sentClass action:@selector(viewScore) forControlEvents:UIControlEventTouchUpInside];
+                    
+                    tmp1Button.yesCount.text = scoreUs;
+                    tmp1Button.noCount.text = scoreThem;
+                    
+                    tmp1Button.qLabel.text = @"F";
+                    
+                    [scoreView addSubview:tmp1Button];
+
                 }
+                @catch (NSException *exception) {
+                    
+                }
+               
                 
-                NSString *scoreUs = [result.activityText substringWithRange:first];
-                NSString *scoreThem = [result.activityText substringWithRange:second];
-                
-
-
-                
-                scoreUs =  [scoreUs stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                scoreThem = [scoreThem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                
-                scoreView.frame = CGRectMake(55, 70, 92, 55);
-                
-                ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(0, 0, 92, 55)];
-                
-                [tmp1Button addTarget:sentClass action:@selector(viewScore) forControlEvents:UIControlEventTouchUpInside];
-
-                tmp1Button.yesCount.text = scoreUs;
-                tmp1Button.noCount.text = scoreThem;
-                                        
-                tmp1Button.qLabel.text = @"F";
-                
-                [scoreView addSubview:tmp1Button];
             }
         }
         

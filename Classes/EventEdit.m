@@ -20,6 +20,7 @@
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "GoogleAppEngine.h"
 
 @implementation EventEdit
 @synthesize activity, saveChanges, practiceOpponent, practiceDate, practiceDescription, opponent, stringDate, description, teamId, eventId, 
@@ -120,25 +121,42 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 		
 	}
 	
-	[activity startAnimating];
-	
-	//Disable the UI buttons and textfields while registering
-	
-	[self.saveChanges setEnabled:NO];
-	[self.practiceChangeDate setEnabled:NO];
-	[self.navigationItem.leftBarButtonItem setEnabled:NO];
-	[self.practiceOpponent setEnabled:NO];
-	[self.practiceDescription setEditable:NO];
-	
-	//Create the team in a background thread
-	
-    self.thePracticeDescription = [NSString stringWithString:self.practiceDescription.text];
-    self.thePracticeOpponent = [NSString stringWithString:self.practiceOpponent.text];
-    self.theEventName = [NSString stringWithString:self.eventName.text];
+    @try {
+        [self.activity startAnimating];
+        
+        //Disable the UI buttons and textfields while registering
+        
+        [self.saveChanges setEnabled:NO];
+        [self.practiceChangeDate setEnabled:NO];
+        [self.navigationItem.leftBarButtonItem setEnabled:NO];
+        [self.practiceOpponent setEnabled:NO];
+        [self.practiceDescription setEditable:NO];
+        
+        //Create the team in a background thread
+        
+        if (self.practiceDescription.text == nil) {
+            self.practiceDescription.text = @"";
+        }
+        if (self.practiceOpponent.text == nil) {
+            self.practiceOpponent.text = @"";
+        }
+        if (self.eventName.text == nil) {
+            self.eventName.text = @"";
+        }
+        self.thePracticeDescription = [NSString stringWithString:self.practiceDescription.text];
+        self.thePracticeOpponent = [NSString stringWithString:self.practiceOpponent.text];
+        self.theEventName = [NSString stringWithString:self.eventName.text];
+        
+        
+        [self performSelectorInBackground:@selector(runRequest) withObject:nil];
 
-    
-	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
-	
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"EventEdit.m - clickedButtonAtIndex" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+  
+		
 	
 }
 
@@ -229,7 +247,7 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 - (void)didFinish{
 	
 	//When background thread is done, return to main thread
-	[activity stopAnimating];
+	[self.activity stopAnimating];
 	
 	if (self.createSuccess){
 		//team, sent, inbox, game or pracitce

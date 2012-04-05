@@ -520,41 +520,51 @@
     if ([self.displayMessage length] > 12) {
         if ([[self.displayMessage substringToIndex:11] isEqualToString:@"Final score"]) {
             
-            displayText.text = @"Game Over!  Final Score:";
+            @try {
+                
+                displayText.text = @"Game Over!  Final Score:";
+                
+                NSRange first = [self.displayMessage rangeOfString:@"="];
+                first.location++;
+                first.length++;
+                
+                NSRange second = [self.displayMessage rangeOfString:@"=" options:NSBackwardsSearch];
+                second.location++;
+                second.length++;
+                
+                if ((second.location + second.length) > [self.displayMessage length]) {
+                    second.length = [self.displayMessage length] - second.location;
+                }
+                
+                NSString *scoreUs = [self.displayMessage substringWithRange:first];
+                NSString *scoreThem = [self.displayMessage substringWithRange:second];
+                
+                
+                UIView *scoreView = [[UIView alloc] initWithFrame:CGRectMake(110, 75, 92, 55)];
+                
+                scoreUs =  [scoreUs stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                scoreThem = [scoreThem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
+                ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(0, 0, 92, 55)];
+                
+                //[tmp1Button addTarget:sentClass action:@selector(viewScore) forControlEvents:UIControlEventTouchUpInside];
+                
+                tmp1Button.yesCount.text = scoreUs;
+                tmp1Button.noCount.text = scoreThem;
+                
+                tmp1Button.qLabel.text = @"F";
+                
+                [scoreView addSubview:tmp1Button];
+                
+                [self.myScrollView addSubview:scoreView];
+                
             
-            NSRange first = [self.displayMessage rangeOfString:@"="];
-            first.location++;
-            first.length++;
-            
-            NSRange second = [self.displayMessage rangeOfString:@"=" options:NSBackwardsSearch];
-            second.location++;
-            second.length++;
-            
-            if ((second.location + second.length) > [self.displayMessage length]) {
-                second.length = [self.displayMessage length] - second.location;
             }
             
-            NSString *scoreUs = [self.displayMessage substringWithRange:first];
-            NSString *scoreThem = [self.displayMessage substringWithRange:second];
-            
-            
-            UIView *scoreView = [[UIView alloc] initWithFrame:CGRectMake(110, 75, 92, 55)];
-            
-            scoreUs =  [scoreUs stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            scoreThem = [scoreThem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                        
-            ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(0, 0, 92, 55)];
-            
-            //[tmp1Button addTarget:sentClass action:@selector(viewScore) forControlEvents:UIControlEventTouchUpInside];
-            
-            tmp1Button.yesCount.text = scoreUs;
-            tmp1Button.noCount.text = scoreThem;
-            
-            tmp1Button.qLabel.text = @"F";
-            
-            [scoreView addSubview:tmp1Button];
-            
-            [self.myScrollView addSubview:scoreView];
+            @catch (NSException *exception) {
+                
+            }
+           
             
         }
     }

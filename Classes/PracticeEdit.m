@@ -20,6 +20,7 @@
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "GoogleAppEngine.h"
 
 @implementation PracticeEdit
 @synthesize activity, saveChanges, practiceOpponent, practiceDate, practiceDescription, opponent, stringDate, description, teamId, practiceId, 
@@ -122,23 +123,39 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 		
 	}
 	
-	[activity startAnimating];
-	
-	//Disable the UI buttons and textfields while registering
-	
-	[self.saveChanges setEnabled:NO];
-	[self.practiceChangeDate setEnabled:NO];
-	[self.navigationItem.leftBarButtonItem setEnabled:NO];
-	[self.practiceOpponent setEnabled:NO];
-	[self.practiceDescription setEditable:NO];
-	
-	//Create the team in a background thread
-	
-    self.thePracticeDescription = [NSString stringWithString:self.practiceDescription.text];
-    self.thePracticeOpponent = [NSString stringWithString:self.practiceOpponent.text];
-    
-	[self performSelectorInBackground:@selector(runRequest) withObject:nil];
-	
+    @try {
+        [self.activity startAnimating];
+        
+        //Disable the UI buttons and textfields while registering
+        
+        [self.saveChanges setEnabled:NO];
+        [self.practiceChangeDate setEnabled:NO];
+        [self.navigationItem.leftBarButtonItem setEnabled:NO];
+        [self.practiceOpponent setEnabled:NO];
+        [self.practiceDescription setEditable:NO];
+        
+        //Create the team in a background thread
+        
+        if (self.practiceDescription.text == nil) {
+            self.practiceDescription.text = @"";
+        }
+        if (self.practiceOpponent.text == nil) {
+            self.practiceOpponent.text = @"";
+        }
+        
+        self.thePracticeDescription = [NSString stringWithString:self.practiceDescription.text];
+        self.thePracticeOpponent = [NSString stringWithString:self.practiceOpponent.text];
+        
+        [self performSelectorInBackground:@selector(runRequest) withObject:nil];
+
+    }
+    @catch (NSException *exception) {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"PracticeEdit.m - clickedButtonAtIndex" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+   
+		
 	
 }
 
@@ -229,7 +246,7 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 - (void)didFinish{
 	
 	//When background thread is done, return to main thread
-	[activity stopAnimating];
+	[self.activity stopAnimating];
 	
 	if (self.createSuccess){
 		//team, sent, inbox, game or pracitce
