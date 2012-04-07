@@ -378,7 +378,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
     
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                         action:@"New Member(s) - Add From Contacts"
+                                         action:@"New Members - Add From Contacts"
                                           label:mainDelegate.token
                                           value:-1
                                       withError:nil]) {
@@ -717,7 +717,7 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 -(void)addNew{
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                         action:@"New Member(s) - Add NOT Contacts"
+                                         action:@"New Members - Add NOT Contacts"
                                           label:mainDelegate.token
                                           value:-1
                                       withError:nil]) {

@@ -11,7 +11,7 @@
 
 @implementation ScoreButton
 @synthesize buttonView, tableDisplayView, pollButton, goToPageButton, attendingLabel, yesCount, yesLabel, noCount, noLabel, qCount, qLabel,
-tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAttendance;
+tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAttendance, activity;
 
 
 + (id)buttonWithFrame:(CGRect)frame {

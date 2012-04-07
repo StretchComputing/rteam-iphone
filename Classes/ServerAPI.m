@@ -24,8 +24,8 @@
 #import "GoogleAppEngine.h"
 #import "rTeamAppDelegate.h"
 
-static NSString *baseUrl = @"https://rteamtest.appspot.com";
-//static NSString *baseUrl = @"http://v2-3.latest.rteamtest.appspot.com";
+//static NSString *baseUrl = @"https://rteamtest.appspot.com";
+static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 
 @implementation ServerAPI
 
@@ -4887,7 +4887,7 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 			
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@includeDetails=%@", symbol, includeDetails];
 		}
-		        
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
@@ -4895,9 +4895,9 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-                                
+                                  
 		SBJSON *jsonParser = [SBJSON new];
-                        
+        
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
 		        
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
@@ -4936,6 +4936,17 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
 				}else {
 					tmpActivity.thumbnail = @"";
 				}
+            
+                tmpActivity.participantRole = [tmpDict valueForKey:@"participantRole"];
+                tmpActivity.eventId = [tmpDict valueForKey:@"eventId"];
+                tmpActivity.eventType = [tmpDict valueForKey:@"eventType"];
+                tmpActivity.sport = [tmpDict valueForKey:@"sport"];
+                tmpActivity.startDate = [tmpDict valueForKey:@"eventStartDate"];
+                tmpActivity.description = [tmpDict valueForKey:@"eventDescription"];
+                
+            
+
+
 				
 				[activities addObject:tmpActivity];
 			}
@@ -5663,7 +5674,6 @@ static NSString *baseUrl = @"https://rteamtest.appspot.com";
         return @"";
     }
   
-
 }
 
 + (NSString *)encodeBase64data:(NSData *)encodeData{

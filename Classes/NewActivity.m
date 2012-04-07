@@ -32,6 +32,12 @@
 #import "GANTracker.h"
 #import "TraceSession.h"
 #import "GoogleAppEngine.h"
+#import "GameTabs.h"
+#import "GameTabsNoCoord.h"
+#import "Gameday.h"
+#import "GameAttendance.h"
+#import "Vote.h"
+#import "ScoreButton.h"
 
 #define REFRESH_HEADER_HEIGHT 52.0f
 
@@ -1910,8 +1916,127 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
--(void)viewScore{
+-(void)viewScore:(id)sender{
     
+   
+    @try {
+        ScoreButton *tmpButton = sender;
+        Activity *newActivity = tmpButton.activity;
+    
+        
+        /*
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Go To Game Page - Activity"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        */
+        
+        
+        NSString *tmpUserRole = [NSString stringWithString:newActivity.participantRole];
+        NSString *tmpTeamId = [NSString stringWithString:newActivity.teamId];
+        NSString *tmpGameId = [NSString stringWithString:newActivity.eventId];
+        NSString *tmpTeamName = [NSString stringWithString:newActivity.teamName];
+        NSString *tmpDate = [NSString stringWithString:newActivity.startDate];
+        NSString *tmpDescription = [NSString stringWithString:newActivity.description];
+        NSString *tmpSport = [NSString stringWithString:newActivity.sport];
+        
+        if ([tmpUserRole isEqualToString:@"creator"] || [tmpUserRole isEqualToString:@"coordinator"]) {
+            GameTabs *currentGameTab = [[GameTabs alloc] init];
+            currentGameTab.fromHome = true;
+            
+            NSArray *tmpViews = currentGameTab.viewControllers;
+            currentGameTab.teamId = tmpTeamId;
+            currentGameTab.gameId = tmpGameId;
+            currentGameTab.userRole = tmpUserRole;
+            currentGameTab.teamName = tmpTeamName;
+            currentGameTab.fromActivity = true;
+
+            Gameday *currentNotes = [tmpViews objectAtIndex:0];
+            currentNotes.gameId = tmpGameId;
+            currentNotes.teamId = tmpTeamId;
+            currentNotes.userRole = tmpUserRole;
+            currentNotes.sport = tmpSport;
+            currentNotes.startDate = tmpDate;
+            currentNotes.opponentString = @"";
+            currentNotes.description = tmpDescription;
+            
+            
+            
+            GameAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+            currentAttendance.gameId = tmpGameId;
+            currentAttendance.teamId = tmpTeamId;
+            currentAttendance.startDate = tmpDate;
+            
+            Vote *fans = [tmpViews objectAtIndex:2];
+            fans.teamId = tmpTeamId;
+            fans.userRole = tmpUserRole;
+            fans.gameId = tmpGameId;
+            
+            
+            UINavigationController *navController = [[UINavigationController alloc] init];
+            
+            [navController pushViewController:currentGameTab animated:YES];
+            
+            navController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                        
+            [self.navigationController presentModalViewController:navController animated:YES];
+            
+            
+        }else {
+            
+            GameTabsNoCoord *currentGameTab = [[GameTabsNoCoord alloc] init];
+            currentGameTab.fromHome = true;
+            NSArray *tmpViews = currentGameTab.viewControllers;
+            currentGameTab.teamId = tmpTeamId;
+            currentGameTab.gameId =tmpGameId;
+            currentGameTab.userRole = tmpUserRole;
+            currentGameTab.teamName = tmpTeamName;
+            currentGameTab.fromActivity = true;
+
+            
+            Gameday *currentNotes = [tmpViews objectAtIndex:0];
+            currentNotes.gameId = tmpGameId;
+            currentNotes.teamId = tmpTeamId;
+            currentNotes.userRole = tmpUserRole;
+            currentNotes.sport = tmpSport;
+            currentNotes.description = tmpDescription;
+            currentNotes.startDate = tmpDate;
+            currentNotes.opponentString = @"";
+
+            
+            Vote *fans = [tmpViews objectAtIndex:1];
+            fans.teamId = tmpTeamId;
+            fans.userRole = tmpUserRole;
+            fans.gameId = tmpGameId;
+            
+            UINavigationController *navController = [[UINavigationController alloc] init];
+            
+            [navController pushViewController:currentGameTab animated:YES];
+            
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            
+            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            
+            
+            [self.navigationController presentModalViewController:navController animated:YES];
+            
+            
+            
+        }
+
+    }
+    @catch (NSException *exception) {
+        
+    }
+ 
+        
+        
+    
+    
+    /*
     homeScoreView.view.hidden = NO;
     
     homeScoreView.homeSuperView = nil;
@@ -1935,7 +2060,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [self moveDivider];
 
-    
+    */
 }
 
 -(void)moveDivider{

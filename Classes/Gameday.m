@@ -99,7 +99,8 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 	if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
 		[self.tabBarController.navigationItem setRightBarButtonItem:self.editDone];
 	}
-
+    
+  
 	
 }
 -(void)viewDidLoad{
@@ -159,7 +160,8 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
             NSDictionary *response = [ServerAPI getGameInfo:self.gameId :self.teamId :token];
             
             NSString *status = [response valueForKey:@"status"];
-                        
+
+            
             if ([status isEqualToString:@"100"]){
                 
                 gameInfo = [response valueForKey:@"gameInfo"];
@@ -204,7 +206,7 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
         
         NSString *starDate = [gameInfo valueForKey:@"startDate"];
                 
-        self.startDate = startDate;
+        self.startDate = starDate;
         
         if ([gameInfo valueForKey:@"location"] != nil) {
             NSString *locationString = [gameInfo valueForKey:@"location"];

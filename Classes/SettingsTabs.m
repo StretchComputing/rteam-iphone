@@ -322,8 +322,10 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
         }else if (row == 1){
             cellLabel.text = @"Help";
 
-        }else if (row == 2){
+        }else if (row == 3){
             cellLabel.text = @"Rate rTeam!";
+        }else {
+            cellLabel.text = @"Report A Problem";
         }
     }
 	
@@ -464,6 +466,31 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [tmpController pushViewController:tmp animated:NO];
             
             [self.navigationController pushViewController:tmp animated:YES];
+        }else if (row == 2){
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Report A Problem"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            if ([MFMailComposeViewController canSendMail]) {
+                
+                MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+                mailViewController.mailComposeDelegate = self;
+                [mailViewController setToRecipients:[NSArray arrayWithObject:@"info@rteam.com"]];
+                [mailViewController setSubject:@"rTeam Problem"];
+                [mailViewController setMessageBody:@"Enter your problem or question here:" isHTML:NO];
+                
+                [self presentModalViewController:mailViewController animated:YES];
+                
+            }else {
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [alert show];
+            }
+            
         }else{
             //rate
             [TraceSession addEventToSession:@"Settings Page - Rate rTeam Button Clicked"];
@@ -543,7 +570,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (section == 0) {
 		return 4;
 	}else if (section == 1){
-        return 3;
+        return 4;
     }else if (section == 2) {
 		return 1;
 	}else{

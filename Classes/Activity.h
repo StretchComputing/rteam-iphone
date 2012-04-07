@@ -31,5 +31,13 @@
 @property (nonatomic, strong) NSArray *replies;
 @property (nonatomic, strong) NSString *lastEditDate;
 
+//game info
+@property (nonatomic, strong) NSString *participantRole;
+@property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSString *sport;
+@property (nonatomic, strong) NSString *startDate;
+@property (nonatomic, strong) NSString *description;
+
 
 @end

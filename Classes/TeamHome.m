@@ -36,6 +36,7 @@
 #import "TeamEdit.h"
 #import "TraceSession.h"
 #import "TeamEditFan.h"
+#import "GoogleAppEngine.h"
 
 @implementation TeamHome
 @synthesize teamId, userRole, teamSport, teamName, nextGameInfoLabel, topRight, topLeft, recentGamesTable, allScoresButton, nextGameButton, teamNameLabel, gamesArray, pastGamesArray, errorLabel, gameSuccess, nextGameArray, teamUrl, allScoresButtonUnderline, nextEventInfoLabel, nextEventButton, eventSuccess, eventsArray,
@@ -639,131 +640,135 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 
 -(void)nextEvent{
 	
-	if ([[self.nextEventArray objectAtIndex:0] class] == [Practice class]) {
-		PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
-		
-		
-		Practice *currentPractice = [self.futureEventsArray objectAtIndex:0];
-		NSArray *viewControllers = currentPracticeTab.viewControllers;
-		currentPracticeTab.teamId = self.teamId;
-		currentPracticeTab.practiceId = currentPractice.practiceId;
-		currentPracticeTab.userRole = self.userRole;
-		
-		PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
-		currentNotes.practiceId = currentPractice.practiceId;
-		currentNotes.teamId = self.teamId;
-		currentNotes.userRole = self.userRole;
-		
-		PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
-		currentAttendance.practiceId = currentPractice.practiceId;
-		currentAttendance.teamId = self.teamId;
-		currentAttendance.startDate = currentPractice.startDate;
-		currentAttendance.userRole = self.userRole;
-
-	
-		[self.navigationController pushViewController:currentPracticeTab animated:YES];
-		
-	}else {
-		
-		EventTabs *currentPracticeTab = [[EventTabs alloc] init];
-		
-		
-		Event *currentEvent = [self.nextEventArray objectAtIndex:0];
-		NSArray *viewControllers = currentPracticeTab.viewControllers;
-		currentPracticeTab.teamId = self.teamId;
-		currentPracticeTab.eventId = currentEvent.eventId;
-		currentPracticeTab.userRole = self.userRole;
-		
-		EventNotes *currentNotes = [viewControllers objectAtIndex:0];
-		currentNotes.eventId = currentEvent.eventId;
-		currentNotes.teamId = self.teamId;
-		currentNotes.userRole = self.userRole;
-		
-		EventAttendance *currentAttendance = [viewControllers objectAtIndex:1];
-		currentAttendance.eventId = currentEvent.eventId;
-		currentAttendance.teamId = self.teamId;
-		currentAttendance.startDate = currentEvent.startDate;
-		currentAttendance.userRole = self.userRole;
-
-	
-		[self.navigationController pushViewController:currentPracticeTab animated:YES];
-		
-	}
+    if ([self.nextEventArray count] > 0) {
+        if ([[self.nextEventArray objectAtIndex:0] class] == [Practice class]) {
+            PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
+            
+            
+            Practice *currentPractice = [self.futureEventsArray objectAtIndex:0];
+            NSArray *viewControllers = currentPracticeTab.viewControllers;
+            currentPracticeTab.teamId = self.teamId;
+            currentPracticeTab.practiceId = currentPractice.practiceId;
+            currentPracticeTab.userRole = self.userRole;
+            
+            PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+            currentNotes.practiceId = currentPractice.practiceId;
+            currentNotes.teamId = self.teamId;
+            currentNotes.userRole = self.userRole;
+            
+            PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+            currentAttendance.practiceId = currentPractice.practiceId;
+            currentAttendance.teamId = self.teamId;
+            currentAttendance.startDate = currentPractice.startDate;
+            currentAttendance.userRole = self.userRole;
+            
+            
+            [self.navigationController pushViewController:currentPracticeTab animated:YES];
+            
+        }else {
+            
+            EventTabs *currentPracticeTab = [[EventTabs alloc] init];
+            
+            
+            Event *currentEvent = [self.nextEventArray objectAtIndex:0];
+            NSArray *viewControllers = currentPracticeTab.viewControllers;
+            currentPracticeTab.teamId = self.teamId;
+            currentPracticeTab.eventId = currentEvent.eventId;
+            currentPracticeTab.userRole = self.userRole;
+            
+            EventNotes *currentNotes = [viewControllers objectAtIndex:0];
+            currentNotes.eventId = currentEvent.eventId;
+            currentNotes.teamId = self.teamId;
+            currentNotes.userRole = self.userRole;
+            
+            EventAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+            currentAttendance.eventId = currentEvent.eventId;
+            currentAttendance.teamId = self.teamId;
+            currentAttendance.startDate = currentEvent.startDate;
+            currentAttendance.userRole = self.userRole;
+            
+            
+            [self.navigationController pushViewController:currentPracticeTab animated:YES];
+            
+        }
+    }
 
 	
 }
 
 -(void)nextGame{
 	
-	Game *currentGame = [self.nextGameArray objectAtIndex:0];
-	
-	if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
-		GameTabs *currentGameTab = [[GameTabs alloc] init];
-		NSArray *viewControllers = currentGameTab.viewControllers;
-		currentGameTab.teamId = self.teamId;
-		currentGameTab.gameId = currentGame.gameId;
-		currentGameTab.userRole = self.userRole;
-		currentGameTab.teamName = self.teamName;
-		
-		Gameday *currentNotes = [viewControllers objectAtIndex:0];
-		currentNotes.gameId = currentGame.gameId;
-		currentNotes.teamId = self.teamId;
-		currentNotes.userRole = self.userRole;
-		currentNotes.sport = self.teamSport;
-		currentNotes.description = currentGame.description;
-		currentNotes.startDate = currentGame.startDate;
-		currentNotes.opponentString = currentGame.opponent;
-	
-		GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
-		currentAttendance.gameId = currentGame.gameId;
-		currentAttendance.teamId = self.teamId;
-		currentAttendance.startDate = currentGame.startDate;
-		
+	if ([self.nextGameArray count] > 0) {
+        Game *currentGame = [self.nextGameArray objectAtIndex:0];
+        
+        if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+            GameTabs *currentGameTab = [[GameTabs alloc] init];
+            NSArray *viewControllers = currentGameTab.viewControllers;
+            currentGameTab.teamId = self.teamId;
+            currentGameTab.gameId = currentGame.gameId;
+            currentGameTab.userRole = self.userRole;
+            currentGameTab.teamName = self.teamName;
+            
+            Gameday *currentNotes = [viewControllers objectAtIndex:0];
+            currentNotes.gameId = currentGame.gameId;
+            currentNotes.teamId = self.teamId;
+            currentNotes.userRole = self.userRole;
+            currentNotes.sport = self.teamSport;
+            currentNotes.description = currentGame.description;
+            currentNotes.startDate = currentGame.startDate;
+            currentNotes.opponentString = currentGame.opponent;
+            
+            GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+            currentAttendance.gameId = currentGame.gameId;
+            currentAttendance.teamId = self.teamId;
+            currentAttendance.startDate = currentGame.startDate;
+            
+            
+            
+            
+            Vote *fans = [viewControllers objectAtIndex:2];
+            fans.teamId = self.teamId;
+            fans.userRole = self.userRole;
+            fans.gameId = currentGame.gameId;
+            
+            [self.navigationController pushViewController:currentGameTab animated:YES];
+            
+        }else {
+            
+            GameTabsNoCoord *currentGameTab = [[GameTabsNoCoord alloc] init];
+            NSArray *viewControllers = currentGameTab.viewControllers;
+            currentGameTab.teamId = self.teamId;
+            currentGameTab.gameId = currentGame.gameId;
+            currentGameTab.userRole = self.userRole;
+            currentGameTab.teamName = self.teamName;
+            
+            /*
+             TeamActivity *activity = [viewControllers objectAtIndex:1];
+             activity.teamId = self.teamId;
+             activity.userRole = self.userRole;
+             */
+            
+            Gameday *currentNotes = [viewControllers objectAtIndex:0];
+            currentNotes.gameId = currentGame.gameId;
+            currentNotes.teamId = self.teamId;
+            currentNotes.userRole = self.userRole;
+            currentNotes.sport = self.teamSport;
+            currentNotes.description = currentGame.description;
+            currentNotes.startDate = currentGame.startDate;
+            currentNotes.opponentString = currentGame.opponent;
+            
+            
+            
+            Vote *fans = [viewControllers objectAtIndex:1];
+            fans.teamId = self.teamId;
+            fans.userRole = self.userRole;
+            fans.gameId = currentGame.gameId;
+            
+            [self.navigationController pushViewController:currentGameTab animated:YES];
+            
+        }
 
-
-		
-		Vote *fans = [viewControllers objectAtIndex:2];
-		fans.teamId = self.teamId;
-		fans.userRole = self.userRole;
-		fans.gameId = currentGame.gameId;
-
-		[self.navigationController pushViewController:currentGameTab animated:YES];
-		
-	}else {
-		
-		GameTabsNoCoord *currentGameTab = [[GameTabsNoCoord alloc] init];
-		NSArray *viewControllers = currentGameTab.viewControllers;
-		currentGameTab.teamId = self.teamId;
-		currentGameTab.gameId = currentGame.gameId;
-		currentGameTab.userRole = self.userRole;
-		currentGameTab.teamName = self.teamName;
-		
-		/*
-		TeamActivity *activity = [viewControllers objectAtIndex:1];
-		activity.teamId = self.teamId;
-		activity.userRole = self.userRole;
-		*/
-		
-		Gameday *currentNotes = [viewControllers objectAtIndex:0];
-		currentNotes.gameId = currentGame.gameId;
-		currentNotes.teamId = self.teamId;
-		currentNotes.userRole = self.userRole;
-		currentNotes.sport = self.teamSport;
-		currentNotes.description = currentGame.description;
-		currentNotes.startDate = currentGame.startDate;
-		currentNotes.opponentString = currentGame.opponent;
-
-
-		
-		Vote *fans = [viewControllers objectAtIndex:1];
-		fans.teamId = self.teamId;
-		fans.userRole = self.userRole;
-		fans.gameId = currentGame.gameId;
-
-		[self.navigationController pushViewController:currentGameTab animated:YES];
-		
-	}
-
+    }
 	
 }
 

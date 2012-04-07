@@ -248,7 +248,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         NSError *errors;
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Add Member - Single"
+                                             action:@"ScoreNow Add Member - Single"
                                               label:mainDelegate.token
                                               value:-1
                                           withError:&errors]) {
@@ -1236,7 +1236,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         NSError *errors;
         // rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         if (![[GANTracker sharedTracker] trackEvent:@"button_click"
-                                             action:@"Add Members - Multiple"
+                                             action:@"ScoreNow Add Members - Multiple"
                                               label:mainDelegate.token
                                               value:-1
                                           withError:&errors]) {

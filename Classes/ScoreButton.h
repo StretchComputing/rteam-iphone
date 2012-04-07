@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "EventNowButton.h"
+#import "Activity.h"
 
 @interface ScoreButton : EventNowButton {
     
 
 }
+@property (nonatomic, strong) Activity *activity;
 @property bool isAttendance;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UIView *tableLineTop;

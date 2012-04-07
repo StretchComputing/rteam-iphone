@@ -622,8 +622,9 @@
                     
                     ScoreButton *tmp1Button = [[ScoreButton alloc] initWithFrame:CGRectMake(0, 0, 92, 55)];
                     
-                    [tmp1Button addTarget:sentClass action:@selector(viewScore) forControlEvents:UIControlEventTouchUpInside];
+                    [tmp1Button addTarget:sentClass action:@selector(viewScore:) forControlEvents:UIControlEventTouchUpInside];
                     
+                    tmp1Button.activity = result;
                     tmp1Button.yesCount.text = scoreUs;
                     tmp1Button.noCount.text = scoreThem;
                     

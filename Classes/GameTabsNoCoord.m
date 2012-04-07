@@ -19,7 +19,7 @@
 @implementation GameTabsNoCoord
 
 @synthesize startDate, endDate, timeZone, gameId, teamId, description, latitude, longitude, opponent, userRole, messageCount, messageSuccess, 
-teamName, newActivity, fromHome;
+teamName, newActivity, fromHome, fromActivity;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -49,7 +49,11 @@ teamName, newActivity, fromHome;
 		[self.navigationItem setLeftBarButtonItem:homeButton];
 	}
 	
-	
+    if (self.fromActivity) {
+        self.fromActivity = false;
+        UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Activity" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
+		[self.navigationItem setLeftBarButtonItem:homeButton];
+    }
 }
 
 -(void)home{

@@ -35,7 +35,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 
 -(void)viewDidLoad{
 	
-	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
+	//UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 	//[self.navigationItem setLeftBarButtonItem:homeButton];
 	
 	//iAds

@@ -12,6 +12,7 @@
 @interface GameTabs : UITabBarController <UITabBarControllerDelegate, UIActionSheetDelegate> {
 
 }
+@property bool fromActivity;
 @property bool fromHome;
 @property bool newActivity;
 @property (nonatomic, strong) NSString *teamName;

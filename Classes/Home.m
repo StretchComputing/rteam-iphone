@@ -1798,7 +1798,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 UIButton *tmpButton = [UIButton buttonWithType:UIButtonTypeCustom];
                 [tmpButton setTitle:@"No upcoming events found, click 'Gameday' to create one now!" forState:UIControlStateNormal];
                 tmpButton.titleLabel.numberOfLines = 2;
-                tmpButton.lineBreakMode = UILineBreakModeWordWrap;
+                tmpButton.titleLabel.lineBreakMode = UILineBreakModeWordWrap;
                 tmpButton.titleLabel.textAlignment = UITextAlignmentCenter;
                 [tmpButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
                 tmpButton.frame = CGRectMake(0, 0, 320, 110);

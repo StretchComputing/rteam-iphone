@@ -258,14 +258,14 @@
 		
 	}else {
 		
-		NSString *replyDate = reply.dateReplied;
+		//NSString *replyDate = reply.dateReplied;
 		
 		NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
 		[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-		NSDate *formatedDate = [dateFormat dateFromString:replyDate];
+		//NSDate *formatedDate = [dateFormat dateFromString:replyDate];
 		//[dateFormat setDateFormat:@"yyyy-MM-dd hh:mm aa"];
 		[dateFormat setDateFormat:@"MMM dd hh:mm aa"];
-		NSString *date = [dateFormat stringFromDate:formatedDate];
+		//NSString *date = [dateFormat stringFromDate:formatedDate];
         
         
 		nameLabel.text = reply.name;
