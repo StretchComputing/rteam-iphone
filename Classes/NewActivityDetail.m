@@ -20,6 +20,7 @@
 #import "Base64.h"
 #import "ReplyButtonBackView.h"
 #import "ScoreButton.h"
+#import "TraceSession.h"
 
 @implementation NewActivityDetail
 @synthesize likeButton,likesMessage, locationText, locationTextLabel, profile, picImageData, profileImage, commentBackground, activity, displayName, displayTime, displayMessage, replies, messageId, myToolbar, myScrollView, postImageArray, postImageData, teamId, starOne, starTwo, starThree, numLikes, numDislikes, thumbsUp, thumbsDown, likesLabel, dislikesLabel, currentVoteBool, voteSuccess, currentVote, voteLabel, isVideo, replyButton, editButton, deleteButton, errorLabel, isCurrentUser, fromReplyEdit, teamName;
@@ -27,6 +28,9 @@
 
 -(void)viewWillAppear:(BOOL)animated{
         
+    [TraceSession addEventToSession:@"Activity Detail - View Will Appear"];
+
+    
     if ([self.fromReplyEdit isEqualToString:@"true"]) {
         self.fromReplyEdit = @"false";
         [self performSelectorInBackground:@selector(getActivityDetails) withObject:nil];
@@ -578,6 +582,9 @@
 
 -(void)imageSelected:(id)sender{
         
+    [TraceSession addEventToSession:@"Activity Detail - Image Selected"];
+
+    
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"Image Selected - Activity Detail"
@@ -595,6 +602,8 @@
 
 -(void)imageSelectedReply:(id)sender{
     
+    [TraceSession addEventToSession:@"Activity Detail - Image Selected Reply"];
+
     
     ImageButton *tmpButton = (ImageButton *)sender;
     
@@ -622,7 +631,8 @@
 
 -(void)videoSelectedReply:(id)sender{
     
-    
+    [TraceSession addEventToSession:@"Activity Detail - Video Selected Reply"];
+
     ImageButton *tmpButton = (ImageButton *)sender;
     
     NSString *msgId = [NSString stringWithString:tmpButton.messageId];
@@ -649,6 +659,8 @@
 
 -(void)videoSelected:(id)sender{
     
+    [TraceSession addEventToSession:@"Activity Detail - Video Selected"];
+
     VideoDisplay *newDisplay = [[VideoDisplay alloc] init];
     newDisplay.activityId = messageId;
     newDisplay.teamId = teamId;
@@ -684,6 +696,8 @@
 
 -(void)voteUp{
 
+    [TraceSession addEventToSession:@"Activity Detail - Vote Up"];
+
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"Vote Like - Activity Detail"
@@ -699,6 +713,8 @@
 }
 
 -(void)voteDown{
+
+    [TraceSession addEventToSession:@"Activity Detail - Vote Down"];
 
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
@@ -837,6 +853,8 @@
 
 -(void)edit{
     
+    [TraceSession addEventToSession:@"Activity Detail - Edit Selected"];
+
     self.errorLabel.text = @"";
     
     ReplyEditActivity *tmp = [[ReplyEditActivity alloc] init];
@@ -866,6 +884,9 @@
 
 -(void)reply{
     
+    [TraceSession addEventToSession:@"Activity Detail - Reply Selected"];
+
+    
     self.errorLabel.text = @"";
 
     ReplyEditActivity *tmp = [[ReplyEditActivity alloc] init];
@@ -878,6 +899,9 @@
 	[self.navigationController presentModalViewController:navController animated:YES];}
 
 -(void)deleteAction{
+    
+    [TraceSession addEventToSession:@"Activity Detail - Delete Selected"];
+
     
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"

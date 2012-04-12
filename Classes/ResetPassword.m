@@ -13,10 +13,16 @@
 #import "ResetPasswordWithQuestion.h"
 #import "GANTracker.h"
 #import "rTeamAppDelegate.h"
+#import "TraceSession.h"
 
 @implementation ResetPassword
 @synthesize email, activity, error, hasQuestion, resetButton, success, question, errorString, theEmail;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"ResetPassword - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
 	self.title = @"Reset Password";

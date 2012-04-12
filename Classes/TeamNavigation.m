@@ -9,7 +9,6 @@
 #import "TeamNavigation.h"
 #import "CurrentTeamTabs.h"
 #import "Players.h"
-#import "Fans.h"
 #import "EventList.h"
 #import "TeamHome.h"
 

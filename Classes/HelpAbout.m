@@ -19,6 +19,8 @@
 @implementation HelpAbout
 @synthesize scrollView, feedbackButton, bannerIsVisible, displayLabel, welcomeLabel, fromSettings, myAd, feedbackAction, gamedayHelpButton, downArrow;
 
+
+
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];
@@ -63,6 +65,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"HelpAbout - View Will Appear"];
+
 	self.title = @"About rTeam";
 	[self.scrollView
 	 setContentSize:CGSizeMake(320,500)];

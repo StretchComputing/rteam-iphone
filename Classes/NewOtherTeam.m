@@ -10,10 +10,15 @@
 #import "NewTeam.h"
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation NewOtherTeam
 @synthesize sport, myTableView, allSports, allMatches, errorMessage, continueButton, fromHome;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"NewOtherTeam - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

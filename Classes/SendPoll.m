@@ -27,7 +27,10 @@
 @synthesize doneButton, activity, pollQuestion, pollType, errorMessage, pollSubject, teamId, createSuccess, eventId, eventType, origLoc, recipients,
 toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, recipientObjects, thePollSubject, thePollQuestion;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"SendPoll - View Will Appear"];
 
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

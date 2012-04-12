@@ -14,10 +14,15 @@
 #import "Fan.h"
 #import "ConfirmMessageDetail.h"
 #import "FastActionSheet.h"
-
+#import "TraceSession.h"
 @implementation ViewDetailMessageReplies
 @synthesize replyArray, teamId, allReplyObjects, finalized, getInfo, threadId, isSender, myTableView, loadingLabel, loadingActivity, members;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"ViewDetailMessageReplies - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

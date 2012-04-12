@@ -17,12 +17,15 @@
 #import "ServerAPI.h"
 #import "GANTracker.h"
 #import "NewActivity.h"
+#import "TraceSession.h"
 
 @implementation HomeScoreView
 @synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView;
 
 - (void)viewDidLoad
 {
+    [TraceSession addEventToSession:@"HomeScoreView - View Did Load"];
+
     self.addUsButton.hidden = YES;
     self.subUsButton.hidden = YES;
     self.addThemButton.hidden = YES;

@@ -15,12 +15,18 @@
 #import "FastActionSheet.h"
 #import <QuartzCore/QuartzCore.h>
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation TeamPicture
 @synthesize removeButton, addChangeButton, profilePic, titleLabel, loadingImageLabel, loadingImageActivity, displayLabel, addImage, hasImage,
 imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, userRole, teamId, largeImageView, camerActionSheet, allWhiteView,
 newImage, dontMove, toOrientation, portrait;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"TeamPicture - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	

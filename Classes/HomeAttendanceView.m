@@ -24,6 +24,7 @@
 #import "GANTracker.h"
 #import "ViewDetailPollRepliesNow.h"
 #import "GoogleAppEngine.h"
+#import "TraceSession.h"
 
 
 
@@ -32,6 +33,8 @@
 
 - (void)viewDidLoad
 {
+    [TraceSession addEventToSession:@"HomeAttendanceView - View Did Load"];
+
     UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.goToButton setBackgroundImage:stretch forState:UIControlStateNormal];

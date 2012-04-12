@@ -30,6 +30,10 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 
 
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"NewTeam - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

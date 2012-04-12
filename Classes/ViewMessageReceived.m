@@ -17,10 +17,10 @@
 #import "ViewDetailMessageReplies.h"
 #import "MessageThreadInbox.h"
 #import "FastActionSheet.h"
-#import "MessageReply.h"
 #import "SendPrivateMessage.h"
 #import "Player.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation ViewMessageReceived
 @synthesize subject, body, receivedDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, wasViewed, threadId,
@@ -36,6 +36,8 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"ViewMessageReceived - View Will Appear"];
+
     self.isAlert = false;
     [self performSelectorInBackground:@selector(getThreadInfo) withObject:nil];
     

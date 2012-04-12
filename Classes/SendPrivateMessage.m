@@ -21,6 +21,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"SendPrivateMessage - View Will Appear"];
+
     NSString *nameString = @"";
     self.recipients = [NSMutableArray array];
         

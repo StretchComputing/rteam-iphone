@@ -7,12 +7,10 @@
 //activi
 
 #import "Team.h"
-#import "InviteFan2.h"
 #import "Home.h"
 #import "Practice.h"
 #import "ServerAPI.h"
 #import "Game.h"
-#import "Fans.h"
 #import "rTeamAppDelegate.h"
 #import "GameTabs.h"
 #import "Gameday.h"
@@ -23,7 +21,6 @@
 #import "AllEventsCalendar.h"
 #import "MessageThreadInbox.h"
 #import "Search.h"
-#import "InviteFan.h"
 #import "MyViewController.h"
 #import "MyTeams.h"
 #import "QuartzCore/QuartzCore.h"
@@ -519,11 +516,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 	
 	UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-  
-
-
-    self.inviteFan = [[UIBarButtonItem alloc] initWithTitle:@"Invite A Fan" style:UIBarButtonItemStyleBordered target:self action:@selector(inviteFanMethod)];
-	self.inviteFan.title = @"Invite A Fan";
  
     
     UIBarButtonItem *question = [[UIBarButtonItem alloc] initWithTitle:@"?" style:UIBarButtonItemStylePlain target:self action:@selector(question)];
@@ -776,61 +768,6 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 }
 
 
-
--(void)inviteFanMethod{
-	
-	self.serverError.text = @"";
-
-	bool goTeam = true;
-	
-	while (!self.haveTeamList) {
-		//Wait here for the background thread to finish;
-		
-		if (self.teamListFailed) {
-			goTeam = false;
-			break;
-		}
-	}
-	
-	if (goTeam) {
-		
-		if ([self.teamList count] == 1) {
-			Team *tmpTeam = [self.teamList objectAtIndex:0];
-			
-			InviteFan2 *tmp = [[InviteFan2 alloc] init];
-			tmp.teamId = tmpTeam.teamId;
-			
-			
-			UINavigationController *navController = [[UINavigationController alloc] init];
-			
-			[navController pushViewController:tmp animated:YES];
-			
-            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-			[self.navigationController presentModalViewController:navController animated:YES];
-			
-			
-		}else if ([self.teamList count] > 1) {
-			InviteFan *tmp = [[InviteFan alloc] init];
-			
-			UINavigationController *navController = [[UINavigationController alloc] init];
-			
-			[navController pushViewController:tmp animated:YES];
-            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-			[self.navigationController presentModalViewController:navController animated:YES];
-		}else {
-			
-			self.serverError.text = @"*You must create or join at least 1 team to invite a fan.";
-		}
-		
-	}else {
-		self.serverError.text = @"*Error connecting to server";
-		self.teamListFailed = false;
-		[self performSelectorInBackground:@selector(getTeamList) withObject:nil];
-	}
-
-	
-	
-}
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	

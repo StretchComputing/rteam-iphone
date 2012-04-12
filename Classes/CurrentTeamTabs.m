@@ -8,12 +8,12 @@
 
 #import "CurrentTeamTabs.h"
 #import "Players.h"
-#import "Fans.h"
 #import "EventList.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "TeamHome.h"
 #import "Home.h"
+#import "TraceSession.h"
 #import "FastActionSheet.h"
 
 @implementation CurrentTeamTabs
@@ -33,6 +33,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
 		
+    [TraceSession addEventToSession:@"CurrentTeamTabs - View Will Appear"];
+
     if (self.fromHome) {
         UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
         [self.navigationItem setLeftBarButtonItem:addButton];

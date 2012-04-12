@@ -25,7 +25,6 @@
 #import "EventTabs.h"
 #import "EventAttendance.h"
 #import "EventNotes.h"
-#import "Fans.h"
 #import "Vote.h"
 #import "QuartzCore/QuartzCore.h"
 #import "Base64.h"
@@ -154,6 +153,8 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 
 
 -(void)viewWillAppear:(BOOL)animated{
+
+    [TraceSession addEventToSession:@"TeamHome - View Will Appear"];
 
    
     

@@ -10,11 +10,19 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "Base64.h"
+#import "TraceSession.h"
+
 
 @implementation ImageDisplayMultiple
 @synthesize imageDataArray, didReply, commentText, isFullScreen, replyButton, isPortrait, myScrollview, currentPage, bigImageView, bigScrollView, activityId, teamId, encodedPhoto;
 
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [TraceSession addEventToSession:@"ImageDisplayMultiple - View Will Appear"];
+
+    
+}
 -(void)viewDidAppear:(BOOL)animated{
  
 }

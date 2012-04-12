@@ -12,6 +12,7 @@
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation MapLocation
 @synthesize map, locationManager, latCoord, longCoord, eventLatCoord, eventLongCoord, directionsButton;
@@ -24,6 +25,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"MapLocation - View Will Appear"];
+
     
 	CLLocation* myLocation = [[CLLocation alloc] initWithLatitude:self.eventLatCoord longitude:self.eventLongCoord];
 	CLLocationCoordinate2D location = myLocation.coordinate;

@@ -18,6 +18,7 @@
 #import "MessageThreadOutbox.h"
 #import "FastActionSheet.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation ViewPollSent
 @synthesize messageThreadId, teamId, subject, body, numReply, option1, option2, option3, option4, option5, replyFraction, individualReplies,
@@ -34,6 +35,8 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"ViewPollSent - View Will Appear"];
+
 	if (self.currentPollNumber == ([self.pollArray count] - 1)) {
 		[self.upDown setEnabled:NO forSegmentAtIndex:1];
 	}

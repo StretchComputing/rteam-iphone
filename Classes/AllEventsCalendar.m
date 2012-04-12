@@ -27,7 +27,6 @@
 #import "EventNotes.h"
 #import "EventAttendance.h"
 #import "Home.h"
-#import "Fans.h"
 #import "FastActionSheet.h"
 #import "Vote.h"
 #import "GANTracker.h"
@@ -46,6 +45,8 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 
 -(void)viewWillAppear:(BOOL)animated{
 
+
+    [TraceSession addEventToSession:@"AllEventsCalendar - View Will Appear"];
 
 	if (self.createdEvent) {
 		self.createdEvent = false;

@@ -19,6 +19,8 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"Vote - View Will Appear"];
+
 	
 	[self.tabBarController.navigationItem setRightBarButtonItem:nil];
 

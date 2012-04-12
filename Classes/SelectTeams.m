@@ -15,6 +15,10 @@
 @implementation SelectTeams
 @synthesize myTeams, myTableView, rowsSelected, isPoll, isPrivate;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"SelectTeams - View Will Appear"];
+
+}
 - (void)viewDidLoad
 {
     self.title = @"Select Team";

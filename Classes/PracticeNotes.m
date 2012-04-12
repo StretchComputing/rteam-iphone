@@ -78,6 +78,9 @@ errorString, dayString, timeString;
 
 
 -(void)viewWillAppear:(BOOL)animated{
+    
+    [TraceSession addEventToSession:@"PracticeNotes - View Will Appear"];
+
 	if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
 		self.editDone = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editPractice)];
 		[self.tabBarController.navigationItem setRightBarButtonItem:self.editDone];

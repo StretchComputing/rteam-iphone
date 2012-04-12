@@ -15,6 +15,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation TeamEdit
 @synthesize teamId, sportLabel, description, teamName, errorLabel, activity, changeSportButton, saveChangesButton, saveSuccess, newTeamName,
@@ -59,6 +60,8 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+
+    [TraceSession addEventToSession:@"TeamEdit - View Will Appear"];
 
 	if (self.newTeamName != nil) {
 		self.sportLabel.text = self.newTeamName;

@@ -18,7 +18,6 @@
 #import <iAd/iAd.h>
 #import "NewMemberObject.h"
 #import "Players.h"
-#import "Fans.h"
 #import "EventList.h"
 #import "TeamHome.h"
 #import "FastActionSheet.h"
@@ -92,6 +91,8 @@ fromHome, myAd, alertOne, alertTwo, isDelete, deleteActivity;
 
 -(void)viewWillAppear:(BOOL)animated{
 		
+    [TraceSession addEventToSession:@"MyTeams - View Will Appear"];
+
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
         bannerIsVisible = YES;

@@ -22,6 +22,11 @@
 @synthesize teamId, members, selectedMembers, selectedMemberObjects, fromWhere, error, messageOrPoll, userRole, eventType, eventId, allFansObjects,
 haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMembers, isPoll, isPrivate, team, fans, allMemberObjects;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"SelectRecipients - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

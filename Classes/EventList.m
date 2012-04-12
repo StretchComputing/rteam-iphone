@@ -30,7 +30,6 @@
 #import "EventNotes.h"
 #import "EventAttendance.h"
 #import "EventEdit.h"
-#import "Fans.h"
 #import "Vote.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
@@ -62,6 +61,8 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+
+    [TraceSession addEventToSession:@"EventList - View Will Appear"];
 
 	[self.eventsTableView setEditing:NO];
 	[super setEditing:NO animated:NO];

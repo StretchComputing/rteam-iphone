@@ -9,6 +9,8 @@
 #import "CameraSelectionTeamPicture.h"
 #import "TeamPicture.h"
 #import "CurrentTeamTabs.h"
+#import "TraceSession.h"
+
 @implementation CameraSelectionTeamPicture
 
 
@@ -21,6 +23,8 @@
 
 -(void)viewDidAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"CameraSelectionTeamPicture - View Did Appear"];
+
 	@try {
         UIImagePickerController * picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;

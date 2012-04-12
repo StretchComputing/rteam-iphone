@@ -11,11 +11,16 @@
 #import "ServerAPI.h"
 #import "JSON/JSON.h"
 #import "SettingsTabs.h"
+#import "TraceSession.h"
 #import "GANTracker.h"
 
 @implementation ChangePassword
 @synthesize submitButton, error, password, confirmPassword, activity, changeSuccess, errorString, thePassword;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"ChangePassword - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
 	self.title = @"Change Password";

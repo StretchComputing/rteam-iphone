@@ -27,7 +27,8 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 
 -(void)viewWillAppear:(BOOL)animated{
 
-	
+    [TraceSession addEventToSession:@"Register - View Will Appear"];
+
 	[self.submitButton setEnabled:YES];
 	[self.memberLogin setEnabled:YES];
 	[self.navigationItem setHidesBackButton:YES];

@@ -11,12 +11,18 @@
 #import "ServerAPI.h"
 #import "FastActionSheet.h"
 #import "Player.h"
+#import "TraceSession.h"
 
 @implementation EditGuardianInfo
 @synthesize guardianArray, oneFirstName, oneLastName, oneEmail, twoFirstName, twoLastName, twoEmail, saveChangesButton, removeGuardiansButton,
 activity, errorLabel, teamId, memberId, errorString, onePhone, twoPhone, oneKey, twoKey, guard1Na, guard2Na, phoneOnlyArray,
 confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, guard2SmsConfirmed, guard2isUser, guard1EmailConfirmed, guard2EmailConfirmed, guard1isUser, theOneEmail, theOnePhone, theTwoEmail, theTwoPhone, theOneLastName, theTwoLastName, theOneFirstName, theTwoFirstName;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"EditGuardianInfo - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

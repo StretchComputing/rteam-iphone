@@ -43,7 +43,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 
 -(void)viewWillAppear:(BOOL)animated{
     
-   
+    [TraceSession addEventToSession:@"NewPlayer - View Will Appear"];
+
 
 	if (self.useGuardians) {
 		[self.addParentGuardianButton setTitle:@"Change Parent or Guardian" forState:UIControlStateNormal];

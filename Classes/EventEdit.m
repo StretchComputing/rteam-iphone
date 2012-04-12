@@ -53,6 +53,8 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"EventEdit - View Will Appear"];
+
 	self.title = @"Edit Event Info";
 	self.practiceOpponent.text = self.opponent;
 	

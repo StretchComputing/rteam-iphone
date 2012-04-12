@@ -8,10 +8,15 @@
 
 #import "TeamChangeSport.h"
 #import "TeamEdit.h"
+#import "TraceSession.h"
 
 @implementation TeamChangeSport
 @synthesize sport, myTableView, allSports, allMatches, errorMessage;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"TeamChangeSport - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
 	

@@ -14,10 +14,16 @@
 #import "PollReplyObject.h"
 #import "ConfirmPollDetail.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation ViewDetailPollReplies
 @synthesize replyArray, teamId, allReplyObjects, finalized, isSender, myTableView, loadingLabel, loadingActivity, members;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"ViewDetailPollReplies - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

@@ -13,7 +13,6 @@
 #import "ServerAPI.h"
 #import "Team.h"
 #import "Base64.h"
-#import "InviteFan2.h"
 #import "Fan.h"
 #import "NewMemberObject.h"
 #import "InviteFanFinal.h"
@@ -82,6 +81,8 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"Players.m - View Will Appear"];
+
 	self.currentMemberId = @"";
 	self.error = @"";
 	

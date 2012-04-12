@@ -16,6 +16,7 @@
 #import "SelectTeamCal.h"
 #import "FastActionSheet.h"
 #import "RecurringEventSelection.h"
+#import "TraceSession.h"
 
 @implementation CreateNewEventGameday
 @synthesize selection, teamId, eventDateTime, haveTeamList, teamList, teamListFailed, error, createButton, createMultipleButton,
@@ -23,6 +24,8 @@ createSingleLabel;
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"CreateNewEventGameday - View Will Appear"];
+
 	[self performSelectorInBackground:@selector(getTeamList) withObject:nil];
     
 }

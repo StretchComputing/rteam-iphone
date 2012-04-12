@@ -8,11 +8,16 @@
 
 #import "ProfilePhoto.h"
 #import "QuartzCore/QuartzCore.h"
-
+#import "TraceSession.h"
 
 @implementation ProfilePhoto
 @synthesize nameLabel, teamLabel, photo, imageData, backView, nameString, teamString;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"ProfilePhoto - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
     self.title = @"Profile";

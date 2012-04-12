@@ -10,6 +10,7 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "Base64.h"
+#import "TraceSession.h"
 
 @implementation VideoDisplay
 @synthesize movieData, basePath, errorString, activityId, teamId, movieString, isPlayingMovie, activity, errorLabel;
@@ -17,6 +18,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"ImageDisplayMultiple - View Will Appear"];
+
     self.errorLabel.text = @"";
     if (!self.isPlayingMovie) {
         self.isPlayingMovie = true;

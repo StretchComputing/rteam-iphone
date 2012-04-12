@@ -49,6 +49,8 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 }
 -(void)viewWillAppear:(BOOL)animated{
 
+    [TraceSession addEventToSession:@"GameEdit - View Will Appear"];
+
 	self.title = @"Edit Game Info";
 	self.gameOpponent.text = self.opponent;
 	self.gameDescription.text = self.description;

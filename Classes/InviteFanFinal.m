@@ -32,6 +32,10 @@ addContactWhere, multipleEmailArrayLabels, multiplePhoneArrayLabels, coordinator
 
 
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"InviteFanFinal - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

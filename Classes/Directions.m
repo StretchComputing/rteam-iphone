@@ -9,10 +9,16 @@
 #import "Directions.h"
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation Directions
 @synthesize webView, urlString;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"Directions - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

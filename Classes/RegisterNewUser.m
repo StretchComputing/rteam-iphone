@@ -32,7 +32,11 @@
 locationManager, updateLat, updateLong, phoneText, carrierText, carrierLabel, carrierPicker, carrierExplain, phoneExplain, carriers, selectedCarrier,
 selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, hardCarriers, usingHardCarriers, locationString, theFirstName, theLastName, thePhoneNumber;
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [TraceSession addEventToSession:@"RegisterNewUser - View Will Appear"];
 
+}
 
 - (void)viewDidLoad {
     

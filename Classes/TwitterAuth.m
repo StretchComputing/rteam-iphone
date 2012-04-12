@@ -9,10 +9,16 @@
 #import "TwitterAuth.h"
 #import "NewTeam.h"
 #import "MyTeams.h"
+#import "TraceSession.h"
 
 @implementation TwitterAuth
 @synthesize webView, url, fromHome;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"TwitterAuth - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
 	NSArray *tmp = [self.navigationController viewControllers];

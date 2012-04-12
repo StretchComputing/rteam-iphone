@@ -11,10 +11,10 @@
 #import "Gameday.h"
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
-#import "Fans.h"
 #import "Home.h"
 #import "FastActionSheet.h"
 #import "Vote.h"
+#import "TraceSession.h"
 
 @implementation GameTabs
 
@@ -29,6 +29,8 @@ teamName, newActivity, fromHome, fromActivity;
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"GameTabs - View Will Appear"];
+
 	int index = self.selectedIndex;
 	
 	if (index == 100) {

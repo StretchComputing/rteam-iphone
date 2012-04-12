@@ -16,11 +16,13 @@
 #import "MessageThreadOutbox.h"
 #import "FastActionSheet.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation ViewMessageSent
 @synthesize subject, body, createdDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, threadId, recipients,
 individualReplies, viewMoreDetailButton, confirmString, confirmStringLabel, messageNumber, messageArray, currentMessageNumber, upDown,
 teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel, deleteButton, errorLabel, errorString, nameLabel, fromClass;
+
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -31,6 +33,8 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"ViewMessageSent - View Will Appear"];
+
 	if (self.currentMessageNumber == ([self.messageArray count] - 1)) {
 		[self.upDown setEnabled:NO forSegmentAtIndex:1];
 	}

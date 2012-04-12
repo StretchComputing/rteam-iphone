@@ -22,6 +22,10 @@
 @synthesize action, question, errorMessage, option1, option2, option3, option4, option5, submitButton, questionText, teamId, createSuccess, 
 eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayResults, errorString, theOption1, theOption2, theOption3, theOption4, theOption5;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"SendPollOptions - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

@@ -11,10 +11,10 @@
 #import "Gameday.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
-#import "Fans.h"
 #import "Home.h"
 #import "FastActionSheet.h"
 #import "Vote.h"
+#import "TraceSession.h"
 
 @implementation GameTabsNoCoord
 
@@ -29,6 +29,8 @@ teamName, newActivity, fromHome, fromActivity;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+
+    [TraceSession addEventToSession:@"GameTabsNoCoord - View Will Appear"];
 
     
 	int index = self.selectedIndex;

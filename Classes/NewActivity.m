@@ -72,6 +72,9 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 	
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"Activity - View Will Appear"];
+
+    
     self.topScrollView.contentOffset = self.bottomScrollView.contentOffset;
     
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -592,9 +595,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
             
             
         }        
-    }
-
-        
+    }        
 }
 
 

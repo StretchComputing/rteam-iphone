@@ -14,12 +14,16 @@
 #import "Team.h"
 #import "Home.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation Scores
 @synthesize teamId, bottomBar, refreshButton, filterButton, table, games, error, teamTable, scroll, haveTeamList, teamList, sport, teamName,
 bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, insideView, myAd;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"Scores - View Will Appear"];
 
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

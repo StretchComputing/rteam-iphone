@@ -10,10 +10,15 @@
 #import "GameEdit.h"
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation GameEditDate
 @synthesize gameDate, gameDatePicker, submitButton;;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"GameEditDate - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

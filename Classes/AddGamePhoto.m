@@ -11,6 +11,7 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import <QuartzCore/QuartzCore.h>
+#import "TraceSession.h"
 
 @implementation AddGamePhoto
 @synthesize hideAction, photoAction, newPhotoButton, submitButton, imagePreview, stayHere, imageData, activityText, countLabel, noImageLabel,
@@ -38,6 +39,8 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 
 -(void)viewDidAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"AddGamePhoto - View Did Appear"];
+
     
 	if (!self.hideAction) {
         

@@ -12,6 +12,7 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation PracticeTabs
 @synthesize startDate, endDate, timeZone, practiceId, teamId, description, latitude, longitude, location, userRole, messageCount, messageSuccess, fromHome;
@@ -24,6 +25,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
 		
+    [TraceSession addEventToSession:@"PracticeTabs - View Will Appear"];
+
 	int index = self.selectedIndex;
 	
 	if (index == 1) {

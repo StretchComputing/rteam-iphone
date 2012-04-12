@@ -18,6 +18,7 @@
 #import "FastActionSheet.h"
 #import "NewActivity.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation ViewPollReceived
 @synthesize subject, body, receivedDate, displayDate, displayBody, displaySubject, teamId, eventId, eventType, pollChoices, buttonOption1,
@@ -35,6 +36,8 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"ViewPollReceived - View Will Appear"];
+
 	if (self.currentPollNumber == ([self.pollArray count] - 1)) {
 		[self.upDown setEnabled:NO forSegmentAtIndex:1];
 	}

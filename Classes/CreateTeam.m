@@ -10,11 +10,16 @@
 #import "NewTeam.h"
 #import "NewOtherTeam.h"
 #import "FastActionSheet.h"
-
+#import "TraceSession.h"
 
 @implementation CreateTeam
 @synthesize  fromHome;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"CreateTeam - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

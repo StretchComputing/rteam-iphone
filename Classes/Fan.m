@@ -240,6 +240,8 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 
 - (void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"Fan.m - View Will Appear"];
+
     self.callTextButton.hidden = YES;
 	self.emailLabel.hidden = YES;
 	self.nameLabel.hidden = YES;

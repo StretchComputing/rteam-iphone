@@ -11,6 +11,7 @@
 #import "rTeamAppDelegate.h"
 #import <MobileCoreServices/UTCoreTypes.h> 
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation ReplyEditActivity
 @synthesize segControl, messageText, activity, messageImage, cancelImageButton, errorLabel, isReply, originalMessage, errorString, imageDataToSend, videoDataToSend, isSendVideo, teamId, activityId, theMessageText, sendOrientation, previewImageData, cancelImageVideo, isTakeVideo, cameraSaveMessage, displayClass;
@@ -18,6 +19,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"ReplyEditActivity - View Will Appear"];
+
     if ([self.previewImageData length] > 0) {
         self.cancelImageButton.hidden = NO;
         

@@ -7,6 +7,7 @@
 //
 
 #import "CameraSelection.h"
+#import "TraceSession.h"
 
 @implementation CameraSelection
 
@@ -18,6 +19,8 @@
 
 -(void)viewDidAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"CameraSelection - View Did Appear"];
+
 	@try {
         UIImagePickerController * picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;

@@ -14,12 +14,16 @@
 #import "PracticeTabs.h"
 #import "FastActionSheet.h"
 #import "NewActivity.h"
-
+#import "TraceSession.h"
 
 @implementation FinalizePoll
 @synthesize teamId, messageThreadId, followUpMessage, confirmButton, createSuccess, errorMessage, activity, errorString, theFollowUpMessage;
 
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"FinalizePoll - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

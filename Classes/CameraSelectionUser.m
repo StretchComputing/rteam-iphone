@@ -8,6 +8,7 @@
 
 #import "CameraSelectionUser.h"
 #import "AddChangeProfilePic.h"
+#import "TraceSession.h"
 
 @implementation CameraSelectionUser
 
@@ -21,6 +22,8 @@
 
 -(void)viewDidAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"CameraSelectionUser - View Did Appear"];
+
 	
     @try {
         UIImagePickerController * picker = [[UIImagePickerController alloc] init];

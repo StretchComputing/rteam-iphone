@@ -12,10 +12,15 @@
 #import "Login.h"
 #import <QuartzCore/QuartzCore.h>
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation ResetPasswordWithQuestion
 @synthesize question, answerField, questionField, errorLabel, activity, submitButton, success, email, errorString, theAnswerField;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"ResetPasswordWithQuestion - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
 	self.title = @"Reset Password";

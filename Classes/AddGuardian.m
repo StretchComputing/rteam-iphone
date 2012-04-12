@@ -9,12 +9,20 @@
 #import "AddGuardian.h"
 #import "NewPlayer.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation AddGuardian
 @synthesize oneFirstName, oneLastName, oneEmail, twoFirstName, twoLastName, twoEmail, errorLabel, saveButton, guardianOneFirst, 
 guardianOneLast, guardianOneEmail, guardianTwoFirst, guardianTwoLast, guardianTwoEmail, onePhone, twoPhone, guardianOnePhone, guardianTwoPhone,
 removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneArray, currentGuardEmail, currentGuardPhone, currentGuardLastName, currentGuardFirstName, multipleEmailAlert, multiplePhoneAlert, multipleEmailArrayLabels, multiplePhoneArrayLabels;
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    self.errorLabel.text = @"";
+
+    [TraceSession addEventToSession:@"AddGuardian - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
     
     [self becomeFirstResponder];
@@ -62,15 +70,6 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
     
 }
 
-
--(void)viewWillAppear:(BOOL)animated{
-	
-    self.errorLabel.text = @"";
-	
-	
-	
-    
-}
 
 -(void)save{
 	self.errorLabel.text = @"";

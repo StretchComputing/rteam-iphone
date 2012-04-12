@@ -101,6 +101,8 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 - (void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"Player.m - View Will Appear"];
+
 	if (self.isEditing) {
 		self.isEditing = false;
 	}

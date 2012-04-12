@@ -29,6 +29,8 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"Search - View Will Appear"];
+
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
         bannerIsVisible = YES;

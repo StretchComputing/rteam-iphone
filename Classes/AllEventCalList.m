@@ -10,7 +10,6 @@
 #import "Game.h"
 #import "Practice.h"
 #import "GameAttendance.h"
-#import "Fans.h"
 #import "Gameday.h"
 #import "GameTabs.h"
 #import "GameTabsNoCoord.h"
@@ -45,6 +44,8 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+
+    [TraceSession addEventToSession:@"AllEventCalList - View Will Appear"];
 
 	self.calendarList.delegate = self;
 	self.calendarList.dataSource = self;

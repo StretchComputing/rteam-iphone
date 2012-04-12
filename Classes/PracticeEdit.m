@@ -51,6 +51,8 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"PracticeEdit - View Will Appear"];
+
 	self.title = @"Edit Practice Info";
 	//self.practiceOpponent.text = self.opponent;
 	self.practiceDescription.text = self.description;

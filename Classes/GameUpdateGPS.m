@@ -15,6 +15,7 @@
 #import "Game.h"
 #import "FastActionSheet.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation GameUpdateGPS
 @synthesize gameId, teamId, locationName, action, lat, longt, locationManager, saveButton, useCurrentButton, updateSuccess, errorMessage, 
@@ -29,6 +30,8 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"GameUpdateGPS - View Will Appear"];
+
 	self.locationName.text = self.locationString;
 }
 

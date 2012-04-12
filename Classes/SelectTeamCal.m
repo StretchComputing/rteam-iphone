@@ -22,11 +22,16 @@
 #import "NewPractice2.h"
 #import "NewEvent2.h"
 #import "RecurringEventSelection.h"
+#import "TraceSession.h"
 
 @implementation SelectTeamCal
 @synthesize teams, error, event, teamId, finalDate, singleOrMultiple;
 
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"SelectTeamCal - View Will Appear"];
+
+}
 - (void)viewDidLoad {
 	
 	self.title = @"Select Team";

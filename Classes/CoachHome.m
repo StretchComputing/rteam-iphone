@@ -14,11 +14,14 @@
 #import "ServerAPI.h"
 #import "Home.h"
 #import "SettingsTabs.h"
+#import "TraceSession.h"
 
 @implementation CoachHome
 @synthesize logout;
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"CoachHome - View Will Appear"];
+
 	NSString *token = @"";
 	//If there is already a valid token and teams created, go straight to team page
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];

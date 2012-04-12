@@ -79,6 +79,8 @@ startDateString, loading, errorString, dayString, timeString, eventNameString;
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"EventNotes - View Will Appear"];
+
 	[self.loading startAnimating];
 	[self performSelectorInBackground:@selector(getPracticeInfo) withObject:nil];
     

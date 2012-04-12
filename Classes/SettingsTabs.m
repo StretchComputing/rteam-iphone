@@ -30,6 +30,8 @@ loadingActivity, bannerIsVisible, largeActivity, doneGames, doneEvents, allGames
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"SettingsTabs - View Will Appear"];
+
     [self.navigationItem setHidesBackButton:YES];
     
     

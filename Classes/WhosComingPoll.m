@@ -14,6 +14,7 @@
 #import "Practice.h"
 #import "Event.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation WhosComingPoll
 @synthesize  teamList, cancelButton, selectView, selectTable, teamSelectButton, currentTeamsView, initialDate, selectedGameId, selectedTeamId, eventList, eventActivity, eventPicker, areNoEvents, eventType, eventId, mainActivity, displayLabel, sendButton, selectedMessageThreadId, isGettingEvents, newGame, createEventView, createEventSegment, createEventDatePicker, createEventCancelButton, createEventSubmitButton, createEventType, createEventDate, noCoordAlert;
@@ -22,6 +23,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"WhosComingPoll - View Will Appear"];
+
     if ([self.teamList count] > 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Who's Coming Poll" message:@"To send a poll to your team asking if they will attend, first select a team, then select an event." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
@@ -33,6 +36,8 @@
 
 -(void)done{
     
+    [TraceSession addEventToSession:@"WhosComingPoll - Poll Sent/Resent"];
+
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"Who's Coming Poll Sent/Resent - Gameday"

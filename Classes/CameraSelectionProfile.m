@@ -9,7 +9,7 @@
 #import "CameraSelectionProfile.h"
 #import "Player.h"
 #import "Fan.h"
-
+#import "TraceSession.h"
 @implementation CameraSelectionProfile
 
 
@@ -22,7 +22,8 @@
 
 -(void)viewDidAppear:(BOOL)animated{
 	
-    
+    [TraceSession addEventToSession:@"CameraSelectionProfile - View Did Appear"];
+
     @try {
         UIImagePickerController * picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;

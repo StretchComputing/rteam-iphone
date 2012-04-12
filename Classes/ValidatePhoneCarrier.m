@@ -17,6 +17,13 @@
 @implementation ValidatePhoneCarrier
 @synthesize  phoneNumber, carrierCode, carriers, verifyError, verifyButton, resendError, resendButton, finishButton, phoneNumberText, phoneCarrierText, carrierPicker, activity, selectCarrierButton, selectedCarrier, confirmCode, errorString, carrierCheatButton, sendingText, tryAgainText, carrierPicked, theConfirmCode, thePhoneNumber;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [TraceSession addEventToSession:@"ValidatePhoneCarrier - View Will Appear"];
+    
+}
+
 -(void)viewDidLoad{
     
     self.title = @"Verify";

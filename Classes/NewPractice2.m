@@ -21,6 +21,11 @@
 @implementation NewPractice2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, location, duration, description, start, errorString, theDuration, theDescription, theLocation;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"NewPractice2 - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

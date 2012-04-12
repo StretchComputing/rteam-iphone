@@ -71,6 +71,8 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 }
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"PracticeAttendance - View Will Appear"];
+
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
     NSDate *formatedDate = [dateFormat dateFromString:self.startDate];

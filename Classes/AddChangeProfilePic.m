@@ -12,13 +12,20 @@
 #import "Base64.h"
 #import "CameraSelectionUser.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation AddChangeProfilePic
 @synthesize removeButton, addChangeButton, profilePic, titleLabel, loadingImageLabel, loadingImageActivity, displayLabel, addImage, hasImage,
 imageString, imageData, fromCameraSelect, selectedImage, activity, errorString, newImage, portrait;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"AddChangeProfilePic - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
+
 	
 	if (self.fromCameraSelect) {
 		

@@ -22,6 +22,10 @@
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, location, eventName, description, start, errorString, theLocation, theDescription, theEventName;
 
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"NewEvent2 - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

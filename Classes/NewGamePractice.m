@@ -18,6 +18,10 @@
 @implementation NewGamePractice
 @synthesize teamId, startDate, practiceOrGame, createButton, recurringEventButton, singleLabel;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"NewGamePractice - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

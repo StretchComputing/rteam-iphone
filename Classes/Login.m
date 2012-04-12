@@ -27,6 +27,8 @@ resetPasswordButton, errorString, startEmail, theEmail, thePassword;
 
 -(void)viewWillAppear:(BOOL)animated{
 	
+    [TraceSession addEventToSession:@"Login - View Will Appear"];
+
 	[self.submitButton setEnabled:YES];
 	[self.resetPasswordButton setEnabled:YES];
 	[self.email setEnabled:YES];

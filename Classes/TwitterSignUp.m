@@ -7,11 +7,15 @@
 //
 
 #import "TwitterSignUp.h"
-
+#import "TraceSession.h"
 
 @implementation TwitterSignUp
 @synthesize webView;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"TwitterSignUp - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
 	self.title = @"Twitter Sign Up";

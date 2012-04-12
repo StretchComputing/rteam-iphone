@@ -15,11 +15,17 @@
 #import "FastActionSheet.h"
 #import "Event.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation EventUpdateGPS
 @synthesize eventId, teamId, locationName, action, lat, longt, locationManager, saveButton, useCurrentButton, updateSuccess, errorMessage, 
 locationString, errorString,updateAllGames, nameOnly, updateLat, updateLong, allPracticesArray, haveGames, practiceSuccess, updateAllSuccess, theLocationName;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"EventUpdateGPS - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

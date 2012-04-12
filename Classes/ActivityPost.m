@@ -24,6 +24,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    [TraceSession addEventToSession:@"ActivityPost - View Will Appear"];
+
     if (self.savedTeams) {
         self.savedTeams = false;
         

@@ -16,6 +16,10 @@
 @implementation Feedback
 @synthesize isRecording, recordButton, sendLabel, sendButton, errorLabel, recordedData, recordingLabel, recordingActivity, sendingActivity, recordedDate, recordedUserName, recordedInstanceUrl, previewButton, temporaryRecFile, myPlayer, recorder;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"Feedback - View Will Appear"];
+
+}
 - (void)viewDidLoad
 {
     

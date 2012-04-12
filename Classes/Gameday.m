@@ -56,6 +56,8 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 }
 -(void)viewWillAppear:(BOOL)animated{
 
+    [TraceSession addEventToSession:@"Gameday - View Will Appear"];
+
     if (self.getInfo) {
 		[self.mainActivity startAnimating];
 		[self performSelectorInBackground:@selector(getGameInfo) withObject:nil];

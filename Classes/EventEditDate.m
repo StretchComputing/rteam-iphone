@@ -10,10 +10,15 @@
 #import "EventEditDate.h"
 #import "rTeamAppDelegate.h"
 #import "FastActionSheet.h"
+#import "TraceSession.h"
 
 @implementation EventEditDate
 @synthesize practiceDate, practiceDatePicker, submitButton;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"EventEditDate - View Will Appear"];
+
+}
 
 -(void)viewDidAppear:(BOOL)animated{
 	

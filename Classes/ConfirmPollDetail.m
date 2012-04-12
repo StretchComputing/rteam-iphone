@@ -12,11 +12,16 @@
 #import "FastActionSheet.h"
 #import "SendPrivateMessage.h"
 #import "Player.h"
+#import "TraceSession.h"
 
 @implementation ConfirmPollDetail
 @synthesize memberId, teamId, confirmDate, memberName, nameLabel, confirmLabel, markConfirmButton, callTextButton, sendMessageButton, phoneNumber,
 displayString, messageSent, displayLabel, callTextActionSheet, replyString, replyLabel;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"ConfirmPollDetail - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	if (self.messageSent) {

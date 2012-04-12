@@ -9,11 +9,16 @@
 #import "DeleteMessageFrequency.h"
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
+#import "TraceSession.h"
 #import "GANTracker.h"
 
 @implementation DeleteMessageFrequency
 @synthesize myTableView, activity, selectedArray, errorString, displayLabel, newValue;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"DeleteMessageFrequency - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
 	self.title = @"Archive Frequency";

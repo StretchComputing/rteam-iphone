@@ -10,10 +10,15 @@
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
 
 @implementation TeamEditFan
 @synthesize errorLabel, activity, deleteButton, teamId, fromHome;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"TeamEditFan - View Will Appear"];
+
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

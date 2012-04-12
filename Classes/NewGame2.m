@@ -21,7 +21,10 @@
 @implementation NewGame2
 @synthesize createSuccess, serverProcess, error, submitButton, teamId, opponent, duration, description, start, errorString, theDuration, theOpponent, theDescription;
 
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"NewGame2 - View Will Appear"];
 
+}
 -(void)viewDidAppear:(BOOL)animated{
 	
 	[self becomeFirstResponder];

@@ -10,10 +10,17 @@
 #import "rTeamAppDelegate.h"
 #import "ServerAPI.h"
 #import "GANTracker.h"
+#import "TraceSession.h"
+
 
 @implementation PlayerAttendance
 @synthesize teamId, memberId, errorMessage, attResults, displayAttResults, eventType, segmentEventType, segChange, fromSearch;
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    [TraceSession addEventToSession:@"PlayerAttendance - View Will Appear"];
+
+}
 -(void)viewDidLoad{
 	
     NSError *errors;
