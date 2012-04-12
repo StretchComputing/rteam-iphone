@@ -14,6 +14,15 @@
     
 
 }
+//Photos page
+@property bool canLoadMorePhotos;
+@property (nonatomic, strong) UIScrollView *photoBackView;
+@property (nonatomic, strong) UIActivityIndicatorView *photoActivity;
+@property (nonatomic, strong) UILabel *photoDisplayLabel;
+@property (nonatomic, strong) NSMutableArray *photosArray;
+@property (nonatomic, strong) NSMutableArray *tmpPhotosArray;
+
+
 @property (nonatomic, strong) HomeScoreView *homeScoreView;
 @property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) NSMutableArray *activityImageObjects;

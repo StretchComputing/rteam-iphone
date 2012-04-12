@@ -43,7 +43,7 @@
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString, homeScoreView;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString, homeScoreView, photosArray, photoActivity, photoDisplayLabel, photoBackView, canLoadMorePhotos, tmpPhotosArray;
 
 
 -(void)home{
@@ -102,6 +102,11 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         CGRect frame1 = self.myActivityTable.frame;
         frame1.size.height = 341;
         self.myActivityTable.frame = frame1;
+        
+        CGRect frame2 = self.photoBackView.frame;
+        frame2.size.height = 341;
+        self.photoBackView.frame = frame2;
+        
     }else{
         bannerIsVisible = NO;
         myAd.hidden = YES;
@@ -114,6 +119,10 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         frame1.size.height = 391;
         self.myActivityTable.frame = frame1;
         
+        CGRect frame2 = self.photoBackView.frame;
+        frame2.size.height = 391;
+        self.photoBackView.frame = frame2;
+        
     }
     
 }
@@ -121,7 +130,14 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     
 - (void)viewDidLoad
 {
+    self.canLoadMorePhotos = false;
+    self.photoBackView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 391)];
+    self.photoBackView.backgroundColor = [UIColor clearColor];
+                                                                       
     
+    self.photosArray = [NSMutableArray array];
+    self.tmpPhotosArray = [NSMutableArray array];
+
     homeScoreView = [[HomeScoreView alloc] init];
     homeScoreView.view.frame = CGRectMake(0, 322, 320, 301);
     homeScoreView.view.hidden = YES;
@@ -151,9 +167,21 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     self.view1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, y)];
     self.view1.backgroundColor = [UIColor whiteColor];
     [self.bottomScrollView addSubview:self.view1];
+    [self.view1 addSubview:self.photoBackView];
     
     PhotosActivity *tmp = [[PhotosActivity alloc] init];
     [self.view1 addSubview:tmp.view];
+    
+    self.photoActivity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    self.photoActivity.frame = CGRectMake(140, 150, 40, 40);
+    
+    self.photoDisplayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 320, 20)];
+    self.photoDisplayLabel.backgroundColor = [UIColor clearColor];
+    self.photoDisplayLabel.textAlignment = UITextAlignmentCenter;
+    self.photoDisplayLabel.textColor = [UIColor darkGrayColor];
+    
+    [self.view1 addSubview:self.photoActivity];
+    [self.view1 addSubview:self.photoDisplayLabel];
     
     self.view2 = [[UIView alloc] initWithFrame:CGRectMake(320, 0, 320, y)];
     self.view2.backgroundColor = [UIColor whiteColor];
@@ -232,11 +260,6 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     [self.view1Top addSubview:centerLabel2];
     [self.view1Top addSubview:rightLabel2];
     [self.view1Top addSubview:leftLabel2];
- 
-    
-    
-    
-   
     
     
     //All Activiiy - Table + loading label and activity indicator + server call
@@ -264,7 +287,6 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     self.allActivityTable.hidden = YES;
     [self.view2 addSubview:self.allActivityTable];
     
-    
     //My Activity - Table + 
     self.didInitMyActivity = false;
     self.myActivityTable = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view2.frame.size.width, self.view2.frame.size.height) style:UITableViewStylePlain];
@@ -285,13 +307,10 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     
     self.myActivityTable.hidden = YES;
     [self.view3 addSubview:self.myActivityTable];
-
     
     //Photos stuff
     self.didInitPhotos = false;
-    
-  
-    
+        
     //Pull to refresh
     self.currentTable = @"everyone";
     [self setupStrings];
@@ -368,12 +387,19 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
                                           withError:nil]) {
         }
         
+        //Photos  
+      if ([self.photosArray count] == 0) {
+        [self.photoActivity startAnimating];
         
-        //Photos
-        if (!self.didInitPhotos) {
-            self.didInitPhotos = false;
-            //[self performSelectorInBackground:@selector(getMyActivity) withObject:nil];
-        }
+        NSDate *today = [NSDate date];
+        //NSDate *tomorrow = [NSDate dateWithTimeInterval:86400 sinceDate:today];
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        [format setDateFormat:@"YYYY-MM-dd"];
+
+        NSString *dateString = [format stringFromDate:today];
+        
+        [self performSelectorInBackground:@selector(getActivityPhotos:) withObject:dateString];
+       }
       
         self.view1.frame = CGRectMake(320, 0, 320, y);
         [self.bottomScrollView addSubview:self.view1];
@@ -649,7 +675,6 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
     [self performSelector:@selector(deselect:) withObject:indexPath afterDelay:1.0];
     
 	@try {
@@ -708,14 +733,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                                   withError:nil]) {
                 }
                 
-                [self.navigationController pushViewController:theMessage animated:YES];
-                
-                
-                
+                [self.navigationController pushViewController:theMessage animated:YES];  
                 
             }else{
                 //Polls
-                
             }
             
         }else{
@@ -730,7 +751,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                                   value:-1
                                               withError:nil]) {
             }
-            
             
             if ([[self.myActivityArray objectAtIndex:row] class] == [MessageThreadInbox class]) {
                 MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:row];
@@ -932,6 +952,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         frame1.size.height = 341;
         self.myActivityTable.frame = frame1;
         
+        CGRect frame2 = self.photoBackView.frame;
+        frame2.size.height = 341;
+        self.photoBackView.frame = frame2;
+        
         
 		self.bannerIsVisible = YES;
 		myAd.hidden = NO;
@@ -953,6 +977,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         CGRect frame1 = self.myActivityTable.frame;
         frame1.size.height = 391;
         self.myActivityTable.frame = frame1;
+        
+        CGRect frame2 = self.photoBackView.frame;
+        frame2.size.height = 391;
+        self.photoBackView.frame = frame2;
         
 		myAd.hidden = YES;
 		self.bannerIsVisible = NO;
@@ -1187,7 +1215,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [format setDateFormat:@"YYYY-MM-dd"];
             NSString *dateString = [format stringFromDate:tomorrow];
             
-            NSDictionary *response = [ServerAPI getActivity:token maxCount:@"25" refreshFirst:@"true" newOnly:@"" mostCurrentDate:dateString totalNumberOfDays:@"20" includeDetails:@"false"];
+            NSDictionary *response = [ServerAPI getActivity:token maxCount:@"25" refreshFirst:@"true" newOnly:@"" mostCurrentDate:dateString totalNumberOfDays:@"20" includeDetails:@"false" mediaOnly:@""];
             
             NSString *status = [response valueForKey:@"status"];
             
@@ -1582,38 +1610,41 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 
+-(void)photoSelected:(id)sender{
+    
+    [TraceSession addEventToSession:@"Activity Photo Page - Image Clicked"];
+    
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Image Selected - Activity Photos"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
+    
+    ImageButton *tmpButton = (ImageButton *)sender;
+    
+    Activity *tmpActivity = [self.photosArray objectAtIndex:tmpButton.tag];
+    
+    ImageDisplayMultiple *newDisplay = [[ImageDisplayMultiple alloc] init];
+    newDisplay.activityId = tmpActivity.activityId;
+    newDisplay.teamId = tmpActivity.teamId;
+    [self.navigationController pushViewController:newDisplay animated:YES];    
+    
+}
+
 -(void)videoSelected:(id)sender{
         
     ImageButton *tmpButton = (ImageButton *)sender;
     
-    NSString *messageId = [NSString stringWithString:tmpButton.messageId];
-    NSString *teamId = @"";
-    NSMutableArray *arrayOfImageData = [NSMutableArray array];
+    Activity *tmpActivity = [self.photosArray objectAtIndex:tmpButton.tag];
     
-    for (int i = 0; i < [self.activityArray count]; i++) {
-        Activity *tmpActivity = [self.activityArray objectAtIndex:i];
-        
-        if ([tmpActivity.activityId isEqualToString:messageId]) {
-            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
-            [arrayOfImageData addObject:profileData];
-            teamId = tmpActivity.teamId;
-            break;
-        }
-    }
-    for (int i = 0; i < [self.totalReplyArray count]; i++) {
-        Activity *tmpActivity = [self.totalReplyArray objectAtIndex:i];
-        
-        if ([tmpActivity.activityId isEqualToString:messageId]) {
-            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
-            [arrayOfImageData addObject:profileData];
-            teamId = tmpActivity.teamId;
-            break;
-        }
-    }
     
     VideoDisplay *newDisplay = [[VideoDisplay alloc] init];
-    newDisplay.activityId = messageId;
-    newDisplay.teamId = teamId;
+    newDisplay.activityId = tmpActivity.activityId;
+    newDisplay.teamId = tmpActivity.teamId;
     
     UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:nil action:nil];
     self.navigationItem.backBarButtonItem = temp;
@@ -2171,7 +2202,216 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
+-(void)getActivityPhotos:(NSString *)dateString{
+        
+    @autoreleasepool {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
+            
+       
+            
+            NSDictionary *response = [ServerAPI getActivity:token maxCount:@"6" refreshFirst:@"" newOnly:@"" mostCurrentDate:dateString totalNumberOfDays:@"" includeDetails:@"true" mediaOnly:@"true"];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.tmpPhotosArray = [NSMutableArray arrayWithArray:[response valueForKey:@"activities"]];
+                                
+                if ([self.tmpPhotosArray count] < 6) {
+                    self.canLoadMorePhotos = false;
+                }else{
+                    self.canLoadMorePhotos = true;
+                }
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 208:
+                        self.errorString = @"NA";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+        }
+        [self performSelectorOnMainThread:@selector(doneActivityPhotos) withObject:nil waitUntilDone:NO];
+        
+    }
+}
 
+-(void)doneActivityPhotos{
+        
+    [self.photoActivity stopAnimating];
+    
+    if ([self.tmpPhotosArray count] > 0) {
+        
+        [self.photosArray addObjectsFromArray:self.tmpPhotosArray];    
+        
+        
+        NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
+        [self.photosArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+
+        [self performSelector:@selector(setUpPhotoPage)];
+    }else{
+        self.photoDisplayLabel.text = @"*Could not get photos at this time.";
+
+    }
+    
+}
+
+
+-(void)setUpPhotoPage{
+    
+    if ([self.photosArray count] > 0) {
+        
+        for (UIView *view in [self.photoBackView subviews]) {
+            [view removeFromSuperview];
+        }
+        
+        int finalHeight = 0;
+
+        for (int i = 0; i < [self.photosArray count]; i++) {
+            
+
+            int x = 0;
+            int y = 0;
+            int inity = 30;
+            int row = 0;
+            
+            if ((i%2) == 0) {
+                //Left Column
+                x = 52;
+                
+                row = (i + 2)/2;
+                
+            }else{
+                //Right Column
+                x = 186;
+                row = (i + 1)/2;
+
+            }
+            
+            y = inity + (row-1)*(82 + 30);
+     
+            UIView *imageBack = [[UIView alloc] initWithFrame:CGRectMake(x, y, 82, 82)];
+            imageBack.backgroundColor = [UIColor blackColor];
+            
+            ImageButton *insideImageView = [ImageButton buttonWithType:UIButtonTypeCustom];
+            
+            Activity *tmpActivity = [self.photosArray objectAtIndex:i];
+            
+            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+            insideImageView.hidden = NO;
+            insideImageView.tag = i;
+            
+            imageBack.hidden = NO;
+            imageBack.backgroundColor = [UIColor blackColor];
+            
+            
+            UIImage *tmpImage = [UIImage imageWithData:profileData];
+            imageBack.frame = CGRectMake(x, y, 82, 82);
+            
+            UIImageView *myImage = [[UIImageView alloc] initWithImage:[UIImage imageWithData:profileData]];
+            
+            if (tmpImage.size.height > tmpImage.size.width) {
+                
+                imageBack.frame = CGRectMake(x+11, y, 60, 82);
+            }else{
+                imageBack.frame = CGRectMake(x, y+11, 82, 60);
+            }
+            
+            myImage.frame = CGRectMake(1, 1, imageBack.frame.size.width -2, imageBack.frame.size.height - 2);
+            
+            if (!tmpActivity.isVideo) {
+                
+                [insideImageView addTarget:self action:@selector(photoSelected:) forControlEvents:UIControlEventTouchUpInside];
+                
+            }else{
+                UIImageView *playButton = [[UIImageView alloc] initWithFrame:CGRectMake(myImage.frame.size.width/2 - 15, myImage.frame.size.height/2 -15, 30, 30)];
+                playButton.image = [UIImage imageNamed:@"playButtonSmall.png"];
+                [myImage addSubview:playButton];
+                
+                [insideImageView addTarget:self action:@selector(photoSelectedVideo:) forControlEvents:UIControlEventTouchUpInside];
+                
+            }
+            
+            [imageBack addSubview:myImage];
+            
+            imageBack.layer.masksToBounds = YES;
+            imageBack.layer.cornerRadius = 4.0;
+            myImage.layer.masksToBounds = YES;
+            myImage.layer.cornerRadius = 4.0;
+            
+            insideImageView.frame = CGRectMake(x, y, 82, 82);
+            insideImageView.backgroundColor = [UIColor clearColor];
+            
+            
+            [self.photoBackView addSubview:imageBack];
+            [self.photoBackView addSubview:insideImageView];
+            
+            finalHeight = y + 90;
+        
+        }
+                
+        if (self.canLoadMorePhotos) {
+            UIButton *tmpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [tmpButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [tmpButton setTitle:@"Load More Photos" forState:UIControlStateNormal];
+            tmpButton.frame = CGRectMake(60, finalHeight + 20, 200, 34);
+            finalHeight = finalHeight + 65;
+            [self.photoBackView addSubview:tmpButton];
+            
+            [tmpButton addTarget:self action:@selector(loadMorePhotos) forControlEvents:UIControlEventTouchUpInside];
+            
+            UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
+            UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
+            [tmpButton setBackgroundImage:stretch forState:UIControlStateNormal];
+        }
+        
+        self.photoBackView.contentSize = CGSizeMake(320, finalHeight);
+        
+        [self.photoBackView removeFromSuperview];
+        [self.view1 addSubview:self.photoBackView];
+        [self.view1 bringSubviewToFront:self.photoBackView];
+        
+    
+    }
+}
+
+-(void)loadMorePhotos{
+    
+    @try {
+        int last = [self.photosArray count] - 1;
+        Activity *tmpActivitiy = [self.photosArray objectAtIndex:last];
+        
+        NSString *dateString = [tmpActivitiy.createdDate substringToIndex:10];
+        
+        [self.photoActivity startAnimating];
+        [self performSelectorInBackground:@selector(getActivityPhotos:) withObject:dateString];
+
+    }
+    @catch (NSException *exception) {
+        
+    }
+    
+   }
 - (void)viewDidUnload
 {
     myAd = nil;

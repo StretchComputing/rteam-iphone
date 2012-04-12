@@ -4803,14 +4803,14 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 }
 
 +(NSDictionary *)getActivity:(NSString *)token maxCount:(NSString *)maxCount refreshFirst:(NSString *)refreshFirst newOnly:(NSString *)newOnly
-             mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails{
+             mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails mediaOnly:(NSString *)mediaOnly{
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSMutableArray *activities = [NSMutableArray array];
 	
 	if ((token == nil) || (mostCurrentDate == nil) || (maxCount == nil) || (refreshFirst == nil) || (newOnly == nil) || (totalNumberOfDays == nil)
-        || (includeDetails == nil)) {
+        || (includeDetails == nil) || (mediaOnly == nil)) {
 		statusReturn = @"0";
 		[returnDictionary setValue:statusReturn forKey:@"status"];
 		return returnDictionary;
@@ -4888,6 +4888,17 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@includeDetails=%@", symbol, includeDetails];
 		}
         
+        if (![mediaOnly isEqualToString:@""]){			
+			NSString *symbol;
+			if (firstParam) {
+				symbol = @"&";
+			}else {
+				symbol = @"?";
+			}
+			
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@mediaOnly=%@", symbol, mediaOnly];
+		}
+        
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		
 		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
@@ -4895,7 +4906,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-                                  
+                   
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -4908,7 +4919,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			for (int i = 0; i < [returnActivites count]; i++) {
 				NSDictionary *tmpDict = [returnActivites objectAtIndex:i];
 				Activity *tmpActivity = [[Activity alloc] init];
-				
+                				
 				tmpActivity.activityText = [tmpDict valueForKey:@"text"];
 				tmpActivity.createdDate = [tmpDict valueForKey:@"createdDate"];
                 tmpActivity.lastEditDate = [tmpDict valueForKey:@"createdDate"];

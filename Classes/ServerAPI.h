@@ -133,7 +133,7 @@
 
 //Activity APIs
 +(NSDictionary *)getActivity:(NSString *)token maxCount:(NSString *)maxCount refreshFirst:(NSString *)refreshFirst newOnly:(NSString *)newOnly
-                        mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails;
+             mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails mediaOnly:(NSString *)mediaOnly;
 
 +(NSDictionary *)createActivity:(NSString *)token teamId:(NSString *)teamId statusUpdate:(NSString *)statusUpdate photo:(NSData *)photo video:(NSData *)video orientation:(NSString *)orientation replyToId:(NSString *)replyToId eventId:(NSString *)eventId newGame:(NSString *)gameday;
 

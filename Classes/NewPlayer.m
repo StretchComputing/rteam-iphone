@@ -169,8 +169,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 	self.helpScreen.layer.masksToBounds = YES;
 	self.helpScreen.layer.cornerRadius = 25.0;
 	
-	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-	[self.navigationItem setRightBarButtonItem:homeButton];
+	//UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
+	//[self.navigationItem setRightBarButtonItem:homeButton];
 	
 }
 
