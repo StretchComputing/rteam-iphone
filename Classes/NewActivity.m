@@ -43,7 +43,7 @@
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString, homeScoreView, photosArray, photoActivity, photoDisplayLabel, photoBackView, canLoadMorePhotos, tmpPhotosArray;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString, homeScoreView, photosArray, photoActivity, photoDisplayLabel, photoBackView, canLoadMorePhotos, tmpPhotosArray, morePhotosButton;
 
 
 -(void)home{
@@ -395,11 +395,11 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
         [self.photoActivity startAnimating];
         
         NSDate *today = [NSDate date];
-        //NSDate *tomorrow = [NSDate dateWithTimeInterval:86400 sinceDate:today];
+        NSDate *tomorrow = [NSDate dateWithTimeInterval:86400 sinceDate:today];
         NSDateFormatter *format = [[NSDateFormatter alloc] init];
         [format setDateFormat:@"YYYY-MM-dd"];
 
-        NSString *dateString = [format stringFromDate:today];
+        NSString *dateString = [format stringFromDate:tomorrow];
         
         [self performSelectorInBackground:@selector(getActivityPhotos:) withObject:dateString];
        }
@@ -1638,6 +1638,65 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)videoSelected:(id)sender{
         
+    [TraceSession addEventToSession:@"Activity Page - Video Clicked"];
+    
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Video Selected - Activity"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
+    ImageButton *tmpButton = (ImageButton *)sender;
+    
+    NSString *messageId = [NSString stringWithString:tmpButton.messageId];
+    NSString *teamId = @"";
+    NSMutableArray *arrayOfImageData = [NSMutableArray array];
+    for (int i = 0; i < [self.activityArray count]; i++) {
+        Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+        
+        if ([tmpActivity.activityId isEqualToString:messageId]) {
+            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+            [arrayOfImageData addObject:profileData];
+            teamId = tmpActivity.teamId;
+            break;
+        }
+    }
+    
+    for (int i = 0; i < [self.totalReplyArray count]; i++) {
+        Activity *tmpActivity = [self.totalReplyArray objectAtIndex:i];
+        
+        if ([tmpActivity.activityId isEqualToString:messageId]) {
+            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+            [arrayOfImageData addObject:profileData];
+            teamId = tmpActivity.teamId;
+            break;
+        }
+    }
+    
+    VideoDisplay *newDisplay = [[VideoDisplay alloc] init];
+    newDisplay.activityId = messageId;
+    newDisplay.teamId = teamId;
+    [self.navigationController pushViewController:newDisplay animated:YES];    
+    
+}
+
+
+-(void)photoSelectedVideo:(id)sender{
+    
+    [TraceSession addEventToSession:@"Activity Photo Page - Video Clicked"];
+    
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Video Selected - Activity Photos"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
     ImageButton *tmpButton = (ImageButton *)sender;
     
     Activity *tmpActivity = [self.photosArray objectAtIndex:tmpButton.tag];
@@ -1653,7 +1712,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.navigationController pushViewController:newDisplay animated:NO];    
     
 }
-
 
 -(void)getUserVotes{
     
@@ -2204,7 +2262,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)getActivityPhotos:(NSString *)dateString{
-        
     @autoreleasepool {
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
@@ -2224,7 +2281,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([status isEqualToString:@"100"]){
                 
                 self.tmpPhotosArray = [NSMutableArray arrayWithArray:[response valueForKey:@"activities"]];
-                                
+                                                
                 if ([self.tmpPhotosArray count] < 6) {
                     self.canLoadMorePhotos = false;
                 }else{
@@ -2372,18 +2429,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
                 
         if (self.canLoadMorePhotos) {
-            UIButton *tmpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [tmpButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [tmpButton setTitle:@"Load More Photos" forState:UIControlStateNormal];
-            tmpButton.frame = CGRectMake(60, finalHeight + 20, 200, 34);
+            self.morePhotosButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.morePhotosButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [self.morePhotosButton setTitle:@"Load More Photos" forState:UIControlStateNormal];
+            self.morePhotosButton.frame = CGRectMake(60, finalHeight + 20, 200, 34);
+            self.morePhotosButton.enabled = YES;
             finalHeight = finalHeight + 65;
-            [self.photoBackView addSubview:tmpButton];
+            [self.photoBackView addSubview:self.morePhotosButton];
             
-            [tmpButton addTarget:self action:@selector(loadMorePhotos) forControlEvents:UIControlEventTouchUpInside];
+            [self.morePhotosButton addTarget:self action:@selector(loadMorePhotos) forControlEvents:UIControlEventTouchUpInside];
             
             UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
             UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
-            [tmpButton setBackgroundImage:stretch forState:UIControlStateNormal];
+            [self.morePhotosButton setBackgroundImage:stretch forState:UIControlStateNormal];
         }
         
         self.photoBackView.contentSize = CGSizeMake(320, finalHeight);
@@ -2398,18 +2456,27 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)loadMorePhotos{
     
+    self.morePhotosButton.enabled = NO;
     @try {
         int last = [self.photosArray count] - 1;
         Activity *tmpActivitiy = [self.photosArray objectAtIndex:last];
         
         NSString *dateString = [tmpActivitiy.createdDate substringToIndex:10];
         
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        [format setDateFormat:@"YYYY-MM-dd"];
+        NSDate *theDate = [format dateFromString:dateString];
+        theDate = [theDate dateByAddingTimeInterval:-86400];
+        
+        NSString *newDateString = [format stringFromDate:theDate];
+
+        
         [self.photoActivity startAnimating];
-        [self performSelectorInBackground:@selector(getActivityPhotos:) withObject:dateString];
+        [self performSelectorInBackground:@selector(getActivityPhotos:) withObject:newDateString];
 
     }
     @catch (NSException *exception) {
-        
+        self.morePhotosButton.enabled = YES;
     }
     
    }

@@ -191,9 +191,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
             NSDictionary *response = [ServerAPI getListOfGames:@"" :token];
                         
             NSString *status = [response valueForKey:@"status"];
-            
-            NSLog(@"Games Status: %@", status);
-            
+                        
             if ([status isEqualToString:@"100"]){
                 
                 games = [response valueForKey:@"games"];
@@ -223,9 +221,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
         
         self.allGames = [NSMutableArray arrayWithArray:games];
         
-        NSLog(@"Games Count: %d", [self.allGames count]);
         [self filterGames];
-        NSLog(@"Games Count2: %d", [self.allGames count]);
 
         [self performSelectorOnMainThread:@selector(finishedGames) withObject:nil waitUntilDone:NO];
 

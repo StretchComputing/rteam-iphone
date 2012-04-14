@@ -563,6 +563,8 @@
 		90FDFA7E126B51B50084A1F5 /* ResetPasswordWithQuestion.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90FDFA7D126B51B50084A1F5 /* ResetPasswordWithQuestion.xib */; };
 		90FDFBE6126BF1920084A1F5 /* blueDot1.png in Resources */ = {isa = PBXBuildFile; fileRef = 90FDFBE5126BF1920084A1F5 /* blueDot1.png */; };
 		90FDFC8C126BFB630084A1F5 /* homeDivider2.png in Resources */ = {isa = PBXBuildFile; fileRef = 90FDFC8B126BFB630084A1F5 /* homeDivider2.png */; };
+		90FE144F1538660300C9BCAF /* newBack1.png in Resources */ = {isa = PBXBuildFile; fileRef = 90FE144E1538660300C9BCAF /* newBack1.png */; };
+		90FE1451153884AD00C9BCAF /* redxsmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 90FE1450153884AD00C9BCAF /* redxsmall@2x.png */; };
 		90FEF7C411BEF9FE00F684CD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FEF7C311BEF9FE00F684CD /* AddressBook.framework */; };
 		90FEF7C811BEFA0B00F684CD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FEF7C711BEFA0B00F684CD /* AddressBookUI.framework */; };
 		90FEFA1611C13A7200F684CD /* ChangePassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FEFA1511C13A7200F684CD /* ChangePassword.m */; };
@@ -1321,6 +1323,8 @@
 		90FDFA7D126B51B50084A1F5 /* ResetPasswordWithQuestion.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ResetPasswordWithQuestion.xib; sourceTree = "<group>"; };
 		90FDFBE5126BF1920084A1F5 /* blueDot1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blueDot1.png; path = ../images/blueDot1.png; sourceTree = SOURCE_ROOT; };
 		90FDFC8B126BFB630084A1F5 /* homeDivider2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = homeDivider2.png; path = ../images/homeDivider2.png; sourceTree = SOURCE_ROOT; };
+		90FE144E1538660300C9BCAF /* newBack1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newBack1.png; sourceTree = "<group>"; };
+		90FE1450153884AD00C9BCAF /* redxsmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redxsmall@2x.png"; sourceTree = "<group>"; };
 		90FEF7C311BEF9FE00F684CD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		90FEF7C711BEFA0B00F684CD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		90FEFA1411C13A7200F684CD /* ChangePassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePassword.h; sourceTree = "<group>"; };
@@ -1891,6 +1895,7 @@
 		907BA79711552A3400604995 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				90FE144E1538660300C9BCAF /* newBack1.png */,
 				90647B9414F7320600E2F994 /* Icon.png */,
 				90647B9514F7320600E2F994 /* Icon@2x.png */,
 				9015CA62150E4D760051E9CA /* basketballOnly.png */,
@@ -1987,6 +1992,7 @@
 				90822ECE12CA48A8009F74E2 /* leftArrowFast.png */,
 				90623549128EF1170074610D /* twitterWordmark.png */,
 				907406C212878280005E89CF /* eventDay.png */,
+				90FE1450153884AD00C9BCAF /* redxsmall@2x.png */,
 				90822ECC12CA48A1009F74E2 /* rightArrowFast.png */,
 				90D62C57146B03C90074D220 /* rightWhite.png */,
 				90D62C58146B03CA0074D220 /* leftWhite.png */,
@@ -2715,6 +2721,8 @@
 				9015CA73150E4FB50051E9CA /* footballOnly.png in Resources */,
 				9015CA74150E4FB50051E9CA /* lacrosseOnly.png in Resources */,
 				9015CA75150E4FB50051E9CA /* hockeyOnly.png in Resources */,
+				90FE144F1538660300C9BCAF /* newBack1.png in Resources */,
+				90FE1451153884AD00C9BCAF /* redxsmall@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,6 +15,7 @@
 
 }
 //Photos page
+@property (nonatomic, strong) UIButton *morePhotosButton;
 @property bool canLoadMorePhotos;
 @property (nonatomic, strong) UIScrollView *photoBackView;
 @property (nonatomic, strong) UIActivityIndicatorView *photoActivity;

@@ -55,10 +55,14 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         [tempDictionary setObject:@"3.1" forKey:@"version"];
 
         
+        NSDate *today = [NSDate date];
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
-        NSString *detectedDateStr = [dateFormat stringFromDate:detectedDate];
-        [tempDictionary setObject:detectedDateStr forKey:@"date"];
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        [dateFormat setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+        NSString *dateString = [dateFormat stringFromDate:today];
+        
+        [tempDictionary setObject:dateString forKey:@"date"];
+        
         
         if(stackData) {
             // stackData is hex and needs to be base64 encoded before packaged inside JSON
@@ -77,9 +81,10 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
             
             [actDictionary setObject:[appActions objectAtIndex:i] forKey:@"description"];
             
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
-            NSString *dateString = [dateFormatter stringFromDate:[appTimestamps objectAtIndex:i]];
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+            [dateFormat setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+            NSString *dateString = [dateFormat stringFromDate:[appTimestamps objectAtIndex:i]];
             
             [actDictionary setObject:dateString forKey:@"timestamp"];
             
@@ -168,11 +173,13 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
 
         //[tempDictionary setObject:instanceUrl forKey:@"instanceUrl"];
         
+        NSDate *today = [NSDate date];
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
-        NSString *recordedDateStr = [dateFormat stringFromDate:recordedDate];
-
-        [tempDictionary setObject:recordedDateStr forKey:@"date"];
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        [dateFormat setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+        NSString *dateString = [dateFormat stringFromDate:today];
+        
+        [tempDictionary setObject:dateString forKey:@"date"];
 
         loginDict = tempDictionary;
         NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
@@ -239,16 +246,29 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         [tempDictionary setObject:@"exception" forKey:@"logLevel"];
         [tempDictionary setObject:[exception reason]  forKey:@"message"];
         [tempDictionary setObject:@"3.1" forKey:@"version"];
+        
+        
+      
+        NSDate *today = [NSDate date];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        [dateFormat setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+        NSString *dateString = [dateFormat stringFromDate:today];
+    
+        [tempDictionary setObject:dateString forKey:@"date"];
 
         
-        NSString *completeStackTrace = @"";
+        NSMutableArray *stackTraceArray = [NSMutableArray array];
         NSArray *stackSymbols = [exception callStackSymbols];
         if(stackSymbols) {
             for (NSString *str in stackSymbols) {
-                completeStackTrace = [completeStackTrace stringByAppendingFormat:@" %@", str];
+
+                [stackTraceArray addObject:str];
+                
             }
         }
-        [tempDictionary setObject:completeStackTrace  forKey:@"stackBackTrace"];
+
+        [tempDictionary setObject:stackTraceArray  forKey:@"stackBackTrace"];
         
         
         //Adding the last 20 actions
@@ -262,11 +282,14 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
             
             [actDictionary setObject:[appActions objectAtIndex:i] forKey:@"description"];
             
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
-            NSString *dateString = [dateFormatter stringFromDate:[appTimestamps objectAtIndex:i]];
-                        
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+            [dateFormat setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+            NSString *dateString = [dateFormat stringFromDate:[appTimestamps objectAtIndex:i]];
+            
+            
             [actDictionary setObject:dateString forKey:@"timestamp"];
+            
             
             [finalArray addObject:actDictionary];
             
@@ -275,7 +298,8 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         [tempDictionary setObject:finalArray forKey:@"appActions"];        
         loginDict = tempDictionary;
         NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
-       // NSLog(@"%@", requestString);
+       
+        //NSLog(@"%@", requestString);
         
         NSString *tmpUrl = [baseUrl stringByAppendingFormat:@"/applications/%@/clientLogs", applicationId];
         //NSLog(@"%@", tmpUrl);
@@ -291,9 +315,6 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         
         // parse the returned JSON object
         NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-        
-        
-        //NSLog(@"%@", returnString);
         
         SBJSON *jsonParser = [SBJSON new];
         NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
@@ -346,8 +367,7 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         [tempDictionary setObject:mainDelegate.token forKey:@"userName"];
         [tempDictionary setObject:@"rTeam" forKey:@"application"];
         [tempDictionary setObject:@"3.1" forKey:@"version"];
-
-       
+        
     
       
         loginDict = tempDictionary;

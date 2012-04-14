@@ -636,7 +636,8 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 				twitterUrl = [response valueForKey:@"twitterAuthorizationUrl"];
 			}
 		}
-		
+
+
 		statusReturn = apiStatus;
         
 		[returnDictionary setValue:teamIdReturn forKey:@"teamId"];
@@ -1183,6 +1184,8 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
         
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+        
+        NSLog(@"ReturnString: %@", responseString);
         
 		SBJSON *jsonParser = [SBJSON new];
         
@@ -2025,7 +2028,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         
         
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-        
+                
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
@@ -4805,6 +4808,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 +(NSDictionary *)getActivity:(NSString *)token maxCount:(NSString *)maxCount refreshFirst:(NSString *)refreshFirst newOnly:(NSString *)newOnly
              mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails mediaOnly:(NSString *)mediaOnly{
 	
+   
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
 	NSMutableArray *activities = [NSMutableArray array];
@@ -4817,9 +4821,10 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	}
 	
 	@try{
+ 
+        //NSException *exception = [NSException exceptionWithName:@"All Time Zones Working?" reason:@"This includes ISO8601!" userInfo:nil];
+        //@throw exception;
         
-        //NSException *e = [[NSException alloc] initWithName:@"Test Exception" reason:@"New Test" userInfo:nil];
-        //@throw e;
         
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
@@ -4898,6 +4903,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			
 			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@mediaOnly=%@", symbol, mediaOnly];
 		}
+    
         
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
 		
@@ -4970,7 +4976,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		
 	}
 	@catch (NSException *e) {
-        
+                
         return [ServerAPI exceptionReturnValue:@"getActivity" :e];
 
 	}
@@ -5531,7 +5537,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
 		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-		
+		        
 		SBJSON *jsonParser = [SBJSON new];
 		
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];

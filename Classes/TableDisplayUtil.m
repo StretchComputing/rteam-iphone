@@ -23,7 +23,6 @@
 //Set up the view for each cell Everyone
 +(UITableViewCell *)setUpTableViewCellWithArray:(NSMutableArray *)messageArray fromClass:(id)sentClass forIndexPath:(NSIndexPath *)indexPath andTableView:(UITableView *)tableView{
     
-    [TraceSession addEventToSession:@"TableDisplayUtil - setUpTableViewCellWithArray"];
 
     
     rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
@@ -751,8 +750,6 @@
 //Set up the view for each cell My
 +(UITableViewCell *)setUpTableViewCellWithArrayMy:(NSMutableArray *)messageArray fromClass:(id)sentClass forIndexPath:(NSIndexPath *)indexPath andTableView:(UITableView *)tableView{
     
-    [TraceSession addEventToSession:@"TableDisplayUtil - setUpTableViewCellWithArrayMY"];
-
     
     NSUInteger row = [indexPath row];
     

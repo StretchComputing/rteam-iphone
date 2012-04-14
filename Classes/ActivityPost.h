@@ -20,10 +20,11 @@
 @property (nonatomic, strong) NSString *sendOrientation;
 @property bool isTakeVideo;
 @property bool isSendVideo;
-@property (nonatomic, strong) IBOutlet UIButton *cancelImageButton;
 @property (nonatomic, strong) NSData *imageDataToSend;
 @property (nonatomic, strong) NSString *cameraSaveMessage;
 @property (nonatomic, strong) IBOutlet UIImageView *previewImage;
+@property (nonatomic, strong) IBOutlet UIButton *cancelImageButton;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *segControl;
 
 
 @property (nonatomic, strong) NSString *theMessageText;
@@ -40,7 +41,6 @@
 @property (nonatomic, retain) IBOutlet UIButton *sendPollButton;
 @property (nonatomic, retain) IBOutlet UIButton *sendPrivateButton;
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activity;
-@property (nonatomic, retain) IBOutlet UISegmentedControl *segControl;
 
 -(IBAction)teamSelect;
 -(IBAction)sendPoll;

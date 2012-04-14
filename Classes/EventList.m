@@ -157,7 +157,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
             NSDictionary *responsePractice = [ServerAPI getListOfEvents:self.teamId :token :@"all"];
             
             NSString *status = [response valueForKey:@"status"];
-            NSString *statusPractice = [response valueForKey:@"status"];
+            NSString *statusPractice = [responsePractice valueForKey:@"status"];
             
             if ([status isEqualToString:@"100"]){
                 

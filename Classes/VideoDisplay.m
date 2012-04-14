@@ -52,11 +52,11 @@
             
             
             NSString *status = [response valueForKey:@"status"];
-            
-            
+                        
             if ([status isEqualToString:@"100"]){
                 
                 self.movieString = [response valueForKey:@"video"];
+                
                 self.errorString = @"";
                 
                 
@@ -111,21 +111,32 @@
 
 -(void)playMovie{
     
-	NSArray * documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	self.basePath = ([documentPaths count] > 0) ? [documentPaths objectAtIndex:0] : nil;
-	
-	[movieData writeToFile:[self.basePath stringByAppendingPathComponent:@"tmpMovie.MOV"] 
-				atomically:YES];
-	MPMoviePlayerViewController *tmpMoviePlayViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:[self.basePath stringByAppendingPathComponent:@"tmpMovie.MOV"]]];
-	
-	if (tmpMoviePlayViewController) {
-		[self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
-		[tmpMoviePlayViewController.moviePlayer play];
+
+    if ([self.movieData length] > 0) {
+        NSArray * documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        self.basePath = ([documentPaths count] > 0) ? [documentPaths objectAtIndex:0] : nil;
+        
+        
+        [self.movieData writeToFile:[self.basePath stringByAppendingPathComponent:@"tmpMovie.MOV"] 
+                         atomically:YES];
+        MPMoviePlayerViewController *tmpMoviePlayViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL fileURLWithPath:[self.basePath stringByAppendingPathComponent:@"tmpMovie.MOV"]]];
+        
+        
+        
+        
+        if (tmpMoviePlayViewController) {
+            [self presentMoviePlayerViewControllerAnimated:tmpMoviePlayViewController]; tmpMoviePlayViewController.moviePlayer.movieSourceType = MPMovieSourceTypeFile; 
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieViewFinishedCallback1:) name:MPMoviePlayerPlaybackDidFinishNotification object:tmpMoviePlayViewController];
+            [tmpMoviePlayViewController.moviePlayer play];
+            
+            
+        }
+
+    }else{
+        [self.navigationController popViewControllerAnimated:NO];
+
+    }
 		
-		
-	}
-	
 }
 
 -(void)viewDidUnload{

@@ -40,7 +40,19 @@
         self.sendTeamName = self.teamNameField.text;
         self.sendSport = self.sportField.text;
         [self.mainActivity startAnimating];
-        [self performSelectorInBackground:@selector(createTeam) withObject:nil];
+        
+        if (self.noTeamsView.hidden == YES) {
+            
+            if (![self.selectedGameId isEqualToString:@""] || (self.selectedGameId != nil)) {
+                [self performSelector:@selector(runCreateGame) withObject:nil afterDelay:1.0];
+
+            }
+            [self performSelectorInBackground:@selector(addMembersToTeam:) withObject:self.selectedTeamId];
+            
+        }else {
+            [self performSelectorInBackground:@selector(createTeam) withObject:nil];
+
+        }
         
     }
     
@@ -78,7 +90,7 @@
         
     }else{
         
-        if (self.isNewTeam) {
+        if (true) {//changed
             
             self.addMembersAlert = [[UIAlertView alloc] initWithTitle:@"Add Members?" message:@"Would you like to add any members to your new team before saving?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", @"No", nil];
             self.isNewTeam = false;
