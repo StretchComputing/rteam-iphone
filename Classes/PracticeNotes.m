@@ -31,14 +31,7 @@ errorString, dayString, timeString;
 	[self.viewMapButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.updateLocationButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	
-	if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
-		
-		
-		[self.updateLocationButton setHidden:NO];
-		
-	}else {
-		[self.updateLocationButton setHidden:YES];
-	}
+
 	
 	
 	
@@ -86,6 +79,15 @@ errorString, dayString, timeString;
 		[self.tabBarController.navigationItem setRightBarButtonItem:self.editDone];
 	}
 	
+    if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+		
+		
+		[self.updateLocationButton setHidden:NO];
+		
+	}else {
+		[self.updateLocationButton setHidden:YES];
+	}
+    
 	[self.loading startAnimating];
 	[self performSelectorInBackground:@selector(getPracticeInfo) withObject:nil];
 	

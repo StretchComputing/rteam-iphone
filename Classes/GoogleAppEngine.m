@@ -316,6 +316,8 @@ static NSString *applicationId = @"ahRzfnJza3lib3gtc3RyZXRjaGNvbXITCxILQXBwbGljY
         // parse the returned JSON object
         NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
         
+         //NSLog(@"Return String: %@", returnString);
+        
         SBJSON *jsonParser = [SBJSON new];
         NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
         

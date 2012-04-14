@@ -1184,9 +1184,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
         
 		NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-        
-        NSLog(@"ReturnString: %@", responseString);
-        
+                
 		SBJSON *jsonParser = [SBJSON new];
         
 		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:responseString error:NULL];
