@@ -585,7 +585,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		deleteButton.frame = CGRectMake(7, 4, 32, 32);
 		deleteButton.tag = row;
-		[deleteButton setImage:[UIImage imageNamed:@"deleteIcon.png"] forState:UIControlStateNormal];
+		[deleteButton setImage:[UIImage imageNamed:@"cancelRed.png"] forState:UIControlStateNormal];
 		[deleteButton addTarget:self action:@selector(deleteEvent:) forControlEvents:UIControlEventTouchUpInside];
 		[cell.contentView addSubview:deleteButton];
 	}
