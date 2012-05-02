@@ -4820,7 +4820,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	@try{
  
-        //NSException *exception = [NSException exceptionWithName:@"All Time Zones Working?" reason:@"This includes ISO8601!" userInfo:nil];
+        //NSException *exception = [NSException exceptionWithName:@"Is this time correct?" reason:@"Is this time correct?" userInfo:nil];
         //@throw exception;
         
         

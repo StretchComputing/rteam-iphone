@@ -23,6 +23,7 @@
 #import "FastActionSheet.h"
 #import "TraceSession.h"
 #import "GANTracker.h"
+#import "GoogleAppEngine.h"
 
 @implementation MyTeams
 @synthesize teams, header, footer, didRegister, deleteRow, teamsStored, numMemberTeams, fanTeams, memberTeams, noFanTeams,
@@ -619,148 +620,156 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                         action:@"View Team Page - From My Teams"
-                                          label:mainDelegate.token
-                                          value:-1
-                                      withError:nil]) {
-    }
     
-	//Get the Team from the array, and forward action to the Teams home page
-	
-	NSUInteger row = [indexPath row];
-	NSUInteger section = [indexPath section];
-	
-	if (section == 0) {
+    @try {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"View Team Page - From My Teams"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
         
-        [TraceSession addEventToSession:@"MyTeams Page - Member Team Clicked"];
-
+        //Get the Team from the array, and forward action to the Teams home page
         
-		if ([self.memberTeams count] > 0) {
-			
-			
-			Team *coachTeam = [self.memberTeams objectAtIndex:row];
-			
-			/*
-			TeamNavigation *tmp = [[TeamNavigation alloc] init];
-			tmp.teamId = coachTeam.teamId;
-			tmp.teamName = coachTeam.name;
-			tmp.userRole = coachTeam.userRole;
-			tmp.sport = coachTeam.sport;
-			tmp.teamUrl = coachTeam.teamUrl;
-
-			
-			[self.navigationController presentModalViewController:tmp animated:YES];
-			*/
-			
-			CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
-			
-			NSArray *viewControllers = tmp.viewControllers;
-			
-			tmp.teamId = coachTeam.teamId;
-			tmp.teamName = coachTeam.name;
-			tmp.userRole = coachTeam.userRole;
-			tmp.title = coachTeam.name;
-			tmp.sport = coachTeam.sport;
-			
-			TeamHome *home = [viewControllers objectAtIndex:0];
-			home.teamId = coachTeam.teamId;
+        NSUInteger row = [indexPath row];
+        NSUInteger section = [indexPath section];
+        
+        if (section == 0) {
             
-			home.userRole = coachTeam.userRole;
-			home.teamSport = coachTeam.sport;
-			home.teamName = coachTeam.name;
-			home.teamUrl = coachTeam.teamUrl;
-			
-			//TeamActivity *activity = [viewControllers objectAtIndex:1];
-			//activity.teamId = coachTeam.teamId;
-			//activity.userRole = coachTeam.userRole;
-			
-			Players *people = [viewControllers objectAtIndex:1];
-			people.teamId = coachTeam.teamId;
-			people.userRole = coachTeam.userRole;
-			people.teamName = coachTeam.name;
-			
-			EventList *events = [viewControllers objectAtIndex:2];
-			events.teamId = coachTeam.teamId;
-			events.userRole = coachTeam.userRole;
-			events.sport = coachTeam.sport;
-			events.teamName = coachTeam.name;
-			
-			//TeamMessages *message = [viewControllers objectAtIndex:4];
-			//message.teamId = coachTeam.teamId;
-			//message.userRole = coachTeam.userRole;
-			
-			
-			[self.navigationController pushViewController:tmp animated:YES];
-			
-			
-		}
-		
-	}else {
-        
-        [TraceSession addEventToSession:@"MyTeams Page - Fan Team Clicked"];
+            [TraceSession addEventToSession:@"MyTeams Page - Member Team Clicked"];
+            
+            
+            if ([self.memberTeams count] > 0) {
+                
+                
+                Team *coachTeam = [self.memberTeams objectAtIndex:row];
+                
+                /*
+                 TeamNavigation *tmp = [[TeamNavigation alloc] init];
+                 tmp.teamId = coachTeam.teamId;
+                 tmp.teamName = coachTeam.name;
+                 tmp.userRole = coachTeam.userRole;
+                 tmp.sport = coachTeam.sport;
+                 tmp.teamUrl = coachTeam.teamUrl;
+                 
+                 
+                 [self.navigationController presentModalViewController:tmp animated:YES];
+                 */
+                
+                CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
+                
+                NSArray *viewControllers = tmp.viewControllers;
+                
+                tmp.teamId = coachTeam.teamId;
+                tmp.teamName = coachTeam.name;
+                tmp.userRole = coachTeam.userRole;
+                tmp.title = coachTeam.name;
+                tmp.sport = coachTeam.sport;
+                
+                TeamHome *home = [viewControllers objectAtIndex:0];
+                home.teamId = coachTeam.teamId;
+                
+                home.userRole = coachTeam.userRole;
+                home.teamSport = coachTeam.sport;
+                home.teamName = coachTeam.name;
+                home.teamUrl = coachTeam.teamUrl;
+                
+                //TeamActivity *activity = [viewControllers objectAtIndex:1];
+                //activity.teamId = coachTeam.teamId;
+                //activity.userRole = coachTeam.userRole;
+                
+                Players *people = [viewControllers objectAtIndex:1];
+                people.teamId = coachTeam.teamId;
+                people.userRole = coachTeam.userRole;
+                people.teamName = coachTeam.name;
+                
+                EventList *events = [viewControllers objectAtIndex:2];
+                events.teamId = coachTeam.teamId;
+                events.userRole = coachTeam.userRole;
+                events.sport = coachTeam.sport;
+                events.teamName = coachTeam.name;
+                
+                //TeamMessages *message = [viewControllers objectAtIndex:4];
+                //message.teamId = coachTeam.teamId;
+                //message.userRole = coachTeam.userRole;
+                
+                
+                [self.navigationController pushViewController:tmp animated:YES];
+                
+                
+            }
+            
+        }else {
+            
+            [TraceSession addEventToSession:@"MyTeams Page - Fan Team Clicked"];
+            
+            
+            if ([self.fanTeams count] > 0) {
+                
+                
+                Team *coachTeam = [self.fanTeams objectAtIndex:row];
+                
+                /*
+                 TeamNavigation *tmp = [[TeamNavigation alloc] init];
+                 tmp.teamId = coachTeam.teamId;
+                 tmp.teamName = coachTeam.name;
+                 tmp.userRole = coachTeam.userRole;
+                 tmp.sport = coachTeam.sport;
+                 tmp.teamUrl = coachTeam.teamUrl;
+                 
+                 [self.navigationController presentModalViewController:tmp animated:YES];
+                 */
+                
+                CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
+                
+                NSArray *viewControllers = tmp.viewControllers;
+                
+                tmp.teamId = coachTeam.teamId;
+                tmp.teamName = coachTeam.name;
+                tmp.userRole = coachTeam.userRole;
+                tmp.title = coachTeam.name;
+                tmp.sport = coachTeam.sport;
+                
+                TeamHome *home = [viewControllers objectAtIndex:0];
+                home.teamId = coachTeam.teamId;
+                home.userRole = coachTeam.userRole;
+                home.teamSport = coachTeam.sport;
+                home.teamName = coachTeam.name;
+                home.teamUrl = coachTeam.teamUrl;
+                
+                //TeamActivity *activity = [viewControllers objectAtIndex:1];
+                ///activity.teamId = coachTeam.teamId;
+                //activity.userRole = coachTeam.userRole;
+                
+                Players *people = [viewControllers objectAtIndex:1];
+                people.teamId = coachTeam.teamId;
+                people.userRole = coachTeam.userRole;
+                people.teamName = coachTeam.name;
+                
+                EventList *events = [viewControllers objectAtIndex:2];
+                events.teamId = coachTeam.teamId;
+                events.userRole = coachTeam.userRole;
+                events.sport = coachTeam.sport;
+                events.teamName = coachTeam.name;
+                
+                //TeamMessages *message = [viewControllers objectAtIndex:4];
+                //message.teamId = coachTeam.teamId;
+                //message.userRole = coachTeam.userRole;
+                
+                
+                [self.navigationController pushViewController:tmp animated:YES];
+                
+            }
+            
+        }
 
-        
-		if ([self.fanTeams count] > 0) {
-			
-			
-			Team *coachTeam = [self.fanTeams objectAtIndex:row];
-			
-			/*
-			TeamNavigation *tmp = [[TeamNavigation alloc] init];
-			tmp.teamId = coachTeam.teamId;
-			tmp.teamName = coachTeam.name;
-			tmp.userRole = coachTeam.userRole;
-			tmp.sport = coachTeam.sport;
-			tmp.teamUrl = coachTeam.teamUrl;
-
-			[self.navigationController presentModalViewController:tmp animated:YES];
-			*/
-			
-			CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
-			
-			NSArray *viewControllers = tmp.viewControllers;
-			
-			tmp.teamId = coachTeam.teamId;
-			tmp.teamName = coachTeam.name;
-			tmp.userRole = coachTeam.userRole;
-			tmp.title = coachTeam.name;
-			tmp.sport = coachTeam.sport;
-			
-			TeamHome *home = [viewControllers objectAtIndex:0];
-			home.teamId = coachTeam.teamId;
-			home.userRole = coachTeam.userRole;
-			home.teamSport = coachTeam.sport;
-			home.teamName = coachTeam.name;
-			home.teamUrl = coachTeam.teamUrl;
-			
-			//TeamActivity *activity = [viewControllers objectAtIndex:1];
-			///activity.teamId = coachTeam.teamId;
-			//activity.userRole = coachTeam.userRole;
-			
-			Players *people = [viewControllers objectAtIndex:1];
-			people.teamId = coachTeam.teamId;
-			people.userRole = coachTeam.userRole;
-			people.teamName = coachTeam.name;
-			
-			EventList *events = [viewControllers objectAtIndex:2];
-			events.teamId = coachTeam.teamId;
-			events.userRole = coachTeam.userRole;
-			events.sport = coachTeam.sport;
-			events.teamName = coachTeam.name;
-			
-			//TeamMessages *message = [viewControllers objectAtIndex:4];
-			//message.teamId = coachTeam.teamId;
-			//message.userRole = coachTeam.userRole;
-			
-			
-			[self.navigationController pushViewController:tmp animated:YES];
-			
-		}
-		
-	}
-	
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"MyTeams.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+   	
 	
 	
 }

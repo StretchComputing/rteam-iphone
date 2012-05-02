@@ -30,6 +30,7 @@
 #import "FastActionSheet.h"
 #import "Vote.h"
 #import "GANTracker.h"
+#import "GoogleAppEngine.h"
 #import "TraceSession.h"
 
 @implementation AllEventsCalendar
@@ -1227,488 +1228,496 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	//Set the back button to just say "Calendar"
-	UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Calendar" style:UIBarButtonItemStyleDone target:nil action:nil];
-	self.navigationItem.backBarButtonItem = temp;
-
-	NSUInteger row = [indexPath row];
-	
-	if (row == 0) {
-		//Create new event
-        [TraceSession addEventToSession:@"Calendar Month Page - Create New Event Clicked"];
-
+    @try {
+        //Set the back button to just say "Calendar"
+        UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Calendar" style:UIBarButtonItemStyleDone target:nil action:nil];
+        self.navigationItem.backBarButtonItem = temp;
         
-		CreateNewEvent *tmp = [[CreateNewEvent alloc] init];
-		tmp.eventDate = self.dateSelected;
-		[self.navigationController pushViewController:tmp animated:YES];
-		
-	}else if ([self.eventType isEqualToString:@"game"]) {
-		
-        [TraceSession addEventToSession:@"Calendar Month Page - Game Clicked"];
-
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                             action:@"View Event - From Calendar"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:nil]) {
-        }
+        NSUInteger row = [indexPath row];
         
-		Game *currentGame = [self.gamesToday objectAtIndex:row-1];
-		
-		NSString *userRole = @"";
-		NSString *teamId = @"";
-		
-		teamId = currentGame.teamId;
-		userRole = currentGame.userRole;
-
-		
-		if (![currentGame.interval isEqualToString:@"-4"]) {
-			
-			if ([userRole isEqualToString:@"creator"] || [userRole isEqualToString:@"coordinator"]) {
-				GameTabs *currentGameTab = [[GameTabs alloc] init];
-				NSArray *viewControllers = currentGameTab.viewControllers;
-				currentGameTab.teamId = teamId;
-				currentGameTab.gameId = currentGame.gameId;
-				currentGameTab.userRole = userRole;
-				currentGameTab.teamName = currentGame.teamName;
-				
-				Gameday *currentNotes = [viewControllers objectAtIndex:0];
-				currentNotes.gameId = currentGame.gameId;
-				currentNotes.teamId = teamId;
-				currentNotes.userRole = userRole;
-				currentNotes.sport = currentGame.sport;
-				currentNotes.description = currentGame.description;
-				currentNotes.startDate = currentGame.startDate;
-				currentNotes.opponentString = currentGame.opponent;
-				
-				/*"Activity" at 1
-				 TeamActivity *activity = [viewControllers objectAtIndex:1];
-				 activity.teamId = teamId;
-				 activity.userRole = userRole;
-				 */
-				
-				GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
-				currentAttendance.gameId = currentGame.gameId;
-				currentAttendance.teamId = teamId;
-				currentAttendance.startDate = currentGame.startDate;
-				
-				/*
-				 GameMessages *messages = [viewControllers objectAtIndex:3];
-				 messages.gameId = currentGame.gameId;
-				 messages.teamId = teamId;
-				 messages.userRole = userRole;
-				 */
-                /*
-				GameChatter *messages = [viewControllers objectAtIndex:1];
-				messages.gameId = currentGame.gameId;
-				messages.teamId = teamId;
-				messages.userRole = userRole;
-				messages.startDate = currentGame.startDate;
-				*/
-                
-				
-				Vote *fans = [viewControllers objectAtIndex:2];
-				fans.teamId = teamId;
-				fans.userRole = userRole;
-				fans.gameId = currentGame.gameId;
-				
-				[self.navigationController pushViewController:currentGameTab animated:YES];
-				
-			}else {
-				
-				GameTabsNoCoord *currentGameTab = [[GameTabsNoCoord alloc] init];
-				NSArray *viewControllers = currentGameTab.viewControllers;
-				currentGameTab.teamId = teamId;
-				currentGameTab.gameId = currentGame.gameId;
-				currentGameTab.userRole = userRole;
-				currentGameTab.teamName = currentGame.teamName;
-				
-				/*Feeds is at 1
-				 TeamActivity *activity = [viewControllers objectAtIndex:1];
-				 activity.teamId = teamId;
-				 activity.userRole = userRole;
-				 */
-				
-				Gameday *currentNotes = [viewControllers objectAtIndex:0];
-				currentNotes.gameId = currentGame.gameId;
-				currentNotes.teamId = teamId;
-				currentNotes.userRole = userRole;
-				currentNotes.sport = currentGame.sport;
-				
-				/*
-				GameChatter *messages = [viewControllers objectAtIndex:1];
-				messages.gameId = currentGame.gameId;
-				messages.teamId = teamId;
-				messages.userRole = userRole;
-				messages.startDate = currentGame.startDate;
-				*/
-				
-				Vote *fans = [viewControllers objectAtIndex:1];
-				fans.teamId = teamId;
-				fans.userRole = userRole;
-				fans.gameId = currentGame.gameId;
-				
-				[self.navigationController pushViewController:currentGameTab animated:YES];
-				
-			}
-			
-			
-		}else {
-			if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
-								
-				self.deleteEventType = @"game";
-				self.deleteEventTeamId = currentGame.teamId;
-				self.deleteEventId = currentGame.gameId;
-				
-				self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
-				self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
-				[self.canceledAction showInView:self.view];
-				
-				
-			}
-		}
-
-
-		
-	}else if ([self.eventType isEqualToString:@"practice"]) {
-		
-        [TraceSession addEventToSession:@"Calendar Month Page - Practice Clicked"];
-
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                             action:@"View Event - From Calendar"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:nil]) {
-        }
-        
-		PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
-		
-		
-		Practice *currentPractice = [self.practicesToday objectAtIndex:row-1];
-		
-		NSString *userRole = @"";
-		NSString *teamId = @"";
-		
-		teamId = currentPractice.ppteamId;
-		userRole = currentPractice.userRole;
-		
-		if (currentPractice.isCanceled) {
-			
-			if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
-				
-				self.deleteEventType = @"practice";
-				self.deleteEventTeamId = currentPractice.ppteamId;
-				self.deleteEventId = currentPractice.practiceId;
-				
-				self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
-				self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
-				[self.canceledAction showInView:self.view];
-				
-				
-			}
-			
-		}else {
-			
-			
-			
-			NSArray *viewControllers = currentPracticeTab.viewControllers;
-			currentPracticeTab.teamId = teamId;
-			currentPracticeTab.practiceId = currentPractice.practiceId;
-			currentPracticeTab.userRole = userRole;
-			
-			PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
-			currentNotes.practiceId = currentPractice.practiceId;
-			currentNotes.teamId = teamId;
-			currentNotes.userRole = userRole;
-			
-			
-			PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
-			currentAttendance.practiceId = currentPractice.practiceId;
-			currentAttendance.teamId = teamId;
-			currentAttendance.userRole = userRole;
-			
-			currentAttendance.startDate = currentPractice.startDate;
-			
-            /*
-			PracticeChatter *messages = [viewControllers objectAtIndex:2];
-			messages.teamId = teamId;
-			messages.practiceId = currentPractice.practiceId;
-			messages.userRole = userRole;
-			messages.startDate = currentPractice.startDate;
-			*/
-			
-			/*
-			 PracticeMessages *messages = [viewControllers objectAtIndex:1];
-			 messages.teamId = teamId;
-			 messages.practiceId = currentPractice.practiceId;
-			 messages.userRole = userRole;
-			 
-			 */
-			[self.navigationController pushViewController:currentPracticeTab animated:YES];
-			
-		}
-		
-	}else if ([self.eventType isEqualToString:@"all"]) {
-		
-		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                             action:@"View Event - From Calendar"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:nil]) {
-        }
-        
-		if ([[self.eventsToday objectAtIndex:row-1] class] == [Game class]) {
-			
+        if (row == 0) {
+            //Create new event
+            [TraceSession addEventToSession:@"Calendar Month Page - Create New Event Clicked"];
+            
+            
+            CreateNewEvent *tmp = [[CreateNewEvent alloc] init];
+            tmp.eventDate = self.dateSelected;
+            [self.navigationController pushViewController:tmp animated:YES];
+            
+        }else if ([self.eventType isEqualToString:@"game"]) {
             
             [TraceSession addEventToSession:@"Calendar Month Page - Game Clicked"];
-
             
-			Game *currentGame = [self.eventsToday objectAtIndex:row-1];
-			
-			NSString *userRole = @"";
-			NSString *teamId = @"";
-			
-			teamId = currentGame.teamId;
-			userRole = currentGame.userRole;
-			
-			if (![currentGame.interval isEqualToString:@"-4"]) {
-				if ([userRole isEqualToString:@"creator"] || [userRole isEqualToString:@"coordinator"]) {
-					GameTabs *currentGameTab = [[GameTabs alloc] init];
-					NSArray *viewControllers = currentGameTab.viewControllers;
-					currentGameTab.teamId = teamId;
-					currentGameTab.gameId = currentGame.gameId;
-					currentGameTab.userRole = userRole;
-					currentGameTab.teamName = currentGame.teamName;
-					
-					
-					Gameday *currentNotes = [viewControllers objectAtIndex:0];
-					currentNotes.gameId = currentGame.gameId;
-					currentNotes.teamId = teamId;
-					currentNotes.userRole = userRole;
-					currentNotes.sport = currentGame.sport;
-					currentNotes.description = currentGame.description;
-					currentNotes.startDate = currentGame.startDate;
-					currentNotes.opponentString = currentGame.opponent;
-					
-					/*"Activity" at 1
-					 TeamActivity *activity = [viewControllers objectAtIndex:1];
-					 activity.teamId = teamId;
-					 activity.userRole = userRole;
-					 */
-					
-					GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
-					currentAttendance.gameId = currentGame.gameId;
-					currentAttendance.teamId = teamId;
-					currentAttendance.startDate = currentGame.startDate;
-					
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"View Event - From Calendar"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            Game *currentGame = [self.gamesToday objectAtIndex:row-1];
+            
+            NSString *userRole = @"";
+            NSString *teamId = @"";
+            
+            teamId = currentGame.teamId;
+            userRole = currentGame.userRole;
+            
+            
+            if (![currentGame.interval isEqualToString:@"-4"]) {
+                
+                if ([userRole isEqualToString:@"creator"] || [userRole isEqualToString:@"coordinator"]) {
+                    GameTabs *currentGameTab = [[GameTabs alloc] init];
+                    NSArray *viewControllers = currentGameTab.viewControllers;
+                    currentGameTab.teamId = teamId;
+                    currentGameTab.gameId = currentGame.gameId;
+                    currentGameTab.userRole = userRole;
+                    currentGameTab.teamName = currentGame.teamName;
+                    
+                    Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                    currentNotes.gameId = currentGame.gameId;
+                    currentNotes.teamId = teamId;
+                    currentNotes.userRole = userRole;
+                    currentNotes.sport = currentGame.sport;
+                    currentNotes.description = currentGame.description;
+                    currentNotes.startDate = currentGame.startDate;
+                    currentNotes.opponentString = currentGame.opponent;
+                    
+                    /*"Activity" at 1
+                     TeamActivity *activity = [viewControllers objectAtIndex:1];
+                     activity.teamId = teamId;
+                     activity.userRole = userRole;
+                     */
+                    
+                    GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    currentAttendance.gameId = currentGame.gameId;
+                    currentAttendance.teamId = teamId;
+                    currentAttendance.startDate = currentGame.startDate;
+                    
                     /*
-					GameChatter *messages = [viewControllers objectAtIndex:1];
-					messages.gameId = currentGame.gameId;
-					messages.teamId = teamId;
-					messages.userRole = userRole;
-					messages.startDate = currentGame.startDate;
-					*/
-					
-					Vote *fans = [viewControllers objectAtIndex:2];
-					fans.teamId = teamId;
-					fans.userRole = userRole;
-					fans.gameId = currentGame.gameId;
-					
-					[self.navigationController pushViewController:currentGameTab animated:YES];
-					
-				}else {
-					
-					GameTabsNoCoord *currentGameTab = [[GameTabsNoCoord alloc] init];
-					NSArray *viewControllers = currentGameTab.viewControllers;
-					currentGameTab.teamId = teamId;
-					currentGameTab.gameId = currentGame.gameId;
-					currentGameTab.userRole = userRole;
-					currentGameTab.teamName = currentGame.teamName;
-					
-					/*Feeds is at 1
-					 TeamActivity *activity = [viewControllers objectAtIndex:1];
-					 activity.teamId = teamId;
-					 activity.userRole = userRole;
-					 */
-					
-					Gameday *currentNotes = [viewControllers objectAtIndex:0];
-					currentNotes.gameId = currentGame.gameId;
-					currentNotes.teamId = teamId;
-					currentNotes.userRole = userRole;
-					currentNotes.sport = currentGame.sport;
-					
+                     GameMessages *messages = [viewControllers objectAtIndex:3];
+                     messages.gameId = currentGame.gameId;
+                     messages.teamId = teamId;
+                     messages.userRole = userRole;
+                     */
                     /*
-					GameChatter *messages = [viewControllers objectAtIndex:1];
-					messages.gameId = currentGame.gameId;
-					messages.teamId = teamId;
-					messages.userRole = userRole;
-					messages.startDate = currentGame.startDate;
-					*/
-					
-					Vote *fans = [viewControllers objectAtIndex:1];
-					fans.teamId = teamId;
-					fans.userRole = userRole;
-					fans.gameId = currentGame.gameId;
-					
-					[self.navigationController pushViewController:currentGameTab animated:YES];
-					
-				}
-				
-			}else {
-				if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
-					
-					self.deleteEventType = @"game";
-					self.deleteEventTeamId = currentGame.teamId;
-					self.deleteEventId = currentGame.gameId;
-					
-					self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
-					self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
-					[self.canceledAction showInView:self.view];
-					
-					
-				}
-			}
-
-			
-			
-			
-		}else if ([[self.eventsToday objectAtIndex:row-1] class] == [Practice class]) {
-			
+                     GameChatter *messages = [viewControllers objectAtIndex:1];
+                     messages.gameId = currentGame.gameId;
+                     messages.teamId = teamId;
+                     messages.userRole = userRole;
+                     messages.startDate = currentGame.startDate;
+                     */
+                    
+                    
+                    Vote *fans = [viewControllers objectAtIndex:2];
+                    fans.teamId = teamId;
+                    fans.userRole = userRole;
+                    fans.gameId = currentGame.gameId;
+                    
+                    [self.navigationController pushViewController:currentGameTab animated:YES];
+                    
+                }else {
+                    
+                    GameTabsNoCoord *currentGameTab = [[GameTabsNoCoord alloc] init];
+                    NSArray *viewControllers = currentGameTab.viewControllers;
+                    currentGameTab.teamId = teamId;
+                    currentGameTab.gameId = currentGame.gameId;
+                    currentGameTab.userRole = userRole;
+                    currentGameTab.teamName = currentGame.teamName;
+                    
+                    /*Feeds is at 1
+                     TeamActivity *activity = [viewControllers objectAtIndex:1];
+                     activity.teamId = teamId;
+                     activity.userRole = userRole;
+                     */
+                    
+                    Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                    currentNotes.gameId = currentGame.gameId;
+                    currentNotes.teamId = teamId;
+                    currentNotes.userRole = userRole;
+                    currentNotes.sport = currentGame.sport;
+                    
+                    /*
+                     GameChatter *messages = [viewControllers objectAtIndex:1];
+                     messages.gameId = currentGame.gameId;
+                     messages.teamId = teamId;
+                     messages.userRole = userRole;
+                     messages.startDate = currentGame.startDate;
+                     */
+                    
+                    Vote *fans = [viewControllers objectAtIndex:1];
+                    fans.teamId = teamId;
+                    fans.userRole = userRole;
+                    fans.gameId = currentGame.gameId;
+                    
+                    [self.navigationController pushViewController:currentGameTab animated:YES];
+                    
+                }
+                
+                
+            }else {
+                if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
+                    
+                    self.deleteEventType = @"game";
+                    self.deleteEventTeamId = currentGame.teamId;
+                    self.deleteEventId = currentGame.gameId;
+                    
+                    self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+                    self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
+                    [self.canceledAction showInView:self.view];
+                    
+                    
+                }
+            }
+            
+            
+            
+        }else if ([self.eventType isEqualToString:@"practice"]) {
             
             [TraceSession addEventToSession:@"Calendar Month Page - Practice Clicked"];
-
             
-			PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
-			
-			
-			Practice *currentPractice = [self.eventsToday objectAtIndex:row-1];
-			
-			NSString *userRole = @"";
-			NSString *teamId = @"";
-			
-			teamId = currentPractice.ppteamId;
-			userRole = currentPractice.userRole;
-			
-			if (currentPractice.isCanceled) {
-				
-				if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
-					
-					self.deleteEventType = @"practice";
-					self.deleteEventTeamId = currentPractice.ppteamId;
-					self.deleteEventId = currentPractice.practiceId;
-					
-					self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
-					self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
-					[self.canceledAction showInView:self.view];
-					
-					
-				}
-			}else {
-				NSArray *viewControllers = currentPracticeTab.viewControllers;
-				currentPracticeTab.teamId = teamId;
-				currentPracticeTab.practiceId = currentPractice.practiceId;
-				currentPracticeTab.userRole = userRole;
-				
-				PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
-				currentNotes.practiceId = currentPractice.practiceId;
-				currentNotes.teamId = teamId;
-				currentNotes.userRole = userRole;
-				
-				
-				PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
-				currentAttendance.practiceId = currentPractice.practiceId;
-				currentAttendance.teamId = teamId;
-				currentAttendance.userRole = userRole;
-				
-				currentAttendance.startDate = currentPractice.startDate;
-				
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"View Event - From Calendar"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
+            
+            
+            Practice *currentPractice = [self.practicesToday objectAtIndex:row-1];
+            
+            NSString *userRole = @"";
+            NSString *teamId = @"";
+            
+            teamId = currentPractice.ppteamId;
+            userRole = currentPractice.userRole;
+            
+            if (currentPractice.isCanceled) {
+                
+                if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
+                    
+                    self.deleteEventType = @"practice";
+                    self.deleteEventTeamId = currentPractice.ppteamId;
+                    self.deleteEventId = currentPractice.practiceId;
+                    
+                    self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+                    self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
+                    [self.canceledAction showInView:self.view];
+                    
+                    
+                }
+                
+            }else {
+                
+                
+                
+                NSArray *viewControllers = currentPracticeTab.viewControllers;
+                currentPracticeTab.teamId = teamId;
+                currentPracticeTab.practiceId = currentPractice.practiceId;
+                currentPracticeTab.userRole = userRole;
+                
+                PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+                currentNotes.practiceId = currentPractice.practiceId;
+                currentNotes.teamId = teamId;
+                currentNotes.userRole = userRole;
+                
+                
+                PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                currentAttendance.practiceId = currentPractice.practiceId;
+                currentAttendance.teamId = teamId;
+                currentAttendance.userRole = userRole;
+                
+                currentAttendance.startDate = currentPractice.startDate;
+                
                 /*
-				PracticeChatter *messages = [viewControllers objectAtIndex:2];
-				messages.teamId = teamId;
-				messages.practiceId = currentPractice.practiceId;
-				messages.userRole = userRole;
-				messages.startDate = currentPractice.startDate;
-				*/
-				
-				/*
-				 PracticeMessages *messages = [viewControllers objectAtIndex:1];
-				 messages.teamId = teamId;
-				 messages.practiceId = currentPractice.practiceId;
-				 messages.userRole = userRole;
-				 
-				 */
-				[self.navigationController pushViewController:currentPracticeTab animated:YES];
-			}
-
-			
-			
-		}else {
+                 PracticeChatter *messages = [viewControllers objectAtIndex:2];
+                 messages.teamId = teamId;
+                 messages.practiceId = currentPractice.practiceId;
+                 messages.userRole = userRole;
+                 messages.startDate = currentPractice.startDate;
+                 */
+                
+                /*
+                 PracticeMessages *messages = [viewControllers objectAtIndex:1];
+                 messages.teamId = teamId;
+                 messages.practiceId = currentPractice.practiceId;
+                 messages.userRole = userRole;
+                 
+                 */
+                [self.navigationController pushViewController:currentPracticeTab animated:YES];
+                
+            }
             
-            [TraceSession addEventToSession:@"Calendar Month Page - Event Clicked"];
-
+        }else if ([self.eventType isEqualToString:@"all"]) {
             
-			EventTabs *currentEventTab = [[EventTabs alloc] init];
-			
-			
-			Event *currentEvent = [self.eventsToday objectAtIndex:row-1];
-			
-			NSString *userRole = @"";
-			NSString *teamId = @"";
-			
-			teamId = currentEvent.teamId;
-			userRole = currentEvent.userRole;
-			
-			if (currentEvent.isCanceled) {
-				if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
-					
-					self.deleteEventType = @"event";
-					self.deleteEventTeamId = currentEvent.teamId;
-					self.deleteEventId = currentEvent.eventId;
-					
-					self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
-					self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
-					[self.canceledAction showInView:self.view];
-					
-					
-				}
-			}else {
-				NSArray *viewControllers = currentEventTab.viewControllers;
-				currentEventTab.teamId = teamId;
-				currentEventTab.eventId = currentEvent.eventId;
-				currentEventTab.userRole = userRole;
-				
-				EventNotes *currentNotes = [viewControllers objectAtIndex:0];
-				currentNotes.eventId = currentEvent.eventId;
-				currentNotes.teamId = teamId;
-				currentNotes.userRole = userRole;
-				
-				
-				EventAttendance *currentAttendance = [viewControllers objectAtIndex:1];
-				currentAttendance.eventId = currentEvent.eventId;
-				currentAttendance.teamId = teamId;
-				currentAttendance.userRole = userRole;
-				
-				currentAttendance.startDate = currentEvent.startDate;
-				/*
-				 EventMessages *messages = [viewControllers objectAtIndex:1];
-				 messages.teamId = teamId;
-				 messages.eventId = currentEvent.eventId;
-				 messages.userRole = userRole;
-				 */
-				
-				[self.navigationController pushViewController:currentEventTab animated:YES];
-			}
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"View Event - From Calendar"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            if ([[self.eventsToday objectAtIndex:row-1] class] == [Game class]) {
+                
+                
+                [TraceSession addEventToSession:@"Calendar Month Page - Game Clicked"];
+                
+                
+                Game *currentGame = [self.eventsToday objectAtIndex:row-1];
+                
+                NSString *userRole = @"";
+                NSString *teamId = @"";
+                
+                teamId = currentGame.teamId;
+                userRole = currentGame.userRole;
+                
+                if (![currentGame.interval isEqualToString:@"-4"]) {
+                    if ([userRole isEqualToString:@"creator"] || [userRole isEqualToString:@"coordinator"]) {
+                        GameTabs *currentGameTab = [[GameTabs alloc] init];
+                        NSArray *viewControllers = currentGameTab.viewControllers;
+                        currentGameTab.teamId = teamId;
+                        currentGameTab.gameId = currentGame.gameId;
+                        currentGameTab.userRole = userRole;
+                        currentGameTab.teamName = currentGame.teamName;
+                        
+                        
+                        Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                        currentNotes.gameId = currentGame.gameId;
+                        currentNotes.teamId = teamId;
+                        currentNotes.userRole = userRole;
+                        currentNotes.sport = currentGame.sport;
+                        currentNotes.description = currentGame.description;
+                        currentNotes.startDate = currentGame.startDate;
+                        currentNotes.opponentString = currentGame.opponent;
+                        
+                        /*"Activity" at 1
+                         TeamActivity *activity = [viewControllers objectAtIndex:1];
+                         activity.teamId = teamId;
+                         activity.userRole = userRole;
+                         */
+                        
+                        GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                        currentAttendance.gameId = currentGame.gameId;
+                        currentAttendance.teamId = teamId;
+                        currentAttendance.startDate = currentGame.startDate;
+                        
+                        /*
+                         GameChatter *messages = [viewControllers objectAtIndex:1];
+                         messages.gameId = currentGame.gameId;
+                         messages.teamId = teamId;
+                         messages.userRole = userRole;
+                         messages.startDate = currentGame.startDate;
+                         */
+                        
+                        Vote *fans = [viewControllers objectAtIndex:2];
+                        fans.teamId = teamId;
+                        fans.userRole = userRole;
+                        fans.gameId = currentGame.gameId;
+                        
+                        [self.navigationController pushViewController:currentGameTab animated:YES];
+                        
+                    }else {
+                        
+                        GameTabsNoCoord *currentGameTab = [[GameTabsNoCoord alloc] init];
+                        NSArray *viewControllers = currentGameTab.viewControllers;
+                        currentGameTab.teamId = teamId;
+                        currentGameTab.gameId = currentGame.gameId;
+                        currentGameTab.userRole = userRole;
+                        currentGameTab.teamName = currentGame.teamName;
+                        
+                        /*Feeds is at 1
+                         TeamActivity *activity = [viewControllers objectAtIndex:1];
+                         activity.teamId = teamId;
+                         activity.userRole = userRole;
+                         */
+                        
+                        Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                        currentNotes.gameId = currentGame.gameId;
+                        currentNotes.teamId = teamId;
+                        currentNotes.userRole = userRole;
+                        currentNotes.sport = currentGame.sport;
+                        
+                        /*
+                         GameChatter *messages = [viewControllers objectAtIndex:1];
+                         messages.gameId = currentGame.gameId;
+                         messages.teamId = teamId;
+                         messages.userRole = userRole;
+                         messages.startDate = currentGame.startDate;
+                         */
+                        
+                        Vote *fans = [viewControllers objectAtIndex:1];
+                        fans.teamId = teamId;
+                        fans.userRole = userRole;
+                        fans.gameId = currentGame.gameId;
+                        
+                        [self.navigationController pushViewController:currentGameTab animated:YES];
+                        
+                    }
+                    
+                }else {
+                    if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
+                        
+                        self.deleteEventType = @"game";
+                        self.deleteEventTeamId = currentGame.teamId;
+                        self.deleteEventId = currentGame.gameId;
+                        
+                        self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+                        self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
+                        [self.canceledAction showInView:self.view];
+                        
+                        
+                    }
+                }
+                
+                
+                
+                
+            }else if ([[self.eventsToday objectAtIndex:row-1] class] == [Practice class]) {
+                
+                
+                [TraceSession addEventToSession:@"Calendar Month Page - Practice Clicked"];
+                
+                
+                PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
+                
+                
+                Practice *currentPractice = [self.eventsToday objectAtIndex:row-1];
+                
+                NSString *userRole = @"";
+                NSString *teamId = @"";
+                
+                teamId = currentPractice.ppteamId;
+                userRole = currentPractice.userRole;
+                
+                if (currentPractice.isCanceled) {
+                    
+                    if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
+                        
+                        self.deleteEventType = @"practice";
+                        self.deleteEventTeamId = currentPractice.ppteamId;
+                        self.deleteEventId = currentPractice.practiceId;
+                        
+                        self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+                        self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
+                        [self.canceledAction showInView:self.view];
+                        
+                        
+                    }
+                }else {
+                    NSArray *viewControllers = currentPracticeTab.viewControllers;
+                    currentPracticeTab.teamId = teamId;
+                    currentPracticeTab.practiceId = currentPractice.practiceId;
+                    currentPracticeTab.userRole = userRole;
+                    
+                    PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+                    currentNotes.practiceId = currentPractice.practiceId;
+                    currentNotes.teamId = teamId;
+                    currentNotes.userRole = userRole;
+                    
+                    
+                    PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    currentAttendance.practiceId = currentPractice.practiceId;
+                    currentAttendance.teamId = teamId;
+                    currentAttendance.userRole = userRole;
+                    
+                    currentAttendance.startDate = currentPractice.startDate;
+                    
+                    /*
+                     PracticeChatter *messages = [viewControllers objectAtIndex:2];
+                     messages.teamId = teamId;
+                     messages.practiceId = currentPractice.practiceId;
+                     messages.userRole = userRole;
+                     messages.startDate = currentPractice.startDate;
+                     */
+                    
+                    /*
+                     PracticeMessages *messages = [viewControllers objectAtIndex:1];
+                     messages.teamId = teamId;
+                     messages.practiceId = currentPractice.practiceId;
+                     messages.userRole = userRole;
+                     
+                     */
+                    [self.navigationController pushViewController:currentPracticeTab animated:YES];
+                }
+                
+                
+                
+            }else {
+                
+                [TraceSession addEventToSession:@"Calendar Month Page - Event Clicked"];
+                
+                
+                EventTabs *currentEventTab = [[EventTabs alloc] init];
+                
+                
+                Event *currentEvent = [self.eventsToday objectAtIndex:row-1];
+                
+                NSString *userRole = @"";
+                NSString *teamId = @"";
+                
+                teamId = currentEvent.teamId;
+                userRole = currentEvent.userRole;
+                
+                if (currentEvent.isCanceled) {
+                    if ([userRole isEqualToString:@"coordinator"] || [userRole isEqualToString:@"creator"]) {
+                        
+                        self.deleteEventType = @"event";
+                        self.deleteEventTeamId = currentEvent.teamId;
+                        self.deleteEventId = currentEvent.eventId;
+                        
+                        self.canceledAction = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+                        self.canceledAction.actionSheetStyle = UIActionSheetStyleDefault;
+                        [self.canceledAction showInView:self.view];
+                        
+                        
+                    }
+                }else {
+                    NSArray *viewControllers = currentEventTab.viewControllers;
+                    currentEventTab.teamId = teamId;
+                    currentEventTab.eventId = currentEvent.eventId;
+                    currentEventTab.userRole = userRole;
+                    
+                    EventNotes *currentNotes = [viewControllers objectAtIndex:0];
+                    currentNotes.eventId = currentEvent.eventId;
+                    currentNotes.teamId = teamId;
+                    currentNotes.userRole = userRole;
+                    
+                    
+                    EventAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    currentAttendance.eventId = currentEvent.eventId;
+                    currentAttendance.teamId = teamId;
+                    currentAttendance.userRole = userRole;
+                    
+                    currentAttendance.startDate = currentEvent.startDate;
+                    /*
+                     EventMessages *messages = [viewControllers objectAtIndex:1];
+                     messages.teamId = teamId;
+                     messages.eventId = currentEvent.eventId;
+                     messages.userRole = userRole;
+                     */
+                    
+                    [self.navigationController pushViewController:currentEventTab animated:YES];
+                }
+                
+                
+            }
+            
+            
+            
+        }
+        
 
-			
-		}
-
-		
-		
-	}
-
+    }
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"AllEventsCalendar.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+	
 }
 
 

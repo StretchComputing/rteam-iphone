@@ -18,6 +18,7 @@
 #import "InviteFanFinal.h"
 #import "TraceSession.h"
 #import "GANTracker.h"
+#import "GoogleAppEngine.h"
 
 @implementation Players
 @synthesize players, teamName, teamId, userRole, currentMemberId, isFans, segRosterFans, addButton, error, fans, playerPics,
@@ -802,54 +803,62 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	if (self.isFans) {
-		
-        [TraceSession addEventToSession:@"People Page - Fan Row Clicked"];
-
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                             action:@"View Fan Profile"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:nil]) {
+    
+    @try {
+        if (self.isFans) {
+            
+            [TraceSession addEventToSession:@"People Page - Fan Row Clicked"];
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"View Fan Profile"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            
+            if ([self.fans count] > 0) {
+                //go to that player profile
+                NSUInteger row = [indexPath row];
+                Fan *coachTeam = [self.fans objectAtIndex:row];
+                coachTeam.headUserRole = self.userRole;
+                coachTeam.teamName = self.teamName;
+                [self.navigationController pushViewController:coachTeam animated:YES];
+                
+            }
+            
+        }else {
+            
+            [TraceSession addEventToSession:@"People Page - Member Row Clicked"];
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"View Member Profile"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            
+            if ([self.players count] > 0) {
+                //go to that player profile
+                NSUInteger row = [indexPath row];
+                Player *coachTeam = [self.players objectAtIndex:row];
+                coachTeam.headUserRole = self.userRole;
+                coachTeam.teamName = self.teamName;
+                [self.navigationController pushViewController:coachTeam animated:YES];
+                
+            }
+            
         }
-        
-        
-		if ([self.fans count] > 0) {
-			//go to that player profile
-			NSUInteger row = [indexPath row];
-			Fan *coachTeam = [self.fans objectAtIndex:row];
-			coachTeam.headUserRole = self.userRole;
-			coachTeam.teamName = self.teamName;
-			[self.navigationController pushViewController:coachTeam animated:YES];
-			
-		}
-		
-	}else {
-		
-        [TraceSession addEventToSession:@"People Page - Member Row Clicked"];
 
+    }
+    @catch (NSException *exception) {
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                             action:@"View Member Profile"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:nil]) {
-        }
-        
-        
-		if ([self.players count] > 0) {
-			//go to that player profile
-			NSUInteger row = [indexPath row];
-			Player *coachTeam = [self.players objectAtIndex:row];
-			coachTeam.headUserRole = self.userRole;
-			coachTeam.teamName = self.teamName;
-			[self.navigationController pushViewController:coachTeam animated:YES];
-			
-		}
-		
-	}
-
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"Players.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+	
 	
 	
 	

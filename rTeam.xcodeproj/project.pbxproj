@@ -243,6 +243,7 @@
 		907DFC11122EE8EE00A3D72C /* Login.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907DFC10122EE8EE00A3D72C /* Login.xib */; };
 		907E668314F6956D00D32986 /* ViewDetailPollRepliesNow.m in Sources */ = {isa = PBXBuildFile; fileRef = 907E668114F6956C00D32986 /* ViewDetailPollRepliesNow.m */; };
 		907E668414F6956D00D32986 /* ViewDetailPollRepliesNow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907E668214F6956C00D32986 /* ViewDetailPollRepliesNow.xib */; };
+		907EB1B9153BC4BB001CEC8A /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 907EB1B8153BC4BB001CEC8A /* UIDevice-Hardware.m */; };
 		907FC9CE14EC584400B08599 /* WhosComingPoll.m in Sources */ = {isa = PBXBuildFile; fileRef = 907FC9CC14EC584300B08599 /* WhosComingPoll.m */; };
 		907FC9CF14EC584400B08599 /* WhosComingPoll.xib in Resources */ = {isa = PBXBuildFile; fileRef = 907FC9CD14EC584300B08599 /* WhosComingPoll.xib */; };
 		9080702A12DFB00C00196AAC /* CalendarEventObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9080702912DFB00C00196AAC /* CalendarEventObject.m */; };
@@ -532,6 +533,7 @@
 		90D70246144C999D0079AF9E /* PhotosActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90D70244144C999D0079AF9E /* PhotosActivity.xib */; };
 		90D70259144CC36A0079AF9E /* NewActivityDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D70257144CC36A0079AF9E /* NewActivityDetail.m */; };
 		90D7025A144CC36A0079AF9E /* NewActivityDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90D70258144CC36A0079AF9E /* NewActivityDetail.xib */; };
+		90D8CDC7154F62960092B3E6 /* rSkybox.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D8CDC6154F62960092B3E6 /* rSkybox.m */; };
 		90DE104B10A71ECB000CC717 /* CoachHome.m in Sources */ = {isa = PBXBuildFile; fileRef = 90DE104A10A71ECB000CC717 /* CoachHome.m */; };
 		90DE10BF10A73390000CC717 /* CoachHome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90DE10BE10A73390000CC717 /* CoachHome.xib */; };
 		90E5425314D0E26600C59A07 /* CreateNewEventGameday.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E5425114D0E26600C59A07 /* CreateNewEventGameday.m */; };
@@ -915,6 +917,8 @@
 		907E668014F6956B00D32986 /* ViewDetailPollRepliesNow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewDetailPollRepliesNow.h; sourceTree = "<group>"; };
 		907E668114F6956C00D32986 /* ViewDetailPollRepliesNow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewDetailPollRepliesNow.m; sourceTree = "<group>"; };
 		907E668214F6956C00D32986 /* ViewDetailPollRepliesNow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewDetailPollRepliesNow.xib; sourceTree = "<group>"; };
+		907EB1B7153BC4BB001CEC8A /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-Hardware.h"; sourceTree = "<group>"; };
+		907EB1B8153BC4BB001CEC8A /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-Hardware.m"; sourceTree = "<group>"; };
 		907FC9CB14EC584300B08599 /* WhosComingPoll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhosComingPoll.h; sourceTree = "<group>"; };
 		907FC9CC14EC584300B08599 /* WhosComingPoll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhosComingPoll.m; sourceTree = "<group>"; };
 		907FC9CD14EC584300B08599 /* WhosComingPoll.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhosComingPoll.xib; sourceTree = "<group>"; };
@@ -1287,6 +1291,8 @@
 		90D70256144CC3690079AF9E /* NewActivityDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewActivityDetail.h; sourceTree = "<group>"; };
 		90D70257144CC36A0079AF9E /* NewActivityDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewActivityDetail.m; sourceTree = "<group>"; };
 		90D70258144CC36A0079AF9E /* NewActivityDetail.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewActivityDetail.xib; sourceTree = "<group>"; };
+		90D8CDC5154F62960092B3E6 /* rSkybox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rSkybox.h; sourceTree = "<group>"; };
+		90D8CDC6154F62960092B3E6 /* rSkybox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = rSkybox.m; sourceTree = "<group>"; };
 		90DE104910A71ECB000CC717 /* CoachHome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoachHome.h; sourceTree = "<group>"; };
 		90DE104A10A71ECB000CC717 /* CoachHome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoachHome.m; sourceTree = "<group>"; };
 		90DE10BE10A73390000CC717 /* CoachHome.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CoachHome.xib; sourceTree = "<group>"; };
@@ -1395,6 +1401,8 @@
 				90B1386F14DF2D88000FB81E /* ScoreNow */,
 				1D3623240D0F684500981E51 /* rTeamAppDelegate.h */,
 				1D3623250D0F684500981E51 /* rTeamAppDelegate.m */,
+				907EB1B7153BC4BB001CEC8A /* UIDevice-Hardware.h */,
+				907EB1B8153BC4BB001CEC8A /* UIDevice-Hardware.m */,
 				90CA2F8F14D8FBF6009316F4 /* ReplyButtonBackView.h */,
 				90CA2F9014D8FBF6009316F4 /* ReplyButtonBackView.m */,
 				90879474149BBA3A0079A207 /* TraceSession.h */,
@@ -1683,6 +1691,8 @@
 				90849BD01137897A007CC7D2 /* Encoder.c */,
 				906EF21B1097478100FB14F7 /* SecondLevelViewController.h */,
 				906EF2191097477600FB14F7 /* SecondLevelViewController.m */,
+				90D8CDC5154F62960092B3E6 /* rSkybox.h */,
+				90D8CDC6154F62960092B3E6 /* rSkybox.m */,
 				90AB194811188C9D005E1018 /* JSON */,
 			);
 			path = Classes;
@@ -2905,6 +2915,8 @@
 				901D46F214F481890061B5BE /* TeamEditFan.m in Sources */,
 				901D46F714F48EEF0061B5BE /* HelpGameday.m in Sources */,
 				907E668314F6956D00D32986 /* ViewDetailPollRepliesNow.m in Sources */,
+				907EB1B9153BC4BB001CEC8A /* UIDevice-Hardware.m in Sources */,
+				90D8CDC7154F62960092B3E6 /* rSkybox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

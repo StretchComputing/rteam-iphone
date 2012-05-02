@@ -54,6 +54,14 @@
 @property (nonatomic, strong) NSString *textRelease2;
 @property (nonatomic, strong) NSString *textLoading2;
 
+@property (nonatomic, strong) UIView *refreshHeaderView3;
+@property (nonatomic, strong) UILabel *refreshLabel3;
+@property (nonatomic, strong) UIImageView *refreshArrow3;
+@property (nonatomic, strong) UIActivityIndicatorView *refreshSpinner3;
+@property (nonatomic, strong) NSString *textPull3;
+@property (nonatomic, strong) NSString *textRelease3;
+@property (nonatomic, strong) NSString *textLoading3;
+
 @property (nonatomic, strong) UIView *refreshHeaderView;
 @property (nonatomic, strong) UILabel *refreshLabel;
 @property (nonatomic, strong) UIImageView *refreshArrow;

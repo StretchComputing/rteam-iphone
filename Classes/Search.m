@@ -21,6 +21,7 @@
 #import "CurrentTeamTabs.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "GoogleAppEngine.h"
 
 @implementation Search
 @synthesize searchBar, searchCriteria, searchTableView, potentialMatches, allMatches, teamsOnly, error, potentialMatchesTeamName, 
@@ -469,73 +470,81 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-    [TraceSession addEventToSession:@"Search Page - Search Result Clicked"];
-
     
-    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                         action:@"Search Result Selected"
-                                          label:mainDelegate.token
-                                          value:-1
-                                      withError:nil]) {
+    @try {
+        [TraceSession addEventToSession:@"Search Page - Search Result Clicked"];
+        
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Search Result Selected"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
+        NSUInteger row = [indexPath row];
+        if ([[self.allMatches objectAtIndex:row] class] == [Team class]) {
+            
+            Team *coachTeam = [self.allMatches objectAtIndex:row];
+            
+            CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
+            
+            NSArray *viewControllers = tmp.viewControllers;
+            
+            tmp.teamId = coachTeam.teamId;
+            tmp.teamName = coachTeam.name;
+            tmp.userRole = coachTeam.userRole;
+            tmp.title = coachTeam.name;
+            tmp.sport = coachTeam.sport;
+            
+            TeamHome *home = [viewControllers objectAtIndex:0];
+            home.teamId = coachTeam.teamId;
+            home.userRole = coachTeam.userRole;
+            home.teamSport = coachTeam.sport;
+            home.teamName = coachTeam.name;
+            home.teamUrl = coachTeam.teamUrl;
+            
+            
+            Players *people = [viewControllers objectAtIndex:1];
+            people.teamId = coachTeam.teamId;
+            people.userRole = coachTeam.userRole;
+            people.teamName = coachTeam.name;
+            
+            EventList *events = [viewControllers objectAtIndex:2];
+            events.teamId = coachTeam.teamId;
+            events.userRole = coachTeam.userRole;
+            events.sport = coachTeam.sport;
+            events.teamName = coachTeam.name;
+            
+            
+            [self.navigationController pushViewController:tmp animated:YES];
+            
+            
+        }else {
+            if ([[self.allMatches objectAtIndex:row] class] == [Player class]) {
+                Player *coachTeam = [self.allMatches objectAtIndex:row];
+                Team *tmpTeam = [self.allMatchesTeamName objectAtIndex:row];
+                coachTeam.headUserRole = tmpTeam.userRole;
+                coachTeam.fromSearch = true;
+                [self.navigationController pushViewController:coachTeam animated:YES];
+            }
+            if ([[self.allMatches objectAtIndex:row] class] == [Fan class]) {
+                Fan *coachTeam = [self.allMatches objectAtIndex:row];
+                Team *tmpTeam = [self.allMatchesTeamName objectAtIndex:row];
+                coachTeam.headUserRole = tmpTeam.userRole;
+                coachTeam.fromSearch = true;
+                [self.navigationController pushViewController:coachTeam animated:YES];
+            }
+            
+        }
+
     }
-    
-	NSUInteger row = [indexPath row];
-	if ([[self.allMatches objectAtIndex:row] class] == [Team class]) {
-		
-		Team *coachTeam = [self.allMatches objectAtIndex:row];
-	
-		CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
-		
-		NSArray *viewControllers = tmp.viewControllers;
-		
-		tmp.teamId = coachTeam.teamId;
-		tmp.teamName = coachTeam.name;
-		tmp.userRole = coachTeam.userRole;
-		tmp.title = coachTeam.name;
-		tmp.sport = coachTeam.sport;
-		
-		TeamHome *home = [viewControllers objectAtIndex:0];
-		home.teamId = coachTeam.teamId;
-		home.userRole = coachTeam.userRole;
-		home.teamSport = coachTeam.sport;
-		home.teamName = coachTeam.name;
-		home.teamUrl = coachTeam.teamUrl;
-		
-	
-		Players *people = [viewControllers objectAtIndex:1];
-		people.teamId = coachTeam.teamId;
-		people.userRole = coachTeam.userRole;
-		people.teamName = coachTeam.name;
-		
-		EventList *events = [viewControllers objectAtIndex:2];
-		events.teamId = coachTeam.teamId;
-		events.userRole = coachTeam.userRole;
-		events.sport = coachTeam.sport;
-		events.teamName = coachTeam.name;
-		
-	
-		[self.navigationController pushViewController:tmp animated:YES];
-
-		
-	}else {
-		if ([[self.allMatches objectAtIndex:row] class] == [Player class]) {
-			Player *coachTeam = [self.allMatches objectAtIndex:row];
-			Team *tmpTeam = [self.allMatchesTeamName objectAtIndex:row];
-			coachTeam.headUserRole = tmpTeam.userRole;
-			coachTeam.fromSearch = true;
-			[self.navigationController pushViewController:coachTeam animated:YES];
-		}
-		if ([[self.allMatches objectAtIndex:row] class] == [Fan class]) {
-			Fan *coachTeam = [self.allMatches objectAtIndex:row];
-			Team *tmpTeam = [self.allMatchesTeamName objectAtIndex:row];
-			coachTeam.headUserRole = tmpTeam.userRole;
-			coachTeam.fromSearch = true;
-			[self.navigationController pushViewController:coachTeam animated:YES];
-		}
-		
-	}
-	
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"Search.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+ 	
 	
 }
 

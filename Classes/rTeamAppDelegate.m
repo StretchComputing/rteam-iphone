@@ -52,8 +52,7 @@
 #import "GoogleAppEngine.h"
 #import "TraceSession.h"
 #import <CrashReporter/CrashReporter.h>
-#import "GoogleAppEngine.h"
-
+#import "UIDevice-Hardware.h"
 
 @implementation rTeamAppDelegate
 
@@ -156,7 +155,7 @@
 
         }
         @catch (NSException *exception) {
-            NSLog(@"*Exception - You did this.*");
+           
         }
       
         
@@ -253,24 +252,6 @@
         
         [self handleCrashReport];
     }
-        
-        
-    /////////////////////////
-    // Test Code for rSkyBox
-    /////////////////////////
-        /*
-    self.crashSummary = @"Joe is testing the crash data being sent to GAE";
-    self.crashDetectDate = [NSDate date];
-    self.crashUserName = @"wrobjx2";
-    
-    NSString *myString = @"0123456789ABCDEF";
-    const char *utfString = [myString UTF8String];
-    self.crashStackData = [NSData dataWithBytes:utfString length:strlen(utfString)];
-    
-    [self performSelectorInBackground:@selector(sendCrashDetect) withObject:nil];
-         */
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
 
     if (![crashReporter enableCrashReporterAndReturnError: &error]){
         //NSLog(@"*************************Warning: Could not enable crash reporter: %@", error);
@@ -330,9 +311,11 @@
                                                   withError:nil]) {
                 }
                 
+                NSString *platform = [[UIDevice currentDevice] platformString];
+
                 // NSLog(@"Crashed on %@", report.systemInfo.timestamp);
-                self.crashSummary = [NSString stringWithFormat:@"Crashed with signal=%@, app version=%@, os version=%@", report.signalInfo.name,
-                                     report.applicationInfo.applicationVersion, report.systemInfo.operatingSystemVersion];
+                self.crashSummary = [NSString stringWithFormat:@"Crashed with signal=%@, app version=%@, os version=%@, hardware=%@", report.signalInfo.name,
+                                     report.applicationInfo.applicationVersion, report.systemInfo.operatingSystemVersion, platform];
                 // NSLog(@"%@", self.crashSummary);
                 
                 self.crashStackData = [crashReporter loadPendingCrashReportDataAndReturnError: &error];
@@ -365,7 +348,6 @@
 }
 
 -(void)sendCrashDetect {
-    
   
     @autoreleasepool {
         // send crash detect to GAE
@@ -628,12 +610,11 @@
 
 //On memory warning, reset the image dictionarys to free up memory
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application{
-    
-    self.replyDictionary = [NSMutableDictionary dictionary];
-    self.messageImageDictionary = [NSMutableDictionary dictionary];
-    
+        
     @try {
-        [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object: [UIApplication sharedApplication]];
+        self.replyDictionary = [NSMutableDictionary dictionary];
+        self.messageImageDictionary = [NSMutableDictionary dictionary];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object: [UIApplication sharedApplication]];
     }
     @catch (NSException *exception) {
         if (self.token == nil) {

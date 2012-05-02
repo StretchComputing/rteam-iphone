@@ -255,8 +255,8 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	[self.navigationItem setRightBarButtonItem:addButton];
 	
 	
-	UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
-	[self.navigationItem setLeftBarButtonItem:homeButton];
+	//UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
+	//[self.navigationItem setLeftBarButtonItem:homeButton];
 	
 	self.bottomBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 440, 320, 40)];
 	

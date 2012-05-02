@@ -90,44 +90,34 @@
         
     }else{
         
-        if (true) {//changed
+        self.theScoreView.gameOverButton.enabled = NO;
+        self.doneButton.enabled = NO;
+        self.cancelButton.enabled = NO;
+        
+        if ([self.selectedGameId isEqualToString:@""]) {
+            //create game, then update game with score
+            self.sendScoreUs = self.theScoreView.scoreUs.text;
+            self.sendScoreThem = self.theScoreView.scoreThem.text;
+            if (self.gameIsOver) {
+                self.sendInterval = @"-1";
+            }else{
+                self.sendInterval = self.theScoreView.quarter.text;
+            }
             
-            self.addMembersAlert = [[UIAlertView alloc] initWithTitle:@"Add Members?" message:@"Would you like to add any members to your new team before saving?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", @"No", nil];
-            self.isNewTeam = false;
-            [self.addMembersAlert show];
-            
+            [self.mainActivity startAnimating];
+            [self performSelectorInBackground:@selector(createGame) withObject:nil];
         }else{
-                
-            self.theScoreView.gameOverButton.enabled = NO;
-            self.doneButton.enabled = NO;
-            self.cancelButton.enabled = NO;
+            //update game with score
+            self.sendScoreUs = self.theScoreView.scoreUs.text;
+            self.sendScoreThem = self.theScoreView.scoreThem.text;
+            if (self.gameIsOver) {
+                self.sendInterval = @"-1";
+            }else{
+                self.sendInterval = self.theScoreView.quarter.text;
+            }
             
-                if ([self.selectedGameId isEqualToString:@""]) {
-                    //create game, then update game with score
-                    self.sendScoreUs = self.theScoreView.scoreUs.text;
-                    self.sendScoreThem = self.theScoreView.scoreThem.text;
-                    if (self.gameIsOver) {
-                        self.sendInterval = @"-1";
-                    }else{
-                        self.sendInterval = self.theScoreView.quarter.text;
-                    }
-                    
-                    [self.mainActivity startAnimating];
-                    [self performSelectorInBackground:@selector(createGame) withObject:nil];
-                }else{
-                    //update game with score
-                    self.sendScoreUs = self.theScoreView.scoreUs.text;
-                    self.sendScoreThem = self.theScoreView.scoreThem.text;
-                    if (self.gameIsOver) {
-                        self.sendInterval = @"-1";
-                    }else{
-                        self.sendInterval = self.theScoreView.quarter.text;
-                    }
-                    
-                    [self.mainActivity startAnimating];
-                    [self performSelectorInBackground:@selector(updateGameScore) withObject:nil];
-                }
-
+            [self.mainActivity startAnimating];
+            [self performSelectorInBackground:@selector(updateGameScore) withObject:nil];
         }
        
         

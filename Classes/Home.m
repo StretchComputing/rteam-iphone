@@ -48,6 +48,7 @@
 #import "CreateNewEventGameday.h"
 #import "ScoreNowScorePage.h"
 #import "WhosComingPoll.h"
+#import "GoogleAppEngine.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -1050,25 +1051,33 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	NSInteger row = [indexPath row];
-	
-    if (tableView == self.postImageTableView) {
+    @try {
+        NSInteger row = [indexPath row];
         
-        Team *tmpTeam = [self.teamList objectAtIndex:row];
-        self.postImageTeamId = tmpTeam.teamId;
-        
-        if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
-            self.postImageIsCoord = true;
+        if (tableView == self.postImageTableView) {
+            
+            Team *tmpTeam = [self.teamList objectAtIndex:row];
+            self.postImageTeamId = tmpTeam.teamId;
+            
+            if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
+                self.postImageIsCoord = true;
+            }else{
+                self.postImageIsCoord = false;
+            }
+            
         }else{
-            self.postImageIsCoord = false;
+            [self.selectRowLabel setHidden:YES];
+            
+            self.rowNewQuickTeam = row;
         }
-        
-    }else{
-        [self.selectRowLabel setHidden:YES];
-        
-        self.rowNewQuickTeam = row;
+
     }
-	
+    @catch (NSException *exception) {
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"Home.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    }
+  
+		
 	
 	
 }

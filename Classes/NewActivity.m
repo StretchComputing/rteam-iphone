@@ -43,7 +43,7 @@
 
 @implementation NewActivity
 @synthesize topScrollView, bottomScrollView, viewControllers, numberOfPages, currentPage, view1, view2, view3, currentMiddle, bannerIsVisible,
-tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString, homeScoreView, photosArray, photoActivity, photoDisplayLabel, photoBackView, canLoadMorePhotos, tmpPhotosArray, morePhotosButton;
+tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityTable, view1Top, view2Top, view3Top, allActivityLoadingLabel, allActivityLoadingIndicator, refreshArrow, refreshLabel, refreshSpinner, textPull, textLoading, textRelease, refreshHeaderView, refreshArrow2, refreshLabel2, refreshSpinner2, refreshHeaderView2, textPull2, textLoading2, textRelease2, isLoading, currentTable, myActivityTable, myActivityLoadingLabel, myActivityLoadingIndicator, photosTable, photosLoadingLabel, photosLoadingIndicator, isDragging, shouldCallStop, didInitPhotos, didInitMyActivity, myActivityArray, myAd, fromPost, swipeAlert, swipeAlertFront, activityImageObjects, totalReplyArray, errorString, homeScoreView, photosArray, photoActivity, photoDisplayLabel, photoBackView, canLoadMorePhotos, tmpPhotosArray, morePhotosButton, refreshArrow3, refreshLabel3, refreshSpinner3, refreshHeaderView3, textPull3, textLoading3, textRelease3;
 
 
 -(void)home{
@@ -136,6 +136,9 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     self.canLoadMorePhotos = false;
     self.photoBackView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 391)];
     self.photoBackView.backgroundColor = [UIColor clearColor];
+    
+    self.photoBackView.delegate = self;
+    
                                                                        
     
     self.photosArray = [NSMutableArray array];
@@ -275,6 +278,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     self.allActivityTable.dataSource = self;
     self.allActivityTable.delegate = self;
 
+    
     self.allActivityLoadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.allActivityLoadingIndicator.frame = CGRectMake(150, 120, 20, 20);
     [self.allActivityLoadingIndicator startAnimating];
@@ -594,7 +598,30 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
             }
             
             
-        }        
+        }else{
+            
+            self.currentTable = @"photos";
+            
+            if (isLoading) {
+                // Update the content inset, good for section headers
+                if (sender.contentOffset.y > 0)
+                    self.photoBackView.contentInset = UIEdgeInsetsZero;
+                else if (sender.contentOffset.y >= -REFRESH_HEADER_HEIGHT)
+                    self.photoBackView.contentInset = UIEdgeInsetsMake(-sender.contentOffset.y, 0, 0, 0);
+            } else if (isDragging && sender.contentOffset.y < 0) {
+                // Update the arrow direction and label
+                [UIView beginAnimations:nil context:NULL];
+                if (sender.contentOffset.y < -REFRESH_HEADER_HEIGHT) {
+                    // User is scrolling above the header
+                    refreshLabel3.text = self.textRelease3;
+                    [refreshArrow3 layer].transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
+                } else { // User is scrolling somewhere within the header
+                    refreshLabel3.text = self.textPull3;
+                    [refreshArrow3 layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
+                }
+                [UIView commitAnimations];
+            }
+        }
     }        
 }
 
@@ -1022,6 +1049,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     textRelease2 = [[NSString alloc] initWithString:@"Release to refresh..."];
     textLoading2 = [[NSString alloc] initWithString:@"Loading..."];
     
+    textPull3 = [[NSString alloc] initWithString:@"Pull down to refresh..."];
+    textRelease3 = [[NSString alloc] initWithString:@"Release to refresh..."];
+    textLoading3 = [[NSString alloc] initWithString:@"Loading..."];
+    
   
     
 }
@@ -1076,6 +1107,32 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [self.myActivityTable addSubview:refreshHeaderView2];
     
+    refreshHeaderView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - REFRESH_HEADER_HEIGHT, 320, REFRESH_HEADER_HEIGHT)];
+    refreshHeaderView3.backgroundColor = [UIColor clearColor];
+    
+    refreshLabel3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, REFRESH_HEADER_HEIGHT)];
+    refreshLabel3.backgroundColor = [UIColor clearColor];
+    refreshLabel3.font = [UIFont boldSystemFontOfSize:12.0];
+    refreshLabel3.textAlignment = UITextAlignmentCenter;
+    
+    refreshArrow3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
+    refreshArrow3.frame = CGRectMake(floorf((REFRESH_HEADER_HEIGHT - 27) / 2),
+                                     (floorf(REFRESH_HEADER_HEIGHT - 44) / 2),
+                                     27, 44);
+    
+    refreshSpinner3 = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    refreshSpinner3.frame = CGRectMake(floorf(floorf(REFRESH_HEADER_HEIGHT - 20) / 2), floorf((REFRESH_HEADER_HEIGHT - 20) / 2), 20, 20);
+    refreshSpinner3.hidesWhenStopped = YES;
+    
+    [refreshHeaderView3 addSubview:refreshLabel3];
+    [refreshHeaderView3 addSubview:refreshArrow3];
+    [refreshHeaderView3 addSubview:refreshSpinner3];
+    
+    [self.photoBackView addSubview:refreshHeaderView3];
+    [self.photoBackView bringSubviewToFront:refreshHeaderView3];
+    refreshHeaderView3.backgroundColor = [UIColor clearColor];
+
+    
    
     
 }
@@ -1123,6 +1180,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         refreshLabel2.text = self.textLoading2;
         refreshArrow2.hidden = YES;
         [refreshSpinner2 startAnimating];
+    }else{
+        self.photoBackView.contentInset = UIEdgeInsetsMake(REFRESH_HEADER_HEIGHT, 0, 0, 0);
+        refreshLabel3.text = self.textLoading3;
+        refreshArrow3.hidden = YES;
+        [refreshSpinner3 startAnimating];
     }
     
     [UIView commitAnimations];
@@ -1150,6 +1212,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.myActivityTable.contentInset = UIEdgeInsetsZero;
         [refreshArrow2 layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
         
+    }else{
+        self.photoBackView.contentInset = UIEdgeInsetsZero;
+        [refreshArrow3 layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
     }
     
     [UIView commitAnimations];
@@ -1171,6 +1236,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         refreshArrow2.hidden = NO;
         [refreshSpinner2 stopAnimating];
         
+    }else{
+        refreshLabel3.text = self.textPull3;
+        refreshArrow3.hidden = NO;
+        [refreshSpinner3 stopAnimating];
     }
 }
 
@@ -1191,8 +1260,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
         [self performSelectorInBackground:@selector(getMyActivity) withObject:nil];
         
-    }else if ([self.currentTable isEqualToString:@"photos"]){
+    }else{
+        [TraceSession addEventToSession:@"Activity Page - Photo Refreshed Clicked"];
+       
+        NSDate *today = [NSDate date];
+        NSDate *tomorrow = [NSDate dateWithTimeInterval:86400 sinceDate:today];
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        [format setDateFormat:@"YYYY-MM-dd"];
         
+        NSString *dateString = [format stringFromDate:tomorrow];
+        
+        [self performSelectorInBackground:@selector(getActivityPhotos:) withObject:dateString];
         
     }
 }
@@ -2316,17 +2394,38 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)doneActivityPhotos{
         
+    bool reset = false;
+    if (self.shouldCallStop) {
+        [self performSelector:@selector(stopLoading) withObject:nil afterDelay:1.0];
+        reset = true;
+    }
+    
     [self.photoActivity stopAnimating];
     
     if ([self.tmpPhotosArray count] > 0) {
         
-        [self.photosArray addObjectsFromArray:self.tmpPhotosArray];    
-        
-        
-        NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
-        [self.photosArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
-
-        [self performSelector:@selector(setUpPhotoPage)];
+        if (reset) {
+            
+            self.photosArray = [NSMutableArray arrayWithArray:self.tmpPhotosArray];   
+            
+            
+            NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
+            [self.photosArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+            
+            [self performSelector:@selector(setUpPhotoPage)];
+            
+        }else{
+            
+            [self.photosArray addObjectsFromArray:self.tmpPhotosArray];    
+            
+            
+            NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
+            [self.photosArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+            
+            [self performSelector:@selector(setUpPhotoPage)];
+            
+        }
+      
     }else{
         self.photoDisplayLabel.text = @"*Could not get photos at this time.";
 
@@ -2340,7 +2439,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.photosArray count] > 0) {
         
         for (UIView *view in [self.photoBackView subviews]) {
-            [view removeFromSuperview];
+            
+            if (view != refreshHeaderView3) {
+                [view removeFromSuperview];
+
+            }
         }
         
         int finalHeight = 0;

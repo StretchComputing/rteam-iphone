@@ -20,7 +20,7 @@
 -(void)viewDidLoad{
 	
 	
-	self.title = @"New Team";
+	self.title = @"New Sport";
 	
 	self.myTableView.delegate = self;
 	self.myTableView.dataSource = self;
