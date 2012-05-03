@@ -7,7 +7,6 @@
 //
 
 #import "CoachHome.h"
-#import "CoachTeamHome.h"
 #import "Register.h"
 #import "rTeamAppDelegate.h"
 #import "Team.h"

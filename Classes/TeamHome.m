@@ -16,7 +16,6 @@
 #import "GameEdit.h"
 #import "GameTabsNoCoord.h"
 #import "Scores.h"
-#import "TeamUrl.h"
 #import "Event.h"
 #import "Practice.h"
 #import "PracticeTabs.h"
@@ -620,6 +619,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 	self.tabBarController.selectedIndex = 3;
 }
 
+/*
 -(void)webPage{
 	
 	TeamUrl *tmp = [[TeamUrl alloc] init];
@@ -628,6 +628,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 	self.navigationItem.backBarButtonItem = temp;
 	[self.navigationController pushViewController:tmp animated:YES];
 }
+*/
 
 -(void)allScores{
 	

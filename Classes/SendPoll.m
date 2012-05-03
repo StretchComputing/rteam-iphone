@@ -10,7 +10,6 @@
 #import "SendPollOptions.h"
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
-#import "MessageTabs.h"
 #import "GameTabs.h"
 #import "PracticeTabs.h"
 #import "CurrentTeamTabs.h"

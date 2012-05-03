@@ -8,7 +8,6 @@
 
 #import "Register.h"
 #import "ServerAPI.h"
-#import "CoachTeamHome.h"
 #import "JSON/JSON.h"
 #import "rTeamAppDelegate.h"
 #import "RegisterNewUser.h"
