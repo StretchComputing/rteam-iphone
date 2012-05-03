@@ -177,7 +177,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 			
 			if ((profile == nil)  || ([profile isEqualToString:@""])){
 				
-				self.profileImage.image = [UIImage imageNamed:@"profile1.png"];
+				self.profileImage.image = [UIImage imageNamed:@"profileNew.png"];
 			}else {
 				
 				NSData *profileData = [Base64 decode:profile];

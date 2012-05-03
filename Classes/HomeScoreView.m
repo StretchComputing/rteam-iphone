@@ -126,14 +126,16 @@
             self.isFullScreen = false;
             [self.fullScreenButton setImage:[UIImage imageNamed:@"fullScreen.jpeg"] forState:UIControlStateNormal];
             
-            CGRect frame = self.view.frame;
-            frame.origin.y = 121;
-            frame.size.height -= 121;
-            self.view.frame = frame;
+            //CGRect frame = self.view.frame;
+            //frame.origin.y = 121;
+            //frame.size.height -= 121;
+            //self.view.frame = frame;
             
             if (self.isKeepingScore) {
                 [self keepScore];
             }
+            
+            [self.homeSuperView moveDivider];
             
             
         }else{

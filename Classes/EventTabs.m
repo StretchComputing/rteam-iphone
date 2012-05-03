@@ -64,14 +64,14 @@
 	tab1.teamId = self.teamId;
 	tab1.eventId = self.eventId;
 	tab1.title = @"Event Day";
-	tab1.tabBarItem.image = [UIImage imageNamed:@"eventDay.png"];
+	tab1.tabBarItem.image = [UIImage imageNamed:@"tabsEday.png"];
 	
 
 	
 	tab3.teamId = self.teamId;
 	tab3.eventId = self.eventId;
 	tab3.title = @"Attendance";
-	tab3.tabBarItem.image = [UIImage imageNamed:@"attendance_small.png"];
+	tab3.tabBarItem.image = [UIImage imageNamed:@"tabsAttendance.png"];
 	
 	
 	self.viewControllers = [NSArray arrayWithObjects:tab1, tab3, nil]; 

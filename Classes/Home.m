@@ -481,10 +481,13 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     self.isGameVisible = false;
 
     homeScoreView.homeSuperView = self;
+
     
     homeAttendanceView = [[HomeAttendanceView alloc] init];
     homeAttendanceView.view.frame = CGRectMake(0, 322, 320, 301);
     homeAttendanceView.view.hidden = YES;
+    homeAttendanceView.homeSuperView = self;
+
     [self.view addSubview:self.homeAttendanceView.view];
     [self.view addSubview:self.homeScoreView.view];
 
@@ -1787,7 +1790,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.noreply = tmp1.noreply;
                             
                             if (![tmp1.teamName isEqualToString:@""]) {
-                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
+                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp1.teamName];
                             }else {
                                 tmp1Button.teamLabel.text = @"";
                             }
@@ -1836,7 +1839,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
                             
                             if (![tmp1.teamName isEqualToString:@""]) {
-                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
+                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp1.teamName];
                             }else {
                                 tmp1Button.teamLabel.text = @"";
                             }
@@ -1908,7 +1911,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         tmp1Button.eventDescription = tmp1.eventDescription;
 
                         if (![tmp1.teamName isEqualToString:@""]) {
-                            tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
+                            tmp1Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp1.teamName];
                         }else {
                             tmp1Button.teamLabel.text = @"";
                         }
@@ -1961,7 +1964,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.messageThreadId = tmp1.messageThreadId;
 
                             if (![tmp1.teamName isEqualToString:@""]) {
-                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
+                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp1.teamName];
                             }else {
                                 tmp1Button.teamLabel.text = @"";
                             }
@@ -2003,7 +2006,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventStringDate = tmp1.eventDate;
 
                             if (![tmp1.teamName isEqualToString:@""]) {
-                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp1.teamName];
+                                tmp1Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp1.teamName];
                             }else {
                                 tmp1Button.teamLabel.text = @"";
                             }
@@ -2058,7 +2061,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
-                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
+                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp2.teamName];
                                 }else {
                                     tmp2Button.teamLabel.text = @"";
                                 }
@@ -2106,7 +2109,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.eventDate = tmp2.eventDate;
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
-                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
+                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp2.teamName];
                                 }else {
                                     tmp2Button.teamLabel.text = @"";
                                 }
@@ -2176,7 +2179,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp2Button.eventStringDate = tmp2.eventDate;
 
                             if (![tmp2.teamName isEqualToString:@""]) {
-                                tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
+                                tmp2Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp2.teamName];
                             }else {
                                 tmp2Button.teamLabel.text = @"";
                             }
@@ -2226,7 +2229,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.messageThreadId = tmp2.messageThreadId;
 
                                 if (![tmp2.teamName isEqualToString:@""]) {
-                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
+                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp2.teamName];
                                 }else {
                                     tmp2Button.teamLabel.text = @"";
                                 }
@@ -2269,7 +2272,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.eventStringDate = tmp2.eventDate;
 
                                 if (![tmp2.teamName isEqualToString:@""]) {
-                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"(%@)", tmp2.teamName];
+                                    tmp2Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp2.teamName];
                                 }else {
                                     tmp2Button.teamLabel.text = @"";
                                 }
@@ -3640,7 +3643,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }else{
             frame.origin.y = 251;
         }
-        self.happeningNowView.frame = frame;
+        //self.happeningNowView.frame = frame;
 
         
         CGRect frame1 = self.homeAttendanceView.view.frame;
@@ -3688,7 +3691,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         CGRect frame = self.happeningNowView.frame;
         frame.origin.y = 0;
-        self.happeningNowView.frame = frame;
+        //self.happeningNowView.frame = frame;
         
         CGRect frame1 = self.homeAttendanceView.view.frame;
         frame1.origin.y = 121;
@@ -3724,6 +3727,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
         }
         
+        if (self.homeAttendanceView.view.hidden == NO) {
+            
+            self.homeAttendanceView.isFullScreen = true;
+            [self.homeAttendanceView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
+            
+            CGRect frame = self.homeAttendanceView.view.frame;
+            frame.origin.y = 0;
+            frame.size.height += 121;
+            self.homeAttendanceView.view.frame = frame;
+            
+        }
+        
+        
         
         self.bottomBar.hidden = YES;
        
@@ -3739,7 +3755,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
         }
         
-
+    
+        
 
     }
      

@@ -177,7 +177,7 @@ tableLineTop, tableLineLeft, tableLineRight, tableLineBottom, closeButton, isAtt
 		self.teamLabel = [[UILabel alloc] initWithFrame:CGRectMake(-10, 70, 110, 9 )];
 		self.teamLabel.textColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.3 alpha:1.0];
 		self.teamLabel.backgroundColor = [UIColor clearColor];
-		self.teamLabel.font = [UIFont fontWithName:@"Verdana-Bold" size:10];
+		self.teamLabel.font = [UIFont fontWithName:@"Verdana" size:10];
 		self.teamLabel.textAlignment = UITextAlignmentCenter;
 		self.teamLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
         

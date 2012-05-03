@@ -7,12 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "Home.h"
+#import "Home.h"
+
+@class Home;
+
 
 @interface HomeAttendanceView : UIViewController <UIActionSheetDelegate> {
 
     
 }
+@property (nonatomic, strong) Home *homeSuperView;
+@property bool isFullScreen;
+@property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
 @property (nonatomic, strong) IBOutlet UIView *lineView;
 @property (nonatomic, strong) IBOutlet UILabel *eventLinkLabel;
 @property (nonatomic, strong) NSArray *attendees;
@@ -51,6 +57,7 @@
 @property (nonatomic, strong) NSString *maybeCount;
 
 
+-(IBAction)fullScreen;
 @property int initY;
 
 -(void)setLabels;

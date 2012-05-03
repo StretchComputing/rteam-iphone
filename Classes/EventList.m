@@ -422,6 +422,8 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 	static NSInteger scoreTag = 600000;
 	static NSInteger noEventsTag = 700000;
 	static NSInteger canceledTag = 800000;
+    static NSInteger myScoreTag = 900000;
+
 	
 	UITableViewCell *cell;
 	if (mapIt) {
@@ -498,6 +500,10 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 		UILabel *canceledLabel = [[UILabel alloc] initWithFrame:frame];
 		canceledLabel.tag = canceledTag;
 		[cell.contentView addSubview:canceledLabel];
+        
+        UIView *scoreView = [[UIView alloc] initWithFrame:CGRectMake(10, 48, 91, 35)];
+        scoreView.tag = myScoreTag;
+        [cell.contentView addSubview:scoreView];
 		
 		
 	}
@@ -514,6 +520,32 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 	UILabel *scoreLabel = (UILabel *)[cell.contentView viewWithTag:scoreTag];
 	scoreLabel.backgroundColor = [UIColor clearColor];
 	UILabel *noEventsLabel = (UILabel *)[cell.contentView viewWithTag:noEventsTag];
+    
+    UIView *scoreView = (UIView *)[cell.contentView viewWithTag:myScoreTag];
+    scoreView.hidden = NO;
+    
+    UIImageView *scoreImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 91, 35)];
+    scoreImageView.image = [UIImage imageNamed:@"scoreimg.png"];
+    [scoreView addSubview:scoreImageView];
+
+    UILabel *usScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 14, 29, 19)];
+    usScoreLabel.backgroundColor = [UIColor clearColor];
+    usScoreLabel.textAlignment = UITextAlignmentCenter;
+    usScoreLabel.textColor = [UIColor redColor];
+    [scoreView addSubview:usScoreLabel];
+    
+    UILabel *themScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 14, 29, 19)];
+    themScoreLabel.backgroundColor = [UIColor clearColor];
+    themScoreLabel.textAlignment = UITextAlignmentCenter;
+    themScoreLabel.textColor = [UIColor redColor];
+    [scoreView addSubview:themScoreLabel];
+    
+    UILabel *intLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, 20, 17)];
+    intLabel.backgroundColor = [UIColor clearColor];
+    intLabel.textAlignment = UITextAlignmentCenter;
+    intLabel.textColor = [UIColor yellowColor];
+    intLabel.font = [UIFont fontWithName:@"Helvetica" size:11];
+    [scoreView addSubview:intLabel];
 
 
 	UILabel *canceledLabel = (UILabel *)[cell.contentView viewWithTag:canceledTag];
@@ -571,6 +603,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 		descLabel.hidden = YES;
 		typeLabel.hidden = YES;
 		scoreLabel.hidden = YES;
+        scoreView.hidden = YES;
 		
 		noEventsLabel.text = @"No events found...";
         noEventsLabel.backgroundColor = [UIColor clearColor];
@@ -590,9 +623,11 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 		descLabel.hidden = NO;
 		typeLabel.hidden = NO;
 		scoreLabel.hidden = NO;
+        scoreView.hidden = YES;
 
 		if ([[self.events objectAtIndex:row] class] == [Game class]) {
 			
+           
 			typeLabel.text = @"Game";
 			Game *theGame = [self.events objectAtIndex:row];
 			
@@ -655,6 +690,13 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 						
 						scoreLabel.text = [NSString stringWithFormat:@"%@ %@-%@", result, theGame.scoreUs, theGame.scoreThem];
 						[scoreLabel setHidden:NO];
+                        scoreView.hidden = NO;
+                        usScoreLabel.text = theGame.scoreUs;
+                        themScoreLabel.text = theGame.scoreThem;
+                        intLabel.text = @"F";
+                        descLabel.hidden = YES;
+
+
 						
 					}else if ([theGame.interval isEqualToString:@"-4"]) {
 						//Cancled
@@ -696,12 +738,20 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 						
 						scoreLabel.text = [NSString stringWithFormat:@"%@-%@ %@", theGame.scoreUs, theGame.scoreThem, time];
 						[scoreLabel setHidden:NO];
+                        scoreView.hidden = NO;
+                        
+                        usScoreLabel.text = theGame.scoreUs;
+                        themScoreLabel.text = theGame.scoreThem;
+                        intLabel.text = time;
+                        descLabel.hidden = YES;
+
+
 					}
 					
 				}
 			}
 			
-			
+            scoreLabel.hidden = YES;
 			
 		}else if ([[self.events objectAtIndex:row] class] == [Practice class]) {
 			
@@ -900,7 +950,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80;
+    return 85;
 }
 
 - (void)tableView:(UITableView *)tableView

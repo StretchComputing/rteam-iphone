@@ -8,12 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import <iAd/iAd.h>
+#import "BoxScoreViewViewController.h"
 
 
 
 @interface TeamHome : UIViewController <UITableViewDelegate, UITableViewDataSource, ADBannerViewDelegate, UIActionSheetDelegate> {
 
 }
+@property (nonatomic, strong) BoxScoreViewViewController *pastGame;
+@property (nonatomic, strong) BoxScoreViewViewController *futureGame;
+
 @property (nonatomic, strong) IBOutlet UILabel *recordLabel;
 @property (nonatomic, strong) NSString *recordString;
 @property bool doneEvents;
@@ -79,6 +83,10 @@
 @property (nonatomic, strong)  IBOutlet UIButton *allScoresButton;
 @property (nonatomic, strong)  IBOutlet UIButton *nextGameButton;
 
+
+@property (nonatomic, strong)  UILabel *pastGameLabel;
+@property (nonatomic, strong)  UILabel *futureGameLabel;
+
 -(IBAction)schedule;
 -(IBAction)allScores;
 -(IBAction)webPage;
@@ -89,5 +97,7 @@
 
 -(IBAction)addMembers;
 -(IBAction)addEvents;
+
+-(NSString *)getIntervalLabelFromInterval:(NSString *)interval1;
 
 @end

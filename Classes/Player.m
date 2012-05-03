@@ -379,7 +379,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 				
 				if ((thumbNail == nil) || ([thumbNail isEqualToString:@""])) {
 					
-					self.profileImage.image = [UIImage imageNamed:@"profile1.png"];
+					self.profileImage.image = [UIImage imageNamed:@"profileNew.png"];
 
 				}else {
 					

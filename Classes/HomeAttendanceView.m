@@ -29,7 +29,7 @@
 
 
 @implementation HomeAttendanceView
-@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView;
+@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView, isFullScreen, fullScreenButton, homeSuperView;
 
 - (void)viewDidLoad
 {
@@ -67,7 +67,7 @@
     self.teamLabel.text = [NSString stringWithFormat:@"%@", self.teamName];
     
 
-    self.eventLinkLabel.frame = CGRectMake(189, 25, 175, 21);
+    self.eventLinkLabel.frame = CGRectMake(189, 50, 175, 21);
     self.eventLinkLabel.backgroundColor = [UIColor clearColor];
     self.eventLinkLabel.text = [NSString stringWithFormat:@"%@ on %@", self.eventType, self.eventDate];
     self.eventLinkLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
@@ -95,7 +95,7 @@
     
     int width = totalSize.width;
     
-    self.lineView.frame = CGRectMake(x+1, 43, width-2, 2);
+    self.lineView.frame = CGRectMake(x+1, 68, width-2, 2);
     
     [self.goToButton setTitle:[NSString stringWithFormat:@"Poll Details", self.eventType] forState:UIControlStateNormal];
     self.yesLabel.text = self.yesCount;
@@ -679,6 +679,44 @@
     [self setLabels];
         
 }
+
+
+-(void)fullScreen{
+    
+    
+    if (self.homeSuperView == nil) {
+        self.view.hidden = YES;
+    }else{
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        if (self.isFullScreen) {
+            self.isFullScreen = false;
+            [self.fullScreenButton setImage:[UIImage imageNamed:@"fullScreen.jpeg"] forState:UIControlStateNormal];
+        
+        
+            [self.homeSuperView moveDivider];
+            
+            
+        }else{
+            self.isFullScreen = true;
+            [self.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
+            
+            CGRect frame = self.view.frame;
+            frame.origin.y = 0;
+            frame.size.height += 121;
+            self.view.frame = frame;
+        }
+        
+        [UIView commitAnimations];
+        
+        
+    }
+    
+}
+
+
 - (void)viewDidUnload
 {
     teamLabel = nil;

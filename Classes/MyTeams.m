@@ -526,7 +526,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 			if ([theSport isEqualToString:@"basketball"]) {
 				myImageView.image = [UIImage imageNamed:@"basketballOnly.png"];
                 
-			}else if ([theSport isEqualToString:@"baseball"]) {
+			}else if ([theSport isEqualToString:@"baseball"] || [theSport isEqualToString:@"softball"]) {
 				myImageView.image = [UIImage imageNamed:@"baseballOnly.png"];
 			}else if ([theSport isEqualToString:@"soccer"]) {
 				myImageView.image = [UIImage imageNamed:@"soccerOnly.png"];
@@ -579,7 +579,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 			if ([theSport isEqualToString:@"basketball"]) {
 				myImageView.image = [UIImage imageNamed:@"basketballOnly.png"];
                 
-			}else if ([theSport isEqualToString:@"baseball"]) {
+			}else if ([theSport isEqualToString:@"baseball"] || [theSport isEqualToString:@"softball"]) {
 				myImageView.image = [UIImage imageNamed:@"baseballOnly.png"];
 			}else if ([theSport isEqualToString:@"soccer"]) {
 				myImageView.image = [UIImage imageNamed:@"soccerOnly.png"];
@@ -594,7 +594,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 			}else if ([theSport isEqualToString:@"volleyball"]) {
 				myImageView.image = [UIImage imageNamed:@"volleyballOnly.png"];
 			}else {
-				myImageView.image = [UIImage imageNamed:@"gen80.png"];
+				myImageView.image = [UIImage imageNamed:@"cellOther.png"];
 			}
             
             for (UIView *myView in [cell.imageView subviews]) {
@@ -674,6 +674,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 home.teamSport = coachTeam.sport;
                 home.teamName = coachTeam.name;
                 home.teamUrl = coachTeam.teamUrl;
+            
                 
                 //TeamActivity *activity = [viewControllers objectAtIndex:1];
                 //activity.teamId = coachTeam.teamId;

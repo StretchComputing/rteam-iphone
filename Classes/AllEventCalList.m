@@ -438,6 +438,7 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	static NSInteger scoreTag = 5;
 	static NSInteger teamTag = 6;
 	static NSInteger canceledTag = 7;
+    static NSInteger myScoreTag = 8;
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
 	
@@ -503,6 +504,10 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		UILabel *canceledLabel = [[UILabel alloc] initWithFrame:frame];
 		canceledLabel.tag = canceledTag;
 		[cell.contentView addSubview:canceledLabel];
+        
+        UIView *scoreView = [[UIView alloc] initWithFrame:CGRectMake(10, 34, 91, 35)];
+        scoreView.tag = myScoreTag;
+        [cell.contentView addSubview:scoreView];
 		
 		
 	}
@@ -525,6 +530,35 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	UILabel *scoreLabel = (UILabel *)[cell.contentView viewWithTag:scoreTag];
 	UILabel *teamLabel = (UILabel *)[cell.contentView viewWithTag:teamTag];
 
+    UIView *scoreView = (UIView *)[cell.contentView viewWithTag:myScoreTag];
+    scoreView.hidden = NO;
+    
+    UIImageView *scoreImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 91, 35)];
+    scoreImageView.image = [UIImage imageNamed:@"scoreimg.png"];
+    [scoreView addSubview:scoreImageView];
+    
+    UILabel *usScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 14, 29, 19)];
+    usScoreLabel.backgroundColor = [UIColor clearColor];
+    usScoreLabel.textAlignment = UITextAlignmentCenter;
+    usScoreLabel.textColor = [UIColor redColor];
+    [scoreView addSubview:usScoreLabel];
+    
+    UILabel *themScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 14, 29, 19)];
+    themScoreLabel.backgroundColor = [UIColor clearColor];
+    themScoreLabel.textAlignment = UITextAlignmentCenter;
+    themScoreLabel.textColor = [UIColor redColor];
+    [scoreView addSubview:themScoreLabel];
+    
+    UILabel *intLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, 20, 17)];
+    intLabel.backgroundColor = [UIColor clearColor];
+    intLabel.textAlignment = UITextAlignmentCenter;
+    intLabel.textColor = [UIColor yellowColor];
+    intLabel.font = [UIFont fontWithName:@"Helvetica" size:11];
+    [scoreView addSubview:intLabel];
+
+    
+    
+    
 		
 	descLabel.backgroundColor = [UIColor clearColor];
 	vsLabel.backgroundColor = [UIColor clearColor];
@@ -555,6 +589,8 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	
 	teamLabel.text = @"";
 	
+    scoreView.hidden = YES;
+    
 	if ([[cellArray objectAtIndex:row] class] == [Game class]) {
 		
 		gameLabel.text = @"Game";
@@ -618,6 +654,11 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 					
 					scoreLabel.hidden = NO;
 					scoreLabel.text = [NSString stringWithFormat:@"%@ %@-%@", result, theGame.scoreUs, theGame.scoreThem];
+                    usScoreLabel.text = theGame.scoreUs;
+                    themScoreLabel.text = theGame.scoreThem;
+                    intLabel.text = @"F";
+                    scoreView.hidden = NO;
+
 				}else if ([theGame.interval isEqualToString:@"-4"]){
 					
 					canceledLabel.hidden = NO;
@@ -655,6 +696,12 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 					
 					scoreLabel.hidden = NO;
 					scoreLabel.text = [NSString stringWithFormat:@"%@-%@ %@", theGame.scoreUs, theGame.scoreThem, time];
+                    scoreView.hidden = NO;
+                    
+                    usScoreLabel.text = theGame.scoreUs;
+                    themScoreLabel.text = theGame.scoreThem;
+                    intLabel.text = time;
+
 				}
 				
 			}else {
@@ -663,7 +710,8 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 
 		}
 		
-		
+        [scoreLabel setHidden:YES];
+
 	}else if ([[cellArray objectAtIndex:row] class] == [Practice class]){
 		
 		[scoreLabel setHidden:YES];
@@ -1034,6 +1082,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSUInteger row = [indexPath row];
+    NSUInteger section = [indexPath section];
+    
+    NSMutableArray *cellArray = [self.dateArray objectAtIndex:section];
+    
+	if ([[cellArray objectAtIndex:row] class] == [Game class]) {
+        return 75;
+    }
     return 55;
 }
 

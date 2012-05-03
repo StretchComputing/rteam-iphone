@@ -283,6 +283,8 @@ eventsArray, eventsError, eventsNowSuccess, currentEventIndex, teamLabel, numRow
 	
 	UILabel *optionLabel = (UILabel *)[cell.contentView viewWithTag:optionTag];
 	
+    optionLabel.backgroundColor = [UIColor clearColor];
+    
 	UIButton *rightArrow = [UIButton buttonWithType:UIButtonTypeCustom];
 	rightArrow.frame = CGRectMake(260, 0, 40, 45);
 	[rightArrow setImage:[UIImage imageNamed:@"right-arrow.png"] forState:UIControlStateNormal];

@@ -41,7 +41,7 @@
 @synthesize teamId, userRole, teamSport, teamName, nextGameInfoLabel, topRight, topLeft, recentGamesTable, allScoresButton, nextGameButton, teamNameLabel, gamesArray, pastGamesArray, errorLabel, gameSuccess, nextGameArray, teamUrl, allScoresButtonUnderline, nextEventInfoLabel, nextEventButton, eventSuccess, eventsArray,
 futureEventsArray, nextEventArray, bannerIsVisible, eventsActivity, touchUpLocation, gestureStartPoint, nextGameLabel, nextEventLabel,
 teamInfoThumbnail, noEvents, noGames, eventsAlert, membersAlert, noMembers, displayedMemberAlert, displayedEventAlert, gamesArrayTemp, pastGamesArrayTemp,
-displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addEventsButton, recentGamesLabel, largeActivity, doneMembers, doneGames, doneEvents, noEventsLabel, recordLabel, recordString;
+displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addEventsButton, recentGamesLabel, largeActivity, doneMembers, doneGames, doneEvents, noEventsLabel, recordLabel, recordString, pastGame, futureGame, pastGameLabel, futureGameLabel;
 
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -53,6 +53,8 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 
 -(void)viewDidLoad{
 
+   
+    
 	self.noEvents = false;
 	self.noGames = false;
 	self.noMembers = false;
@@ -76,49 +78,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
     
 	
 	
-	NSString *theSport = [self.teamSport lowercaseString];
-	
-	if ([theSport isEqualToString:@"basketball"]) {
-		self.topRight.image = [UIImage imageNamed:@"cellBasketball.png"];
-		self.topLeft.image = [UIImage imageNamed:@"cellBasketball.png"];
 		
-	}else if ([theSport isEqualToString:@"baseball"]) {
-		self.topRight.image = [UIImage imageNamed:@"cellBaseball.png"];
-		self.topLeft.image = [UIImage imageNamed:@"cellBaseball.png"];
-		
-	}else if ([theSport isEqualToString:@"soccer"]) {
-		self.topRight.image = [UIImage imageNamed:@"cellSoccer.png"];
-		self.topLeft.image = [UIImage imageNamed:@"cellSoccer.png"];
-		
-	}else if ([theSport isEqualToString:@"football"] || [self.teamSport isEqualToString:@"flag football"]) {
-		self.topRight.image = [UIImage imageNamed:@"cellFootball.png"];
-		self.topLeft.image = [UIImage imageNamed:@"cellFootball.png"];
-		
-	}else if ([theSport isEqualToString:@"hockey"]) {
-		self.topRight.image = [UIImage imageNamed:@"cellHockey.png"];
-		self.topLeft.image = [UIImage imageNamed:@"cellHockey.png"];
-		
-	}else if ([theSport isEqualToString:@"lacrosse"]) {
-		self.topRight.image = [UIImage imageNamed:@"cellLacrosse.png"];
-		self.topLeft.image = [UIImage imageNamed:@"cellLacrosse.png"];
-		
-	}else if ([theSport isEqualToString:@"tennis"]) {
-		self.topRight.image = [UIImage imageNamed:@"cellTennis.png"];
-		self.topLeft.image = [UIImage imageNamed:@"cellTennis.png"];
-		
-	}else if ([theSport isEqualToString:@"volleyball"]) {
-		self.topRight.image = [UIImage imageNamed:@"cellVolleyball.png"];
-		self.topLeft.image = [UIImage imageNamed:@"cellVolleyball.png"];
-		
-	}else if ([theSport isEqualToString:@"development"]) {
-		self.topRight.image = [UIImage imageNamed:@"computerCell.png"];
-		self.topLeft.image = [UIImage imageNamed:@"computerCell.png"];
-	}else {
-		self.topLeft.image = [UIImage imageNamed:@"cellOther.png"];
-		self.topRight.image = [UIImage imageNamed:@"cellOther.png"];
-
-	}
-	
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.nextGameButton setBackgroundImage:stretch forState:UIControlStateNormal];
@@ -156,13 +116,63 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 
     [TraceSession addEventToSession:@"TeamHome - View Will Appear"];
 
+    
+    NSString *theSport = [self.teamSport lowercaseString];
+    
+	if ([theSport isEqualToString:@"basketball"]) {
+		self.topRight.image = [UIImage imageNamed:@"basketballOnly.png"];
+		self.topLeft.image = [UIImage imageNamed:@"basketballOnly.png"];
+		
+	}else if ([theSport isEqualToString:@"baseball"] || [theSport isEqualToString:@"softball"]) {
+		self.topRight.image = [UIImage imageNamed:@"baseballOnly.png"];
+		self.topLeft.image = [UIImage imageNamed:@"baseballOnly.png"];
+		
+	}else if ([theSport isEqualToString:@"soccer"]) {
+		self.topRight.image = [UIImage imageNamed:@"soccerOnly.png"];
+		self.topLeft.image = [UIImage imageNamed:@"soccerOnly.png"];
+		
+	}else if ([theSport isEqualToString:@"football"] || [self.teamSport isEqualToString:@"flag football"]) {
+		self.topRight.image = [UIImage imageNamed:@"footballOnly.png"];
+		self.topLeft.image = [UIImage imageNamed:@"footballOnly.png"];
+		
+	}else if ([theSport isEqualToString:@"hockey"]) {
+		self.topRight.image = [UIImage imageNamed:@"hockeyOnly.png"];
+		self.topLeft.image = [UIImage imageNamed:@"hockeyOnly.png"];
+		
+	}else if ([theSport isEqualToString:@"lacrosse"]) {
+		self.topRight.image = [UIImage imageNamed:@"lacrosseOnly.png"];
+		self.topLeft.image = [UIImage imageNamed:@"lacrosseOnly.png"];
+		
+	}else if ([theSport isEqualToString:@"tennis"]) {
+		self.topRight.image = [UIImage imageNamed:@"tennisOnly.png"];
+		self.topLeft.image = [UIImage imageNamed:@"tennisOnly.png"];
+		
+	}else if ([theSport isEqualToString:@"volleyball"]) {
+		self.topRight.image = [UIImage imageNamed:@"volleyballOnly.png"];
+		self.topLeft.image = [UIImage imageNamed:@"volleyballOnly.png"];
+		
+	}else if ([theSport isEqualToString:@"development"]) {
+		self.topRight.image = [UIImage imageNamed:@"computerCell.png"];
+		self.topLeft.image = [UIImage imageNamed:@"computerCell.png"];
+	}else {
+		self.topLeft.image = [UIImage imageNamed:@"gen80.png"];
+		self.topRight.image = [UIImage imageNamed:@"gen80.png"];
+        
+	}
+
+    
+    self.futureGame.view.hidden = YES;
+    self.pastGame.view.hidden = YES;
+    
+
    
     
 	displayPhoto = true;
 	self.displayWarning = true;
-	[self performSelectorInBackground:@selector(getListOfMembers) withObject:nil];
-
-	[self.tabBarController.navigationItem setRightBarButtonItem:nil];
+    
+    
+    UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editTeam)];
+    [self.tabBarController.navigationItem setRightBarButtonItem:edit];
 
 	self.nextGameArray = [NSMutableArray array];
 	self.title = @"Team Home";
@@ -179,7 +189,6 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 	[self performSelectorInBackground:@selector(getTeamInfo) withObject:nil];
     self.recordLabel.hidden = YES;
 	[self performSelectorInBackground:@selector(getListOfGames) withObject:nil];
-	[self performSelectorInBackground:@selector(getListOfEvents) withObject:nil];
 	
 	self.nextGameButton.hidden = YES;
 	self.nextEventButton.hidden = YES;
@@ -281,337 +290,327 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             
         }
         
-        [self performSelectorOnMainThread:@selector(done) withObject:nil waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(doneGetGames) withObject:nil waitUntilDone:NO];
 
 	
     }
 }
 
--(void)done{
+-(void)doneGetGames{
 	
-    self.doneGames = true;
-	self.gamesArray = [NSMutableArray arrayWithArray:self.gamesArrayTemp];
+    @try {
+        self.doneGames = true;
+        self.gamesArray = [NSMutableArray arrayWithArray:self.gamesArrayTemp];
 		
-	[self.eventsActivity stopAnimating];
-
-	if (self.gameSuccess) {
-		        
-        if ([self.gamesArray count] > 0) {
-            self.recordLabel.hidden = NO;
-            self.recordLabel.text = [NSString stringWithFormat:self.recordString];
-        }
-      
+        [self.eventsActivity stopAnimating];
+        [self.largeActivity stopAnimating];
         
-        if (self.doneMembers && self.doneEvents && self.doneGames) {
+        if (self.gameSuccess) {
             
-            bool orig = false;
-            
-            if (self.noEvents && self.noMembers && self.noGames) {
+            if ([self.gamesArray count] > 0) {
+                
+                self.recordLabel.hidden = NO;
+                self.recordLabel.text = [NSString stringWithFormat:self.recordString];
                 
                 
-                [self.largeActivity stopAnimating];
+                NSDate *dateNow = [NSDate date];
+                NSDateFormatter *format = [[NSDateFormatter alloc] init];
+                [format setDateFormat:@"yyyy-MM-dd HH:mm"]; 
                 
-                if (self.noMembers && self.noEvents) {
-                    if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+                bool futureGame1 = false;
+                
+                self.pastGamesArrayTemp = [NSMutableArray array];
+                for (int i = 0; i < [self.gamesArray count]; i++){
+                    
+                    Game *tmp = [self.gamesArray objectAtIndex:i];
+                    
+                    NSDate *gameDate = [format dateFromString:tmp.startDate];
+                    
+                    
+                    if ([gameDate isEqualToDate:[gameDate earlierDate:dateNow]]) {
+                        //if the game is in the past
                         
-                        self.addMembersButton.hidden = NO;
-                        self.noEventsLabel.hidden = NO;
-
-                        self.addEventsButton.hidden = NO;
-                    }else{
-                        orig = true;
+                        [self.pastGamesArrayTemp addObject:tmp];
+                    }else {
+                        //we have reached the first game in the future
+                        futureGame1 = true;
+                        
+                        [format setDateFormat:@"MMM dd 'at' hh:mm a"];
+                        
+                        self.nextGameInfoLabel.text = [format stringFromDate:gameDate];
+                        [self.nextGameArray addObject:tmp];
+                        i = [self.gamesArray count];
                     }
+                    
+                    
+                }
+                
+                NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:NO];
+                [self.pastGamesArrayTemp sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
+                
+                
+                if ([self.pastGamesArrayTemp count] > 0) {
+                    
+                    //Mmost recent past game is at pastGamesARrayTemp index 0
+                    //Next future game is at nextGameArray index 0
+                    
+                    NSDate *checkToday = [NSDate date];
+                    NSDateFormatter *newDateFormat = [[NSDateFormatter alloc] init];
+                    
+                    [newDateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+                    
+                    Game *tmpGame = [self.pastGamesArrayTemp objectAtIndex:0];
+                    NSDate *checkGame = [newDateFormat dateFromString:tmpGame.startDate];
+                    
+                    NSTimeInterval timeInterval = [checkToday timeIntervalSinceDate:checkGame];
+                    
+                    if (timeInterval <= 43200) {
+                        //if the game started within the last 12 hrs, and the interval says its in progress, move it to the next game array
+                        
+                        int checkInterval = [tmpGame.interval intValue];
+                        if (checkInterval > 0) {
+                            self.nextGameArray = [NSMutableArray arrayWithObject:tmpGame];
+                            [self.pastGamesArrayTemp removeObjectAtIndex:0];
+                            
+                        }
+                    }
+                    
+                    
+                }
+                
+                [self.futureGameLabel removeFromSuperview];
+                [self.pastGameLabel removeFromSuperview];
+                
+                self.futureGameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 320, 25)];
+                self.futureGameLabel.textAlignment = UITextAlignmentCenter;
+                self.futureGameLabel.backgroundColor = [UIColor clearColor];
+                [self.view addSubview:self.futureGameLabel];
+                
+                self.pastGameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, 320, 25)];
+                self.pastGameLabel.textAlignment = UITextAlignmentCenter;
+                self.pastGameLabel.backgroundColor = [UIColor clearColor];
+                [self.view addSubview:self.pastGameLabel];
+                
+                if (futureGame1) {
+                    //There is a future Game
+                    Game *tmpGame = [self.nextGameArray objectAtIndex:0];
+                    
+                    self.futureGame = [[BoxScoreViewViewController alloc] init];
+                    self.futureGame.view.frame = CGRectMake(15, 130, 290, 65);
+                    self.futureGame.scoreUs.text = [NSString stringWithString:tmpGame.scoreUs];
+                    self.futureGame.scoreThem.text = [NSString stringWithString:tmpGame.scoreThem];
+                    self.futureGame.nameUs.text = [NSString stringWithString:self.teamName];
+                    
+                    futureGameLabel.text = @"Next Game:";
+                    
+                    UIButton *futureGameButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                    futureGameButton.frame = CGRectMake(0, 0, 250, 60);
+                    [futureGameButton addTarget:self action:@selector(nextGame) forControlEvents:UIControlEventTouchUpInside];
+                    [self.futureGame.view addSubview:futureGameButton];
+                    
+                    if ([tmpGame.interval isEqualToString:@"0"]) {
+                        //interval is the date
+                        
+                        
+                        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+                        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+                        NSDate *eventDate = [dateFormat dateFromString:tmpGame.startDate];
+                        [dateFormat setDateFormat:@"MM/dd"];
+                        self.futureGame.interval.text = [dateFormat stringFromDate:eventDate];
+                        
+                        self.futureGame.scoreUs.text = @"-";
+                        self.futureGame.scoreThem.text = @"-";
+                        
+                        
+                    }else{
+                        self.futureGame.interval.text = [self getIntervalLabelFromInterval:tmpGame.interval];
+                        
+                        if (![tmpGame.interval isEqualToString:@"-1"]) {
+                            //Game is in progress!
+                            futureGameLabel.text = @"Game in progress!";
+                            
+                        }else{
+                            
+                            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+                            [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+                            NSDate *eventDate = [dateFormat dateFromString:tmpGame.startDate];
+                            [dateFormat setDateFormat:@"MM/dd"];
+                            self.futureGame.interval.text = [dateFormat stringFromDate:eventDate];
+                            
+                            
+                        }
+                    }
+                    
+                    if (![tmpGame.opponent isEqualToString:@""]) {
+                        self.futureGame.nameThem.text = [NSString stringWithString:tmpGame.opponent];
+                    }else{
+                        self.futureGame.nameThem.text = @"Opponent";
+                    }
+                    [self.view addSubview:self.futureGame.view];
+                    
+                    
                     
                 }else{
-                    orig = true;
-                }
-                
-                
-                
-            }else{
-                orig = true;
-            }
-            
-            if (orig) {
-                self.allScoresButtonUnderline.hidden = NO;
-                self.allScoresButton.hidden = NO;
-                self.recentGamesLabel.hidden = NO;
-                self.recentGamesTable.hidden = NO;
-            }
-            
-        }
-        
-		NSDate *dateNow = [NSDate date];
-		NSDateFormatter *format = [[NSDateFormatter alloc] init];
-		[format setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-
-		bool futureGame = false;
-		
-		self.pastGamesArrayTemp = [NSMutableArray array];
-		for (int i = 0; i < [self.gamesArray count]; i++){
-			
-			Game *tmp = [self.gamesArray objectAtIndex:i];
-			
-			NSDate *gameDate = [format dateFromString:tmp.startDate];
-			
-			
-			if ([gameDate isEqualToDate:[gameDate earlierDate:dateNow]]) {
-				//if the game is in the past
-				
-				[self.pastGamesArrayTemp addObject:tmp];
-			}else {
-				//we have reached the first game in the future
-				futureGame = true;
-				
-				[format setDateFormat:@"MMM dd 'at' hh:mm a"];
-				
-				self.nextGameInfoLabel.text = [format stringFromDate:gameDate];
-				[self.nextGameArray addObject:tmp];
-				i = [self.gamesArray count];
-			}
-
-			
-		}
-		
-		NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:NO];
-		[self.pastGamesArrayTemp sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
-        
-		self.pastGamesArray = [NSMutableArray arrayWithArray:self.pastGamesArrayTemp];
-		
-		[self performSelectorInBackground:@selector(getMvpInfo) withObject:nil];
-		
-		[self.recentGamesTable reloadData];
-		
-		if (!futureGame) {
-			self.nextGameInfoLabel.text = @"*No games scheduled*";
-			[self.nextGameButton setHidden:YES];
-		}else {
-			[self.nextGameButton setHidden:NO];
-		}
-
-		
-	}else {
-		self.errorLabel.text = @"*Error connecting to server";
-	}
-
-	
-}
-
-
--(void)getListOfEvents{
-
-	@autoreleasepool {
-        self.eventsArray = [NSMutableArray array];
-        self.futureEventsArray = [NSMutableArray array];
-        self.nextEventArray = [NSMutableArray array];
-        
-        NSString *token = @"";
-        
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        if (mainDelegate.token != nil){
-            token = mainDelegate.token;
-        }
-        
-        if (![token isEqualToString:@""]){
-            
-            NSDictionary *response = [ServerAPI getListOfEvents:self.teamId :token :@"all"];
-            
-            NSString *status = [response valueForKey:@"status"];
-            
-            if ([status isEqualToString:@"100"]){
-                
-                self.eventSuccess = true;
-                self.eventsArray = [response valueForKey:@"events"];
-                
-                
-                if ([self.eventsArray count] == 0) {
-                    self.noEvents = true;
-                }
-                
-                for (int i = 0; i < [self.eventsArray count]; i++) {
+                    futureGameLabel.text = @"No future games found...";
                     
-                    if ([Event class] == [[self.eventsArray objectAtIndex:i] class]) {
+                    self.futureGame = [[BoxScoreViewViewController alloc] init];
+                    self.futureGame.view.frame = CGRectMake(15, 130, 290, 65);
+                    self.futureGame.scoreUs.text = @"-";
+                    self.futureGame.scoreThem.text = @"-";
+                    self.futureGame.nameUs.text = [NSString stringWithString:self.teamName];
+                    self.futureGame.nameThem.text = @"Opponent TBD";
+                    self.futureGame.interval.text = @"-";
+                    
+                    
+                    [self.view addSubview:self.futureGame.view];
+                    
+                    
+                }
+                
+                if ([self.pastGamesArrayTemp count] > 0) {
+                    //There is a most recent game at index 0
+                    
+                    Game *tmpGame = [self.pastGamesArrayTemp objectAtIndex:0];
+                    
+                    self.pastGame = [[BoxScoreViewViewController alloc] init];
+                    self.pastGame.view.frame = CGRectMake(35, 260, 250, 60);
+                    self.pastGame.frontView.backgroundColor = [UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1.0];
+                    self.pastGame.scoreUs.text = [NSString stringWithString:tmpGame.scoreUs];
+                    self.pastGame.scoreThem.text = [NSString stringWithString:tmpGame.scoreThem];
+                    self.pastGame.nameUs.text = [NSString stringWithString:self.teamName];
+                    
+                    self.pastGame.nameUs.textColor = [UIColor darkGrayColor];
+                    self.pastGame.nameThem.textColor = [UIColor darkGrayColor];
+                    
+                    pastGameLabel.text = @"Most Recent Game:";
+                    
+                    UIButton *pastGameButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                    pastGameButton.frame = CGRectMake(0, 0, 250, 60);
+                    [pastGameButton addTarget:self action:@selector(previousGame) forControlEvents:UIControlEventTouchUpInside];
+                    [self.pastGame.view addSubview:pastGameButton];
+                    
+                    if ([tmpGame.interval isEqualToString:@"0"]) {
+                        //interval is the date
                         
-                        Event *tmpEvent = [self.eventsArray objectAtIndex:i];
                         
-                        if (tmpEvent.isCanceled) {
-                            [self.eventsArray removeObjectAtIndex:i];
-                            i--;
-                        }
-                    }else if ([Practice class] == [[self.eventsArray objectAtIndex:i] class]) {
+                        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+                        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+                        NSDate *eventDate = [dateFormat dateFromString:tmpGame.startDate];
+                        [dateFormat setDateFormat:@"MM/dd"];
+                        self.pastGame.interval.text = [dateFormat stringFromDate:eventDate];
                         
-                        Practice *tmpEvent = [self.eventsArray objectAtIndex:i];
+                        self.pastGame.scoreUs.text = @"-";
+                        self.pastGame.scoreThem.text = @"-";
                         
-                        if (tmpEvent.isCanceled) {
-                            [self.eventsArray removeObjectAtIndex:i];
-                            i--;
+                    }else{
+                        self.pastGame.interval.text = [self getIntervalLabelFromInterval:tmpGame.interval];
+                        
+                        if (![tmpGame.interval isEqualToString:@"-1"]) {
+                            //Game is in progress!
+                            pastGameLabel.text = @"Game in progress!";
+                            
+                        }else{
+                            
+                            //Game is final
+                            UILabel *finalLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 250, 40)];
+                            finalLabel.backgroundColor = [UIColor clearColor];
+                            finalLabel.textAlignment = UITextAlignmentCenter;
+                            finalLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:32];
+                            
+                            
+                            int scoreu = [tmpGame.scoreUs intValue];
+                            int scoret = [tmpGame.scoreThem intValue];
+                            
+                            if (scoreu > scoret) {
+                                finalLabel.text = @"W";
+                                finalLabel.textColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
+                            }else if (scoret > scoreu){
+                                finalLabel.text = @"L";
+                                finalLabel.textColor = [UIColor redColor];
+                            }else{
+                                finalLabel.text = @"T";
+                                finalLabel.textColor = [UIColor blueColor];
+                            }
+                            
+                            [self.pastGame.view addSubview:finalLabel];
+                            
+                            CGRect frame = self.pastGame.interval.frame;
+                            frame.origin.y +=20;
+                            self.pastGame.interval.font = [UIFont fontWithName:@"Helvetica" size:14];
+                            self.pastGame.interval.frame = frame;
+                            
                         }
                     }
+                    
+                    if (![tmpGame.opponent isEqualToString:@""]) {
+                        self.pastGame.nameThem.text = [NSString stringWithString:tmpGame.opponent];
+                    }else{
+                        self.pastGame.nameThem.text = @"Opponent";
+                    }
+                    [self.view addSubview:self.pastGame.view];
+                    
+                    
+                }else{
+                    
+                    pastGameLabel.text = @"No past games found...";
+                    
+                    
+                    self.pastGame = [[BoxScoreViewViewController alloc] init];
+                    self.pastGame.view.frame = CGRectMake(35, 260, 250, 60);
+                    self.pastGame.frontView.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];
+                    self.pastGame.scoreUs.text = [NSString stringWithString:@"-"];
+                    self.pastGame.scoreThem.text = [NSString stringWithString:@"-"];
+                    self.pastGame.nameUs.text = [NSString stringWithString:self.teamName];
+                    self.pastGame.interval.text = @"-";
+                    self.pastGame.nameThem.text = @"No Opponent";
+                    self.pastGame.nameUs.textColor = [UIColor darkGrayColor];
+                    self.pastGame.nameThem.textColor = [UIColor darkGrayColor];
+
+                    
+                    [self.view addSubview:self.pastGame.view];
+                    
                 }
                 
+                
+                self.addMembersButton.hidden = YES;
+                self.noEventsLabel.hidden = YES;
+                
+                self.addEventsButton.hidden = YES;
             }else{
                 
-                //Server hit failed...get status code out and display error accordingly
-                int statusCode = [status intValue];
-                self.eventSuccess = false;
-                switch (statusCode) {
-                    case 0:
-                        //null parameter
-                        //self.error = @"*Error connecting to server";
-                        break;
-                    case 1:
-                        //error connecting to server
-                        //self.error = @"*Error connecting to server";
-                        break;
-                    default:
-                        //log status code
-                        //self.error = @"*Error connecting to server";
-                        break;
+                if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+                    self.addMembersButton.hidden = NO;
+                    self.noEventsLabel.hidden = NO;
+                    
+                    self.addEventsButton.hidden = NO;
+                }else{
+                    self.noEventsLabel.hidden = NO;
+                    self.noEventsLabel.text = @"Your team has no scheduled games...";
                 }
+                
             }
             
+            
+            
+            
+            
+            
+        }else {
+            self.errorLabel.text = @"*Error connecting to server";
         }
-        
-        [self performSelectorOnMainThread:@selector(doneEventsMethod) withObject:nil waitUntilDone:NO];
 
     }
-}
-
--(void)doneEventsMethod{
-	
-    self.doneEvents = true;
-    
-	[self.eventsActivity stopAnimating];
-
-	
-	if (self.eventSuccess) {
-		        
-        if (self.doneMembers && self.doneEvents && self.doneGames) {
-            
-            bool orig = false;
-            
-            if (self.noEvents && self.noMembers && self.noGames) {
-                
-                
-                [self.largeActivity stopAnimating];
-                
-                if (self.noMembers && self.noEvents) {
-                    if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
-                        
-                        self.addMembersButton.hidden = NO;
-                        self.noEventsLabel.hidden = NO;
-
-                        self.addEventsButton.hidden = NO;
-                    }else{
-                        orig = true;
-                    }
-                    
-                }else{
-                    orig = true;
-                }
-                                
-            }else{
-                orig = true;
-            }
-            
-            if (orig) {
-                self.allScoresButtonUnderline.hidden = NO;
-                self.allScoresButton.hidden = NO;
-                self.recentGamesLabel.hidden = NO;
-                self.recentGamesTable.hidden = NO;
-            }
-            
-        }
-		
-		NSDate *dateNow = [NSDate date];
-		NSDateFormatter *format = [[NSDateFormatter alloc] init];
-		[format setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-		
-		for (int i = 0; i < [self.eventsArray count]; i++){
-			
-			NSDate *gameDate = [NSDate date];
-			
-			if ([[self.eventsArray objectAtIndex:i] class] == [Practice class]) {
-				Practice *tmp = [self.eventsArray objectAtIndex:i];
-				gameDate = [format dateFromString:tmp.startDate];
-			}
-			if ([[self.eventsArray objectAtIndex:i] class] == [Event class]) {
-				Event *tmp = [self.eventsArray objectAtIndex:i];
-				gameDate = [format dateFromString:tmp.startDate];
-			}
-			
-			if ([dateNow isEqualToDate:[gameDate earlierDate:dateNow]]) {
-				//if the game is in the future
-				
-				[self.futureEventsArray addObject:[self.eventsArray objectAtIndex:i]];
-			}
-			
-			
-		}
-		
-		//sort the futureEventsArray
-		NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-		[self.futureEventsArray sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
-		
-		
-		//Go through the futureEvents Array, if find an "Event", list that, else list first Practice
-		bool oneEvent = false;
-		if ([self.futureEventsArray count] > 0) {
-			
-			[self.nextEventButton setHidden:NO];
-			
-			for (int i = 0; i < [self.futureEventsArray count]; i++){
-				
-			if ([[self.futureEventsArray objectAtIndex:i] class] == [Event class]) {
-				
-				oneEvent = true;
-				Event *tmp = [self.futureEventsArray objectAtIndex:i];
-				[self.nextEventArray addObject:tmp];
-				
-				[format setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-				
-					
-				NSDate *eventDate = [format dateFromString:tmp.startDate];
-						
-				[format setDateFormat:@"MMM dd 'at' hh:mm a"];
-						
-				self.nextEventInfoLabel.text = [format stringFromDate:eventDate];
-				break;
-			}
-				
-			}
-			
-			if (!oneEvent) {
-				Practice *tmp = [self.futureEventsArray objectAtIndex:0];
-				[self.nextEventArray addObject:tmp];
-				
-				[format setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-				
-				
-				NSDate *eventDate = [format dateFromString:tmp.startDate];
-				
-				[format setDateFormat:@"MMM dd 'at' hh:mm a"];
-				
-				self.nextEventInfoLabel.text = [format stringFromDate:eventDate];
-				
-			}
-			
-		}else {
-			self.nextEventInfoLabel.text = @"*None scheduled*";
-			[self.nextEventButton setHidden:YES];
-		}
-
-		
-	}else {
-		self.nextEventInfoLabel.text = @"*None scheduled*";
-		[self.nextEventButton setHidden:YES];
-
-	}
-
-		
+    @catch (NSException *exception) {
+        
+        rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
+        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"TeamHome.m - doneGetGames()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+    }
+   
 	
 }
+
+
 
 
 
@@ -697,6 +696,83 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 	
 }
 
+
+-(void)previousGame{
+    
+    if ([self.pastGamesArrayTemp count] > 0) {
+        Game *currentGame = [self.pastGamesArrayTemp objectAtIndex:0];
+        
+        if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+            GameTabs *currentGameTab = [[GameTabs alloc] init];
+            NSArray *viewControllers = currentGameTab.viewControllers;
+            currentGameTab.teamId = self.teamId;
+            currentGameTab.gameId = currentGame.gameId;
+            currentGameTab.userRole = self.userRole;
+            currentGameTab.teamName = self.teamName;
+            
+            Gameday *currentNotes = [viewControllers objectAtIndex:0];
+            currentNotes.gameId = currentGame.gameId;
+            currentNotes.teamId = self.teamId;
+            currentNotes.userRole = self.userRole;
+            currentNotes.sport = self.teamSport;
+            currentNotes.description = currentGame.description;
+            currentNotes.startDate = currentGame.startDate;
+            currentNotes.opponentString = currentGame.opponent;
+            
+            GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+            currentAttendance.gameId = currentGame.gameId;
+            currentAttendance.teamId = self.teamId;
+            currentAttendance.startDate = currentGame.startDate;
+            
+            
+            
+            
+            Vote *fans = [viewControllers objectAtIndex:2];
+            fans.teamId = self.teamId;
+            fans.userRole = self.userRole;
+            fans.gameId = currentGame.gameId;
+            
+            [self.navigationController pushViewController:currentGameTab animated:YES];
+            
+        }else {
+            
+            GameTabsNoCoord *currentGameTab = [[GameTabsNoCoord alloc] init];
+            NSArray *viewControllers = currentGameTab.viewControllers;
+            currentGameTab.teamId = self.teamId;
+            currentGameTab.gameId = currentGame.gameId;
+            currentGameTab.userRole = self.userRole;
+            currentGameTab.teamName = self.teamName;
+            
+            /*
+             TeamActivity *activity = [viewControllers objectAtIndex:1];
+             activity.teamId = self.teamId;
+             activity.userRole = self.userRole;
+             */
+            
+            Gameday *currentNotes = [viewControllers objectAtIndex:0];
+            currentNotes.gameId = currentGame.gameId;
+            currentNotes.teamId = self.teamId;
+            currentNotes.userRole = self.userRole;
+            currentNotes.sport = self.teamSport;
+            currentNotes.description = currentGame.description;
+            currentNotes.startDate = currentGame.startDate;
+            currentNotes.opponentString = currentGame.opponent;
+            
+            
+            
+            Vote *fans = [viewControllers objectAtIndex:1];
+            fans.teamId = self.teamId;
+            fans.userRole = self.userRole;
+            fans.gameId = currentGame.gameId;
+            
+            [self.navigationController pushViewController:currentGameTab animated:YES];
+            
+        }
+        
+    }
+
+    
+}
 -(void)nextGame{
 	
 	if ([self.nextGameArray count] > 0) {
@@ -1276,7 +1352,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
 			
 		if (displayPhoto) {
-			[self.tabBarController.navigationItem setRightBarButtonItem:teamPicture];
+			//[self.tabBarController.navigationItem setRightBarButtonItem:teamPicture];
 
 		}
 			
@@ -1297,11 +1373,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 			
 			if (displayPhoto) {
-				[self.tabBarController.navigationItem setRightBarButtonItem:teamPicture];
+				//[self.tabBarController.navigationItem setRightBarButtonItem:teamPicture];
 			}
 			
 		}else {
-			[self.tabBarController.navigationItem setRightBarButtonItem:nil];
+			//[self.tabBarController.navigationItem setRightBarButtonItem:nil];
 
 		}
 
@@ -1316,108 +1392,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 
--(void)getListOfMembers{
-	
-
-    @autoreleasepool {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        NSString *token = @"";
-        if (mainDelegate.token != nil){
-            token = mainDelegate.token;
-        } 
-        
-        if (![token isEqualToString:@""]){	
-            NSDictionary *response = [ServerAPI getListOfTeamMembers:self.teamId :token :@"" :@""];
-            
-            NSString *status = [response valueForKey:@"status"];
-            
-            if ([status isEqualToString:@"100"]){
-                
-                NSArray *memberArray = [response valueForKey:@"members"];
-                
-                
-                if ([memberArray count] <= 1) {
-                    self.noMembers = true;
-                }
-                
-            }else{
-                
-                //Server hit failed...get status code out and display error accordingly
-                int statusCode = [status intValue];
-                
-                //[self.errorLabel setHidden:NO];
-                switch (statusCode) {
-                    case 0:
-                        //null parameter
-                        //self.errorLabel.text = @"*Error connecting to server";
-                        break;
-                    case 1:
-                        //error connecting to server
-                        //self.errorLabel.text = @"*Error connecting to server";
-                        break;
-                    default:
-                        //log status code?
-                        //self.errorLabel.text = @"*Error connecting to server";
-                        break;
-                }
-            }
-        }
-        
-        
-        [self performSelectorOnMainThread:@selector(doneMembersMethod) withObject:nil waitUntilDone:NO];
-
-    }
-	
-		
-	
-	
-}
-
--(void)doneMembersMethod{
-	
-    self.doneMembers = true;
-    
-    if (self.doneMembers && self.doneEvents && self.doneGames) {
-        
-        bool orig = false;
-
-        if (self.noEvents && self.noMembers && self.noGames) {
-            
-        
-            [self.largeActivity stopAnimating];
-            
-            if (self.noMembers && self.noEvents) {
-                if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
-                    
-                    self.addMembersButton.hidden = NO;
-                    self.noEventsLabel.hidden = NO;
-
-                    self.addEventsButton.hidden = NO;
-                }else{
-                    orig = true;
-                }
-                
-            }else{
-                orig = true;
-            }
-   
-
-       
-        }else{
-            orig = true;
-        }
-      
-        if (orig) {
-            self.allScoresButtonUnderline.hidden = NO;
-            self.allScoresButton.hidden = NO;
-            self.recentGamesLabel.hidden = NO;
-            self.recentGamesTable.hidden = NO;
-        }
-        
-    }
-	
-}
 
 
 -(void)editTeam{
@@ -1443,10 +1417,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         [self.navigationController pushViewController:tmp animated:YES];
         
     }
-    
-    
-  
-    
+ 
     
 }
 
@@ -1499,6 +1470,51 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	myAd = nil;
     recordLabel = nil;
 	[super viewDidUnload];
+}
+
+
+-(NSString *)getIntervalLabelFromInterval:(NSString *)interval1{
+    
+    if ([interval1 isEqualToString:@"-1"]) {
+        //Game over
+        return @"Final";
+        
+    }else {
+        //Game in progress
+        
+        NSString *time = @"";
+        int interval = [interval1 intValue];
+        
+        if (interval == 1) {
+            time = @"1st";
+        }
+        
+        if (interval == 2) {
+            time = @"2nd";
+        }
+        
+        if (interval == 3) {
+            time = @"3rd";
+        }
+        
+        if (interval >= 4) {
+            time = [NSString stringWithFormat:@"%@th", interval1];
+        }
+        
+        if (interval == -2) {
+            time = @"OT";
+        }
+        
+        
+        if (interval == -3) {
+            time = @"";
+        }
+        
+        
+        return time;
+    }
+
+    
 }
 
 @end
