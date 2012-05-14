@@ -145,8 +145,10 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"GameEdit.m - clickedButtonAtIndex" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+
+        
+        [GoogleAppEngine sendClientLog:@"GameEdit.m - clickedButtonAtIndex" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
    
 		

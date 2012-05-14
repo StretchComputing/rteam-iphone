@@ -12,6 +12,9 @@
 @interface AttendingButton : EventNowButton {
 
 }
+
+
+
 @property (nonatomic, strong) NSArray *attendees;
 @property (nonatomic, strong) NSString *messageThreadId;
 

@@ -18,19 +18,25 @@
 #import "Team.h"
 #import "ServerAPI.h"
 #import "rTeamAppDelegate.h"
-#import "NewGame2.h"
-#import "NewPractice2.h"
-#import "NewEvent2.h"
-#import "RecurringEventSelection.h"
+
 #import "TraceSession.h"
+#import "SelectCalendarEvent.h"
 
 @implementation SelectTeamCal
-@synthesize teams, error, event, teamId, finalDate, singleOrMultiple;
+@synthesize teams, error, event, teamId, finalDate, singleOrMultiple, fromHome, haveDate;
 
 
 -(void)viewWillAppear:(BOOL)animated{
     [TraceSession addEventToSession:@"SelectTeamCal - View Will Appear"];
+    
+    if (self.fromHome) {
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancel)];
+        [self.navigationItem setLeftBarButtonItem:addButton];
+    }
 
+}
+-(void)cancel{
+    [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 - (void)viewDidLoad {
 	
@@ -96,38 +102,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	int row = [indexPath row];
 	
-	Team *tmpTeam = [self.teams objectAtIndex:row];
-	self.teamId = tmpTeam.teamId;
-    
-	if ([self.singleOrMultiple isEqualToString:@"single"]) {
-		if ([self.event isEqualToString:@"game"]) {
-			//Game	
-			NewGame2 *nextController = [[NewGame2 alloc] init];
-			nextController.teamId = self.teamId;
-			nextController.start = self.finalDate;
-			[self.navigationController pushViewController:nextController animated:YES];	
-		}else if ([self.event isEqualToString:@"practice"]) {
-			//Practice
-			NewPractice2 *nextController = [[NewPractice2 alloc] init];
-			nextController.teamId = self.teamId;
-			nextController.start = self.finalDate;
-			[self.navigationController pushViewController:nextController animated:YES];	
-		}else {
-			//Other
-			NewEvent2 *nextController = [[NewEvent2 alloc] init];
-			nextController.teamId = self.teamId;
-			nextController.start = self.finalDate;
-			[self.navigationController pushViewController:nextController animated:YES];	
-		}
-		
-	}else {
-		
-		RecurringEventSelection *tmp = [[RecurringEventSelection alloc] init];
-		tmp.teamId = self.teamId;
-		tmp.eventType = self.event;
-		[self.navigationController pushViewController:tmp animated:YES];
-		
-	}
+	Team *tmpTeam = [self.teams objectAtIndex:row];    
+    SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
+    tmp.teamId = tmpTeam.teamId;
+    tmp.haveDate = self.haveDate;
+    [self.navigationController pushViewController:tmp animated:YES];
     
     
 }

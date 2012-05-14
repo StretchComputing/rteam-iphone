@@ -34,6 +34,7 @@
 	
 	IBOutlet UIView *explainPickerView;
 	IBOutlet UILabel *explainPickerLabel;
+   
 	
 	IBOutlet UIButton *addEventButton;
 	
@@ -49,6 +50,19 @@
     
 	
 }
+@property (nonatomic, strong) NSDate *haveDate;
+@property bool areGames;
+@property bool arePractices;
+@property bool areEvents;
+
+@property bool doneGames;
+@property bool donePractices;
+@property bool doneEvents;
+
+@property (nonatomic, strong) IBOutlet UIView *infoView;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *infoSegControl;
+@property (nonatomic, strong) IBOutlet UITextField *infoTextField;
+
 @property (nonatomic, strong) UIBarButtonItem *createButton;
 @property (nonatomic, strong) UILabel *errorLabel;
 @property (nonatomic, strong) UIActivityIndicatorView *activity;
@@ -74,6 +88,11 @@
 
 @property (nonatomic, strong) NSMutableArray *allEvents;
 
+@property (nonatomic, strong) NSMutableArray *allGames;
+@property (nonatomic, strong) NSMutableArray *allPractices;
+@property (nonatomic, strong) NSMutableArray *allGenerics;
+
+
 
 
 @property (nonatomic, strong) NSString *eventType;
@@ -85,5 +104,9 @@
 -(IBAction)cancelTime;
 -(IBAction)removeEvent;
 -(IBAction)addEvent;
+
+-(IBAction)segmentSelected;
+
+-(IBAction)endText;
 @end
 

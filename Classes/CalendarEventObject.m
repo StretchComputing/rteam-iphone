@@ -10,7 +10,7 @@
 
 
 @implementation CalendarEventObject
-@synthesize eventType, eventDate, eventTime;
+@synthesize eventType, eventDate, eventTime, infoText;
 
 
 @end

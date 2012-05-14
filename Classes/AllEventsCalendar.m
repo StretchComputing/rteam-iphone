@@ -20,7 +20,6 @@
 #import "PracticeTabs.h"
 #import "PracticeNotes.h"
 #import "PracticeAttendance.h"
-#import "CreateNewEvent.h"
 #import "AllEventCalList.h"
 #import "Event.h"
 #import "EventTabs.h"
@@ -32,11 +31,14 @@
 #import "GANTracker.h"
 #import "GoogleAppEngine.h"
 #import "TraceSession.h"
+#import "Team.h"
+#import "SelectTeamCal.h"
+#import "SelectCalendarEvent.h"
 
 @implementation AllEventsCalendar
 @synthesize allGames, allPractices, allEvents, eventType, dateSelected, gamesToday, practicesToday, eventsToday, bottomBar, segmentedControl, 
 createdEvent, error, allGenericEvents, loadingActivity, activityLabel, deleteActivity, deleteAction, deleteEventType, deleteEventId,
-deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete, pDelete, eDelete, gotGames, gotPractices, gotEvents, canceledAction, errorString;
+deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete, pDelete, eDelete, gotGames, gotPractices, gotEvents, canceledAction, errorString, teamList, haveTeamList, teamListFailed;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -47,13 +49,14 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 -(void)viewWillAppear:(BOOL)animated{
 
 
+    [self performSelectorInBackground:@selector(getTeamList) withObject:nil];
     [TraceSession addEventToSession:@"AllEventsCalendar - View Will Appear"];
 
 	if (self.createdEvent) {
 		self.createdEvent = false;
 		[self performSelectorInBackground:@selector(getAllGames) withObject:nil];
-		//[calendarView refreshViewWithPushDirection:nil];
-        [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
+
+        //[calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
 
 		[myTableView reloadData];
 	}
@@ -593,7 +596,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
 	if (row == 0) {
-		eventLabel.text = @"*Create New Event*";
+		eventLabel.text = @"*Create New Event(s)*";
 		eventLabel.textAlignment = UITextAlignmentCenter;
 		eventLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
 		eventLabel.frame = CGRectMake(10, 10, 300, 20);
@@ -1236,13 +1239,91 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         NSUInteger row = [indexPath row];
         
         if (row == 0) {
-            //Create new event
-            [TraceSession addEventToSession:@"Calendar Month Page - Create New Event Clicked"];
             
+            while (!self.haveTeamList) {
+                //Wait here for the background thread to finish;
+                
+                if (self.teamListFailed) {
+                    break;
+                }
+            }
             
-            CreateNewEvent *tmp = [[CreateNewEvent alloc] init];
-            tmp.eventDate = self.dateSelected;
-            [self.navigationController pushViewController:tmp animated:YES];
+            if (self.teamListFailed) {
+                //self.error.text = @"*Error connecting to server, please try again.";
+                self.teamListFailed = false;
+                [self performSelectorInBackground:@selector(getTeamList) withObject:nil];
+            }else {
+                
+                
+                if ([self.teamList count] == 0) {
+                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No teams found" message:@"You must be a part of at least 1 team to add events" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [alert show];
+                    
+                }else if ([self.teamList count] > 1){
+                    //Go to a "select team" page
+                    bool coordTeam = false;
+                    NSMutableArray *coordTeams = [NSMutableArray array];
+                    
+                    for (int i = 0; i < [self.teamList count]; i++) {
+                        Team *tmpTeam = [self.teamList objectAtIndex:i];
+                        
+                        if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
+                            coordTeam = true;
+                            [coordTeams addObject:tmpTeam];
+                        }
+                    }
+                    
+                    if ([coordTeams count] == 1) {
+                        
+                        Team *tmpTeam = [self.teamList objectAtIndex:0];
+                        
+                        SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
+                        tmp.teamId = tmpTeam.teamId;
+                        tmp.haveDate = self.dateSelected;
+
+                        [self.navigationController pushViewController:tmp animated:YES];
+                        
+                    }else if ([coordTeams count] > 0){
+                        
+                        
+                        SelectTeamCal *tmp = [[SelectTeamCal alloc] initWithStyle:UITableViewStyleGrouped];
+                        
+                        tmp.teams = coordTeams;
+                        tmp.haveDate = self.dateSelected;
+
+                        [self.navigationController pushViewController:tmp animated:YES];
+
+                    }else {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No teams found" message:@"You must be a coordinator of at least 1 team to add events" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [alert show];
+                    }
+                    
+                    
+                }else {
+                    
+                    Team *tmpTeam = [self.teamList objectAtIndex:0];
+                    
+                    if ([tmpTeam.userRole isEqualToString:@"coordinator"] || [tmpTeam.userRole isEqualToString:@"creator"]) {
+                        
+                        SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
+                        tmp.teamId = tmpTeam.teamId;
+                        tmp.haveDate = self.dateSelected;
+
+                        [self.navigationController pushViewController:tmp animated:YES];
+
+                        
+                        
+                    }else {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No teams found" message:@"You must be a coordinator of at least 1 team to add events" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [alert show];
+                    }
+                    
+                    
+                    
+                }
+            }
+            
             
         }else if ([self.eventType isEqualToString:@"game"]) {
             
@@ -1714,8 +1795,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"AllEventsCalendar.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        [GoogleAppEngine sendClientLog:@"AllEventsCalendar.m - didSelectRowAtIndexPath()"  logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
 	
 }
@@ -2398,23 +2480,69 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	return YES;
 }
 
+
+-(void)getTeamList{
+    
+	@autoreleasepool {
+        //Retrieve teams from DB
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        
+        //If there is a token, do a DB lookup to find the teams associated with this coach:
+        if (![token isEqualToString:@""]){
+            
+            
+            NSDictionary *response = [ServerAPI getListOfTeams:token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                self.teamList = [response valueForKey:@"teams"];
+              
+                self.haveTeamList = true;
+                
+                
+            }else{
+                
+                self.teamListFailed = true;
+                
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.error = @"*Error connecting to server";
+                        break;
+                    default:
+                        //should never get here
+                        //self.error = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+
+            
+        }
+        
+    }
+    
+}
+
+
 -(void)viewDidUnload{
 	
-	/*
-	allGames =nil;
-	gamesToday =nil;
-	allPractices =nil;
-	practicesToday =nil;
-	allEvents =nil;
-	eventsToday =nil;
-	eventType =nil;
-	dateSelected =nil;
-	error =nil;
-	allGenericEvents =nil;
-	deleteEventId = nil;
-	deleteEventType = nil;
-	deleteEventTeamId = nil;
-	*/
+
 	
 	
 	deleteAction = nil;

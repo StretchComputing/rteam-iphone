@@ -35,7 +35,8 @@
                                           value:-1
                                       withError:nil]) {
     }
-    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
 	if (buttonIndex == 0) {
         FastChangeEventStatus *tmp = [[FastChangeEventStatus alloc] init];
 		[sender.navigationController pushViewController:tmp animated:NO];

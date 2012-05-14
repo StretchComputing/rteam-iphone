@@ -29,7 +29,6 @@
 #import "Base64.h"
 #import "TeamPicture.h"
 #import "NewPlayer.h"
-#import "NewGamePractice.h"
 #import <QuartzCore/QuartzCore.h>
 #import "TeamEdit.h"
 #import "TraceSession.h"
@@ -600,9 +599,12 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 
     }
     @catch (NSException *exception) {
+    
         
-        rTeamAppDelegate *mainDelegate = [[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"TeamHome.m - doneGetGames()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        [GoogleAppEngine sendClientLog:@"TeamHome.m - doneGetGames()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
+        
+        
         
     }
    
@@ -1349,7 +1351,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			blackView.layer.masksToBounds = YES;
 			blackView.layer.cornerRadius = 3.0;
 			
-			UIBarButtonItem *teamPicture = [[UIBarButtonItem alloc] initWithCustomView:backView];
+			//UIBarButtonItem *teamPicture = [[UIBarButtonItem alloc] initWithCustomView:backView];
         
 			
 		if (displayPhoto) {
@@ -1369,7 +1371,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			[tmpButton setImage:[UIImage imageNamed:@"camera.png"] forState:UIControlStateNormal];
 			[tmpButton addTarget:self action:@selector(changeTeamPicture) forControlEvents:UIControlEventTouchUpInside];
 			
-			UIBarButtonItem *teamPicture = [[UIBarButtonItem alloc] initWithCustomView:tmpButton];
+			//UIBarButtonItem *teamPicture = [[UIBarButtonItem alloc] initWithCustomView:tmpButton];
 			//UIBarButtonItem *teamPicture = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"camera.png"] style:UIBarButtonItemStylePlain target:self action:@selector(changeTeamPicture)];
 			
 			
@@ -1431,13 +1433,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.navigationController pushViewController:nextController animated:YES];
     
 }
--(void)addEvents{
-    
-    NewGamePractice *nextController = [[NewGamePractice alloc] init];
-    nextController.teamId = self.teamId;
-    [self.navigationController pushViewController:nextController animated:YES];	
-    
-}
+
 
 -(void)dealloc{
     

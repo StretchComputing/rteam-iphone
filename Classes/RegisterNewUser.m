@@ -172,6 +172,11 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
             mainDelegate.quickLinkOneImage = @"";
             mainDelegate.quickLinkTwoImage = @"";
             
+            mainDelegate.firstName = self.theFirstName;
+            mainDelegate.lastName = self.theLastName;
+            mainDelegate.emailAddress = self.email;
+            mainDelegate.phoneNumber = @"";
+            
             if (([response valueForKey:@"teamId"] != nil) && ([[response valueForKey:@"teamId"] length] > 0)) {
                 mainDelegate.quickLinkOne = [response valueForKey:@"teamId"];
                 

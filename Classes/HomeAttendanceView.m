@@ -29,7 +29,7 @@
 
 
 @implementation HomeAttendanceView
-@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView, isFullScreen, fullScreenButton, homeSuperView;
+@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView, isFullScreen, fullScreenButton, homeSuperView, latitude, longitude;
 
 - (void)viewDidLoad
 {
@@ -561,7 +561,9 @@
             self.currentMemberId = @"";
             
             NSException *exception = [NSException exceptionWithName:@"Nil Argument" reason:@"nullPointer" userInfo:nil];
-            [GoogleAppEngine sendExceptionCaught:exception inMethod:@"HomeAttendanceView.m - currentMemberId = nil" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+            
+            [GoogleAppEngine sendClientLog:@"HomeAttendanceView.m - currentMemberId = nil" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
 
         }
     

@@ -18,4 +18,6 @@
 @property (nonatomic, strong) NSDate *eventDate;
 @property (nonatomic, strong) NSDate *eventTime;
 @property (nonatomic, strong) NSString *eventType;
+@property (nonatomic, strong) NSString *infoText;
+
 @end

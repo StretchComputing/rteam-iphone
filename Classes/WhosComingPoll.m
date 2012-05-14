@@ -457,7 +457,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if ([status isEqualToString:@"100"]){
             
 			gameId = [response valueForKey:@"gameId"];
-            NSLog(@"GameID: %@", gameId);
             
         }else{
             

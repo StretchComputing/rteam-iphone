@@ -142,8 +142,9 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         }
         
         if (docall) {
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            [GoogleAppEngine sendExceptionCaught:e inMethod:methodName theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+            
+            [GoogleAppEngine sendClientLog:methodName logMessage:[e reason] logLevel:@"exception" exception:e];
+
         }
         
 		statusReturn = @"1";
@@ -266,7 +267,28 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			userIconTwoAlias = [response valueForKey:@"userIconTwoAlias"];
 			userIconOneImage = [response valueForKey:@"userIconOneImage"];
 			userIconTwoImage = [response valueForKey:@"userIconTwoImage"];
+
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
+            if ([response valueForKey:@"firstName"] != nil) {
+                mainDelegate.firstName = [response valueForKey:@"firstName"];
+            }
+            if ([response valueForKey:@"lastName"] != nil) {
+                mainDelegate.lastName = [response valueForKey:@"lastName"];
+            }
+            if ([response valueForKey:@"emailAddress"] != nil) {
+                mainDelegate.emailAddress = [response valueForKey:@"emailAddress"];
+            }
+            if ([response valueForKey:@"phoneNumber"] != nil) {
+                mainDelegate.phoneNumber = [response valueForKey:@"phoneNumber"];
+            }
+            
+            if (mainDelegate.phoneNumber == nil) {
+                mainDelegate.phoneNumber = @"";
+            }
+
+            [mainDelegate saveUserInfo];
+
 			[returnDictionary setValue:userIconOneId forKey:@"userIconOneId"];
 			[returnDictionary setValue:userIconOneAlias forKey:@"userIconOneAlias"];
 			[returnDictionary setValue:userIconTwoId forKey:@"userIconTwoId"];
@@ -305,8 +327,9 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         }
         
         if (docall) {
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            [GoogleAppEngine sendExceptionCaught:e inMethod:methodName theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+            
+            [GoogleAppEngine sendClientLog:methodName logMessage:[e reason] logLevel:@"exception" exception:e];
+
         }
         
 		statusReturn = @"1";
@@ -707,6 +730,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                 
 				NSDictionary *thisTeam = [teamsJsonObjects objectAtIndex:i];
                 
+              
 				tmpTeam.name = [thisTeam valueForKey:@"teamName"];
                 
 				tmpTeam.teamId = [thisTeam valueForKey:@"teamId"];
@@ -717,7 +741,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 				tmpTeam.useTwitter = [[thisTeam valueForKey:@"useTwitter"] boolValue];
 				tmpTeam.teamUrl = [thisTeam valueForKey:@"teamSiteUrl"];
 				//tmpTeam.teamUrl = @"http://www.google.com";
-                
+             
 				[teams addObject:tmpTeam];
                 
                 
@@ -3142,9 +3166,12 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 					}
                     
 					if ([todaysEvent valueForKey:@"latitude"] != nil) {
-						tmpEvent.latitude = [todaysEvent valueForKey:@"latitude"];
-						tmpEvent.longitude = [todaysEvent valueForKey:@"longitude"];
-					}
+						tmpEvent.latitude = [[todaysEvent valueForKey:@"latitude"] stringValue];
+						tmpEvent.longitude = [[todaysEvent valueForKey:@"longitude"] stringValue];
+					}else{
+                        tmpEvent.latitude = @"";
+                        tmpEvent.longitude = @"";
+                    }
                     
                     NSArray *attendees = [todaysEvent valueForKey:@"attendees"];
                     
@@ -3224,9 +3251,12 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 					}
 					
 					if ([tomorrowsEvent valueForKey:@"latitude"] != nil) {
-						tmpEvent.latitude = [tomorrowsEvent valueForKey:@"latitude"];
-						tmpEvent.longitude = [tomorrowsEvent valueForKey:@"longitude"];
-					}
+						tmpEvent.latitude = [[tomorrowsEvent valueForKey:@"latitude"] stringValue];
+						tmpEvent.longitude = [[tomorrowsEvent valueForKey:@"longitude"] stringValue];
+					}else{
+                        tmpEvent.latitude = @"";
+                        tmpEvent.longitude = @"";
+                    }
                     
                     NSArray *attendees = [tomorrowsEvent valueForKey:@"attendees"];
                     tmpEvent.attendees = [NSArray arrayWithArray:attendees];
@@ -4820,8 +4850,8 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	@try{
  
-        //NSException *exception = [NSException exceptionWithName:@"Is this time correct?" reason:@"Is this time correct?" userInfo:nil];
-        //@throw exception;
+        NSException *exception = [NSException exceptionWithName:@"Exception when getting Activity Name" reason:@"Exception when getting Activity Reason" userInfo:nil];
+        @throw exception;
         
         
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
@@ -5655,10 +5685,13 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
     }
     
     if (docall) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:e inMethod:methodName theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        [GoogleAppEngine sendClientLog:methodName logMessage:[e reason] logLevel:@"exception" exception:e];
     }
     
+       
+
+         
     [returnDictionary setValue:@"1" forKey:@"status"];
     return returnDictionary;
     
@@ -5683,8 +5716,10 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         return encodedString;
     }
     @catch (NSException *e) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:e inMethod:@"encodeBase64 - String" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        
+        [GoogleAppEngine sendClientLog:@"encodeBase64 - String" logMessage:[e reason] logLevel:@"exception" exception:e];
+
         
         return @"";
     }
@@ -5711,8 +5746,8 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         return encodedString;
     }
     @catch (NSException *e) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:e inMethod:@"encodeBase64 - Data" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        [GoogleAppEngine sendClientLog:@"encodeBase64 - Data" logMessage:[e reason] logLevel:@"exception" exception:e];
+
         
         return @"";
     }

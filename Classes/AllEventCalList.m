@@ -1072,8 +1072,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
     @catch (NSException *exception) {
         
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"AllEventCalList - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+          [GoogleAppEngine sendClientLog:@"AllEventCalList - didSelectRowAtIndexPath()"  logMessage:[exception reason] logLevel:@"exception" exception:exception];
     }
   
     	

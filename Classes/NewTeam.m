@@ -104,7 +104,7 @@ miniGuardErrorLabel, removeGuardiansButton, currentGuardName, currentGuardEmail,
 	[self.submitButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.addButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.closeButton setBackgroundImage:stretch forState:UIControlStateNormal];
-	[self.saveButton setBackgroundImage:stretch forState:UIControlStateNormal];
+	//[self.saveButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.addNewButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.miniCancelButton setBackgroundImage:stretch forState:UIControlStateNormal];
 	[self.miniAddButton setBackgroundImage:stretch forState:UIControlStateNormal];

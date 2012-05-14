@@ -20,12 +20,13 @@
 #import "TraceSession.h"
 
 @implementation HomeScoreView
-@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView;
+@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView, latitude,longitude, opponent, mapButton;
 
 - (void)viewDidLoad
 {
     [TraceSession addEventToSession:@"HomeScoreView - View Did Load"];
-
+    
+   
     self.addUsButton.hidden = YES;
     self.subUsButton.hidden = YES;
     self.addThemButton.hidden = YES;
@@ -56,6 +57,13 @@
 
 -(void)setLabels{
     
+    if (![self.latitude isEqualToString:@""] && (self.latitude != nil)) {
+        self.mapButton.hidden = NO;
+    }else{
+        self.mapButton.hidden = YES;
+        
+    }
+    
     if ([self.participantRole isEqualToString:@"creator"] || [self.participantRole isEqualToString:@"coordinator"]) {
         self.scoreButton.hidden = NO;
         CGRect frame = self.goToButton.frame;
@@ -68,7 +76,17 @@
         self.goToButton.frame = frame;
     }
     
-    self.topLabel.text = [NSString stringWithFormat:@"%@ Game", self.teamName];
+    self.topLabel.text = [NSString stringWithFormat:@"%@", self.teamName];
+    
+    self.topLabel.text = @"Live Score";
+    self.usLabel.text = [NSString stringWithFormat:@"%@", self.teamName];
+
+    if ([self.opponent isEqualToString:@"Opponent TBD"] || [self.opponent isEqualToString:@""] || (self.opponent == nil)) {
+        self.themLabel.text = @"Them";
+    }else{
+        self.themLabel.text = [NSString stringWithString:self.opponent];
+    }
+    
     self.scoreUsLabel.text = self.scoreUs;
     self.scoreThemLabel.text = self.scoreThem;
     
@@ -209,6 +227,9 @@
 
 -(void)goToPage{
         
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
+    
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"Go To Event Page - Happening Now"
@@ -590,6 +611,10 @@
     [self.homeSuperView displayCamera];
 }
 
+-(void)mapAction{
+    
+}
+
 - (void)viewDidUnload
 {
     overActivity = nil;
@@ -609,6 +634,7 @@
     addIntervalButton = nil;
     subIntervalButton = nil;
     gameOverButton = nil;
+    mapButton = nil;
     [super viewDidUnload];
 
 }

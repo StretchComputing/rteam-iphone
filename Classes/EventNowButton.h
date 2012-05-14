@@ -33,4 +33,8 @@
 @property (nonatomic, strong) CurrentEvent *event;
 @property (nonatomic, strong) UILabel *teamLabel;
 @property (nonatomic, strong) UILabel *eventLabel;
+
+@property (nonatomic, strong) NSString *latitude;
+@property (nonatomic, strong) NSString *longitude;
+@property (nonatomic, strong) NSString *opponent;
 @end

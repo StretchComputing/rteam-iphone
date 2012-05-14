@@ -33,6 +33,11 @@
 @property bool emptyPractices;
 @property bool emptyEvents;
 @property int deleteCell;
+
+@property bool haveTeamList;
+@property bool teamListFailed;
+@property (nonatomic, strong) NSMutableArray *teamList;
+
 @property (nonatomic, strong) NSString *deleteEventTeamId;
 @property (nonatomic, strong) NSString *deleteEventType;
 @property (nonatomic, strong) NSString *deleteEventId;

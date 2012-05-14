@@ -12,6 +12,8 @@
 @interface SelectTeamCal : UITableViewController {
 
 }
+@property (nonatomic, strong) NSDate *haveDate;
+@property bool fromHome;
 @property (nonatomic, strong) NSString *singleOrMultiple;
 @property (nonatomic, strong) NSString *teamId;
 @property (nonatomic, strong) NSDate *finalDate;

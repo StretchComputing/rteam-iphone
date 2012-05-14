@@ -14,6 +14,11 @@
 @interface HomeScoreView : UIViewController {
     
 }
+@property (nonatomic, strong) IBOutlet UIButton *mapButton;
+@property (nonatomic, strong) NSString *latitude;
+@property (nonatomic, strong) NSString *longitude;
+@property (nonatomic, strong) NSString *opponent;
+
 @property (nonatomic, strong) Home *homeSuperView;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *overActivity;
 @property (nonatomic, strong) IBOutlet UIButton *gameOverButton;
@@ -69,6 +74,8 @@
 
 -(IBAction)gameOver;
 -(IBAction)takePhoto;
+-(IBAction)mapAction;
+
 
 -(void)setNewInterval;
 

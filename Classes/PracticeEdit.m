@@ -153,8 +153,8 @@ practiceChangeDate, notifyTeam, fromDateChange, practiceDateObject, createSucces
     }
     @catch (NSException *exception) {
         
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"PracticeEdit.m - clickedButtonAtIndex" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        [GoogleAppEngine sendClientLog:@"PracticeEdit.m - clickedButtonAtIndex" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
    
 		

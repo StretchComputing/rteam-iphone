@@ -45,10 +45,11 @@
 #import "GANTracker.h"
 #import "TraceSession.h"
 #import "AddGamePhoto.h"
-#import "CreateNewEventGameday.h"
 #import "ScoreNowScorePage.h"
 #import "WhosComingPoll.h"
 #import "GoogleAppEngine.h"
+#import "SelectCalendarEvent.h"
+#import "SelectTeamCal.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -83,21 +84,22 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
     self.postImageTeamId = @"";
     self.postImageBackView.hidden = YES;
+    
     if (myAd.bannerLoaded) {
         myAd.hidden = NO;
         bannerIsVisible = YES;
         
-        self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
-        self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
-        self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
+        //self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
+        //self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
+        //self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
         
     }else{
         myAd.hidden = YES;
         bannerIsVisible = NO;
         
-        self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
-        self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
-        self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
+        //self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
+        //self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
+        //self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
 
     }
     
@@ -227,7 +229,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
   
 	[self.view bringSubviewToFront:myAd];
-    [self.view bringSubviewToFront:self.bottomBar];
+    //[self.view bringSubviewToFront:self.bottomBar];
     [self.view bringSubviewToFront:self.postImageBackView];
 
 	
@@ -464,9 +466,19 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     
 
 }
+-(void)adiad{
+    //iAds
+	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 366, 320, 50)];
+	myAd.delegate = self;
+	myAd.hidden = YES;
+	[self.view addSubview:myAd];
+}
 
 - (void)viewDidLoad {
 
+   
+    [self performSelector:@selector(adiad) withObject:nil afterDelay:5.0];
+    
     self.postImageEvents = [NSMutableArray array];
     self.activityPhotoEventId = @"";
     self.postImageTableView.dataSource = self;
@@ -575,11 +587,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didComeBack:) 
 												 name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    //iAds
-	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 366, 320, 50)];
-	myAd.delegate = self;
-	myAd.hidden = YES;
-	[self.view addSubview:myAd];
+
     
  
     
@@ -1076,8 +1084,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"Home.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+      
+        [GoogleAppEngine sendClientLog:@"Home.m - didSelectRowAtIndexPath()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
   
 		
@@ -1782,6 +1791,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.currentMemberId = tmp1.currentMemberId;
                             tmp1Button.currentMemberResponse = tmp1.currentMemberResponse;
                             tmp1Button.messageThreadId = tmp1.messageThreadId;
+                            
+                            tmp1Button.latitude = tmp1.latitude;
+                            tmp1Button.longitude = tmp1.longitude;
 
                             
                             tmp1Button.yes = tmp1.yes;
@@ -1837,6 +1849,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventDate = tmp1.eventDate;
                             tmp1Button.eventStringDate = tmp1.eventDate;
 
+                            tmp1Button.latitude = tmp1.latitude;
+                            tmp1Button.longitude = tmp1.longitude;
+                            tmp1Button.opponent = tmp1.opponent;
                             
                             if (![tmp1.teamName isEqualToString:@""]) {
                                 tmp1Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp1.teamName];
@@ -1958,6 +1973,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.eventDescription = tmp1.eventDescription;
                             tmp1Button.eventStringDate = tmp1.eventDate;
 
+                            tmp1Button.latitude = tmp1.latitude;
+                            tmp1Button.longitude = tmp1.longitude;
                             
                             tmp1Button.currentMemberId = tmp1.currentMemberId;
                             tmp1Button.currentMemberResponse = tmp1.currentMemberResponse;
@@ -2059,6 +2076,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.currentMemberResponse = tmp2.currentMemberResponse;
                                 tmp2Button.messageThreadId = tmp2.messageThreadId;
 
+                                tmp2Button.latitude = tmp2.latitude;
+                                tmp2Button.longitude = tmp2.longitude;
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
                                     tmp2Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp2.teamName];
@@ -2107,6 +2126,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.eventStringDate = tmp2.eventDate;
 
                                 tmp2Button.eventDate = tmp2.eventDate;
+                                
+                                tmp2Button.latitude = tmp2.latitude;
+                                tmp2Button.longitude = tmp2.longitude;
+                                tmp2Button.opponent = tmp2.opponent;
                                 
                                 if (![tmp2.teamName isEqualToString:@""]) {
                                     tmp2Button.teamLabel.text = [NSString stringWithFormat:@"%@", tmp2.teamName];
@@ -2223,6 +2246,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.no = tmp2.no;
                                 tmp2Button.maybe = tmp2.maybe;
                                 tmp2Button.noreply = tmp2.noreply;
+                                
+                                tmp2Button.latitude = tmp2.latitude;
+                                tmp2Button.longitude = tmp2.longitude;
                                 
                                 tmp2Button.currentMemberId = tmp2.currentMemberId;
                                 tmp2Button.currentMemberResponse = tmp2.currentMemberResponse;
@@ -2352,6 +2378,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeAttendanceView.noReplyCount = [NSString stringWithFormat:@"%d", tmp.noreply];
             homeAttendanceView.maybeCount = [NSString stringWithFormat:@"%d", tmp.maybe];
             
+            homeAttendanceView.latitude = tmp.latitude;
+            homeAttendanceView.longitude = tmp.longitude;
+
             [homeAttendanceView setLabels];
 
         }else{
@@ -2378,6 +2407,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeScoreView.sport = tmp.sport;
             
             
+            homeScoreView.latitude = tmp.latitude;
+            homeScoreView.longitude = tmp.longitude;
+            homeScoreView.opponent = tmp.opponent;
+            
+            
             [homeScoreView setLabels];
         }
         
@@ -2401,6 +2435,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 homeAttendanceView.eventStringDate = tmp.eventStringDate;
                 homeAttendanceView.attendees = [NSArray arrayWithArray:tmp.attendees];
 
+                homeAttendanceView.latitude = tmp.latitude;
+                homeAttendanceView.longitude = tmp.longitude;
                 
                 homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
                 
@@ -2453,6 +2489,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 homeScoreView.sport = tmp.sport;
                 
                 homeScoreView.eventStringDate = tmp.eventStringDate;
+                
+                homeScoreView.latitude = tmp.latitude;
+                homeScoreView.longitude = tmp.longitude;
+                homeScoreView.opponent = tmp.opponent;
                 
                 [homeScoreView setLabels];
 
@@ -2755,6 +2795,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         self.bannerIsVisible = YES;
         myAd.hidden = NO;
+        
+        myAd.frame = CGRectMake(0, self.view.frame.size.height - 50, 320, 50);
         [self.view bringSubviewToFront:myAd];  
         
         if (self.isMoreShowing) {
@@ -2786,7 +2828,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             CGRect hapFrame;
             hapFrame = self.happeningNowView.frame;
             hapFrame.origin.y -= 50;
-            self.happeningNowView.frame = hapFrame;
+            //self.happeningNowView.frame = hapFrame;
             
             CGRect attFrame;
             attFrame = self.homeAttendanceView.view.frame;
@@ -2798,13 +2840,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             scoreFrame.origin.y -= 50;
             self.homeScoreView.view.frame = scoreFrame;
             
-            self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
-            self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
-            self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
+            //self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
+            //self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
+            //self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
             
             [UIView commitAnimations];
             
-            [self.view bringSubviewToFront:self.bottomBar];
+            //[self.view bringSubviewToFront:self.bottomBar];
             [self.view bringSubviewToFront:self.postImageBackView];
 
             
@@ -2874,7 +2916,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             CGRect hapFrame;
             hapFrame = self.happeningNowView.frame;
             hapFrame.origin.y += 50;
-            self.happeningNowView.frame = hapFrame;
+            //self.happeningNowView.frame = hapFrame;
             
             CGRect attFrame;
             attFrame = self.homeAttendanceView.view.frame;
@@ -2887,14 +2929,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             self.homeScoreView.view.frame = scoreFrame;
             
             
-            self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
-            self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
-            self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
+            //self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
+            //self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
+            //self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
     
             
             [UIView commitAnimations];
             
-            [self.view bringSubviewToFront:self.bottomBar];
+           // [self.view bringSubviewToFront:self.bottomBar];
             [self.view bringSubviewToFront:self.postImageBackView];
 
             
@@ -3096,11 +3138,110 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
         }else if (buttonIndex == 3){
             
+            /*
             CreateNewEventGameday *tmp = [[CreateNewEventGameday alloc] init];
             UINavigationController *navController = [[UINavigationController alloc] init];
             [navController pushViewController:tmp animated:NO];
             navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             [self.navigationController presentModalViewController:navController animated:YES];
+             */
+            while (!self.haveTeamList) {
+                //Wait here for the background thread to finish;
+                
+                if (self.teamListFailed) {
+                    break;
+                }
+            }
+            
+            if (self.teamListFailed) {
+                //self.error.text = @"*Error connecting to server, please try again.";
+                self.teamListFailed = false;
+                [self performSelectorInBackground:@selector(getTeamList) withObject:nil];
+            }else {
+                
+                
+                if ([self.teamList count] == 0) {
+                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No teams found" message:@"You must be a part of at least 1 team to add events" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [alert show];
+                    
+                }else if ([self.teamList count] > 1){
+                    //Go to a "select team" page
+                    bool coordTeam = false;
+                    NSMutableArray *coordTeams = [NSMutableArray array];
+                    
+                    for (int i = 0; i < [self.teamList count]; i++) {
+                        Team *tmpTeam = [self.teamList objectAtIndex:i];
+                        
+                        if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
+                            coordTeam = true;
+                            [coordTeams addObject:tmpTeam];
+                        }
+                    }
+                    
+                    if ([coordTeams count] == 1) {
+                        
+                        Team *tmpTeam = [self.teamList objectAtIndex:0];
+                            
+                        SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
+                        tmp.teamId = tmpTeam.teamId;
+                        
+                        UINavigationController *navController = [[UINavigationController alloc] init];
+                        
+                        [navController pushViewController:tmp animated:YES];
+                        
+                        navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                        [self.navigationController presentModalViewController:navController animated:YES];
+                            
+                    }else if ([coordTeams count] > 0){
+                    
+                        
+                        SelectTeamCal *tmp = [[SelectTeamCal alloc] initWithStyle:UITableViewStyleGrouped];
+                        
+                        tmp.teams = coordTeams;
+                        tmp.fromHome = true;
+                        
+                        UINavigationController *navController = [[UINavigationController alloc] init];
+                        
+                        [navController pushViewController:tmp animated:YES];
+                        
+                        navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                        [self.navigationController presentModalViewController:navController animated:YES];
+                        
+                    }else {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No teams found" message:@"You must be a coordinator of at least 1 team to add events" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [alert show];
+                    }
+                    
+                    
+                }else {
+                    
+                    Team *tmpTeam = [self.teamList objectAtIndex:0];
+                    
+                    if ([tmpTeam.userRole isEqualToString:@"coordinator"] || [tmpTeam.userRole isEqualToString:@"creator"]) {
+                                                
+                        SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
+                        tmp.teamId = tmpTeam.teamId;
+              
+                        UINavigationController *navController = [[UINavigationController alloc] init];
+                        
+                        [navController pushViewController:tmp animated:YES];
+                        
+                        navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                        [self.navigationController presentModalViewController:navController animated:YES];
+                        
+                        
+                    }else {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No teams found" message:@"You must be a coordinator of at least 1 team to add events" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [alert show];
+                    }
+                    
+                    
+                    
+                }
+            }
+
+            
         }
         
     }else {
@@ -3625,15 +3766,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)moveDivider{
   
+
     if (self.isMoreShowing) {
         
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        self.navigationController.navigationBarHidden = NO;
+
         self.showLessButton.hidden = YES;
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:1.0];
         
         
         self.bottomBar.hidden = NO;
-        [self.view bringSubviewToFront:self.bottomBar];
+        //[self.view bringSubviewToFront:self.bottomBar];
         [self.view bringSubviewToFront:self.postImageBackView];
 
 
@@ -3671,9 +3816,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.isMoreShowing = NO;
         
         self.isGameVisible = false;
+        
+        myAd.frame = CGRectMake(0, self.view.frame.size.height - 50, 320, 50);
+
 
     }else{
    
+        self.navigationController.navigationBarHidden = YES;
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+
         self.showLessButton.hidden = NO;
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:1.0];
@@ -3693,19 +3844,71 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         frame.origin.y = 0;
         //self.happeningNowView.frame = frame;
         
-        CGRect frame1 = self.homeAttendanceView.view.frame;
-        frame1.origin.y = 121;
-        if (isAd) {
-            frame1.size.height = 245;
+        
+        if (self.homeAttendanceView.view.hidden == NO) {
+            
+            self.homeAttendanceView.isFullScreen = true;
+            [self.homeAttendanceView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
+            
+            CGRect frame = self.homeAttendanceView.view.frame;
+            frame.origin.y = 0;
+            if (isAd) {
+                frame.size.height = 245 + 121 + 44;
+            }else{
+                frame.size.height = 295 + 121 + 44;
+            }
+
+            self.homeAttendanceView.view.frame = frame;
+            
         }else{
-            frame1.size.height = 295;
+            
+            CGRect frame1 = self.homeAttendanceView.view.frame;
+            frame1.origin.y = 121;
+            if (isAd) {
+                frame1.size.height = 245;
+            }else{
+                frame1.size.height = 295;
+            }
+            self.homeAttendanceView.view.frame = frame1;
+            
         }
-        self.homeAttendanceView.view.frame = frame1;
+        
+        
+        if (self.homeScoreView.view.hidden == NO) {
+            
+            self.homeScoreView.isFullScreen = true;
+            [self.homeScoreView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
+            
+            CGRect frame = self.homeScoreView.view.frame;
+            frame.origin.y = 0;
+            if (isAd) {
+                frame.size.height = 245 + 121 + 44;
+            }else{
+                frame.size.height = 295 + 121 + 44;
+            }
+            
+            self.homeScoreView.view.frame = frame;
+            
+        }else{
+            
+            CGRect frame1 = self.homeScoreView.view.frame;
+            frame1.origin.y = 121;
+            if (isAd) {
+                frame1.size.height = 245;
+            }else{
+                frame1.size.height = 295;
+            }
+            self.homeScoreView.view.frame = frame1;
+            
+        }
+        
+        
+      
         
         
         
         
-        
+        /*
         CGRect frame2 = self.homeScoreView.view.frame;
         frame2.origin.y = 121;
         if (isAd) {
@@ -3715,6 +3918,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         self.homeScoreView.view.frame = frame2;
 
+        
         if (self.homeScoreView.view.hidden == NO) {
             
             self.homeScoreView.isFullScreen = true;
@@ -3727,17 +3931,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
         }
         
-        if (self.homeAttendanceView.view.hidden == NO) {
-            
-            self.homeAttendanceView.isFullScreen = true;
-            [self.homeAttendanceView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
-            
-            CGRect frame = self.homeAttendanceView.view.frame;
-            frame.origin.y = 0;
-            frame.size.height += 121;
-            self.homeAttendanceView.view.frame = frame;
-            
-        }
+        */
         
         
         
@@ -3756,7 +3950,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
     
-        
+        myAd.frame = CGRectMake(0, 430, 320, 50);
+
 
     }
      

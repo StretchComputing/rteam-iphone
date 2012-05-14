@@ -50,6 +50,13 @@
     
 	
 }
+//User Info
+@property (nonatomic, strong) NSString *firstName;
+@property (nonatomic, strong) NSString *lastName;
+@property (nonatomic, strong) NSString *emailAddress;
+@property (nonatomic, strong) NSString *phoneNumber;
+
+
 
 @property (nonatomic, strong) NSString *lastPostTeamId;
 @property (nonatomic, strong) NSMutableDictionary *replyDictionary;
@@ -58,6 +65,7 @@
 @property (nonatomic, strong) NSString *lastTwenty;
 @property (nonatomic, strong) NSString *lastTwentyTime;
 
+@property (nonatomic, strong) NSString *showCreateAlert;
 @property (nonatomic, strong) NSString *showSwipeAlert;
 @property (nonatomic, strong) NSString *justAddName;
 @property (nonatomic, strong) NSArray *phoneOnlyArray;

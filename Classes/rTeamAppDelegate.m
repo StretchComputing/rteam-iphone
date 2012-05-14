@@ -57,7 +57,7 @@
 @implementation rTeamAppDelegate
 
 @synthesize window;
-@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData, crashInstanceUrl, lastTwenty, lastTwentyTime, messageImageDictionary, replyDictionary, lastPostTeamId;
+@synthesize navController, dataFilePath, token, registered, pushToken, startNew, quickLinkOne, quickLinkTwo, quickLinkOneName, quickLinkTwoName, quickLinkOneImage, quickLinkTwoImage, displayedConnectionError, returnHome, displayName, phoneOnlyArray, justAddName, showSwipeAlert, crashSummary, crashUserName, crashDetectDate, crashStackData, crashInstanceUrl, lastTwenty, lastTwentyTime, messageImageDictionary, replyDictionary, lastPostTeamId, showCreateAlert, firstName, lastName, emailAddress, phoneNumber;
 
 - (id) init {
 
@@ -78,6 +78,7 @@
 	NSFileManager *fileManager = [NSFileManager defaultManager];
     
     self.showSwipeAlert = @"true";
+    self.showCreateAlert = @"true";
 	if([fileManager fileExistsAtPath:dataFilePath]){
 		//open it and read it
 		NSMutableData *theData;
@@ -90,9 +91,16 @@
 		NSString *tempLinkOneImage = @"";
 		NSString *tempLinkTwoImage = @"";
         NSString *tmpSwipeAlert = @"";
+        NSString *tmpCreateAlert = @"";
         NSString *tempLastTwenty = @"";
         NSString *tempLastTwentyTime = @"";
         NSString *tmpLastPostTeamId = @"";
+        
+        NSString *tmpFirstName = @"";
+        NSString *tmpLastName = @"";
+        NSString *tmpEmailAddress = @"";
+        NSString *tmpPhoneNumber = @"";
+
 
 
 
@@ -107,9 +115,18 @@
 		tempLinkOneImage = [decoder decodeObjectForKey:@"quickLinkOneImage"];
 		tempLinkTwoImage = [decoder decodeObjectForKey:@"quickLinkTwoImage"];
         tmpSwipeAlert = [decoder decodeObjectForKey:@"showSwipeAlert"];
+        tmpCreateAlert = [decoder decodeObjectForKey:@"showCreateAlert"];
+
         tempLastTwenty = [decoder decodeObjectForKey:@"lastTwenty"];
         tempLastTwentyTime = [decoder decodeObjectForKey:@"lastTwentyTime"];
         tmpLastPostTeamId = [decoder decodeObjectForKey:@"lastPostTeamId"];
+        
+        tmpFirstName = [decoder decodeObjectForKey:@"firstName"];
+        tmpLastName = [decoder decodeObjectForKey:@"lastName"];
+        tmpEmailAddress = [decoder decodeObjectForKey:@"emailAddress"];
+        tmpPhoneNumber = [decoder decodeObjectForKey:@"phoneNumber"];
+
+
 
 
 
@@ -123,6 +140,13 @@
 		[self setQuickLinkTwoImage:tempLinkTwoImage];
 		[self setToken:tempToken];
         [self setShowSwipeAlert:tmpSwipeAlert];
+        [self setShowCreateAlert:tmpCreateAlert];
+        
+        [self setFirstName:tmpFirstName];
+        [self setLastName:tmpLastName];
+        [self setEmailAddress:tmpEmailAddress];
+        [self setPhoneNumber:tmpPhoneNumber];
+
         [self setLastPostTeamId:tmpLastPostTeamId];
 
         
@@ -174,7 +198,12 @@
 			self.quickLinkOneImage = @"";
 			self.quickLinkTwoImage = @"";
             self.showSwipeAlert = @"true";
+            self.showCreateAlert = @"true";
             self.lastPostTeamId = @"";
+            self.firstName = @"";
+            self.lastName = @"";
+            self.emailAddress = @"";
+            self.phoneNumber = @"";
 		}
 	} else {
 		self.token = @"";
@@ -236,8 +265,10 @@
         if (self.token == nil) {
             self.token = @"";
         }
+
         
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"rTeamAppDelegate.m - didFinishLaunchingWithOptions" theRecordedDate:[NSDate date] theRecordedUserName:self.token theInstanceUrl:@""];
+        [GoogleAppEngine sendClientLog:@"rTeamAppDelegate.m - didFinishLaunchingWithOptions"logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
         
     }
 	
@@ -327,8 +358,8 @@
                 if (self.token == nil) {
                     self.token = @"";
                 }
-                
-                [GoogleAppEngine sendExceptionCaught:exception inMethod:@"rTeamAppDelegate.m - handleCrashReport" theRecordedDate:[NSDate date] theRecordedUserName:self.token theInstanceUrl:@""];
+            
+                   [GoogleAppEngine sendClientLog:@"rTeamAppDelegate.m - handleCrashReport" logMessage:[exception reason] logLevel:@"exception" exception:exception];
             }
           
          
@@ -394,8 +425,9 @@
             if (self.token == nil) {
                 self.token = @"";
             }
+        
             
-            [GoogleAppEngine sendExceptionCaught:exception inMethod:@"rTeamAppDelegate.m - didReceiveRemoteNotification" theRecordedDate:[NSDate date] theRecordedUserName:self.token theInstanceUrl:@""];
+             [GoogleAppEngine sendClientLog:@"rTeamAppDelegate.m - didReceiveRemoteNotification" logMessage:[exception reason] logLevel:@"exception" exception:exception];
         }
         
      		
@@ -462,9 +494,19 @@
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+    [encoder encodeObject:showCreateAlert forKey:@"showCreateAlert"];
+
     [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
     [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
     [encoder encodeObject:lastPostTeamId forKey:@"lastPostTeamId"];
+    
+    
+    [encoder encodeObject:firstName forKey:@"firstName"];
+    [encoder encodeObject:lastName forKey:@"lastName"];
+    [encoder encodeObject:emailAddress forKey:@"emailAddress"];
+    [encoder encodeObject:phoneNumber forKey:@"phoneNumber"];
+
+
 
 
 
@@ -503,10 +545,16 @@
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+    [encoder encodeObject:showCreateAlert forKey:@"showCreateAlert"];
+
     [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
     [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
     [encoder encodeObject:lastPostTeamId forKey:@"lastPostTeamId"];
 
+    [encoder encodeObject:firstName forKey:@"firstName"];
+    [encoder encodeObject:lastName forKey:@"lastName"];
+    [encoder encodeObject:emailAddress forKey:@"emailAddress"];
+    [encoder encodeObject:phoneNumber forKey:@"phoneNumber"];
 
 	[encoder finishEncoding];
 	
@@ -532,10 +580,16 @@
 	[encoder encodeObject:quickLinkOneImage forKey:@"quickLinkOneImage"];
 	[encoder encodeObject:quickLinkTwoImage forKey:@"quickLinkTwoImage"];
     [encoder encodeObject:showSwipeAlert forKey:@"showSwipeAlert"];
+    [encoder encodeObject:showCreateAlert forKey:@"showCreateAlert"];
+
     [encoder encodeObject:lastTwenty forKey:@"lastTwenty"];
     [encoder encodeObject:lastTwentyTime forKey:@"lastTwentyTime"];
     [encoder encodeObject:lastPostTeamId forKey:@"lastPostTeamId"];
 
+    [encoder encodeObject:firstName forKey:@"firstName"];
+    [encoder encodeObject:lastName forKey:@"lastName"];
+    [encoder encodeObject:emailAddress forKey:@"emailAddress"];
+    [encoder encodeObject:phoneNumber forKey:@"phoneNumber"];
 
 	[encoder finishEncoding];
 	
@@ -621,7 +675,7 @@
             self.token = @"";
         }
         
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"rTeamAppDelegate.m - applicationDidReceiveMemoryWarning" theRecordedDate:[NSDate date] theRecordedUserName:self.token theInstanceUrl:@""];
+         [GoogleAppEngine sendClientLog:@"rTeamAppDelegate.m - applicationDidReceiveMemoryWarning" logMessage:[exception reason] logLevel:@"exception" exception:exception];
 
     }
   

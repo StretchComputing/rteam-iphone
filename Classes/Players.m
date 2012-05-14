@@ -855,8 +855,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"Players.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        [GoogleAppEngine sendClientLog:@"Players.m - didSelectRowAtIndexPath()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
+        
+        
     }
 	
 	

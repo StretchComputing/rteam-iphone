@@ -303,6 +303,10 @@ numberOfRowsInComponent:(NSInteger)component{
 		if ([status isEqualToString:@"100"]){
 			
 			self.errorString = @"";
+            
+            mainDelegate.phoneNumber = self.thePhoneNumber;
+            
+            [mainDelegate saveUserInfo];
 			
 		}else{
 			

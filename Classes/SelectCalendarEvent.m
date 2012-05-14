@@ -22,12 +22,12 @@
 #import "rTeamAppDelegate.h"
 #import "GANTracker.h"
 #import "Home.h"
-#import "CreateNewEventGameday.h"
 #import "GoogleAppEngine.h"
+#import "SelectTeamCal.h"
 
 @implementation SelectCalendarEvent
 @synthesize shouldPushAnotherView, allEvents, eventType, dateSelected, error, eventLabel, eventTimeField, removeEventButton, errorLabel, activity,
-timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabel, isEventToday, addEventButton, errorString, teamId, createButton;
+timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabel, isEventToday, addEventButton, errorString, teamId, createButton, infoView, infoTextField, infoSegControl, allGames, allGenerics, allPractices, areGames, areEvents, arePractices, doneGames, doneEvents, donePractices, haveDate;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -36,50 +36,87 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 -(void)create{
 	
-	[self.activity startAnimating];
+    
+    if ([self.allEvents count] > 0) {
+        [self.activity startAnimating];
+        
+        self.createButton.enabled = NO;
+        self.eventTimeField.enabled = NO;
+        self.removeEventButton.enabled = NO;
+        self.addEventButton.enabled = NO;
+        
+        self.timePicker.hidden = YES;
+        self.explainPickerView.hidden = YES;
+        self.infoView.hidden = YES;
+        
+        self.explainPickerLabel.hidden = YES;
+        self.okTimeButton.hidden = YES;
+        self.cancelTimeButton.hidden = YES;
+        
+        
+        for (int i = 0; i < [self.allEvents count]; i++) {
+            
+            CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+            
+            if ([tmp.eventType isEqualToString:@"game"]){
+                [self.allGames addObject:tmp];
+            }else if ([tmp.eventType isEqualToString:@"practice"]){
+                [self.allPractices addObject:tmp];
+            }else{
+                [self.allGenerics addObject:tmp];
+            }
+        }
+        
+        self.doneGames = false;
+        self.donePractices = false;
+        self.doneEvents = false;
+        
+        self.areGames = false;
+        self.arePractices = false;
+        self.areEvents = false;
+
+
+        if ([self.allGames count] > 0) {
+            self.areGames = true;
+            
+            [self performSelectorInBackground:@selector(createGames) withObject:nil];
+        }
+            
+        if ([self.allPractices count] > 0) {
+            self.arePractices = true;
+            [self performSelectorInBackground:@selector(createPractices) withObject:nil];
+        }
+            
+        if ([self.allGenerics count] > 0) {
+            self.areEvents = true;
+            [self performSelectorInBackground:@selector(createEvents) withObject:nil];
+
+        }
+            
+            
+        
+
+    }else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Events Added" message:@"You must add at least one event." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
 	
-	self.createButton.enabled = NO;
-	self.eventTimeField.enabled = NO;
-	self.removeEventButton.enabled = NO;
-	self.addEventButton.enabled = NO;
-	
-	self.timePicker.hidden = YES;
-	self.explainPickerView.hidden = YES;
-	self.explainPickerLabel.hidden = YES;
-	self.okTimeButton.hidden = YES;
-	self.cancelTimeButton.hidden = YES;
-	
-	if ([self.eventType isEqualToString:@"game"]) {
-		
-		[self performSelectorInBackground:@selector(createGames) withObject:nil];
-
-		
-	}else if ([self.eventType isEqualToString:@"practice"]) {
-		
-		[self performSelectorInBackground:@selector(createPractices) withObject:nil];
-
-		
-	}else {
-		
-		[self performSelectorInBackground:@selector(createEvents) withObject:nil];
-
-	}
-
 	
 }
 
 -(void)viewDidLoad{
 	
+    self.infoSegControl.selectedSegmentIndex = 0;
+    self.infoTextField.placeholder = @"Opponent (optional)";
    
    
-	if ([self.eventType isEqualToString:@"game"]) {
-		self.title = @"Add Game(s)";
-	}else if ([self.eventType isEqualToString:@"practice"]) {
-		self.title = @"Add Practice(s)";
-	}else {
-		self.title = @"Add Event(s)";
+	self.allGames = [NSMutableArray array];
+    self.allPractices = [NSMutableArray array];
+	self.allGenerics = [NSMutableArray array];
 
-	}
+    self.title = @"Add Event(s)";
+
+	
 
     
     @try {
@@ -90,14 +127,26 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
         self.timePicker.date = theDate;
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - viewDidLoad" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+
+         [GoogleAppEngine sendClientLog:@"SelectCalendarEvent.m - viewDidLoad" logMessage:[exception reason] logLevel:@"exception" exception:exception];
     }
 	
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+    if ([mainDelegate.showCreateAlert isEqualToString:@"true"]) {
+        mainDelegate.showCreateAlert = @"false";
+        
+        [mainDelegate saveUserInfo];
+        
+        NSString *message = @"To add an Event, click a date on the calendar, then enter the Event info.  When you are done, click 'Create' in the upper right corner to create the Events.";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Creating Events" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        
+    }else{
 
-	NSString *message = @"To add an Event, click a date on the calendar, then enter the Event time.  When you are done, click 'Create' in the upper right corner to create the Events.";
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Creating Events" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert show];
+    }
+
+	
 	self.createButton = [[UIBarButtonItem alloc] initWithTitle:@"Create" style:UIBarButtonItemStyleBordered target:self action:@selector(create)];
 	[self.navigationItem setRightBarButtonItem:self.createButton];
 	
@@ -117,6 +166,8 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	self.okTimeButton.hidden = YES;
 	self.cancelTimeButton.hidden = YES;
 	self.explainPickerView.hidden = YES;
+    self.infoView.hidden = YES;
+
 	self.explainPickerLabel.hidden = YES;
 	self.addEventButton.hidden = YES;
 	
@@ -205,7 +256,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             if (self.isEventToday) {
                 
                 self.eventLabel.hidden = NO;
-                self.eventLabel.text = [NSString stringWithFormat:@"Time for Event on %@/%@", month, day];
+                self.eventLabel.text = [NSString stringWithFormat:@"Info for Event on %@/%@", month, day];
                 self.addEventButton.hidden = YES;
                 self.removeEventButton.hidden = NO;
                 self.eventTimeField.text = timeEventToday;
@@ -217,8 +268,10 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 self.cancelTimeButton.hidden = NO;
                 self.okTimeButton.hidden = NO;
                 self.explainPickerView.hidden = NO;
+                self.infoView.hidden = NO;
+
                 self.explainPickerLabel.hidden = NO;
-                self.explainPickerLabel.text = [NSString stringWithFormat:@"Select the time for the Event on %@/%@", month, day];
+                self.explainPickerLabel.text = [NSString stringWithFormat:@"Enter info for the Event on %@/%@", month, day];
                 
                 self.eventLabel.hidden = NO;
                 self.eventLabel.text = [NSString stringWithFormat:@"No Event currently on %@/%@", month, day];
@@ -232,8 +285,9 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - tappedTile:()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        [GoogleAppEngine sendClientLog:@"SelectCalendarEvent.m - tappedTile:()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
   
 		
@@ -246,6 +300,8 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	self.cancelTimeButton.hidden = NO;
 	self.okTimeButton.hidden = NO;
 	self.explainPickerView.hidden = NO;
+    self.infoView.hidden = NO;
+
 	self.explainPickerLabel.hidden = NO;
 	
 	self.eventLabel.hidden = NO;
@@ -261,75 +317,105 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	self.okTimeButton.hidden = NO;
 	self.cancelTimeButton.hidden = NO;
 	self.explainPickerView.hidden = NO;
+    self.infoView.hidden = NO;
+
 	self.explainPickerLabel.hidden = NO;
 }
 
 -(void)okTime{
 	
     @try {
-        NSString *timeEventToday = @"";
-        NSDate *tmpTime = self.timePicker.date;
-        NSDateFormatter *tmpFormat = [[NSDateFormatter alloc] init];
-        [tmpFormat setDateFormat:@"hh:mm aa"];
-        timeEventToday = [tmpFormat stringFromDate:tmpTime];
-        
-        NSString *dateTodayString = @"";
-        [tmpFormat setDateFormat:@"MM/dd"];
-        dateTodayString = [tmpFormat stringFromDate:self.dateSelected];
-        
-        if (self.isEventToday) {
-            //Replace the Time of the Event that is today with the new time;
-            int eventIndex;
-            NSDate *tmpDate = [NSDate date];
-            
-            for (int i = 0; i < [self.allEvents count]; i++){
-                
-                CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
-                
-                if ([tmp.eventDate isEqualToDate:self.dateSelected]){
-                    //found the event today
-                    eventIndex = i;
-                    tmpDate = tmp.eventDate;
-                    break;
-                }
-            }
-            
-            CalendarEventObject *newObject = [[CalendarEventObject alloc] init];
-            newObject.eventDate = tmpDate;
-            newObject.eventTime = tmpTime;
-            [self.allEvents replaceObjectAtIndex:eventIndex withObject:newObject];
-            
-        }else {
-            
-            CalendarEventObject *tmp = [[CalendarEventObject alloc] init];
-            
-            tmp.eventDate = [self.dateSelected copy];
-            tmp.eventTime = tmpTime;
-            
-            [self.allEvents addObject:tmp];
-            
-            
-            //[calendarView refreshViewWithPushDirection:nil];
-            [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
-            
+        if (self.infoTextField.text == nil) {
+            self.infoTextField.text = @"";
         }
         
-        
-        self.eventTimeField.text = timeEventToday;
-        self.eventTimeField.hidden = NO;
-        self.eventLabel.text = [NSString stringWithFormat:@"Time for Event on %@", dateTodayString];
-        self.removeEventButton.hidden = NO;
-        self.addEventButton.hidden = YES;
-        self.explainPickerView.hidden = YES;
-        self.explainPickerLabel.hidden = YES;
-        self.okTimeButton.hidden = YES;
-        self.cancelTimeButton.hidden = YES;
-        self.timePicker.hidden = YES;
+        if ((self.infoSegControl.selectedSegmentIndex == 2) && [self.infoTextField.text isEqualToString:@""]) {
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Name Required." message:@"If you are creating a generic event, you must enter a name" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            
+        }else{
+            
+            NSString *timeEventToday = @"";
+            NSDate *tmpTime = self.timePicker.date;
+            NSDateFormatter *tmpFormat = [[NSDateFormatter alloc] init];
+            [tmpFormat setDateFormat:@"hh:mm aa"];
+            timeEventToday = [tmpFormat stringFromDate:tmpTime];
+            
+            NSString *dateTodayString = @"";
+            [tmpFormat setDateFormat:@"MM/dd"];
+            dateTodayString = [tmpFormat stringFromDate:self.dateSelected];
+            
+            if (self.isEventToday) {
+                //Replace the Time of the Event that is today with the new time;
+                int eventIndex;
+                NSDate *tmpDate = [NSDate date];
+                
+                for (int i = 0; i < [self.allEvents count]; i++){
+                    
+                    CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+                    
+                    if ([tmp.eventDate isEqualToDate:self.dateSelected]){
+                        //found the event today
+                        eventIndex = i;
+                        tmpDate = tmp.eventDate;
+                        break;
+                    }
+                }
+                
+                CalendarEventObject *newObject = [[CalendarEventObject alloc] init];
+                newObject.eventDate = tmpDate;
+                newObject.eventTime = tmpTime;
+                [self.allEvents replaceObjectAtIndex:eventIndex withObject:newObject];
+                
+            }else {
+                
+                
+                
+                CalendarEventObject *tmp = [[CalendarEventObject alloc] init];
+                
+                tmp.eventDate = [self.dateSelected copy];
+                tmp.eventTime = tmpTime;
+                tmp.infoText = self.infoTextField.text;
 
+                if (infoSegControl.selectedSegmentIndex == 0) {
+                    tmp.eventType = @"game";
+                }else if (infoSegControl.selectedSegmentIndex == 1){
+                    tmp.eventType = @"practice";
+
+                }else{
+                    tmp.eventType = @"generic";
+
+                }
+                
+                [self.allEvents addObject:tmp];
+                
+                self.infoTextField.text = @"";
+                //[calendarView refreshViewWithPushDirection:nil];
+                [calendarView performSelector:@selector(refreshViewWithPushDirection:) withObject:nil];
+                
+            }
+            
+            
+            self.eventTimeField.text = timeEventToday;
+            self.eventTimeField.hidden = NO;
+            self.eventLabel.text = [NSString stringWithFormat:@"Time for Event on %@", dateTodayString];
+            self.removeEventButton.hidden = NO;
+            self.addEventButton.hidden = YES;
+            self.explainPickerView.hidden = YES;
+            self.infoView.hidden = YES;
+            
+            self.explainPickerLabel.hidden = YES;
+            self.okTimeButton.hidden = YES;
+            self.cancelTimeButton.hidden = YES;
+            self.timePicker.hidden = YES;
+
+            
+        }
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - okTime:()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+    
+        [GoogleAppEngine sendClientLog:@"SelectCalendarEvent.m - okTime:()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
     }
   
 		
@@ -349,6 +435,8 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
 	
 	self.explainPickerView.hidden = YES;
+    self.infoView.hidden = YES;
+
 	self.explainPickerLabel.hidden = YES;
 	self.okTimeButton.hidden = YES;
 	self.cancelTimeButton.hidden = YES;
@@ -388,8 +476,9 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - removeEvent:()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+      
+        [GoogleAppEngine sendClientLog:@"SelectCalendarEvent.m - removeEvent:()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
   
 	
@@ -464,8 +553,9 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - createTileForDate:()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+  
+        [GoogleAppEngine sendClientLog:@"SelectCalendarEvent.m - createTileForDate:()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
   
 		
@@ -544,16 +634,20 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             NSString *theOpponent = @"Opponent TBD";
             
             
-            for(int i = 0; i < [self.allEvents count]; i++){
+            for(int i = 0; i < [self.allGames count]; i++){
                 
                 NSString *dateString = @"";
                 NSString *timeString = @"";
                 
                 NSString *startDateString = @"";
                 
-                CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+                CalendarEventObject *tmpGameObject = [self.allGames objectAtIndex:i];
                 
                 NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
+                
+                if (![tmpGameObject.infoText isEqualToString:@""]) {
+                    theOpponent = tmpGameObject.infoText;
+                }
                 
                 [tmpGame setObject:theDescription forKey:@"description"];
                 [tmpGame setObject:theOpponent forKey:@"opponent"];
@@ -617,7 +711,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             
             
             [self performSelectorOnMainThread:
-             @selector(doneCreate)
+             @selector(doneCreateGames)
                                    withObject:nil
                                 waitUntilDone:NO
              ];
@@ -627,8 +721,9 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
     
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - createGames" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        [GoogleAppEngine sendClientLog:@"SelectCalendarEvent.m - createGames" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
         
     }
@@ -639,8 +734,10 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 }
 
 
--(void)doneCreate{
+-(void)doneCreateGames{
 	
+    self.doneGames = true;
+    
 	[self.activity stopAnimating];
 	self.createButton.enabled = YES;
 	self.eventTimeField.enabled = YES;
@@ -649,35 +746,29 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	
 	if ([self.errorString isEqualToString:@""]) {
 		
-		NSArray *views = [self.navigationController viewControllers];
-		
+        bool runIt = true;
         
-        if ([views count] == 3) {
-            
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                 action:@"Create Multiple Games - Gameday"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:nil]) {
+		if (self.arePractices) {
+            if (self.donePractices) {
+                runIt = true;
+            }else{
+                runIt = false;
             }
-            
-            [self.navigationController dismissModalViewControllerAnimated:YES];
-        }else{
-            
-            if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Games - Event List"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
-                }
-                CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
-                tmp.selectedIndex = 3;
+        }   
+        
+        if (self.areEvents) {
+            if (self.doneEvents) {
+                runIt = true;
+            }else{
+                runIt = false;
+            }
+        }
+        
+        if (runIt) {
+            NSArray *views = [self.navigationController viewControllers];
+                                    
+            if ([views count] == 1) {
                 
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [CreateNewEventGameday class]) {
                 rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                 if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                      action:@"Create Multiple Games - Gameday"
@@ -685,42 +776,58 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                       value:-1
                                                   withError:nil]) {
                 }
+                
                 [self.navigationController dismissModalViewControllerAnimated:YES];
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Games - Calendar"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
-                }
-                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
-                tmp.createdEvent = true;
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Games - Calendar"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
-                }
-                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
-                tmp.createdEvent = true;
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
-                Home *tmp = [views objectAtIndex:[views count] - 5];
-                
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
-                Home *tmp = [views objectAtIndex:[views count] - 4];
-                
-                [self.navigationController popToViewController:tmp animated:NO];
-            }
+            }else if (([views count] == 2) && ([[views objectAtIndex:0] class] == [SelectTeamCal class])){
+            
+                //From Gameday
+                [self.navigationController dismissModalViewControllerAnimated:YES];
 
             
+            }else{
+                
+                if ([[views objectAtIndex:[views count] - 2] class] == [CurrentTeamTabs class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Event List"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 2];
+                    tmp.selectedIndex = 3;
+                    
+                    [self.navigationController popToViewController:tmp animated:NO];
+                    
+                }else if ([[views objectAtIndex:[views count] - 2] class] == [AllEventsCalendar class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Calendar"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 2];
+                    tmp.createdEvent = true;
+                    [self.navigationController popToViewController:tmp animated:NO];
+                }else if ([[views objectAtIndex:[views count] - 3] class] == [AllEventsCalendar class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Calendar"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 3];
+                    tmp.createdEvent = true;
+                    [self.navigationController popToViewController:tmp animated:NO];
+                }
+                
+                
+                
+            }
+
         }
-        
 				
 	}else {
 		
@@ -751,14 +858,18 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             NSString *theLocation = @"Location TBD";
             
             
-            for(int i = 0; i < [self.allEvents count]; i++){
+            for(int i = 0; i < [self.allPractices count]; i++){
                 
                 NSString *dateString = @"";
                 NSString *timeString = @"";
                 
                 NSString *startDateString = @"";
                 
-                CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+                CalendarEventObject *tmpGameObject = [self.allPractices objectAtIndex:i];
+                
+                if (![tmpGameObject.infoText isEqualToString:@""]) {
+                    theLocation = tmpGameObject.infoText;
+                }
                 
                 NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
                 
@@ -826,15 +937,15 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             
             
             [self performSelectorOnMainThread:
-             @selector(donePractices)
+             @selector(doneCreatePractices)
                                    withObject:nil
                                 waitUntilDone:NO
              ];
 
         }
         @catch (NSException *exception) {
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - createPractices" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+            
+             [GoogleAppEngine sendClientLog:@"SelectCalendarEvent.m - createPractices" logMessage:[exception reason] logLevel:@"exception" exception:exception];
         }
        
        
@@ -843,8 +954,10 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 }
 
 
--(void)donePractices{
+-(void)doneCreatePractices{
 	
+    self.donePractices = true;
+    
 	[self.activity stopAnimating];
 	self.createButton.enabled = YES;
 	self.eventTimeField.enabled = YES;
@@ -853,75 +966,87 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	
 	if ([self.errorString isEqualToString:@""]) {
 		
-		NSArray *views = [self.navigationController viewControllers];
-		
-        if ([views count] == 3) {
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                 action:@"Create Multiple Practices - Gameday"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:nil]) {
+        bool runIt = true;
+        
+		if (self.areGames) {
+            if (self.doneGames) {
+                runIt = true;
+            }else{
+                runIt = false;
             }
+        }   
+        
+        if (self.areEvents) {
+            if (self.doneEvents) {
+                runIt = true;
+            }else{
+                runIt = false;
+            }
+        }
+        
+        if (runIt) {
+            NSArray *views = [self.navigationController viewControllers];
             
-            [self.navigationController dismissModalViewControllerAnimated:YES];
-        }else{
-            if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Practices - Event List"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
-                }
-                CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
+            
+            if ([views count] == 1) {
                 
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [CreateNewEventGameday class]) {
                 rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                 if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Practices - Gameday"
+                                                     action:@"Create Multiple Games - Gameday"
                                                       label:mainDelegate.token
                                                       value:-1
                                                   withError:nil]) {
                 }
                 
                 [self.navigationController dismissModalViewControllerAnimated:YES];
+            }else if (([views count] == 2) && ([[views objectAtIndex:0] class] == [SelectTeamCal class])){
                 
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Practices - Calendar"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
+                
+                [self.navigationController dismissModalViewControllerAnimated:YES];
+                
+                
+            }else{
+                
+                if ([[views objectAtIndex:[views count] - 2] class] == [CurrentTeamTabs class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Event List"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 2];
+                    tmp.selectedIndex = 3;
+                    
+                    [self.navigationController popToViewController:tmp animated:NO];
+                    
+                }else if ([[views objectAtIndex:[views count] - 2] class] == [AllEventsCalendar class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Calendar"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 2];
+                    tmp.createdEvent = true;
+                    [self.navigationController popToViewController:tmp animated:NO];
+                }else if ([[views objectAtIndex:[views count] - 3] class] == [AllEventsCalendar class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Calendar"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 3];
+                    tmp.createdEvent = true;
+                    [self.navigationController popToViewController:tmp animated:NO];
                 }
                 
-                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
-                tmp.createdEvent = true;
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Practices - Calendar"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
-                }
-                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
-                tmp.createdEvent = true;
                 
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
-                Home *tmp = [views objectAtIndex:[views count] - 5];
-                
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
-                Home *tmp = [views objectAtIndex:[views count] - 4];
-                
-                [self.navigationController popToViewController:tmp animated:NO];
             }
-
+            
         }
 				
 	}else {
@@ -954,21 +1079,21 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             NSString *theLocation = @"Location TBD";
             
             
-            for(int i = 0; i < [self.allEvents count]; i++){
+            for(int i = 0; i < [self.allGenerics count]; i++){
                 
                 NSString *dateString = @"";
                 NSString *timeString = @"";
                 
                 NSString *startDateString = @"";
                 
-                CalendarEventObject *tmpGameObject = [self.allEvents objectAtIndex:i];
+                CalendarEventObject *tmpGameObject = [self.allGenerics objectAtIndex:i];
                 
                 NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
                 
                 [tmpGame setObject:theDescription forKey:@"description"];
                 [tmpGame setObject:theLocation forKey:@"opponent"];
                 [tmpGame setObject:@"generic" forKey:@"eventType"];
-                [tmpGame setObject:@"No Event Name" forKey:@"eventName"];
+                [tmpGame setObject:tmpGameObject.infoText forKey:@"eventName"];
                 
                 
                 
@@ -1032,7 +1157,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             
             
             [self performSelectorOnMainThread:
-             @selector(doneEvents)
+             @selector(doneCreateEvents)
                                    withObject:nil
                                 waitUntilDone:NO
              ];
@@ -1040,8 +1165,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 
         }
         @catch (NSException *exception) {
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            [GoogleAppEngine sendExceptionCaught:exception inMethod:@"SelectCalendarEvent.m - createEvents" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+            [GoogleAppEngine sendClientLog:@"SelectCalendarEvent.m - createEvents" logMessage:[exception reason] logLevel:@"exception" exception:exception];
         }
       
                 
@@ -1051,8 +1175,10 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 }
 
 
--(void)doneEvents{
+-(void)doneCreateEvents{
 	
+    self.doneEvents = true;
+    
 	[self.activity stopAnimating];
 	self.createButton.enabled = YES;
 	self.eventTimeField.enabled = YES;
@@ -1061,75 +1187,87 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	
 	if ([self.errorString isEqualToString:@""]) {
 		
-		NSArray *views = [self.navigationController viewControllers];
-		
-        if ([views count] == 3) {
-            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-            if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                 action:@"Create Multiple Events - Gameday"
-                                                  label:mainDelegate.token
-                                                  value:-1
-                                              withError:nil]) {
+        bool runIt = true;
+        
+		if (self.arePractices) {
+            if (self.donePractices) {
+                runIt = true;
+            }else{
+                runIt = false;
             }
+        }   
+        
+        if (self.areGames) {
+            if (self.doneGames) {
+                runIt = true;
+            }else{
+                runIt = false;
+            }
+        }
+        
+        if (runIt) {
+            NSArray *views = [self.navigationController viewControllers];
             
-            [self.navigationController dismissModalViewControllerAnimated:YES];
-        }else{
-            if ([[views objectAtIndex:[views count] - 4] class] == [CurrentTeamTabs class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Events - Event List"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
-                }
-                CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 4];
-                tmp.selectedIndex = 3;
+            
+            if ([views count] == 1) {
                 
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [CreateNewEventGameday class]) {
                 rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                 if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Events - Gameday"
+                                                     action:@"Create Multiple Games - Gameday"
                                                       label:mainDelegate.token
                                                       value:-1
                                                   withError:nil]) {
                 }
                 
                 [self.navigationController dismissModalViewControllerAnimated:YES];
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [AllEventsCalendar class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Events - Calendar"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
+            }else{
+                
+                if ([[views objectAtIndex:[views count] - 2] class] == [CurrentTeamTabs class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Event List"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 2];
+                    tmp.selectedIndex = 3;
+                    
+                    [self.navigationController popToViewController:tmp animated:NO];
+                    
+                }else if (([views count] == 2) && ([[views objectAtIndex:0] class] == [SelectTeamCal class])){
+                    
+                    
+                    [self.navigationController dismissModalViewControllerAnimated:YES];
+                    
+                    
+                }else if ([[views objectAtIndex:[views count] - 2] class] == [AllEventsCalendar class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Calendar"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 2];
+                    tmp.createdEvent = true;
+                    [self.navigationController popToViewController:tmp animated:NO];
+                }else if ([[views objectAtIndex:[views count] - 3] class] == [AllEventsCalendar class]) {
+                    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+                    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                         action:@"Create Multiple Games - Calendar"
+                                                          label:mainDelegate.token
+                                                          value:-1
+                                                      withError:nil]) {
+                    }
+                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 3];
+                    tmp.createdEvent = true;
+                    [self.navigationController popToViewController:tmp animated:NO];
                 }
-                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 4];
-                tmp.createdEvent = true;
                 
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 5] class] == [AllEventsCalendar class]) {
-                rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-                if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                                     action:@"Create Multiple Events - Calendar"
-                                                      label:mainDelegate.token
-                                                      value:-1
-                                                  withError:nil]) {
-                }
-                AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 5];
-                tmp.createdEvent = true;
                 
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 5] class] == [Home class]) {
-                Home *tmp = [views objectAtIndex:[views count] - 5];
-                
-                [self.navigationController popToViewController:tmp animated:NO];
-            }else if ([[views objectAtIndex:[views count] - 4] class] == [Home class]) {
-                Home *tmp = [views objectAtIndex:[views count] - 4];
-                
-                [self.navigationController popToViewController:tmp animated:NO];
             }
-
+            
         }
 		
 		
@@ -1157,10 +1295,34 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 	explainPickerLabel = nil;
 	errorLabel = nil;
 	activity = nil;
+    infoView = nil;
+    infoSegControl = nil;
+    infoTextField = nil;
 	[super viewDidUnload];
 }
 
 
+
+-(void)segmentSelected{
+    
+    self.infoTextField.text = @"";
+    
+    if (self.infoSegControl.selectedSegmentIndex == 0) {
+        self.infoTextField.placeholder = @"Opponent (optional)";
+
+    }else if (self.infoSegControl.selectedSegmentIndex == 1){
+        
+        self.infoTextField.placeholder = @"Location (optional)";
+
+    }else{
+        self.infoTextField.placeholder = @"Event Name (required)";
+
+    }
+}
+
+-(void)endText{
+
+}
 
 @end
 

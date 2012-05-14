@@ -154,8 +154,8 @@ deleteActionSheet, isCancel, thePracticeDescription, thePracticeOpponent, theEve
 
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"EventEdit.m - clickedButtonAtIndex" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        [GoogleAppEngine sendClientLog:@"EventEdit.m - clickedButtonAtIndex" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
   
 		

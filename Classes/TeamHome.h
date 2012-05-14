@@ -96,7 +96,7 @@
 -(IBAction)editTeam;
 
 -(IBAction)addMembers;
--(IBAction)addEvents;
+//-(IBAction)addEvents;
 
 -(NSString *)getIntervalLabelFromInterval:(NSString *)interval1;
 

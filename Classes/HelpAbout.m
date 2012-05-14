@@ -69,7 +69,7 @@
 
 	self.title = @"About rTeam";
 	[self.scrollView
-	 setContentSize:CGSizeMake(320,500)];
+	 setContentSize:CGSizeMake(320,416)];
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.feedbackButton setBackgroundImage:stretch forState:UIControlStateNormal];

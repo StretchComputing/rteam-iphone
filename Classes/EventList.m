@@ -23,7 +23,6 @@
 #import "PracticeAttendance.h"
 #import "PracticeEdit.h"
 #import "GameTabsNoCoord.h"
-#import "NewGamePractice.h"
 #import "MapLocation.h"
 #import "Event.h"
 #import "EventTabs.h"
@@ -34,6 +33,7 @@
 #import "GANTracker.h"
 #import "GoogleAppEngine.h"
 #import "TraceSession.h"
+#import "SelectCalendarEvent.h"
 
 @implementation EventList
 @synthesize events, teamName, teamId, deleteRow, isPastGame, fromEdit, userRole, error, addButton, sport, barActivity, 
@@ -338,18 +338,12 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
     }
 }
 
--(void)create{
-	
-	NewGamePractice *nextController = [[NewGamePractice alloc] init];
-	nextController.teamId = self.teamId;
-	[self.navigationController pushViewController:nextController animated:YES];	
-	
-}
 
 -(void)addTeam{
-    NewGamePractice *nextController = [[NewGamePractice alloc] init];
-	nextController.teamId = self.teamId;
-	[self.navigationController pushViewController:nextController animated:YES];	
+   
+    SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
+	tmp.teamId = self.teamId;
+	[self.navigationController pushViewController:tmp animated:YES];
 }
 
 
@@ -981,7 +975,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if (![currentGame.interval isEqualToString:@"-4"]) {
                     if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
                         GameTabs *currentGameTab = [[GameTabs alloc] init];
+                        
                         NSArray *viewControllers = currentGameTab.viewControllers;
+          
+
                         currentGameTab.teamId = self.teamId;
                         currentGameTab.gameId = currentGame.gameId;
                         currentGameTab.userRole = self.userRole;
@@ -1158,8 +1155,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"EventList.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+       
+        
+        [GoogleAppEngine sendClientLog:@"EventList.m - didSelectRowAtIndexPath()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
+        
     }
    		
 }

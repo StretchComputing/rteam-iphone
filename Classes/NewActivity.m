@@ -915,9 +915,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     }
     @catch (NSException *exception) {
-       
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"NewActivity.m - didSelectRowAtIndexPath()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+        
+        [GoogleAppEngine sendClientLog:@"NewActivity.m - didSelectRowAtIndexPath()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
       
 }
@@ -2601,8 +2601,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         myAd = nil;
     }
     @catch (NSException *exception) {
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [GoogleAppEngine sendExceptionCaught:exception inMethod:@"NewActivity.m - dealloc()" theRecordedDate:[NSDate date] theRecordedUserName:mainDelegate.token theInstanceUrl:@""];
+
+        [GoogleAppEngine sendClientLog:@"NewActivity.m - dealloc()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
     }
    
   
