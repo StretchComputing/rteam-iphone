@@ -18,7 +18,7 @@
 @class HomeAttendanceView;
 
 @interface Home : UIViewController <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextFieldDelegate, ADBannerViewDelegate,
-UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>{
+UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MFMailComposeViewControllerDelegate>{
 
 
 
@@ -231,6 +231,8 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 
 -(IBAction)postImageSubmit;
 -(IBAction)postImageCancel;
+
+-(IBAction)questionsComments;
 
 
 @end

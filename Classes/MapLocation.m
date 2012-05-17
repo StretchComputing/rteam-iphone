@@ -15,7 +15,7 @@
 #import "TraceSession.h"
 
 @implementation MapLocation
-@synthesize map, locationManager, latCoord, longCoord, eventLatCoord, eventLongCoord, directionsButton;
+@synthesize map, locationManager, latCoord, longCoord, eventLatCoord, eventLongCoord, directionsButton, cancelButton;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -51,12 +51,22 @@
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.directionsButton setBackgroundImage:stretch forState:UIControlStateNormal];
+    
+   
+}
+
+-(void)cancel{
+    [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 -(void)viewDidLoad{
 	
 	self.title = @"Event Location";
 	
+    if (self.cancelButton) {
+        UIBarButtonItem *tmp = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+        [self.navigationItem setLeftBarButtonItem:tmp];
+    }
 	
 }
 

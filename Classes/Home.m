@@ -660,7 +660,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     self.inviteFanQbutton.tag = 10;
     
     
-    self.refreshQbutton = [[UIButton alloc] initWithFrame:CGRectMake(275, 369, 50, 50)];
+    self.refreshQbutton = [[UIButton alloc] initWithFrame:CGRectMake(275, 319, 50, 50)];
     [self.refreshQbutton setImage:[UIImage imageNamed:@"qcircle.png"] forState:UIControlStateNormal];
     self.refreshQbutton.opaque = YES;
     [self.refreshQbutton addTarget:self action:@selector(helpButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -2496,6 +2496,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 [homeScoreView setLabels];
 
+                
+                [homeScoreView startTimer];
+                
+
             }else{
                 move = false;
                 
@@ -4320,6 +4324,67 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	
 }
+
+-(void)questionsComments{
+    
+    [TraceSession addEventToSession:@"Settings Page - Email Feedback Selected"];
+    
+    
+    
+    
+    
+    if ([MFMailComposeViewController canSendMail]) {
+        
+        MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+        mailViewController.mailComposeDelegate = self;
+        [mailViewController setToRecipients:[NSArray arrayWithObject:@"info@rteam.com"]];
+        [mailViewController setSubject:@"rTeam Question/Comment"];
+        [mailViewController setMessageBody:@"Enter your feedback or question here:" isHTML:NO];
+        
+        [self presentModalViewController:mailViewController animated:YES];
+        
+    }else {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
+}
+
+
+-(void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+	
+	switch (result)
+	{
+		case MFMailComposeResultCancelled:
+			break;
+		case MFMailComposeResultSent:
+	
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"Home Feedback/Question Sent"
+                                                  label:nil
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+			break;
+		case MFMailComposeResultFailed:
+		
+			break;
+			
+		case MFMailComposeResultSaved:
+		
+			break;
+		default:
+			
+			break;
+	}
+	
+	
+	[self dismissModalViewControllerAnimated:YES];
+	
+}
+
 
 
 - (void)dealloc {

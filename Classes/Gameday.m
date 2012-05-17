@@ -26,7 +26,7 @@ successMessage, latitude, longitude, fromNextUpdate, nameGameLocation, locationN
 enableScoring, isScoringEnabled, error, scoreUs, scoreThem, interval, userRole, updateLocationButton, sport, defaultScoringButton, getInfo,
 bannerIsVisible, usLabel, scoreUsLabel, themLabel, scoreThemLabel, scoreDividerLabel, keepScoreButton, intervalLabel, setInfoGame, setInfoScore,
 refreshActivity, isGameOver, editFinalButton, mainActivity, editDone, startDate, description, opponentString, orOtherInterval, scoringAdded,
-errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, myFootballScoring, myBasketballScoring, greenBackView;
+errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, myFootballScoring, myBasketballScoring, greenBackView, scoreView;
 
 
 -(void)editGame{

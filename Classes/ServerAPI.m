@@ -4850,8 +4850,8 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	@try{
  
-        NSException *exception = [NSException exceptionWithName:@"Exception when getting Activity Name" reason:@"Exception when getting Activity Reason" userInfo:nil];
-        @throw exception;
+        //NSException *exception = [NSException exceptionWithName:@"Exception when getting Activity Name" reason:@"Exception when getting Activity Reason" userInfo:nil];
+        //@throw exception;
         
         
 		NSString *stringToEncode = [@"login:" stringByAppendingString:token];

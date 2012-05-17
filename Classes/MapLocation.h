@@ -13,6 +13,7 @@
 
 	
 }
+@property bool cancelButton;
 @property (nonatomic, strong ) IBOutlet UIButton *directionsButton;
 @property double eventLatCoord;
 @property double eventLongCoord;

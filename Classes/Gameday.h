@@ -14,11 +14,13 @@
 #import "NewBasketballScoring.h"
 #import "NewSoccerScoring.h"
 #import "NewBaseballScoring.h"
+#import "BoxScoreViewViewController.h"
 
 @interface Gameday : UIViewController <CLLocationManagerDelegate, ADBannerViewDelegate> {
     
 
 }
+@property (nonatomic, strong) BoxScoreViewViewController *scoreView;
 @property (nonatomic, strong) NewBaseballScoring *myBaseballScoring;
 @property (nonatomic, strong) NewBasketballScoring *myBasketballScoring;
 @property (nonatomic, strong) NewFootballScoring *myFootballScoring;

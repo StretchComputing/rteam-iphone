@@ -58,7 +58,7 @@
 @property (nonatomic, strong) IBOutlet UILabel *maybeLabel;
 @property (nonatomic, strong) NSString *maybeCount;
 
-
+@property (nonatomic, strong) IBOutlet UIButton *mapButton;
 -(IBAction)fullScreen;
 @property int initY;
 
@@ -69,6 +69,7 @@
 -(IBAction)pollDetails;
 
 -(IBAction)setStatus;
+-(IBAction)mapAction;
 
 
 @end

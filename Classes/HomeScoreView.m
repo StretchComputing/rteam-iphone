@@ -18,9 +18,10 @@
 #import "GANTracker.h"
 #import "NewActivity.h"
 #import "TraceSession.h"
+#import "MapLocation.h"
 
 @implementation HomeScoreView
-@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView, latitude,longitude, opponent, mapButton;
+@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView, latitude,longitude, opponent, mapButton, myTimer, linkLine, linkLabel;
 
 - (void)viewDidLoad
 {
@@ -92,7 +93,126 @@
     
     [self setNewInterval];
     
+    
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
+    NSDate *eventDate1 = [dateFormat dateFromString:self.eventStringDate];
+    [dateFormat setDateFormat:@"MM/dd"];
+    
+    NSString *dateString = [NSString stringWithFormat:@"for Game on %@", [dateFormat stringFromDate:eventDate1]];
+    
+    
+     CGSize constraints = CGSizeMake(900, 900);
+     CGSize totalSize = [dateString sizeWithFont:[UIFont fontWithName:@"Helvetica-Bold" size:17] constrainedToSize:constraints];
+    
+    float size = totalSize.width;
+
+    float start = (320 - size)/2;
+    
+
+    self.linkLabel.text = dateString;
+    CGRect frame = self.linkLabel.frame;
+    frame.origin.x = start;
+    frame.size.width = 320;
+    self.linkLabel.frame = frame;
+    
+    CGRect frame2 = self.linkLine.frame;
+    frame2.origin.x = start + 1;
+    frame2.size.width = size - 2;
+    self.linkLine.frame = frame2;
+    
+    
+
+     
+    
 }
+
+-(void)startTimer{
+    self.myTimer = [NSTimer scheduledTimerWithTimeInterval: 30
+                                                    target: self
+                                                  selector: @selector(getNewScores)
+                                                  userInfo: nil
+                                                   repeats: YES];
+}
+
+-(void)getNewScores{
+    
+    [self performSelectorInBackground:@selector(getScores) withObject:nil];
+}
+
+-(void)getScores{
+	
+	@autoreleasepool {
+
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        }
+        
+        NSDictionary *gameInfo = [NSDictionary dictionary];
+        //If there is a token, do a DB lookup to find the game info 
+        if (![token isEqualToString:@""]){
+            
+            
+            NSDictionary *response = [ServerAPI getGameInfo:self.eventId :self.teamId :token];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            
+            if ([status isEqualToString:@"100"]){
+                
+                gameInfo = [response valueForKey:@"gameInfo"];
+                
+                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorString = @"*Error connecting to server";
+                        break;
+                    case 1:
+                        //error connecting to server
+                        //self.errorString = @"*Error connecting to server";
+                        break;
+                    default:
+                        //log status code
+                       // self.errorString = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+        }
+        [self performSelectorOnMainThread:@selector(didFinish:) withObject:gameInfo waitUntilDone:NO];
+        
+    }
+    
+}
+
+-(void)didFinish:(NSDictionary *)gameInfo{
+        
+        
+        if ([gameInfo valueForKey:@"interval"] != nil) {
+            
+            self.interval = [[gameInfo valueForKey:@"interval"] stringValue];
+            self.scoreUs = [[gameInfo valueForKey:@"scoreUs"] stringValue];
+            self.scoreThem = [[gameInfo valueForKey:@"scoreThem"] stringValue];
+            
+            [self setLabels];
+            
+        }
+
+	
+}
+
+
+
 -(void)setNewInterval{
     
     NSString *time = @"";
@@ -132,6 +252,7 @@
 }
 -(void)fullScreen{
     
+    [self.myTimer invalidate];
     
     if (self.homeSuperView == nil) {
         self.view.hidden = YES;
@@ -192,7 +313,11 @@
         self.addIntervalButton.hidden = YES;
         self.subIntervalButton.hidden = YES;
         
+        [self startTimer];
+        
     }else{
+        
+        [self.myTimer invalidate];
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         if (![[GANTracker sharedTracker] trackEvent:@"action"
@@ -227,6 +352,8 @@
 
 -(void)goToPage{
         
+    [self.myTimer invalidate];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
 
     
@@ -598,6 +725,10 @@
 
 -(void)takePhoto{
    
+    [self.myTimer invalidate];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                          action:@"Take Game Photo - Happening Now"
@@ -612,6 +743,27 @@
 }
 
 -(void)mapAction{
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
+
+    MapLocation *next = [[MapLocation alloc] init];
+    next.eventLatCoord = [self.latitude doubleValue];
+    next.eventLongCoord = [self.longitude doubleValue];
+    next.cancelButton = true;
+    
+    UINavigationController *navController = [[UINavigationController alloc] init];
+    
+    [navController pushViewController:next animated:YES];
+    
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    id mainViewController = [self.view.superview nextResponder];
+    
+    Home *tmp = (Home *)mainViewController;
+    [tmp.navigationController presentModalViewController:navController animated:YES];
+        
+   
     
 }
 
@@ -635,6 +787,8 @@
     subIntervalButton = nil;
     gameOverButton = nil;
     mapButton = nil;
+    linkLabel = nil;
+    linkLine = nil;
     [super viewDidUnload];
 
 }

@@ -14,6 +14,10 @@
 @interface HomeScoreView : UIViewController {
     
 }
+@property (nonatomic, strong) IBOutlet UILabel *linkLabel;
+@property (nonatomic, strong) IBOutlet UIView *linkLine;
+
+@property (nonatomic, strong) NSTimer *myTimer;
 @property (nonatomic, strong) IBOutlet UIButton *mapButton;
 @property (nonatomic, strong) NSString *latitude;
 @property (nonatomic, strong) NSString *longitude;
@@ -76,8 +80,10 @@
 -(IBAction)takePhoto;
 -(IBAction)mapAction;
 
-
+-(void)startTimer;
 -(void)setNewInterval;
+
+
 
 
 @end
