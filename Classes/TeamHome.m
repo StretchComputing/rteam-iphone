@@ -413,7 +413,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
                         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
                         NSDate *eventDate = [dateFormat dateFromString:tmpGame.startDate];
-                        [dateFormat setDateFormat:@"MM/dd"];
+                        [dateFormat setDateFormat:@"MM/dd hh:mm"];
                         self.futureGame.interval.text = [dateFormat stringFromDate:eventDate];
                         
                         self.futureGame.scoreUs.text = @"-";
@@ -432,7 +432,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
                             [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
                             NSDate *eventDate = [dateFormat dateFromString:tmpGame.startDate];
-                            [dateFormat setDateFormat:@"MM/dd"];
+                            [dateFormat setDateFormat:@"MM/dd hh:mm"];
                             self.futureGame.interval.text = [dateFormat stringFromDate:eventDate];
                             
                             

@@ -14,14 +14,23 @@
 
 
 @implementation ImageDisplayMultiple
-@synthesize imageDataArray, didReply, commentText, isFullScreen, replyButton, isPortrait, myScrollview, currentPage, bigImageView, bigScrollView, activityId, teamId, encodedPhoto;
+@synthesize imageDataArray, didReply, commentText, isFullScreen, replyButton, isPortrait, myScrollview, currentPage, bigImageView, bigScrollView, activityId, teamId, encodedPhoto, fromScoreboard;
 
 
 -(void)viewWillAppear:(BOOL)animated{
     
     [TraceSession addEventToSession:@"ImageDisplayMultiple - View Will Appear"];
+    
+    if (self.fromScoreboard) {
+        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
+        [self.navigationItem setLeftBarButtonItem:button];
+    }
 
     
+}
+
+-(void)backAction{
+    [self dismissModalViewControllerAnimated:NO];
 }
 -(void)viewDidAppear:(BOOL)animated{
  
@@ -289,6 +298,7 @@
 
 	}else {
 
+        [self.navigationController popViewControllerAnimated:NO];
 	}
     
 	

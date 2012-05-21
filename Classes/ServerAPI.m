@@ -5012,6 +5012,200 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 }
 
+
+
++(NSDictionary *)getActivityGamePhotos:(NSString *)token maxCount:(NSString *)maxCount refreshFirst:(NSString *)refreshFirst newOnly:(NSString *)newOnly
+             mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails mediaOnly:(NSString *)mediaOnly eventId:(NSString *)eventId teamId:(NSString *)teamId;{
+	
+    
+	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
+	NSString *statusReturn = @"";
+	NSMutableArray *activities = [NSMutableArray array];
+	
+	if ((token == nil) || (mostCurrentDate == nil) || (maxCount == nil) || (refreshFirst == nil) || (newOnly == nil) || (totalNumberOfDays == nil)
+        || (includeDetails == nil) || (mediaOnly == nil)) {
+		statusReturn = @"0";
+		[returnDictionary setValue:statusReturn forKey:@"status"];
+		return returnDictionary;
+	}
+	
+	@try{
+        
+        //NSException *exception = [NSException exceptionWithName:@"Exception when getting Activity Name" reason:@"Exception when getting Activity Reason" userInfo:nil];
+        //@throw exception;
+        
+        
+		NSString *stringToEncode = [@"login:" stringByAppendingString:token];
+		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
+		
+		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
+		NSString *timeZone = [tmp1 name];
+		
+		timeZone = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
+		
+		NSString *tmpUrl = @"";
+		
+		tmpUrl = [NSString stringWithFormat:@"%@/team/%@/activities/%@", baseUrl, teamId, timeZone];
+		
+		bool firstParam = false;
+        
+		if (![maxCount isEqualToString:@""]){
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"?maxCount=%@", maxCount];
+			firstParam = true;
+		}
+		
+		if (![refreshFirst isEqualToString:@""]){
+			NSString *symbol;
+			if (firstParam) {
+				symbol = @"&";
+			}else {
+				symbol = @"?";
+			}
+			
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@refreshFirst=%@", symbol, refreshFirst];
+			firstParam = true;
+			if ([refreshFirst isEqualToString:@"true"] && ![newOnly isEqualToString:@""]) {
+				tmpUrl = [tmpUrl stringByAppendingFormat:@"&newOnly=%@", newOnly];
+			}
+		}
+		
+		if (![mostCurrentDate isEqualToString:@""]){
+            NSString *symbol;
+            if (firstParam) {
+                symbol = @"&";
+            }else {
+                symbol = @"?";
+            }
+			firstParam = true;
+            tmpUrl = [tmpUrl stringByAppendingFormat:@"%@mostCurrentDate=%@", symbol, mostCurrentDate];
+		}
+		
+		if (![totalNumberOfDays isEqualToString:@""]){			
+			NSString *symbol;
+			if (firstParam) {
+				symbol = @"&";
+			}else {
+				symbol = @"?";
+			}
+			
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@totalNumberOfDays=%@", symbol, totalNumberOfDays];
+		}
+        
+        if (![includeDetails isEqualToString:@""]){			
+			NSString *symbol;
+			if (firstParam) {
+				symbol = @"&";
+			}else {
+				symbol = @"?";
+			}
+			
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@includeDetails=%@", symbol, includeDetails];
+		}
+        
+        if (![mediaOnly isEqualToString:@""]){			
+			NSString *symbol;
+			if (firstParam) {
+				symbol = @"&";
+			}else {
+				symbol = @"?";
+			}
+			
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@mediaOnly=%@", symbol, mediaOnly];
+		}
+        
+        
+        if (![eventId isEqualToString:@""]){			
+			NSString *symbol;
+			if (firstParam) {
+				symbol = @"&";
+			}else {
+				symbol = @"?";
+			}
+			
+			tmpUrl = [tmpUrl stringByAppendingFormat:@"%@eventId=%@&eventType=game", symbol, eventId];
+		}
+        
+        
+		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: tmpUrl]];
+		
+		[request setValue:authentication forHTTPHeaderField:@"Authorization"];
+		[request setHTTPMethod: @"GET"];
+		
+		NSData *returnData = [ NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
+		NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+        
+		SBJSON *jsonParser = [SBJSON new];
+        
+		NSDictionary *response = (NSDictionary *) [jsonParser objectWithString:returnString error:NULL];
+        
+		NSString *apiStatus = [response valueForKey:@"apiStatus"];
+		
+		if ([apiStatus isEqualToString:@"100"]) {
+			NSArray *returnActivites = [response valueForKey:@"activities"];
+            
+			for (int i = 0; i < [returnActivites count]; i++) {
+				NSDictionary *tmpDict = [returnActivites objectAtIndex:i];
+				Activity *tmpActivity = [[Activity alloc] init];
+                
+				tmpActivity.activityText = [tmpDict valueForKey:@"text"];
+				tmpActivity.createdDate = [tmpDict valueForKey:@"createdDate"];
+                tmpActivity.lastEditDate = [tmpDict valueForKey:@"createdDate"];
+                
+				tmpActivity.cacheId = [tmpDict valueForKey:@"cacheId"];
+				
+                
+				tmpActivity.teamId = [tmpDict valueForKey:@"teamId"];
+				tmpActivity.teamName = [tmpDict valueForKey:@"teamName"];
+                tmpActivity.senderName = [tmpDict valueForKey:@"poster"];
+				
+				tmpActivity.activityId = [tmpDict valueForKey:@"activityId"];
+                
+				tmpActivity.numLikes = [[tmpDict valueForKey:@"numberOfLikeVotes"] intValue];
+				tmpActivity.numDislikes = [[tmpDict valueForKey:@"numberOfDislikeVotes"] intValue];
+				
+				tmpActivity.isVideo = [[tmpDict valueForKey:@"isVideo"] boolValue];
+                tmpActivity.isCurrentUser = [[tmpDict valueForKey:@"isCurrentUser"] boolValue];
+                
+                tmpActivity.vote = [tmpDict valueForKey:@"vote"];
+				tmpActivity.replies = [NSArray array];
+                
+				if ([tmpDict valueForKey:@"thumbNail"] != nil) {
+					tmpActivity.thumbnail = [tmpDict valueForKey:@"thumbNail"];
+				}else {
+					tmpActivity.thumbnail = @"";
+				}
+                
+                tmpActivity.participantRole = [tmpDict valueForKey:@"participantRole"];
+                tmpActivity.eventId = [tmpDict valueForKey:@"eventId"];
+                tmpActivity.eventType = [tmpDict valueForKey:@"eventType"];
+                tmpActivity.sport = [tmpDict valueForKey:@"sport"];
+                tmpActivity.startDate = [tmpDict valueForKey:@"eventStartDate"];
+                tmpActivity.description = [tmpDict valueForKey:@"eventDescription"];
+                
+                
+                
+                
+				
+				[activities addObject:tmpActivity];
+			}
+		}
+		statusReturn = apiStatus;
+		
+		[returnDictionary setValue:statusReturn forKey:@"status"];
+		[returnDictionary setValue:activities forKey:@"activities"];
+		return returnDictionary;
+		
+	}
+	@catch (NSException *e) {
+        
+        return [ServerAPI exceptionReturnValue:@"getActivityGamePhotos" :e];
+        
+	}
+	
+	
+}
+
+
 +(NSDictionary *)getActivityDetails:(NSString *)token activityIds:(NSArray *)activityIds{
     
     NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];

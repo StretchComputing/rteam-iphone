@@ -21,6 +21,7 @@
 
 
 @property (nonatomic, strong) UIActionSheet *disconnect;
+@property (nonatomic, strong) UIActionSheet *deleteTeamAction;
 @property (nonatomic, strong) IBOutlet UILabel *loadingLabel;
 @property (nonatomic, strong) IBOutlet  UIActivityIndicatorView *loadingActivity;
 @property (nonatomic, strong) NSString *errorString;

@@ -64,7 +64,7 @@
             self.success = true;
             self.question = [response valueForKey:@"passwordResetQuestion"];
             
-            if ([self.question isEqualToString:@""]) {
+            if ([self.question isEqualToString:@""] || (self.question == nil)) {
                 self.hasQuestion = false;
             }else {
                 self.hasQuestion = true;
@@ -110,8 +110,9 @@
 - (void)didFinish{
 	
 	//When background thread is done, return to main thread
-	[activity stopAnimating];
-	
+	[self.activity stopAnimating];
+    [self.resetButton setEnabled:YES];
+
 	if (self.success) {
 		
 		[self.error setHidden:YES];
@@ -137,7 +138,6 @@
 		}
 	}else {
 		self.error.text = self.errorString;
-		[self.resetButton setEnabled:YES];
 		[self.email setEnabled:YES];
 		[self.error setHidden:NO];
 	}

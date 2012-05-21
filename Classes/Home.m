@@ -50,6 +50,8 @@
 #import "GoogleAppEngine.h"
 #import "SelectCalendarEvent.h"
 #import "SelectTeamCal.h"
+#import "HomeAttendanceView.h"
+#import "HomeScoreView.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -62,7 +64,7 @@ refreshButton, questionButton, backHelpView, backViewTop, transViewBottom, trans
 myTeamsQbutton, activityQbutton, messagesQbutton, eventsQbutton, quickLinksQbutton, happeningNowQbutton, helpQbutton,
 inviteFanQbutton, refreshQbutton, backViewBottom, closeQuestionButton, helpExplanation,   isMoreShowing,  regTextView, regTextButton, registrationBackView, textBackView, textFrontView,
 currentDisplay, aboutButton, numObjects, shortcutButton, quickLinkChangeButton, quickLinkOkButton, quickLinkCancelButton, quickLinkCancelTwoButton,
-blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happeningNowView, scrollView, pageControl, homeAttendanceView, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview, postImageTeamId, postImageActivity, postImageErrorLabel, postImageText, activityPhotoEventId, postImageLabel, activityPhotoTeamId, postImageCreateGameSegment, postImageAlert, postImageIsCoord, postImageEvents, isGameVisible;
+blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, scrollView, pageControl, showLessButton, gamedayButton, gamedayAction, sendOrientation, imageDataToSend, postImageTextView, postImageBackView, postImageFrontView, postImageTableView, postImageSubmitButton, postImageCancelButton, postImagePreview, postImageTeamId, postImageActivity, postImageErrorLabel, postImageText, activityPhotoEventId, postImageLabel, activityPhotoTeamId, postImageCreateGameSegment, postImageAlert, postImageIsCoord, postImageEvents, isGameVisible, holdScoreView;
 
 
 
@@ -89,149 +91,138 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
         myAd.hidden = NO;
         bannerIsVisible = YES;
         
-        //self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
-        //self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
-        //self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
-        
     }else{
         myAd.hidden = YES;
         bannerIsVisible = NO;
         
-        //self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
-        //self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
-        //self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
+    }
 
-    }
     
-    if (self.isMoreShowing) {
-        [self moveDivider];
-    }
+    self.addMembersButton.hidden = YES;
     
-	self.addMembersButton.hidden = YES;
-	
-	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-	mainDelegate.returnHome = NO;
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    mainDelegate.returnHome = NO;
     
     if ((mainDelegate.justAddName != nil) &&! [mainDelegate.justAddName isEqualToString:@""]){
         
         self.justAddName = mainDelegate.justAddName;
         mainDelegate.justAddName = @"";
     }
-
+    
     self.messageBadge.hidden = YES;
-
-	self.isEditingQuickLinkOne = false;
-	
-	self.alreadyCalled1 = false;
-	self.alreadyCalled2 = false;
-	self.alreadyCalledCreate = false;
-
-	
-	self.haveTeamList = false;
-	[self performSelectorInBackground:@selector(getTeamList) withObject:nil];
-	[self performSelectorInBackground:@selector(getMessageThreadCount) withObject:nil];
-	[self performSelectorInBackground:@selector(getUserInfo) withObject:nil];
-	
-	[self.eventsNowActivity startAnimating];
-	[self performSelectorInBackground:@selector(getEventsNow) withObject:nil];
-
-	[self.changeQuickLinkBack setHidden:YES];
-	[self.displayIconsScrollBack setHidden:YES];
-	
-
-	
-	CAGradientLayer *gradient = [CAGradientLayer layer];
-	gradient.frame = self.changeQuickLink.bounds;
-	UIColor *color1 =  [UIColor colorWithRed:34/255.0 green:145/255.0 blue:34/255.0 alpha:0.9];
-	//UIColor *color1 = [UIColor whiteColor];
-	UIColor *color2 = [UIColor colorWithRed:.386 green:.704 blue:.386 alpha:0.9];
-	gradient.colors = [NSArray arrayWithObjects:(id)[color2 CGColor], (id)[color1 CGColor], nil];
-	//[self.changeQuickLink.layer insertSublayer:gradient atIndex:0];
-	self.changeQuickLink.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"greenbackSmall.png"]];
     
-	CAGradientLayer *gradient1 = [CAGradientLayer layer];
-	gradient1.frame = self.displayIconsScroll.bounds;
-	gradient1.colors = [NSArray arrayWithObjects:(id)[color2 CGColor], (id)[color1 CGColor], nil];
-	//[self.displayIconsScroll.layer insertSublayer:gradient1 atIndex:0];
+    self.isEditingQuickLinkOne = false;
+    
+    self.alreadyCalled1 = false;
+    self.alreadyCalled2 = false;
+    self.alreadyCalledCreate = false;
+    
+    
+    self.haveTeamList = false;
+    [self performSelectorInBackground:@selector(getTeamList) withObject:nil];
+    [self performSelectorInBackground:@selector(getMessageThreadCount) withObject:nil];
+    [self performSelectorInBackground:@selector(getUserInfo) withObject:nil];
+    
+    [self.eventsNowActivity startAnimating];
+    [self performSelectorInBackground:@selector(getEventsNow) withObject:nil];
+    
+    [self.changeQuickLinkBack setHidden:YES];
+    [self.displayIconsScrollBack setHidden:YES];
+    
+    
+    
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = self.changeQuickLink.bounds;
+    UIColor *color1 =  [UIColor colorWithRed:34/255.0 green:145/255.0 blue:34/255.0 alpha:0.9];
+    //UIColor *color1 = [UIColor whiteColor];
+    UIColor *color2 = [UIColor colorWithRed:.386 green:.704 blue:.386 alpha:0.9];
+    gradient.colors = [NSArray arrayWithObjects:(id)[color2 CGColor], (id)[color1 CGColor], nil];
+    //[self.changeQuickLink.layer insertSublayer:gradient atIndex:0];
+    self.changeQuickLink.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"greenbackSmall.png"]];
+    
+    CAGradientLayer *gradient1 = [CAGradientLayer layer];
+    gradient1.frame = self.displayIconsScroll.bounds;
+    gradient1.colors = [NSArray arrayWithObjects:(id)[color2 CGColor], (id)[color1 CGColor], nil];
+    //[self.displayIconsScroll.layer insertSublayer:gradient1 atIndex:0];
     self.displayIconsScroll.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"greenbackSmall.png"]];
-
-	
-	self.rowNewQuickTeam = -1;
-	
-	self.changeQuickLink.layer.masksToBounds = YES;
-	self.changeQuickLink.layer.cornerRadius = 7.0;
-	self.displayIconsScroll.layer.masksToBounds = YES;
-	self.displayIconsScroll.layer.cornerRadius = 7.0;
-	
-	self.changeQuickLinkBack.layer.masksToBounds = YES;
-	self.changeQuickLinkBack.layer.cornerRadius = 7.0;
-	self.displayIconsScrollBack.layer.masksToBounds = YES;
-	self.displayIconsScrollBack.layer.cornerRadius = 7.0;
-	
-	self.newQuickLinkAlias.delegate = self;
-	
-	self.newQuickLinkTable.delegate = self;
-	self.newQuickLinkTable.dataSource = self;
-	self.newQuickLinkTable.backgroundColor = [UIColor clearColor];
-
-    self.postImageBackView.layer.masksToBounds = YES;
-	self.postImageBackView.layer.cornerRadius = 7.0;
-	self.postImageFrontView.layer.masksToBounds = YES;
-	self.postImageFrontView.layer.cornerRadius = 7.0;
     
-
-	[self addQuickLinks];
-
-
-	NSString *ios = [[UIDevice currentDevice] systemVersion];
-		
-	if (!(![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"])) {
-		[self.eventsButton setHidden:YES];
-	
-	}
-
-	
-	if ([mainDelegate.phoneOnlyArray count] > 0) {
-		
-		self.phoneOnlyArray = [NSMutableArray arrayWithArray:mainDelegate.phoneOnlyArray];
-		mainDelegate.phoneOnlyArray = [NSArray array];
-		bool canText = false;
-		
-		NSString *ios = [[UIDevice currentDevice] systemVersion];
-		
-		
-		if ((![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"])) {
-			
-			if ([MFMessageComposeViewController canSendText]) {
-				
-				canText = true;
-				
-			}
-		}else { 
-			if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"sms://"]]){
-				canText = true;
-			}
-		}
-		
-		if (canText) {
-			NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Would you like to send them a text right now with information on how to sign up?";
-			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
-			[alert1 show];
-		}else {
-			NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Please notify them that they must send the text 'yes' to 'join@rteam.com' to sign up.";
-			UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-			[alert1 show];
-		}
-		
-		
-		
-	}
-
-  
-	[self.view bringSubviewToFront:myAd];
-    //[self.view bringSubviewToFront:self.bottomBar];
+    
+    self.rowNewQuickTeam = -1;
+    
+    self.changeQuickLink.layer.masksToBounds = YES;
+    self.changeQuickLink.layer.cornerRadius = 7.0;
+    self.displayIconsScroll.layer.masksToBounds = YES;
+    self.displayIconsScroll.layer.cornerRadius = 7.0;
+    
+    self.changeQuickLinkBack.layer.masksToBounds = YES;
+    self.changeQuickLinkBack.layer.cornerRadius = 7.0;
+    self.displayIconsScrollBack.layer.masksToBounds = YES;
+    self.displayIconsScrollBack.layer.cornerRadius = 7.0;
+    
+    self.newQuickLinkAlias.delegate = self;
+    
+    self.newQuickLinkTable.delegate = self;
+    self.newQuickLinkTable.dataSource = self;
+    self.newQuickLinkTable.backgroundColor = [UIColor clearColor];
+    
+    self.postImageBackView.layer.masksToBounds = YES;
+    self.postImageBackView.layer.cornerRadius = 7.0;
+    self.postImageFrontView.layer.masksToBounds = YES;
+    self.postImageFrontView.layer.cornerRadius = 7.0;
+    
+    
+    [self addQuickLinks];
+    
+    
+    NSString *ios = [[UIDevice currentDevice] systemVersion];
+    
+    if (!(![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"])) {
+        [self.eventsButton setHidden:YES];
+        
+    }
+    
+    
+    if ([mainDelegate.phoneOnlyArray count] > 0) {
+        
+        self.phoneOnlyArray = [NSMutableArray arrayWithArray:mainDelegate.phoneOnlyArray];
+        mainDelegate.phoneOnlyArray = [NSArray array];
+        bool canText = false;
+        
+        NSString *ios = [[UIDevice currentDevice] systemVersion];
+        
+        
+        if ((![ios isEqualToString:@"3.0"] && ![ios isEqualToString:@"3.0.1"] && ![ios isEqualToString:@"3.1"] && ![ios isEqualToString:@"3.1.2"] && ![ios isEqualToString:@"3.1.3"])) {
+            
+            if ([MFMessageComposeViewController canSendText]) {
+                
+                canText = true;
+                
+            }
+        }else { 
+            if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"sms://"]]){
+                canText = true;
+            }
+        }
+        
+        if (canText) {
+            NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Would you like to send them a text right now with information on how to sign up?";
+            UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send Text", nil];
+            [alert1 show];
+        }else {
+            NSString *message1 = @"You have added at least one member with a phone number and no email address.  We can still send them rTeam messages if they sign up for our free texting service first.  Please notify them that they must send the text 'yes' to 'join@rteam.com' to sign up.";
+            UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Text Message" message:message1 delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert1 show];
+        }
+        
+        
+        
+    }
+    
+    
+    [self.view bringSubviewToFront:myAd];
     [self.view bringSubviewToFront:self.postImageBackView];
 
+    
 	
 }
 
@@ -476,7 +467,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
 
 - (void)viewDidLoad {
 
-   
+    
     [self performSelector:@selector(adiad) withObject:nil afterDelay:5.0];
     
     self.postImageEvents = [NSMutableArray array];
@@ -487,23 +478,12 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, homeScoreView, happe
     self.showLessButton.hidden = YES;
 	self.currentDisplay = 1;
     self.registrationBackView.hidden = YES;
-    homeScoreView = [[HomeScoreView alloc] init];
-    homeScoreView.view.frame = CGRectMake(0, 322, 320, 301);
-    homeScoreView.view.hidden = YES;
+    
     self.isGameVisible = false;
 
-    homeScoreView.homeSuperView = self;
 
     
-    homeAttendanceView = [[HomeAttendanceView alloc] init];
-    homeAttendanceView.view.frame = CGRectMake(0, 322, 320, 301);
-    homeAttendanceView.view.hidden = YES;
-    homeAttendanceView.homeSuperView = self;
-
-    [self.view addSubview:self.homeAttendanceView.view];
-    [self.view addSubview:self.homeScoreView.view];
-
-    
+     
 	self.title = @"rTeam";
 		
 	UIBarButtonItem *btn=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
@@ -1787,7 +1767,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmp1Button.sport = tmp1.sport;
                             tmp1Button.eventDescription = tmp1.eventDescription;
                             tmp1Button.attendees = [NSArray arrayWithArray:tmp1.attendees];
-                            
+                            tmp1Button.opponent = tmp1.opponent;
+
                             tmp1Button.currentMemberId = tmp1.currentMemberId;
                             tmp1Button.currentMemberResponse = tmp1.currentMemberResponse;
                             tmp1Button.messageThreadId = tmp1.messageThreadId;
@@ -1965,7 +1946,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             
                             tmp1Button.attendees = [NSArray arrayWithArray:tmp1.attendees];
 
-                            
+                            tmp1Button.opponent = tmp1.opponent;
+
                             tmp1Button.yes = tmp1.yes;
                             tmp1Button.no = tmp1.no;
                             tmp1Button.maybe = tmp1.maybe;
@@ -2069,6 +2051,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.noreply = tmp2.noreply;
                                 tmp2Button.eventStringDate = tmp2.eventDate;
                                 tmp2Button.attendees = [NSArray arrayWithArray:tmp2.attendees];
+
+                                tmp2Button.opponent = tmp2.opponent;
 
                                 tmp2Button.eventDescription = tmp2.eventDescription;
 
@@ -2241,6 +2225,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                 tmp2Button.eventDescription = tmp2.eventDescription;
                                 tmp2Button.eventStringDate = tmp2.eventDate;
                                 tmp2Button.attendees = [NSArray arrayWithArray:tmp2.attendees];
+                                tmp2Button.opponent = tmp2.opponent;
 
                                 tmp2Button.yes = tmp2.yes;
                                 tmp2Button.no = tmp2.no;
@@ -2342,15 +2327,50 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [TraceSession addEventToSession:@"Home Page - Happening Now Button Clicked"];
 
-    if (self.isMoreShowing) {
+    
+    if ([sender class] == [AttendingButton class]) {
         
-        if ([sender class] == [AttendingButton class]) {
-            homeAttendanceView.view.hidden = NO;
-            homeScoreView.view.hidden = YES;
-            self.isGameVisible = false;
-
-            AttendingButton *tmp = (AttendingButton *)sender;
+        AttendingButton *tmp = (AttendingButton *)sender;
+        
+        if ([tmp.canceledLabel.text isEqualToString:@""] || tmp.canceledLabel.text == nil) {
             
+            HomeAttendanceView *attendanceView = [[HomeAttendanceView alloc] init];
+            
+            
+            attendanceView.teamName = tmp.teamName;
+            attendanceView.eventDate = tmp.eventDate;
+            attendanceView.eventType = tmp.eventType;
+            attendanceView.teamId = tmp.teamId;
+            attendanceView.participantRole = tmp.participantRole;
+            attendanceView.eventId = tmp.eventId;
+            attendanceView.sport = tmp.sport;
+            attendanceView.eventStringDate = tmp.eventStringDate;
+            attendanceView.attendees = [NSArray arrayWithArray:tmp.attendees];
+            
+            attendanceView.latitude = tmp.latitude;
+            attendanceView.longitude = tmp.longitude;
+            attendanceView.opponent = tmp.opponent;
+            
+            attendanceView.currentMemberResponse = tmp.currentMemberResponse;
+            
+            if (tmp.currentMemberId == nil) {
+                tmp.currentMemberId = @"";
+            }
+            attendanceView.currentMemberId = [NSString stringWithString:tmp.currentMemberId];
+            
+            attendanceView.messageThreadId = tmp.messageThreadId;
+            attendanceView.eventDescription = tmp.eventDescription;
+            
+            attendanceView.yesCount = [NSString stringWithFormat:@"%d", tmp.yes];
+            attendanceView.noCount = [NSString stringWithFormat:@"%d", tmp.no];
+            attendanceView.noReplyCount = [NSString stringWithFormat:@"%d", tmp.noreply];
+            attendanceView.maybeCount = [NSString stringWithFormat:@"%d", tmp.maybe];
+                        
+            [self.navigationController presentModalViewController:attendanceView animated:YES];
+            
+            
+            /*
+            self.homeAttendanceView.view.hidden = NO;
             
             homeAttendanceView.teamName = tmp.teamName;
             homeAttendanceView.eventDate = tmp.eventDate;
@@ -2359,9 +2379,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             homeAttendanceView.participantRole = tmp.participantRole;
             homeAttendanceView.eventId = tmp.eventId;
             homeAttendanceView.sport = tmp.sport;
-            homeAttendanceView.eventDescription = tmp.eventDescription;
             homeAttendanceView.eventStringDate = tmp.eventStringDate;
             homeAttendanceView.attendees = [NSArray arrayWithArray:tmp.attendees];
+            
+            homeAttendanceView.latitude = tmp.latitude;
+            homeAttendanceView.longitude = tmp.longitude;
+            homeAttendanceView.opponent = tmp.opponent;
             
             homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
             
@@ -2369,157 +2392,83 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 tmp.currentMemberId = @"";
             }
             homeAttendanceView.currentMemberId = [NSString stringWithString:tmp.currentMemberId];
+            
             homeAttendanceView.messageThreadId = tmp.messageThreadId;
-
-        
+            homeAttendanceView.eventDescription = tmp.eventDescription;
             
             homeAttendanceView.yesCount = [NSString stringWithFormat:@"%d", tmp.yes];
             homeAttendanceView.noCount = [NSString stringWithFormat:@"%d", tmp.no];
             homeAttendanceView.noReplyCount = [NSString stringWithFormat:@"%d", tmp.noreply];
             homeAttendanceView.maybeCount = [NSString stringWithFormat:@"%d", tmp.maybe];
             
-            homeAttendanceView.latitude = tmp.latitude;
-            homeAttendanceView.longitude = tmp.longitude;
-
             [homeAttendanceView setLabels];
-
+             */
         }else{
-            
-            ScoreButton *tmp = (ScoreButton *)sender;
-            
-            homeScoreView.view.hidden = NO;
-            self.isGameVisible = true;
-            
-            homeAttendanceView.view.hidden = YES;
-            homeScoreView.teamName = tmp.teamName;
-            homeScoreView.scoreUs = tmp.scoreUs;
-            homeScoreView.scoreThem = tmp.scoreThem;
-            homeScoreView.interval = tmp.interval;
-            
-            homeScoreView.eventDate = tmp.eventDate;
-            homeScoreView.eventDescription = tmp.eventDescription;
-            homeScoreView.eventStringDate = tmp.eventStringDate;
 
+            self.undoEventType = tmp.eventType;
+            self.undoEventId = tmp.eventId;
+            self.undoTeamId = tmp.teamId;
             
-            homeScoreView.teamId = tmp.teamId;
-            homeScoreView.participantRole = tmp.participantRole;
-            homeScoreView.eventId = tmp.eventId;
-            homeScoreView.sport = tmp.sport;
-            
-            
-            homeScoreView.latitude = tmp.latitude;
-            homeScoreView.longitude = tmp.longitude;
-            homeScoreView.opponent = tmp.opponent;
-            
-            
-            [homeScoreView setLabels];
+            self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+            self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
+            [self.undoCancel showInView:self.view];
         }
         
     }else{
-        bool move = true;
         
-        if ([sender class] == [AttendingButton class]) {
+        ScoreButton *tmp = (ScoreButton *)sender;
+        
+        if ([tmp.canceledLabel.text isEqualToString:@""] || tmp.canceledLabel.text == nil) {
             
-            AttendingButton *tmp = (AttendingButton *)sender;
-                        
-            if ([tmp.canceledLabel.text isEqualToString:@""] || tmp.canceledLabel.text == nil) {
-                self.homeAttendanceView.view.hidden = NO;
-
-                homeAttendanceView.teamName = tmp.teamName;
-                homeAttendanceView.eventDate = tmp.eventDate;
-                homeAttendanceView.eventType = tmp.eventType;
-                homeAttendanceView.teamId = tmp.teamId;
-                homeAttendanceView.participantRole = tmp.participantRole;
-                homeAttendanceView.eventId = tmp.eventId;
-                homeAttendanceView.sport = tmp.sport;
-                homeAttendanceView.eventStringDate = tmp.eventStringDate;
-                homeAttendanceView.attendees = [NSArray arrayWithArray:tmp.attendees];
-
-                homeAttendanceView.latitude = tmp.latitude;
-                homeAttendanceView.longitude = tmp.longitude;
-                
-                homeAttendanceView.currentMemberResponse = tmp.currentMemberResponse;
-                
-                if (tmp.currentMemberId == nil) {
-                    tmp.currentMemberId = @"";
-                }
-                homeAttendanceView.currentMemberId = [NSString stringWithString:tmp.currentMemberId];
-                
-                homeAttendanceView.messageThreadId = tmp.messageThreadId;
-                homeAttendanceView.eventDescription = tmp.eventDescription;
-                
-                homeAttendanceView.yesCount = [NSString stringWithFormat:@"%d", tmp.yes];
-                homeAttendanceView.noCount = [NSString stringWithFormat:@"%d", tmp.no];
-                homeAttendanceView.noReplyCount = [NSString stringWithFormat:@"%d", tmp.noreply];
-                homeAttendanceView.maybeCount = [NSString stringWithFormat:@"%d", tmp.maybe];
-                
-                [homeAttendanceView setLabels];
-            }else{
-                move = false;
-                self.undoEventType = tmp.eventType;
-                self.undoEventId = tmp.eventId;
-                self.undoTeamId = tmp.teamId;
-                
-                self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
-                self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
-                [self.undoCancel showInView:self.view];
-            }
-          
+            
+            HomeScoreView *scoreView = [[HomeScoreView alloc] init];
+            scoreView.home = true;
+            
+            
+            scoreView.teamName = tmp.teamName;
+            scoreView.scoreUs = tmp.scoreUs;
+            
+            scoreView.scoreThem = tmp.scoreThem;
+            scoreView.interval = tmp.interval;
+            
+            tmp.eventDate = tmp.eventDate;
+            
+            scoreView.teamId = tmp.teamId;
+            scoreView.eventDescription = tmp.description;
+            
+            scoreView.participantRole = tmp.participantRole;
+            scoreView.eventId = tmp.eventId;
+            scoreView.sport = tmp.sport;
+            
+            scoreView.eventStringDate = tmp.eventStringDate;
+            
+            scoreView.latitude = tmp.latitude;
+            scoreView.longitude = tmp.longitude;
+            scoreView.opponent = tmp.opponent;
+            
+            [scoreView setLabels];
+            
+            
+            [scoreView startTimer];
+            
+            
+            [self.navigationController presentModalViewController:scoreView animated:YES];
+            
+            
+            
         }else{
             
-            ScoreButton *tmp = (ScoreButton *)sender;
+            self.undoEventType = @"game";
+            self.undoEventId = tmp.eventId;
+            self.undoTeamId = tmp.teamId;
             
-            if ([tmp.canceledLabel.text isEqualToString:@""] || tmp.canceledLabel.text == nil) {
-                
-                homeScoreView.view.hidden = NO;
-                self.isGameVisible = true;
-
-                homeScoreView.teamName = tmp.teamName;
-                homeScoreView.scoreUs = tmp.scoreUs;
-                homeScoreView.scoreThem = tmp.scoreThem;
-                homeScoreView.interval = tmp.interval;
-                
-                homeScoreView.eventDate = tmp.eventDate;
-                
-                homeScoreView.teamId = tmp.teamId;
-                homeScoreView.eventDescription = tmp.eventDescription;
-                
-                homeScoreView.participantRole = tmp.participantRole;
-                homeScoreView.eventId = tmp.eventId;
-                homeScoreView.sport = tmp.sport;
-                
-                homeScoreView.eventStringDate = tmp.eventStringDate;
-                
-                homeScoreView.latitude = tmp.latitude;
-                homeScoreView.longitude = tmp.longitude;
-                homeScoreView.opponent = tmp.opponent;
-                
-                [homeScoreView setLabels];
-
-                
-                [homeScoreView startTimer];
-                
-
-            }else{
-                move = false;
-                
-                self.undoEventType = @"game";
-                self.undoEventId = tmp.eventId;
-                self.undoTeamId = tmp.teamId;
-                
-                self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
-                self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
-                [self.undoCancel showInView:self.view];
-            }
+            self.undoCancel = [[UIActionSheet alloc] initWithTitle:@"Do you want to remove this event from the schedule, or make it active again?" delegate:self cancelButtonTitle:@"Back" destructiveButtonTitle:@"Remove Event" otherButtonTitles:@"Make Active", nil];
+            self.undoCancel.actionSheetStyle = UIActionSheetStyleDefault;
+            [self.undoCancel showInView:self.view];
         }
-        
-        if (move) {
-            [self moveDivider];
-
-        }
-        
-
     }
+    
+
     
 }
 
@@ -2806,21 +2755,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if (self.isMoreShowing) {
             
             
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:1.0];
-                        
-            CGRect attFrame;
-            attFrame = self.homeAttendanceView.view.frame;
-            attFrame.size.height -= 50;
-            self.homeAttendanceView.view.frame = attFrame;
-            
-            CGRect attFrame1;
-            attFrame1 = self.homeScoreView.view.frame;
-            attFrame1.size.height -= 50;
-            self.homeScoreView.view.frame = attFrame1;
-            
-            
-            [UIView commitAnimations];
             
         }else{
             
@@ -2828,25 +2762,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             [UIView setAnimationDuration:1.0];
             
             [self.view bringSubviewToFront:self.registrationBackView];
-            
-            CGRect hapFrame;
-            hapFrame = self.happeningNowView.frame;
-            hapFrame.origin.y -= 50;
-            //self.happeningNowView.frame = hapFrame;
-            
-            CGRect attFrame;
-            attFrame = self.homeAttendanceView.view.frame;
-            attFrame.origin.y -= 50;
-            self.homeAttendanceView.view.frame = attFrame;
-            
-            CGRect scoreFrame;
-            scoreFrame = self.homeScoreView.view.frame;
-            scoreFrame.origin.y -= 50;
-            self.homeScoreView.view.frame = scoreFrame;
-            
-            //self.bottomBar.frame = CGRectMake(0, 322, 320, 44);
-            //self.refreshQbutton.frame = CGRectMake(275, 319, 50, 50);
-            //self.aboutButton.frame = CGRectMake(85, 325, 150, 35);
+          
             
             [UIView commitAnimations];
             
@@ -2893,22 +2809,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (self.isMoreShowing) {
             
-            
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:1.0];
-            
-            CGRect attFrame;
-            attFrame = self.homeAttendanceView.view.frame;
-            attFrame.size.height += 50;
-            self.homeAttendanceView.view.frame = attFrame;
-            
-            CGRect attFrame1;
-            attFrame1 = self.homeScoreView.view.frame;
-            attFrame1.size.height += 50;
-            self.homeScoreView.view.frame = attFrame1;
-            
-            
-            [UIView commitAnimations];
+         
             
         }else{
             
@@ -2917,25 +2818,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [self.view bringSubviewToFront:self.registrationBackView];
             
-            CGRect hapFrame;
-            hapFrame = self.happeningNowView.frame;
-            hapFrame.origin.y += 50;
-            //self.happeningNowView.frame = hapFrame;
-            
-            CGRect attFrame;
-            attFrame = self.homeAttendanceView.view.frame;
-            attFrame.origin.y += 50;
-            self.homeAttendanceView.view.frame = attFrame;
-            
-            CGRect scoreFrame;
-            scoreFrame = self.homeScoreView.view.frame;
-            scoreFrame.origin.y += 50;
-            self.homeScoreView.view.frame = scoreFrame;
-            
-            
-            //self.bottomBar.frame = CGRectMake(0, 372, 320, 44);
-            //self.refreshQbutton.frame = CGRectMake(275, 369, 50, 50);
-            //self.aboutButton.frame = CGRectMake(85, 375, 150, 35);
+      
     
             
             [UIView commitAnimations];
@@ -3751,216 +3634,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 -(void)hide{
-    homeScoreView.view.hidden = YES;
-    homeAttendanceView.view.hidden = YES;
+
     self.isGameVisible = false;
 
 
 }
 
--(void)showLessAction{
-    
-    if (self.isMoreShowing) {
-        [self moveDivider];
-        [self refresh];
-    }
-    
-}
 
 
--(void)moveDivider{
-  
 
-    if (self.isMoreShowing) {
-        
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        self.navigationController.navigationBarHidden = NO;
-
-        self.showLessButton.hidden = YES;
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:1.0];
-        
-        
-        self.bottomBar.hidden = NO;
-        //[self.view bringSubviewToFront:self.bottomBar];
-        [self.view bringSubviewToFront:self.postImageBackView];
-
-
-        CGRect frame = self.happeningNowView.frame;
-        if (self.bannerIsVisible) {
-            frame.origin.y = 201;
-        }else{
-            frame.origin.y = 251;
-        }
-        //self.happeningNowView.frame = frame;
-
-        
-        CGRect frame1 = self.homeAttendanceView.view.frame;
-        if (self.bannerIsVisible) {
-            frame1.origin.y = 322;
-        }else{
-            frame1.origin.y = 372;
-        }
-        self.homeAttendanceView.view.frame = frame1;
-        
-        CGRect frame2 = self.homeScoreView.view.frame;
-        if (self.bannerIsVisible) {
-            frame2.origin.y = 322;
-        }else{
-            frame2.origin.y = 372;
-        }
-        self.homeScoreView.view.frame = frame2;
-        [self.homeScoreView doReset];
-        
-     
-        [UIView commitAnimations];
-        
-        [self performSelector:@selector(hide) withObject:nil afterDelay:1.0];
-
-        self.isMoreShowing = NO;
-        
-        self.isGameVisible = false;
-        
-        myAd.frame = CGRectMake(0, self.view.frame.size.height - 50, 320, 50);
-
-
-    }else{
-   
-        self.navigationController.navigationBarHidden = YES;
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-
-        self.showLessButton.hidden = NO;
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:1.0];
-        
-        
-        int init = 0;
-        bool isAd = false;
-        if (self.bannerIsVisible) {
-            init = 50;
-            isAd = true;
-        }
-  
-        homeAttendanceView.view.clipsToBounds = YES;
-        
-        
-        CGRect frame = self.happeningNowView.frame;
-        frame.origin.y = 0;
-        //self.happeningNowView.frame = frame;
-        
-        
-        if (self.homeAttendanceView.view.hidden == NO) {
-            
-            self.homeAttendanceView.isFullScreen = true;
-            [self.homeAttendanceView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
-            
-            CGRect frame = self.homeAttendanceView.view.frame;
-            frame.origin.y = 0;
-            if (isAd) {
-                frame.size.height = 245 + 121 + 44;
-            }else{
-                frame.size.height = 295 + 121 + 44;
-            }
-
-            self.homeAttendanceView.view.frame = frame;
-            
-        }else{
-            
-            CGRect frame1 = self.homeAttendanceView.view.frame;
-            frame1.origin.y = 121;
-            if (isAd) {
-                frame1.size.height = 245;
-            }else{
-                frame1.size.height = 295;
-            }
-            self.homeAttendanceView.view.frame = frame1;
-            
-        }
-        
-        
-        if (self.homeScoreView.view.hidden == NO) {
-            
-            self.homeScoreView.isFullScreen = true;
-            [self.homeScoreView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
-            
-            CGRect frame = self.homeScoreView.view.frame;
-            frame.origin.y = 0;
-            if (isAd) {
-                frame.size.height = 245 + 121 + 44;
-            }else{
-                frame.size.height = 295 + 121 + 44;
-            }
-            
-            self.homeScoreView.view.frame = frame;
-            
-        }else{
-            
-            CGRect frame1 = self.homeScoreView.view.frame;
-            frame1.origin.y = 121;
-            if (isAd) {
-                frame1.size.height = 245;
-            }else{
-                frame1.size.height = 295;
-            }
-            self.homeScoreView.view.frame = frame1;
-            
-        }
-        
-        
-      
-        
-        
-        
-        
-        /*
-        CGRect frame2 = self.homeScoreView.view.frame;
-        frame2.origin.y = 121;
-        if (isAd) {
-            frame2.size.height = 245;
-        }else{
-            frame2.size.height = 295;
-        }
-        self.homeScoreView.view.frame = frame2;
-
-        
-        if (self.homeScoreView.view.hidden == NO) {
-            
-            self.homeScoreView.isFullScreen = true;
-            [self.homeScoreView.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
-            
-            CGRect frame = self.homeScoreView.view.frame;
-            frame.origin.y = 0;
-            frame.size.height += 121;
-            self.homeScoreView.view.frame = frame;
-            
-        }
-        
-        */
-        
-        
-        
-        self.bottomBar.hidden = YES;
-       
-        
-        [UIView commitAnimations];
-        
-        homeScoreView.initY = init;
-        homeAttendanceView.initY = 0;
-        self.isMoreShowing = YES;
-        
-        if (self.bannerIsVisible){
-            [self.view bringSubviewToFront:myAd];
-
-        }
-        
-    
-        myAd.frame = CGRectMake(0, 430, 320, 50);
-
-
-    }
-     
-
-}
 
 -(void)regText{
     [self.view bringSubviewToFront:self.registrationBackView];
@@ -4305,8 +3987,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     quickLinkCancelTwoButton = nil;
     blueArrow = nil;
     
-    homeScoreView = nil;
-    homeAttendanceView = nil;
+
     happeningNowView = nil;
     scrollView = nil;
     pageControl = nil;

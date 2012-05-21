@@ -19,14 +19,47 @@
 #import "NewActivity.h"
 #import "TraceSession.h"
 #import "MapLocation.h"
+#import "Activity.h"
+#import "Base64.h"
+#import "ImageDisplayMultiple.h"
 
 @implementation HomeScoreView
-@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView, latitude,longitude, opponent, mapButton, myTimer, linkLine, linkLabel;
+@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView, latitude,longitude, opponent, mapButton, myTimer, linkLine, linkLabel, gameday, cameraButton, isSwitch, gameImageArray, fullBackView, imageView, imageButton, imageBackView, rightButton, leftButton, currentImageDisplayCell, home, sendOrientation, postImageLabel, postImagePreview, postImageActivity, postImageBackView, postImageTextView, postImageFrontView, postImageErrorLabel, postImageCancelButton, postImageSubmitButton, imageDataToSend, postImageText, errorString, picCount;
 
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    if (self.gameday || self.home) {
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        self.navigationController.navigationBar.hidden = YES;
+        [self setLabels];
+    }
+    
+  
+}
 - (void)viewDidLoad
 {
+    self.gameImageArray = [NSMutableArray array];
+    self.postImageBackView.hidden = YES;
+    self.scoreButton.enabled = YES;
+    self.cameraButton.enabled = YES;
+
+
+    
+    self.postImageBackView.layer.masksToBounds = YES;
+    self.postImageBackView.layer.cornerRadius = 5.0;
+    self.postImageFrontView.layer.masksToBounds = YES;
+    self.postImageFrontView.layer.cornerRadius = 5.0;
     [TraceSession addEventToSession:@"HomeScoreView - View Did Load"];
     
+    self.fullBackView.hidden = YES;
+    
+    if (self.gameday) {
+        self.cameraButton.hidden = YES;
+    }else{
+        self.cameraButton.hidden = NO;
+    }
    
     self.addUsButton.hidden = YES;
     self.subUsButton.hidden = YES;
@@ -58,6 +91,9 @@
 
 -(void)setLabels{
     
+    self.picCount = [self.gameImageArray count];
+    [self performSelectorInBackground:@selector(getGameImages) withObject:nil];
+    
     if (![self.latitude isEqualToString:@""] && (self.latitude != nil)) {
         self.mapButton.hidden = NO;
     }else{
@@ -87,6 +123,7 @@
     }else{
         self.themLabel.text = [NSString stringWithString:self.opponent];
     }
+    
     
     self.scoreUsLabel.text = self.scoreUs;
     self.scoreThemLabel.text = self.scoreThem;
@@ -122,9 +159,10 @@
     frame2.size.width = size - 2;
     self.linkLine.frame = frame2;
     
+    if (!self.myTimer.isValid){
+        [self startTimer];
+    }
     
-
-     
     
 }
 
@@ -252,46 +290,11 @@
 }
 -(void)fullScreen{
     
-    [self.myTimer invalidate];
-    
-    if (self.homeSuperView == nil) {
-        self.view.hidden = YES;
-    }else{
-        
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:1.0];
-        
-        if (self.isFullScreen) {
-            self.isFullScreen = false;
-            [self.fullScreenButton setImage:[UIImage imageNamed:@"fullScreen.jpeg"] forState:UIControlStateNormal];
-            
-            //CGRect frame = self.view.frame;
-            //frame.origin.y = 121;
-            //frame.size.height -= 121;
-            //self.view.frame = frame;
-            
-            if (self.isKeepingScore) {
-                [self keepScore];
-            }
-            
-            [self.homeSuperView moveDivider];
-            
-            
-        }else{
-            self.isFullScreen = true;
-            [self.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
-            
-            CGRect frame = self.view.frame;
-            frame.origin.y = 0;
-            frame.size.height += 121;
-            self.view.frame = frame;
-        }
-        
-        [UIView commitAnimations];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 
-        
-    }
-   
+    [self dismissModalViewControllerAnimated:YES];
+    
+       
 }
 
 -(void)keepScore{
@@ -315,24 +318,22 @@
         
         [self startTimer];
         
+        if ([self.gameImageArray count] > 0) {
+            self.fullBackView.hidden = NO;
+        }
+        
     }else{
         
         [self.myTimer invalidate];
         
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                             action:@"Keep Score - Happening Now"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:nil]) {
-        }
+    
         
         [self.scoreButton setTitle:@"Save Score" forState:UIControlStateNormal];
 
         
-        if (!self.isFullScreen) {
-            [self fullScreen];
-        }
+       // if (!self.isFullScreen) {
+         //   [self fullScreen];
+        //}
         self.isKeepingScore = true;
         
         self.addUsButton.hidden = NO;
@@ -347,6 +348,7 @@
             self.subIntervalButton.hidden = NO;
         }
    
+        self.fullBackView.hidden = YES;
     }
 }
 
@@ -354,17 +356,21 @@
         
     [self.myTimer invalidate];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-
-    
-    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                         action:@"Go To Event Page - Happening Now"
-                                          label:mainDelegate.token
-                                          value:-1
-                                      withError:nil]) {
-    }
-    
+    if (self.gameday) {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        [self dismissModalViewControllerAnimated:YES];
+    }else{
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                             action:@"Go To Event Page - Happening Now"
+                                              label:mainDelegate.token
+                                              value:-1
+                                          withError:nil]) {
+        }
+        
         NSString *tmpUserRole = self.participantRole;
         NSString *tmpTeamId = self.teamId;
         
@@ -396,25 +402,13 @@
             fans.teamId = self.teamId;
             fans.userRole = self.participantRole;
             fans.gameId = self.eventId;
-                        
+            
+            
             UINavigationController *navController = [[UINavigationController alloc] init];
             
             [navController pushViewController:currentGameTab animated:YES];
             
-            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-            
-            id mainViewController = [self.view.superview nextResponder];
-            
-            if ([mainViewController class] == [Home class]) {
-                Home *tmp = (Home *)mainViewController;
-                [tmp.navigationController presentModalViewController:navController animated:YES];
-                
-            }
-            if ([mainViewController class] == [NewActivity class]) {
-                NewActivity *tmp = (NewActivity *)mainViewController;
-                [tmp.navigationController presentModalViewController:navController animated:YES];
-                
-            }
+            [self presentModalViewController:navController animated:NO];
             
         }else {
             
@@ -444,23 +438,11 @@
             
             [navController pushViewController:currentGameTab animated:YES];
             
-            navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-                    
-            id mainViewController = [self.view.superview nextResponder];
-            
-            if ([mainViewController class] == [Home class]) {
-                Home *tmp = (Home *)mainViewController;
-                [tmp.navigationController presentModalViewController:navController animated:YES];
-                
-            } 
-            
-            if ([mainViewController class] == [NewActivity class]) {
-                NewActivity *tmp = (NewActivity *)mainViewController;
-                [tmp.navigationController presentModalViewController:navController animated:YES];
-                
-            }
+            [self presentModalViewController:navController animated:NO];
         }
-        
+
+    }
+           
         
         
 }
@@ -709,14 +691,7 @@
     if ([responseString isEqualToString:@""]) {
         
         [self setLabels];
-        
-        id mainViewController = [self.view.superview nextResponder];
-        
-        if ([mainViewController class] == [Home class]) {
-            Home *tmp = (Home *)mainViewController;
-            [tmp performSelectorInBackground:@selector(showLessAction) withObject:nil];
-            
-        }
+    
         
     }else{
   
@@ -727,7 +702,6 @@
    
     [self.myTimer invalidate];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 
     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (![[GANTracker sharedTracker] trackEvent:@"action"
@@ -737,34 +711,410 @@
                                       withError:nil]) {
     }
     
-    self.homeSuperView.activityPhotoEventId = [NSString stringWithString:self.eventId];
-    self.homeSuperView.activityPhotoTeamId = [NSString stringWithString:self.teamId];
-    [self.homeSuperView displayCamera];
+    [self displayCamera];
+
 }
 
--(void)mapAction{
+-(void)displayCamera{
     
+    @try {
+        UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        [self presentModalViewController:picker animated:YES];
+    }
+    @catch (NSException *exception) {
+        
+    }
+    
+    
+    
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+	
+    [picker dismissModalViewControllerAnimated:YES];	
+    
+    UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    float xVal;
+    float yVal;
+    
+    bool isPort = true;
+    
+    if (tmpImage.size.height > tmpImage.size.width) {
+        //Portrait
+        
+        xVal = 210.0;
+        yVal = 280.0;
+        isPort = true;
+        self.sendOrientation = @"portrait";
+    }else{
+        //Landscape
+        xVal = 280.0;
+        yVal = 210.0;
+        isPort = false;
+        self.sendOrientation = @"landscape";
+    }
+    
+    NSData *jpegImage = UIImageJPEGRepresentation(tmpImage, 1.0);
+    
+    UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
+    
+    UIGraphicsBeginImageContext(CGSizeMake(xVal, yVal));
+    
+    [myThumbNail drawInRect:CGRectMake(0.0, 0.0, xVal, yVal)];
+    
+    UIImage *newImage    = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    
+    self.imageDataToSend = UIImageJPEGRepresentation(newImage, 0.90);
+    
+    self.postImageBackView.hidden = NO;
+    self.scoreButton.enabled = NO;
+    self.cameraButton.enabled = NO;
+
+
+    self.postImageErrorLabel.text = @"";
+    self.postImageTextView.text = @"";
+    [self.view bringSubviewToFront:self.postImageBackView];
+    
+    self.postImagePreview.image = [UIImage imageWithData:self.imageDataToSend];
+    
+  
+    
+    
+    
+} 
+
+-(void)mapAction{
+        
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
 
 
-    MapLocation *next = [[MapLocation alloc] init];
-    next.eventLatCoord = [self.latitude doubleValue];
-    next.eventLongCoord = [self.longitude doubleValue];
-    next.cancelButton = true;
+    if (self.gameday || self.home) {
+        
+        MapLocation *next = [[MapLocation alloc] init];
+        next.eventLatCoord = [self.latitude doubleValue];
+        next.eventLongCoord = [self.longitude doubleValue];
+        next.cancelButton = true;
+        
+        UINavigationController *navController = [[UINavigationController alloc] init];
+        
+        [navController pushViewController:next animated:YES];
+        
+        navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                
+        [self presentModalViewController:navController animated:YES];
+        
+    }
     
-    UINavigationController *navController = [[UINavigationController alloc] init];
-    
-    [navController pushViewController:next animated:YES];
-    
-    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
-    id mainViewController = [self.view.superview nextResponder];
-    
-    Home *tmp = (Home *)mainViewController;
-    [tmp.navigationController presentModalViewController:navController animated:YES];
         
    
     
+}
+
+
+-(void)getGameImages{
+    
+    @autoreleasepool {
+        
+        NSMutableArray *tmpArray = [NSMutableArray array];
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSString *token = @"";
+        if (mainDelegate.token != nil){
+            token = mainDelegate.token;
+        } 
+        
+        if (![token isEqualToString:@""]){	
+            
+            NSDate *today = [NSDate date];
+            NSDate *tomorrow = [NSDate dateWithTimeInterval:86400 sinceDate:today];
+            NSDateFormatter *format = [[NSDateFormatter alloc] init];
+            [format setDateFormat:@"YYYY-MM-dd"];
+            NSString *dateString = [format stringFromDate:tomorrow];
+       
+            NSDictionary *response = [ServerAPI getActivityGamePhotos:token maxCount:@"6" refreshFirst:@"" newOnly:@"" mostCurrentDate:dateString totalNumberOfDays:@"" includeDetails:@"true" mediaOnly:@"true" eventId:self.eventId teamId:self.teamId];
+            
+            NSString *status = [response valueForKey:@"status"];
+            
+            if ([status isEqualToString:@"100"]){
+                
+                tmpArray = [response valueForKey:@"activities"];
+                                
+            }else{
+                
+                //Server hit failed...get status code out and display error accordingly
+                int statusCode = [status intValue];
+                
+                //[self.errorLabel setHidden:NO];
+                switch (statusCode) {
+                    case 0:
+                        //null parameter
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                    case 208:
+                        //self.errorString = @"NA";
+                        break;
+                    default:
+                        //log status code?
+                        //self.errorLabel.text = @"*Error connecting to server";
+                        break;
+                }
+            }
+            
+            
+        }
+        
+        [self performSelectorOnMainThread:@selector(doneGameImages:) withObject:tmpArray waitUntilDone:NO];
+        
+    }
+	
+}
+
+-(void)doneGameImages:(NSMutableArray *)activityArray{
+    
+    
+    if ([activityArray count] > 0) {
+        
+        
+        if ([activityArray count] != self.picCount) {
+            self.gameImageArray = [NSMutableArray arrayWithArray:activityArray];
+            
+            NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
+            [self.gameImageArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+            
+            self.leftButton.enabled = NO;
+            if ([activityArray count] > 1) {
+                self.rightButton.enabled = YES;
+            }else{
+                self.rightButton.enabled = NO;
+            }
+            
+            Activity *tmpActivity = [self.gameImageArray objectAtIndex:0];
+            NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+            
+            UIImage *tmpImage = [UIImage imageWithData:profileData];
+            
+            if (tmpImage.size.height > tmpImage.size.width) {
+                self.imageBackView.frame = CGRectMake(114, 2, 75, 100);
+                
+            }else{
+                self.imageBackView.frame = CGRectMake(102, 14, 100, 75);
+            }
+            
+            self.imageView.frame = CGRectMake(1, 1, self.imageBackView.frame.size.width -2, self.imageBackView.frame.size.height - 2);
+            self.imageView.image = tmpImage;
+            
+            self.imageBackView.layer.masksToBounds = YES;
+            self.imageBackView.layer.cornerRadius = 4.0;
+            self.imageView.layer.masksToBounds = YES;
+            self.imageView.layer.cornerRadius = 4.0;
+            
+            self.currentImageDisplayCell = 0;
+            self.fullBackView.hidden = NO;
+
+        }
+    }else{
+        self.fullBackView.hidden = YES;
+        self.gameImageArray = [NSMutableArray array];
+    }
+}
+
+
+-(void)imageSelected:(id)sender{
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    
+    Activity *tmpActivity = [self.gameImageArray objectAtIndex:self.currentImageDisplayCell];
+
+    ImageDisplayMultiple *newDisplay = [[ImageDisplayMultiple alloc] init];
+    newDisplay.activityId = tmpActivity.activityId;
+    newDisplay.teamId = self.teamId;
+    newDisplay.fromScoreboard = true;
+    
+    [self.myTimer invalidate];
+    
+    UINavigationController *navController = [[UINavigationController alloc] init];
+    
+    [navController pushViewController:newDisplay animated:NO];
+    
+    //navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    [self presentModalViewController:navController animated:NO];
+    
+}
+
+-(void)rightButtonAction{
+    
+    self.currentImageDisplayCell++;
+    
+    Activity *tmpActivity = [self.gameImageArray objectAtIndex:self.currentImageDisplayCell];
+    NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+    
+    UIImage *tmpImage = [UIImage imageWithData:profileData];
+    
+    self.imageView.image = tmpImage;
+    
+    if (tmpImage.size.height > tmpImage.size.width) {
+        self.imageBackView.frame = CGRectMake(114, 2, 75, 100);
+        
+    }else{
+        self.imageBackView.frame = CGRectMake(102, 14, 100, 75);
+    }
+    
+    self.imageView.frame = CGRectMake(1, 1, self.imageBackView.frame.size.width -2, self.imageBackView.frame.size.height - 2);
+    
+    self.leftButton.enabled = YES;
+    
+    if (self.currentImageDisplayCell == [self.gameImageArray count] - 1) {
+        self.rightButton.enabled = NO;
+    }else{
+        self.rightButton.enabled = YES;
+    }
+    
+}
+-(void)leftButtonAction{
+    
+    self.currentImageDisplayCell--;
+    
+    Activity *tmpActivity = [self.gameImageArray objectAtIndex:self.currentImageDisplayCell];
+    NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
+    
+    UIImage *tmpImage = [UIImage imageWithData:profileData];
+    
+    self.imageView.image = tmpImage;
+    
+    if (tmpImage.size.height > tmpImage.size.width) {
+        self.imageBackView.frame = CGRectMake(114, 2, 75, 100);
+        
+    }else{
+        self.imageBackView.frame = CGRectMake(102, 14, 100, 75);
+    }
+    
+    self.imageView.frame = CGRectMake(1, 1, self.imageBackView.frame.size.width -2, self.imageBackView.frame.size.height - 2);
+    
+    self.rightButton.enabled = YES;
+    
+    if (self.currentImageDisplayCell == 0) {
+        self.leftButton.enabled = NO;
+    }else{
+        self.leftButton.enabled = YES;
+    }
+    
+}
+
+
+-(void)postImageCancel{
+    self.imageDataToSend = [NSData data];
+    self.postImageBackView.hidden = YES;
+}
+
+-(void)postImageSubmit{
+    
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                         action:@"Image Posted to Actiivty - Gameday"
+                                          label:mainDelegate.token
+                                          value:-1
+                                      withError:nil]) {
+    }
+    
+
+    self.postImageErrorLabel.text = @"";
+
+    [self.postImageActivity startAnimating];
+    self.postImageText = [NSString stringWithString:self.postImageTextView.text];
+    [self performSelectorInBackground:@selector(postImage:) withObject:@""];
+    
+       
+}
+
+
+-(void)postImage:(NSString *)gameday{
+    
+    @autoreleasepool {
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSData *tmpData = [NSData data];
+        
+        tmpData = [NSData dataWithData:self.imageDataToSend];
+        
+        if (self.postImageText == nil) {
+            self.postImageText = @"";
+        }
+        
+        NSDictionary *response = [ServerAPI createActivity:mainDelegate.token teamId:self.teamId statusUpdate:self.postImageText photo:tmpData video:[NSData data] orientation:self.sendOrientation replyToId:@"" eventId:self.eventId newGame:@""];
+        
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            self.errorString=@"";
+            
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            //[self.errorLabel setHidden:NO];
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    self.errorString = @"*Error connecting to server";
+                    break;
+                case 208:
+                    self.errorString = @"NA";
+                    break;
+                default:
+                    //log status code?
+                    self.errorString = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+        [self performSelectorOnMainThread:@selector(donePostImage) withObject:nil waitUntilDone:NO];
+        
+    }
+    
+    
+}
+
+-(void)donePostImage{
+    
+    [self.postImageActivity stopAnimating];
+    
+    if ([self.errorString isEqualToString:@""]) {
+        self.postImageErrorLabel.text = @"Post Successful!";
+        self.postImageErrorLabel.textColor = [UIColor colorWithRed:0.0 green:100.0 blue:0.0 alpha:1.0];
+        [self performSelector:@selector(hidePost) withObject:nil afterDelay:0.5];
+    }else{
+        if ([self.errorString isEqualToString:@"NA"]) {
+			NSString *tmp = @"Only User's with confirmed email addresses can post to Activity.  To confirm your email, please click on the activation link in the email we sent you.";
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Email Not Confirmed." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[alert show];
+		}else{
+            self.postImageErrorLabel.text = self.errorString;
+        }
+    }
+}
+
+-(void)hidePost{
+    self.postImageBackView.hidden = YES;
+    self.scoreButton.enabled = YES;
+    self.cameraButton.enabled = YES;
 }
 
 - (void)viewDidUnload
@@ -788,7 +1138,23 @@
     gameOverButton = nil;
     mapButton = nil;
     linkLabel = nil;
+    cameraButton = nil;
     linkLine = nil;
+    fullBackView = nil;
+    imageView = nil;
+    imageButton = nil;
+    imageBackView = nil;
+    rightButton = nil;
+    leftButton = nil;
+    postImageErrorLabel = nil;
+    postImageFrontView = nil;
+    postImageLabel = nil;
+    postImagePreview = nil;
+    postImageCancelButton = nil;
+    postImageBackView = nil;
+    postImageActivity = nil;
+    postImageTextView = nil;
+    postImageSubmitButton = nil;
     [super viewDidUnload];
 
 }

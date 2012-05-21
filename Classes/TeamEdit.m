@@ -20,7 +20,7 @@
 @implementation TeamEdit
 @synthesize teamId, sportLabel, description, teamName, errorLabel, activity, changeSportButton, saveChangesButton, saveSuccess, newTeamName,
 connectTwitterButton, connectTwitterLabel, twitterUser, updateTwitter, twitterUrl, disconnectTwitterButton, errorString, teamInfo, loadingActivity,
-loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButton, fromHome;
+loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButton, fromHome, deleteTeamAction;
 
 -(void)viewDidAppear:(BOOL)animated{
 	
@@ -409,7 +409,16 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 			[self performSelectorInBackground:@selector(removeTwitter) withObject:nil];
 			
 		}
-	}else {
+	}else if (actionSheet == self.deleteTeamAction){
+        
+        if (buttonIndex == 0) {
+			
+            [self.activity startAnimating];
+            [self performSelectorInBackground:@selector(runDelete) withObject:nil];
+			
+		}
+        
+    }else {
 		[FastActionSheet doAction:self :buttonIndex];
 
 	}
@@ -510,8 +519,10 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 
 -(void)deleteTeam{
     
-    [self.activity startAnimating];
-    [self performSelectorInBackground:@selector(runDelete) withObject:nil];
+    self.deleteTeamAction =  [[UIActionSheet alloc] initWithTitle:@"Are you sure you want to delete this team?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
+	self.deleteTeamAction.delegate = self;
+	[self.deleteTeamAction showInView:self.view];
+   
 }
 
 -(void)runDelete{

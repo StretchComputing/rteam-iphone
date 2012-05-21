@@ -16,6 +16,8 @@
 
     
 }
+@property bool startedScoring;
+@property (nonatomic, strong) NSString *opponent;
 @property (nonatomic, strong) NSString *latitude;
 @property (nonatomic, strong) NSString *longitude;
 @property (nonatomic, strong) Home *homeSuperView;
@@ -59,10 +61,14 @@
 @property (nonatomic, strong) NSString *maybeCount;
 
 @property (nonatomic, strong) IBOutlet UIButton *mapButton;
+
+@property (nonatomic, strong) IBOutlet UIButton *startScoreButton;
 -(IBAction)fullScreen;
 @property int initY;
 
 -(void)setLabels;
+
+-(IBAction)startScore;
 
 -(IBAction)sendPoll;
 -(IBAction)goToPage;

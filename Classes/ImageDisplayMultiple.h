@@ -9,6 +9,7 @@
 @interface ImageDisplayMultiple : UIViewController <UIScrollViewDelegate> {
 
 }
+@property bool fromScoreboard;
 @property (nonatomic, strong) NSString *encodedPhoto;
 @property (nonatomic, strong) NSString *activityId;
 @property (nonatomic, strong) NSString *teamId;

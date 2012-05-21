@@ -11,11 +11,7 @@
 #import <iAd/iAd.h>
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMessageComposeViewController.h>
-#import "HomeScoreView.h"
-#import "HomeAttendanceView.h"
 
-@class HomeScoreView;
-@class HomeAttendanceView;
 
 @interface Home : UIViewController <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextFieldDelegate, ADBannerViewDelegate,
 UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MFMailComposeViewControllerDelegate>{
@@ -24,6 +20,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 
     
 }
+@property bool holdScoreView;
 //Post Image
 @property (nonatomic, strong) IBOutlet UIView *postImageBackView;
 @property (nonatomic, strong) IBOutlet UIView *postImageFrontView;
@@ -50,8 +47,7 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 @property (nonatomic, strong) IBOutlet UIButton *showLessButton;
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
-@property (nonatomic, strong) HomeScoreView *homeScoreView;
-@property (nonatomic, strong) HomeAttendanceView *homeAttendanceView;
+
 @property (nonatomic, strong) IBOutlet UIView *happeningNowView;
 @property (nonatomic, strong) IBOutlet UIToolbar *bottomBar;
 
@@ -223,16 +219,16 @@ UIActionSheetDelegate, MFMessageComposeViewControllerDelegate, UINavigationContr
 
 -(int)getIconHeight:(NSString *)sport;
 
--(IBAction)moveDivider;
 
 -(IBAction)regText;
 
--(IBAction)showLessAction;
 
 -(IBAction)postImageSubmit;
 -(IBAction)postImageCancel;
 
 -(IBAction)questionsComments;
+
+-(void)refresh;
 
 
 @end

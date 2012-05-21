@@ -18,6 +18,7 @@
 #import "GameEdit.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "HomeScoreView.h"
 
 
 @implementation Gameday
@@ -26,7 +27,7 @@ successMessage, latitude, longitude, fromNextUpdate, nameGameLocation, locationN
 enableScoring, isScoringEnabled, error, scoreUs, scoreThem, interval, userRole, updateLocationButton, sport, defaultScoringButton, getInfo,
 bannerIsVisible, usLabel, scoreUsLabel, themLabel, scoreThemLabel, scoreDividerLabel, keepScoreButton, intervalLabel, setInfoGame, setInfoScore,
 refreshActivity, isGameOver, editFinalButton, mainActivity, editDone, startDate, description, opponentString, orOtherInterval, scoringAdded,
-errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, myFootballScoring, myBasketballScoring, greenBackView, scoreView;
+errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, myFootballScoring, myBasketballScoring, greenBackView, scoreView, teamName;
 
 
 -(void)editGame{
@@ -119,7 +120,6 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 	UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.defaultScoringButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
 	[self.enableScoring setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
-	[self.mapButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
 	[self.updateLocationButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
 	[self.keepScoreButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
 	[self.editFinalButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
@@ -283,17 +283,72 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
         self.day.text = [@"- " stringByAppendingString:[format stringFromDate:formatStartDate]];
         self.time.text = [timeFormat stringFromDate:formatStartDate];
         
+        self.scoreView = [[BoxScoreViewViewController alloc] init];
+        self.scoreView.view.frame = CGRectMake(15, 75, 290, 65);
+        self.scoreView.scoreUs.text = [NSString stringWithString:self.scoreUs];
+        self.scoreView.scoreThem.text = [NSString stringWithString:self.scoreThem];
+        self.scoreView.nameUs.text = [NSString stringWithString:self.teamName];
+        self.scoreView.nameThem.text = [NSString stringWithString:opp];
+        
+        
+        if ([self.interval isEqualToString:@"0"]) {
+            //interval is the date
+            
+            
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+            [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+            NSDate *eventDate = [dateFormat dateFromString:self.startDate];
+            [dateFormat setDateFormat:@"MM/dd"];
+            self.scoreView.interval.text = [dateFormat stringFromDate:eventDate];
+            
+            self.scoreView.scoreUs.text = @"-";
+            self.scoreView.scoreThem.text = @"-";
+            
+            
+        }else{
+            self.scoreView.interval.text = [self getIntervalLabelFromInterval:self.interval];
+            
+            if (![self.interval isEqualToString:@"-1"]) {
+                //Game is in progress!
+                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+                [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+                NSDate *eventDate = [dateFormat dateFromString:self.startDate];
+                [dateFormat setDateFormat:@"MM/dd"];
+                self.scoreView.interval.text = [dateFormat stringFromDate:eventDate];
+                
+            }else{
+                
+              self.scoreView.interval.text = @"Final";
+                
+                
+            }
+        }
+
+        
+        UIButton *futureGameButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        futureGameButton.frame = CGRectMake(0, 0, 250, 60);
+        [futureGameButton addTarget:self action:@selector(showScore) forControlEvents:UIControlEventTouchUpInside];
+        [self.scoreView.view addSubview:futureGameButton];
+        
+        [self.view addSubview:self.scoreView.view];
+
+        
 
     }
     
+    
+    
+
+    
+    
 	if (self.setInfoGame) {
 		self.setInfoGame = false;
-		[self setInfoGameStarted];
+		//[self setInfoGameStarted];
 	}
 	
 	if (self.setInfoScore) {
 		self.setInfoScore = false;
-		[self setInfoScoringStarted];
+		//[self setInfoScoringStarted];
 	}
 	
 	if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
@@ -350,6 +405,45 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 	
 	
 }
+
+-(void)showScore{
+    
+
+    HomeScoreView *tmp = [[HomeScoreView alloc] init];
+    tmp.gameday = true;
+
+    
+    tmp.teamName = self.teamName;
+    tmp.scoreUs = self.scoreUs;
+    
+    tmp.scoreThem = self.scoreThem;
+    tmp.interval = self.interval;
+    
+    tmp.eventDate = self.startDate;
+    
+    tmp.teamId = self.teamId;
+    tmp.eventDescription = self.description;
+    
+    tmp.participantRole = self.userRole;
+    tmp.eventId = self.gameId;
+    tmp.sport = self.sport;
+    
+    tmp.eventStringDate = self.startDate;
+    
+    tmp.latitude = self.latitude;
+    tmp.longitude = self.longitude;
+    tmp.opponent = self.opponentString;
+    
+    [tmp setLabels];
+    
+    
+    [tmp startTimer];
+    
+    
+    [self.navigationController presentModalViewController:tmp animated:YES];
+}
+
+
 -(void)map{
 	
     [TraceSession addEventToSession:@"Gameday Page - View Map Location Button Clicked"];
@@ -800,6 +894,51 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 
 	
 }
+
+-(NSString *)getIntervalLabelFromInterval:(NSString *)interval1{
+    
+    if ([interval1 isEqualToString:@"-1"]) {
+        //Game over
+        return @"Final";
+        
+    }else {
+        //Game in progress
+        
+        NSString *time1 = @"";
+        int interval2 = [interval1 intValue];
+        
+        if (interval2 == 1) {
+            time1 = @"1st";
+        }
+        
+        if (interval2 == 2) {
+            time1 = @"2nd";
+        }
+        
+        if (interval2 == 3) {
+            time1 = @"3rd";
+        }
+        
+        if (interval2 >= 4) {
+            time1 = [NSString stringWithFormat:@"%@th", interval1];
+        }
+        
+        if (interval2 == -2) {
+            time1 = @"OT";
+        }
+        
+        
+        if (interval2 == -3) {
+            time1 = @"";
+        }
+        
+        
+        return time1;
+    }
+    
+    
+}
+
 
 -(void)dealloc{
     

@@ -11,9 +11,42 @@
 
 @class Home;
 
-@interface HomeScoreView : UIViewController {
+@interface HomeScoreView : UIViewController <UIImagePickerControllerDelegate> {
     
 }
+//Post Image
+@property (nonatomic, strong) NSString *errorString;
+@property (nonatomic, strong) NSData *imageDataToSend;
+@property (nonatomic, strong) IBOutlet UIView *postImageBackView;
+@property (nonatomic, strong) IBOutlet UIView *postImageFrontView;
+@property (nonatomic, strong) IBOutlet UIImageView *postImagePreview;
+@property (nonatomic, strong) IBOutlet UITextField *postImageTextView;
+@property (nonatomic, strong) NSString *postImageText;
+@property (nonatomic, strong) IBOutlet UIButton *postImageSubmitButton;
+@property (nonatomic, strong) IBOutlet UIButton *postImageCancelButton;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *postImageActivity;
+@property (nonatomic, strong) IBOutlet UILabel *postImageErrorLabel;
+@property (nonatomic, strong) IBOutlet UILabel *postImageLabel;
+
+@property (nonatomic, strong) NSString *sendOrientation;
+
+//Game Image scrolling
+@property int picCount;
+@property int currentImageDisplayCell;
+@property bool home;
+@property (nonatomic, strong) NSMutableArray *gameImageArray;
+@property (nonatomic, strong) IBOutlet UIView *fullBackView;
+@property (nonatomic, strong) IBOutlet UIView *imageBackView;
+@property (nonatomic, strong) IBOutlet UIButton *rightButton;
+@property (nonatomic, strong) IBOutlet UIButton *leftButton;
+@property (nonatomic, strong) IBOutlet UIButton *imageButton;
+@property (nonatomic, strong) IBOutlet UIImageView *imageView;
+
+
+
+@property bool isSwitch;
+@property (nonatomic, strong) IBOutlet UIButton *cameraButton;
+@property bool gameday;
 @property (nonatomic, strong) IBOutlet UILabel *linkLabel;
 @property (nonatomic, strong) IBOutlet UIView *linkLine;
 
@@ -84,6 +117,12 @@
 -(void)setNewInterval;
 
 
+-(IBAction)imageSelected:(id)sender;
+-(IBAction)rightButtonAction;
+-(IBAction)leftButtonAction;
 
+-(void)displayCamera;
 
+-(IBAction)postImageCancel;
+-(IBAction)postImageSubmit;
 @end

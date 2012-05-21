@@ -26,11 +26,50 @@
 #import "GoogleAppEngine.h"
 #import "TraceSession.h"
 #import "MapLocation.h"
+#import "HomeScoreView.h"
 
 
 
 @implementation HomeAttendanceView
-@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView, isFullScreen, fullScreenButton, homeSuperView, latitude, longitude, mapButton;
+@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView, isFullScreen, fullScreenButton, homeSuperView, latitude, longitude, mapButton, startScoreButton, opponent, startedScoring;
+
+
+-(void)viewDidAppear:(BOOL)animated{
+    if (self.startedScoring) {
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
+        [self dismissModalViewControllerAnimated:NO];
+    }
+}
+-(void)viewWillAppear:(BOOL)animated{
+    
+    if (self.startedScoring) {
+        for (UIView *view in [self.view subviews]) {
+            [view removeFromSuperview];
+        }
+        
+        UIImageView *tmp = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noLogoNoCrowd.png"]];
+        tmp.frame = CGRectMake(0, 0, 320, 480);
+        [self.view addSubview:tmp];
+        
+        UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        activity.frame = CGRectMake(140, 100, 40, 40);
+        [activity startAnimating];
+        
+        [self.view addSubview:activity];
+            
+    }else{
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        
+        
+        [self setLabels];
+    }
+   
+    
+
+    
+}
 
 - (void)viewDidLoad
 {
@@ -45,12 +84,20 @@
     UIImage *buttonImageNormal1 = [UIImage imageNamed:@"greenButton.png"];
 	UIImage *stretch1 = [buttonImageNormal1 stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.statusButton setBackgroundImage:stretch1 forState:UIControlStateNormal];
+    [self.startScoreButton setBackgroundImage:stretch1 forState:UIControlStateNormal];
+
 
 
     [super viewDidLoad];
 }
 
 -(void)setLabels{
+    
+    if ([self.eventType isEqualToString:@"Game"]) {
+        self.startScoreButton.hidden = NO;
+    }else{
+        self.startScoreButton.hidden = YES;
+    }
     
     if (![self.latitude isEqualToString:@""] && (self.latitude != nil)) {
         self.mapButton.hidden = NO;
@@ -93,6 +140,7 @@
 
 
     }
+    
     
     self.lineView.backgroundColor = [UIColor blueColor];
     int x = self.eventLinkLabel.frame.origin.x;
@@ -159,6 +207,9 @@
         self.statusButton.hidden = NO;
         self.statusReply.hidden = NO;
     }
+    
+    
+   
     
 }
 
@@ -254,13 +305,10 @@
     
     navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
-    id mainViewController = [self.view.superview nextResponder];
-    
-    if ([mainViewController class] == [Home class]) {
-        Home *tmp = (Home *)mainViewController;
-        [tmp.navigationController presentModalViewController:navController animated:YES];
+  
+    [self presentModalViewController:navController animated:YES];
         
-    }
+    
     
     
 }
@@ -320,13 +368,7 @@
             
             navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             
-            id mainViewController = [self.view.superview nextResponder];
-            
-            if ([mainViewController class] == [Home class]) {
-                Home *tmp = (Home *)mainViewController;
-                [tmp.navigationController presentModalViewController:navController animated:YES];
-                
-            }
+            [self presentModalViewController:navController animated:YES];
             
         }else {
             
@@ -360,13 +402,8 @@
             
             navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             
-            id mainViewController = [self.view.superview nextResponder];
-            
-            if ([mainViewController class] == [Home class]) {
-                Home *tmp = (Home *)mainViewController;
-                [tmp.navigationController presentModalViewController:navController animated:YES];
-                
-            }
+            [self presentModalViewController:navController animated:YES];
+
             
         }
         
@@ -408,13 +445,8 @@
         
         navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         
-        id mainViewController = [self.view.superview nextResponder];
-        
-        if ([mainViewController class] == [Home class]) {
-            Home *tmp = (Home *)mainViewController;
-            [tmp.navigationController presentModalViewController:navController animated:YES];
-            
-        }
+        [self presentModalViewController:navController animated:YES];
+
         
         
     }else{
@@ -454,13 +486,8 @@
         
         navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         
-        id mainViewController = [self.view.superview nextResponder];
-        
-        if ([mainViewController class] == [Home class]) {
-            Home *tmp = (Home *)mainViewController;
-            [tmp.navigationController presentModalViewController:navController animated:YES];
-            
-        }
+        [self presentModalViewController:navController animated:YES];
+
         
         
     }
@@ -698,37 +725,10 @@
 
 
 -(void)fullScreen{
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
     
-    
-    if (self.homeSuperView == nil) {
-        self.view.hidden = YES;
-    }else{
-        
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:1.0];
-        
-        if (self.isFullScreen) {
-            self.isFullScreen = false;
-            [self.fullScreenButton setImage:[UIImage imageNamed:@"fullScreen.jpeg"] forState:UIControlStateNormal];
-        
-        
-            [self.homeSuperView moveDivider];
-            
-            
-        }else{
-            self.isFullScreen = true;
-            [self.fullScreenButton setImage:[UIImage imageNamed:@"smallScreen.png"] forState:UIControlStateNormal];
-            
-            CGRect frame = self.view.frame;
-            frame.origin.y = 0;
-            frame.size.height += 121;
-            self.view.frame = frame;
-        }
-        
-        [UIView commitAnimations];
-        
-        
-    }
+    [self dismissModalViewControllerAnimated:YES];
     
 }
 
@@ -748,13 +748,98 @@
     
     navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
-    id mainViewController = [self.view.superview nextResponder];
-    
-    Home *tmp = (Home *)mainViewController;
-    [tmp.navigationController presentModalViewController:navController animated:YES];
+    [self presentModalViewController:navController animated:YES];
     
     
     
+}
+
+-(void)startScore{
+    
+    [self performSelectorInBackground:@selector(startGame) withObject:nil];
+    
+  
+    self.startedScoring = true;
+    
+    HomeScoreView *homeScoreView = [[HomeScoreView alloc] init];
+    
+    homeScoreView.home = true;
+    
+    homeScoreView.teamName = self.teamName;
+    homeScoreView.scoreUs = @"0";
+    homeScoreView.scoreThem = @"0";
+    homeScoreView.interval = @"1";
+    homeScoreView.isSwitch = true;
+    
+    homeScoreView.eventDate = self.eventDate;
+    
+    homeScoreView.teamId = self.teamId;
+    homeScoreView.eventDescription = self.eventDescription;
+    
+    homeScoreView.participantRole = self.participantRole;
+    homeScoreView.eventId = self.eventId;
+    homeScoreView.sport = self.sport;
+    
+    homeScoreView.eventStringDate = self.eventStringDate;
+    
+    homeScoreView.latitude = self.latitude;
+    homeScoreView.longitude = self.longitude;
+    homeScoreView.opponent = self.opponent;
+    
+    [homeScoreView setLabels];
+    
+    
+    [homeScoreView startTimer];
+    
+    [self presentModalViewController:homeScoreView animated:NO];
+
+    
+}
+
+
+- (void)startGame {
+    
+	
+	@autoreleasepool {
+        NSString *token = @"";
+        
+        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+        token = mainDelegate.token;
+   
+        
+        NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"0" :@"0" :@"1" :@"" :@"" :@""];
+        
+        NSString *status = [response valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"100"]){
+            
+            
+            
+        }else{
+            
+            //Server hit failed...get status code out and display error accordingly
+            int statusCode = [status intValue];
+            
+            switch (statusCode) {
+                case 0:
+                    //null parameter
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+                case 1:
+                    //error connecting to server
+                    ///self.error.text = @"*Error connecting to server";
+                    break;
+                    
+                default:
+                    //should never get here
+                    //self.error.text = @"*Error connecting to server";
+                    break;
+            }
+        }
+        
+    }	
+	
+	
 }
 
 
@@ -775,6 +860,7 @@
     statusButton = nil;
     eventLinkLabel = nil;
     lineView = nil;
+    startScoreButton = nil;
     mapButton = nil;
     [super viewDidUnload];
     

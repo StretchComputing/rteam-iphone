@@ -20,6 +20,7 @@
     
 
 }
+@property (nonatomic, strong) NSString *teamName;
 @property (nonatomic, strong) BoxScoreViewViewController *scoreView;
 @property (nonatomic, strong) NewBaseballScoring *myBaseballScoring;
 @property (nonatomic, strong) NewBasketballScoring *myBasketballScoring;
@@ -104,4 +105,5 @@
 -(IBAction)defaultScoring;
 -(IBAction)keepScore;
 -(IBAction)photo;
+-(NSString *)getIntervalLabelFromInterval:(NSString *)interval1;
 @end

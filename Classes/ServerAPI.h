@@ -149,6 +149,9 @@
 
 +(NSDictionary *)getActivityDetails:(NSString *)token activityIds:(NSArray *)activityIds;
 
++(NSDictionary *)getActivityGamePhotos:(NSString *)token maxCount:(NSString *)maxCount refreshFirst:(NSString *)refreshFirst newOnly:(NSString *)newOnly
+                       mostCurrentDate:(NSString *)mostCurrentDate totalNumberOfDays:(NSString *)totalNumberOfDays includeDetails:(NSString *)includeDetails mediaOnly:(NSString *)mediaOnly eventId:(NSString *)eventId teamId:(NSString *)teamId;
+
 //Misc
 +(NSDictionary *)getMobileCarrierList;
 

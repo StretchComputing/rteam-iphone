@@ -179,7 +179,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     [self.view1 addSubview:tmp.view];
     
     self.photoActivity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    self.photoActivity.frame = CGRectMake(140, 150, 40, 40);
+    self.photoActivity.frame = CGRectMake(140, 50, 40, 40);
     
     self.photoDisplayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 320, 20)];
     self.photoDisplayLabel.backgroundColor = [UIColor clearColor];
