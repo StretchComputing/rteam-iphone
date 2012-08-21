@@ -8,14 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "Home.h"
+#import <iAd/iAd.h>
 
 @class Home;
 
 
-@interface HomeAttendanceView : UIViewController <UIActionSheetDelegate> {
+@interface HomeAttendanceView : UIViewController <UIActionSheetDelegate, ADBannerViewDelegate> {
 
     
 }
+@property (nonatomic, strong) IBOutlet UIView *frontView;
+@property BOOL bannerIsVisible;
+@property (nonatomic, strong) ADBannerView *myAd;
+
 @property bool startedScoring;
 @property (nonatomic, strong) NSString *opponent;
 @property (nonatomic, strong) NSString *latitude;

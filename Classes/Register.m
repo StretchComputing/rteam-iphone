@@ -243,6 +243,7 @@ isHelpOpen, barItem, memberLogin, confirmEmail, closeButton, firstName, lastName
 			tmp.password = password.text;
 			tmp.firstString = self.firstName;
 			tmp.lastString = self.lastName;
+            tmp.numMemberTeams = self.numMemberTeams;
 			[self.navigationController pushViewController:tmp animated:YES];
 			
 		}else {

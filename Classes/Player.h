@@ -10,19 +10,39 @@
 #import "PhoneNumberFormatter.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMessageComposeViewController.h>
+#import <MessageUI/MFMailComposeViewController.h>
 #import <UIKit/UIKit.h>
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 
 
 @interface Player : UIViewController  < UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, 
-MFMessageComposeViewControllerDelegate, UIActionSheetDelegate > {
+MFMessageComposeViewControllerDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate > {
 	
     PhoneNumberFormatter *myPhoneNumberFormatter;
     int myTextFieldSemaphore;
 
     
 }
+@property (nonatomic, strong) UIBarButtonItem *cancelButton;
+@property (nonatomic, strong) NSString *finalUserRole;
+@property (nonatomic, strong) NSString *finalFanMember;
+
+@property (nonatomic, strong) UISegmentedControl *memberFanSegment;
+@property (nonatomic, strong) UISegmentedControl *coordinatorSegment;
+@property (nonatomic, strong) NSString *playerEmailString;
+
+@property (nonatomic, strong) UITableView *memberEmailTable;
+@property (nonatomic, strong) UITableView *memberPhoneTable;
+
+@property (nonatomic, strong) UITableView *editNameTable;
+@property (nonatomic, strong) UITableView *editEmailPhoneTable;
+@property (nonatomic, strong) UITableView *editRoleTable;
+
+
+
+
+@property (nonatomic, strong) UIBarButtonItem *editButtonBar;
 @property bool justChose;
 @property (nonatomic, strong) NSString *theFirstEdit;
 @property (nonatomic, strong) NSString *theLastEdit;

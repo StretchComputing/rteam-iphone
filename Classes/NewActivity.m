@@ -81,9 +81,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
     
     if ([mainDelegate.showSwipeAlert isEqualToString:@"true"]) {
         self.swipeAlert.hidden = NO;
-        mainDelegate.showSwipeAlert = @"false";
-        
-        [mainDelegate saveUserInfo];
+    
     }else{
         self.swipeAlert.hidden = YES;
     }
@@ -1958,6 +1956,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 -(void)cancelSwipe{
     
+    rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+    mainDelegate.showSwipeAlert = @"false";
+    
+    [mainDelegate saveUserInfo];
     self.swipeAlert.hidden = YES;
 }
 

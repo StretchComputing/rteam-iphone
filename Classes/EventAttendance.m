@@ -12,6 +12,7 @@
 #import "Player.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "GoogleAppEngine.h"
 
 @implementation EventAttendance
 @synthesize players, teamId, allSelector, eventId, attMarker, saveAll, select, activity, successLabel, startDate, attReport, attendanceInfo,
@@ -287,15 +288,22 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 
 -(void)finishedAttendance{
 	
-    self.successLabel.text = self.errorString;
-	self.attMarker = [NSMutableArray arrayWithArray:self.attMarkerTemp];
-    self.preMarker = [NSMutableArray arrayWithArray:self.preMarkerTemp];
-    
-	[self.barActivity stopAnimating];
-	[self.attActivity stopAnimating];
-	self.attActivityLabel.hidden = YES;
-	[self.playerTableView reloadData];
-    [self.playerTableViewPre reloadData];
+    @try {
+        self.successLabel.text = self.errorString;
+        self.attMarker = [NSMutableArray arrayWithArray:self.attMarkerTemp];
+        self.preMarker = [NSMutableArray arrayWithArray:self.preMarkerTemp];
+        
+        [self.barActivity stopAnimating];
+        [self.attActivity stopAnimating];
+        self.attActivityLabel.hidden = YES;
+        [self.playerTableView reloadData];
+        [self.playerTableViewPre reloadData];
+    }
+    @catch (NSException *exception) {
+        [GoogleAppEngine sendClientLog:@"GameAttendance.m - finishedAttendance()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+    }
+ 
+
     
 	
 }

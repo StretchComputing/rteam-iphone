@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WhosComingPoll : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface WhosComingPoll : UIViewController <UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong) UIAlertView *noCoordAlert;
 @property bool isGettingEvents;

@@ -19,6 +19,7 @@
 #import "GANTracker.h"
 #import "TraceSession.h"
 #import "HomeScoreView.h"
+#import "GoogleAppEngine.h"
 
 
 @implementation Gameday
@@ -223,8 +224,12 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
         
         NSString *opp = [gameInfo valueForKey:@"opponent"];
                 
+        if (opp == nil) {
+            opp = @"Opponent TBD";
+        }
+        
         self.description = [gameInfo valueForKey:@"description"];
-        self.opponentString = opp;
+        self.opponentString = [NSString stringWithString:opp];
         if ([gameInfo valueForKey:@"latitude"] != nil) {
             
             self.latitude = [[gameInfo valueForKey:@"latitude"] stringValue];
@@ -280,7 +285,15 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
         [format setDateFormat:@"EEE, MMM dd"];
         [timeFormat setDateFormat:@"h:mm aa"];
         
-        self.day.text = [@"- " stringByAppendingString:[format stringFromDate:formatStartDate]];
+        @try {
+            self.day.text = [@"- " stringByAppendingString:[format stringFromDate:formatStartDate]];
+        }
+        @catch (NSException *exception) {
+            self.day.text = @"";
+            [GoogleAppEngine sendClientLog:@"Vote.m - didFinish:gameInfo()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
+        }
+       
         self.time.text = [timeFormat stringFromDate:formatStartDate];
         
         self.scoreView = [[BoxScoreViewViewController alloc] init];

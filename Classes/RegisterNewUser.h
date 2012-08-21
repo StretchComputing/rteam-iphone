@@ -21,6 +21,7 @@
     int myTextFieldSemaphore;
 	
 }
+@property int numMemberTeams;
 @property (nonatomic, strong) NSString *thePhoneNumber;
 @property (nonatomic, strong) NSString *theFirstName;
 @property (nonatomic, strong) NSString *theLastName;

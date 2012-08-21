@@ -12,6 +12,7 @@
 #import "VoteMemberObject.h"
 #import "GANTracker.h"
 #import "TraceSession.h"
+#import "GoogleAppEngine.h"
 
 @implementation Vote
 @synthesize userRole, teamId, loadingLabel, loadingActivity, myTableView, closeVotingButton, errorLabel, activity, memberArray, errorString, myVote,
@@ -54,71 +55,79 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 -(void)getMemberVotes{
 	
 	@autoreleasepool {
-        NSString *token = @"";
-        NSMutableArray *tmpMemberArray = [NSMutableArray array];
         
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        if (mainDelegate.token != nil){
-            token = mainDelegate.token;
-        } 
-        
-        //If there is a token, do a DB lookup to find the players associated with this team:
-        if (![token isEqualToString:@""]){
+        @try {
+            NSString *token = @"";
+            NSMutableArray *tmpMemberArray = [NSMutableArray array];
             
-            NSDictionary *response = [ServerAPI getGameVoteTallies:token :self.teamId :self.gameId :@"mvp"];
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
-            NSString *status = [response valueForKey:@"status"];
+            if (mainDelegate.token != nil){
+                token = mainDelegate.token;
+            } 
             
-            if ([status isEqualToString:@"100"]){
+            //If there is a token, do a DB lookup to find the players associated with this team:
+            if (![token isEqualToString:@""]){
                 
-                self.errorString = @"";
+                NSDictionary *response = [ServerAPI getGameVoteTallies:token :self.teamId :self.gameId :@"mvp"];
                 
-                self.myVote = @"";
-                if ([response valueForKey:@"votedFor"] != nil) {
-                    self.myVote = [response valueForKey:@"votedFor"];
+                NSString *status = [response valueForKey:@"status"];
+                
+                if ([status isEqualToString:@"100"]){
                     
+                    self.errorString = @"";
+                    
+                    self.myVote = @"";
+                    if ([response valueForKey:@"votedFor"] != nil) {
+                        self.myVote = [response valueForKey:@"votedFor"];
+                        
+                    }
+                    NSArray *memberTallies = [response valueForKey:@"memberTallies"];
+                    
+                    for (int i = 0; i < [memberTallies count]; i++) {
+                        
+                        NSDictionary *tmpDictionary = [memberTallies objectAtIndex:i];
+                        VoteMemberObject *tmpMember = [[VoteMemberObject alloc] init];
+                        
+                        tmpMember.memberId = [tmpDictionary valueForKey:@"memberId"];
+                        tmpMember.memberName = [tmpDictionary valueForKey:@"memberName"];
+                        tmpMember.numVotes = [[tmpDictionary valueForKey:@"voteCount"] intValue];
+                        
+                        
+                        [tmpMemberArray addObject:tmpMember];
+                        
+                        
+                    }
+                    
+                    self.memberArray = [NSMutableArray arrayWithArray:tmpMemberArray];
+                }else{
+                    
+                    //Server hit failed...get status code out and display error accordingly
+                    int statusCode = [status intValue];
+                    
+                    switch (statusCode) {
+                        case 0:
+                            //null parameter
+                            self.errorString = @"*Error connecting to server";
+                            break;
+                        case 1:
+                            //error connecting to server
+                            self.errorString = @"*Error connecting to server";
+                            break;
+                        default:
+                            //Game retrieval failed, log error code?
+                            self.errorString = @"*Error connecting to server";
+                            break;
+                    }
                 }
-                NSArray *memberTallies = [response valueForKey:@"memberTallies"];
                 
-                for (int i = 0; i < [memberTallies count]; i++) {
-                    
-                    NSDictionary *tmpDictionary = [memberTallies objectAtIndex:i];
-                    VoteMemberObject *tmpMember = [[VoteMemberObject alloc] init];
-                    
-                    tmpMember.memberId = [tmpDictionary valueForKey:@"memberId"];
-                    tmpMember.memberName = [tmpDictionary valueForKey:@"memberName"];
-                    tmpMember.numVotes = [[tmpDictionary valueForKey:@"voteCount"] intValue];
-                    
-                    
-                    [tmpMemberArray addObject:tmpMember];
-                    
-                    
-                }
-                
-                self.memberArray = tmpMemberArray;
-            }else{
-                
-                //Server hit failed...get status code out and display error accordingly
-                int statusCode = [status intValue];
-                
-                switch (statusCode) {
-                    case 0:
-                        //null parameter
-                        self.errorString = @"*Error connecting to server";
-                        break;
-                    case 1:
-                        //error connecting to server
-                        self.errorString = @"*Error connecting to server";
-                        break;
-                    default:
-                        //Game retrieval failed, log error code?
-                        self.errorString = @"*Error connecting to server";
-                        break;
-                }
             }
-               
         }
+        @catch (NSException *exception) {
+            [GoogleAppEngine sendClientLog:@"Vote.m - getMemberVotes()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+        }
+     
+       
 
         [self performSelectorOnMainThread:@selector(doneMemberVotes) withObject:nil waitUntilDone:NO];
 
@@ -278,25 +287,33 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [TraceSession addEventToSession:@"Vote Page - Member Row Clicked"];
 
     
-	NSUInteger row = [indexPath row];
-	
-	if (self.isOpen) {
-		VoteMemberObject *tmpMember = [self.memberArray objectAtIndex:row];
-		
-        rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (![[GANTracker sharedTracker] trackEvent:@"action"
-                                             action:@"MVP Vote"
-                                              label:mainDelegate.token
-                                              value:-1
-                                          withError:nil]) {
-        }
+    @try {
+        NSUInteger row = [indexPath row];
         
-		[self.votingActivity startAnimating];
-		[self performSelectorInBackground:@selector(castVote:) withObject:tmpMember.memberId];
-	}else {
-		self.errorLabel.text = @"*Voting has been closed for this game.";
-	}
+        if (self.isOpen) {
+            VoteMemberObject *tmpMember = [self.memberArray objectAtIndex:row];
+            
+            rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (![[GANTracker sharedTracker] trackEvent:@"action"
+                                                 action:@"MVP Vote"
+                                                  label:mainDelegate.token
+                                                  value:-1
+                                              withError:nil]) {
+            }
+            
+            [self.votingActivity startAnimating];
+            [self performSelectorInBackground:@selector(castVote:) withObject:tmpMember.memberId];
+        }else {
+            self.errorLabel.text = @"*Voting has been closed for this game.";
+        }
 
+    }
+    @catch (NSException *exception) {
+        [GoogleAppEngine sendClientLog:@"Vote.m - didSelectRowAtIndexPath()" logMessage:[exception reason] logLevel:@"exception" exception:exception];
+
+    }
+  
+	
 	
 	
 	

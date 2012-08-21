@@ -29,7 +29,7 @@
 @implementation RegisterNewUser
 @synthesize email, password, firstName, lastName, error, registering, submitButton, createSuccess, firstString, lastString, errorString,
 locationManager, updateLat, updateLong, phoneText, carrierText, carrierLabel, carrierPicker, carrierExplain, phoneExplain, carriers, selectedCarrier,
-selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, hardCarriers, usingHardCarriers, locationString, theFirstName, theLastName, thePhoneNumber;
+selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, hardCarriers, usingHardCarriers, locationString, theFirstName, theLastName, thePhoneNumber, numMemberTeams;
 
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -332,6 +332,7 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
             SettingsTabs *nextController = [[SettingsTabs alloc] init];
             nextController.fromRegisterFlow = @"true";
             nextController.didRegister = @"true";
+            nextController.numMemberTeams = self.numMemberTeams;
             [self.navigationController  pushViewController:nextController animated:NO];
             
         }
@@ -611,6 +612,7 @@ numberOfRowsInComponent:(NSInteger)component{
             SettingsTabs *nextController = [[SettingsTabs alloc] init];
             nextController.fromRegisterFlow = @"true";
             nextController.didRegister = @"true";
+            nextController.numMemberTeams = self.numMemberTeams;
             [self.navigationController  pushViewController:nextController animated:NO];
             
         }
@@ -647,6 +649,7 @@ numberOfRowsInComponent:(NSInteger)component{
             SettingsTabs *nextController = [[SettingsTabs alloc] init];
             nextController.fromRegisterFlow = @"true";
             nextController.didRegister = @"true";
+            nextController.numMemberTeams = self.numMemberTeams;
             [self.navigationController  pushViewController:nextController animated:NO];
             
         }
@@ -685,6 +688,7 @@ numberOfRowsInComponent:(NSInteger)component{
         SettingsTabs *nextController = [[SettingsTabs alloc] init];
         nextController.fromRegisterFlow = @"true";
         nextController.didRegister = @"true";
+        nextController.numMemberTeams = self.numMemberTeams;
         [self.navigationController  pushViewController:nextController animated:NO];
         
     }else{

@@ -44,9 +44,7 @@ fromHome, myAd, alertOne, alertTwo, isDelete, deleteActivity;
         if (([self.fanTeams count] == 0) && ([self.memberTeams count] == 0) && !(self.quickCreate)) {
             
             if (!self.gettingTeams) {
-                NSString *tmp = @"If you believe you are on a team, but you do not see it, please make sure you have confirmed your email address by clicking the link in the email we sent you.";
-                self.myAlertView = [[UIAlertView alloc] initWithTitle:@"No Teams Found." message:tmp delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                //[self.myAlertView show];
+               
                 
             }
             

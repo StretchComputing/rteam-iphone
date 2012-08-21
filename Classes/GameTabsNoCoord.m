@@ -53,7 +53,7 @@ teamName, newActivity, fromHome, fromActivity;
 	}
 	
     if (self.fromActivity) {
-        self.fromActivity = false;
+        //self.fromActivity = false;
         UIBarButtonItem *homeButton = [[UIBarButtonItem alloc] initWithTitle:@"Activity" style:UIBarButtonItemStyleBordered target:self action:@selector(home)];
 		[self.navigationItem setLeftBarButtonItem:homeButton];
     }

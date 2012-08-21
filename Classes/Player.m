@@ -35,7 +35,7 @@ addPhotoButton, activity, messageSent, displayMessage, contactAdded, userRole, c
 changedRole, shouldChangeRole, phone, headUserRole, isEditing, errorLabel, origCompressImage, fromSearch,
 editGuardianInfoButton, guardiansArray, deleteButton, scrollView, alertDelete, deleteSuccess, fromImage, alertCallText, isUser, 
 isNetworkAuthenticated, errorString, deleteActionSheet, roleActionSheet, callTextActionSheet, playerInfo, loadingActivity, loadingLabel,
-changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData, shouldUnload, switchFanLabel, switchFanButton, teamName, profilePhotoButton, isCurrentUser, portrait, guard1NA, guard1Last, guard2Last, guard1Email, guard1First, guard1Phone, guard2Email, guard2First, guard2Phone, guard1SmsConfirmed, guard2SmsConfirmed, guard2NA, guard1Key, guard2Key, isSmsConfirmed, guard1isUser, guard2isUser, phoneOnlyArray, callOrTextWho, callTextWhoAlertView, scenario, initPhone, newPhoneAlert, isEmailConfirmed, guard1EmailConfirmed, guard2EmailConfirmed, didHideMessage, theLastEdit, theEmailEdit, theFirstEdit, theJerseyEdit, theMobileEdit, justChose;
+changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData, shouldUnload, switchFanLabel, switchFanButton, teamName, profilePhotoButton, isCurrentUser, portrait, guard1NA, guard1Last, guard2Last, guard1Email, guard1First, guard1Phone, guard2Email, guard2First, guard2Phone, guard1SmsConfirmed, guard2SmsConfirmed, guard2NA, guard1Key, guard2Key, isSmsConfirmed, guard1isUser, guard2isUser, phoneOnlyArray, callOrTextWho, callTextWhoAlertView, scenario, initPhone, newPhoneAlert, isEmailConfirmed, guard1EmailConfirmed, guard2EmailConfirmed, didHideMessage, theLastEdit, theEmailEdit, theFirstEdit, theJerseyEdit, theMobileEdit, justChose, editButtonBar, memberEmailTable, memberPhoneTable, playerEmailString, editNameTable, editRoleTable, editEmailPhoneTable, memberFanSegment, coordinatorSegment, finalUserRole, finalFanMember, cancelButton;
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -46,6 +46,62 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 
 -(void)viewDidLoad{
+    
+    self.finalFanMember = @"";
+    self.finalUserRole = @"";
+    
+    self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelEdit)];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+                                             selector:@selector(keyboardWillShow:) 
+                                                 name:UIKeyboardWillShowNotification 
+                                               object:nil];
+    
+    self.memberEmailTable = [[UITableView alloc] initWithFrame:CGRectMake(4, 100, 312, 135) style:UITableViewStyleGrouped];
+    self.memberEmailTable.delegate = self;
+    self.memberEmailTable.dataSource = self;
+    self.memberEmailTable.scrollEnabled = NO;
+    self.memberEmailTable.backgroundColor = [UIColor clearColor];
+    self.memberEmailTable.backgroundView = nil;
+    self.memberEmailTable.hidden = YES;
+    [self.view addSubview:self.memberEmailTable];
+    
+    self.memberPhoneTable = [[UITableView alloc] initWithFrame:CGRectMake(4, 210, 312, 135) style:UITableViewStyleGrouped];
+    self.memberPhoneTable.delegate = self;
+    self.memberPhoneTable.dataSource = self;
+    self.memberPhoneTable.scrollEnabled = NO;
+    self.memberPhoneTable.backgroundColor = [UIColor clearColor];
+    self.memberPhoneTable.backgroundView = nil;
+    self.memberPhoneTable.hidden = YES;
+    [self.view addSubview:self.memberPhoneTable];
+    
+    
+    self.editNameTable = [[UITableView alloc] initWithFrame:CGRectMake(95, 0, 220, 135) style:UITableViewStyleGrouped];
+    self.editNameTable.delegate = self;
+    self.editNameTable.dataSource = self;
+    self.editNameTable.scrollEnabled = NO;
+    self.editNameTable.backgroundColor = [UIColor clearColor];
+    self.editNameTable.backgroundView = nil;
+    self.editNameTable.hidden = YES;
+    [self.view addSubview:self.editNameTable];
+    
+    self.editEmailPhoneTable = [[UITableView alloc] initWithFrame:CGRectMake(4, 135, 312, 95) style:UITableViewStyleGrouped];
+    self.editEmailPhoneTable.delegate = self;
+    self.editEmailPhoneTable.dataSource = self;
+    self.editEmailPhoneTable.scrollEnabled = NO;
+    self.editEmailPhoneTable.backgroundColor = [UIColor clearColor];
+    self.editEmailPhoneTable.backgroundView = nil;
+    self.editEmailPhoneTable.hidden = YES;
+    [self.view addSubview:self.editEmailPhoneTable];
+    
+    self.editRoleTable = [[UITableView alloc] initWithFrame:CGRectMake(4, 230, 312, 95) style:UITableViewStyleGrouped];
+    self.editRoleTable.delegate = self;
+    self.editRoleTable.dataSource = self;
+    self.editRoleTable.scrollEnabled = NO;
+    self.editRoleTable.backgroundColor = [UIColor clearColor];
+    self.editRoleTable.backgroundView = nil;
+    self.editRoleTable.hidden = YES;
+    [self.view addSubview:self.editRoleTable];
     
     
     self.firstEdit.text = @"";
@@ -116,17 +172,20 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	
     if (self.profileImage.image.size.height > self.profileImage.image.size.width) {
         //Portrait
-        self.profileImage.frame = CGRectMake(26, 34, 61, 81);
-        self.profilePhotoButton.frame = CGRectMake(26, 34, 61, 81);
+        self.profileImage.frame = CGRectMake(26, 5, 61, 81);
+        self.profilePhotoButton.frame = CGRectMake(26, 5, 61, 81);
         
     }else{
         
-        self.profileImage.frame = CGRectMake(16, 54, 81, 61);
-        self.profilePhotoButton.frame = CGRectMake(16, 54, 81, 61);
+        self.profileImage.frame = CGRectMake(16, 25, 81, 61);
+        self.profilePhotoButton.frame = CGRectMake(16, 25, 81, 61);
         
     }
     
-	
+	self.editNameTable.hidden = YES;
+    self.editRoleTable.hidden = YES;
+    self.editEmailPhoneTable.hidden = YES;
+    
 	self.nameLabel.hidden = YES;
 	self.emailLabel.hidden = YES;
 	self.addContactButton.hidden = YES;
@@ -201,11 +260,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	
 	[self.endEditButton setHidden:YES];
 	
-	if (!self.fromSearch) {
-		//UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
-		//[self.navigationItem setRightBarButtonItem:doneButton];
-	}
-	
+
 	
 	self.firstEdit.placeholder = @"First";
 	self.lastEdit.placeholder = @"Last";
@@ -214,7 +269,11 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	self.mobileEdit.placeholder = @"Mobile";
 	
 	
-	
+    if ([self.headUserRole isEqualToString:@"coordinator"] || [self.headUserRole isEqualToString:@"creator"]) {
+
+        self.editButtonBar = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editStart)];
+        self.navigationItem.rightBarButtonItem = self.editButtonBar;
+    }
     
 	
 	
@@ -313,7 +372,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         }
 	
 	
-	
+        self.playerEmailString = [playerInfo valueForKey:@"emailAddress"];
 	self.emailLabel.text = [playerInfo valueForKey:@"emailAddress"];
 	
 	if (jerseyNumber == nil || [jerseyNumber isEqualToString:@""] || [jerseyNumber isEqualToString:@"Jersey #"]) {
@@ -413,13 +472,13 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         
         if (self.profileImage.image.size.height > self.profileImage.image.size.width) {
             //Portrait
-            self.profileImage.frame = CGRectMake(26, 34, 61, 81);
-            self.profilePhotoButton.frame = CGRectMake(26, 34, 61, 81);
+            self.profileImage.frame = CGRectMake(26, 5, 61, 81);
+            self.profilePhotoButton.frame = CGRectMake(26, 5, 61, 81);
             
         }else{
             
-            self.profileImage.frame = CGRectMake(16, 54, 81, 61);
-            self.profilePhotoButton.frame = CGRectMake(16, 54, 81, 61);
+            self.profileImage.frame = CGRectMake(16, 25, 81, 61);
+            self.profilePhotoButton.frame = CGRectMake(16, 25, 81, 61);
             
         }
     
@@ -428,39 +487,9 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	self.emailLabel.hidden = NO;
     self.addContactButton.hidden = NO;
         
-        bool hideButton = false;
-            if (!self.isNetworkAuthenticated && !self.isSmsConfirmed && !self.guard1SmsConfirmed && !self.guard1NA && !self.guard2SmsConfirmed && !self.guard2NA) {
-                hideButton = true;
-            }
-        
-				        
-		if ([self.headUserRole isEqualToString:@"coordinator"] || [self.headUserRole isEqualToString:@"creator"]) {
-			self.startEditButton.hidden = NO;
-            if (!hideButton) {
-                self.sendMessageButton.hidden = YES; //*MSGCHG
-                
-            }
-
-		}else {
-			self.startEditButton.hidden = YES;
-			
-			if (![self.headUserRole isEqualToString:@"member"]) {
-				self.sendMessageButton.hidden = YES;
-			}else {
-                if (!hideButton) {
-                    self.sendMessageButton.hidden = YES; //*MSGCHG
-
-                }
-			}
-
-		}
-
-		
-        if (self.isCurrentUser){
-            
-            self.sendMessageButton.hidden = YES;
-        }
-	
+       
+        [self.memberEmailTable reloadData];
+        [self.memberPhoneTable reloadData];
 	
 	}else {
 		self.errorLabel.text = self.errorString;
@@ -470,19 +499,48 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	
 }
 
+-(void)cancelEdit{
+    
+    self.isEditing = false;
+
+    self.editButtonBar.title = @"Edit";
+    self.editButtonBar.style = UIBarButtonItemStylePlain;
+    
+    [self.navigationItem setHidesBackButton:NO];
+    self.navigationItem.leftBarButtonItem = nil;
+    
+    self.editNameTable.hidden = YES;
+    self.editRoleTable.hidden = YES;
+    self.editEmailPhoneTable.hidden = YES;
+    
+    self.deleteButton.hidden = YES;
+    self.editGuardianInfoButton.hidden = YES;
+
+    self.addContactButton.hidden = NO;
+    
+    self.profilePhotoButton.enabled = YES;
+    self.addPhotoButton.hidden = YES;
+
+    [self.memberEmailTable reloadData];
+    [self.memberPhoneTable reloadData];
+}
+
 
 -(void)editStart{
 	
     [TraceSession addEventToSession:@"Member Info Page - Edit Button Clicked"];
 
     
+    [self.firstEdit becomeFirstResponder];
 	if (!self.isEditing) {
 		
         
-        if (self.sendMessageButton.hidden != YES) {
-            self.sendMessageButton.hidden = YES;
-            self.didHideMessage = true;
-        }
+        [self.navigationItem setHidesBackButton:YES];
+        self.navigationItem.leftBarButtonItem = self.cancelButton;
+        
+        self.editButtonBar.title = @"Save";
+        self.editButtonBar.style = UIBarButtonItemStyleDone;
+    
         self.addContactButton.hidden = YES;
         self.editGuardianInfoButton.hidden = NO;
         
@@ -497,99 +555,35 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
             }
         }
 		
-		[self.startEditButton setHidden:YES];
-		[self.endEditButton setHidden:NO];
-		
-		self.switchFanLabel.hidden = NO;
-		self.switchFanButton.hidden = NO;
-		self.changeRoleButton.hidden = YES;
-		self.changeRoleText.hidden = YES;
-
-		//What to display when Edit button is clicked
-		if ([self.firstName length] > 0) {
-			self.firstEdit.text = self.firstName;
-			self.firstEdit.textColor = [UIColor blackColor];
-		}else {
-
-		}
-
-		
-		if ([self.lastName length] > 0) {
-			self.lastEdit.text = self.lastName;
-			self.lastEdit.textColor = [UIColor blackColor];
-		}else {
-
-		}
-
-		
-		if ([self.emailLabel.text length] > 0) {
-			self.emailEdit.text = self.emailLabel.text;
-			self.emailEdit.textColor = [UIColor blackColor];
-		}else {
-
-		}
-
-		
-		if ([self.jerseyLabel.text length] > 0) {
-			self.jerseyEdit.text = self.jersey;
-			self.jerseyEdit.textColor = [UIColor blackColor];
-		}else {
-		}
-		
-		
-		if (![self.phone isEqualToString:@""]) {
-			//self.mobileEdit.text = self.phone; jlhkjh
-            NSString *myLocale;
-            self.mobileEdit.text = [myPhoneNumberFormatter format:self.phone withLocale:myLocale];
-			self.mobileEdit.textColor = [UIColor blackColor];
-		}else {
-		}
 
 
-		//hide labels, and unhide text fields
-		[self.nameLabel setHidden:YES];
-		[self.jerseyLabel setHidden:YES];
-		[self.emailLabel setHidden:YES];
-		
-		[self.firstEdit setHidden:NO];
-		[self.lastEdit setHidden:NO];
-		
-		
-		
-
-        [self.emailEdit setHidden:NO];
-		[self.mobileEdit setHidden:NO];
-		[self.jerseyEdit setHidden:NO];
 		[self.addPhotoButton setHidden:NO];
 		
-        if (self.isUser) {
-            
-            if (self.isEmailConfirmed) {
-                [self.emailEdit setHidden:YES];
-            }
-            
-            if (self.isSmsConfirmed) {
-                [self.mobileEdit setHidden:YES];
-            }
-        }else{
-            
-            if (self.isEmailConfirmed) {
-               // [self.emailEdit setHidden:YES];
-            }
-            
-        }
         
-		[self.callNumberButton setHidden:YES];
 		
 		[self.mobileEdit setClearsOnBeginEditing:NO];
 		
+        self.editNameTable.hidden = NO;
+        self.editEmailPhoneTable.hidden = NO;
+        self.editRoleTable.hidden = NO;
+        
+        [self.editNameTable reloadData];
+        [self.editEmailPhoneTable reloadData];
+        [self.editRoleTable reloadData];
+        
+        self.memberEmailTable.hidden = YES;
+        self.memberPhoneTable.hidden = YES;
+        
 	}else {
+        
+        
+        [self.navigationItem setHidesBackButton:NO];
+        self.navigationItem.leftBarButtonItem = nil;
 		
+        self.editButtonBar.title = @"Edit";
+        self.editButtonBar.style = UIBarButtonItemStylePlain;
 
-        if (self.didHideMessage) {
-            self.sendMessageButton.hidden = YES; //*MSGCHG
-            self.didHideMessage = false;
-        }
+      
         self.addContactButton.hidden = NO;
         self.editGuardianInfoButton.hidden = YES;
         
@@ -601,21 +595,12 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		[self.endEditButton setHidden:YES];
 		[self.deleteButton setHidden:YES];
 
-		self.switchFanLabel.hidden = YES;
-		self.switchFanButton.hidden = YES;
-		self.changeRoleButton.hidden = NO;
-		self.changeRoleText.hidden = NO;
-		
-		[self.nameLabel setHidden:NO];
-		[self.jerseyLabel setHidden:NO];
-		[self.emailLabel setHidden:NO];
-		
-		[self.firstEdit setHidden:YES];
-		[self.lastEdit setHidden:YES];
-		[self.emailEdit setHidden:YES];
-		[self.mobileEdit setHidden:YES];
-		[self.jerseyEdit setHidden:YES];
-		
+		self.editNameTable.hidden = YES;
+        self.editEmailPhoneTable.hidden = YES;
+        self.editRoleTable.hidden = YES;
+        self.memberEmailTable.hidden = NO;
+		self.memberPhoneTable.hidden = NO;
+        
 		[self.firstEdit resignFirstResponder];
 		[self.lastEdit resignFirstResponder];
 		[self.emailEdit resignFirstResponder];
@@ -623,23 +608,33 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		[self.jerseyEdit resignFirstResponder];
 		
 		[self.addPhotoButton setHidden:YES];
-		//[self.callNumberButton setHidden:NO];
 		
 		//run and Update Member transaction
 		[self.activity startAnimating];
 		
-		//self.isEditing = true;
-		
-		[self.startEditButton setEnabled:NO];
-		[self.endEditButton setEnabled:NO];
-		
 		[self.navigationItem setHidesBackButton:YES];
-		[self.sendMessageButton setEnabled:NO];
-		[self.addContactButton setEnabled:NO];
-		[self.callNumberButton setEnabled:NO];
-		[self.changeRoleButton setEnabled:NO];
-		[self.callNumberButton setHidden:YES];
+		
         self.phoneOnlyArray = [NSMutableArray array];
+        
+        if (self.firstEdit.text == nil) {
+            self.firstEdit.text = @"";
+        }
+        
+        if (self.lastEdit.text == nil) {
+            self.lastEdit.text = @"";
+        }
+        
+        if (self.jerseyEdit.text == nil) {
+            self.jerseyEdit.text = @"";
+        }
+        
+        if (self.emailEdit.text == nil) {
+            self.emailEdit.text = @"";
+        }
+        
+        if (self.mobileEdit.text == nil) {
+            self.mobileEdit.text = @"";
+        }
         
         self.theFirstEdit = [NSString stringWithString:self.firstEdit.text];
         self.theLastEdit = [NSString stringWithString:self.lastEdit.text];
@@ -649,7 +644,25 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
         
 		[self performSelectorInBackground:@selector(runRequest) withObject:nil];
+        
+        if ([self.finalUserRole isEqualToString:@"coordinator"]) {
+            if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
+                
+            }else{
+                //change them to coordinator
+                [self performSelector:@selector(changeRole)];
+
+            }
+        }else if ([self.finalUserRole isEqualToString:@"member"]){
+            if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
+                //change them to NON coordinator
+                [self performSelector:@selector(changeRole)];
+            }
+        }
 		
+        if ([self.finalFanMember isEqualToString:@"fan"]) {
+            [self performSelector:@selector(switchFan)];
+        }
 	}
 
 }
@@ -1295,13 +1308,13 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
     
     if (self.profileImage.image.size.height > self.profileImage.image.size.width) {
         //Portrait
-        self.profileImage.frame = CGRectMake(26, 34, 61, 81);
-        self.profilePhotoButton.frame = CGRectMake(26, 34, 61, 81);
+        self.profileImage.frame = CGRectMake(26, 5, 61, 81);
+        self.profilePhotoButton.frame = CGRectMake(26, 5, 61, 81);
         
     }else{
         
-        self.profileImage.frame = CGRectMake(16, 54, 81, 61);
-        self.profilePhotoButton.frame = CGRectMake(16, 54, 81, 61);
+        self.profileImage.frame = CGRectMake(16, 25, 81, 61);
+        self.profilePhotoButton.frame = CGRectMake(16, 25, 81, 61);
         
     }
     
@@ -2211,6 +2224,714 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 
 }
 
+
+
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section {
+	
+	if (tableView == self.memberPhoneTable) {
+        
+        int returnNumber = 0;
+        if (![self.initPhone isEqualToString:@""] && (self.initPhone != nil)) {
+            returnNumber++;
+        }
+        
+        if (![self.guard1Phone isEqualToString:@""] && (self.guard1Phone != nil)) {
+            returnNumber++;
+        }
+        
+        if (![self.guard2Phone isEqualToString:@""] && (self.guard2Phone != nil)) {
+            returnNumber++;
+        }
+        
+        if (returnNumber == 0) {
+            self.memberPhoneTable.hidden = YES;
+        
+            
+        }else{
+            self.memberPhoneTable.hidden = NO;
+            
+            int returnNumber1 = 0;
+            if (![self.playerEmailString isEqualToString:@""] && (self.playerEmailString != nil)) {
+                returnNumber1++;
+            }
+            
+            if (![self.guard1Email isEqualToString:@""] && (self.guard1Email != nil)) {
+                returnNumber1++;
+            }
+            
+            if (![self.guard2Email isEqualToString:@""] && (self.guard2Email != nil)) {
+                returnNumber1++;
+            }
+            
+            CGRect frame = self.memberPhoneTable.frame;
+            if (returnNumber1 ==0){
+                frame.origin.y = 100;
+        
+            }else{
+                frame.origin.y = 112 + (40*returnNumber1);
+            }
+            self.memberPhoneTable.frame = frame;
+            
+            CGRect frame2 = self.addContactButton.frame;
+            frame2.origin.y = self.memberPhoneTable.frame.origin.y + (40*returnNumber) + 20;
+            
+            if (frame2.origin.y < 290) {
+                frame2.origin.y = 290;
+            }
+            self.addContactButton.frame = frame2;
+
+        }
+        return returnNumber;
+        
+    }else if (tableView == self.memberEmailTable){
+        
+        int returnNumber = 0;
+        if (![self.playerEmailString isEqualToString:@""] && (self.playerEmailString != nil)) {
+            returnNumber++;
+        }
+        
+        if (![self.guard1Email isEqualToString:@""] && (self.guard1Email != nil)) {
+            returnNumber++;
+        }
+        
+        if (![self.guard2Email isEqualToString:@""] && (self.guard2Email != nil)) {
+            returnNumber++;
+        }
+        
+        if (returnNumber == 0) {
+            self.memberEmailTable.hidden = YES;
+        }else{
+            self.memberEmailTable.hidden = NO;
+        }
+        return returnNumber;
+        
+    }else if (tableView == self.editNameTable){
+        return 3;
+    }
+    return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView
+		 cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSUInteger row = [indexPath row];
+	
+    if (tableView == self.memberEmailTable) {
+        static NSString *FirstLevelCell=@"FirstLevelCell";
+        static NSInteger typeTag = 1;
+        static NSInteger valueTag = 2;
+        
+        
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
+        
+        if (cell == nil){
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
+            
+            UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 70, 20)];
+            typeLabel.tag = typeTag;
+            [cell.contentView addSubview:typeLabel];
+            
+            
+            UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 10, 205, 20)];
+            valueLabel.tag = valueTag;
+            [cell.contentView addSubview:valueLabel];
+            
+        }
+        
+        UILabel *typeLabel = (UILabel *)[cell.contentView viewWithTag:typeTag];
+        UILabel *valueLabel = (UILabel *)[cell.contentView viewWithTag:valueTag];
+        typeLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
+        
+        typeLabel.backgroundColor = [UIColor clearColor];
+        valueLabel.backgroundColor = [UIColor clearColor];
+        
+        typeLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
+        valueLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17];
+        
+        typeLabel.textAlignment = UITextAlignmentRight;
+        
+        if (row == 0) {
+            //member, guard1 or guard2
+            
+            if (![self.playerEmailString isEqualToString:@""] && (self.playerEmailString != nil)) {
+                valueLabel.text = self.playerEmailString;
+                typeLabel.text = @"email";
+            }else if (![self.guard1Email isEqualToString:@""] && (self.guard1Email != nil)) {
+                valueLabel.text = self.guard1Email;
+                typeLabel.text = @"g1 email";
+            }else if (![self.guard2Email isEqualToString:@""] && (self.guard2Email != nil)) {
+                valueLabel.text = self.guard2Email;
+                typeLabel.text = @"g2 email";
+            }
+            
+        }else if (row == 1){
+            //guard1 or guard2
+            
+            if (![self.playerEmailString isEqualToString:@""] && (self.playerEmailString != nil)) {
+                if (![self.guard1Email isEqualToString:@""] && (self.guard1Email != nil)) {
+                    valueLabel.text = self.guard1Email;
+                    typeLabel.text = @"g1 email";
+                }else if (![self.guard2Email isEqualToString:@""] && (self.guard2Email != nil)) {
+                    valueLabel.text = self.guard2Email;
+                    typeLabel.text = @"g2 email";
+                }
+            }else if (![self.guard2Email isEqualToString:@""] && (self.guard2Email != nil)) {
+                valueLabel.text = self.guard2Email;
+                typeLabel.text = @"g2 email";
+            }
+            
+        }else {
+            //guard2
+            valueLabel.text = self.guard2Email;
+            typeLabel.text = @"g2 email";
+        }
+        
+        
+        return cell;
+    }else if (tableView == self.memberPhoneTable) {
+        static NSString *FirstLevelCell=@"FirstLevelCell";
+        static NSInteger typeTag = 1;
+        static NSInteger valueTag = 2;
+        
+        
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
+        
+        if (cell == nil){
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
+            
+            UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 70, 20)];
+            typeLabel.tag = typeTag;
+            [cell.contentView addSubview:typeLabel];
+            
+            
+            UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 10, 205, 20)];
+            valueLabel.tag = valueTag;
+            [cell.contentView addSubview:valueLabel];
+            
+        }
+        
+        UILabel *typeLabel = (UILabel *)[cell.contentView viewWithTag:typeTag];
+        UILabel *valueLabel = (UILabel *)[cell.contentView viewWithTag:valueTag];
+        typeLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
+                
+        typeLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
+        valueLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17];
+        
+        typeLabel.backgroundColor = [UIColor clearColor];
+        valueLabel.backgroundColor = [UIColor clearColor];
+        
+        typeLabel.textAlignment = UITextAlignmentRight;
+
+        if (row == 0) {
+            //member, guard1 or guard2
+            
+            if (![self.initPhone isEqualToString:@""] && (self.initPhone != nil)) {
+                valueLabel.text = self.initPhone;
+                typeLabel.text = @"phone";
+            }else if (![self.guard1Phone isEqualToString:@""] && (self.guard1Phone != nil)) {
+                valueLabel.text = self.guard1Phone;
+                typeLabel.text = @"g1 phone";
+            }else if (![self.guard2Phone isEqualToString:@""] && (self.guard2Phone != nil)) {
+                valueLabel.text = self.guard2Phone;
+                typeLabel.text = @"g2 phone";
+            }
+            
+        }else if (row == 1){
+            //guard1 or guard2
+            
+            if (![self.initPhone isEqualToString:@""] && (self.initPhone != nil)) {
+                if (![self.guard1Phone isEqualToString:@""] && (self.guard1Phone != nil)) {
+                    valueLabel.text = self.guard1Phone;
+                    typeLabel.text = @"g1 phone";
+                }else if (![self.guard2Phone isEqualToString:@""] && (self.guard2Phone != nil)) {
+                    valueLabel.text = self.guard2Phone;
+                    typeLabel.text = @"g2 phone";
+                }
+            }else if (![self.guard2Phone isEqualToString:@""] && (self.guard2Phone != nil)) {
+                valueLabel.text = self.guard2Phone;
+                typeLabel.text = @"g2 phone";
+            }
+            
+        }else {
+            //guard2
+            valueLabel.text = self.guard2Phone;
+            typeLabel.text = @"G2 Phone";
+        }
+        
+        return cell;
+        
+    }else if (tableView == self.editNameTable) {
+        
+        static NSString *FirstLevelCell=@"FirstLevelCell";
+        static NSInteger typeTag = 1;
+        static NSInteger valueTag = 2;
+        
+        
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
+        
+        if (cell == nil){
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
+            
+            UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 70, 20)];
+            typeLabel.tag = typeTag;
+            [cell.contentView addSubview:typeLabel];
+            
+            
+            UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 10, 205, 20)];
+            valueLabel.tag = valueTag;
+            [cell.contentView addSubview:valueLabel];
+            
+        }
+        
+        UILabel *typeLabel = (UILabel *)[cell.contentView viewWithTag:typeTag];
+        UILabel *valueLabel = (UILabel *)[cell.contentView viewWithTag:valueTag];
+        typeLabel.hidden = YES;
+        valueLabel.hidden = YES;
+        
+        for (UIView *view in [cell.contentView subviews]) {
+            [view removeFromSuperview];
+        }
+        if (row == 0) {
+            
+            self.firstEdit = [[UITextField alloc] initWithFrame:CGRectMake(5, 10, 195, 20)];
+            self.firstEdit.clearButtonMode = UITextFieldViewModeWhileEditing;
+            self.firstEdit.placeholder = @"First";
+            self.firstEdit.returnKeyType = UIReturnKeyDone;
+            self.firstEdit.delegate = self;
+            self.firstEdit.backgroundColor = [UIColor clearColor];
+            
+            if ([self.firstName length] > 0) {
+                self.firstEdit.text = self.firstName;
+                self.firstEdit.textColor = [UIColor blackColor];
+            }else {
+                
+            }
+            
+            [cell.contentView addSubview:self.firstEdit];
+
+        }else if (row == 1){
+            
+            self.lastEdit = [[UITextField alloc] initWithFrame:CGRectMake(5, 10, 195, 20)];
+            [self.lastEdit addTarget:self action:@selector(endText) forControlEvents:UIControlEventValueChanged];
+            self.lastEdit.clearButtonMode = UITextFieldViewModeWhileEditing;
+            self.lastEdit.placeholder = @"Last";
+            self.lastEdit.returnKeyType = UIReturnKeyDone;
+            self.lastEdit.delegate = self;
+            self.lastEdit.backgroundColor = [UIColor clearColor];
+            
+            if ([self.lastName length] > 0) {
+                self.lastEdit.text = self.lastName;
+                self.lastEdit.textColor = [UIColor blackColor];
+            }else {
+                
+            }
+            
+            [cell.contentView addSubview:self.lastEdit];
+            
+
+        }else{
+            self.jerseyEdit = [[UITextField alloc] initWithFrame:CGRectMake(5, 10, 195, 20)];
+            [self.jerseyEdit addTarget:self action:@selector(endText) forControlEvents:UIControlEventValueChanged];
+            self.jerseyEdit.clearButtonMode = UITextFieldViewModeWhileEditing;
+            self.jerseyEdit.placeholder = @"Jersey #";
+            self.jerseyEdit.returnKeyType = UIReturnKeyDone;
+            self.jerseyEdit.delegate = self;
+            self.jerseyEdit.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            self.jerseyEdit.backgroundColor = [UIColor clearColor];
+            
+            if ([self.jersey length] > 0) {
+                self.jerseyEdit.text = self.jersey;
+                self.jerseyEdit.textColor = [UIColor blackColor];
+            }else {
+                
+            }
+            
+            [cell.contentView addSubview:self.jerseyEdit];
+
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+
+        
+    }else if (tableView == self.editEmailPhoneTable) {
+        
+        static NSString *FirstLevelCell=@"FirstLevelCell";
+        static NSInteger typeTag = 1;
+        static NSInteger valueTag = 2;
+        
+        
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
+        
+        if (cell == nil){
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
+            
+            UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 70, 20)];
+            typeLabel.tag = typeTag;
+            [cell.contentView addSubview:typeLabel];
+            
+            
+            UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 10, 205, 20)];
+            valueLabel.tag = valueTag;
+            [cell.contentView addSubview:valueLabel];
+            
+        }
+        
+        UILabel *typeLabel = (UILabel *)[cell.contentView viewWithTag:typeTag];
+        UILabel *valueLabel = (UILabel *)[cell.contentView viewWithTag:valueTag];
+        typeLabel.hidden = YES;
+        valueLabel.hidden = YES;
+        
+        for (UIView *view in [cell.contentView subviews]) {
+            [view removeFromSuperview];
+        }
+        
+        if (row == 0) {
+            
+            self.emailEdit = [[UITextField alloc] initWithFrame:CGRectMake(5, 10, 287, 20)];
+            [self.emailEdit addTarget:self action:@selector(endText) forControlEvents:UIControlEventValueChanged];
+            self.emailEdit.clearButtonMode = UITextFieldViewModeWhileEditing;
+            self.emailEdit.placeholder = @"Email";
+            self.emailEdit.returnKeyType = UIReturnKeyDone;
+            self.emailEdit.delegate = self;
+            self.emailEdit.backgroundColor = [UIColor clearColor];
+            
+            if ([self.playerEmailString length] > 0) {
+                self.emailEdit.text = self.playerEmailString;
+                self.emailEdit.textColor = [UIColor blackColor];
+            }else {
+                
+            }
+            
+            
+            if (self.isUser) {
+                
+                if (self.isEmailConfirmed) {
+                    [self.emailEdit setEnabled:NO];
+                }
+           
+            }
+            
+            
+            [cell.contentView addSubview:self.emailEdit];
+            
+        }else{
+            
+            self.mobileEdit = [[UITextField alloc] initWithFrame:CGRectMake(5, 10, 287, 20)];
+            [self.mobileEdit addTarget:self action:@selector(endText) forControlEvents:UIControlEventValueChanged];
+            self.mobileEdit.clearButtonMode = UITextFieldViewModeWhileEditing;
+            self.mobileEdit.placeholder = @"Phone";
+            self.mobileEdit.returnKeyType = UIReturnKeyDone;
+            self.mobileEdit.delegate = self;
+            self.mobileEdit.backgroundColor = [UIColor clearColor];
+            
+            if (![self.phone isEqualToString:@""]) {
+
+                NSString *myLocale;
+                self.mobileEdit.text = [myPhoneNumberFormatter format:self.phone withLocale:myLocale];
+                self.mobileEdit.textColor = [UIColor blackColor];
+            }else {
+                
+            }
+
+            if (self.isUser) {
+            
+                if (self.isSmsConfirmed) {
+                    [self.mobileEdit setEnabled:NO];
+                }
+            }
+            
+            
+            [cell.contentView addSubview:self.mobileEdit];
+          
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+        
+    }else{
+        
+        static NSString *FirstLevelCell=@"FirstLevelCell";
+        static NSInteger typeTag = 1;
+        static NSInteger valueTag = 2;
+        
+        
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:FirstLevelCell];
+        
+        if (cell == nil){
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FirstLevelCell];
+            
+            UILabel *typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 85, 20)];
+            typeLabel.tag = typeTag;
+            [cell.contentView addSubview:typeLabel];
+            
+            
+            UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 10, 205, 20)];
+            valueLabel.tag = valueTag;
+            [cell.contentView addSubview:valueLabel];
+            
+        }
+        
+        UILabel *typeLabel = (UILabel *)[cell.contentView viewWithTag:typeTag];
+        UILabel *valueLabel = (UILabel *)[cell.contentView viewWithTag:valueTag];
+        valueLabel.hidden = YES;
+        
+        typeLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
+        
+        typeLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
+        valueLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17];
+        
+        typeLabel.backgroundColor = [UIColor clearColor];
+        valueLabel.backgroundColor = [UIColor clearColor];
+        
+        typeLabel.textAlignment = UITextAlignmentRight;
+        
+        for (UIView *view in [cell.contentView subviews]) {
+            
+            if ([view class] == [UISegmentedControl class]) {
+                [view removeFromSuperview];
+            }
+        }
+        
+        
+        if (row == 0) {
+            
+            self.coordinatorSegment = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Yes", @"No", nil]];
+            self.coordinatorSegment.frame = CGRectMake(105, 5, 182, 30);
+            self.coordinatorSegment.segmentedControlStyle = UISegmentedControlStyleBar;
+            
+            [self.coordinatorSegment addTarget:self action:@selector(coordinatorChanged) forControlEvents:UIControlEventValueChanged];
+
+            if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+                self.coordinatorSegment.selectedSegmentIndex = 0;
+            }else{
+                self.coordinatorSegment.selectedSegmentIndex = 1;
+            }
+            self.coordinatorSegment.enabled = YES;
+            
+            if ([self.userRole isEqualToString:@"creator"]) {
+                self.coordinatorSegment.enabled = NO;
+            }
+            
+            [cell.contentView addSubview:self.coordinatorSegment];
+            typeLabel.text = @"coordinator";
+
+            
+        }else{
+            typeLabel.text = @"role";
+
+            self.memberFanSegment = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Member", @"Fan", nil]];
+            self.memberFanSegment.frame = CGRectMake(105, 5, 182, 30);
+            self.memberFanSegment.segmentedControlStyle = UISegmentedControlStyleBar;
+            self.memberFanSegment.selectedSegmentIndex = 0;
+            [self.memberFanSegment addTarget:self action:@selector(memberFanChanged) forControlEvents:UIControlEventValueChanged];
+            [cell.contentView addSubview:self.memberFanSegment];
+
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+        
+    }
+
+
+}
+
+
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    NSUInteger row = [indexPath row];
+    if (tableView == self.memberEmailTable) {
+        
+        NSString *emailString = @"";
+        if (row == 0) {
+            //member, guard1 or guard2
+            
+            if (![self.playerEmailString isEqualToString:@""] && (self.playerEmailString != nil)) {
+                emailString = self.playerEmailString;
+            }else if (![self.guard1Email isEqualToString:@""] && (self.guard1Email != nil)) {
+                emailString = self.guard1Email;
+
+            }else if (![self.guard2Email isEqualToString:@""] && (self.guard2Email != nil)) {
+                emailString = self.guard2Email;
+            }
+            
+        }else if (row == 1){
+            //guard1 or guard2
+            
+            if (![self.playerEmailString isEqualToString:@""] && (self.playerEmailString != nil)) {
+                if (![self.guard1Email isEqualToString:@""] && (self.guard1Email != nil)) {
+                    emailString = self.guard1Email;
+
+                }else if (![self.guard2Email isEqualToString:@""] && (self.guard2Email != nil)) {
+                    emailString = self.guard2Email;
+                }
+            }else if (![self.guard2Email isEqualToString:@""] && (self.guard2Email != nil)) {
+                emailString = self.guard2Email;
+            }
+            
+        }else {
+            //guard2
+            emailString = self.guard2Email;
+        }
+        
+        if ([MFMailComposeViewController canSendMail]) {
+            
+            MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+            mailViewController.mailComposeDelegate = self;
+            [mailViewController setToRecipients:[NSArray arrayWithObject:emailString]];
+            
+            [self presentModalViewController:mailViewController animated:YES];
+            
+        }else {
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Device." message:@"Your device cannot currently send email." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+        }
+        
+    }else if (tableView == self.memberPhoneTable){
+        if (row == 0) {
+            //member, guard1 or guard2
+            if (![self.initPhone isEqualToString:@""] && (self.initPhone != nil)) {
+                self.callOrTextWho = @"member";
+            }else if (![self.guard1Phone isEqualToString:@""] && (self.guard1Phone != nil)) {
+                self.callOrTextWho = @"guard1";
+            }else if (![self.guard2Phone isEqualToString:@""] && (self.guard2Phone != nil)) {
+                self.callOrTextWho = @"guard2";
+
+            }
+            
+        }else if (row == 1){
+            //guard1 or guard2
+            
+            if (![self.initPhone isEqualToString:@""] && (self.initPhone != nil)) {
+                if (![self.guard1Phone isEqualToString:@""] && (self.guard1Phone != nil)) {
+                    self.callOrTextWho = @"guard1";
+
+                }else if (![self.guard2Phone isEqualToString:@""] && (self.guard2Phone != nil)) {
+                    self.callOrTextWho = @"guard2";
+
+                }
+            }else if (![self.guard2Phone isEqualToString:@""] && (self.guard2Phone != nil)) {
+                self.callOrTextWho = @"guard2";
+
+            }
+            
+        }else {
+            //guard2
+           self.callOrTextWho = @"guard2";
+
+        }
+        
+        self.callTextActionSheet = [[UIActionSheet alloc] initWithTitle:@"Call or Text this person?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Call", @"Text", nil];
+        self.callTextActionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+        [self.callTextActionSheet showInView:self.view];
+    }else if (tableView == self.editNameTable){
+
+        if (row == 0) {
+            [self.firstEdit becomeFirstResponder];
+
+        }else if (row == 1){
+            [self.lastEdit becomeFirstResponder];
+
+        }else{
+            [self.jerseyEdit becomeFirstResponder];
+        }
+    }else if (tableView == self.editEmailPhoneTable){
+
+        if (row == 0) {
+            [self.emailEdit becomeFirstResponder];
+            
+        }else{
+            [self.mobileEdit becomeFirstResponder];
+        }
+        
+    }else{
+
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 40;
+}
+
+-(void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+	
+	switch (result)
+	{
+		case MFMailComposeResultCancelled:
+			break;
+		case MFMailComposeResultSent:
+            
+			break;
+		case MFMailComposeResultFailed:
+            
+			break;
+			
+		case MFMailComposeResultSaved:
+            
+			break;
+		default:
+			
+			break;
+	}
+	
+	
+	[self dismissModalViewControllerAnimated:YES];
+	
+}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+	[textField resignFirstResponder];
+    
+    self.editNameTable.frame =CGRectMake(95, 0, 220, 135);
+    self.editEmailPhoneTable.frame = CGRectMake(4, 135, 312, 95);
+                                
+	return YES;
+    
+}
+
+
+- (void)keyboardWillShow:(NSNotification *)note {  
+    
+    if ([self.mobileEdit isFirstResponder]) {
+        self.editNameTable.frame =CGRectMake(95, -50, 220, 135);
+        self.editEmailPhoneTable.frame = CGRectMake(4, 85, 312, 95);
+    }else{
+        self.editNameTable.frame =CGRectMake(95, 0, 220, 135);
+        self.editEmailPhoneTable.frame = CGRectMake(4, 135, 312, 95);
+    }
+    
+    
+    
+}
+
+-(void)memberFanChanged{
+    
+    if (self.memberFanSegment.selectedSegmentIndex == 0) {
+        self.finalFanMember = @"member";
+    }else{
+        self.finalFanMember = @"fan";
+    }
+}
+
+-(void)coordinatorChanged{
+    if (self.coordinatorSegment.selectedSegmentIndex == 0) {
+        self.finalUserRole = @"coordinator";
+    }else{
+        self.finalUserRole = @"member";
+    }
+}
+
 -(void)viewDidUnload{
 
     startEditButton = nil;
@@ -2241,6 +2962,8 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	switchFanButton = nil;
 	switchFanLabel = nil;
 	profilePhotoButton = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
 	[super viewDidUnload];
 	 
 }

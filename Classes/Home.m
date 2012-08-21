@@ -52,6 +52,7 @@
 #import "SelectTeamCal.h"
 #import "HomeAttendanceView.h"
 #import "HomeScoreView.h"
+#import "TestWebView.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -749,6 +750,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
 	self.serverError.text = @"";
 
 	Search *tmp = [[Search alloc] init];
+    //TestWebView *tmp = [[TestWebView alloc] init];
 	
 	UINavigationController *navController = [[UINavigationController alloc] init];
 	
@@ -3653,6 +3655,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         self.currentDisplay = 2;
         self.regTextView.text = @"This is your Home screen.  To get back here from anywhere else, just shake your phone to activate the 'Quick Link' menu, then select 'Home'.";
+        
+        self.textBackView.frame = CGRectMake(15, 15, 290, 140);
+        self.textFrontView.frame = CGRectMake(2, 2, 286, 136);
+
+
     }else if (self.currentDisplay == 2){
     
         if (self.createdTeam) {

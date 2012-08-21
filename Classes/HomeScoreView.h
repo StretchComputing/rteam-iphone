@@ -8,12 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "Home.h"
+#import <iAd/iAd.h>
 
 @class Home;
 
-@interface HomeScoreView : UIViewController <UIImagePickerControllerDelegate> {
+@interface HomeScoreView : UIViewController <UIImagePickerControllerDelegate, ADBannerViewDelegate, UINavigationControllerDelegate> {
     
 }
+@property (nonatomic, strong) IBOutlet UIButton *saveScoreEditButton;
+@property (nonatomic, strong) IBOutlet UITextField *scoreUsTextField;
+@property (nonatomic, strong) IBOutlet UITextField *scoreThemTextField;
+
+@property (nonatomic, strong) IBOutlet UIView *frontView;
+@property BOOL bannerIsVisible;
+@property (nonatomic, strong) ADBannerView *myAd;
+
 //Post Image
 @property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) NSData *imageDataToSend;
@@ -125,4 +134,7 @@
 
 -(IBAction)postImageCancel;
 -(IBAction)postImageSubmit;
+
+-(IBAction)endText;
+-(IBAction)doneButton;
 @end

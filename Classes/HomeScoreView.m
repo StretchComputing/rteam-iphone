@@ -24,12 +24,34 @@
 #import "ImageDisplayMultiple.h"
 
 @implementation HomeScoreView
-@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView, latitude,longitude, opponent, mapButton, myTimer, linkLine, linkLabel, gameday, cameraButton, isSwitch, gameImageArray, fullBackView, imageView, imageButton, imageBackView, rightButton, leftButton, currentImageDisplayCell, home, sendOrientation, postImageLabel, postImagePreview, postImageActivity, postImageBackView, postImageTextView, postImageFrontView, postImageErrorLabel, postImageCancelButton, postImageSubmitButton, imageDataToSend, postImageText, errorString, picCount;
+@synthesize fullScreenButton, isFullScreen, initY, teamName, scoreUs, scoreThem, interval, scoreUsLabel, scoreThemLabel, topLabel, usLabel, themLabel, intervalLabel, teamId, eventId, sport, participantRole, goToButton, scoreButton, eventDate, addUsButton, addThemButton, subUsButton, subThemButton, addIntervalButton, subIntervalButton, isKeepingScore, eventDescription, eventStringDate, gameOverButton, overActivity, homeSuperView, latitude,longitude, opponent, mapButton, myTimer, linkLine, linkLabel, gameday, cameraButton, isSwitch, gameImageArray, fullBackView, imageView, imageButton, imageBackView, rightButton, leftButton, currentImageDisplayCell, home, sendOrientation, postImageLabel, postImagePreview, postImageActivity, postImageBackView, postImageTextView, postImageFrontView, postImageErrorLabel, postImageCancelButton, postImageSubmitButton, imageDataToSend, postImageText, errorString, picCount, myAd, bannerIsVisible, frontView, scoreUsTextField, scoreThemTextField, saveScoreEditButton;
 
 
-
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewDidAppear:(BOOL)animated{
+    if (self.bannerIsVisible) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        myAd.frame = CGRectMake(0, 430, 320, 50);
+        self.frontView.frame = CGRectMake(0, 0, 320, 430);
+        
+        
+        
+        [UIView commitAnimations];
+    }else{
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        self.frontView.frame = self.view.frame;
+        
+        [UIView commitAnimations];
+        
+    }
     
+}
+-(void)viewWillAppear:(BOOL)animated{
+        
     if (self.gameday || self.home) {
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
         self.navigationController.navigationBar.hidden = YES;
@@ -37,11 +59,33 @@
     }
     
   
+    
+  
+  
 }
 - (void)viewDidLoad
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+                                             selector:@selector(keyboardWillShow:) 
+                                                 name:UIKeyboardWillShowNotification 
+                                               object:nil];
+    
+    self.saveScoreEditButton.hidden = YES;
+    self.scoreUsTextField.hidden = YES;
+    self.scoreThemTextField.hidden = YES;
+    
+    self.scoreUsTextField.backgroundColor = [UIColor clearColor];
+    self.scoreThemTextField.backgroundColor = [UIColor clearColor];
+    
+    myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 480, 320, 50)];
+	myAd.delegate = self;
+	myAd.hidden = YES;
+	[self.view addSubview:myAd];
+    
     self.gameImageArray = [NSMutableArray array];
     self.postImageBackView.hidden = YES;
+    self.scoreUsTextField.enabled = YES;
+    self.scoreThemTextField.enabled = YES;
     self.scoreButton.enabled = YES;
     self.cameraButton.enabled = YES;
 
@@ -55,11 +99,7 @@
     
     self.fullBackView.hidden = YES;
     
-    if (self.gameday) {
-        self.cameraButton.hidden = YES;
-    }else{
-        self.cameraButton.hidden = NO;
-    }
+
    
     self.addUsButton.hidden = YES;
     self.subUsButton.hidden = YES;
@@ -72,7 +112,7 @@
 
     //To make this view go full screen:         
     self.isFullScreen = false;
-    self.view.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
+    self.frontView.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
     [super viewDidLoad];
     
     UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
@@ -124,7 +164,12 @@
         self.themLabel.text = [NSString stringWithString:self.opponent];
     }
     
-    
+    if ([self.scoreUs isEqualToString:@""] || self.scoreUs == nil) {
+        self.scoreUs = @"0";
+    }
+    if ([self.scoreThem isEqualToString:@""] || self.scoreThem == nil) {
+        self.scoreThem = @"0";
+    }
     self.scoreUsLabel.text = self.scoreUs;
     self.scoreThemLabel.text = self.scoreThem;
     
@@ -256,6 +301,9 @@
     NSString *time = @"";
     int intInterval = [self.interval intValue];
     
+    if (intInterval == 0) {
+        time = @"-";
+    }
     if (intInterval == 1) {
         time = @"1st";
     }
@@ -303,6 +351,9 @@
         
         [self performSelectorInBackground:@selector(runRequest) withObject:nil];
 
+        self.scoreUsTextField.hidden = YES;
+        self.scoreThemTextField.hidden = YES;
+        
         [self.scoreButton setTitle:@"Keep Score" forState:UIControlStateNormal];
         
         self.isKeepingScore = false;
@@ -326,7 +377,8 @@
         
         [self.myTimer invalidate];
         
-    
+        self.scoreUsTextField.hidden = NO;
+        self.scoreThemTextField.hidden = NO;
         
         [self.scoreButton setTitle:@"Save Score" forState:UIControlStateNormal];
 
@@ -688,6 +740,9 @@
     self.subUsButton.enabled = YES;
     self.subThemButton.enabled = YES;
     
+    self.scoreUsTextField.hidden = YES;
+    self.scoreThemTextField.hidden = YES;
+    
     if ([responseString isEqualToString:@""]) {
         
         [self setLabels];
@@ -775,6 +830,8 @@
     self.imageDataToSend = UIImageJPEGRepresentation(newImage, 0.90);
     
     self.postImageBackView.hidden = NO;
+    self.scoreUsTextField.enabled = NO;
+    self.scoreThemTextField.enabled = NO;
     self.scoreButton.enabled = NO;
     self.cameraButton.enabled = NO;
 
@@ -790,6 +847,15 @@
     
     
 } 
+
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    
+	[picker dismissModalViewControllerAnimated:YES];	
+ 
+    self.scoreButton.enabled = YES;
+    self.cameraButton.enabled = YES;
+}
 
 -(void)mapAction{
         
@@ -1013,6 +1079,8 @@
 -(void)postImageCancel{
     self.imageDataToSend = [NSData data];
     self.postImageBackView.hidden = YES;
+    self.scoreUsTextField.enabled = YES;
+    self.scoreThemTextField.enabled = YES;
 }
 
 -(void)postImageSubmit{
@@ -1113,9 +1181,151 @@
 
 -(void)hidePost{
     self.postImageBackView.hidden = YES;
+    self.scoreUsTextField.enabled = YES;
+    self.scoreThemTextField.enabled = YES;
     self.scoreButton.enabled = YES;
     self.cameraButton.enabled = YES;
 }
+
+
+//iAd delegate methods
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
+	
+	return YES;
+	
+}
+
+-(void)bannerViewActionDidFinish:(ADBannerView *)banner{
+    
+    
+}
+
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner{
+    
+    if (!self.bannerIsVisible) {
+        
+        self.bannerIsVisible = YES;
+        myAd.hidden = NO;
+        
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        myAd.frame = CGRectMake(0, 430, 320, 50);
+        self.frontView.frame = CGRectMake(0, 0, 320, 430);
+
+        
+        
+        [UIView commitAnimations];
+        
+        [self.view bringSubviewToFront:myAd]; 
+    }
+        
+          
+    
+    
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
+    
+    
+    self.myAd.hidden = YES;
+	if (self.bannerIsVisible) {
+        
+		self.bannerIsVisible = NO;
+        
+   
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        self.frontView.frame = CGRectMake(0, 0, 320, 480);
+        
+        
+        
+        [UIView commitAnimations];
+        
+        
+	}
+	
+	
+}
+
+
+
+
+-(void)endText{
+    
+}
+
+-(void)doneButton{
+ 
+    self.saveScoreEditButton.hidden = YES;
+  
+    
+    self.addUsButton.hidden = NO;
+    self.subUsButton.hidden = NO;
+    self.addThemButton.hidden =  NO;
+    self.subThemButton.hidden = NO;
+    
+    if (![self.scoreUsTextField.text isEqualToString:@""] && (self.scoreUsTextField.text != nil)) {
+        self.scoreUs = self.scoreUsTextField.text;
+    }
+    
+    if (![self.scoreThemTextField.text isEqualToString:@""] && (self.scoreThemTextField.text != nil)) {
+        self.scoreThem = self.scoreThemTextField.text;
+    }
+    
+    [self.scoreUsTextField resignFirstResponder];
+    [self.scoreThemTextField resignFirstResponder];
+    self.scoreUsTextField.text = @"";
+    self.scoreThemTextField.text = @"";
+    self.scoreUsTextField.backgroundColor = [UIColor clearColor];
+    self.scoreThemTextField.backgroundColor = [UIColor clearColor];
+    
+    [self performSelectorInBackground:@selector(runRequest) withObject:nil];
+
+    [self setLabels];
+
+
+}
+
+- (void)keyboardWillShow:(NSNotification *)note {  
+    // create custom button
+    self.saveScoreEditButton.hidden = NO;
+    
+    self.addUsButton.hidden = YES;
+    self.subUsButton.hidden = YES;
+    self.addThemButton.hidden = YES;
+    self.subThemButton.hidden = YES;
+    
+    self.scoreUsTextField.text = self.scoreUs;
+    self.scoreThemTextField.text = self.scoreThem;
+    
+    if ([self.scoreThemTextField isFirstResponder]) {
+        if ([self.scoreThemTextField.text isEqualToString:@"0"]) {
+            self.scoreThemTextField.text = @"";
+        }
+    }
+    
+    if ([self.scoreUsTextField isFirstResponder]) {
+        if ([self.scoreUsTextField.text isEqualToString:@"0"]) {
+            self.scoreUsTextField.text = @"";
+        }
+    }
+    
+    
+    
+    
+    self.scoreUsTextField.backgroundColor = [UIColor blackColor];
+    self.scoreThemTextField.backgroundColor = [UIColor blackColor];
+    
+ 
+
+    
+}
+
+ 
+
 
 - (void)viewDidUnload
 {
@@ -1155,6 +1365,12 @@
     postImageActivity = nil;
     postImageTextView = nil;
     postImageSubmitButton = nil;
+    frontView = nil;
+    scoreThemTextField = nil;
+    scoreUsTextField = nil;
+    saveScoreEditButton = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [super viewDidUnload];
 
 }

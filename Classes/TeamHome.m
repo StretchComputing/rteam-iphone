@@ -381,11 +381,13 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                 
                 self.futureGameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 320, 25)];
                 self.futureGameLabel.textAlignment = UITextAlignmentCenter;
+                self.futureGameLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17];
                 self.futureGameLabel.backgroundColor = [UIColor clearColor];
                 [self.view addSubview:self.futureGameLabel];
                 
                 self.pastGameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, 320, 25)];
                 self.pastGameLabel.textAlignment = UITextAlignmentCenter;
+                self.pastGameLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17];
                 self.pastGameLabel.backgroundColor = [UIColor clearColor];
                 [self.view addSubview:self.pastGameLabel];
                 

@@ -31,17 +31,43 @@
 
 
 @implementation HomeAttendanceView
-@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView, isFullScreen, fullScreenButton, homeSuperView, latitude, longitude, mapButton, startScoreButton, opponent, startedScoring;
-
+@synthesize initY, teamName, teamLabel, yesCount, yesLabel, noCount, noLabel, noReplyCount, noReplyLabel, dateLabel, eventDate, eventType, pollButton, goToButton, participantRole, teamId, eventId, sport, pollActivity, pollLabel, maybeCount, maybeLabel, pollDescription, currentMemberId, currentMemberResponse, statusReply, statusButton, messageThreadId, eventDescription, eventStringDate, attendees, eventLinkLabel, lineView, isFullScreen, fullScreenButton, homeSuperView, latitude, longitude, mapButton, startScoreButton, opponent, startedScoring, myAd, bannerIsVisible, frontView;
 
 -(void)viewDidAppear:(BOOL)animated{
+    
+    
     if (self.startedScoring) {
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
-
+        
         [self dismissModalViewControllerAnimated:NO];
+    }else{
+        if (self.bannerIsVisible) {
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:1.0];
+            
+            myAd.frame = CGRectMake(0, 430, 320, 50);
+            self.frontView.frame = CGRectMake(0, 0, 320, 430);
+            
+            
+            
+            [UIView commitAnimations];
+        }else{
+            
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:1.0];
+            
+            self.frontView.frame = self.view.frame;
+            
+            [UIView commitAnimations];
+            
+        }
     }
+   
+    
 }
+
+
 -(void)viewWillAppear:(BOOL)animated{
     
     if (self.startedScoring) {
@@ -75,6 +101,11 @@
 {
     [TraceSession addEventToSession:@"HomeAttendanceView - View Did Load"];
 
+    myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 480, 320, 50)];
+	myAd.delegate = self;
+	myAd.hidden = YES;
+	[self.view addSubview:myAd];
+    
     UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
 	[self.goToButton setBackgroundImage:stretch forState:UIControlStateNormal];
@@ -159,7 +190,7 @@
     self.noReplyLabel.text = noReplyCount;
     self.maybeLabel.text = self.maybeCount;
     
-    int totalHeight = self.view.frame.size.height;
+    //int totalHeight = self.view.frame.size.height;
     
     NSString *myReply = @"";
     
@@ -179,9 +210,9 @@
         self.pollButton.hidden = NO;
         self.pollDescription.hidden = NO;
         
-        self.goToButton.frame = CGRectMake(191, totalHeight - 57, 109, 35);
-        self.statusButton.frame = CGRectMake(20, totalHeight - 57, 129, 35);
-        self.statusReply.frame = CGRectMake(-6, totalHeight - 27, 180, 21);
+        self.goToButton.frame = CGRectMake(191, self.goToButton.frame.origin.y, 109, 35);
+        self.statusButton.frame = CGRectMake(20, self.statusButton.frame.origin.y, 129, 35);
+        self.statusReply.frame = CGRectMake(-6, self.statusReply.frame.origin.y, 180, 21);
        
         [self.goToButton setTitle:[NSString stringWithFormat:@"Poll Details", self.eventType] forState:UIControlStateNormal];
 
@@ -190,9 +221,9 @@
         self.pollButton.hidden = YES;
         self.pollDescription.hidden = YES;
         
-        self.goToButton.frame = CGRectMake(80, totalHeight - 45, 160, 35);
-        self.statusButton.frame = CGRectMake(95, totalHeight - 109, 130, 35);
-        self.statusReply.frame = CGRectMake(0, totalHeight - 79, 320, 21);
+        self.goToButton.frame = CGRectMake(80, self.goToButton.frame.origin.y, 160, 35);
+        self.statusButton.frame = CGRectMake(95, self.statusButton.frame.origin.y, 130, 35);
+        self.statusReply.frame = CGRectMake(0, self.statusReply.frame.origin.y, 320, 21);
         
         [self.goToButton setTitle:[NSString stringWithFormat:@"Poll Details", self.eventType] forState:UIControlStateNormal];
 
@@ -838,6 +869,68 @@
         }
         
     }	
+	
+	
+}
+
+//iAd delegate methods
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
+	
+	return YES;
+	
+}
+
+-(void)bannerViewActionDidFinish:(ADBannerView *)banner{
+    
+    
+}
+
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner{
+    
+    if (!self.bannerIsVisible) {
+        
+        self.bannerIsVisible = YES;
+        myAd.hidden = NO;
+        
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        myAd.frame = CGRectMake(0, 430, 320, 50);
+        self.frontView.frame = CGRectMake(0, 0, 320, 430);
+        
+        
+        
+        [UIView commitAnimations];
+        
+        [self.view bringSubviewToFront:myAd]; 
+    }
+    
+    
+    
+    
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
+    
+    
+    self.myAd.hidden = YES;
+	if (self.bannerIsVisible) {
+        
+		self.bannerIsVisible = NO;
+        
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:1.0];
+        
+        self.frontView.frame = CGRectMake(0, 0, 320, 480);
+        
+        
+        
+        [UIView commitAnimations];
+        
+        
+	}
 	
 	
 }

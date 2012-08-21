@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import <MapKit/MKMapView.h>
+
 
 @interface MapLocation : UIViewController <CLLocationManagerDelegate, UIActionSheetDelegate> {
 
