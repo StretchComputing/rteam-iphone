@@ -93,9 +93,9 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
             int num = [temp count];
             num = num - 2;
             
-            if ([[temp objectAtIndex:num] class] == [NewPlayer class]) {
+            if ([temp[num] class] == [NewPlayer class]) {
                 //
-                NewPlayer *newPlayer = [temp objectAtIndex:num];
+                NewPlayer *newPlayer = temp[num];
                 newPlayer.useGuardians = true;
                 newPlayer.guardianOneFirst = self.oneFirstName.text;
                 newPlayer.guardianOneLast = self.oneLastName.text;
@@ -127,9 +127,9 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
         int num = [temp count];
         num = num - 2;
         
-        if ([[temp objectAtIndex:num] class] == [NewPlayer class]) {
+        if ([temp[num] class] == [NewPlayer class]) {
             //
-            NewPlayer *newPlayer = [temp objectAtIndex:num];
+            NewPlayer *newPlayer = temp[num];
             newPlayer.useGuardians = true;
             newPlayer.guardianOneFirst = self.oneFirstName.text;
             newPlayer.guardianOneLast = self.oneLastName.text;
@@ -203,10 +203,10 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
         
         if (buttonIndex != 0){
             if (self.addContactGuard1) {
-                self.oneEmail.text = [self.multipleEmailArray objectAtIndex:buttonIndex-1];
+                self.oneEmail.text = (self.multipleEmailArray)[buttonIndex-1];
                 
             }else{
-                self.twoEmail.text = [self.multipleEmailArray objectAtIndex:buttonIndex-1];
+                self.twoEmail.text = (self.multipleEmailArray)[buttonIndex-1];
                 
             }
         }else{
@@ -229,9 +229,9 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
         if (buttonIndex != 0) {
             
             if (self.addContactGuard1){
-                self.onePhone.text = [self.multiplePhoneArray objectAtIndex:buttonIndex-1];
+                self.onePhone.text = (self.multiplePhoneArray)[buttonIndex-1];
             }else{
-                self.twoPhone.text = [self.multiplePhoneArray objectAtIndex:buttonIndex-1];
+                self.twoPhone.text = (self.multiplePhoneArray)[buttonIndex-1];
                 
             }
         }else{
@@ -264,9 +264,9 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
     int num = [temp count];
     num = num - 2;
     
-    if ([[temp objectAtIndex:num] class] == [NewPlayer class]) {
+    if ([temp[num] class] == [NewPlayer class]) {
         //
-        NewPlayer *newPlayer = [temp objectAtIndex:num];
+        NewPlayer *newPlayer = temp[num];
         newPlayer.useGuardians = false;
         newPlayer.guardianOneFirst = @"";
         newPlayer.guardianOneLast = @"";
@@ -327,55 +327,98 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
     self.currentGuardEmail = @"";
     self.currentGuardPhone = @"";
     
-    NSString* fName = (__bridge_transfer NSString *)ABRecordCopyValue(person,
-                                                                      kABPersonFirstNameProperty);
-	
-	NSString *lName = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-    
-	
-	ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
-	
-	NSArray *emailArray1 = (__bridge_transfer NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
-	NSString *emailAddress = @"";
-	if ([emailArray1 count] > 0) {
-		emailAddress = [emailArray1 objectAtIndex:0];
-        self.multipleEmailArray = [NSMutableArray arrayWithArray:emailArray1];
+    NSString *fName = @"";
+    @try {
+        fName = (__bridge NSString *)ABRecordCopyValue(person,
+                                                       kABPersonFirstNameProperty);
+    }
+    @catch (NSException *exception) {
         
-        for(int i = 0; i < ABMultiValueGetCount(emails); i++)
-        {
-            NSString *test = (__bridge_transfer NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
+    }
+    
+    NSString *lName = @"";
+    
+    @try {
+        lName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        
+    }
+    @catch (NSException *exception) {
+        
+    }
+    
+    NSString *emailAddress = @"";
+    
+    @try {
+        ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
+        
+        NSArray *emailArray1 = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
+        
+        if ([emailArray1 count] > 0) {
+            emailAddress = emailArray1[0];
+            self.multipleEmailArray = [NSMutableArray arrayWithArray:emailArray1];
             
-            NSString *final = [self getType:test];
+            int countHere = ABMultiValueGetCount(emails);
             
-            [self.multipleEmailArrayLabels addObject:final];
+            for(int i = 0; i < countHere; i++)
+            {
+                @try {
+                    NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
+                    
+                    NSString *final = [self getType:test];
+                    
+                    [self.multipleEmailArrayLabels addObject:final];
+                }
+                @catch (NSException *exception) {
+                    [self.multipleEmailArrayLabels addObject:@""];
+                }
+                
+                
+                
+            }
             
         }
         
-	}
-	
-	
-	ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
-	
-    
-    
-	NSArray *phoneArray = (__bridge_transfer NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
-	NSString *phoneString = @"";
-	if ([phoneArray count] > 0) {
-		phoneString = [phoneArray objectAtIndex:0];
-        self.multiplePhoneArray = [NSMutableArray arrayWithArray:phoneArray];
+    }
+    @catch (NSException *exception) {
+        self.multipleEmailArray = [NSMutableArray array];
+        self.multipleEmailArrayLabels = [NSMutableArray array];
         
-        //_$!<Mobile>!$_
-        for(int i = 0; i < ABMultiValueGetCount(phone); i++)
-        {
-            NSString *test = (__bridge_transfer NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
+    }
+    
+    
+    NSString *phoneString = @"";
+    
+    @try {
+        ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
+        
+        NSArray *phoneArray = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
+        if ([phoneArray count] > 0) {
+            phoneString = phoneArray[0];
+            self.multiplePhoneArray = [NSMutableArray arrayWithArray:phoneArray];
             
-            NSString *final = [self getType:test];
-            
-            [self.multiplePhoneArrayLabels addObject:final];
-            
+            for(int i = 0; i < ABMultiValueGetCount(phone); i++)
+            {
+                
+                @try {
+                    NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
+                    
+                    NSString *final = [self getType:test];
+                    
+                    [self.multiplePhoneArrayLabels addObject:final];
+                }
+                @catch (NSException *exception) {
+                    [self.multiplePhoneArrayLabels addObject:@""];
+                }
+                
+            }
         }
         
-	}
+    }
+    @catch (NSException *exception) {
+        self.multiplePhoneArray = [NSMutableArray array];
+        self.multiplePhoneArrayLabels = [NSMutableArray array];
+        
+    }
 	
     
     if (fName == nil) {
@@ -413,7 +456,7 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
             NSMutableArray *tmpArray = [NSMutableArray array];
             
             for (int i = 0; i < 4 ; i++) {
-                [tmpArray addObject:[self.multipleEmailArray objectAtIndex:i]];
+                [tmpArray addObject:(self.multipleEmailArray)[i]];
             }
             
             self.multipleEmailArray = [NSMutableArray arrayWithArray:tmpArray];
@@ -430,8 +473,8 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
         
         for (int i = 0; i < [self.multipleEmailArray count]; i++) {
             
-            NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
-                               [self.multipleEmailArray objectAtIndex:i]];
+            NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multipleEmailArrayLabels)[i],
+                               (self.multipleEmailArray)[i]];
             [self.multipleEmailAlert addButtonWithTitle:title];
         }
         showEmail = true;
@@ -452,7 +495,7 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
             NSMutableArray *tmpArray = [NSMutableArray array];
             
             for (int i = 0; i < 4 ; i++) {
-                [tmpArray addObject:[self.multiplePhoneArray objectAtIndex:i]];
+                [tmpArray addObject:(self.multiplePhoneArray)[i]];
             }
             
             self.multiplePhoneArray = [NSMutableArray arrayWithArray:tmpArray];
@@ -469,8 +512,8 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
         
         for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
             
-            NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
-                               [self.multiplePhoneArray objectAtIndex:i]];
+            NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multiplePhoneArrayLabels)[i],
+                               (self.multiplePhoneArray)[i]];
             [self.multiplePhoneAlert addButtonWithTitle:title];
         }
         showPhone = true;
@@ -527,7 +570,7 @@ removeGuardians, addContactGuard1, twoAlerts, multipleEmailArray, multiplePhoneA
     
     NSArray *tmpArray = [typeLabel componentsSeparatedByString:@">"];
     
-    NSString *tmpString = [tmpArray objectAtIndex:0];
+    NSString *tmpString = tmpArray[0];
     
     returnString = [tmpString substringFromIndex:4];
     

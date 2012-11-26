@@ -84,21 +84,21 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
             
             if (self.team) {
                 for (int i = 0; i < [self.allMemberObjects count]; i++) {
-                    [justMemberObjects addObject:[self.allMemberObjects objectAtIndex:i]];
+                    [justMemberObjects addObject:(self.allMemberObjects)[i]];
                 }
             }
             
             if (self.fans) {
                 for (int i = 0; i < [self.allFansObjects count]; i++) {
-                    [justMemberObjects addObject:[self.allFansObjects objectAtIndex:i]];
+                    [justMemberObjects addObject:(self.allFansObjects)[i]];
                 }
             }
             
         }else{
             for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
                 
-                if (([[self.selectedMemberObjects objectAtIndex:i] class] == [Fan class]) || ([[self.selectedMemberObjects objectAtIndex:i] class] == [Player class]) ) {
-                    [justMemberObjects addObject:[self.selectedMemberObjects objectAtIndex:i]];
+                if (([(self.selectedMemberObjects)[i] class] == [Fan class]) || ([(self.selectedMemberObjects)[i] class] == [Player class]) ) {
+                    [justMemberObjects addObject:(self.selectedMemberObjects)[i]];
                     
                 }
                 
@@ -156,8 +156,8 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
                 //Remove not network auth
                 for (int i = 0; i < [tmpArray count]; i++) {
                     
-                    if ([[tmpArray objectAtIndex:i] class] == [Fan class]) {
-                        Fan *tmp = [tmpArray objectAtIndex:i];
+                    if ([tmpArray[i] class] == [Fan class]) {
+                        Fan *tmp = tmpArray[i];
                         
                         if (!tmp.isNetworkAuthenticated) {
                             [tmpArray removeObjectAtIndex:i];
@@ -166,7 +166,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
                         
                         
                     }else {
-                        Player *tmp = [tmpArray objectAtIndex:i];
+                        Player *tmp = tmpArray[i];
                         bool remove = false;
                         
                         if (!tmp.isNetworkAuthenticated) {
@@ -188,8 +188,8 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
                 
                 for (int i = 0; i < [tmpArray count]; i++) {
                     
-                    if ([[tmpArray objectAtIndex:i] class] == [Fan class]) {
-                        Fan *tmp = [tmpArray objectAtIndex:i];
+                    if ([tmpArray[i] class] == [Fan class]) {
+                        Fan *tmp = tmpArray[i];
                         [self.allFansObjects addObject:tmp];
                         self.haveFans = true;
                         [tmpArray removeObjectAtIndex:i];
@@ -201,7 +201,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
                 //tmpArray now holds no fans
                 //Add fans to the end of the array
                 for (int i = 0; i < [self.allFansObjects count]; i++) {
-                    [tmpArray addObject:[self.allFansObjects objectAtIndex:i]];
+                    [tmpArray addObject:(self.allFansObjects)[i]];
                 }
                 
                 self.members = [NSArray arrayWithArray:tmpArray];
@@ -249,7 +249,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 	for (int i = 0; i < [self.members count] + 3; i++) {
 		[self.selectedMembers addObject:@""];
 	}
-    [self.selectedMembers replaceObjectAtIndex:0 withObject:@"s"];
+    (self.selectedMembers)[0] = @"s";
 	for (int i = 0; i < [self.members count]; i++) {
 		[self.selectedMemberObjects addObject:@""];
 	}
@@ -334,7 +334,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 		}
 
 	}else{
-		Player *controller = [self.members objectAtIndex:row-3];
+		Player *controller = (self.members)[row-3];
 		nameLabel.text = controller.firstName;
 		if ([controller.userRole isEqualToString:@"fan"]) {
 			cell.contentView.backgroundColor = [UIColor colorWithRed:0.92 green:0.92 blue:0.92 alpha:1.0];
@@ -343,7 +343,7 @@ haveFans, memberTableView, saveButton, loadingActivity, loadingLabel, haveMember
 	}
 	
 	
-	if ([[self.selectedMembers objectAtIndex:row] isEqualToString:@"s"]) {
+	if ([(self.selectedMembers)[row] isEqualToString:@"s"]) {
 		//selectedLabel.text = @"X";
 		[tmpView setHidden:NO];
 	}else{
@@ -361,10 +361,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	int row = [indexPath row];
 	bool add = true;
 	
-	if ([[self.selectedMembers objectAtIndex:row] isEqualToString:@""]) {
-		[self.selectedMembers replaceObjectAtIndex:row withObject:@"s"];
+	if ([(self.selectedMembers)[row] isEqualToString:@""]) {
+		(self.selectedMembers)[row] = @"s";
 	}else {
-		[self.selectedMembers replaceObjectAtIndex:row withObject:@""];
+		(self.selectedMembers)[row] = @"";
 		add = false;
 
 	}
@@ -375,16 +375,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.fans = true;
         
 		if (add) {
-			[self.selectedMembers replaceObjectAtIndex:1 withObject:@""];
-			[self.selectedMembers replaceObjectAtIndex:2 withObject:@""];
+			(self.selectedMembers)[1] = @"";
+			(self.selectedMembers)[2] = @"";
 		}
 		
 		for (int i = 3; i < [self.selectedMembers count]; i++) {
-			[self.selectedMembers replaceObjectAtIndex:i withObject:@""];
+			(self.selectedMembers)[i] = @"";
 		}
         
         for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
-            [self.selectedMemberObjects replaceObjectAtIndex:i withObject:@""];
+            (self.selectedMemberObjects)[i] = @"";
         }
 		
 	}else if (row == 1){
@@ -393,15 +393,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.fans = false;
         
 		if (add) {
-			[self.selectedMembers replaceObjectAtIndex:0 withObject:@""];
-			[self.selectedMembers replaceObjectAtIndex:2 withObject:@""];
+			(self.selectedMembers)[0] = @"";
+			(self.selectedMembers)[2] = @"";
 		}
 		for (int i = 3; i < [self.selectedMembers count]; i++) {
-			[self.selectedMembers replaceObjectAtIndex:i withObject:@""];
+			(self.selectedMembers)[i] = @"";
 		}
         
         for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
-            [self.selectedMemberObjects replaceObjectAtIndex:i withObject:@""];
+            (self.selectedMemberObjects)[i] = @"";
         }
 		
 	}else if (row == 2){
@@ -412,18 +412,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		if (self.haveFans) {
 			
 			if (add) {
-				[self.selectedMembers replaceObjectAtIndex:0 withObject:@""];
-				[self.selectedMembers replaceObjectAtIndex:1 withObject:@""];
+				(self.selectedMembers)[0] = @"";
+				(self.selectedMembers)[1] = @"";
 			}
 			for (int i = 3; i < [self.selectedMembers count]; i++) {
-				[self.selectedMembers replaceObjectAtIndex:i withObject:@""];
+				(self.selectedMembers)[i] = @"";
 			}
 		}else {
-			[self.selectedMembers replaceObjectAtIndex:2 withObject:@""];
+			(self.selectedMembers)[2] = @"";
 		}
 
         for (int i = 0; i < [self.selectedMemberObjects count]; i++) {
-            [self.selectedMemberObjects replaceObjectAtIndex:i withObject:@""];
+            (self.selectedMemberObjects)[i] = @"";
         }
 		
 	}else {
@@ -431,15 +431,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.team = false;
         self.fans = false;
         
-		[self.selectedMembers replaceObjectAtIndex:0 withObject:@""];
-		[self.selectedMembers replaceObjectAtIndex:1 withObject:@""];
-		[self.selectedMembers replaceObjectAtIndex:2 withObject:@""];
-		Player *tmp = [self.members objectAtIndex:row-3];
+		(self.selectedMembers)[0] = @"";
+		(self.selectedMembers)[1] = @"";
+		(self.selectedMembers)[2] = @"";
+		Player *tmp = (self.members)[row-3];
 		
 		if (add) {
-			[self.selectedMemberObjects replaceObjectAtIndex:row-3 withObject:tmp];
+			(self.selectedMemberObjects)[row-3] = tmp;
 		}else {
-			[self.selectedMemberObjects replaceObjectAtIndex:row-3 withObject:@""];
+			(self.selectedMemberObjects)[row-3] = @"";
 		}
 
 	}

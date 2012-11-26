@@ -44,7 +44,7 @@ teamName, newActivity, fromHome, fromActivity;
 		//[tmp viewWillAppear:NO];
 	}else {
 		//OBJECT AT INDEX 0
-		Gameday *tmp = [self.viewControllers objectAtIndex:0];
+		Gameday *tmp = (self.viewControllers)[0];
         tmp.teamName = self.teamName;
 		[tmp viewWillAppear:NO];
 		self.navigationItem.title = self.teamName;
@@ -70,16 +70,15 @@ teamName, newActivity, fromHome, fromActivity;
 }
 - (void)viewDidLoad {
 	
-	self.tabBar.backgroundColor = [UIColor greenColor];
+   	self.tabBar.backgroundColor = [UIColor greenColor];
 	self.title = @"GameDay";
 	
-	Gameday *tab1 =  
-	[[Gameday alloc] init]; 
+	//Gameday *tab1 = [[Gameday alloc] init];
+    Gameday *tab1 = [[Gameday alloc] initWithNibName:@"Gameday" bundle:[NSBundle mainBundle]];
 
 	GameAttendance *tab3 =  
 	[[GameAttendance alloc] init]; 
-	//GameMessages *tab4 =  
-	//[[[GameMessages alloc] init] autorelease]; 
+
 	Vote *tab5 =  
 	[[Vote alloc] init]; 
 
@@ -103,10 +102,7 @@ teamName, newActivity, fromHome, fromActivity;
 	tab5.title = @"Vote";
 	tab5.tabBarItem.image = [UIImage imageNamed:@"tabsVote.png"];
 
-	
-	
-	
-	self.viewControllers = [NSArray arrayWithObjects:tab1, tab3, tab5, nil]; 
+	self.viewControllers = [NSArray arrayWithObjects:tab1, tab3, tab5, nil];
 	
 	self.delegate = self;
 
@@ -186,6 +182,36 @@ teamName, newActivity, fromHome, fromActivity;
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
    	
+}
+
+
+//iAd delegate methods
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave{
+	
+	return YES;
+	
+}
+
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner{
+	
+	if (!self.bannerIsVisible) {
+		self.bannerIsVisible = YES;
+		self.myAd.hidden = NO;
+		
+        [self.view bringSubviewToFront:self.myAd];
+	}
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
+	
+	if (self.bannerIsVisible) {
+		
+		self.myAd.hidden = YES;
+		self.bannerIsVisible = NO;
+		
+	}
+	
+	
 }
 
 @end

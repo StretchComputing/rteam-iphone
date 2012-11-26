@@ -41,7 +41,7 @@
     
     for (int i = 0; i < [self.rowsSelected count]; i++) {
         
-        if (![[self.rowsSelected objectAtIndex:i] isEqualToString:@""]) {
+        if (![(self.rowsSelected)[i] isEqualToString:@""]) {
             anyTeams = true;
             break;
         }
@@ -50,7 +50,7 @@
     if (anyTeams) {
         NSArray *viewControllers = [self.navigationController viewControllers];
         
-        ActivityPost *tmp = [viewControllers objectAtIndex:[viewControllers count] - 2];
+        ActivityPost *tmp = viewControllers[[viewControllers count] - 2];
         tmp.savedTeams = true;
         tmp.selectedTeams = [NSMutableArray arrayWithArray:self.rowsSelected];
         
@@ -110,11 +110,11 @@
 	fieldLabel.backgroundColor = [UIColor clearColor];
 	NSUInteger row = [indexPath row];
     
-    Team *tmpTeam = [self.myTeams objectAtIndex:row];
+    Team *tmpTeam = (self.myTeams)[row];
     
     fieldLabel.text =  tmpTeam.name;
     
-    if ([[self.rowsSelected objectAtIndex:row] isEqualToString:@""]) {
+    if ([(self.rowsSelected)[row] isEqualToString:@""]) {
         blueCheck.hidden = YES;
     }else{
         blueCheck.hidden = NO;
@@ -144,7 +144,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                     action:nil];
     
     NSUInteger row = [indexPath row];
-    Team *tmpTeam = [self.myTeams objectAtIndex:row];
+    Team *tmpTeam = (self.myTeams)[row];
     
     if (self.isPrivate) {
         SelectRecipients *tmp = [[SelectRecipients alloc] init];
@@ -161,21 +161,21 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
     }else{
         for (int i = 0; i < [self.rowsSelected count]; i++) {
-            if ([[self.rowsSelected objectAtIndex:i] isEqualToString:@"s"]) {
-                [self.rowsSelected replaceObjectAtIndex:i withObject:@""];
+            if ([(self.rowsSelected)[i] isEqualToString:@"s"]) {
+                (self.rowsSelected)[i] = @"";
             }
         }
         
         
-        [self.rowsSelected replaceObjectAtIndex:row withObject:@"s"];
+        (self.rowsSelected)[row] = @"s";
         
         
         NSArray *viewControllers = [self.navigationController viewControllers];
         
-        ActivityPost *tmp = [viewControllers objectAtIndex:[viewControllers count] - 2];
+        ActivityPost *tmp = viewControllers[[viewControllers count] - 2];
         tmp.savedTeams = true;
         tmp.selectedTeams = [NSMutableArray arrayWithArray:self.rowsSelected];
-        Team *tmpTeam = [self.myTeams objectAtIndex:row];
+        Team *tmpTeam = (self.myTeams)[row];
         tmp.postTeamId = [NSString stringWithString:tmpTeam.teamId];
         
         [self.navigationController popToViewController:tmp animated:YES];

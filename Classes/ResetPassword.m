@@ -178,7 +178,7 @@
 				int num = [temp count];
 				num = num - 2;
 				
-				Login *cont = [temp objectAtIndex:num];
+				Login *cont = temp[num];
 				cont.success.text = @"Success!  You will recieve your new password via email.";
 				cont.error.text = @"";
 				cont.password.text = @"";

@@ -68,7 +68,7 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 	}else {
 		[self.loadingActivity startAnimating];
 		[self.loadingLabel setHidden:NO];
-		self.teamInfo = [NSDictionary dictionary];
+		self.teamInfo = @{};
 
 		[self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
 	}
@@ -268,7 +268,7 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
         
         NSString *status = [results valueForKey:@"status"];
         
-        NSLog(@"Status: %@", status);
+        //NSLog(@"Status: %@", status);
 
         
         if ([status isEqualToString:@"100"]){
@@ -354,7 +354,7 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 		int num = [temp count];
 		num = num - 2;
 		
-		CurrentTeamTabs *cont = [temp objectAtIndex:num];
+		CurrentTeamTabs *cont = temp[num];
 		cont.selectedIndex = 0;
 		[self.navigationController popToViewController:cont animated:YES];
 	}else{
@@ -503,7 +503,7 @@ loadingLabel, disconnect, theDescription, theTeamName, theSportLabel, deleteButt
 	[self.activity stopAnimating];
 	
 	[self.loadingActivity startAnimating];
-	self.teamInfo = [NSDictionary dictionary];
+	self.teamInfo = @{};
 	[self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
 	
 	

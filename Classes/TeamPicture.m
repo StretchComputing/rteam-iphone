@@ -281,7 +281,7 @@ newImage, dontMove, toOrientation, portrait;
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	[picker dismissModalViewControllerAnimated:YES];	
 	
-	UIImageView *tmpView = [[UIImageView alloc] initWithImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
+	UIImageView *tmpView = [[UIImageView alloc] initWithImage:info[UIImagePickerControllerOriginalImage]];
 	
     float xVal;
     float yVal;

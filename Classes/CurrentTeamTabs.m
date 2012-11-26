@@ -49,17 +49,17 @@
 		//[tmp viewWillAppear:NO];
 	}else if (index == 1) {
         
-		Players *tmp = [self.viewControllers objectAtIndex:1];
+		Players *tmp = (self.viewControllers)[1];
 		[tmp viewWillAppear:NO];
 	}else if (index == 2) {
-		EventList *tmp = [self.viewControllers objectAtIndex:2];
+		EventList *tmp = (self.viewControllers)[2];
 		[tmp viewWillAppear:NO];
 	}else if (index == 4) {
 		//TeamMessages *tmp = [self.viewControllers objectAtIndex:4];
 		//[tmp viewWillAppear:NO];
 	}else {
 		//OBJECT AT INDEX 0
-		TeamHome *tmp = [self.viewControllers objectAtIndex:0];
+		TeamHome *tmp = (self.viewControllers)[0];
 		[tmp viewWillAppear:NO];
 	}
 
@@ -99,7 +99,7 @@
 
 	
 	
-	self.viewControllers = [NSArray arrayWithObjects:tab1, tab3, tab4, nil]; 
+	self.viewControllers = @[tab1, tab3, tab4]; 
 
 	
 	self.delegate = self;
@@ -148,9 +148,9 @@
 	
 		//TeamActivity *teamActivity = (TeamActivity *)[self.viewControllers objectAtIndex:1];
 		//[teamActivity viewWillDisappear:NO];
-		Players *players = (Players *)[self.viewControllers objectAtIndex:1];
+		Players *players = (Players *)(self.viewControllers)[1];
 		[players viewWillDisappear:NO];
-		EventList *eventList = (EventList *)[self.viewControllers objectAtIndex:2];
+		EventList *eventList = (EventList *)(self.viewControllers)[2];
 		[eventList viewWillDisappear:NO];
 		///TeamMessages *teamMessages = (TeamMessages *)[self.viewControllers objectAtIndex:4];
 		//[teamMessages viewWillDisappear:NO];
@@ -163,12 +163,12 @@
         }
 		
 		
-		TeamHome *teamHome = (TeamHome *)[self.viewControllers objectAtIndex:0];
+		TeamHome *teamHome = (TeamHome *)(self.viewControllers)[0];
 		[teamHome viewWillDisappear:NO];
 		//TeamActivity *teamActivity = (TeamActivity *)[self.viewControllers objectAtIndex:1];
 		//[teamActivity viewWillDisappear:NO];
 
-		EventList *eventList = (EventList *)[self.viewControllers objectAtIndex:2];
+		EventList *eventList = (EventList *)(self.viewControllers)[2];
 		[eventList viewWillDisappear:NO];
 		//TeamMessages *teamMessages = (TeamMessages *)[self.viewControllers objectAtIndex:4];
 		//[teamMessages viewWillDisappear:NO];
@@ -181,11 +181,11 @@
         }
 		
 		
-		TeamHome *teamHome = (TeamHome *)[self.viewControllers objectAtIndex:0];
+		TeamHome *teamHome = (TeamHome *)(self.viewControllers)[0];
 		[teamHome viewWillDisappear:NO];
 		//TeamActivity *teamActivity = (TeamActivity *)[self.viewControllers objectAtIndex:1];
 		//[teamActivity viewWillDisappear:NO];
-		Players *players = (Players *)[self.viewControllers objectAtIndex:1];
+		Players *players = (Players *)(self.viewControllers)[1];
 		[players viewWillDisappear:NO];
 
 		//TeamMessages *teamMessages = (TeamMessages *)[self.viewControllers objectAtIndex:4];

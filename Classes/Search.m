@@ -99,7 +99,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 
 	@autoreleasepool {
         NSString *token = @"";
-        NSArray *teamArray = [NSArray array];
+        NSArray *teamArray = @[];
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
@@ -144,7 +144,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
         
         self.potentialMatches = [NSMutableArray arrayWithArray:teamArray];
         for (int i = 0; i < [self.potentialMatches count]; i++) {
-            Team *tmpTeam = [self.potentialMatches objectAtIndex:i];
+            Team *tmpTeam = (self.potentialMatches)[i];
             
             [self.potentialMatchesTeamName addObject:tmpTeam];
         }
@@ -179,9 +179,9 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 		
 		for (int i = 0; i < [self.potentialMatches count]; i++) {
 						
-			if ([[self.potentialMatches objectAtIndex:i] class] == [Team class]) {
+			if ([(self.potentialMatches)[i] class] == [Team class]) {
 				//Its a Team
-				Team *tmpTeam = [self.potentialMatches objectAtIndex:i];
+				Team *tmpTeam = (self.potentialMatches)[i];
 				NSString *currentResult = tmpTeam.name;
 				
 				if (currentResult.length > length) {
@@ -195,10 +195,10 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 					
 				}
 				
-			}else if ([[self.potentialMatches objectAtIndex:i] class] == [Player class]){
+			}else if ([(self.potentialMatches)[i] class] == [Player class]){
 				//Its a Player
 				
-				Player *tmpPlayer = [self.potentialMatches objectAtIndex:i];
+				Player *tmpPlayer = (self.potentialMatches)[i];
 				
 				NSString *wholeName = @"";
 				NSString *currentResult = @"";
@@ -223,7 +223,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 					
 					if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
 						[self.allMatches addObject:tmpPlayer];
-						[self.allMatchesTeamName addObject:[self.potentialMatchesTeamName objectAtIndex:i]];
+						[self.allMatchesTeamName addObject:(self.potentialMatchesTeamName)[i]];
 
 						didAdd = true;
 					}
@@ -239,7 +239,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 					if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
 						if (!didAdd) {
 							[self.allMatches addObject:tmpPlayer];
-							[self.allMatchesTeamName addObject:[self.potentialMatchesTeamName objectAtIndex:i]];
+							[self.allMatchesTeamName addObject:(self.potentialMatchesTeamName)[i]];
 
 							didAdd = true;
 						}
@@ -254,7 +254,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 					if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
 						if (!didAdd) {
 							[self.allMatches addObject:tmpPlayer];
-							[self.allMatchesTeamName addObject:[self.potentialMatchesTeamName objectAtIndex:i]];
+							[self.allMatchesTeamName addObject:(self.potentialMatchesTeamName)[i]];
 
 							didAdd = true;
 						}
@@ -272,7 +272,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 					if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
 						if (!didAdd) {
 							[self.allMatches addObject:tmpPlayer];
-							[self.allMatchesTeamName addObject:[self.potentialMatchesTeamName objectAtIndex:i]];
+							[self.allMatchesTeamName addObject:(self.potentialMatchesTeamName)[i]];
 							
 							didAdd = true;
 						}
@@ -283,7 +283,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 				
 			}else {
 				//Fan
-				Fan *tmpPlayer = [self.potentialMatches objectAtIndex:i];
+				Fan *tmpPlayer = (self.potentialMatches)[i];
 				NSString *wholeName = @"";
 				
 				if (tmpPlayer.firstName != nil) {
@@ -303,7 +303,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 					
 					if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
 						[self.allMatches addObject:tmpPlayer];
-						[self.allMatchesTeamName addObject:[self.potentialMatchesTeamName objectAtIndex:i]];
+						[self.allMatchesTeamName addObject:(self.potentialMatchesTeamName)[i]];
 
 						didAdd = true;
 					}
@@ -319,7 +319,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 					if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
 						if (!didAdd) {
 							[self.allMatches addObject:tmpPlayer];
-							[self.allMatchesTeamName addObject:[self.potentialMatchesTeamName objectAtIndex:i]];
+							[self.allMatchesTeamName addObject:(self.potentialMatchesTeamName)[i]];
 
 							didAdd = true;
 						}
@@ -334,7 +334,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 					if ([currentText localizedCaseInsensitiveCompare:substring] == 0) {
 						if (!didAdd) {
 							[self.allMatches addObject:tmpPlayer];
-							[self.allMatchesTeamName addObject:[self.potentialMatchesTeamName objectAtIndex:i]];
+							[self.allMatchesTeamName addObject:(self.potentialMatchesTeamName)[i]];
 							didAdd = true;
 						}
 						
@@ -415,12 +415,12 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 	NSString *teamDisplay = @"";
 
 	
-	if ([[self.allMatches objectAtIndex:row] class] == [Team class]) {
-		Team *tmpTeam = [self.allMatches objectAtIndex:row];
+	if ([(self.allMatches)[row] class] == [Team class]) {
+		Team *tmpTeam = (self.allMatches)[row];
 		display = tmpTeam.name;
 	}else {
-		if ([[self.allMatches objectAtIndex:row] class] == [Player class]) {
-			Player *tmpPlayer = [self.allMatches objectAtIndex:row];
+		if ([(self.allMatches)[row] class] == [Player class]) {
+			Player *tmpPlayer = (self.allMatches)[row];
 			if (tmpPlayer.firstName != nil) {
 				display = tmpPlayer.firstName;
 				if (tmpPlayer.lastName != nil) {
@@ -429,12 +429,12 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 				}
 			}
 			
-			Team *tmpTeam = [self.allMatchesTeamName objectAtIndex:row];
+			Team *tmpTeam = (self.allMatchesTeamName)[row];
 			teamDisplay = [NSString stringWithFormat:@"(%@)", tmpTeam.name];
 		}
 		
-		if ([[self.allMatches objectAtIndex:row] class] == [Fan class]) {
-			Fan *tmpPlayer = [self.allMatches objectAtIndex:row];
+		if ([(self.allMatches)[row] class] == [Fan class]) {
+			Fan *tmpPlayer = (self.allMatches)[row];
 			
 			if (tmpPlayer.firstName != nil) {
 				display = tmpPlayer.firstName;
@@ -444,7 +444,7 @@ allMatchesTeamName, bannerIsVisible, errorLabel, searchActivity, myAd;
 				}
 			}
 			
-			Team *tmpTeam = [self.allMatchesTeamName objectAtIndex:row];
+			Team *tmpTeam = (self.allMatchesTeamName)[row];
 			teamDisplay = [NSString stringWithFormat:@"(%@)", tmpTeam.name];
 
 		}
@@ -484,9 +484,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
         
         NSUInteger row = [indexPath row];
-        if ([[self.allMatches objectAtIndex:row] class] == [Team class]) {
+        if ([(self.allMatches)[row] class] == [Team class]) {
             
-            Team *coachTeam = [self.allMatches objectAtIndex:row];
+            Team *coachTeam = (self.allMatches)[row];
             
             CurrentTeamTabs *tmp = [[CurrentTeamTabs alloc] init];
             
@@ -498,7 +498,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             tmp.title = coachTeam.name;
             tmp.sport = coachTeam.sport;
             
-            TeamHome *home = [viewControllers objectAtIndex:0];
+            TeamHome *home = viewControllers[0];
             home.teamId = coachTeam.teamId;
             home.userRole = coachTeam.userRole;
             home.teamSport = coachTeam.sport;
@@ -506,12 +506,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             home.teamUrl = coachTeam.teamUrl;
             
             
-            Players *people = [viewControllers objectAtIndex:1];
+            Players *people = viewControllers[1];
             people.teamId = coachTeam.teamId;
             people.userRole = coachTeam.userRole;
             people.teamName = coachTeam.name;
             
-            EventList *events = [viewControllers objectAtIndex:2];
+            EventList *events = viewControllers[2];
             events.teamId = coachTeam.teamId;
             events.userRole = coachTeam.userRole;
             events.sport = coachTeam.sport;
@@ -522,16 +522,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             
         }else {
-            if ([[self.allMatches objectAtIndex:row] class] == [Player class]) {
-                Player *coachTeam = [self.allMatches objectAtIndex:row];
-                Team *tmpTeam = [self.allMatchesTeamName objectAtIndex:row];
+            if ([(self.allMatches)[row] class] == [Player class]) {
+                Player *coachTeam = (self.allMatches)[row];
+                Team *tmpTeam = (self.allMatchesTeamName)[row];
                 coachTeam.headUserRole = tmpTeam.userRole;
                 coachTeam.fromSearch = true;
                 [self.navigationController pushViewController:coachTeam animated:YES];
             }
-            if ([[self.allMatches objectAtIndex:row] class] == [Fan class]) {
-                Fan *coachTeam = [self.allMatches objectAtIndex:row];
-                Team *tmpTeam = [self.allMatchesTeamName objectAtIndex:row];
+            if ([(self.allMatches)[row] class] == [Fan class]) {
+                Fan *coachTeam = (self.allMatches)[row];
+                Team *tmpTeam = (self.allMatchesTeamName)[row];
                 coachTeam.headUserRole = tmpTeam.userRole;
                 coachTeam.fromSearch = true;
                 [self.navigationController pushViewController:coachTeam animated:YES];
@@ -554,9 +554,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         for (int i = 0; i < [self.teamsOnly count]; i++) {
             
-            Team *tmpTeam = [self.teamsOnly objectAtIndex:i];
+            Team *tmpTeam = (self.teamsOnly)[i];
             
-            NSArray *tmp = [NSArray array];
+            NSArray *tmp = @[];
             
             NSDictionary *response = [ServerAPI getListOfTeamMembers:tmpTeam.teamId :mainDelegate.token :@"all" :@""];
             
@@ -593,23 +593,23 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 
                 
-                if ([[tmp objectAtIndex:j] class] == [Player class]) {
-                    Player *tmpPlayer = [tmp objectAtIndex:j];
+                if ([tmp[j] class] == [Player class]) {
+                    Player *tmpPlayer = tmp[j];
                     
                     if ((tmpPlayer.firstName != nil) && ![tmpPlayer.firstName isEqualToString:@""]) {
                         NSString *fullName = tmpPlayer.firstName;
                         
                         NSArray *names = [fullName componentsSeparatedByString:@" "];
-                        tmpPlayer.firstName = [names objectAtIndex:0];
+                        tmpPlayer.firstName = names[0];
                         
                         tmpPlayer.lastName = @"";
                         bool oneBefore = false;
                         for (int i = 1; i < [names count]; i++) {
                             
                             if (oneBefore) {
-                                tmpPlayer.lastName = [tmpPlayer.lastName stringByAppendingFormat:@" %@", [names objectAtIndex:i]];
+                                tmpPlayer.lastName = [tmpPlayer.lastName stringByAppendingFormat:@" %@", names[i]];
                             }else {
-                                tmpPlayer.lastName = [tmpPlayer.lastName stringByAppendingString:[names objectAtIndex:i]];
+                                tmpPlayer.lastName = [tmpPlayer.lastName stringByAppendingString:names[i]];
                             }
                             oneBefore = true;
                             
@@ -621,18 +621,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     [self.potentialMatchesTeamName addObject:tmpTeam];
                 }
                 
-                if ([[tmp objectAtIndex:j] class] == [Fan class]) {
-                    Fan *tmpPlayer = [tmp objectAtIndex:j];
+                if ([tmp[j] class] == [Fan class]) {
+                    Fan *tmpPlayer = tmp[j];
                     
                     NSString *fullName = tmpPlayer.firstName;
                     
                     
                     NSArray *names = [fullName componentsSeparatedByString:@" "];
-                    tmpPlayer.firstName = [names objectAtIndex:0];
+                    tmpPlayer.firstName = names[0];
                     
                     
                     @try {
-                        tmpPlayer.lastName = [names objectAtIndex:1];
+                        tmpPlayer.lastName = names[1];
                     }
                     @catch (NSException * e) {
                         tmpPlayer.lastName = @"";

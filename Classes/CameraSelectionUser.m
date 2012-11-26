@@ -51,7 +51,7 @@
 	
 	[picker dismissModalViewControllerAnimated:YES];	
 	
-	UIImageView *tmpView = [[UIImageView alloc] initWithImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
+	UIImageView *tmpView = [[UIImageView alloc] initWithImage:info[UIImagePickerControllerOriginalImage]];
 	
     float xVal;
     float yVal;
@@ -84,8 +84,8 @@
 	
 	NSArray *views = [self.navigationController viewControllers];
 	
-	if ([AddChangeProfilePic class] == [[views objectAtIndex:[views count] - 2] class]) {
-		AddChangeProfilePic *tmpController = (AddChangeProfilePic *)[views objectAtIndex:[views count] - 2];
+	if ([AddChangeProfilePic class] == [views[[views count] - 2] class]) {
+		AddChangeProfilePic *tmpController = (AddChangeProfilePic *)views[[views count] - 2];
 		
 		tmpController.fromCameraSelect = true;
 		tmpController.imageData = UIImageJPEGRepresentation(newImage1, 0.80);
@@ -105,7 +105,7 @@
 	
 	NSArray *views = [self.navigationController viewControllers];
 	
-	AddChangeProfilePic *tmpController = (AddChangeProfilePic *)[views objectAtIndex:[views count] - 2];
+	AddChangeProfilePic *tmpController = (AddChangeProfilePic *)views[[views count] - 2];
 	
 	
 	[self.navigationController popToViewController:tmpController animated:NO];

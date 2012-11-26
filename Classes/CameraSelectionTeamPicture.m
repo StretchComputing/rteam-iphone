@@ -51,7 +51,7 @@
 	
 	[picker dismissModalViewControllerAnimated:YES];	
 	
-	UIImageView *tmpView = [[UIImageView alloc] initWithImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
+	UIImageView *tmpView = [[UIImageView alloc] initWithImage:info[UIImagePickerControllerOriginalImage]];
 	
     float xVal;
     float yVal;
@@ -84,8 +84,8 @@
 	
 	NSArray *views = [self.navigationController viewControllers];
     
-	if ([TeamPicture class] == [[views objectAtIndex:[views count] - 3] class]) {
-		TeamPicture *tmpController = (TeamPicture *)[views objectAtIndex:[views count] - 3];
+	if ([TeamPicture class] == [views[[views count] - 3] class]) {
+		TeamPicture *tmpController = (TeamPicture *)views[[views count] - 3];
 		
 		tmpController.fromCameraSelect = true;
 		tmpController.imageData = UIImageJPEGRepresentation(newImage1, 0.95);
@@ -93,8 +93,8 @@
         
 		tmpController.newImage = true;
 		
-        if ([TeamPicture class] == [[views objectAtIndex:[views count] - 3] class]) {
-            TeamPicture *tmpController1 = (TeamPicture *)[views objectAtIndex:[views count] - 3];
+        if ([TeamPicture class] == [views[[views count] - 3] class]) {
+            TeamPicture *tmpController1 = (TeamPicture *)views[[views count] - 3];
             
             tmpController1.fromCameraSelect = true;
             tmpController1.imageData = UIImageJPEGRepresentation(newImage1, 0.95);
@@ -102,8 +102,8 @@
             
             tmpController1.newImage = true;
             [self.navigationController popToViewController:tmpController1 animated:NO];
-        }else if ([TeamPicture class] == [[views objectAtIndex:[views count] - 2] class]) {            
-            TeamPicture *tmpController2 = (TeamPicture *)[views objectAtIndex:[views count] - 2];
+        }else if ([TeamPicture class] == [views[[views count] - 2] class]) {            
+            TeamPicture *tmpController2 = (TeamPicture *)views[[views count] - 2];
             
             tmpController2.fromCameraSelect = true;
             tmpController2.imageData = UIImageJPEGRepresentation(newImage1, 0.95);
@@ -112,10 +112,10 @@
             [self.navigationController popToViewController:tmpController2 animated:NO];
         }
         
-	}else if ([TeamPicture class] == [[views objectAtIndex:[views count] - 2] class]) {
+	}else if ([TeamPicture class] == [views[[views count] - 2] class]) {
         
         
-		TeamPicture *tmpController = (TeamPicture *)[views objectAtIndex:[views count] - 2];
+		TeamPicture *tmpController = (TeamPicture *)views[[views count] - 2];
 		
 		tmpController.fromCameraSelect = true;
 		tmpController.imageData = UIImageJPEGRepresentation(newImage1, 0.95);
@@ -134,12 +134,12 @@
 	
 	NSArray *views = [self.navigationController viewControllers];
     
-	if ([TeamPicture class] == [[views objectAtIndex:[views count] - 3] class]) {
-		TeamPicture *tmpController = (TeamPicture *)[views objectAtIndex:[views count] - 3];
+	if ([TeamPicture class] == [views[[views count] - 3] class]) {
+		TeamPicture *tmpController = (TeamPicture *)views[[views count] - 3];
 		
 		[self.navigationController popToViewController:tmpController animated:NO];
-	}else if ([TeamPicture class] == [[views objectAtIndex:[views count] - 2] class]) {
-		TeamPicture *tmpController = (TeamPicture *)[views objectAtIndex:[views count] - 2];
+	}else if ([TeamPicture class] == [views[[views count] - 2] class]) {
+		TeamPicture *tmpController = (TeamPicture *)views[[views count] - 2];
 		
         
 		[self.navigationController popToViewController:tmpController animated:NO];

@@ -175,7 +175,7 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
             token = mainDelegate.token;
         }
         
-        NSDictionary *response =[NSDictionary dictionary];
+        NSDictionary *response =@{};
         //If there is a token, do a DB lookup to find the game info 
         if (![token isEqualToString:@""]){
             
@@ -230,10 +230,10 @@ locationString, errorString, updateAllGames, nameOnly, updateLat, updateLong, al
 		int tempNum = [tempCont count];
 		tempNum = tempNum - 2;
 		
-		GameTabs *cont = [tempCont objectAtIndex:tempNum];
+		GameTabs *cont = tempCont[tempNum];
 		NSArray *viewControllers = cont.viewControllers;
 		
-		Gameday *currentNotes = [viewControllers objectAtIndex:0];
+		Gameday *currentNotes = viewControllers[0];
 		currentNotes.fromNextUpdate = true;
 
 		[self.navigationController popToViewController:cont animated:YES];

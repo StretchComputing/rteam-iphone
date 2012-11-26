@@ -33,9 +33,9 @@
         
         for (int i = 0; i < [self.selectedTeams count]; i++) {
             
-            if (![[self.selectedTeams objectAtIndex:i] isEqualToString:@""]) {
+            if (![(self.selectedTeams)[i] isEqualToString:@""]) {
                 
-                Team *tmpTeam = [self.teams objectAtIndex:i];
+                Team *tmpTeam = (self.teams)[i];
                 
                 if ([titleString isEqualToString:@""]) {
                     titleString = [titleString stringByAppendingFormat:@"%@", tmpTeam.name];
@@ -285,7 +285,7 @@
             bool found = false;
             for (int i = 0; i < [self.teams count]; i++) {
                 
-                Team *tmpTeam = [self.teams objectAtIndex:i];
+                Team *tmpTeam = (self.teams)[i];
                 if ([tmpTeam.teamId isEqualToString:mainDelegate.lastPostTeamId]) {
                     
                     hasTeams = true;
@@ -296,7 +296,7 @@
                     for (int i = 0; i < [self.teams count]; i++) {
                         [self.selectedTeams addObject:@""];
                     }
-                    [self.selectedTeams replaceObjectAtIndex:i withObject:@"s"];
+                    (self.selectedTeams)[i] = @"s";
                     
                     found = true; 
                     break;
@@ -305,7 +305,7 @@
             
             
             if (!found) {
-                Team *tmpTeam = [self.teams objectAtIndex:0];
+                Team *tmpTeam = (self.teams)[0];
                 hasTeams = true;
                 [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
                 self.postTeamId = tmpTeam.teamId;  
@@ -314,12 +314,12 @@
                 for (int i = 0; i < [self.teams count]; i++) {
                     [self.selectedTeams addObject:@""];
                 }
-                [self.selectedTeams replaceObjectAtIndex:0 withObject:@"s"];
+                (self.selectedTeams)[0] = @"s";
             }
             
             
         }else{
-            Team *tmpTeam = [self.teams objectAtIndex:0];
+            Team *tmpTeam = (self.teams)[0];
             hasTeams = true;
             [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
             self.postTeamId = tmpTeam.teamId;  
@@ -328,7 +328,7 @@
             for (int i = 0; i < [self.teams count]; i++) {
                 [self.selectedTeams addObject:@""];
             }
-            [self.selectedTeams replaceObjectAtIndex:0 withObject:@"s"];
+            (self.selectedTeams)[0] = @"s";
 
         }
        
@@ -371,7 +371,7 @@
         
         if ([self.teams count] == 1) {
             
-            Team *tmpTeam = [self.teams objectAtIndex:0];
+            Team *tmpTeam = (self.teams)[0];
             
             SelectRecipients *tmp = [[SelectRecipients alloc] init];
             tmp.teamId = tmpTeam.teamId;
@@ -409,7 +409,7 @@
         
         if ([self.teams count] == 1) {
             
-            Team *tmpTeam = [self.teams objectAtIndex:0];
+            Team *tmpTeam = (self.teams)[0];
             
             SelectRecipients *tmp = [[SelectRecipients alloc] init];
             tmp.teamId = tmpTeam.teamId;
@@ -549,7 +549,7 @@
         
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         picker.mediaTypes =  
-        [NSArray arrayWithObject:(NSString *)kUTTypeMovie];
+        @[(NSString *)kUTTypeMovie];
         picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModeVideo;
         picker.videoMaximumDuration = 30;
         picker.videoQuality = UIImagePickerControllerQualityTypeLow;
@@ -583,7 +583,7 @@
         self.isSendVideo = true;
         [picker dismissModalViewControllerAnimated:YES];	
         
-        NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        NSURL *videoURL = info[UIImagePickerControllerMediaURL];
         self.videoDataToSend = [NSData dataWithContentsOfURL:videoURL];
                 
         MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL: videoURL];
@@ -604,7 +604,7 @@
         self.isSendVideo = false;
         [picker dismissModalViewControllerAnimated:YES];	
         
-        UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        UIImage *tmpImage = info[UIImagePickerControllerOriginalImage];
         
         float xVal;
         float yVal;

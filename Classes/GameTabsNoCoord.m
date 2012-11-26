@@ -40,7 +40,7 @@ teamName, newActivity, fromHome, fromActivity;
 		//[tmp viewWillAppear:NO];
 	}else {
 		//OBJECT AT INDEX 0
-		Gameday *tmp = [self.viewControllers objectAtIndex:0];
+		Gameday *tmp = (self.viewControllers)[0];
         tmp.teamName = self.teamName;
 		[tmp viewWillAppear:NO];
 		self.navigationItem.title = self.teamName;
@@ -89,7 +89,7 @@ teamName, newActivity, fromHome, fromActivity;
 	
 	
 	
-	self.viewControllers = [NSArray arrayWithObjects:tab1, tab4, nil]; 
+	self.viewControllers = @[tab1, tab4]; 
 	
 	self.delegate = self;
 

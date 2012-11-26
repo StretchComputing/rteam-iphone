@@ -102,7 +102,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 -(void)getGames{
 
 	@autoreleasepool {
-        NSArray *tmpGames = [NSArray array];
+        NSArray *tmpGames = @[];
         NSString *token = @"";
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -148,7 +148,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
         NSMutableArray *tmpGamesSort = [NSMutableArray arrayWithArray:tmpGames];
         
         NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:NO];
-        [tmpGamesSort sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+        [tmpGamesSort sortUsingDescriptors:@[lastNameSorter]];
         self.games = [NSMutableArray arrayWithArray:tmpGamesSort];
         
         
@@ -325,7 +325,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		
 		nameThemLabel.hidden = NO;
 	NSUInteger row = [indexPath row];
-	Game *tmpGame = [self.games objectAtIndex:row];
+	Game *tmpGame = (self.games)[row];
 	
 		
 	NSString *date = tmpGame.startDate;
@@ -568,7 +568,7 @@ bannerIsVisible, loadingActivity, loadingLabel, refreshActivity, cancelButton, i
 		}else {
 
 			
-			Team *tmpTeam = [self.teamList objectAtIndex:row-1];
+			Team *tmpTeam = (self.teamList)[row-1];
 			
 			cell.textLabel.text = tmpTeam.name;
 		}
@@ -617,7 +617,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			[self.loadingLabel setHidden:NO];
 			[self performSelectorInBackground:@selector(getGames) withObject:nil];
 		}else {
-			Team *tmpTeam = [self.teamList objectAtIndex:row-1];
+			Team *tmpTeam = (self.teamList)[row-1];
 			self.teamId = tmpTeam.teamId;
 			self.sport = tmpTeam.sport;
 			self.teamName = tmpTeam.name;
@@ -718,8 +718,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     self.filterButton = [[UIBarButtonItem alloc] initWithTitle:@"Team Filter" style:UIBarButtonItemStyleBordered target:self action:@selector(filter)];
     self.filterButton.title = @"Team Filter";
-    NSArray *items1 = [NSArray arrayWithObjects:self.filterButton, flexibleSpace, self.refreshButton, nil];
-    NSArray *items2 = [NSArray arrayWithObjects:flexibleSpace, self.refreshButton, nil];
+    NSArray *items1 = @[self.filterButton, flexibleSpace, self.refreshButton];
+    NSArray *items2 = @[flexibleSpace, self.refreshButton];
 	if (showFilter) {
         self.bottomBar.items = items1;
 

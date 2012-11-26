@@ -20,7 +20,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 -(void)viewDidLoad{
 	self.doneMessage = false;
     self.doneSecondary = false;
-	self.recipArray = [NSArray arrayWithObjects:@"Team Coordinators", @"Everyone", nil];
+	self.recipArray = @[@"Team Coordinators", @"Everyone"];
 	self.currentRecipIndex = 0;
 	
 	self.title = @"My Status";
@@ -151,7 +151,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 	}
 	
 	
-	self.toLabel.text = [self.recipArray objectAtIndex:self.currentRecipIndex];
+	self.toLabel.text = (self.recipArray)[self.currentRecipIndex];
 }
 
 -(void)leftRecip{
@@ -163,7 +163,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 	}
 	
 	
-	self.toLabel.text = [self.recipArray objectAtIndex:self.currentRecipIndex];
+	self.toLabel.text = (self.recipArray)[self.currentRecipIndex];
 	
 	
 }
@@ -266,7 +266,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 		token = mainDelegate.token;
 	} 
 	
-	NSArray *recipients = [NSArray array];
+	NSArray *recipients = @[];
 	
 	NSString *coordsOnly = @"";
 	if (self.currentRecipIndex == 0) {
@@ -287,7 +287,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 		}
     
         
-        NSDictionary *response = [ServerAPI createMessageThread:token teamId:self.selectedEvent.teamId subject:@"Event Status" body:message type:@"plain" eventId:self.selectedEvent.eventId eventType:type isAlert:@"true" pollChoices:[NSArray array] recipients:recipients displayResults:@"" includeFans:@"false" coordinatorsOnly:coordsOnly];
+        NSDictionary *response = [ServerAPI createMessageThread:token teamId:self.selectedEvent.teamId subject:@"Event Status" body:message type:@"plain" eventId:self.selectedEvent.eventId eventType:type isAlert:@"true" pollChoices:@[] recipients:recipients displayResults:@"" includeFans:@"false" coordinatorsOnly:coordsOnly];
 		
 		NSString *status1 = [response valueForKey:@"status"];
 		
@@ -372,7 +372,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 	
 	NSArray *temp = [self.navigationController viewControllers];
 	
-	UIViewController *tmp1 = [temp objectAtIndex:[temp count] - 3];
+	UIViewController *tmp1 = temp[[temp count] - 3];
 	
 	[self.navigationController popToViewController:tmp1 animated:NO];
 	
@@ -394,7 +394,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 	} 
 
 	
-	NSDictionary *response = [NSDictionary dictionary];
+	NSDictionary *response = @{};
 	if (![token isEqualToString:@""]){	
 		
 		NSDateFormatter *format = [[NSDateFormatter alloc] init];
@@ -461,7 +461,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 		token = mainDelegate.token;
 	}
 	
-	NSDictionary *response = [NSDictionary dictionary];
+	NSDictionary *response = @{};
 
 	if ([self.eventTypeString isEqualToString:@"Game"]) {
 		
@@ -586,7 +586,7 @@ newCurrentLocationLabel, latitude, longitude, locationManager;
 	
 
 	
-	NSDictionary *response = [NSDictionary dictionary];
+	NSDictionary *response = @{};
 	
 	if (![token isEqualToString:@""]){	
 		

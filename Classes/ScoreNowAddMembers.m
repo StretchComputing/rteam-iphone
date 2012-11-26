@@ -152,7 +152,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 	gradient.frame = self.addView.bounds;
 	UIColor *color2 =  [UIColor colorWithRed:176/255.0 green:196/255.0 blue:222/255.0 alpha:0.9];
 	UIColor *color1 =  [UIColor colorWithRed:230/255.0 green:230/255.0 blue:255/255.0 alpha:0.9];
-	gradient.colors = [NSArray arrayWithObjects:(id)[color2 CGColor], (id)[color1 CGColor], nil];
+	gradient.colors = @[(id)[color2 CGColor], (id)[color1 CGColor]];
 	[self.addView.layer insertSublayer:gradient atIndex:0];
 	
 	self.useGuardians = false;
@@ -281,15 +281,15 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         
         if (![self.guardianOneFirst isEqualToString:@""]) {
             
-            NSDictionary *tmpDictionary = [NSDictionary dictionary];
-            [guardianOne setObject:self.guardianOneFirst forKey:@"firstName"];
-            [guardianOne setObject:self.guardianOneLast forKey:@"lastName"];
+            NSDictionary *tmpDictionary = @{};
+            guardianOne[@"firstName"] = self.guardianOneFirst;
+            guardianOne[@"lastName"] = self.guardianOneLast;
             
             if (![self.guardianOneEmail isEqualToString:@""]) {
-                [guardianOne setObject:self.guardianOneEmail forKey:@"emailAddress"];
+                guardianOne[@"emailAddress"] = self.guardianOneEmail;
             }
             if (![self.guardianOnePhone isEqualToString:@""]) {
-                [guardianOne setObject:self.guardianOnePhone forKey:@"phoneNumber"];
+                guardianOne[@"phoneNumber"] = self.guardianOnePhone;
             }
             
             tmpDictionary = guardianOne;
@@ -298,15 +298,15 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         
         if (![self.guardianTwoFirst isEqualToString:@""]) {
             
-            NSDictionary *tmpDictionary = [NSDictionary dictionary];
-            [guardianTwo setObject:self.guardianTwoFirst forKey:@"firstName"];
-            [guardianTwo setObject:self.guardianTwoLast forKey:@"lastName"];
+            NSDictionary *tmpDictionary = @{};
+            guardianTwo[@"firstName"] = self.guardianTwoFirst;
+            guardianTwo[@"lastName"] = self.guardianTwoLast;
             
             if (![self.guardianTwoEmail isEqualToString:@""]) {
-                [guardianTwo setObject:self.guardianTwoEmail forKey:@"emailAddress"];
+                guardianTwo[@"emailAddress"] = self.guardianTwoEmail;
             }
             if (![self.guardianTwoPhone isEqualToString:@""]) {
-                [guardianTwo setObject:self.guardianTwoPhone forKey:@"phoneNumber"];
+                guardianTwo[@"phoneNumber"] = self.guardianTwoPhone;
             }
             
             
@@ -409,17 +409,17 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		if ([tempCont count] > tempNum) {
 			
 			
-			if ([CurrentTeamTabs class] == [[tempCont objectAtIndex:tempNum] class]) {
-				CurrentTeamTabs *tmpCont = [tempCont objectAtIndex:tempNum];
+			if ([CurrentTeamTabs class] == [tempCont[tempNum] class]) {
+				CurrentTeamTabs *tmpCont = tempCont[tempNum];
 				tmpCont.userRole = self.userRole;
 				tmpCont.selectedIndex = 2;
 				
-				Players *tmp = [[tmpCont viewControllers] objectAtIndex:2];
+				Players *tmp = [tmpCont viewControllers][2];
 				tmp.phoneOnlyArray = self.phoneOnlyArray;
 				[self.navigationController popToViewController:tmpCont animated:NO];
-			}else if ([Home class] == [[tempCont objectAtIndex:tempNum] class]) {
+			}else if ([Home class] == [tempCont[tempNum] class]) {
 				
-				Home *tmp = [tempCont objectAtIndex:tempNum];
+				Home *tmp = tempCont[tempNum];
 				tmp.phoneOnlyArray = self.phoneOnlyArray;
 				[self.navigationController popToViewController:tmp animated:NO];
 			}
@@ -546,52 +546,98 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         self.currentGuardEmail = @"";
         self.currentGuardPhone = @"";
         
-        NSString* fName = (__bridge NSString *)ABRecordCopyValue(person,
-                                                                 kABPersonFirstNameProperty);
+        NSString *fName = @"";
+        @try {
+            fName = (__bridge NSString *)ABRecordCopyValue(person,
+                                                           kABPersonFirstNameProperty);
+        }
+        @catch (NSException *exception) {
+            
+        }
         
-        NSString *lName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        NSString *lName = @"";
         
+        @try {
+            lName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+            
+        }
+        @catch (NSException *exception) {
+            
+        }
         
-        ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
-        
-        NSArray *emailArray1 = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
         NSString *emailAddress = @"";
-        if ([emailArray1 count] > 0) {
-            emailAddress = [emailArray1 objectAtIndex:0];
-            self.multipleEmailArray = [NSMutableArray arrayWithArray:emailArray1];
+        
+        @try {
+            ABMultiValueRef emails = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonEmailProperty);
             
-            for(int i = 0; i < ABMultiValueGetCount(emails); i++)
-            {
-                NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
+            NSArray *emailArray1 = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(emails);
+            
+            if ([emailArray1 count] > 0) {
+                emailAddress = emailArray1[0];
+                self.multipleEmailArray = [NSMutableArray arrayWithArray:emailArray1];
                 
-                NSString *final = [self getType:test];
+                int countHere = ABMultiValueGetCount(emails);
                 
-                [self.multipleEmailArrayLabels addObject:final];
+                for(int i = 0; i < countHere; i++)
+                {
+                    @try {
+                        NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(emails, i);
+                        
+                        NSString *final = [self getType:test];
+                        
+                        [self.multipleEmailArrayLabels addObject:final];
+                    }
+                    @catch (NSException *exception) {
+                        [self.multipleEmailArrayLabels addObject:@""];
+                    }
+                    
+                    
+                    
+                }
                 
             }
             
         }
+        @catch (NSException *exception) {
+            self.multipleEmailArray = [NSMutableArray array];
+            self.multipleEmailArrayLabels = [NSMutableArray array];
+            
+        }
         
         
-        ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
-        
-        NSArray *phoneArray = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
         NSString *phoneString = @"";
-        if ([phoneArray count] > 0) {
-            phoneString = [phoneArray objectAtIndex:0];
-            self.multiplePhoneArray = [NSMutableArray arrayWithArray:phoneArray];
-            
-            for(int i = 0; i < ABMultiValueGetCount(phone); i++)
-            {
-                NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
-                
-                NSString *final = [self getType:test];
-                
-                [self.multiplePhoneArrayLabels addObject:final];
-                
-            }
-        }
         
+        @try {
+            ABMultiValueRef phone = (ABMultiValueRef) ABRecordCopyValue(person, kABPersonPhoneProperty);
+            
+            NSArray *phoneArray = (__bridge NSArray *)ABMultiValueCopyArrayOfAllValues(phone);
+            if ([phoneArray count] > 0) {
+                phoneString = phoneArray[0];
+                self.multiplePhoneArray = [NSMutableArray arrayWithArray:phoneArray];
+                
+                for(int i = 0; i < ABMultiValueGetCount(phone); i++)
+                {
+                    
+                    @try {
+                        NSString *test = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phone, i);
+                        
+                        NSString *final = [self getType:test];
+                        
+                        [self.multiplePhoneArrayLabels addObject:final];
+                    }
+                    @catch (NSException *exception) {
+                        [self.multiplePhoneArrayLabels addObject:@""];
+                    }
+                    
+                }
+            }
+            
+        }
+        @catch (NSException *exception) {
+            self.multiplePhoneArray = [NSMutableArray array];
+            self.multiplePhoneArrayLabels = [NSMutableArray array];
+            
+        }
         
         
         
@@ -630,7 +676,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     NSMutableArray *tmpArray = [NSMutableArray array];
                     
                     for (int i = 0; i < 4 ; i++) {
-                        [tmpArray addObject:[self.multipleEmailArray objectAtIndex:i]];
+                        [tmpArray addObject:(self.multipleEmailArray)[i]];
                     }
                     
                     self.multipleEmailArray = [NSMutableArray arrayWithArray:tmpArray];
@@ -650,8 +696,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     
                     for (int i = 0; i < [self.multipleEmailArray count]; i++) {
                         
-                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
-                                           [self.multipleEmailArray objectAtIndex:i]];
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multipleEmailArrayLabels)[i],
+                                           (self.multipleEmailArray)[i]];
                         [self.miniMultipleEmailAlert addButtonWithTitle:title];
                     }
                     
@@ -661,8 +707,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     
                     for (int i = 0; i < [self.multipleEmailArray count]; i++) {
                         
-                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
-                                           [self.multipleEmailArray objectAtIndex:i]];
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multipleEmailArrayLabels)[i],
+                                           (self.multipleEmailArray)[i]];
                         [self.guard1EmailAlert addButtonWithTitle:title];
                     }
                     
@@ -672,8 +718,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     
                     for (int i = 0; i < [self.multipleEmailArray count]; i++) {
                         
-                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
-                                           [self.multipleEmailArray objectAtIndex:i]];
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multipleEmailArrayLabels)[i],
+                                           (self.multipleEmailArray)[i]];
                         [self.guard2EmailAlert addButtonWithTitle:title];
                     }
                     
@@ -691,7 +737,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     NSMutableArray *tmpArray = [NSMutableArray array];
                     
                     for (int i = 0; i < 4 ; i++) {
-                        [tmpArray addObject:[self.multiplePhoneArray objectAtIndex:i]];
+                        [tmpArray addObject:(self.multiplePhoneArray)[i]];
                     }
                     
                     self.multiplePhoneArray = [NSMutableArray arrayWithArray:tmpArray];
@@ -711,8 +757,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     
                     for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
                         
-                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
-                                           [self.multiplePhoneArray objectAtIndex:i]];
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multiplePhoneArrayLabels)[i],
+                                           (self.multiplePhoneArray)[i]];
                         [self.miniMultiplePhoneAlert addButtonWithTitle:title];
                     }
                     
@@ -722,8 +768,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     
                     for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
                         
-                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
-                                           [self.multiplePhoneArray objectAtIndex:i]];
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multiplePhoneArrayLabels)[i],
+                                           (self.multiplePhoneArray)[i]];
                         [self.guard1PhoneAlert addButtonWithTitle:title];
                     }
                     
@@ -733,8 +779,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     
                     for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
                         
-                        NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
-                                           [self.multiplePhoneArray objectAtIndex:i]];
+                        NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multiplePhoneArrayLabels)[i],
+                                           (self.multiplePhoneArray)[i]];
                         [self.guard2PhoneAlert addButtonWithTitle:title];
                     }
                 }
@@ -880,7 +926,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     NSMutableArray *tmpArray = [NSMutableArray array];
                     
                     for (int i = 0; i < 4 ; i++) {
-                        [tmpArray addObject:[self.multipleEmailArray objectAtIndex:i]];
+                        [tmpArray addObject:(self.multipleEmailArray)[i]];
                     }
                     
                     self.multipleEmailArray = [NSMutableArray arrayWithArray:tmpArray];
@@ -897,8 +943,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                 
                 for (int i = 0; i < [self.multipleEmailArray count]; i++) {
                     
-                    NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multipleEmailArrayLabels objectAtIndex:i],
-                                       [self.multipleEmailArray objectAtIndex:i]];
+                    NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multipleEmailArrayLabels)[i],
+                                       (self.multipleEmailArray)[i]];
                     [self.multipleEmailAlert addButtonWithTitle:title];
                 }
                 showEmail = true;
@@ -915,7 +961,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     NSMutableArray *tmpArray = [NSMutableArray array];
                     
                     for (int i = 0; i < 4 ; i++) {
-                        [tmpArray addObject:[self.multiplePhoneArray objectAtIndex:i]];
+                        [tmpArray addObject:(self.multiplePhoneArray)[i]];
                     }
                     
                     self.multiplePhoneArray = [NSMutableArray arrayWithArray:tmpArray];
@@ -932,8 +978,8 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                 
                 for (int i = 0; i < [self.multiplePhoneArray count]; i++) {
                     
-                    NSString *title = [NSString stringWithFormat:@"%@: %@", [self.multiplePhoneArrayLabels objectAtIndex:i],
-                                       [self.multiplePhoneArray objectAtIndex:i]];
+                    NSString *title = [NSString stringWithFormat:@"%@: %@", (self.multiplePhoneArrayLabels)[i],
+                                       (self.multiplePhoneArray)[i]];
                     [self.multiplePhoneAlert addButtonWithTitle:title];
                 }
                 showPhone = true;
@@ -1095,7 +1141,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		
         NSArray *viewControllers = [self.navigationController viewControllers];
         
-        ScoreNowScorePage *tmp = [viewControllers objectAtIndex:[viewControllers count] - 2];
+        ScoreNowScorePage *tmp = viewControllers[[viewControllers count] - 2];
         tmp.emailArray =  [NSArray arrayWithArray:self.emailArray];
         
         [self.navigationController popViewControllerAnimated:YES];
@@ -1112,13 +1158,13 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         NSMutableArray *tmpMemberArray = [NSMutableArray array];
-        NSArray *finalMemberArray = [NSArray array];
+        NSArray *finalMemberArray = @[];
         
         for (int i = 0; i < [self.emailArray count]; i++) {
             
             NSMutableDictionary *tmpDictionary = [[NSMutableDictionary alloc] init];
             
-            NewMemberObject *tmpMember = [self.emailArray objectAtIndex:i];
+            NewMemberObject *tmpMember = (self.emailArray)[i];
             
             if ([tmpMember.email isEqualToString:@""] && ![tmpMember.phone isEqualToString:@""]) {
                 [self.phoneOnlyArray addObject:tmpMember.phone];
@@ -1134,19 +1180,19 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
             
             
             if (![tmpMember.firstName isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.firstName forKey:@"firstName"];
+                tmpDictionary[@"firstName"] = tmpMember.firstName;
             }
             if (![tmpMember.lastName isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.lastName forKey:@"lastName"];
+                tmpDictionary[@"lastName"] = tmpMember.lastName;
             }
             if (![tmpMember.email isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.email forKey:@"emailAddress"];
+                tmpDictionary[@"emailAddress"] = tmpMember.email;
             }
             if (![tmpMember.phone isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.phone forKey:@"phoneNumber"];
+                tmpDictionary[@"phoneNumber"] = tmpMember.phone;
             }
             if (![tmpMember.role isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.role forKey:@"participantRole"];
+                tmpDictionary[@"participantRole"] = tmpMember.role;
             }
             
             NSMutableArray *guardArray = [NSMutableArray array];
@@ -1158,29 +1204,29 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                 
                 NSArray *nameArray = [tmpMember.guardianOneName componentsSeparatedByString:@" "];
                 
-                NSString *fName = [nameArray objectAtIndex:0];
+                NSString *fName = nameArray[0];
                 NSString *lName = @"";
                 
                 for (int i = 1; i < [nameArray count]; i++) {
                     if (i == 1) {
-                        lName = [lName stringByAppendingFormat:@"%@", [nameArray objectAtIndex:i]];
+                        lName = [lName stringByAppendingFormat:@"%@", nameArray[i]];
                     }else{
-                        lName = [lName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
+                        lName = [lName stringByAppendingFormat:@" %@", nameArray[i]];
                         
                     }
                 }
                 
                 if (![fName isEqualToString:@""]) {
-                    [guard1 setObject:fName forKey:@"firstName"];
+                    guard1[@"firstName"] = fName;
                 }
                 if (![lName isEqualToString:@""]) {
-                    [guard1 setObject:lName forKey:@"lastName"];
+                    guard1[@"lastName"] = lName;
                 }
                 if (![tmpMember.guardianOneEmail isEqualToString:@""]) {
-                    [guard1 setObject:tmpMember.guardianOneEmail forKey:@"emailAddress"];
+                    guard1[@"emailAddress"] = tmpMember.guardianOneEmail;
                 }
                 if (![tmpMember.guardianOnePhone isEqualToString:@""]) {
-                    [guard1 setObject:tmpMember.guardianOnePhone forKey:@"phoneNumber"];
+                    guard1[@"phoneNumber"] = tmpMember.guardianOnePhone;
                 }
                 
                 [guardArray addObject:guard1];
@@ -1192,29 +1238,29 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
                     
                     NSArray *nameArray = [tmpMember.guardianTwoName componentsSeparatedByString:@" "];
                     
-                    NSString *fName = [nameArray objectAtIndex:0];
+                    NSString *fName = nameArray[0];
                     NSString *lName = @"";
                     
                     for (int i = 1; i < [nameArray count]; i++) {
                         if (i == 1) {
-                            lName = [lName stringByAppendingFormat:@"%@", [nameArray objectAtIndex:i]];
+                            lName = [lName stringByAppendingFormat:@"%@", nameArray[i]];
                         }else{
-                            lName = [lName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
+                            lName = [lName stringByAppendingFormat:@" %@", nameArray[i]];
                             
                         }
                     }
                     
                     if (![fName isEqualToString:@""]) {
-                        [guard2 setObject:fName forKey:@"firstName"];
+                        guard2[@"firstName"] = fName;
                     }
                     if (![lName isEqualToString:@""]) {
-                        [guard2 setObject:lName forKey:@"lastName"];
+                        guard2[@"lastName"] = lName;
                     }
                     if (![tmpMember.guardianTwoEmail isEqualToString:@""]) {
-                        [guard2 setObject:tmpMember.guardianTwoEmail forKey:@"emailAddress"];
+                        guard2[@"emailAddress"] = tmpMember.guardianTwoEmail;
                     }
                     if (![tmpMember.guardianTwoPhone isEqualToString:@""]) {
-                        [guard2 setObject:tmpMember.guardianTwoPhone forKey:@"phoneNumber"];
+                        guard2[@"phoneNumber"] = tmpMember.guardianTwoPhone;
                     }
                     
                     [guardArray addObject:guard2];
@@ -1224,7 +1270,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
             }
             
             if ([guardArray count] > 0) {
-                [tmpDictionary setObject:guardArray forKey:@"guardians"];
+                tmpDictionary[@"guardians"] = guardArray;
             }
             
             [tmpMemberArray addObject:tmpDictionary];
@@ -1312,11 +1358,11 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		theCount = theCount - 2;
         
 		if (theCount >= 0) {
-			if ([CurrentTeamTabs class] == [[tmpViews objectAtIndex:[tmpViews count] - 2] class]) {
-				CurrentTeamTabs *tmpCont = [tmpViews objectAtIndex:[tmpViews count] - 2];
+			if ([CurrentTeamTabs class] == [tmpViews[[tmpViews count] - 2] class]) {
+				CurrentTeamTabs *tmpCont = tmpViews[[tmpViews count] - 2];
 				tmpCont.selectedIndex = 1;
 				
-				Players *tmp = [[tmpCont viewControllers] objectAtIndex:1];
+				Players *tmp = [tmpCont viewControllers][1];
 				tmp.phoneOnlyArray = self.phoneOnlyArray;
 				[self.navigationController popToViewController:tmpCont animated:NO];
 			}else{
@@ -1384,14 +1430,14 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
 		if (![self.nameText.text isEqualToString:@""]) {
 			NSArray *nameArray = [self.nameText.text componentsSeparatedByString:@" "];
 			
-			tmp.firstName = [nameArray objectAtIndex:0];
+			tmp.firstName = nameArray[0];
 			
 			for (int i = 1; i < [nameArray count]; i++) {
 				
 				if (i == 1) {
-					tmp.lastName = [nameArray objectAtIndex:1];
+					tmp.lastName = nameArray[1];
 				}else {
-					tmp.lastName = [tmp.lastName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
+					tmp.lastName = [tmp.lastName stringByAppendingFormat:@" %@", nameArray[i]];
 				}
                 
 			}
@@ -1542,7 +1588,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
             [deleteButton addTarget:self action:@selector(deleteEvent:) forControlEvents:UIControlEventTouchUpInside];
             [cell.contentView addSubview:deleteButton];
             
-            NewMemberObject *tmp = [self.emailArray objectAtIndex:row/2];
+            NewMemberObject *tmp = (self.emailArray)[row/2];
             
             dateLabel.textColor = [UIColor blackColor];
             dateLabel.textAlignment = UITextAlignmentLeft;
@@ -1589,7 +1635,7 @@ currentGuardName, currentGuardEmail, currentGuardPhone, multipleEmailArrayLabels
             
             dateLabel.frame = CGRectMake(35, 5, 266, 20);
             
-            NewMemberObject *tmpObject = [self.emailArray objectAtIndex:(row-1)/2];
+            NewMemberObject *tmpObject = (self.emailArray)[(row-1)/2];
             
             if ([tmpObject.guardianOneName isEqualToString:@""]){
                 dateLabel.text = @"+ Add parent or guardian";
@@ -1653,7 +1699,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             self.currentGuardianSelection = row-1;
             self.miniGuardErrorLabel.text = @"";
             
-            NewMemberObject *tmpMember = [self.emailArray objectAtIndex:self.currentGuardianSelection/2];
+            NewMemberObject *tmpMember = (self.emailArray)[self.currentGuardianSelection/2];
             
             self.oneEmail.text = tmpMember.guardianOneEmail;
             self.oneName.text = tmpMember.guardianOneName;
@@ -1688,7 +1734,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex != 0){
             
-            self.email.text = [self.multipleEmailArray objectAtIndex:buttonIndex-1];
+            self.email.text = (self.multipleEmailArray)[buttonIndex-1];
         }else{
             self.email.text = @"";
         }
@@ -1701,7 +1747,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex != 0) {
             
-            self.phoneNumber.text = [self.multiplePhoneArray objectAtIndex:buttonIndex-1];
+            self.phoneNumber.text = (self.multiplePhoneArray)[buttonIndex-1];
         }else{
             self.phoneNumber.text = @"";
         }
@@ -1710,7 +1756,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex != 0) {
             
-            self.tmpMiniEmail = [self.multipleEmailArray objectAtIndex:buttonIndex-1];
+            self.tmpMiniEmail = (self.multipleEmailArray)[buttonIndex-1];
             
             if (self.twoAlerts){
                 [self.miniMultiplePhoneAlert show];
@@ -1777,7 +1823,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex != 0) {
             
-            self.tmpMiniPhone = [self.multiplePhoneArray objectAtIndex:buttonIndex-1];
+            self.tmpMiniPhone = (self.multiplePhoneArray)[buttonIndex-1];
             
         }
         NewMemberObject *tmpObject = [[NewMemberObject alloc] init];
@@ -1810,7 +1856,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex != 0) {
             
-            self.currentGuardEmail = [self.multipleEmailArray objectAtIndex:buttonIndex-1];
+            self.currentGuardEmail = (self.multipleEmailArray)[buttonIndex-1];
             
             if (self.twoAlerts) {
                 [self.guard1PhoneAlert show];
@@ -1841,7 +1887,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex != 0) {
             
-            self.currentGuardPhone = [self.multiplePhoneArray objectAtIndex:buttonIndex-1];
+            self.currentGuardPhone = (self.multiplePhoneArray)[buttonIndex-1];
         }
         
         
@@ -1854,7 +1900,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex != 0) {
             
-            self.currentGuardEmail = [self.multipleEmailArray objectAtIndex:buttonIndex-1];
+            self.currentGuardEmail = (self.multipleEmailArray)[buttonIndex-1];
             
             if (self.twoAlerts) {
                 [self.guard2PhoneAlert show];
@@ -1885,7 +1931,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (buttonIndex != 0) {
             
-            self.currentGuardPhone = [self.multiplePhoneArray objectAtIndex:buttonIndex-1];
+            self.currentGuardPhone = (self.multiplePhoneArray)[buttonIndex-1];
         }
         
         
@@ -1914,7 +1960,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             self.miniGuardErrorLabel.text = @"*Guardian 2 email or phone required.";
         }else{
             
-            NewMemberObject *tmpObject = [self.emailArray objectAtIndex:self.currentGuardianSelection/2];
+            NewMemberObject *tmpObject = (self.emailArray)[self.currentGuardianSelection/2];
             
             tmpObject.guardianOneName = self.oneName.text;
             tmpObject.guardianOneEmail = self.oneEmail.text;
@@ -1927,7 +1973,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             
             
-            [self.emailArray replaceObjectAtIndex:self.currentGuardianSelection/2 withObject:tmpObject];
+            (self.emailArray)[self.currentGuardianSelection/2] = tmpObject;
             self.guardianBackground.hidden = YES;
             
             [self.myTableView reloadData];
@@ -1936,13 +1982,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }else{
         
         //Add the guardian info to the new member object
-        NewMemberObject *tmpObject = [self.emailArray objectAtIndex:self.currentGuardianSelection/2];
+        NewMemberObject *tmpObject = (self.emailArray)[self.currentGuardianSelection/2];
         
         tmpObject.guardianOneName = self.oneName.text;
         tmpObject.guardianOneEmail = self.oneEmail.text;
         tmpObject.guardianOnePhone = self.onePhone.text;
         
-        [self.emailArray replaceObjectAtIndex:self.currentGuardianSelection/2 withObject:tmpObject];
+        (self.emailArray)[self.currentGuardianSelection/2] = tmpObject;
         self.guardianBackground.hidden = YES;
         [self.myTableView reloadData];
     }
@@ -1953,7 +1999,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)removeGuardians{
     
-    NewMemberObject *tmpObject = [self.emailArray objectAtIndex:self.currentGuardianSelection/2];
+    NewMemberObject *tmpObject = (self.emailArray)[self.currentGuardianSelection/2];
     
     tmpObject.guardianOneName = @"";
     tmpObject.guardianOneEmail = @"";
@@ -1966,7 +2012,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
     
-    [self.emailArray replaceObjectAtIndex:self.currentGuardianSelection/2 withObject:tmpObject];
+    (self.emailArray)[self.currentGuardianSelection/2] = tmpObject;
     self.guardianBackground.hidden = YES;
     
     [self.myTableView reloadData];
@@ -1989,7 +2035,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSArray *tmpArray = [typeLabel componentsSeparatedByString:@">"];
     
-    NSString *tmpString = [tmpArray objectAtIndex:0];
+    NSString *tmpString = tmpArray[0];
     
     returnString = [tmpString substringFromIndex:4];
     

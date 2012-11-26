@@ -278,7 +278,7 @@ errorLabel, submitActivity, errorString, teamId, fromCameraSelect, selectedImage
 	
 	self.noImageLabel.hidden = YES;
 	
-	UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+	UIImage *tmpImage = info[UIImagePickerControllerOriginalImage];
 	
     float xVal;
     float yVal;

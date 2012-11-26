@@ -108,7 +108,7 @@
         
         
         
-        NSDictionary *response = [NSDictionary dictionary];
+        NSDictionary *response = @{};
         if (![token isEqualToString:@""]){	
             
             
@@ -160,8 +160,8 @@
 		int tempNum = [tempCont count];
 		tempNum = tempNum - 3;			
 		
-		if ([[tempCont objectAtIndex:tempNum] class] == [NewActivity class]) {
-			NewActivity *cont = [tempCont objectAtIndex:tempNum];
+		if ([tempCont[tempNum] class] == [NewActivity class]) {
+			NewActivity *cont = tempCont[tempNum];
 			cont.fromPost = true;
 			
 			[self.navigationController popToViewController:cont animated:YES];

@@ -148,7 +148,7 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
             token = mainDelegate.token;
         } 
         
-        NSArray *choices = [NSArray arrayWithObjects:@"Yes", @"No", nil];
+        NSArray *choices = @[@"Yes", @"No"];
         
         
         NSString *dispResults = @"";
@@ -162,18 +162,18 @@ toTeam, userRole, displayResults, includeFans, errorString, pollActionSheet, rec
         
         for (int i = 0; i < [self.recipientObjects count]; i++) {
             
-            if ([[self.recipientObjects objectAtIndex:i] class] == [Fan class]) {
-                Fan *tmpFan = [self.recipientObjects objectAtIndex:i];
+            if ([(self.recipientObjects)[i] class] == [Fan class]) {
+                Fan *tmpFan = (self.recipientObjects)[i];
                 [recipIds addObject:tmpFan.memberId];
-            }else if ([[self.recipientObjects objectAtIndex:i] class] == [Player class]) {
-                Player *tmpPlayer = [self.recipientObjects objectAtIndex:i];
+            }else if ([(self.recipientObjects)[i] class] == [Player class]) {
+                Player *tmpPlayer = (self.recipientObjects)[i];
                 [recipIds addObject:tmpPlayer.memberId];
             }
         }
         
         NSArray *recip = [NSArray arrayWithArray:recipIds];
         
-        NSDictionary *response = [NSDictionary dictionary];
+        NSDictionary *response = @{};
         if (![token isEqualToString:@""]){
             
             response = [ServerAPI createMessageThread:token teamId:self.teamId subject:self.thePollSubject body:self.thePollQuestion type:@"poll" eventId:@"" eventType:@"" isAlert:@"false" pollChoices:choices recipients:recip displayResults:dispResults includeFans:@"true" coordinatorsOnly:@""];

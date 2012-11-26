@@ -59,7 +59,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 	
 	
 	
-	NSArray *segments = [NSArray arrayWithObjects:@"Roster", @"Fans", nil];
+	NSArray *segments = @[@"Roster", @"Fans"];
 	
 	self.segRosterFans = [[UISegmentedControl alloc] initWithItems:segments];
 	self.segRosterFans.frame = CGRectMake(75, 20, 170, 30);
@@ -151,8 +151,8 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
     
 	@autoreleasepool {
         NSString *token = @"";
-        NSDictionary *response = [NSDictionary dictionary];
-        NSArray *playerArray = [NSArray array];
+        NSDictionary *response = @{};
+        NSArray *playerArray = @[];
         
         self.tmpPlayers = [NSMutableArray array];
         self.tmpFans = [NSMutableArray array];
@@ -208,13 +208,13 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
         
         for (int i = 0; i < [playerArray count]; i++) {
             
-            if ([[playerArray objectAtIndex:i] class] == [Fan class]) {
-                Fan *tmpPlayer = [playerArray objectAtIndex:i];
+            if ([playerArray[i] class] == [Fan class]) {
+                Fan *tmpPlayer = playerArray[i];
                 
                 [self.tmpFans addObject:tmpPlayer];
                 [self.fanPics addObject:@""];
             }else {
-                Player *tmpPlayer = [playerArray objectAtIndex:i];
+                Player *tmpPlayer = playerArray[i];
                 
                 [self.tmpPlayers addObject:tmpPlayer];
                 [self.playerPics addObject:@""];
@@ -437,7 +437,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			NSUInteger row = [indexPath row];
 			if ([self.fans count] >= row) {
 			
-			Fan *controller = [self.fans objectAtIndex:row];
+			Fan *controller = (self.fans)[row];
 						
 				if (controller.isUser) {
 					descLabel.text = @"Active - rTeam App";
@@ -484,11 +484,11 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			if ([self.fanPics count] > row) {
 					
 				
-			if ([[self.fanPics objectAtIndex:row] isEqualToString:@""]) {
+			if ([(self.fanPics)[row] isEqualToString:@""]) {
 				imageView.image = [UIImage imageNamed:@"profile1.png"];
 			}else {
 				
-                NSData *profileData = [Base64 decode:[self.fanPics objectAtIndex:row]];
+                NSData *profileData = [Base64 decode:(self.fanPics)[row]];
                 UIImage *tmpImage = [UIImage imageWithData:profileData];
                 
                 
@@ -578,7 +578,7 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			
 			if ([self.players count] > row) {
 				
-			Player *controller = [self.players objectAtIndex:row];
+			Player *controller = (self.players)[row];
 			
                 if (![controller.guard1First isEqualToString:@""]) {
                     //At least 1 guardian
@@ -730,11 +730,11 @@ fanPics, barActivity, memberTableView, memberActivity, memberActivityLabel, tmpP
 			if ([self.playerPics count] > row) {
 		
 				
-			if ([[self.playerPics objectAtIndex:row] isEqualToString:@""]) {
+			if ([(self.playerPics)[row] isEqualToString:@""]) {
 				imageView.image = [UIImage imageNamed:@"profile1.png"];
 			}else {
 				
-				NSData *profileData = [Base64 decode:[self.playerPics objectAtIndex:row]];
+				NSData *profileData = [Base64 decode:(self.playerPics)[row]];
                 UIImage *tmpImage = [UIImage imageWithData:profileData];
         
         
@@ -821,7 +821,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([self.fans count] > 0) {
                 //go to that player profile
                 NSUInteger row = [indexPath row];
-                Fan *coachTeam = [self.fans objectAtIndex:row];
+                Fan *coachTeam = (self.fans)[row];
                 coachTeam.headUserRole = self.userRole;
                 coachTeam.teamName = self.teamName;
                 [self.navigationController pushViewController:coachTeam animated:YES];
@@ -844,7 +844,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([self.players count] > 0) {
                 //go to that player profile
                 NSUInteger row = [indexPath row];
-                Player *coachTeam = [self.players objectAtIndex:row];
+                Player *coachTeam = (self.players)[row];
                 coachTeam.headUserRole = self.userRole;
                 coachTeam.teamName = self.teamName;
                 [self.navigationController pushViewController:coachTeam animated:YES];
@@ -877,7 +877,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             if ([self.fans count] > i) {
                 
-                Player *controller = [self.fans objectAtIndex:i];
+                Player *controller = (self.fans)[i];
                 
                 NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :controller.memberId :mainDelegate.token :@""];
                 
@@ -897,7 +897,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     }else {
                         
                         if ([self.fanPics count] > i) {
-                            [self.fanPics replaceObjectAtIndex:i withObject:profile];
+                            (self.fanPics)[i] = profile;
                             
                         }
                         
@@ -959,7 +959,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             if ([self.players count] > i) {
                 
-                Player *controller = [self.players objectAtIndex:i];
+                Player *controller = (self.players)[i];
                 
                 NSDictionary *response = [ServerAPI getMemberInfo:self.teamId :controller.memberId :mainDelegate.token :@""];
                 
@@ -979,7 +979,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     }else {
                         
                         if ([self.playerPics count] > i) {
-                            [self.playerPics replaceObjectAtIndex:i withObject:profile];
+                            (self.playerPics)[i] = profile;
                             
                         }
                     }
@@ -1039,7 +1039,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             if ([self.players count] >= row) {
 
-                Player *tmpPlayer = [self.players objectAtIndex:row];
+                Player *tmpPlayer = (self.players)[row];
                 
                 if (![tmpPlayer.guard1First isEqualToString:@""]) {
                     
@@ -1086,7 +1086,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				
 				NSString *numberToCall = @"";
 				
-				NSString *tmpPhone = [self.phoneOnlyArray objectAtIndex:i];
+				NSString *tmpPhone = (self.phoneOnlyArray)[i];
 								
 				if ([tmpPhone length] == 16) {
 					call = true;
@@ -1151,7 +1151,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 					}
 				}else {
 					
-					NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+					NSString *url = [@"sms://" stringByAppendingString:numbersToCall[0]];
 					[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 				}
 				

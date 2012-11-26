@@ -158,7 +158,7 @@ locationString, errorString,updateAllGames, nameOnly, updateLat, updateLong, all
             token = mainDelegate.token;
         }
         
-        NSDictionary *response =[NSDictionary dictionary];
+        NSDictionary *response =@{};
         //If there is a token, do a DB lookup to find the practice info 
         if (![token isEqualToString:@""]){
             
@@ -213,10 +213,10 @@ locationString, errorString,updateAllGames, nameOnly, updateLat, updateLong, all
 		int tempNum = [tempCont count];
 		tempNum = tempNum - 2;
 		
-		PracticeTabs *cont = [tempCont objectAtIndex:tempNum];
+		PracticeTabs *cont = tempCont[tempNum];
 		NSArray *viewControllers = cont.viewControllers;
 		
-		PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+		PracticeNotes *currentNotes = viewControllers[0];
 		currentNotes.fromNextUpdate = true;
 		
 		[self.navigationController popToViewController:cont animated:YES];

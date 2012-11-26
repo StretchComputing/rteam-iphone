@@ -125,7 +125,7 @@
 
 	}
 	
-	if ([[self.selectedArray objectAtIndex:row] isEqualToString:@""]) {
+	if ([(self.selectedArray)[row] isEqualToString:@""]) {
 		blueCheck.hidden = YES;
 	}else {
 		blueCheck.hidden = NO;
@@ -238,15 +238,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     int number = [tmpNumber intValue];
                     
                     if (number == 3) {
-                        [self.selectedArray replaceObjectAtIndex:0 withObject:@"s"];
+                        (self.selectedArray)[0] = @"s";
                     }else if (number == 7) {
-                        [self.selectedArray replaceObjectAtIndex:1 withObject:@"s"];
+                        (self.selectedArray)[1] = @"s";
                     }else if (number == 14) {
-                        [self.selectedArray replaceObjectAtIndex:2 withObject:@"s"];
+                        (self.selectedArray)[2] = @"s";
                     }else if (number == 21) {
-                        [self.selectedArray replaceObjectAtIndex:3 withObject:@"s"];
+                        (self.selectedArray)[3] = @"s";
                     }else {
-                        [self.selectedArray replaceObjectAtIndex:4 withObject:@"s"];
+                        (self.selectedArray)[4] = @"s";
                     }
                     
                     self.errorString = @"";

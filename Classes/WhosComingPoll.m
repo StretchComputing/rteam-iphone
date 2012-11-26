@@ -107,11 +107,11 @@
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        NSDictionary *response = [ServerAPI createMessageThread:mainDelegate.token teamId:self.selectedTeamId subject:@"" body:@"" type:@"whoiscoming" eventId:self.eventId eventType:self.eventType isAlert:@"" pollChoices:[NSArray array] recipients:[NSArray array] displayResults:@"" includeFans:@"" coordinatorsOnly:@""];
+        NSDictionary *response = [ServerAPI createMessageThread:mainDelegate.token teamId:self.selectedTeamId subject:@"" body:@"" type:@"whoiscoming" eventId:self.eventId eventType:self.eventType isAlert:@"" pollChoices:@[] recipients:@[] displayResults:@"" includeFans:@"" coordinatorsOnly:@""];
         
         NSString *status = [response valueForKey:@"status"];
                 
-        NSLog(@"SendWhoPoll: %@", status);
+        //NSLog(@"SendWhoPoll: %@", status);
 
         NSString *didSucceed = @"";
         if ([status isEqualToString:@"100"]) {
@@ -177,7 +177,7 @@
     
     NSMutableArray *coordTeamList = [NSMutableArray array];
     for (int i = 0; i < [self.teamList count]; i++) {
-        Team *tmpTeam = [self.teamList objectAtIndex:i];
+        Team *tmpTeam = (self.teamList)[i];
         
         if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
             [coordTeamList addObject:tmpTeam];
@@ -216,7 +216,7 @@
         
         self.currentTeamsView.hidden = NO;
         
-        Team *tmpTeam = [self.teamList objectAtIndex:0];
+        Team *tmpTeam = (self.teamList)[0];
         [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
         
         
@@ -253,7 +253,7 @@
     
     @autoreleasepool {
         NSString *token = @"";
-        NSArray *eventArray = [NSArray array];
+        NSArray *eventArray = @[];
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
@@ -305,13 +305,13 @@
         
         for (int i = 0; i < [eventArray count]; i++) {
             
-            [tmpArray addObject:[eventArray objectAtIndex:i]];
+            [tmpArray addObject:eventArray[i]];
         }
         
         
               
         NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-        [tmpArray sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+        [tmpArray sortUsingDescriptors:@[lastNameSorter]];
         
         
         self.eventList = [NSArray arrayWithArray:tmpArray];
@@ -365,7 +365,7 @@
     
         
       
-            Team *team = [self.teamList objectAtIndex:row];
+            Team *team = (self.teamList)[row];
             cell.textLabel.text = team.name;
         
    
@@ -389,7 +389,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSUInteger row = [indexPath row];
     
    
-        Team *tmpTeam = [self.teamList objectAtIndex:row];
+        Team *tmpTeam = (self.teamList)[row];
         [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
         self.selectView.hidden = YES;
         [self.eventActivity startAnimating];
@@ -494,7 +494,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (![gameId isEqualToString:@""]) {
         self.eventId = [NSString stringWithString:gameId];
-        NSLog(@"EventID: %@", self.eventId);
+        //NSLog(@"EventID: %@", self.eventId);
         [self performSelectorInBackground:@selector(sendWhoPoll) withObject:nil];
 
     }else{
@@ -582,21 +582,21 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         self.eventId = @"";
     }else{
         self.newGame = false;
-        if ([Game class] == [[self.eventList objectAtIndex:row-1] class]) {
+        if ([Game class] == [(self.eventList)[row-1] class]) {
             
-            Game *tmpGame = [self.eventList objectAtIndex:row-1];
+            Game *tmpGame = (self.eventList)[row-1];
             self.eventId = tmpGame.gameId;
             self.eventType = @"game";
             
-        }else if ([Practice class] == [[self.eventList objectAtIndex:row-1] class]) {
+        }else if ([Practice class] == [(self.eventList)[row-1] class]) {
             
-            Practice *tmpGame = [self.eventList objectAtIndex:row-1];
+            Practice *tmpGame = (self.eventList)[row-1];
             self.eventId = tmpGame.practiceId;
             self.eventType = @"practice";
             
         }else {
             
-            Event *tmpGame = [self.eventList objectAtIndex:row-1];
+            Event *tmpGame = (self.eventList)[row-1];
             self.eventId = tmpGame.eventId;
             self.eventType = @"generic";
         }
@@ -632,9 +632,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
     }else{
         
-        if ([Game class] == [[self.eventList objectAtIndex:row-1] class]) {
+        if ([Game class] == [(self.eventList)[row-1] class]) {
             
-            Game *tmpGame = [self.eventList objectAtIndex:row-1];
+            Game *tmpGame = (self.eventList)[row-1];
             type = @"Game";
             date = tmpGame.startDate;
             
@@ -642,9 +642,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 alreadySent = true;
             }
             
-        }else if ([Practice class] == [[self.eventList objectAtIndex:row-1] class]) {
+        }else if ([Practice class] == [(self.eventList)[row-1] class]) {
             
-            Practice *tmpGame = [self.eventList objectAtIndex:row-1];
+            Practice *tmpGame = (self.eventList)[row-1];
             type = @"Practice";
             date = tmpGame.startDate;
             
@@ -654,7 +654,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
         }else {
             
-            Event *tmpGame = [self.eventList objectAtIndex:row-1];
+            Event *tmpGame = (self.eventList)[row-1];
             type = @"Event";
             date = tmpGame.startDate;
             

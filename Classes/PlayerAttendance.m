@@ -50,7 +50,7 @@
 	//[headerView addSubview:headerLabel];
 	
 	
-	NSArray *segments = [NSArray arrayWithObjects:@"Games", @"Practices", @"All", nil];
+	NSArray *segments = @[@"Games", @"Practices", @"All"];
 	
 	self.segmentEventType = [[UISegmentedControl alloc] initWithItems:segments];
 	self.segmentEventType.frame = CGRectMake(25, 20, 275, 30);
@@ -115,7 +115,7 @@
 			NSMutableArray *tmp = [NSMutableArray arrayWithArray:self.attResults];
 			
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"eventDate" ascending:YES];
-			[tmp sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+			[tmp sortUsingDescriptors:@[lastNameSorter]];
             
 			self.attResults = tmp;
 			self.displayAttResults = tmp;
@@ -160,9 +160,9 @@
         
         for (int i = 0; i < [self.attResults count]; i++) {
             
-            NSDictionary *results = [self.attResults objectAtIndex:i];
+            NSDictionary *results = (self.attResults)[i];
             
-            if ([[results objectForKey:@"eventType"] isEqualToString:event]) {
+            if ([results[@"eventType"] isEqualToString:event]) {
                 [tmp addObject:results];
             }
             
@@ -300,10 +300,10 @@
         //Configure the cell
         
         NSUInteger row = [indexPath row];
-        NSDictionary *results = [self.displayAttResults objectAtIndex:row];
+        NSDictionary *results = (self.displayAttResults)[row];
         
         //format the start date (coming back as YYYY-MM-DD hh:mm)
-        NSString *date = [results objectForKey:@"eventDate"];
+        NSString *date = results[@"eventDate"];
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
@@ -320,7 +320,7 @@
         
         //Is it a game or practice	
         eventNameLabel.text = @"";
-        NSString *type = [results objectForKey:@"eventType"];
+        NSString *type = results[@"eventType"];
         if ([type isEqualToString:@"game"]) {
             eventLabel.text = @"Game";
         }else if ([type isEqualToString:@"practice"]){
@@ -334,7 +334,7 @@
         
         //Was the member absent or present
         
-        if ([[results objectForKey:@"present"] isEqualToString:@"yes"]) {
+        if ([results[@"present"] isEqualToString:@"yes"]) {
             absentOrPresent.image = [UIImage imageNamed:@"present.png"];
             imageLabel.text = @"Present";
         }else {

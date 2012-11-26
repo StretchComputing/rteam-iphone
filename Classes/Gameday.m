@@ -31,6 +31,8 @@ refreshActivity, isGameOver, editFinalButton, mainActivity, editDone, startDate,
 errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, myFootballScoring, myBasketballScoring, greenBackView, scoreView, teamName;
 
 
+
+
 -(void)editGame{
 	
     [TraceSession addEventToSession:@"Gameday Page - Edit Button Clicked"];
@@ -69,16 +71,16 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
         float tmpFloat = [[[UIDevice currentDevice] systemVersion] floatValue];
         if (tmpFloat < 5.0) {
             [self.mainActivity startAnimating];
-            [self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
+           [self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
         }
 	}
-        
-    if (myAd.bannerLoaded) {
-        myAd.hidden = NO;
+    
+    if (self.myAd.bannerLoaded) {
+        self.myAd.hidden = NO;
         bannerIsVisible = YES;
     }else{
         bannerIsVisible = NO;
-        myAd.hidden = YES;
+        self.myAd.hidden = YES;
     }
     
 	self.isGameOver = false;
@@ -109,6 +111,7 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 }
 -(void)viewDidLoad{
 		
+    
     self.greenBackView.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
 
     self.editDone = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editGame)];
@@ -133,14 +136,11 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 	self.defaultScoringButton.hidden = YES;
 	self.scoringNotEnabled.hidden = YES;
 	
-	
 
-    //iAds
-	myAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-	myAd.delegate = self;
-	myAd.hidden = YES;
-	[self.view addSubview:myAd];
 
+    
+ 
+ 
 }
 
 
@@ -155,7 +155,7 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
             token = mainDelegate.token;
         }
         
-        NSDictionary *gameInfo = [NSDictionary dictionary];
+        NSDictionary *gameInfo = @{};
         //If there is a token, do a DB lookup to find the game info 
         if (![token isEqualToString:@""]){
 
@@ -531,9 +531,9 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 	
 	if (!self.bannerIsVisible) {
 		self.bannerIsVisible = YES;
-		myAd.hidden = NO;
+		self.myAd.hidden = NO;
 		
-        [self.view bringSubviewToFront:myAd];
+        [self.view bringSubviewToFront:self.myAd];
 	}
 }
 
@@ -541,7 +541,7 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 	
 	if (self.bannerIsVisible) {
 		
-		myAd.hidden = YES;
+		self.myAd.hidden = YES;
 		self.bannerIsVisible = NO;
 		
 	}
@@ -823,7 +823,7 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 		if ((location.y < 142) && (location.y > 50)) {
 			NSArray *subs = [self.view subviews];
 			
-			UIView *tmp = [subs objectAtIndex:[subs count] - 1];
+			UIView *tmp = subs[[subs count] - 1];
 			tmp.hidden = YES;
 			[self.refreshActivity startAnimating];
 			[self performSelectorInBackground:@selector(getGameInfo) withObject:nil];
@@ -955,45 +955,9 @@ errorString, photoButton, showCamera, myAd, mySoccerScoring, myBaseballScoring, 
 
 -(void)dealloc{
     
-    myAd.delegate = nil;
-	myAd = nil;
+    self.myAd.delegate = nil;
+	self.myAd = nil;
     
-}
-
--(void)viewDidUnload{
-	
-	opponent = nil;
-	day = nil;
-	time = nil;
-    error = nil;
-	successMessage = nil;
-    refreshActivity = nil;
-    usLabel = nil;
-	scoreUsLabel = nil;
-	themLabel = nil;
-	scoreThemLabel = nil;
-    defaultScoringButton = nil;
-	photoButton = nil;
-    orOtherInterval = nil;
-	mainActivity = nil;
-	keepScoreButton = nil;
-	intervalLabel = nil;
-	editFinalButton = nil;
-    scoreDividerLabel = nil;
-    myAd.delegate = nil;
-	myAd = nil;
-	mapButton = nil;
-	locationLabel = nil;
-    enableScoring = nil;
-    updateLocationButton = nil;
-    moreDetail = nil;
-	scoringNotEnabled = nil;
-	editDone = nil;
-    greenBackView = nil;
-
-	[super viewDidUnload];
-
-
 }
 
 

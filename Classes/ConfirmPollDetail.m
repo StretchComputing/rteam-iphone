@@ -148,14 +148,14 @@ displayString, messageSent, displayLabel, callTextActionSheet, replyString, repl
     tmp.isReply = true;
     tmp.isConfirm = true;
     
-    NSLog(@"MemberID: %@", self.memberId);
-    NSLog(@"MemberName: %@", self.memberName);
+    //NSLog(@"MemberID: %@", self.memberId);
+    //NSLog(@"MemberName: %@", self.memberName);
     
     Player *newPlayer = [[Player alloc] init];
     newPlayer.firstName = self.memberName;
     newPlayer.memberId = self.memberId;
     
-    NSArray *tmpArray = [NSArray arrayWithObject:newPlayer];
+    NSArray *tmpArray = @[newPlayer];
     
     tmp.recipientObjects = [NSArray arrayWithArray:tmpArray];
     
@@ -298,7 +298,7 @@ displayString, messageSent, displayLabel, callTextActionSheet, replyString, repl
 									
 									MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
 									messageViewController.messageComposeDelegate = self;
-									[messageViewController setRecipients:[NSArray arrayWithObject:numberToCall]];
+									[messageViewController setRecipients:@[numberToCall]];
 									[self presentModalViewController:messageViewController animated:YES];
 									
 								}

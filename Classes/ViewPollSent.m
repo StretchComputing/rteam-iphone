@@ -92,7 +92,7 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 				self.currentPollNumber--;
 				
-				MessageThreadOutbox *thread = [self.pollArray objectAtIndex:self.currentPollNumber];
+				MessageThreadOutbox *thread = (self.pollArray)[self.currentPollNumber];
 				
 				self.teamId = thread.teamId;
 				self.messageThreadId = thread.threadId;
@@ -132,7 +132,7 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 				self.currentPollNumber++;
 				
-				MessageThreadOutbox *thread = [self.pollArray objectAtIndex:self.currentPollNumber];
+				MessageThreadOutbox *thread = (self.pollArray)[self.currentPollNumber];
 								
 				self.teamId = thread.teamId;
 				self.messageThreadId = thread.threadId;
@@ -213,7 +213,7 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 		        
         if ([status1 isEqualToString:@"100"]){
             
-            self.response = [NSDictionary dictionary];
+            self.response = @{};
             self.response = [response1 valueForKey:@"messageThreadInfo"];
             self.errorString = @"";
             
@@ -286,8 +286,8 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 		
 		[self.scrollView addSubview:self.followUp];
 	}
-	self.subject.text = [self.response objectForKey:@"subject"];
-	self.body.text = [self.response objectForKey:@"body"];
+	self.subject.text = (self.response)[@"subject"];
+	self.body.text = (self.response)[@"body"];
 	
 	if (self.body.contentSize.height > 54) {
 		[self.downArrow setHidden:NO];
@@ -298,13 +298,13 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 	self.numReply.text = self.replyFraction;
 	
 	[self.finalizedMessage setHidden:YES];
-	self.status = [self.response objectForKey:@"status"];
+	self.status = (self.response)[@"status"];
 	if ([self.status isEqualToString:@"finalized"]) {
 		[self.finalizedMessage setHidden:NO];
 		[self.finalizeButton setHidden:YES];
 	}
 	
-	NSArray *pollChoices = [self.response objectForKey:@"pollChoices"];
+	NSArray *pollChoices = (self.response)[@"pollChoices"];
 		
 		if ([pollChoices count] <= 4) {
 			
@@ -318,34 +318,34 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 
 	NSMutableArray *pollChoicesCount = [NSMutableArray array];
 	for (int i = 0; i < [pollChoices count]; i++) {
-		NSNumber *num = [[NSNumber alloc] initWithInt:0];
+		NSNumber *num = @0;
 		[pollChoicesCount addObject:num];
 	}
 	
-	self.individualReplies = [self.response objectForKey:@"members"];
+	self.individualReplies = (self.response)[@"members"];
 	
 	
 	for (int i = 0; i < [self.individualReplies count]; i++) {
 		
-		NSDictionary *tmpDictionary = [self.individualReplies objectAtIndex:i];
+		NSDictionary *tmpDictionary = (self.individualReplies)[i];
 		
-		if ([tmpDictionary objectForKey:@"reply"] != nil) {
+		if (tmpDictionary[@"reply"] != nil) {
 			
-			NSString *reply = [tmpDictionary objectForKey:@"reply"];
+			NSString *reply = tmpDictionary[@"reply"];
 			
 			for (int j = 0; j < [pollChoices count]; j++) {
 				
-				NSString *thisChoice = [pollChoices objectAtIndex:j];
+				NSString *thisChoice = pollChoices[j];
 				
 				if ([thisChoice isEqualToString:reply]) {
 					
-					NSNumber *tmpNum = [pollChoicesCount objectAtIndex:j];
+					NSNumber *tmpNum = pollChoicesCount[j];
 					int tmpInt = [tmpNum intValue];
 					
 					tmpInt++;
 					
-					NSNumber *newNum = [[NSNumber alloc] initWithInt:tmpInt];
-					[pollChoicesCount replaceObjectAtIndex:j withObject:newNum];
+					NSNumber *newNum = @(tmpInt);
+					pollChoicesCount[j] = newNum;
 					
 					
 				}
@@ -361,31 +361,31 @@ upDown, currentPollNumber, pollArray, pollNumber, origTeamId, response, loadingA
 		self.option4.lineBreakMode = UILineBreakModeMiddleTruncation;
 		self.option5.lineBreakMode = UILineBreakModeMiddleTruncation;
 
-	NSNumber *num1 = [pollChoicesCount objectAtIndex:0];
-	self.option1.text = [[[pollChoices objectAtIndex:0] stringByAppendingString:@":  "] stringByAppendingString:[num1 stringValue]];
+	NSNumber *num1 = pollChoicesCount[0];
+	self.option1.text = [[pollChoices[0] stringByAppendingString:@":  "] stringByAppendingString:[num1 stringValue]];
 	
-	NSNumber *num2 = [pollChoicesCount objectAtIndex:1];
-	self.option2.text = [[[pollChoices objectAtIndex:1] stringByAppendingString:@":  "] stringByAppendingString:[num2 stringValue]];
+	NSNumber *num2 = pollChoicesCount[1];
+	self.option2.text = [[pollChoices[1] stringByAppendingString:@":  "] stringByAppendingString:[num2 stringValue]];
 	
 	if ([pollChoices count] > 2) {
-		NSNumber *num3 = [pollChoicesCount objectAtIndex:2];
-		self.option3.text = [[[pollChoices objectAtIndex:2] stringByAppendingString:@":  "] stringByAppendingString:[num3 stringValue]]; 
+		NSNumber *num3 = pollChoicesCount[2];
+		self.option3.text = [[pollChoices[2] stringByAppendingString:@":  "] stringByAppendingString:[num3 stringValue]]; 
 	}else {
 		[self.option3 setHidden:YES];
 	}
 	
 	
 	if ([pollChoices count] > 3) {
-		NSNumber *num4 = [pollChoicesCount objectAtIndex:3];
-		self.option4.text = [[[pollChoices objectAtIndex:3] stringByAppendingString:@":  "] stringByAppendingString:[num4 stringValue]];
+		NSNumber *num4 = pollChoicesCount[3];
+		self.option4.text = [[pollChoices[3] stringByAppendingString:@":  "] stringByAppendingString:[num4 stringValue]];
 	}else {
 		[self.option4 setHidden:YES];
 	}
 	
 	
 	if ([pollChoices count] > 4) {
-		NSNumber *num5 = [pollChoicesCount objectAtIndex:4];
-		self.option5.text = [[[pollChoices objectAtIndex:4] stringByAppendingString:@":  "] stringByAppendingString:[num5
+		NSNumber *num5 = pollChoicesCount[4];
+		self.option5.text = [[pollChoices[4] stringByAppendingString:@":  "] stringByAppendingString:[num5
 																													 stringValue]];
 	}else {
 		[self.option5 setHidden:YES];

@@ -139,8 +139,8 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 
     @autoreleasepool {
         NSString *token = @"";
-        NSArray *gameArray = [NSArray array];
-        NSArray *practiceArray = [NSArray array];
+        NSArray *gameArray = @[];
+        NSArray *practiceArray = @[];
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
@@ -232,7 +232,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
             
             //if (![formatedDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
             
-            [tmpArray addObject:[gameArray objectAtIndex:i]];
+            [tmpArray addObject:gameArray[i]];
             
             //}
             
@@ -253,7 +253,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
              
              if (![formatedDate isEqualToDate:[formatedDate earlierDate:todaysDate]]) {
              */
-            [tmpArray addObject:[practiceArray objectAtIndex:i]];
+            [tmpArray addObject:practiceArray[i]];
 			
             //}
             
@@ -262,7 +262,7 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
         
         
         NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-        [tmpArray sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+        [tmpArray sortUsingDescriptors:@[lastNameSorter]];
         
         
         self.events = [NSArray arrayWithArray:tmpArray];
@@ -295,14 +295,14 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
     int cell = -1;
     for (int i = 0; i < [self.events count]; i++) {
         
-        if ([[self.events  objectAtIndex:i] class] == [Game class]) {
-			Game *tmpGame = [self.events  objectAtIndex:i];
+        if ([(self.events)[i] class] == [Game class]) {
+			Game *tmpGame = (self.events)[i];
 			cellDate = tmpGame.startDate;
-		}else if ([[self.events  objectAtIndex:i] class] == [Practice class]) {
-			Practice *tmpGame = [self.events  objectAtIndex:i];
+		}else if ([(self.events)[i] class] == [Practice class]) {
+			Practice *tmpGame = (self.events)[i];
 			cellDate = tmpGame.startDate;
-		}else if ([[self.events  objectAtIndex:i] class] == [Event class]) {
-			Event *tmpGame = [self.events  objectAtIndex:i];
+		}else if ([(self.events)[i] class] == [Event class]) {
+			Event *tmpGame = (self.events)[i];
 			cellDate = tmpGame.startDate;
 		}
 		
@@ -365,9 +365,9 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 	
 	if ([self.events count] > 0) {
 		
-		if ([[self.events objectAtIndex:row] class] == [Game class]) {
+		if ([(self.events)[row] class] == [Game class]) {
 			
-			Game *theGame = [self.events objectAtIndex:row];
+			Game *theGame = (self.events)[row];
 			if (theGame.latitude != nil) {
 				mapIt = true;
 			}
@@ -377,9 +377,9 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 			}
 			
 			
-		}else if ([[self.events objectAtIndex:row] class] == [Practice class]) {
+		}else if ([(self.events)[row] class] == [Practice class]) {
 			
-			Practice *thePracitce = [self.events objectAtIndex:row];
+			Practice *thePracitce = (self.events)[row];
 			if (thePracitce.latitude != nil) {
 				mapIt = true;
 			}
@@ -389,9 +389,9 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 			}
 			
 			
-		}else if ([[self.events objectAtIndex:row] class] == [Event class]) {
+		}else if ([(self.events)[row] class] == [Event class]) {
 			
-			Event *theEvent = [self.events objectAtIndex:row];
+			Event *theEvent = (self.events)[row];
 			
 			if (theEvent.latitude != nil) {
 				mapIt = true;
@@ -619,11 +619,11 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 		scoreLabel.hidden = NO;
         scoreView.hidden = YES;
 
-		if ([[self.events objectAtIndex:row] class] == [Game class]) {
+		if ([(self.events)[row] class] == [Game class]) {
 			
            
 			typeLabel.text = @"Game";
-			Game *theGame = [self.events objectAtIndex:row];
+			Game *theGame = (self.events)[row];
 			
 			//format the start date (coming back as YYYY-MM-DD hh:mm)
 			NSString *date = theGame.startDate;
@@ -747,11 +747,11 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 			
             scoreLabel.hidden = YES;
 			
-		}else if ([[self.events objectAtIndex:row] class] == [Practice class]) {
+		}else if ([(self.events)[row] class] == [Practice class]) {
 			
 			[scoreLabel setHidden:YES];
 			typeLabel.text = @"Practice";
-			Practice *thePracitce = [self.events objectAtIndex:row];
+			Practice *thePracitce = (self.events)[row];
 			
 			//format the start date (coming back as YYYY-MM-DD hh:mm)
 			NSString *date = thePracitce.startDate;
@@ -785,11 +785,11 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			}
 			
-		}else if ([[self.events objectAtIndex:row] class] == [Event class]) {
+		}else if ([(self.events)[row] class] == [Event class]) {
 			
 			[scoreLabel setHidden:YES];
 			typeLabel.text = @"Event";
-			Event *theEvent = [self.events objectAtIndex:row];
+			Event *theEvent = (self.events)[row];
 			
 			//format the start date (coming back as YYYY-MM-DD hh:mm)
 			NSString *date = theEvent.startDate;
@@ -864,9 +864,9 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 	
 	int row = tmp.tag;
 	
-	if ([[self.events objectAtIndex:row] class] == [Game class]) {
+	if ([(self.events)[row] class] == [Game class]) {
 		
-		Game *tmpGame = [self.events objectAtIndex:row];
+		Game *tmpGame = (self.events)[row];
 		
 		MapLocation *next = [[MapLocation alloc] init];
 		next.eventLatCoord = [tmpGame.latitude doubleValue];
@@ -874,9 +874,9 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 		[self.navigationController pushViewController:next animated:YES];
 		
 		
-	}else if ([[self.events objectAtIndex:row] class] == [Practice class]) {
+	}else if ([(self.events)[row] class] == [Practice class]) {
 		
-		Practice *tmpPractice = [self.events objectAtIndex:row];
+		Practice *tmpPractice = (self.events)[row];
 		
 		MapLocation *next = [[MapLocation alloc] init];
 		next.eventLatCoord = [tmpPractice.latitude doubleValue];
@@ -884,9 +884,9 @@ eventActivityLabel, eventsTableView, undoCancel, actionRow, editEventActiviy, er
 		[self.navigationController pushViewController:next animated:YES];
 		
 		
-	}else if ([[self.events objectAtIndex:row] class] == [Event class]) {
+	}else if ([(self.events)[row] class] == [Event class]) {
 		
-		Event *tmpPractice = [self.events objectAtIndex:row];
+		Event *tmpPractice = (self.events)[row];
 		
 		MapLocation *next = [[MapLocation alloc] init];
 		next.eventLatCoord = [tmpPractice.latitude doubleValue];
@@ -968,9 +968,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             UIBarButtonItem *temp = [[UIBarButtonItem alloc] initWithTitle:@"Events" style:UIBarButtonItemStyleDone target:nil action:nil];
             self.navigationItem.backBarButtonItem = temp;
             
-            if ([[self.events objectAtIndex:row] class] == [Game class]) {
+            if ([(self.events)[row] class] == [Game class]) {
                 
-                Game *currentGame = [self.events objectAtIndex:row];
+                Game *currentGame = (self.events)[row];
                 
                 if (![currentGame.interval isEqualToString:@"-4"]) {
                     if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
@@ -984,7 +984,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         currentGameTab.userRole = self.userRole;
                         currentGameTab.teamName = self.teamName;
                         
-                        Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                        Gameday *currentNotes = viewControllers[0];
                         currentNotes.gameId = currentGame.gameId;
                         currentNotes.teamId = self.teamId;
                         currentNotes.userRole = self.userRole;
@@ -993,13 +993,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         currentNotes.startDate = currentGame.startDate;
                         currentNotes.opponentString = currentGame.opponent;
                         
-                        GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                        GameAttendance *currentAttendance = viewControllers[1];
                         currentAttendance.gameId = currentGame.gameId;
                         currentAttendance.teamId = self.teamId;
                         currentAttendance.startDate = currentGame.startDate;
                         
                         
-                        Vote *fans = [viewControllers objectAtIndex:2];
+                        Vote *fans = viewControllers[2];
                         fans.teamId = self.teamId;
                         fans.userRole = self.userRole;
                         fans.gameId = currentGame.gameId;
@@ -1016,13 +1016,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         currentGameTab.teamName = self.teamName;
                         
                         
-                        Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                        Gameday *currentNotes = viewControllers[0];
                         currentNotes.gameId = currentGame.gameId;
                         currentNotes.teamId = self.teamId;
                         currentNotes.userRole = self.userRole;
                         currentNotes.sport = self.sport;
                         
-                        Vote *fans = [viewControllers objectAtIndex:1];
+                        Vote *fans = viewControllers[1];
                         fans.teamId = self.teamId;
                         fans.userRole = self.userRole;
                         fans.gameId = currentGame.gameId;
@@ -1045,12 +1045,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 }
                 
                 
-            }else if ([[self.events objectAtIndex:row] class] == [Practice class]) {
+            }else if ([(self.events)[row] class] == [Practice class]) {
                 
                 PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
                 
                 
-                Practice *currentPractice = [self.events objectAtIndex:row];
+                Practice *currentPractice = (self.events)[row];
                 
                 if (currentPractice.isCanceled) {
                     if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
@@ -1069,12 +1069,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     currentPracticeTab.practiceId = currentPractice.practiceId;
                     currentPracticeTab.userRole = self.userRole;
                     
-                    PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+                    PracticeNotes *currentNotes = viewControllers[0];
                     currentNotes.practiceId = currentPractice.practiceId;
                     currentNotes.teamId = self.teamId;
                     currentNotes.userRole = self.userRole;
                     
-                    PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    PracticeAttendance *currentAttendance = viewControllers[1];
                     currentAttendance.practiceId = currentPractice.practiceId;
                     currentAttendance.teamId = self.teamId;
                     currentAttendance.startDate = currentPractice.startDate;
@@ -1099,12 +1099,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 }
                 
                 
-            }else if ([[self.events objectAtIndex:row] class] == [Event class]) {
+            }else if ([(self.events)[row] class] == [Event class]) {
                 
                 EventTabs *currentPracticeTab = [[EventTabs alloc] init];
                 
                 
-                Event *currentEvent = [self.events objectAtIndex:row];
+                Event *currentEvent = (self.events)[row];
                 
                 if (currentEvent.isCanceled) {
                     if ([self.userRole isEqualToString:@"coordinator"] || [self.userRole isEqualToString:@"creator"]) {
@@ -1123,13 +1123,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     currentPracticeTab.eventId = currentEvent.eventId;
                     currentPracticeTab.userRole = self.userRole;
                     
-                    EventNotes *currentNotes = [viewControllers objectAtIndex:0];
+                    EventNotes *currentNotes = viewControllers[0];
                     currentNotes.eventId = currentEvent.eventId;
                     currentNotes.teamId = self.teamId;
                     currentNotes.userRole = self.userRole;
                     
                     
-                    EventAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    EventAttendance *currentAttendance = viewControllers[1];
                     currentAttendance.eventId = currentEvent.eventId;
                     currentAttendance.teamId = self.teamId;
                     currentAttendance.startDate = currentEvent.startDate;
@@ -1171,9 +1171,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	NSUInteger row = [indexPath row];
 	
-	if ([[self.events objectAtIndex:row] class] == [Game class]) {
+	if ([(self.events)[row] class] == [Game class]) {
 		
-		Game *currentGame = [self.events objectAtIndex:row];
+		Game *currentGame = (self.events)[row];
 		
 		
 		GameEdit *editGame = [[GameEdit alloc] init];
@@ -1187,8 +1187,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		[self.navigationController pushViewController:editGame animated:YES];
 		
-	}else if ([[self.events objectAtIndex:row] class] == [Practice class]) {
-		Practice *currentPractice = [self.events objectAtIndex:row];
+	}else if ([(self.events)[row] class] == [Practice class]) {
+		Practice *currentPractice = (self.events)[row];
 		
 		
 		PracticeEdit *editPractice = [[PracticeEdit alloc] init];
@@ -1201,8 +1201,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		
 		[self.navigationController pushViewController:editPractice animated:YES];
-	}else if ([[self.events objectAtIndex:row] class] == [Event class]) {
-		Event *currentPractice = [self.events objectAtIndex:row];
+	}else if ([(self.events)[row] class] == [Event class]) {
+		Event *currentPractice = (self.events)[row];
 		
 		
 		EventEdit *editPractice = [[EventEdit alloc] init];
@@ -1287,9 +1287,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             token = mainDelegate.token;
         }
         
-        if ([[self.events objectAtIndex:self.deleteRow] class] == [Game class]) {
+        if ([(self.events)[self.deleteRow] class] == [Game class]) {
             
-            Game *gameToDelete = [self.events objectAtIndex:self.deleteRow];
+            Game *gameToDelete = (self.events)[self.deleteRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI deleteGame:token :self.teamId :gameToDelete.gameId];
                 
@@ -1321,9 +1321,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
             }
             
-        }else if ([[self.events objectAtIndex:self.deleteRow] class] == [Practice class]) {
+        }else if ([(self.events)[self.deleteRow] class] == [Practice class]) {
             
-            Practice *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
+            Practice *practiceToDelete = (self.events)[self.deleteRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI deleteEvent:token :self.teamId :practiceToDelete.practiceId];
                 NSString *status = [response valueForKey:@"status"];
@@ -1357,7 +1357,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }
         }else {
             
-            Event *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
+            Event *practiceToDelete = (self.events)[self.deleteRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI deleteEvent:token :self.teamId :practiceToDelete.eventId];
                 NSString *status = [response valueForKey:@"status"];
@@ -1411,9 +1411,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             token = mainDelegate.token;
         }
         
-        if ([[self.events objectAtIndex:self.deleteRow] class] == [Game class]) {
+        if ([(self.events)[self.deleteRow] class] == [Game class]) {
             
-            Game *gameToDelete = [self.events objectAtIndex:self.deleteRow];
+            Game *gameToDelete = (self.events)[self.deleteRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateGame:token :self.teamId :gameToDelete.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"-4" :@"" :@"" :@""];
                 
@@ -1446,9 +1446,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
             }
             
-        }else if ([[self.events objectAtIndex:self.deleteRow] class] == [Practice class]) {
+        }else if ([(self.events)[self.deleteRow] class] == [Practice class]) {
             
-            Practice *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
+            Practice *practiceToDelete = (self.events)[self.deleteRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.practiceId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"true"];
                 NSString *status = [response valueForKey:@"status"];
@@ -1479,7 +1479,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }
         }else {
             
-            Event *practiceToDelete = [self.events objectAtIndex:self.deleteRow];
+            Event *practiceToDelete = (self.events)[self.deleteRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"true"];
                 NSString *status = [response valueForKey:@"status"];
@@ -1533,9 +1533,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             token = mainDelegate.token;
         }
         
-        if ([[self.events objectAtIndex:self.actionRow] class] == [Game class]) {
+        if ([(self.events)[self.actionRow] class] == [Game class]) {
             
-            Game *gameToDelete = [self.events objectAtIndex:self.actionRow];
+            Game *gameToDelete = (self.events)[self.actionRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateGame:token :self.teamId :gameToDelete.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"0" :@"" :@"" :@""];
                 
@@ -1570,9 +1570,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
             }
             
-        }else if ([[self.events objectAtIndex:self.actionRow] class] == [Practice class]) {
+        }else if ([(self.events)[self.actionRow] class] == [Practice class]) {
             
-            Practice *practiceToDelete = [self.events objectAtIndex:self.actionRow];
+            Practice *practiceToDelete = (self.events)[self.actionRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.practiceId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false"];
                 NSString *status = [response valueForKey:@"status"];
@@ -1603,7 +1603,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }
         }else {
             
-            Event *practiceToDelete = [self.events objectAtIndex:self.actionRow];
+            Event *practiceToDelete = (self.events)[self.actionRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateEvent:token :self.teamId :practiceToDelete.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false"];
                 NSString *status = [response valueForKey:@"status"];

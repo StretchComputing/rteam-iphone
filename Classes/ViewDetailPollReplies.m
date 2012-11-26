@@ -38,7 +38,7 @@
 	self.myTableView.dataSource = self;
 	self.myTableView.hidden = YES;
 	
-	self.members = [NSArray array];
+	self.members = @[];
 	
 	[self.loadingActivity startAnimating];
 	[self performSelectorInBackground:@selector(getMembers) withObject:nil];
@@ -104,7 +104,7 @@
 		
 		for (int i = 0; i < [self.replyArray count]; i++) {
 			
-			NSDictionary *memberReplyObject = [self.replyArray objectAtIndex:i];
+			NSDictionary *memberReplyObject = (self.replyArray)[i];
 			
 			NSString *memberReplyID = [memberReplyObject valueForKey:@"memberId"];
 			
@@ -112,8 +112,8 @@
 			for (int j = 0; j < [members count]; j++) {
 				
 				
-				if ([[members objectAtIndex:j] class] == [Player class]) {
-					Player *tmpPlayer = [members objectAtIndex:j];
+				if ([members[j] class] == [Player class]) {
+					Player *tmpPlayer = members[j];
 					
 					if ([memberReplyID isEqualToString:tmpPlayer.memberId]) {
 						//Add that player to the list
@@ -144,7 +144,7 @@
 					
 				}else {
 					//Fan
-					Fan *tmpPlayer = [members objectAtIndex:j];
+					Fan *tmpPlayer = members[j];
 					
 					if ([memberReplyID isEqualToString:tmpPlayer.memberId]) {
 						//Add that player to the list
@@ -246,7 +246,7 @@
 	
     NSUInteger row = [indexPath row];
 	
-	PollReplyObject *reply = [self.allReplyObjects objectAtIndex:row];
+	PollReplyObject *reply = (self.allReplyObjects)[row];
 
 	if ([reply.dateReplied isEqualToString:@""]) {
 		
@@ -296,7 +296,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	if (self.isSender) {
 		
-		PollReplyObject *reply = [self.allReplyObjects objectAtIndex:[indexPath row]];
+		PollReplyObject *reply = (self.allReplyObjects)[[indexPath row]];
 		
 		NSString *nameString = @"";
 		NSString *confirmDateString = @"";

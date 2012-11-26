@@ -138,7 +138,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 	
-	NSArray *segments = [NSArray arrayWithObjects:@"Games", @"Practices", @"All", nil];
+	NSArray *segments = @[@"Games", @"Practices", @"All"];
 	
 	self.segmentedControl = [[UISegmentedControl alloc] initWithItems:segments];
 	self.segmentedControl.frame = CGRectMake(25, 3, 250, 30);
@@ -150,7 +150,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	
 	
-	NSArray *items1 = [NSArray arrayWithObjects:flexibleSpace, tmp, flexibleSpace, nil];
+	NSArray *items1 = @[flexibleSpace, tmp, flexibleSpace];
 	self.bottomBar.items = items1;
 
 	
@@ -181,7 +181,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
         [self performSelectorInBackground:@selector(getAllEvents) withObject:nil];
         
         
-        NSArray *games = [NSArray array];
+        NSArray *games = @[];
         NSString *token = @"";
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -245,7 +245,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 - (void)getAllPractices {
 
     @autoreleasepool {
-        NSArray *practices = [NSArray array];
+        NSArray *practices = @[];
         NSString *token = @"";
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -308,7 +308,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 
 	@autoreleasepool {
-        NSArray *practices = [NSArray array];
+        NSArray *practices = @[];
         NSString *token = @"";
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -390,21 +390,21 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
         
         for (int i = 0; i < [self.allGames count]; i++) {
             
-            [self.allEvents addObject:[self.allGames objectAtIndex:i]];
+            [self.allEvents addObject:(self.allGames)[i]];
         }
         
         for (int i = 0; i < [self.allPractices count]; i++) {
             
-            [self.allEvents addObject:[self.allPractices objectAtIndex:i]];
+            [self.allEvents addObject:(self.allPractices)[i]];
         }
         
         for (int i = 0; i < [self.allGenericEvents count]; i++) {
             
-            [self.allEvents addObject:[self.allGenericEvents objectAtIndex:i]];
+            [self.allEvents addObject:(self.allGenericEvents)[i]];
         }
         
         NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-        [self.allEvents sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
+        [self.allEvents sortUsingDescriptors:@[dateSorter]];
         
         [self performSelectorOnMainThread:
          @selector(didFinishEvents)
@@ -460,7 +460,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 		if ([self.eventType isEqualToString:@"game"]) {
 
-			Game *tmpGame = [self.gamesToday objectAtIndex:row-1];
+			Game *tmpGame = (self.gamesToday)[row-1];
 		
 			if ([tmpGame.userRole isEqualToString:@"creator"] || [tmpGame.userRole isEqualToString:@"coordinator"]) {
 				addDelete = true;
@@ -468,7 +468,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		
 		}else if ([self.eventType isEqualToString:@"practice"]) {
 
-			Practice *tmpGame = [self.practicesToday objectAtIndex:row-1];
+			Practice *tmpGame = (self.practicesToday)[row-1];
 			
 			if ([tmpGame.userRole isEqualToString:@"creator"] || [tmpGame.userRole isEqualToString:@"coordinator"]) {
 				addDelete = true;
@@ -476,25 +476,25 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 		}else{
 		
-			if ([[self.eventsToday objectAtIndex:row-1] class] == [Game class]) {
+			if ([(self.eventsToday)[row-1] class] == [Game class]) {
 			
-				Game *tmpGame = [self.eventsToday objectAtIndex:row-1];
+				Game *tmpGame = (self.eventsToday)[row-1];
 				
 				if ([tmpGame.userRole isEqualToString:@"creator"] || [tmpGame.userRole isEqualToString:@"coordinator"]) {
 					addDelete = true;
 				}
 					
-			}else if ([[self.eventsToday objectAtIndex:row-1] class] == [Practice class]) {
+			}else if ([(self.eventsToday)[row-1] class] == [Practice class]) {
 			
-				Practice *tmpGame = [self.eventsToday objectAtIndex:row-1];
+				Practice *tmpGame = (self.eventsToday)[row-1];
 
 				if ([tmpGame.userRole isEqualToString:@"creator"] || [tmpGame.userRole isEqualToString:@"coordinator"]) {
 					addDelete = true;
 				}
 			
-			}else if ([[self.eventsToday objectAtIndex:row-1] class] == [Event class]) {
+			}else if ([(self.eventsToday)[row-1] class] == [Event class]) {
 			
-				Event *tmpEvent = [self.eventsToday objectAtIndex:row-1];
+				Event *tmpEvent = (self.eventsToday)[row-1];
 			
 				if ([tmpEvent.userRole isEqualToString:@"creator"] || [tmpEvent.userRole isEqualToString:@"coordinator"]) {
 					addDelete = true;
@@ -606,7 +606,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	}else {
 		if ([self.eventType isEqualToString:@"game"]) {
 			//
-	        Game *tmpGame = [self.gamesToday objectAtIndex:row-1];
+	        Game *tmpGame = (self.gamesToday)[row-1];
 			
 			NSString *date = tmpGame.startDate;
 			
@@ -628,7 +628,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			
 		}else if ([self.eventType isEqualToString:@"practice"]) {
 			//
-			Practice *tmpGame = [self.practicesToday objectAtIndex:row-1];
+			Practice *tmpGame = (self.practicesToday)[row-1];
 			NSString *date = tmpGame.startDate;
 			
 			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
@@ -649,9 +649,9 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		}else{
 			//	
 			
-			if ([[self.eventsToday objectAtIndex:row-1] class] == [Game class]) {
+			if ([(self.eventsToday)[row-1] class] == [Game class]) {
 				
-				Game *tmpGame = [self.eventsToday objectAtIndex:row-1];
+				Game *tmpGame = (self.eventsToday)[row-1];
 				
 				NSString *date = tmpGame.startDate;
 				
@@ -673,9 +673,9 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 				}
 
 				
-			}else if ([[self.eventsToday objectAtIndex:row-1] class] == [Practice class]) {
+			}else if ([(self.eventsToday)[row-1] class] == [Practice class]) {
 				
-				Practice *tmpGame = [self.eventsToday objectAtIndex:row-1];
+				Practice *tmpGame = (self.eventsToday)[row-1];
 				NSString *date = tmpGame.startDate;
 				
 				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
@@ -694,9 +694,9 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 					cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				}
 				
-			}else if ([[self.eventsToday objectAtIndex:row-1] class] == [Event class]) {
+			}else if ([(self.eventsToday)[row-1] class] == [Event class]) {
 				
-				Event *tmpEvent = [self.eventsToday objectAtIndex:row-1];
+				Event *tmpEvent = (self.eventsToday)[row-1];
 				NSString *date = tmpEvent.startDate;
 				
 				NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
@@ -736,7 +736,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	if ([self.eventType isEqualToString:@"game"]) {
 		
-		Game *tmpGame = [self.gamesToday objectAtIndex:cell];
+		Game *tmpGame = (self.gamesToday)[cell];
 		
 		self.deleteEventType = @"game";
 		self.deleteEventId = tmpGame.gameId;
@@ -745,7 +745,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	}else if ([self.eventType isEqualToString:@"practice"]) {
 		
-		Practice *tmpGame = [self.practicesToday objectAtIndex:cell];
+		Practice *tmpGame = (self.practicesToday)[cell];
 		
 		self.deleteEventType = @"practice";
 		self.deleteEventId = tmpGame.practiceId;
@@ -755,9 +755,9 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		
 	}else{
 		
-		if ([[self.eventsToday objectAtIndex:cell] class] == [Game class]) {
+		if ([(self.eventsToday)[cell] class] == [Game class]) {
 			
-			Game *tmpGame = [self.eventsToday objectAtIndex:cell];
+			Game *tmpGame = (self.eventsToday)[cell];
 			
 			self.deleteEventType = @"game";
 			self.deleteEventId = tmpGame.gameId;
@@ -765,9 +765,9 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			self.deleteCell = cell;
 
 			
-		}else if ([[self.eventsToday objectAtIndex:cell] class] == [Practice class]) {
+		}else if ([(self.eventsToday)[cell] class] == [Practice class]) {
 			
-			Practice *tmpGame = [self.eventsToday objectAtIndex:cell];
+			Practice *tmpGame = (self.eventsToday)[cell];
 		
 			self.deleteEventType = @"practice";
 			self.deleteEventId = tmpGame.practiceId;
@@ -775,9 +775,9 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			self.deleteCell = cell;
 
 			
-		}else if ([[self.eventsToday objectAtIndex:cell] class] == [Event class]) {
+		}else if ([(self.eventsToday)[cell] class] == [Event class]) {
 			
-			Event *tmpEvent = [self.eventsToday objectAtIndex:cell];
+			Event *tmpEvent = (self.eventsToday)[cell];
 			
 			self.deleteEventType = @"generic";
 			self.deleteEventId = tmpEvent.eventId;
@@ -882,7 +882,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		
 		for (int i = 0; i < [self.allGames count]; i++){
 			
-			Game *tmpGame = [self.allGames objectAtIndex:i];
+			Game *tmpGame = (self.allGames)[i];
 			
 			NSString *date = tmpGame.startDate;
 			
@@ -898,7 +898,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		
 		for (int i = 0; i < [self.allPractices count]; i++){
 			
-			Practice *tmpGame = [self.allPractices objectAtIndex:i];
+			Practice *tmpGame = (self.allPractices)[i];
 			
 			NSString *date = tmpGame.startDate;
 			
@@ -913,7 +913,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	}else {
 		for (int i = 0; i < [self.allGames count]; i++){
 			
-			Game *tmpGame = [self.allGames objectAtIndex:i];
+			Game *tmpGame = (self.allGames)[i];
 			
 			NSString *date = tmpGame.startDate;
 			
@@ -927,7 +927,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		
 		for (int i = 0; i < [self.allPractices count]; i++){
 			
-			Practice *tmpGame = [self.allPractices objectAtIndex:i];
+			Practice *tmpGame = (self.allPractices)[i];
 			
 			NSString *date = tmpGame.startDate;
 			
@@ -941,7 +941,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 		}
 		for (int i = 0; i < [self.allGenericEvents count]; i++){
 			
-			Event *tmpEvent = [self.allGenericEvents objectAtIndex:i];
+			Event *tmpEvent = (self.allGenericEvents)[i];
 			
 			NSString *date = tmpEvent.startDate;
 			
@@ -1019,15 +1019,15 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	//Sort the games, practices, and all events
 	NSMutableArray *tmpMutable = [NSMutableArray arrayWithArray:self.allGames];
 	NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-	[tmpMutable sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+	[tmpMutable sortUsingDescriptors:@[lastNameSorter]];
 	self.allGames = tmpMutable;
 	
 	tmpMutable = [NSMutableArray arrayWithArray:self.allPractices];
-	[tmpMutable sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+	[tmpMutable sortUsingDescriptors:@[lastNameSorter]];
 	self.allPractices = tmpMutable;
 	
 	tmpMutable = [NSMutableArray arrayWithArray:self.allEvents];
-	[tmpMutable sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+	[tmpMutable sortUsingDescriptors:@[lastNameSorter]];
 	self.allEvents = tmpMutable;
 	
 	
@@ -1100,7 +1100,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	for (int i = 0; i < [self.allGames count]; i++) {
 		
-		Game *tmpGame = [self.allGames objectAtIndex:i];
+		Game *tmpGame = (self.allGames)[i];
 		
 		NSString *date = tmpGame.startDate;
 		
@@ -1127,7 +1127,7 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	for (int i = 0; i < [self.allPractices count]; i++) {
 		
-		Practice *tmpGame = [self.allPractices objectAtIndex:i];
+		Practice *tmpGame = (self.allPractices)[i];
 		
 		NSString *date = tmpGame.startDate;
 		
@@ -1158,29 +1158,9 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 	
 	for (int i = 0; i < [self.allEvents count]; i++) {
 		
-		if ([[self.allEvents objectAtIndex:i] class]==[Practice class]) {
+		if ([(self.allEvents)[i] class]==[Practice class]) {
 			
-			Practice *tmpGame = [self.allEvents objectAtIndex:i];
-			
-			NSString *date = tmpGame.startDate;
-			
-			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-			[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-			NSDate *gameDate = [dateFormat dateFromString:date];
-			
-			[dateFormat setDateFormat:@"yyyyMMdd"];
-			
-			NSString *dateOfGame = [dateFormat stringFromDate:gameDate];
-			NSString *dateToday = [dateFormat stringFromDate:self.dateSelected];
-			
-			if ([dateOfGame isEqualToString:dateToday]) {
-				[self.eventsToday addObject:tmpGame];
-			}
-			
-			
-		}else if ([[self.allEvents objectAtIndex:i] class]==[Game class]) {
-			
-			Game *tmpGame = [self.allEvents objectAtIndex:i];
+			Practice *tmpGame = (self.allEvents)[i];
 			
 			NSString *date = tmpGame.startDate;
 			
@@ -1198,9 +1178,29 @@ deleteEventTeamId, deleteCell, emptyGames, emptyPractices, emptyEvents, gDelete,
 			}
 			
 			
-		}else if ([[self.allEvents objectAtIndex:i] class]==[Event class]) {
+		}else if ([(self.allEvents)[i] class]==[Game class]) {
 			
-			Event *tmpEvent = [self.allEvents objectAtIndex:i];
+			Game *tmpGame = (self.allEvents)[i];
+			
+			NSString *date = tmpGame.startDate;
+			
+			NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
+			[dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
+			NSDate *gameDate = [dateFormat dateFromString:date];
+			
+			[dateFormat setDateFormat:@"yyyyMMdd"];
+			
+			NSString *dateOfGame = [dateFormat stringFromDate:gameDate];
+			NSString *dateToday = [dateFormat stringFromDate:self.dateSelected];
+			
+			if ([dateOfGame isEqualToString:dateToday]) {
+				[self.eventsToday addObject:tmpGame];
+			}
+			
+			
+		}else if ([(self.allEvents)[i] class]==[Event class]) {
+			
+			Event *tmpEvent = (self.allEvents)[i];
 			
 			NSString *date = tmpEvent.startDate;
 			
@@ -1266,7 +1266,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     NSMutableArray *coordTeams = [NSMutableArray array];
                     
                     for (int i = 0; i < [self.teamList count]; i++) {
-                        Team *tmpTeam = [self.teamList objectAtIndex:i];
+                        Team *tmpTeam = (self.teamList)[i];
                         
                         if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
                             coordTeam = true;
@@ -1276,7 +1276,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                     if ([coordTeams count] == 1) {
                         
-                        Team *tmpTeam = [self.teamList objectAtIndex:0];
+                        Team *tmpTeam = (self.teamList)[0];
                         
                         SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
                         tmp.teamId = tmpTeam.teamId;
@@ -1302,7 +1302,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                 }else {
                     
-                    Team *tmpTeam = [self.teamList objectAtIndex:0];
+                    Team *tmpTeam = (self.teamList)[0];
                     
                     if ([tmpTeam.userRole isEqualToString:@"coordinator"] || [tmpTeam.userRole isEqualToString:@"creator"]) {
                         
@@ -1337,7 +1337,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                               withError:nil]) {
             }
             
-            Game *currentGame = [self.gamesToday objectAtIndex:row-1];
+            Game *currentGame = (self.gamesToday)[row-1];
             
             NSString *userRole = @"";
             NSString *teamId = @"";
@@ -1356,7 +1356,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     currentGameTab.userRole = userRole;
                     currentGameTab.teamName = currentGame.teamName;
                     
-                    Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                    Gameday *currentNotes = viewControllers[0];
                     currentNotes.gameId = currentGame.gameId;
                     currentNotes.teamId = teamId;
                     currentNotes.userRole = userRole;
@@ -1371,7 +1371,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                      activity.userRole = userRole;
                      */
                     
-                    GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    GameAttendance *currentAttendance = viewControllers[1];
                     currentAttendance.gameId = currentGame.gameId;
                     currentAttendance.teamId = teamId;
                     currentAttendance.startDate = currentGame.startDate;
@@ -1391,7 +1391,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                      */
                     
                     
-                    Vote *fans = [viewControllers objectAtIndex:2];
+                    Vote *fans = viewControllers[2];
                     fans.teamId = teamId;
                     fans.userRole = userRole;
                     fans.gameId = currentGame.gameId;
@@ -1413,7 +1413,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                      activity.userRole = userRole;
                      */
                     
-                    Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                    Gameday *currentNotes = viewControllers[0];
                     currentNotes.gameId = currentGame.gameId;
                     currentNotes.teamId = teamId;
                     currentNotes.userRole = userRole;
@@ -1427,7 +1427,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                      messages.startDate = currentGame.startDate;
                      */
                     
-                    Vote *fans = [viewControllers objectAtIndex:1];
+                    Vote *fans = viewControllers[1];
                     fans.teamId = teamId;
                     fans.userRole = userRole;
                     fans.gameId = currentGame.gameId;
@@ -1469,7 +1469,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
             
             
-            Practice *currentPractice = [self.practicesToday objectAtIndex:row-1];
+            Practice *currentPractice = (self.practicesToday)[row-1];
             
             NSString *userRole = @"";
             NSString *teamId = @"";
@@ -1501,13 +1501,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 currentPracticeTab.practiceId = currentPractice.practiceId;
                 currentPracticeTab.userRole = userRole;
                 
-                PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+                PracticeNotes *currentNotes = viewControllers[0];
                 currentNotes.practiceId = currentPractice.practiceId;
                 currentNotes.teamId = teamId;
                 currentNotes.userRole = userRole;
                 
                 
-                PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                PracticeAttendance *currentAttendance = viewControllers[1];
                 currentAttendance.practiceId = currentPractice.practiceId;
                 currentAttendance.teamId = teamId;
                 currentAttendance.userRole = userRole;
@@ -1543,13 +1543,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                               withError:nil]) {
             }
             
-            if ([[self.eventsToday objectAtIndex:row-1] class] == [Game class]) {
+            if ([(self.eventsToday)[row-1] class] == [Game class]) {
                 
                 
                 [TraceSession addEventToSession:@"Calendar Month Page - Game Clicked"];
                 
                 
-                Game *currentGame = [self.eventsToday objectAtIndex:row-1];
+                Game *currentGame = (self.eventsToday)[row-1];
                 
                 NSString *userRole = @"";
                 NSString *teamId = @"";
@@ -1567,7 +1567,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         currentGameTab.teamName = currentGame.teamName;
                         
                         
-                        Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                        Gameday *currentNotes = viewControllers[0];
                         currentNotes.gameId = currentGame.gameId;
                         currentNotes.teamId = teamId;
                         currentNotes.userRole = userRole;
@@ -1582,7 +1582,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                          activity.userRole = userRole;
                          */
                         
-                        GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                        GameAttendance *currentAttendance = viewControllers[1];
                         currentAttendance.gameId = currentGame.gameId;
                         currentAttendance.teamId = teamId;
                         currentAttendance.startDate = currentGame.startDate;
@@ -1595,7 +1595,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                          messages.startDate = currentGame.startDate;
                          */
                         
-                        Vote *fans = [viewControllers objectAtIndex:2];
+                        Vote *fans = viewControllers[2];
                         fans.teamId = teamId;
                         fans.userRole = userRole;
                         fans.gameId = currentGame.gameId;
@@ -1617,7 +1617,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                          activity.userRole = userRole;
                          */
                         
-                        Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                        Gameday *currentNotes = viewControllers[0];
                         currentNotes.gameId = currentGame.gameId;
                         currentNotes.teamId = teamId;
                         currentNotes.userRole = userRole;
@@ -1631,7 +1631,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                          messages.startDate = currentGame.startDate;
                          */
                         
-                        Vote *fans = [viewControllers objectAtIndex:1];
+                        Vote *fans = viewControllers[1];
                         fans.teamId = teamId;
                         fans.userRole = userRole;
                         fans.gameId = currentGame.gameId;
@@ -1658,7 +1658,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 
                 
-            }else if ([[self.eventsToday objectAtIndex:row-1] class] == [Practice class]) {
+            }else if ([(self.eventsToday)[row-1] class] == [Practice class]) {
                 
                 
                 [TraceSession addEventToSession:@"Calendar Month Page - Practice Clicked"];
@@ -1667,7 +1667,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
                 
                 
-                Practice *currentPractice = [self.eventsToday objectAtIndex:row-1];
+                Practice *currentPractice = (self.eventsToday)[row-1];
                 
                 NSString *userRole = @"";
                 NSString *teamId = @"";
@@ -1695,13 +1695,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     currentPracticeTab.practiceId = currentPractice.practiceId;
                     currentPracticeTab.userRole = userRole;
                     
-                    PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+                    PracticeNotes *currentNotes = viewControllers[0];
                     currentNotes.practiceId = currentPractice.practiceId;
                     currentNotes.teamId = teamId;
                     currentNotes.userRole = userRole;
                     
                     
-                    PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    PracticeAttendance *currentAttendance = viewControllers[1];
                     currentAttendance.practiceId = currentPractice.practiceId;
                     currentAttendance.teamId = teamId;
                     currentAttendance.userRole = userRole;
@@ -1736,7 +1736,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 EventTabs *currentEventTab = [[EventTabs alloc] init];
                 
                 
-                Event *currentEvent = [self.eventsToday objectAtIndex:row-1];
+                Event *currentEvent = (self.eventsToday)[row-1];
                 
                 NSString *userRole = @"";
                 NSString *teamId = @"";
@@ -1763,13 +1763,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     currentEventTab.eventId = currentEvent.eventId;
                     currentEventTab.userRole = userRole;
                     
-                    EventNotes *currentNotes = [viewControllers objectAtIndex:0];
+                    EventNotes *currentNotes = viewControllers[0];
                     currentNotes.eventId = currentEvent.eventId;
                     currentNotes.teamId = teamId;
                     currentNotes.userRole = userRole;
                     
                     
-                    EventAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    EventAttendance *currentAttendance = viewControllers[1];
                     currentAttendance.eventId = currentEvent.eventId;
                     currentAttendance.teamId = teamId;
                     currentAttendance.userRole = userRole;
@@ -2079,7 +2079,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (self.gDelete) {
 		self.gDelete = false;
 		for (int i = 0; i < [self.allGames count]; i++) {
-			Game *tmpGame = [self.allGames objectAtIndex:i];
+			Game *tmpGame = (self.allGames)[i];
 			
 			if ([tmpGame.gameId isEqualToString:self.deleteEventId]) {
 				
@@ -2091,8 +2091,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		for (int i = 0; i < [self.allEvents count]; i++) {
 			
-			if ([[self.allEvents objectAtIndex:i] class] == [Game class]) {
-				Game *tmpGame = [self.allEvents objectAtIndex:i];
+			if ([(self.allEvents)[i] class] == [Game class]) {
+				Game *tmpGame = (self.allEvents)[i];
 				
 				if ([tmpGame.gameId isEqualToString:self.deleteEventId]) {
 					
@@ -2109,7 +2109,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (self.pDelete) {
 		self.pDelete = false;
 		for (int i = 0; i < [self.allPractices count]; i++) {
-			Practice *tmpGame = [self.allPractices objectAtIndex:i];
+			Practice *tmpGame = (self.allPractices)[i];
 			
 			if ([tmpGame.practiceId isEqualToString:self.deleteEventId]) {
 				
@@ -2120,8 +2120,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		for (int i = 0; i < [self.allEvents count]; i++) {
 			
-			if ([[self.allEvents objectAtIndex:i] class] == [Practice class]) {
-				Practice *tmpGame = [self.allEvents objectAtIndex:i];
+			if ([(self.allEvents)[i] class] == [Practice class]) {
+				Practice *tmpGame = (self.allEvents)[i];
 				
 				if ([tmpGame.practiceId isEqualToString:self.deleteEventId]) {
 					[self.allEvents removeObjectAtIndex:i];
@@ -2136,7 +2136,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (self.eDelete) {
 		self.eDelete = false;
 		for (int i = 0; i < [self.allGenericEvents count]; i++) {
-			Event *tmpGame = [self.allGenericEvents objectAtIndex:i];
+			Event *tmpGame = (self.allGenericEvents)[i];
 			
 			if ([tmpGame.eventId isEqualToString:self.deleteEventId]) {
 				
@@ -2147,8 +2147,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		for (int i = 0; i < [self.allEvents count]; i++) {
 		
-			if ([[self.allEvents objectAtIndex:i] class] == [Event class]) {
-				Event *tmpGame = [self.allEvents objectAtIndex:i];
+			if ([(self.allEvents)[i] class] == [Event class]) {
+				Event *tmpGame = (self.allEvents)[i];
 				
 				if ([tmpGame.eventId isEqualToString:self.deleteEventId]) {
 					[self.allEvents removeObjectAtIndex:i];
@@ -2193,15 +2193,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if ([status isEqualToString:@"100"]){
                     
                     if ([self.eventType isEqualToString:@"game"]) {
-                        Game *tmpEvent = [self.gamesToday objectAtIndex:self.deleteCell];
+                        Game *tmpEvent = (self.gamesToday)[self.deleteCell];
                         tmpEvent.interval = @"-4";
                         
-                        [self.gamesToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                        (self.gamesToday)[self.deleteCell] = tmpEvent;
                     }else {
-                        Game *tmpEvent = [self.eventsToday objectAtIndex:self.deleteCell];
+                        Game *tmpEvent = (self.eventsToday)[self.deleteCell];
                         tmpEvent.interval = @"-4";
                         
-                        [self.eventsToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                        (self.eventsToday)[self.deleteCell] = tmpEvent;
                     }
                     
                     
@@ -2238,15 +2238,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if ([status isEqualToString:@"100"]){
                     
                     if ([self.eventType isEqualToString:@"practice"]) {
-                        Practice *tmpEvent = [self.practicesToday objectAtIndex:self.deleteCell];
+                        Practice *tmpEvent = (self.practicesToday)[self.deleteCell];
                         tmpEvent.isCanceled = false;
                         
-                        [self.practicesToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                        (self.practicesToday)[self.deleteCell] = tmpEvent;
                     }else {
-                        Practice *tmpEvent = [self.eventsToday objectAtIndex:self.deleteCell];
+                        Practice *tmpEvent = (self.eventsToday)[self.deleteCell];
                         tmpEvent.isCanceled = false;
                         
-                        [self.eventsToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                        (self.eventsToday)[self.deleteCell] = tmpEvent;
                     }
                     
                 }else{
@@ -2278,10 +2278,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 if ([status isEqualToString:@"100"]){
                     
-                    Event *tmpEvent = [self.eventsToday objectAtIndex:self.deleteCell];
+                    Event *tmpEvent = (self.eventsToday)[self.deleteCell];
                     tmpEvent.isCanceled = true;
                     
-                    [self.eventsToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                    (self.eventsToday)[self.deleteCell] = tmpEvent;
                     
                 }else{
                     
@@ -2339,15 +2339,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if ([status isEqualToString:@"100"]){
                     
                     if ([self.eventType isEqualToString:@"game"]) {
-                        Game *tmpEvent = [self.gamesToday objectAtIndex:self.deleteCell];
+                        Game *tmpEvent = (self.gamesToday)[self.deleteCell];
                         tmpEvent.interval = @"0";
                         
-                        [self.gamesToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                        (self.gamesToday)[self.deleteCell] = tmpEvent;
                     }else {
-                        Game *tmpEvent = [self.eventsToday objectAtIndex:self.deleteCell];
+                        Game *tmpEvent = (self.eventsToday)[self.deleteCell];
                         tmpEvent.interval = @"0";
                         
-                        [self.eventsToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                        (self.eventsToday)[self.deleteCell] = tmpEvent;
                     }
                     
                     
@@ -2386,15 +2386,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if ([status isEqualToString:@"100"]){
                     
                     if ([self.eventType isEqualToString:@"practice"]) {
-                        Practice *tmpEvent = [self.practicesToday objectAtIndex:self.deleteCell];
+                        Practice *tmpEvent = (self.practicesToday)[self.deleteCell];
                         tmpEvent.isCanceled = false;
                         
-                        [self.practicesToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                        (self.practicesToday)[self.deleteCell] = tmpEvent;
                     }else {
-                        Practice *tmpEvent = [self.eventsToday objectAtIndex:self.deleteCell];
+                        Practice *tmpEvent = (self.eventsToday)[self.deleteCell];
                         tmpEvent.isCanceled = false;
                         
-                        [self.eventsToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                        (self.eventsToday)[self.deleteCell] = tmpEvent;
                     }
                     
                     
@@ -2428,10 +2428,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 if ([status isEqualToString:@"100"]){
                     
-                    Event *tmpEvent = [self.eventsToday objectAtIndex:self.deleteCell];
+                    Event *tmpEvent = (self.eventsToday)[self.deleteCell];
                     tmpEvent.isCanceled = false;
                     
-                    [self.eventsToday replaceObjectAtIndex:self.deleteCell withObject:tmpEvent];
+                    (self.eventsToday)[self.deleteCell] = tmpEvent;
                     
                 }else{
                     

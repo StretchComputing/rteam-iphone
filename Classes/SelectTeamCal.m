@@ -87,7 +87,7 @@
 	
 	NSUInteger row = [indexPath row];
 	
-	Team *controller = [self.teams objectAtIndex:row];
+	Team *controller = (self.teams)[row];
 	nameLabel.text = controller.name;
     
     nameLabel.backgroundColor = [UIColor clearColor];
@@ -102,7 +102,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	int row = [indexPath row];
 	
-	Team *tmpTeam = [self.teams objectAtIndex:row];    
+	Team *tmpTeam = (self.teams)[row];    
     SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
     tmp.teamId = tmpTeam.teamId;
     tmp.haveDate = self.haveDate;

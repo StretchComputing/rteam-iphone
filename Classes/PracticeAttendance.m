@@ -151,7 +151,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         
         
         NSString *token = @"";
-        NSArray *playerArray = [NSArray array];
+        NSArray *playerArray = @[];
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
@@ -160,7 +160,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
             token = mainDelegate.token;
         }
         
-        NSDictionary *response = [NSDictionary dictionary];
+        NSDictionary *response = @{};
         self.errorString = @"";
         //If there is a token, do a DB lookup to find the players associated with this team:
         if (![token isEqualToString:@""]){
@@ -242,33 +242,33 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
             
             for (int i = 0; i < [self.players count]; i++) {
                 
-                Player *tmpPlayer = [self.players objectAtIndex:i];
+                Player *tmpPlayer = (self.players)[i];
                 
                 for (int j = 0; j < [self.attReport count]; j++) {
                     
-                    NSDictionary *memberReport = [self.attReport objectAtIndex:j];
+                    NSDictionary *memberReport = (self.attReport)[j];
                     
-                    NSString *memId = [memberReport objectForKey:@"memberId"];
-                    NSString *isPresent = [memberReport objectForKey:@"present"];
-                    NSString *preResponse = [memberReport objectForKey:@"preGameStatus"];
+                    NSString *memId = memberReport[@"memberId"];
+                    NSString *isPresent = memberReport[@"present"];
+                    NSString *preResponse = memberReport[@"preGameStatus"];
                     
                     if ([memId isEqualToString:tmpPlayer.memberId]) {
                         
                         if ([isPresent isEqualToString:@"yes"]) {
-                            [self.attMarkerTemp replaceObjectAtIndex:i withObject:@"1"];
+                            (self.attMarkerTemp)[i] = @"1";
                         }else if ([isPresent isEqualToString:@"no"]) {
-                            [self.attMarkerTemp replaceObjectAtIndex:i withObject:@"0"];
+                            (self.attMarkerTemp)[i] = @"0";
                             
                         }
                         
                         
                         if ([preResponse isEqualToString:@"yes"]) {
-                            [self.preMarkerTemp replaceObjectAtIndex:i withObject:@"1"];
+                            (self.preMarkerTemp)[i] = @"1";
                         }else if ([preResponse isEqualToString:@"no"]) {
-                            [self.preMarkerTemp replaceObjectAtIndex:i withObject:@"0"];
+                            (self.preMarkerTemp)[i] = @"0";
                             
                         }else if ([preResponse isEqualToString:@"maybe"]){
-                            [self.preMarkerTemp replaceObjectAtIndex:i withObject:@"2"];
+                            (self.preMarkerTemp)[i] = @"2";
                         }
                         
                         
@@ -318,7 +318,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 		for (int i = 0; i < [self.players count]; i++) {
 			
 			if ([self.attMarker count] > i) {
-				[self.attMarker replaceObjectAtIndex:i withObject:@"1"];
+				(self.attMarker)[i] = @"1";
 			}
 		}
 	}else if ([self.allSelector isEqualToString:@"all"]){
@@ -327,7 +327,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 		for (int i = 0; i < [self.players count]; i++) {
 			
 			if ([self.attMarker count] > i) {
-				[self.attMarker replaceObjectAtIndex:i withObject:@"0"];
+				(self.attMarker)[i] = @"0";
 			}
 			
 		}
@@ -345,7 +345,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         for (int i = 0; i < [self.players count]; i++) {
             
             if ([self.preMarker count] > i) {
-                [self.preMarker replaceObjectAtIndex:i withObject:@"1"];
+                (self.preMarker)[i] = @"1";
             }
         }
     }else if ([self.allSelectorPre isEqualToString:@"all"]){
@@ -354,7 +354,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         for (int i = 0; i < [self.players count]; i++) {
             
             if ([self.preMarker count] > i) {
-                [self.preMarker replaceObjectAtIndex:i withObject:@"0"];
+                (self.preMarker)[i] = @"0";
             }
             
         }
@@ -396,7 +396,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         UILabel *nameLabel = (UILabel *)[cell.contentView viewWithTag:nameTag];
-        NSArray *segments = [NSArray arrayWithObjects:@"Present", @"Absent", nil];
+        NSArray *segments = @[@"Present", @"Absent"];
         UISegmentedControl *attendance = [[UISegmentedControl alloc] initWithItems:segments];
         attendance.frame = CGRectMake(170.0, 3.0, 145.0, 27.0);
         attendance.tag = attTag;
@@ -412,16 +412,16 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         //Configure the cell
         
         NSUInteger row = [indexPath row];
-        Player *controller = [players objectAtIndex:row];
+        Player *controller = players[row];
         
         nameLabel.text = controller.firstName;
         
         attendance.tag = row;
         [attendance addTarget:self action:@selector(segmentSelect:) forControlEvents:UIControlEventValueChanged];
         
-        if ([[self.attMarker objectAtIndex:row] isEqualToString:@"1"]) {
+        if ([(self.attMarker)[row] isEqualToString:@"1"]) {
             attendance.selectedSegmentIndex = 0;
-        }else if ([[self.attMarker objectAtIndex:row] isEqualToString:@"0"]) {
+        }else if ([(self.attMarker)[row] isEqualToString:@"0"]) {
             attendance.selectedSegmentIndex = 1;
         }
         
@@ -451,7 +451,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         UILabel *nameLabel = (UILabel *)[cell.contentView viewWithTag:nameTag];
-        NSArray *segments = [NSArray arrayWithObjects:@"Yes", @"No", @"?", nil];
+        NSArray *segments = @[@"Yes", @"No", @"?"];
         UISegmentedControl *attendance = [[UISegmentedControl alloc] initWithItems:segments];
         attendance.frame = CGRectMake(180.0, 3.0, 130.0, 27.0);
         attendance.tag = attTag;
@@ -462,18 +462,18 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         //Configure the cell
         
         NSUInteger row = [indexPath row];
-        Player *controller = [players objectAtIndex:row];
+        Player *controller = players[row];
         
         nameLabel.text = controller.firstName;
         
         attendance.tag = row;
         [attendance addTarget:self action:@selector(segmentSelectPre:) forControlEvents:UIControlEventValueChanged];
         
-        if ([[self.preMarker objectAtIndex:row] isEqualToString:@"1"]) {
+        if ([(self.preMarker)[row] isEqualToString:@"1"]) {
             attendance.selectedSegmentIndex = 0;
-        }else if ([[self.preMarker objectAtIndex:row] isEqualToString:@"0"]) {
+        }else if ([(self.preMarker)[row] isEqualToString:@"0"]) {
             attendance.selectedSegmentIndex = 1;
-        }else if ([[self.preMarker objectAtIndex:row] isEqualToString:@"2"]){
+        }else if ([(self.preMarker)[row] isEqualToString:@"2"]){
             attendance.selectedSegmentIndex = 2;
         }
         
@@ -506,7 +506,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 			[segmentedControl setTitle:@"Present" forSegmentAtIndex:0];
 			[segmentedControl setTitle:@"" forSegmentAtIndex:1];
 			if ([self.attMarker count] > row) {
-				[self.attMarker replaceObjectAtIndex:row withObject:@"1"];
+				(self.attMarker)[row] = @"1";
 			}
             
 			break;
@@ -514,7 +514,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 			[segmentedControl setTitle:@"Absent" forSegmentAtIndex:1];
 			[segmentedControl setTitle:@"" forSegmentAtIndex:0];
 			if ([self.attMarker count] > row) {
-				[self.attMarker replaceObjectAtIndex:row withObject:@"0"];
+				(self.attMarker)[row] = @"0";
 			}
             
 			break;
@@ -537,7 +537,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 			[segmentedControl setTitle:@"Yes" forSegmentAtIndex:0];
 			//[segmentedControl setTitle:@"" forSegmentAtIndex:1];
 			if ([self.preMarker count] > row) {
-				[self.preMarker replaceObjectAtIndex:row withObject:@"1"];
+				(self.preMarker)[row] = @"1";
 			}
             
 			break;
@@ -545,7 +545,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
 			[segmentedControl setTitle:@"No" forSegmentAtIndex:1];
 			//[segmentedControl setTitle:@"" forSegmentAtIndex:0];
 			if ([self.preMarker count] > row) {
-				[self.preMarker replaceObjectAtIndex:row withObject:@"0"];
+				(self.preMarker)[row] = @"0";
 			}
             
 			break;
@@ -554,7 +554,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
             [segmentedControl setTitle:@"?" forSegmentAtIndex:2];
 			//[segmentedControl setTitle:@"" forSegmentAtIndex:2];
 			if ([self.preMarker count] > row) {
-				[self.preMarker replaceObjectAtIndex:row withObject:@"2"];
+				(self.preMarker)[row] = @"2";
 			}
             
 			break;
@@ -603,7 +603,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         //self.players is the array of Player objects
         //self.attMarker is the corresponding array of whether they were present or absent
         NSMutableArray *attendance = [NSMutableArray array];
-        NSArray *finalAttendance = [NSArray array];
+        NSArray *finalAttendance = @[];
         bool anyselections = false;
         
         
@@ -611,21 +611,21 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
         for (int i = 0; i < [self.players count]; i++) {
             
             NSMutableDictionary *attList = [NSMutableDictionary dictionary];
-            Player *tmpPlayer = [self.players objectAtIndex:i];
-            NSString *marker = [self.attMarker objectAtIndex:i];
-            NSString *preMarkerString = [self.preMarker objectAtIndex:i];
+            Player *tmpPlayer = (self.players)[i];
+            NSString *marker = (self.attMarker)[i];
+            NSString *preMarkerString = (self.preMarker)[i];
             
             if ([marker isEqualToString:@"1"]) {
                 //present
-                [attList setObject:tmpPlayer.memberId forKey:@"memberId"];
-                [attList setObject:@"yes" forKey:@"present"];
+                attList[@"memberId"] = tmpPlayer.memberId;
+                attList[@"present"] = @"yes";
                 anyselections = true;
                 
                 [attendance addObject:attList];
             }else if ([marker isEqualToString:@"0"]) {
                 //absent
-                [attList setObject:tmpPlayer.memberId forKey:@"memberId"];
-                [attList setObject:@"no" forKey:@"present"];
+                attList[@"memberId"] = tmpPlayer.memberId;
+                attList[@"present"] = @"no";
                 anyselections = true;
                 
                 [attendance addObject:attList];
@@ -633,29 +633,29 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
             
             if ([preMarkerString isEqualToString:@"1"]) {
                 //present
-                [attList setObject:tmpPlayer.memberId forKey:@"memberId"];
-                [attList setObject:@"yes" forKey:@"preGameStatus"];
+                attList[@"memberId"] = tmpPlayer.memberId;
+                attList[@"preGameStatus"] = @"yes";
                 anyselections = true;
                 
                 [attendance addObject:attList];
             }else if ([preMarkerString isEqualToString:@"0"]) {
                 //absent
-                [attList setObject:tmpPlayer.memberId forKey:@"memberId"];
-                [attList setObject:@"no" forKey:@"preGameStatus"];
+                attList[@"memberId"] = tmpPlayer.memberId;
+                attList[@"preGameStatus"] = @"no";
                 anyselections = true;
                 
                 [attendance addObject:attList];
             }else if ([preMarkerString isEqualToString:@"2"]){
                 //maybe
-                [attList setObject:tmpPlayer.memberId forKey:@"memberId"];
-                [attList setObject:@"maybe" forKey:@"preGameStatus"];
+                attList[@"memberId"] = tmpPlayer.memberId;
+                attList[@"preGameStatus"] = @"maybe";
                 anyselections = true;
                 
                 [attendance addObject:attList];
             }else{
                 //absent
-                [attList setObject:tmpPlayer.memberId forKey:@"memberId"];
-                [attList setObject:@"noreply" forKey:@"preGameStatus"];
+                attList[@"memberId"] = tmpPlayer.memberId;
+                attList[@"preGameStatus"] = @"noreply";
                 anyselections = true;
                 
                 [attendance addObject:attList];
@@ -677,7 +677,7 @@ saveSuccess, playerTableView, successString, successNoChoices, barActivity, attA
                 token = mainDelegate.token;
             }
             
-            NSDictionary *response = [NSDictionary dictionary];
+            NSDictionary *response = @{};
             if (![token isEqualToString:@""]){
                 
                 response = [ServerAPI updateAttendees:token :self.teamId :self.practiceId :@"practice" :finalAttendance :self.startDate];

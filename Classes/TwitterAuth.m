@@ -24,7 +24,7 @@
 	NSArray *tmp = [self.navigationController viewControllers];
 	int num = [tmp count];
 	
-	if ([[tmp objectAtIndex:num-2] class] == [NewTeam class]) {
+	if ([tmp[num-2] class] == [NewTeam class]) {
 		[self.navigationItem setHidesBackButton:YES];
         
         NSString *title = @"";
@@ -62,14 +62,14 @@
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }else{
         
-        if ([[temp objectAtIndex:num-4] class] == [MyTeams class]) {
+        if ([temp[num-4] class] == [MyTeams class]) {
             
-            MyTeams *tmp = [temp objectAtIndex:num-4];
+            MyTeams *tmp = temp[num-4];
             [self.navigationController popToViewController:tmp animated:YES];
             
-        }else if ([[temp objectAtIndex:num-5] class] == [MyTeams class]) {
+        }else if ([temp[num-5] class] == [MyTeams class]) {
             
-            MyTeams *tmp = [temp objectAtIndex:num-5];
+            MyTeams *tmp = temp[num-5];
             [self.navigationController popToViewController:tmp animated:YES];
         }
     }

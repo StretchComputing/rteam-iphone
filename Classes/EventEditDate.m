@@ -48,7 +48,7 @@
 	int num = [temp count];
 	num = num - 2;
 	
-	EventEdit *cont = [temp objectAtIndex:num];
+	EventEdit *cont = temp[num];
 	cont.practiceDateObject = self.practiceDatePicker.date;
 	cont.fromDateChange = YES;
 	[self.navigationController popToViewController:cont animated:YES];

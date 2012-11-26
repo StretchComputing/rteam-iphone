@@ -130,7 +130,7 @@
 		int num = [temp count];
 		num = num - 2;
 		
-		SettingsTabs *tmp = [temp objectAtIndex:num];
+		SettingsTabs *tmp = temp[num];
 		tmp.displaySuccess = true;
 		[self.navigationController popToViewController:tmp animated:YES];
 	}else {

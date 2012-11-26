@@ -83,7 +83,7 @@ eventsArray, eventsError, eventsNowSuccess, currentEventIndex, teamLabel, numRow
 			self.eventsArray = [NSMutableArray arrayWithArray:eventsToday];
 			
 			for (int i = 0; i < [eventsTomorrow count]; i++) {
-				[self.eventsArray addObject:[eventsTomorrow objectAtIndex:i]];
+				[self.eventsArray addObject:eventsTomorrow[i]];
 			}
 			
 			
@@ -133,12 +133,12 @@ eventsArray, eventsError, eventsNowSuccess, currentEventIndex, teamLabel, numRow
 			self.teamLabel.hidden = NO;
 			self.currentEventLabel.hidden = NO;
 			
-			self.currentEventLabel.text = [self getEventLabel:[self.eventsArray objectAtIndex:0]];
+			self.currentEventLabel.text = [self getEventLabel:(self.eventsArray)[0]];
 			self.currentEventIndex = 0;
 			
 			if ([[self.currentEventLabel.text substringToIndex:4] isEqualToString:@"Game"]) {
 				
-				CurrentEvent *tmp = [self.eventsArray objectAtIndex:self.currentEventIndex];
+				CurrentEvent *tmp = (self.eventsArray)[self.currentEventIndex];
 				if (![tmp.gameInterval isEqualToString:@"-1"]) {
 					self.numRows = 5;
 					[self.myTableView reloadData];
@@ -153,7 +153,7 @@ eventsArray, eventsError, eventsNowSuccess, currentEventIndex, teamLabel, numRow
 				[self.myTableView reloadData];
 			}
 			
-			CurrentEvent *tmp = [self.eventsArray objectAtIndex:0];
+			CurrentEvent *tmp = (self.eventsArray)[0];
 			self.teamLabel.text = [NSString stringWithFormat:@"Team: %@", tmp.teamName];
 			
 		}else {
@@ -183,12 +183,12 @@ eventsArray, eventsError, eventsNowSuccess, currentEventIndex, teamLabel, numRow
         self.currentEventIndex = [self.eventsArray count] - 1;
 	}
 	
-	CurrentEvent *tmpEvent = [self.eventsArray objectAtIndex:self.currentEventIndex];
+	CurrentEvent *tmpEvent = (self.eventsArray)[self.currentEventIndex];
 	
 	self.currentEventLabel.text = [self getEventLabel:tmpEvent];
 	
 	if ([[self.currentEventLabel.text substringToIndex:4] isEqualToString:@"Game"]) {
-		CurrentEvent *tmp = [self.eventsArray objectAtIndex:self.currentEventIndex];
+		CurrentEvent *tmp = (self.eventsArray)[self.currentEventIndex];
 		if (![tmp.gameInterval isEqualToString:@"-1"]) {
 			self.numRows = 5;
 			[self.myTableView reloadData];
@@ -214,14 +214,14 @@ eventsArray, eventsError, eventsNowSuccess, currentEventIndex, teamLabel, numRow
         self.currentEventIndex = 0;
 	}
 	
-	CurrentEvent *tmpEvent = [self.eventsArray objectAtIndex:self.currentEventIndex];
+	CurrentEvent *tmpEvent = (self.eventsArray)[self.currentEventIndex];
 	
 	self.currentEventLabel.text = [self getEventLabel:tmpEvent];
 	
 	if ([[self.currentEventLabel.text substringToIndex:4] isEqualToString:@"Game"]) {
-		CurrentEvent *tmp = [self.eventsArray objectAtIndex:self.currentEventIndex];
+		CurrentEvent *tmp = (self.eventsArray)[self.currentEventIndex];
 		
-		NSLog(@"Interval :%@", tmp.gameInterval);
+		//NSLog(@"Interval :%@", tmp.gameInterval);
 		
 		if (![tmp.gameInterval isEqualToString:@"-1"]) {
 			self.numRows = 5;
@@ -402,7 +402,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		tmp.status = status;
 		tmp.delay = self.currentInterval;
 		tmp.messageString = message;
-		tmp.selectedEvent = [self.eventsArray objectAtIndex:self.currentEventIndex];
+		tmp.selectedEvent = (self.eventsArray)[self.currentEventIndex];
 		[self.navigationController pushViewController:tmp animated:YES];
 		
 	}else {

@@ -264,7 +264,7 @@
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-        NSDictionary *response = [ServerAPI createMessageThread:mainDelegate.token teamId:self.teamId subject:@"" body:@"" type:@"whoiscoming" eventId:self.eventId eventType:self.eventType isAlert:@"" pollChoices:[NSArray array] recipients:[NSArray array] displayResults:@"" includeFans:@"" coordinatorsOnly:@""];
+        NSDictionary *response = [ServerAPI createMessageThread:mainDelegate.token teamId:self.teamId subject:@"" body:@"" type:@"whoiscoming" eventId:self.eventId eventType:self.eventType isAlert:@"" pollChoices:@[] recipients:@[] displayResults:@"" includeFans:@"" coordinatorsOnly:@""];
         
         NSString *status = [response valueForKey:@"status"];
                 
@@ -371,7 +371,7 @@
             currentGameTab.userRole = tmpUserRole;
             currentGameTab.teamName = self.teamName;
             
-            Gameday *currentNotes = [tmpViews objectAtIndex:0];
+            Gameday *currentNotes = tmpViews[0];
             currentNotes.gameId = self.eventId;
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
@@ -382,12 +382,12 @@
             
   
             
-            GameAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+            GameAttendance *currentAttendance = tmpViews[1];
             currentAttendance.gameId = self.eventId;
             currentAttendance.teamId = tmpTeamId;
             currentAttendance.startDate = self.eventStringDate;
             
-            Vote *fans = [tmpViews objectAtIndex:2];
+            Vote *fans = tmpViews[2];
             fans.teamId = self.teamId;
             fans.userRole = self.participantRole;
             fans.gameId = self.eventId;
@@ -411,7 +411,7 @@
             currentGameTab.userRole = tmpUserRole;
             currentGameTab.teamName = self.teamName;
             
-            Gameday *currentNotes = [tmpViews objectAtIndex:0];
+            Gameday *currentNotes = tmpViews[0];
             currentNotes.gameId = self.eventId;
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
@@ -420,7 +420,7 @@
             currentNotes.startDate = self.eventStringDate;
             currentNotes.opponentString = @"";
             
-            Vote *fans = [tmpViews objectAtIndex:1];
+            Vote *fans = tmpViews[1];
             fans.teamId = self.teamId;
             fans.userRole = self.participantRole;
             fans.gameId = self.eventId;
@@ -457,14 +457,14 @@
         currentPracticeTab.practiceId = self.eventId;
         currentPracticeTab.userRole = tmpUserRole;
         
-        PracticeNotes *currentNotes = [tmpViews objectAtIndex:0];
+        PracticeNotes *currentNotes = tmpViews[0];
         currentNotes.practiceId = self.eventId;
         currentNotes.teamId = tmpTeamId;
         currentNotes.userRole = tmpUserRole;
         currentNotes.descriptionString = self.eventDescription;
         
         
-        PracticeAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+        PracticeAttendance *currentAttendance = tmpViews[1];
         currentAttendance.practiceId = self.eventId;
         currentAttendance.teamId = tmpTeamId;
         currentAttendance.userRole = self.participantRole;
@@ -496,14 +496,14 @@
         currentPracticeTab.eventId = self.eventId;
         currentPracticeTab.userRole = tmpUserRole;
         
-        EventNotes *currentNotes = [tmpViews objectAtIndex:0];
+        EventNotes *currentNotes = tmpViews[0];
         currentNotes.eventId = self.eventId;
         currentNotes.teamId = tmpTeamId;
         currentNotes.userRole = tmpUserRole;
         currentNotes.descriptionString = self.eventDescription;
 
         
-        EventAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+        EventAttendance *currentAttendance = tmpViews[1];
         currentAttendance.eventId = self.eventId;
         currentAttendance.teamId = tmpTeamId;
         currentAttendance.userRole = self.participantRole;
@@ -624,7 +624,7 @@
         //self.players is the array of Player objects
         //self.attMarker is the corresponding array of whether they were present or absent
         NSMutableArray *attendance = [NSMutableArray array];
-        NSArray *finalAttendance = [NSArray array];
+        NSArray *finalAttendance = @[];
         NSMutableDictionary *attList = [NSMutableDictionary dictionary];
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -639,8 +639,8 @@
 
         }
     
-        [attList setObject:self.currentMemberId forKey:@"memberId"];
-        [attList setObject:replyResponse forKey:@"preGameStatus"];
+        attList[@"memberId"] = self.currentMemberId;
+        attList[@"preGameStatus"] = replyResponse;
         
         [attendance addObject:attList];
         
@@ -655,7 +655,7 @@
                 token = mainDelegate.token;
             }
             
-            NSDictionary *response = [NSDictionary dictionary];
+            NSDictionary *response = @{};
             if (![token isEqualToString:@""]){
                 
                 response = [ServerAPI updateAttendees:token :self.teamId :self.eventId :self.eventType :finalAttendance :@""];

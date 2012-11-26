@@ -52,7 +52,6 @@
 #import "SelectTeamCal.h"
 #import "HomeAttendanceView.h"
 #import "HomeScoreView.h"
-#import "TestWebView.h"
 
 @implementation Home
 @synthesize name, teamId, oneTeamFlag, games, practices,eventTodayIndex, eventToday, bottomBar, nextGameIndex, nextPracticeIndex, userRole, 
@@ -137,13 +136,13 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
     UIColor *color1 =  [UIColor colorWithRed:34/255.0 green:145/255.0 blue:34/255.0 alpha:0.9];
     //UIColor *color1 = [UIColor whiteColor];
     UIColor *color2 = [UIColor colorWithRed:.386 green:.704 blue:.386 alpha:0.9];
-    gradient.colors = [NSArray arrayWithObjects:(id)[color2 CGColor], (id)[color1 CGColor], nil];
+    gradient.colors = @[(id)[color2 CGColor], (id)[color1 CGColor]];
     //[self.changeQuickLink.layer insertSublayer:gradient atIndex:0];
     self.changeQuickLink.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"greenbackSmall.png"]];
     
     CAGradientLayer *gradient1 = [CAGradientLayer layer];
     gradient1.frame = self.displayIconsScroll.bounds;
-    gradient1.colors = [NSArray arrayWithObjects:(id)[color2 CGColor], (id)[color1 CGColor], nil];
+    gradient1.colors = @[(id)[color2 CGColor], (id)[color1 CGColor]];
     //[self.displayIconsScroll.layer insertSublayer:gradient1 atIndex:0];
     self.displayIconsScroll.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"greenbackSmall.png"]];
     
@@ -186,7 +185,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
     if ([mainDelegate.phoneOnlyArray count] > 0) {
         
         self.phoneOnlyArray = [NSMutableArray arrayWithArray:mainDelegate.phoneOnlyArray];
-        mainDelegate.phoneOnlyArray = [NSArray array];
+        mainDelegate.phoneOnlyArray = @[];
         bool canText = false;
         
         NSString *ios = [[UIDevice currentDevice] systemVersion];
@@ -288,7 +287,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
             
 			for (int i = 0; i < [self.teamList count]; i++) {
                 
-				Team *team = [self.teamList objectAtIndex:i];
+				Team *team = (self.teamList)[i];
                 
 				if ([team.teamId isEqualToString:self.shortcutButton.teamId]) {
                     
@@ -413,7 +412,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
     
 	if (self.rowNewQuickTeam != -1) {
 		
-		Team *tmpTeam = [self.teamList objectAtIndex:self.rowNewQuickTeam];
+		Team *tmpTeam = (self.teamList)[self.rowNewQuickTeam];
 		rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 		
 			
@@ -537,7 +536,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
 
     }
  
-	NSArray *items1 = [NSArray arrayWithObjects:question, flexibleSpace, self.gamedayButton, flexibleSpace, refresh, nil];
+	NSArray *items1 = @[question, flexibleSpace, self.gamedayButton, flexibleSpace, refresh];
 	self.bottomBar.items = items1;
 	
 		
@@ -796,7 +795,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
                     
                     NSString *numberToCall = @"";
                     
-                    NSString *tmpPhone = [self.phoneOnlyArray objectAtIndex:i];
+                    NSString *tmpPhone = (self.phoneOnlyArray)[i];
                     
                     if ([tmpPhone length] == 16) {
                         call = true;
@@ -862,7 +861,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
                         }
                     }else {
                         
-                        NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+                        NSString *url = [@"sms://" stringByAppendingString:numbersToCall[0]];
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
                     }
                     
@@ -1029,7 +1028,7 @@ blueArrow, myAd, pageControlUsed, createdTeam, errorString, happeningNowView, sc
 	
 	NSUInteger row = [indexPath row];
 	
-	Team *tmpTeam = [self.teamList objectAtIndex:row];
+	Team *tmpTeam = (self.teamList)[row];
 	
 	cell.textLabel.text = tmpTeam.name;
 	
@@ -1049,7 +1048,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         if (tableView == self.postImageTableView) {
             
-            Team *tmpTeam = [self.teamList objectAtIndex:row];
+            Team *tmpTeam = (self.teamList)[row];
             self.postImageTeamId = tmpTeam.teamId;
             
             if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
@@ -1109,7 +1108,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 self.teamList = [response valueForKey:@"teams"];
                 
                 if ([self.teamList count] == 1) {
-                    Team *tmpTeam = [self.teamList objectAtIndex:0];
+                    Team *tmpTeam = (self.teamList)[0];
                     
                     if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
                         
@@ -1179,7 +1178,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([self.teamList count] > 0) {
         if ([mainDelegate.quickLinkOne isEqualToString:@"create"] || [mainDelegate.quickLinkOne isEqualToString:@""]) {
             
-            Team *tmpTeam = [self.teamList objectAtIndex:0];
+            Team *tmpTeam = (self.teamList)[0];
             
             mainDelegate.quickLinkOne = tmpTeam.teamId;
             mainDelegate.quickLinkOneName = tmpTeam.name;
@@ -1486,7 +1485,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (i >= 0) {
 			
-			CurrentEvent *tmp = [self.eventsToday objectAtIndex:i];
+			CurrentEvent *tmp = (self.eventsToday)[i];
             tmp.scoreLabel = @"";
 			NSString *startDate = tmp.eventDate;
 			
@@ -1576,7 +1575,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		if (i >= 0) {
 			
-			CurrentEvent *tmp = [self.eventsTomorrow objectAtIndex:i];
+			CurrentEvent *tmp = (self.eventsTomorrow)[i];
 			tmp.scoreLabel = @"";
 			NSString *startDate = tmp.eventDate;
 			
@@ -1629,32 +1628,32 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	//Add Games Today mini array to main array
 	for (int i = 0; i < [gamesToday count]; i++) {
-		[self.allBottomButtons addObject:[gamesToday objectAtIndex:i]];
+		[self.allBottomButtons addObject:gamesToday[i]];
 	}
 	
 	//Add Practices Today mini array to main array
 	for (int i = 0; i < [practicesToday count]; i++) {
-		[self.allBottomButtons addObject:[practicesToday objectAtIndex:i]];
+		[self.allBottomButtons addObject:practicesToday[i]];
 	}
 	
 	//Add Events Today mini array to main array
 	for (int i = 0; i < [genericToday count]; i++) {
-		[self.allBottomButtons addObject:[genericToday objectAtIndex:i]];
+		[self.allBottomButtons addObject:genericToday[i]];
 	}
 	
 	//Add Games Tomorrow mini array to main array
 	for (int i = 0; i < [gamesTomorrow count]; i++) {
-		[self.allBottomButtons addObject:[gamesTomorrow objectAtIndex:i]];
+		[self.allBottomButtons addObject:gamesTomorrow[i]];
 	}
 	
 	//Add Practices Tomorrow mini array to main array
 	for (int i = 0; i < [practicesTomorrow count]; i++) {
-		[self.allBottomButtons addObject:[practicesTomorrow objectAtIndex:i]];
+		[self.allBottomButtons addObject:practicesTomorrow[i]];
 	}
 	
 	//Add Events Tomorrow mini array to main array
 	for (int i = 0; i < [genericTomorrow count]; i++) {
-		[self.allBottomButtons addObject:[genericTomorrow objectAtIndex:i]];
+		[self.allBottomButtons addObject:genericTomorrow[i]];
 	}
 	
 	
@@ -1715,10 +1714,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (page >= self.numberOfPages) return;
 	
     // replace the placeholder if necessary
-    MyViewController *controller = [viewControllers objectAtIndex:page];
+    MyViewController *controller = viewControllers[page];
     if ((NSNull *)controller == [NSNull null]) {
         controller = [[MyViewController alloc] initWithPageNumber:page];
-        [viewControllers replaceObjectAtIndex:page withObject:controller];
+        viewControllers[page] = controller;
     }
 	
     // add the controller's view to the scroll view
@@ -1752,7 +1751,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if (page == j) {
                     //want cells j and j+1 from the allBottomButtons array
                     
-                    CurrentEvent *tmp1 = [self.allBottomButtons objectAtIndex:2*j];
+                    CurrentEvent *tmp1 = (self.allBottomButtons)[2*j];
                                         
                     if ([tmp1.eventType isEqualToString:@"game"]) {
                         
@@ -2033,7 +2032,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                     if ((2*j) + 1 < [self.allBottomButtons count]) {
                         
-                        CurrentEvent *tmp2 = [self.allBottomButtons objectAtIndex:(2*j)+1];
+                        CurrentEvent *tmp2 = (self.allBottomButtons)[(2*j)+1];
                                                 
                         if ([tmp2.eventType isEqualToString:@"game"]) {
                             
@@ -2513,7 +2512,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				currentGameTab.userRole = tmpUserRole;
 				currentGameTab.teamName = tmpEvent.teamName;
 				
-				Gameday *currentNotes = [tmpViews objectAtIndex:0];
+				Gameday *currentNotes = tmpViews[0];
 				currentNotes.gameId = tmpEvent.eventId;
 				currentNotes.teamId = tmpTeamId;
 				currentNotes.userRole = tmpUserRole;
@@ -2522,12 +2521,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				currentNotes.startDate = tmpEvent.eventDate;
 				currentNotes.opponentString = @"";
 
-				GameAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+				GameAttendance *currentAttendance = tmpViews[1];
 				currentAttendance.gameId = tmpEvent.eventId;
 				currentAttendance.teamId = tmpTeamId;
 				currentAttendance.startDate = tmpEvent.eventDate;
 
-				Vote *fans = [tmpViews objectAtIndex:2];
+				Vote *fans = tmpViews[2];
 				fans.teamId = tmpEvent.teamId;
 				fans.userRole = tmpEvent.participantRole;
 				fans.gameId = tmpEvent.eventId;
@@ -2550,7 +2549,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				currentGameTab.userRole = tmpUserRole;
 				currentGameTab.teamName = tmpEvent.teamName;
 	
-				Gameday *currentNotes = [tmpViews objectAtIndex:0];
+				Gameday *currentNotes = tmpViews[0];
 				currentNotes.gameId = tmpEvent.eventId;
 				currentNotes.teamId = tmpTeamId;
 				currentNotes.userRole = tmpUserRole;
@@ -2559,7 +2558,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 				currentNotes.startDate = tmpEvent.eventDate;
 				currentNotes.opponentString = @"";
 
-				Vote *fans = [tmpViews objectAtIndex:1];
+				Vote *fans = tmpViews[1];
 				fans.teamId = tmpEvent.teamId;
 				fans.userRole = tmpEvent.participantRole;
 				fans.gameId = tmpEvent.eventId;
@@ -2592,13 +2591,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			currentPracticeTab.practiceId = tmpEvent.eventId;
 			currentPracticeTab.userRole = tmpUserRole;
 			
-			PracticeNotes *currentNotes = [tmpViews objectAtIndex:0];
+			PracticeNotes *currentNotes = tmpViews[0];
 			currentNotes.practiceId = tmpEvent.eventId;
 			currentNotes.teamId = tmpTeamId;
 			currentNotes.userRole = tmpUserRole;
 			
 			
-			PracticeAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+			PracticeAttendance *currentAttendance = tmpViews[1];
 			currentAttendance.practiceId = tmpEvent.eventId;
 			currentAttendance.teamId = tmpTeamId;
 			currentAttendance.userRole = tmpEvent.participantRole;
@@ -2627,13 +2626,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			currentPracticeTab.eventId = tmpEvent.eventId;
 			currentPracticeTab.userRole = tmpUserRole;
 			
-			EventNotes *currentNotes = [tmpViews objectAtIndex:0];
+			EventNotes *currentNotes = tmpViews[0];
 			currentNotes.eventId = tmpEvent.eventId;
 			currentNotes.teamId = tmpTeamId;
 			currentNotes.userRole = tmpUserRole;
 			
 			
-			EventAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+			EventAttendance *currentAttendance = tmpViews[1];
 			currentAttendance.eventId = tmpEvent.eventId;
 			currentAttendance.teamId = tmpTeamId;
 			currentAttendance.userRole = tmpEvent.participantRole;
@@ -3060,7 +3059,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     NSMutableArray *coordTeams = [NSMutableArray array];
                     
                     for (int i = 0; i < [self.teamList count]; i++) {
-                        Team *tmpTeam = [self.teamList objectAtIndex:i];
+                        Team *tmpTeam = (self.teamList)[i];
                         
                         if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
                             coordTeam = true;
@@ -3070,7 +3069,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                     if ([coordTeams count] == 1) {
                         
-                        Team *tmpTeam = [self.teamList objectAtIndex:0];
+                        Team *tmpTeam = (self.teamList)[0];
                             
                         SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
                         tmp.teamId = tmpTeam.teamId;
@@ -3105,7 +3104,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                 }else {
                     
-                    Team *tmpTeam = [self.teamList objectAtIndex:0];
+                    Team *tmpTeam = (self.teamList)[0];
                     
                     if ([tmpTeam.userRole isEqualToString:@"coordinator"] || [tmpTeam.userRole isEqualToString:@"creator"]) {
                                                 
@@ -3735,7 +3734,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
         [picker dismissModalViewControllerAnimated:YES];	
         
-        UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        UIImage *tmpImage = info[UIImagePickerControllerOriginalImage];
         
         float xVal;
         float yVal;
@@ -3825,7 +3824,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
  
             if (!foundEvent) {
                 for (int i = 0; i < [self.postImageEvents count]; i++) {
-                    CurrentEvent *tmpEvent = [self.postImageEvents objectAtIndex:i];
+                    CurrentEvent *tmpEvent = (self.postImageEvents)[i];
 
                     if ([tmpEvent.eventType isEqualToString:@"game"]) {
                         if ([tmpEvent.teamId isEqualToString:self.postImageTeamId]) {
@@ -3851,7 +3850,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }else{
             
             if ([self.teamList count] ==1) {
-                Team *tmpTeam = [self.teamList objectAtIndex:0];
+                Team *tmpTeam = (self.teamList)[0];
                 self.postImageTeamId = tmpTeam.teamId;
                 [self.postImageActivity startAnimating];
                 [self performSelectorInBackground:@selector(postImage:) withObject:@""];
@@ -4025,7 +4024,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
         mailViewController.mailComposeDelegate = self;
-        [mailViewController setToRecipients:[NSArray arrayWithObject:@"info@rteam.com"]];
+        [mailViewController setToRecipients:@[@"info@rteam.com"]];
         [mailViewController setSubject:@"rTeam Question/Comment"];
         [mailViewController setMessageBody:@"Enter your feedback or question here:" isHTML:NO];
         

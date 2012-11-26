@@ -101,12 +101,10 @@
         [self.recordButton setTitle:@"Stop" forState:UIControlStateNormal];
         self.temporaryRecFile = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithString:@"VoiceFile1.mp4"]]];
         
-        NSDictionary *recordSettings = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        [NSNumber numberWithFloat: 44100.0], AVSampleRateKey,
-                                        [NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
-                                        [NSNumber numberWithInt: 1], AVNumberOfChannelsKey,
-                                        [NSNumber numberWithInt: AVAudioQualityMedium],AVEncoderAudioQualityKey,
-                                        nil];
+        NSDictionary *recordSettings = @{AVSampleRateKey: @44100.0f,
+                                        AVFormatIDKey: @(kAudioFormatMPEG4AAC),
+                                        AVNumberOfChannelsKey: @1,
+                                        AVEncoderAudioQualityKey: @(AVAudioQualityMedium)};
         
         
         

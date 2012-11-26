@@ -45,7 +45,7 @@ selectCarrierButton, carrierCode, sendingText, tryAgainText, didGetCarrierList, 
     self.didGetCarrierList = false;
 	self.title = @"Register";
     
-    self.carriers = [NSArray array];
+    self.carriers = @[];
     
     [self performSelectorInBackground:@selector(getCarriers) withObject:nil];
     
@@ -497,10 +497,10 @@ numberOfRowsInComponent:(NSInteger)component{
         return @"I don't know.";
     }else{
         if (self.usingHardCarriers) {
-            MobileCarrier *tmpCarrier = [self.hardCarriers objectAtIndex:row-1];
+            MobileCarrier *tmpCarrier = (self.hardCarriers)[row-1];
             return tmpCarrier.name;
         }else{
-            MobileCarrier *tmpCarrier = [self.carriers objectAtIndex:row-1];
+            MobileCarrier *tmpCarrier = (self.carriers)[row-1];
             return tmpCarrier.name;
         }
        
@@ -516,11 +516,11 @@ numberOfRowsInComponent:(NSInteger)component{
     }else{
         
         if (self.usingHardCarriers) {
-            MobileCarrier *tmpCarrier = [self.hardCarriers objectAtIndex:row-1];
+            MobileCarrier *tmpCarrier = (self.hardCarriers)[row-1];
             self.selectedCarrier = tmpCarrier.name;
             self.carrierCode = tmpCarrier.code;
         }else{
-            MobileCarrier *tmpCarrier = [self.carriers objectAtIndex:row-1];
+            MobileCarrier *tmpCarrier = (self.carriers)[row-1];
             self.selectedCarrier = tmpCarrier.name;
             self.carrierCode = tmpCarrier.code;
         }
@@ -600,7 +600,7 @@ numberOfRowsInComponent:(NSInteger)component{
             
             MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
             messageViewController.messageComposeDelegate = self;
-            NSArray *numbersToCall = [NSArray arrayWithObject:@"join@rteam.com"];
+            NSArray *numbersToCall = @[@"join@rteam.com"];
             [messageViewController setRecipients:numbersToCall];
             
             NSString *bodyMessage = @"yes";
@@ -627,7 +627,7 @@ numberOfRowsInComponent:(NSInteger)component{
                 
                 MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
                 messageViewController.messageComposeDelegate = self;
-                NSArray *numbersToCall = [NSArray arrayWithObject:@"join@rteam.com"];
+                NSArray *numbersToCall = @[@"join@rteam.com"];
                 [messageViewController setRecipients:numbersToCall];
                 
                 NSString *bodyMessage = @"yes";

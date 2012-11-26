@@ -78,7 +78,7 @@
         
         UIImageView *addView = [[UIImageView alloc] initWithFrame:CGRectMake(320*i, 0, 320, 416)];
         addView.contentMode = UIViewContentModeScaleAspectFit;
-        addView.image = [UIImage imageWithData:[self.imageDataArray objectAtIndex:i]];
+        addView.image = [UIImage imageWithData:(self.imageDataArray)[i]];
         [self.myScrollview addSubview:addView];
     }
     
@@ -117,7 +117,7 @@
         
         UIImageView *addView = [[UIImageView alloc] initWithFrame:CGRectMake(320*i, 0, 320, 416)];
         addView.contentMode = UIViewContentModeScaleAspectFit;
-        addView.image = [UIImage imageWithData:[self.imageDataArray objectAtIndex:i]];
+        addView.image = [UIImage imageWithData:(self.imageDataArray)[i]];
         [self.myScrollview addSubview:addView];
     }
     self.myScrollview.delegate = self;
@@ -166,7 +166,7 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     self.replyButton.hidden = YES;
     self.commentText.hidden = YES;
-    self.bigImageView.image = [UIImage imageWithData:[self.imageDataArray objectAtIndex:self.currentPage]];
+    self.bigImageView.image = [UIImage imageWithData:(self.imageDataArray)[self.currentPage]];
     self.bigScrollView.hidden = NO;
     self.myScrollview.hidden = YES;
     

@@ -30,7 +30,7 @@
 	int index = self.selectedIndex;
 	
 	if (index == 1) {
-		PracticeAttendance *tmp = [self.viewControllers objectAtIndex:1];
+		PracticeAttendance *tmp = (self.viewControllers)[1];
 		[tmp viewWillAppear:NO];
 	}else if (index == 22){
 		//PracticeChatter *tmp = [self.viewControllers objectAtIndex:2];
@@ -38,7 +38,7 @@
 	
 	}else {
 		//OBJECT AT INDEX 0
-		PracticeNotes *tmp = [self.viewControllers objectAtIndex:0];
+		PracticeNotes *tmp = (self.viewControllers)[0];
 		[tmp viewWillAppear:NO];
 	}
 	
@@ -76,7 +76,7 @@
 	tab3.tabBarItem.image = [UIImage imageNamed:@"tabsAttendance.png"];
 	
 	
-	self.viewControllers = [NSArray arrayWithObjects:tab1, tab3, nil]; 
+	self.viewControllers = @[tab1, tab3]; 
 
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didComeBack:) 

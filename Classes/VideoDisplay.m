@@ -114,7 +114,7 @@
 
     if ([self.movieData length] > 0) {
         NSArray * documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        self.basePath = ([documentPaths count] > 0) ? [documentPaths objectAtIndex:0] : nil;
+        self.basePath = ([documentPaths count] > 0) ? documentPaths[0] : nil;
         
         
         [self.movieData writeToFile:[self.basePath stringByAppendingPathComponent:@"tmpMovie.MOV"] 

@@ -44,7 +44,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
     self.emailEdit.text = @"";
     
     self.initPhone = @"";
-	self.playerInfo = [NSDictionary dictionary];
+	self.playerInfo = @{};
 	
 	self.profilePhotoButton.enabled = NO;
 	
@@ -561,7 +561,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
         
         
         NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :first :last
-                                                        :jers :rRoles :[NSArray array] :mainDelegate.token :profile :newEmail :@"fan" :newMobile :orientation];
+                                                        :jers :rRoles :@[] :mainDelegate.token :profile :newEmail :@"fan" :newMobile :orientation];
         
         NSString *status = [response valueForKey:@"status"];
         
@@ -691,7 +691,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
         }
         
         NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@""
-                                                        :@"" :[NSArray array] :[NSArray array] :mainDelegate.token :profile :@"" :@"fan" :@"" :orientation];
+                                                        :@"" :@[] :@[] :mainDelegate.token :profile :@"" :@"fan" :@"" :orientation];
         
         NSString *status = [response valueForKey:@"status"];
         
@@ -824,8 +824,8 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 		int num = [temp count];
 		num = num-2;
 		
-		if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
-			CurrentTeamTabs *cont = [temp objectAtIndex:num];
+		if ([temp[num] class] == [CurrentTeamTabs class]) {
+			CurrentTeamTabs *cont = temp[num];
 			[self.navigationController popToViewController:cont animated:YES];
 		}else {
 			[self.activity stopAnimating];
@@ -906,7 +906,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	[picker dismissModalViewControllerAnimated:YES];	
 	
-	UIImageView *tmpView = [[UIImageView alloc] initWithImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
+	UIImageView *tmpView = [[UIImageView alloc] initWithImage:info[UIImagePickerControllerOriginalImage]];
 	
     float xVal;
     float yVal;
@@ -987,7 +987,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
                     
                     NSString *numberToCall = @"";
                     
-                    NSString *tmpPhone = [self.phoneOnlyArray objectAtIndex:i];
+                    NSString *tmpPhone = (self.phoneOnlyArray)[i];
                     
                     if ([tmpPhone length] == 16) {
                         call = true;
@@ -1055,8 +1055,8 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
                         }
                     }else {
                         
-                        if ([numbersToCall objectAtIndex:0] != nil) {
-                            NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+                        if (numbersToCall[0] != nil) {
+                            NSString *url = [@"sms://" stringByAppendingString:numbersToCall[0]];
                             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
                         }
                       
@@ -1211,7 +1211,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
         
         
         
-        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :[NSArray array] :mainDelegate.token 
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :@[] :@[] :mainDelegate.token 
                                                         :[NSData data] :@"" :@"member" :@"" :@""];
         
         NSString *status = [response valueForKey:@"status"];
@@ -1472,7 +1472,7 @@ isEmailConfirmed, justChose, theFirstEdit, theEmailEdit, theMobileEdit, theLastE
                         
                         MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
                         messageViewController.messageComposeDelegate = self;
-                        [messageViewController setRecipients:[NSArray arrayWithObject:numberToCall]];
+                        [messageViewController setRecipients:@[numberToCall]];
                         [self presentModalViewController:messageViewController animated:YES];
                         
                     }

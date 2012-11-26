@@ -34,11 +34,11 @@
 	self.allMatches = [NSMutableArray array]; 
 	[self.myTableView setHidden:YES];
 	self.myTableView.backgroundColor = [UIColor clearColor];
-	self.allSports = [NSArray arrayWithObjects:@"Archery", @"Biking", @"Cycling", @"Boating", @"Bowling", @"Climbing", @"Cricket", @"Lacrosse",
+	self.allSports = @[@"Archery", @"Biking", @"Cycling", @"Boating", @"Bowling", @"Climbing", @"Cricket", @"Lacrosse",
 					  @"Fishing", @"Golf", @"Water Polo", @"Rugby", @"Skiing", @"Sailing", @"Swimming", @"Diving", @"Surfing", 
 					  @"Field Hockey", @"Broomball", @"Softball", @"Curling", @"Volleyball", @"Laser Tag", @"Paintball",  @"Ultimate Frisbee", 
 					  @"Track", @"Cross Country", @"Flag Football", @"Baseball", @"Basketball", @"Hockey", @"Soccer", @"Football",
-					  @"Tennis", nil];
+					  @"Tennis"];
 	
 	UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
 	UIImage *stretch = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
@@ -56,7 +56,7 @@
 		
         for (int i = 0; i < [self.allSports count]; i++) {
             
-            NSString *currentSport = [self.allSports objectAtIndex:i];
+            NSString *currentSport = (self.allSports)[i];
             
             if (currentSport.length > length) {
                 
@@ -130,7 +130,7 @@
 	
 	for (int i = 0; i < [self.allSports count]; i++) {
 		
-		NSString *currentSport = [self.allSports objectAtIndex:i];
+		NSString *currentSport = (self.allSports)[i];
 		
         if ([self.sport.text localizedCaseInsensitiveCompare:currentSport] == 0) {
             return true;
@@ -164,7 +164,7 @@
 	}
     
 	NSUInteger row = [indexPath row];
-	NSString *theSport = [self.allMatches objectAtIndex:row];
+	NSString *theSport = (self.allMatches)[row];
 	cell.textLabel.text = [@" " stringByAppendingString:theSport];
 	cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
 	
@@ -180,7 +180,7 @@
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSUInteger row = [indexPath row];
 	
-	NSString *value = [self.allMatches objectAtIndex:row];
+	NSString *value = (self.allMatches)[row];
 	
 	self.sport.text = value;
 	

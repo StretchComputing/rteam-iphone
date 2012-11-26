@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <iAd/iAd.h>
 
-
-@interface GameTabs : UITabBarController <UITabBarControllerDelegate, UIActionSheetDelegate> {
+@interface GameTabs : UITabBarController <UITabBarControllerDelegate, UIActionSheetDelegate, ADBannerViewDelegate> {
 
 }
+@property BOOL bannerIsVisible;
+@property (nonatomic, strong) ADBannerView *myAd;
 @property bool fromActivity;
 @property bool fromHome;
 @property bool newActivity;

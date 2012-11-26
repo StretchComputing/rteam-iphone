@@ -356,7 +356,7 @@ tmpActivityArray, newActivityFailed, hasNewActivity, activityArray, allActivityT
   
     for (int i = 0; i < 3; i++) {
         MyViewController *controller = [[MyViewController alloc] initWithPageNumber:i];
-        [viewControllers replaceObjectAtIndex:i withObject:controller];
+        viewControllers[i] = controller;
     }
         
     self.currentPage = 1;
@@ -710,9 +710,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [TraceSession addEventToSession:@"Activity Page - Activity Row Clicked"];
             
-            if ([[self.activityArray objectAtIndex:row] class] == [Activity class]) {
+            if ([(self.activityArray)[row] class] == [Activity class]) {
                 
-                Activity *tmpActivity = [self.activityArray objectAtIndex:row];
+                Activity *tmpActivity = (self.activityArray)[row];
                 
                 
                 
@@ -778,8 +778,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                                               withError:nil]) {
             }
             
-            if ([[self.myActivityArray objectAtIndex:row] class] == [MessageThreadInbox class]) {
-                MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:row];
+            if ([(self.myActivityArray)[row] class] == [MessageThreadInbox class]) {
+                MessageThreadInbox *messageOrPoll = (self.myActivityArray)[row];
                 
                 if ([messageOrPoll.pollChoices count] > 0) {
                     ViewPollReceived *poll = [[ViewPollReceived alloc] init];
@@ -839,7 +839,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }else{
                 //Outbox
                 
-                MessageThreadOutbox *message = [self.myActivityArray objectAtIndex:row];
+                MessageThreadOutbox *message = (self.myActivityArray)[row];
                 
                 if ([message.messageType isEqualToString:@"poll"] || [message.messageType isEqualToString:@"whoiscoming"]) {
                     
@@ -1357,20 +1357,20 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
     for (int i = 0; i < [self.activityArray count]; i++) {
-        Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+        Activity *tmpActivity = (self.activityArray)[i];
         
-        if (([mainDelegate.replyDictionary objectForKey:tmpActivity.activityId] == nil) && ([mainDelegate.messageImageDictionary objectForKey:tmpActivity.activityId] == nil)) {
+        if (((mainDelegate.replyDictionary)[tmpActivity.activityId] == nil) && ((mainDelegate.messageImageDictionary)[tmpActivity.activityId] == nil)) {
             [activityIds addObject:tmpActivity.activityId];
         }else{
             
             [activityIds addObject:tmpActivity.activityId];
 
-            if ([mainDelegate.replyDictionary objectForKey:tmpActivity.activityId] != nil) {
+            if ((mainDelegate.replyDictionary)[tmpActivity.activityId] != nil) {
                 
                 NSArray *replies = [mainDelegate.replyDictionary valueForKey:tmpActivity.activityId];
                 
                 if ([replies count] > 0) {
-                    Activity *tmp = [replies objectAtIndex:0];
+                    Activity *tmp = replies[0];
                     
                     tmpActivity.lastEditDate = [NSString stringWithFormat:tmp.createdDate];
                 }
@@ -1381,7 +1381,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
     
     NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"lastEditDate" ascending:NO];
-    [self.activityArray sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
+    [self.activityArray sortUsingDescriptors:@[dateSorter]];
     
     self.allActivityTable.hidden = NO;
     [self.allActivityTable reloadData];
@@ -1406,7 +1406,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSString *status = [response valueForKey:@"status"];
         
-        NSArray *details = [NSArray array];
+        NSArray *details = @[];
         if ([status isEqualToString:@"100"]){
             
            details = [response valueForKey:@"activities"];
@@ -1445,7 +1445,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         for (int i = 0; i < [details count]; i++) {
             
-            NSDictionary *tmpDictionary = [details objectAtIndex:i];
+            NSDictionary *tmpDictionary = details[i];
             
             NSString *activityId = [tmpDictionary valueForKey:@"activityId"];
             NSString *thumbnail = [tmpDictionary valueForKey:@"thumbNail"];
@@ -1454,7 +1454,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([thumbnail length] > 0) {
                 
                 for (int j = 0; j < [self.activityArray count]; j++) {
-                    Activity *tmpActivity = [self.activityArray objectAtIndex:j];
+                    Activity *tmpActivity = (self.activityArray)[j];
                     
                     if ([tmpActivity.activityId isEqualToString:activityId]) {
 
@@ -1470,14 +1470,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 totalReplies = [NSMutableArray arrayWithArray:[totalReplies arrayByAddingObjectsFromArray:replies]];
 
                 for (int j = 0; j < [self.activityArray count]; j++) {
-                    Activity *tmpActivity = [self.activityArray objectAtIndex:j];
+                    Activity *tmpActivity = (self.activityArray)[j];
                     NSMutableArray *mutableReplyArray = [NSMutableArray array];
                     
                     if ([tmpActivity.activityId isEqualToString:activityId]) {
                         
                         for (int k = 0; k < [replies count]; k++) {
                             
-                            NSDictionary *tmpDict = [replies objectAtIndex:k];
+                            NSDictionary *tmpDict = replies[k];
                             
                             Activity *tmpReply = [[Activity alloc] init];
                                                         
@@ -1499,7 +1499,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                             tmpReply.isCurrentUser = [[tmpDict valueForKey:@"isCurrentUser"] boolValue];
                             
                             tmpReply.vote = [tmpDict valueForKey:@"vote"];
-                            tmpReply.replies = [NSArray array];
+                            tmpReply.replies = @[];
                             
                             if ([tmpDict valueForKey:@"thumbNail"] != nil) {
                                 tmpReply.thumbnail = [tmpDict valueForKey:@"thumbNail"];
@@ -1512,12 +1512,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                         }
                         
                         NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
-                        [mutableReplyArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+                        [mutableReplyArray sortUsingDescriptors:@[dateSort]];
                         
                         [mainDelegate.replyDictionary setValue:mutableReplyArray forKey:tmpActivity.activityId];
                                                 
                         if ([mutableReplyArray count] > 0) {
-                            Activity *tmpReply = [mutableReplyArray objectAtIndex:0];
+                            Activity *tmpReply = mutableReplyArray[0];
                             
                             tmpActivity.lastEditDate = [NSString stringWithFormat:tmpReply.createdDate];
 
@@ -1535,7 +1535,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self performSelectorInBackground:@selector(getReplyImages:) withObject:totalReplies];
 
     NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"lastEditDate" ascending:NO];
-    [self.activityArray sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
+    [self.activityArray sortUsingDescriptors:@[dateSorter]];
     
     [self.allActivityTable reloadData];
 }
@@ -1589,7 +1589,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     for (int i = 0; i < [messages count]; i++) {
         
-        id tmpObject = [messages objectAtIndex:i];
+        id tmpObject = messages[i];
         
         if ([tmpObject class] == [MessageThreadInbox class]) {
             
@@ -1605,7 +1605,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //Sort the array
     
     NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
-    [self.myActivityArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+    [self.myActivityArray sortUsingDescriptors:@[dateSort]];
     
     [self.myActivityTable reloadData];
     
@@ -1658,7 +1658,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *teamId = @"";
     NSMutableArray *arrayOfImageData = [NSMutableArray array];
     for (int i = 0; i < [self.activityArray count]; i++) {
-        Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+        Activity *tmpActivity = (self.activityArray)[i];
         
         if ([tmpActivity.activityId isEqualToString:messageId]) {
             NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
@@ -1669,7 +1669,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
     
     for (int i = 0; i < [self.totalReplyArray count]; i++) {
-        Activity *tmpActivity = [self.totalReplyArray objectAtIndex:i];
+        Activity *tmpActivity = (self.totalReplyArray)[i];
         
         if ([tmpActivity.activityId isEqualToString:messageId]) {
             NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
@@ -1703,7 +1703,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     ImageButton *tmpButton = (ImageButton *)sender;
     
-    Activity *tmpActivity = [self.photosArray objectAtIndex:tmpButton.tag];
+    Activity *tmpActivity = (self.photosArray)[tmpButton.tag];
     
     ImageDisplayMultiple *newDisplay = [[ImageDisplayMultiple alloc] init];
     newDisplay.activityId = tmpActivity.activityId;
@@ -1731,7 +1731,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *teamId = @"";
     NSMutableArray *arrayOfImageData = [NSMutableArray array];
     for (int i = 0; i < [self.activityArray count]; i++) {
-        Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+        Activity *tmpActivity = (self.activityArray)[i];
         
         if ([tmpActivity.activityId isEqualToString:messageId]) {
             NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
@@ -1742,7 +1742,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
     
     for (int i = 0; i < [self.totalReplyArray count]; i++) {
-        Activity *tmpActivity = [self.totalReplyArray objectAtIndex:i];
+        Activity *tmpActivity = (self.totalReplyArray)[i];
         
         if ([tmpActivity.activityId isEqualToString:messageId]) {
             NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
@@ -1775,7 +1775,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     ImageButton *tmpButton = (ImageButton *)sender;
     
-    Activity *tmpActivity = [self.photosArray objectAtIndex:tmpButton.tag];
+    Activity *tmpActivity = (self.photosArray)[tmpButton.tag];
     
     
     VideoDisplay *newDisplay = [[VideoDisplay alloc] init];
@@ -1808,7 +1808,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             NSString *activityIds = @"";
             for (int i = 0; i < [self.activityArray count]; i++) {
                 
-                Activity *tmpActivity = [self.activityArray objectAtIndex:i];
+                Activity *tmpActivity = (self.activityArray)[i];
                 
                 if (i == ([self.activityArray count] - 1)) {
                     activityIds = [activityIds stringByAppendingFormat:@"%@", tmpActivity.activityId];
@@ -1833,7 +1833,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 for (int i = 0; i < [activityResponses count]; i++) {
                     
-                    NSDictionary *tmpDictionary = [activityResponses objectAtIndex:i];
+                    NSDictionary *tmpDictionary = activityResponses[i];
                     
                     NSString *currentActId = [tmpDictionary valueForKey:@"activityId"];
                     NSString *vote = [tmpDictionary valueForKey:@"vote"];
@@ -1841,7 +1841,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                     for (int j = 0; j < [self.activityArray count]; j++) {
                         
-                        Activity *tmpActivity = [self.activityArray objectAtIndex:j];
+                        Activity *tmpActivity = (self.activityArray)[j];
                         
                         if ([tmpActivity.activityId isEqualToString:currentActId]) {
                             
@@ -1974,7 +1974,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         NSMutableArray *idArray = [NSMutableArray array];
         for (int i = 0; i < [repliesArray count]; i++) {
             
-            NSDictionary *tmpDict = [repliesArray objectAtIndex:i];            
+            NSDictionary *tmpDict = repliesArray[i];            
             NSString *activityId = [tmpDict valueForKey:@"activityId"];
             
             if ((activityId != nil) && ![activityId isEqualToString:@""]) {
@@ -1986,7 +1986,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         NSString *status = [response valueForKey:@"status"];
                 
-        NSArray *details = [NSArray array];
+        NSArray *details = @[];
         if ([status isEqualToString:@"100"]){
             
             details = [response valueForKey:@"activities"];
@@ -2024,7 +2024,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         for (int i = 0; i < [details count]; i++) {
             
-            NSDictionary *tmpDictionary = [details objectAtIndex:i];
+            NSDictionary *tmpDictionary = details[i];
             
             NSString *activityId = [tmpDictionary valueForKey:@"activityId"];
             NSString *thumbnail = [tmpDictionary valueForKey:@"thumbNail"];
@@ -2062,8 +2062,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             NSString *sendTeamId = @"";
             NSString *sendThreadId = @"";
             
-            if ([[self.myActivityArray objectAtIndex:i] class] == [MessageThreadInbox class]) {
-                MessageThreadInbox *messageOrPoll = [self.myActivityArray objectAtIndex:i];
+            if ([(self.myActivityArray)[i] class] == [MessageThreadInbox class]) {
+                MessageThreadInbox *messageOrPoll = (self.myActivityArray)[i];
                 
                 sendTeamId = messageOrPoll.teamId;
                 sendThreadId = messageOrPoll.threadId;
@@ -2124,7 +2124,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             currentGameTab.teamName = tmpTeamName;
             currentGameTab.fromActivity = true;
 
-            Gameday *currentNotes = [tmpViews objectAtIndex:0];
+            Gameday *currentNotes = tmpViews[0];
             currentNotes.gameId = tmpGameId;
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
@@ -2135,12 +2135,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             
             
-            GameAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+            GameAttendance *currentAttendance = tmpViews[1];
             currentAttendance.gameId = tmpGameId;
             currentAttendance.teamId = tmpTeamId;
             currentAttendance.startDate = tmpDate;
             
-            Vote *fans = [tmpViews objectAtIndex:2];
+            Vote *fans = tmpViews[2];
             fans.teamId = tmpTeamId;
             fans.userRole = tmpUserRole;
             fans.gameId = tmpGameId;
@@ -2167,7 +2167,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             currentGameTab.fromActivity = true;
 
             
-            Gameday *currentNotes = [tmpViews objectAtIndex:0];
+            Gameday *currentNotes = tmpViews[0];
             currentNotes.gameId = tmpGameId;
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
@@ -2177,7 +2177,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             currentNotes.opponentString = @"";
 
             
-            Vote *fans = [tmpViews objectAtIndex:1];
+            Vote *fans = tmpViews[1];
             fans.teamId = tmpTeamId;
             fans.userRole = tmpUserRole;
             fans.gameId = tmpGameId;
@@ -2412,7 +2412,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             
             NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
-            [self.photosArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+            [self.photosArray sortUsingDescriptors:@[dateSort]];
             
             [self performSelector:@selector(setUpPhotoPage)];
             
@@ -2422,7 +2422,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             
             NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
-            [self.photosArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+            [self.photosArray sortUsingDescriptors:@[dateSort]];
             
             [self performSelector:@selector(setUpPhotoPage)];
             
@@ -2478,7 +2478,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             ImageButton *insideImageView = [ImageButton buttonWithType:UIButtonTypeCustom];
             
-            Activity *tmpActivity = [self.photosArray objectAtIndex:i];
+            Activity *tmpActivity = (self.photosArray)[i];
             
             NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
             insideImageView.hidden = NO;
@@ -2564,7 +2564,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.morePhotosButton.enabled = NO;
     @try {
         int last = [self.photosArray count] - 1;
-        Activity *tmpActivitiy = [self.photosArray objectAtIndex:last];
+        Activity *tmpActivitiy = (self.photosArray)[last];
         
         NSString *dateString = [tmpActivitiy.createdDate substringToIndex:10];
         

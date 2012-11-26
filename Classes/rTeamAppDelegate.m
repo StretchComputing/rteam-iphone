@@ -71,7 +71,7 @@
     }
 
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *documentsDirectory = paths[0];
 	NSString *path = [documentsDirectory stringByAppendingPathComponent:@"teams.dat"];
     [self setDataFilePath:path];
 	
@@ -164,7 +164,7 @@
                 NSMutableArray *tmpDateArray = [NSMutableArray array];
 
                 for (int i = 0; i < [tmpTraceTimeArray count]; i++) {
-                    NSString *tmpTime = [tmpTraceTimeArray objectAtIndex:i];
+                    NSString *tmpTime = tmpTraceTimeArray[i];
                     
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];

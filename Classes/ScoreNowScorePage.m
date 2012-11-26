@@ -131,12 +131,12 @@
 -(void)viewDidLoad{
     
     self.phoneOnlyArray = [NSMutableArray array];
-    self.emailArray = [NSArray array];
+    self.emailArray = @[];
     self.gameIsOver = false;
     
     NSMutableArray *coordTeamList = [NSMutableArray array];
     for (int i = 0; i < [self.teamList count]; i++) {
-        Team *tmpTeam = [self.teamList objectAtIndex:i];
+        Team *tmpTeam = (self.teamList)[i];
         
         if ([tmpTeam.userRole isEqualToString:@"creator"] || [tmpTeam.userRole isEqualToString:@"coordinator"]) {
             [coordTeamList addObject:tmpTeam];
@@ -158,7 +158,7 @@
     
     self.title = @"Score Now";
     
-    self.gameList = [NSArray array];
+    self.gameList = @[];
     self.theScoreView = [[ScoreNowScoring alloc] init];
     
 
@@ -190,7 +190,7 @@
         self.currentTeamsView.hidden = NO;
         self.noTeamsView.hidden = YES;
         
-        Team *tmpTeam = [self.teamList objectAtIndex:0];
+        Team *tmpTeam = (self.teamList)[0];
         [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
         [self.gameActivity startAnimating];
         [self.gameTableActivity startAnimating];
@@ -295,7 +295,7 @@
         //remove games more than 36 hrs into future
         for (int i = 0; i < [gameArray count]; i++) {
             
-            Game *tmpGame = [gameArray objectAtIndex:i];
+            Game *tmpGame = gameArray[i];
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
             [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
@@ -319,7 +319,7 @@
    
         
         NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-        [tmpArray sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+        [tmpArray sortUsingDescriptors:@[lastNameSorter]];
         
         
         self.gameList = [NSArray arrayWithArray:tmpArray];
@@ -381,7 +381,7 @@
             cell.textLabel.text = @"+ Create New Team +";
 
         }else{
-            Team *team = [self.teamList objectAtIndex:row-1];
+            Team *team = (self.teamList)[row-1];
             cell.textLabel.text = team.name;
         }
     }else{
@@ -389,7 +389,7 @@
         if (row == 0) {
             cell.textLabel.text = @"+ Create New Game +";
         }else{
-            Game *tmpGame = [self.gameList objectAtIndex:row-1];
+            Game *tmpGame = (self.gameList)[row-1];
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
             [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
@@ -432,13 +432,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             self.selectedTeamId = @"";
             
         }else{
-            Team *tmpTeam = [self.teamList objectAtIndex:row-1];
+            Team *tmpTeam = (self.teamList)[row-1];
             [self.teamSelectButton setTitle:tmpTeam.name forState:UIControlStateNormal];
             self.selectView.hidden = YES;
             [self.gameActivity startAnimating];
             [self.gameTableActivity startAnimating];
 
-            self.gameList = [NSArray array];
+            self.gameList = @[];
             
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"MM/dd hh:mm"];
@@ -472,7 +472,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             self.selectedGameId = @"";
         }else{
             
-            Game *tmpGame = [self.gameList objectAtIndex:row-1];
+            Game *tmpGame = (self.gameList)[row-1];
             
             self.selectedGameId = tmpGame.gameId;
             
@@ -889,13 +889,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         NSMutableArray *tmpMemberArray = [NSMutableArray array];
-        NSArray *finalMemberArray = [NSArray array];
+        NSArray *finalMemberArray = @[];
         
         for (int i = 0; i < [self.emailArray count]; i++) {
             
             NSMutableDictionary *tmpDictionary = [[NSMutableDictionary alloc] init];
             
-            NewMemberObject *tmpMember = [self.emailArray objectAtIndex:i];
+            NewMemberObject *tmpMember = (self.emailArray)[i];
             
             if ([tmpMember.email isEqualToString:@""] && ![tmpMember.phone isEqualToString:@""]) {
                 [self.phoneOnlyArray addObject:tmpMember.phone];
@@ -911,19 +911,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             
             if (![tmpMember.firstName isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.firstName forKey:@"firstName"];
+                tmpDictionary[@"firstName"] = tmpMember.firstName;
             }
             if (![tmpMember.lastName isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.lastName forKey:@"lastName"];
+                tmpDictionary[@"lastName"] = tmpMember.lastName;
             }
             if (![tmpMember.email isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.email forKey:@"emailAddress"];
+                tmpDictionary[@"emailAddress"] = tmpMember.email;
             }
             if (![tmpMember.phone isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.phone forKey:@"phoneNumber"];
+                tmpDictionary[@"phoneNumber"] = tmpMember.phone;
             }
             if (![tmpMember.role isEqualToString:@""]) {
-                [tmpDictionary setObject:tmpMember.role forKey:@"participantRole"];
+                tmpDictionary[@"participantRole"] = tmpMember.role;
             }
             
             NSMutableArray *guardArray = [NSMutableArray array];
@@ -935,29 +935,29 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 NSArray *nameArray = [tmpMember.guardianOneName componentsSeparatedByString:@" "];
                 
-                NSString *fName = [nameArray objectAtIndex:0];
+                NSString *fName = nameArray[0];
                 NSString *lName = @"";
                 
                 for (int i = 1; i < [nameArray count]; i++) {
                     if (i == 1) {
-                        lName = [lName stringByAppendingFormat:@"%@", [nameArray objectAtIndex:i]];
+                        lName = [lName stringByAppendingFormat:@"%@", nameArray[i]];
                     }else{
-                        lName = [lName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
+                        lName = [lName stringByAppendingFormat:@" %@", nameArray[i]];
                         
                     }
                 }
                 
                 if (![fName isEqualToString:@""]) {
-                    [guard1 setObject:fName forKey:@"firstName"];
+                    guard1[@"firstName"] = fName;
                 }
                 if (![lName isEqualToString:@""]) {
-                    [guard1 setObject:lName forKey:@"lastName"];
+                    guard1[@"lastName"] = lName;
                 }
                 if (![tmpMember.guardianOneEmail isEqualToString:@""]) {
-                    [guard1 setObject:tmpMember.guardianOneEmail forKey:@"emailAddress"];
+                    guard1[@"emailAddress"] = tmpMember.guardianOneEmail;
                 }
                 if (![tmpMember.guardianOnePhone isEqualToString:@""]) {
-                    [guard1 setObject:tmpMember.guardianOnePhone forKey:@"phoneNumber"];
+                    guard1[@"phoneNumber"] = tmpMember.guardianOnePhone;
                 }
                 
                 [guardArray addObject:guard1];
@@ -969,29 +969,29 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                     NSArray *nameArray = [tmpMember.guardianTwoName componentsSeparatedByString:@" "];
                     
-                    NSString *fName = [nameArray objectAtIndex:0];
+                    NSString *fName = nameArray[0];
                     NSString *lName = @"";
                     
                     for (int i = 1; i < [nameArray count]; i++) {
                         if (i == 1) {
-                            lName = [lName stringByAppendingFormat:@"%@", [nameArray objectAtIndex:i]];
+                            lName = [lName stringByAppendingFormat:@"%@", nameArray[i]];
                         }else{
-                            lName = [lName stringByAppendingFormat:@" %@", [nameArray objectAtIndex:i]];
+                            lName = [lName stringByAppendingFormat:@" %@", nameArray[i]];
                             
                         }
                     }
                     
                     if (![fName isEqualToString:@""]) {
-                        [guard2 setObject:fName forKey:@"firstName"];
+                        guard2[@"firstName"] = fName;
                     }
                     if (![lName isEqualToString:@""]) {
-                        [guard2 setObject:lName forKey:@"lastName"];
+                        guard2[@"lastName"] = lName;
                     }
                     if (![tmpMember.guardianTwoEmail isEqualToString:@""]) {
-                        [guard2 setObject:tmpMember.guardianTwoEmail forKey:@"emailAddress"];
+                        guard2[@"emailAddress"] = tmpMember.guardianTwoEmail;
                     }
                     if (![tmpMember.guardianTwoPhone isEqualToString:@""]) {
-                        [guard2 setObject:tmpMember.guardianTwoPhone forKey:@"phoneNumber"];
+                        guard2[@"phoneNumber"] = tmpMember.guardianTwoPhone;
                     }
                     
                     [guardArray addObject:guard2];
@@ -1001,7 +1001,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }
             
             if ([guardArray count] > 0) {
-                [tmpDictionary setObject:guardArray forKey:@"guardians"];
+                tmpDictionary[@"guardians"] = guardArray;
             }
             
             [tmpMemberArray addObject:tmpDictionary];

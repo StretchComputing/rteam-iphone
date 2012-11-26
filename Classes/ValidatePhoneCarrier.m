@@ -36,7 +36,7 @@
     self.phoneNumberText.text = self.phoneNumber;
     
     for (int i = 0; i < [self.carriers count]; i++) {
-        MobileCarrier *tmp = [self.carriers objectAtIndex:i];
+        MobileCarrier *tmp = (self.carriers)[i];
         
         if ([tmp.code isEqualToString:self.carrierCode]) {
             self.phoneCarrierText.text = tmp.name;
@@ -228,7 +228,7 @@ numberOfRowsInComponent:(NSInteger)component{
     if (row == 0) {
         return @"I don't know.";
     }else{
-        MobileCarrier *tmpCarrier = [self.carriers objectAtIndex:row-1];
+        MobileCarrier *tmpCarrier = (self.carriers)[row-1];
         return tmpCarrier.name;
     }
 }
@@ -241,7 +241,7 @@ numberOfRowsInComponent:(NSInteger)component{
         self.selectedCarrier = @"I don't know.";
         self.carrierCode = @"";
     }else{
-        MobileCarrier *tmpCarrier = [self.carriers objectAtIndex:row-1];
+        MobileCarrier *tmpCarrier = (self.carriers)[row-1];
         self.selectedCarrier = tmpCarrier.name;
         self.carrierCode = tmpCarrier.code;
     }
@@ -457,7 +457,7 @@ numberOfRowsInComponent:(NSInteger)component{
             
             MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
             messageViewController.messageComposeDelegate = self;
-            NSArray *numbersToCall = [NSArray arrayWithObject:@"join@rteam.com"];
+            NSArray *numbersToCall = @[@"join@rteam.com"];
             [messageViewController setRecipients:numbersToCall];
             
             NSString *bodyMessage = @"yes";
@@ -485,7 +485,7 @@ numberOfRowsInComponent:(NSInteger)component{
                 
                 MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
                 messageViewController.messageComposeDelegate = self;
-                NSArray *numbersToCall = [NSArray arrayWithObject:@"join@rteam.com"];
+                NSArray *numbersToCall = @[@"join@rteam.com"];
                 [messageViewController setRecipients:numbersToCall];
                 
                 NSString *bodyMessage = @"yes";

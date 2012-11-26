@@ -128,7 +128,7 @@
         int tempNum = [tempCont count];
         tempNum = tempNum - 2;
         
-        SettingsTabs *tmp = [tempCont objectAtIndex:tempNum];
+        SettingsTabs *tmp = tempCont[tempNum];
         tmp.displaySuccess = true;
         [self.navigationController popToViewController:tmp animated:YES];
     }else{

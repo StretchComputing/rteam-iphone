@@ -304,8 +304,6 @@
 		9087425812EDCBC900A2CA1D /* ProfilePhoto.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9087425712EDCBC900A2CA1D /* ProfilePhoto.xib */; };
 		9087438012EDDF2400A2CA1D /* CameraSelectionUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9087437F12EDDF2400A2CA1D /* CameraSelectionUser.m */; };
 		9087534C1474A438000850D4 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9087534B1474A438000850D4 /* libsqlite3.0.dylib */; };
-		908753541474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */; };
-		908753551474A7DB000850D4 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 908753531474A7DB000850D4 /* libGoogleAnalytics.a */; };
 		90877C5113CF3A3D00552AFF /* ScoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 90877C5013CF3A3D00552AFF /* ScoreButton.m */; };
 		90877C5513CF467100552AFF /* HomeScoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90877C5313CF467100552AFF /* HomeScoreView.m */; };
 		90877C5A13CF467E00552AFF /* HomeAttendanceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90877C5813CF467E00552AFF /* HomeAttendanceView.m */; };
@@ -332,23 +330,25 @@
 		908A468B12DD13C5000C346A /* AddGamePhoto.xib in Resources */ = {isa = PBXBuildFile; fileRef = 908A468A12DD13C5000C346A /* AddGamePhoto.xib */; };
 		908AA039118A7298001BD26D /* GameUpdateGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 908AA038118A7298001BD26D /* GameUpdateGPS.m */; };
 		908AA03D118A72BA001BD26D /* GameUpdateGPS.xib in Resources */ = {isa = PBXBuildFile; fileRef = 908AA03C118A72BA001BD26D /* GameUpdateGPS.xib */; };
-		908E645E1199BE890083A1D6 /* CheckmarkTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E64461199BE890083A1D6 /* CheckmarkTile.m */; };
-		908E645F1199BE890083A1D6 /* KLCalendarModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E64481199BE890083A1D6 /* KLCalendarModel.m */; };
-		908E64601199BE890083A1D6 /* KLCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E644A1199BE890083A1D6 /* KLCalendarView.m */; };
-		908E64611199BE890083A1D6 /* KLColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E644C1199BE890083A1D6 /* KLColors.m */; };
-		908E64621199BE890083A1D6 /* KLDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E644E1199BE890083A1D6 /* KLDate.m */; };
-		908E64631199BE890083A1D6 /* KLGraphicsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E64501199BE890083A1D6 /* KLGraphicsUtils.m */; };
-		908E64641199BE890083A1D6 /* KLGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E64521199BE890083A1D6 /* KLGridView.m */; };
-		908E64651199BE890083A1D6 /* KLTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E64541199BE890083A1D6 /* KLTile.m */; };
-		908E64661199BE890083A1D6 /* left-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 908E64551199BE890083A1D6 /* left-arrow.png */; };
-		908E64671199BE890083A1D6 /* right-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 908E64561199BE890083A1D6 /* right-arrow.png */; };
-		908E64681199BE890083A1D6 /* THCalendarInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 908E64581199BE890083A1D6 /* THCalendarInfo.m */; };
 		908E647A1199C0210083A1D6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 908E64791199C0210083A1D6 /* QuartzCore.framework */; };
+		9090D740162074B700FDDDB9 /* libCrashReporter-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9090D73F162074B700FDDDB9 /* libCrashReporter-iphoneos.a */; };
+		9090D7421620769800FDDDB9 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9090D7411620769700FDDDB9 /* libGoogleAnalytics.a */; };
 		9091603213E1B5540073C20A /* NewActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 9091603013E1B5540073C20A /* NewActivity.m */; };
 		9091603313E1B5540073C20A /* NewActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9091603113E1B5540073C20A /* NewActivity.xib */; };
 		9093A59D1365C40F00CD98DC /* MobileCarrier.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093A59C1365C40F00CD98DC /* MobileCarrier.m */; };
 		9093A5A01365CE1800CD98DC /* ValidatePhoneCarrier.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093A59F1365CE1700CD98DC /* ValidatePhoneCarrier.m */; };
 		9093A5A51365D17A00CD98DC /* ValidatePhoneCarrier.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9093A5A41365D17A00CD98DC /* ValidatePhoneCarrier.xib */; };
+		9093B8D815E57FBE001F667D /* CheckmarkTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8C315E57FBE001F667D /* CheckmarkTile.m */; };
+		9093B8D915E57FBE001F667D /* KLCalendarModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8C615E57FBE001F667D /* KLCalendarModel.m */; };
+		9093B8DA15E57FBE001F667D /* KLCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8C815E57FBE001F667D /* KLCalendarView.m */; };
+		9093B8DB15E57FBE001F667D /* KLColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8CA15E57FBE001F667D /* KLColors.m */; };
+		9093B8DC15E57FBE001F667D /* KLDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8CC15E57FBE001F667D /* KLDate.m */; };
+		9093B8DD15E57FBE001F667D /* KLGraphicsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8CE15E57FBE001F667D /* KLGraphicsUtils.m */; };
+		9093B8DE15E57FBE001F667D /* KLGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8D015E57FBE001F667D /* KLGridView.m */; };
+		9093B8DF15E57FBE001F667D /* KLTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8D215E57FBE001F667D /* KLTile.m */; };
+		9093B8E015E57FBE001F667D /* left-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 9093B8D315E57FBE001F667D /* left-arrow.png */; };
+		9093B8E215E57FBE001F667D /* right-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 9093B8D515E57FBE001F667D /* right-arrow.png */; };
+		9093B8E315E57FBE001F667D /* THCalendarInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9093B8D715E57FBE001F667D /* THCalendarInfo.m */; };
 		9095BE2312E7C85C001FE84D /* MessageReply.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9095BE2212E7C85C001FE84D /* MessageReply.xib */; };
 		9095C05112E802F8001FE84D /* NewMemberObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9095C05012E802F8001FE84D /* NewMemberObject.m */; };
 		9099676812384A4300267CA6 /* CreateTeam.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9099676712384A4300267CA6 /* CreateTeam.xib */; };
@@ -358,7 +358,6 @@
 		90A3F1F112FDDE2400F6C1DC /* ViewDetailMessageReplies.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90A3F1F012FDDE2400F6C1DC /* ViewDetailMessageReplies.xib */; };
 		90AABC1C15644099007A930D /* tabsPeople.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AABC1A15644099007A930D /* tabsPeople.png */; };
 		90AABC1D15644099007A930D /* tabsPeople@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AABC1B15644099007A930D /* tabsPeople@2x.png */; };
-		90AABC1F156440AB007A930D /* libCrashReporter-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90AABC1E156440AB007A930D /* libCrashReporter-iphoneos.a */; };
 		90AABC2115644100007A930D /* tabsEvents@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AABC2015644100007A930D /* tabsEvents@2x.png */; };
 		90AABC2315644471007A930D /* tabsEvents.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AABC2215644471007A930D /* tabsEvents.png */; };
 		90AABC26156444BE007A930D /* tabsEday@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AABC24156444BE007A930D /* tabsEday@2x.png */; };
@@ -374,8 +373,6 @@
 		90AB195911188C9D005E1018 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 90AB195111188C9D005E1018 /* SBJsonBase.m */; };
 		90AB195A11188C9D005E1018 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 90AB195311188C9D005E1018 /* SBJsonParser.m */; };
 		90AB195B11188C9D005E1018 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 90AB195511188C9D005E1018 /* SBJsonWriter.m */; };
-		90AB8C1113D9CCBF00515B9F /* homeBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AB8C0F13D9CCBF00515B9F /* homeBottom.png */; };
-		90AB8C1213D9CCBF00515B9F /* homeTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AB8C1013D9CCBF00515B9F /* homeTop.png */; };
 		90AB8C3A13DDC07400515B9F /* greenbackSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 90AB8C3913DDC07400515B9F /* greenbackSmall.png */; };
 		90AC116A12C1B8D100224865 /* FastHelp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90AC116912C1B8D100224865 /* FastHelp.xib */; };
 		90B1388214DF2E20000FB81E /* ScoreNowAddMembers.m in Sources */ = {isa = PBXBuildFile; fileRef = 90B1388014DF2E1F000FB81E /* ScoreNowAddMembers.m */; };
@@ -856,8 +853,6 @@
 		9087437F12EDDF2400A2CA1D /* CameraSelectionUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraSelectionUser.m; sourceTree = "<group>"; };
 		9087534B1474A438000850D4 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		908753511474A7DB000850D4 /* GANTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GANTracker.h; sourceTree = "<group>"; };
-		908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics_NoThumb.a; sourceTree = "<group>"; };
-		908753531474A7DB000850D4 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
 		90877C4F13CF3A3D00552AFF /* ScoreButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreButton.h; sourceTree = "<group>"; };
 		90877C5013CF3A3D00552AFF /* ScoreButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreButton.m; sourceTree = "<group>"; };
 		90877C5213CF467100552AFF /* HomeScoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScoreView.h; sourceTree = "<group>"; };
@@ -897,27 +892,9 @@
 		908AA037118A7298001BD26D /* GameUpdateGPS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameUpdateGPS.h; sourceTree = "<group>"; };
 		908AA038118A7298001BD26D /* GameUpdateGPS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameUpdateGPS.m; sourceTree = "<group>"; };
 		908AA03C118A72BA001BD26D /* GameUpdateGPS.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameUpdateGPS.xib; sourceTree = "<group>"; };
-		908E64451199BE890083A1D6 /* CheckmarkTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CheckmarkTile.h; path = ../CalendarTest/Calendar/CheckmarkTile.h; sourceTree = SOURCE_ROOT; };
-		908E64461199BE890083A1D6 /* CheckmarkTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CheckmarkTile.m; path = ../CalendarTest/Calendar/CheckmarkTile.m; sourceTree = SOURCE_ROOT; };
-		908E64471199BE890083A1D6 /* KLCalendarModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLCalendarModel.h; path = ../CalendarTest/Calendar/KLCalendarModel.h; sourceTree = SOURCE_ROOT; };
-		908E64481199BE890083A1D6 /* KLCalendarModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLCalendarModel.m; path = ../CalendarTest/Calendar/KLCalendarModel.m; sourceTree = SOURCE_ROOT; };
-		908E64491199BE890083A1D6 /* KLCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLCalendarView.h; path = ../CalendarTest/Calendar/KLCalendarView.h; sourceTree = SOURCE_ROOT; };
-		908E644A1199BE890083A1D6 /* KLCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLCalendarView.m; path = ../CalendarTest/Calendar/KLCalendarView.m; sourceTree = SOURCE_ROOT; };
-		908E644B1199BE890083A1D6 /* KLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLColors.h; path = ../CalendarTest/Calendar/KLColors.h; sourceTree = SOURCE_ROOT; };
-		908E644C1199BE890083A1D6 /* KLColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLColors.m; path = ../CalendarTest/Calendar/KLColors.m; sourceTree = SOURCE_ROOT; };
-		908E644D1199BE890083A1D6 /* KLDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLDate.h; path = ../CalendarTest/Calendar/KLDate.h; sourceTree = SOURCE_ROOT; };
-		908E644E1199BE890083A1D6 /* KLDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLDate.m; path = ../CalendarTest/Calendar/KLDate.m; sourceTree = SOURCE_ROOT; };
-		908E644F1199BE890083A1D6 /* KLGraphicsUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLGraphicsUtils.h; path = ../CalendarTest/Calendar/KLGraphicsUtils.h; sourceTree = SOURCE_ROOT; };
-		908E64501199BE890083A1D6 /* KLGraphicsUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLGraphicsUtils.m; path = ../CalendarTest/Calendar/KLGraphicsUtils.m; sourceTree = SOURCE_ROOT; };
-		908E64511199BE890083A1D6 /* KLGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLGridView.h; path = ../CalendarTest/Calendar/KLGridView.h; sourceTree = SOURCE_ROOT; };
-		908E64521199BE890083A1D6 /* KLGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLGridView.m; path = ../CalendarTest/Calendar/KLGridView.m; sourceTree = SOURCE_ROOT; };
-		908E64531199BE890083A1D6 /* KLTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLTile.h; path = ../CalendarTest/Calendar/KLTile.h; sourceTree = SOURCE_ROOT; };
-		908E64541199BE890083A1D6 /* KLTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLTile.m; path = ../CalendarTest/Calendar/KLTile.m; sourceTree = SOURCE_ROOT; };
-		908E64551199BE890083A1D6 /* left-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left-arrow.png"; path = "../CalendarTest/Calendar/left-arrow.png"; sourceTree = SOURCE_ROOT; };
-		908E64561199BE890083A1D6 /* right-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "right-arrow.png"; path = "../CalendarTest/Calendar/right-arrow.png"; sourceTree = SOURCE_ROOT; };
-		908E64571199BE890083A1D6 /* THCalendarInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = THCalendarInfo.h; path = ../CalendarTest/Calendar/THCalendarInfo.h; sourceTree = SOURCE_ROOT; };
-		908E64581199BE890083A1D6 /* THCalendarInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = THCalendarInfo.m; path = ../CalendarTest/Calendar/THCalendarInfo.m; sourceTree = SOURCE_ROOT; };
 		908E64791199C0210083A1D6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9090D73F162074B700FDDDB9 /* libCrashReporter-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCrashReporter-iphoneos.a"; sourceTree = "<group>"; };
+		9090D7411620769700FDDDB9 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
 		9091602F13E1B5540073C20A /* NewActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewActivity.h; sourceTree = "<group>"; };
 		9091603013E1B5540073C20A /* NewActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewActivity.m; sourceTree = "<group>"; };
 		9091603113E1B5540073C20A /* NewActivity.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewActivity.xib; path = Classes/NewActivity.xib; sourceTree = "<group>"; };
@@ -926,6 +903,27 @@
 		9093A59E1365CE1600CD98DC /* ValidatePhoneCarrier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValidatePhoneCarrier.h; sourceTree = "<group>"; };
 		9093A59F1365CE1700CD98DC /* ValidatePhoneCarrier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValidatePhoneCarrier.m; sourceTree = "<group>"; };
 		9093A5A41365D17A00CD98DC /* ValidatePhoneCarrier.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ValidatePhoneCarrier.xib; sourceTree = "<group>"; };
+		9093B8C215E57FBE001F667D /* CheckmarkTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckmarkTile.h; sourceTree = "<group>"; };
+		9093B8C315E57FBE001F667D /* CheckmarkTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckmarkTile.m; sourceTree = "<group>"; };
+		9093B8C415E57FBE001F667D /* KCalendar_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCalendar_Prefix.pch; sourceTree = "<group>"; };
+		9093B8C515E57FBE001F667D /* KLCalendarModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLCalendarModel.h; sourceTree = "<group>"; };
+		9093B8C615E57FBE001F667D /* KLCalendarModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLCalendarModel.m; sourceTree = "<group>"; };
+		9093B8C715E57FBE001F667D /* KLCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLCalendarView.h; sourceTree = "<group>"; };
+		9093B8C815E57FBE001F667D /* KLCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLCalendarView.m; sourceTree = "<group>"; };
+		9093B8C915E57FBE001F667D /* KLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLColors.h; sourceTree = "<group>"; };
+		9093B8CA15E57FBE001F667D /* KLColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLColors.m; sourceTree = "<group>"; };
+		9093B8CB15E57FBE001F667D /* KLDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLDate.h; sourceTree = "<group>"; };
+		9093B8CC15E57FBE001F667D /* KLDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLDate.m; sourceTree = "<group>"; };
+		9093B8CD15E57FBE001F667D /* KLGraphicsUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLGraphicsUtils.h; sourceTree = "<group>"; };
+		9093B8CE15E57FBE001F667D /* KLGraphicsUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLGraphicsUtils.m; sourceTree = "<group>"; };
+		9093B8CF15E57FBE001F667D /* KLGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLGridView.h; sourceTree = "<group>"; };
+		9093B8D015E57FBE001F667D /* KLGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLGridView.m; sourceTree = "<group>"; };
+		9093B8D115E57FBE001F667D /* KLTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLTile.h; sourceTree = "<group>"; };
+		9093B8D215E57FBE001F667D /* KLTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLTile.m; sourceTree = "<group>"; };
+		9093B8D315E57FBE001F667D /* left-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left-arrow.png"; sourceTree = "<group>"; };
+		9093B8D515E57FBE001F667D /* right-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-arrow.png"; sourceTree = "<group>"; };
+		9093B8D615E57FBE001F667D /* THCalendarInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THCalendarInfo.h; sourceTree = "<group>"; };
+		9093B8D715E57FBE001F667D /* THCalendarInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THCalendarInfo.m; sourceTree = "<group>"; };
 		9095BE2212E7C85C001FE84D /* MessageReply.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageReply.xib; sourceTree = "<group>"; };
 		9095C04F12E802F8001FE84D /* NewMemberObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMemberObject.h; sourceTree = "<group>"; };
 		9095C05012E802F8001FE84D /* NewMemberObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMemberObject.m; sourceTree = "<group>"; };
@@ -937,7 +935,6 @@
 		90A3F1F012FDDE2400F6C1DC /* ViewDetailMessageReplies.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewDetailMessageReplies.xib; sourceTree = "<group>"; };
 		90AABC1A15644099007A930D /* tabsPeople.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabsPeople.png; sourceTree = "<group>"; };
 		90AABC1B15644099007A930D /* tabsPeople@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabsPeople@2x.png"; sourceTree = "<group>"; };
-		90AABC1E156440AB007A930D /* libCrashReporter-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCrashReporter-iphoneos.a"; sourceTree = "<group>"; };
 		90AABC2015644100007A930D /* tabsEvents@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabsEvents@2x.png"; sourceTree = "<group>"; };
 		90AABC2215644471007A930D /* tabsEvents.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabsEvents.png; sourceTree = "<group>"; };
 		90AABC24156444BE007A930D /* tabsEday@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabsEday@2x.png"; sourceTree = "<group>"; };
@@ -962,8 +959,6 @@
 		90AB195311188C9D005E1018 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		90AB195411188C9D005E1018 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		90AB195511188C9D005E1018 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
-		90AB8C0F13D9CCBF00515B9F /* homeBottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = homeBottom.png; path = "../rTeam Images/homeBottom.png"; sourceTree = "<group>"; };
-		90AB8C1013D9CCBF00515B9F /* homeTop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = homeTop.png; path = "../rTeam Images/homeTop.png"; sourceTree = "<group>"; };
 		90AB8C3913DDC07400515B9F /* greenbackSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenbackSmall.png; sourceTree = "<group>"; };
 		90AC116912C1B8D100224865 /* FastHelp.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FastHelp.xib; sourceTree = "<group>"; };
 		90B1387F14DF2E1F000FB81E /* ScoreNowAddMembers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreNowAddMembers.h; sourceTree = "<group>"; };
@@ -1062,7 +1057,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90AABC1F156440AB007A930D /* libCrashReporter-iphoneos.a in Frameworks */,
+				9090D740162074B700FDDDB9 /* libCrashReporter-iphoneos.a in Frameworks */,
 				9069C65B14AA2741002934BE /* AVFoundation.framework in Frameworks */,
 				9087534C1474A438000850D4 /* libsqlite3.0.dylib in Frameworks */,
 				9083F891133BB84300972821 /* EventKit.framework in Frameworks */,
@@ -1081,9 +1076,8 @@
 				9073B61712988A8E00827073 /* iAd.framework in Frameworks */,
 				90F5FF0112A195F500AF3D03 /* MessageUI.framework in Frameworks */,
 				908A456212DC0BAB000C346A /* MobileCoreServices.framework in Frameworks */,
-				908753541474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a in Frameworks */,
-				908753551474A7DB000850D4 /* libGoogleAnalytics.a in Frameworks */,
 				9086E32314A232B200B349CB /* CrashReporter.framework in Frameworks */,
+				9090D7421620769800FDDDB9 /* libGoogleAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1095,7 +1089,7 @@
 			children = (
 				907A5E2512AEC29C0002C04E /* Reachability.h */,
 				907A5E2612AEC29C0002C04E /* Reachability.m */,
-				908E64431199BE7B0083A1D6 /* Calendar */,
+				9093B8C115E57FBE001F667D /* Calendar */,
 				902F389C121E237800CA50EF /* Scoring */,
 				907DEAC912C157A300BCEAF0 /* FAST */,
 				9081D82612DEBAB700E134EB /* RecurringEvents */,
@@ -1400,10 +1394,9 @@
 			children = (
 				9069C65A14AA2741002934BE /* AVFoundation.framework */,
 				9087534B1474A438000850D4 /* libsqlite3.0.dylib */,
+				9090D7411620769700FDDDB9 /* libGoogleAnalytics.a */,
+				9090D73F162074B700FDDDB9 /* libCrashReporter-iphoneos.a */,
 				908753511474A7DB000850D4 /* GANTracker.h */,
-				90AABC1E156440AB007A930D /* libCrashReporter-iphoneos.a */,
-				908753521474A7DB000850D4 /* libGoogleAnalytics_NoThumb.a */,
-				908753531474A7DB000850D4 /* libGoogleAnalytics.a */,
 				9083F890133BB84200972821 /* EventKit.framework */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -1689,8 +1682,6 @@
 				908478081468645B002BF668 /* fullStar.png */,
 				90D62C57146B03C90074D220 /* rightWhite.png */,
 				90D62C58146B03CA0074D220 /* leftWhite.png */,
-				90AB8C0F13D9CCBF00515B9F /* homeBottom.png */,
-				90AB8C1013D9CCBF00515B9F /* homeTop.png */,
 				908477EC146243BE002BF668 /* exclam.png */,
 				9083CD4514715FF400315792 /* newEventsHome.png */,
 				9083CD4614715FF400315792 /* newActivityHome.png */,
@@ -1758,49 +1749,33 @@
 			name = RecurringEvent;
 			sourceTree = "<group>";
 		};
-		908E64431199BE7B0083A1D6 /* Calendar */ = {
+		9093B8C115E57FBE001F667D /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
-				908E64591199BE890083A1D6 /* Classes */,
-				908E64441199BE890083A1D6 /* Calendar */,
+				9093B8C215E57FBE001F667D /* CheckmarkTile.h */,
+				9093B8C315E57FBE001F667D /* CheckmarkTile.m */,
+				9093B8C415E57FBE001F667D /* KCalendar_Prefix.pch */,
+				9093B8C515E57FBE001F667D /* KLCalendarModel.h */,
+				9093B8C615E57FBE001F667D /* KLCalendarModel.m */,
+				9093B8C715E57FBE001F667D /* KLCalendarView.h */,
+				9093B8C815E57FBE001F667D /* KLCalendarView.m */,
+				9093B8C915E57FBE001F667D /* KLColors.h */,
+				9093B8CA15E57FBE001F667D /* KLColors.m */,
+				9093B8CB15E57FBE001F667D /* KLDate.h */,
+				9093B8CC15E57FBE001F667D /* KLDate.m */,
+				9093B8CD15E57FBE001F667D /* KLGraphicsUtils.h */,
+				9093B8CE15E57FBE001F667D /* KLGraphicsUtils.m */,
+				9093B8CF15E57FBE001F667D /* KLGridView.h */,
+				9093B8D015E57FBE001F667D /* KLGridView.m */,
+				9093B8D115E57FBE001F667D /* KLTile.h */,
+				9093B8D215E57FBE001F667D /* KLTile.m */,
+				9093B8D315E57FBE001F667D /* left-arrow.png */,
+				9093B8D515E57FBE001F667D /* right-arrow.png */,
+				9093B8D615E57FBE001F667D /* THCalendarInfo.h */,
+				9093B8D715E57FBE001F667D /* THCalendarInfo.m */,
 			);
-			name = Calendar;
+			path = Calendar;
 			sourceTree = "<group>";
-		};
-		908E64441199BE890083A1D6 /* Calendar */ = {
-			isa = PBXGroup;
-			children = (
-				908E64451199BE890083A1D6 /* CheckmarkTile.h */,
-				908E64461199BE890083A1D6 /* CheckmarkTile.m */,
-				908E64471199BE890083A1D6 /* KLCalendarModel.h */,
-				908E64481199BE890083A1D6 /* KLCalendarModel.m */,
-				908E64491199BE890083A1D6 /* KLCalendarView.h */,
-				908E644A1199BE890083A1D6 /* KLCalendarView.m */,
-				908E644B1199BE890083A1D6 /* KLColors.h */,
-				908E644C1199BE890083A1D6 /* KLColors.m */,
-				908E644D1199BE890083A1D6 /* KLDate.h */,
-				908E644E1199BE890083A1D6 /* KLDate.m */,
-				908E644F1199BE890083A1D6 /* KLGraphicsUtils.h */,
-				908E64501199BE890083A1D6 /* KLGraphicsUtils.m */,
-				908E64511199BE890083A1D6 /* KLGridView.h */,
-				908E64521199BE890083A1D6 /* KLGridView.m */,
-				908E64531199BE890083A1D6 /* KLTile.h */,
-				908E64541199BE890083A1D6 /* KLTile.m */,
-				908E64551199BE890083A1D6 /* left-arrow.png */,
-				908E64561199BE890083A1D6 /* right-arrow.png */,
-				908E64571199BE890083A1D6 /* THCalendarInfo.h */,
-				908E64581199BE890083A1D6 /* THCalendarInfo.m */,
-			);
-			name = Calendar;
-			sourceTree = "<group>";
-		};
-		908E64591199BE890083A1D6 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Classes;
-			path = ../CalendarTest/Classes;
-			sourceTree = SOURCE_ROOT;
 		};
 		90AB194811188C9D005E1018 /* JSON */ = {
 			isa = PBXGroup;
@@ -1914,8 +1889,6 @@
 				906CCAAA1193431700E79065 /* SendPoll.xib in Resources */,
 				906CCB0B1193525900E79065 /* SendPollOptions.xib in Resources */,
 				906CCD4A1194E2FC00E79065 /* MessagesTwitter.xib in Resources */,
-				908E64661199BE890083A1D6 /* left-arrow.png in Resources */,
-				908E64671199BE890083A1D6 /* right-arrow.png in Resources */,
 				90704F3611A44C2900C23592 /* GameEdit.xib in Resources */,
 				90704F7211A4732B00C23592 /* GameEditDate.xib in Resources */,
 				9070BFEF11A6D8A60038D7CB /* PracticeEdit.xib in Resources */,
@@ -2009,8 +1982,6 @@
 				90877C5F13CF477A00552AFF /* HomeAttendanceView.xib in Resources */,
 				90877C6B13D08D2600552AFF /* attBack.png in Resources */,
 				90B5021313D730F700DE887D /* SettingsTabs.xib in Resources */,
-				90AB8C1113D9CCBF00515B9F /* homeBottom.png in Resources */,
-				90AB8C1213D9CCBF00515B9F /* homeTop.png in Resources */,
 				90AB8C3A13DDC07400515B9F /* greenbackSmall.png in Resources */,
 				9091603313E1B5540073C20A /* NewActivity.xib in Resources */,
 				90C7408D142ABD9500950B08 /* fullScreen.jpeg in Resources */,
@@ -2144,6 +2115,8 @@
 				907C84C1156FDF3500C74307 /* doneup.png in Resources */,
 				907C84C2156FDF3500C74307 /* doneup@2x.png in Resources */,
 				907C84C3156FDF3500C74307 /* donedown@2x.png in Resources */,
+				9093B8E015E57FBE001F667D /* left-arrow.png in Resources */,
+				9093B8E215E57FBE001F667D /* right-arrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2187,15 +2160,6 @@
 				906CCAA4119342E600E79065 /* SendPoll.m in Sources */,
 				906CCAFA1193512A00E79065 /* SendPollOptions.m in Sources */,
 				908072AA119642D5005294EA /* PlayerAttendance.m in Sources */,
-				908E645E1199BE890083A1D6 /* CheckmarkTile.m in Sources */,
-				908E645F1199BE890083A1D6 /* KLCalendarModel.m in Sources */,
-				908E64601199BE890083A1D6 /* KLCalendarView.m in Sources */,
-				908E64611199BE890083A1D6 /* KLColors.m in Sources */,
-				908E64621199BE890083A1D6 /* KLDate.m in Sources */,
-				908E64631199BE890083A1D6 /* KLGraphicsUtils.m in Sources */,
-				908E64641199BE890083A1D6 /* KLGridView.m in Sources */,
-				908E64651199BE890083A1D6 /* KLTile.m in Sources */,
-				908E64681199BE890083A1D6 /* THCalendarInfo.m in Sources */,
 				90704F2E11A44B2800C23592 /* GameEdit.m in Sources */,
 				90704F6C11A4727E00C23592 /* GameEditDate.m in Sources */,
 				9070BFC811A6D4A40038D7CB /* PracticeEdit.m in Sources */,
@@ -2319,6 +2283,15 @@
 				907B8E67155190E80045ABA8 /* BoxScoreViewViewController.m in Sources */,
 				90843EEC156DCCD800B387AE /* Player1.m in Sources */,
 				902E056C158582CB00A2ADFE /* CoreDataModel.xcdatamodeld in Sources */,
+				9093B8D815E57FBE001F667D /* CheckmarkTile.m in Sources */,
+				9093B8D915E57FBE001F667D /* KLCalendarModel.m in Sources */,
+				9093B8DA15E57FBE001F667D /* KLCalendarView.m in Sources */,
+				9093B8DB15E57FBE001F667D /* KLColors.m in Sources */,
+				9093B8DC15E57FBE001F667D /* KLDate.m in Sources */,
+				9093B8DD15E57FBE001F667D /* KLGraphicsUtils.m in Sources */,
+				9093B8DE15E57FBE001F667D /* KLGridView.m in Sources */,
+				9093B8DF15E57FBE001F667D /* KLTile.m in Sources */,
+				9093B8E315E57FBE001F667D /* THCalendarInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2329,12 +2302,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "~/Desktop/iCoach/Entitlements.plist";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Wroblewski (X5X79Y3ZRE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos3.1.3]" = "iPhone Developer: Joseph Wroblewski (X5X79Y3ZRE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos4.1]" = "iPhone Developer: Joseph Wroblewski (X5X79Y3ZRE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos5.0]" = "iPhone Developer: Joseph Wroblewski (X5X79Y3ZRE)";
+				CODE_SIGN_ENTITLEMENTS = "~/Desktop/rteam/Entitlements.plist";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nick Wroblewski (LTVWA323P3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nick Wroblewski (LTVWA323P3)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2348,17 +2320,15 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "rTeam-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = rTeam;
-				PROVISIONING_PROFILE = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
-				"PROVISIONING_PROFILE[sdk=iphoneos3.1.3]" = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
-				"PROVISIONING_PROFILE[sdk=iphoneos4.1]" = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
-				"PROVISIONING_PROFILE[sdk=iphoneos5.0]" = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
+				PROVISIONING_PROFILE = "3223651B-AD93-47A8-8646-1BF64508231F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3223651B-AD93-47A8-8646-1BF64508231F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2368,8 +2338,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = armv7;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "~/Desktop/iCoach/Entitlements.plist";
+				CODE_SIGN_ENTITLEMENTS = "~/Desktop/rteam/Entitlements.plist";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2381,7 +2352,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "rTeam-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
@@ -2412,9 +2383,9 @@
 					$SDKROOT/usr/include/libxml2,
 					"\"$SDKROOT/usr/include/libxml2\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PROVISIONING_PROFILE = "9D2F692B-415C-474D-B420-E27A9FABE465";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9D2F692B-415C-474D-B420-E27A9FABE465";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PROVISIONING_PROFILE = "FCD02607-B598-48C2-A01D-3F79E3684F77";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FCD02607-B598-48C2-A01D-3F79E3684F77";
 				SDKROOT = iphoneos;
 			};
 			name = AdHoc;
@@ -2426,9 +2397,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Stretch Computing,Incorporated";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Stretch Computing,Incorporated";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Stretch Computing,Incorporated";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos3.1.3]" = "iPhone Distribution: Stretch Computing,Incorporated";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2442,17 +2411,15 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "rTeam-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = rTeam;
-				PROVISIONING_PROFILE = "9D2F692B-415C-474D-B420-E27A9FABE465";
-				"PROVISIONING_PROFILE[sdk=*]" = "9D2F692B-415C-474D-B420-E27A9FABE465";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9D2F692B-415C-474D-B420-E27A9FABE465";
-				"PROVISIONING_PROFILE[sdk=iphoneos3.1.3]" = "9D2F692B-415C-474D-B420-E27A9FABE465";
+				PROVISIONING_PROFILE = "FCD02607-B598-48C2-A01D-3F79E3684F77";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FCD02607-B598-48C2-A01D-3F79E3684F77";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2464,15 +2431,12 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_OBJCPP_ARC_ABI = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Stretch Computing,Incorporated";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Stretch Computing,Incorporated";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PROVISIONING_PROFILE = "0D2F78DD-22DE-4496-86FE-7890C8196472";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D2F78DD-22DE-4496-86FE-7890C8196472";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 			};
 			name = iPhoneDistribution;
@@ -2482,9 +2446,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "~/Desktop/iCoach/Entitlements.plist";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Stretch Computing,Incorporated";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Stretch Computing,Incorporated";
+				CODE_SIGN_ENTITLEMENTS = "~/Desktop/rteam/Entitlements.plist";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2496,15 +2460,13 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "rTeam-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../libYAJLIPhone-0\"",
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = rTeam;
-				PROVISIONING_PROFILE = "E283BA18-7C59-4D16-837C-737B5F6E7A4B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E283BA18-7C59-4D16-837C-737B5F6E7A4B";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2513,15 +2475,12 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Wroblewski (X5X79Y3ZRE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Joseph Wroblewski (X5X79Y3ZRE)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nick Wroblewski (LTVWA323P3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nick Wroblewski (LTVWA323P3)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2532,9 +2491,9 @@
 					$SDKROOT/usr/include/libxml2,
 					"\"$SDKROOT/usr/include/libxml2\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PROVISIONING_PROFILE = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "30E4A938-C8EF-4D83-A7C5-226F706C37E9";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PROVISIONING_PROFILE = "3223651B-AD93-47A8-8646-1BF64508231F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3223651B-AD93-47A8-8646-1BF64508231F";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2542,10 +2501,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv7,
-					armv6,
-				);
+				ARCHS = armv7;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				CODE_SIGN_ENTITLEMENTS = "~/Desktop/iCoach/Entitlements.plist";
@@ -2555,7 +2511,15 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include/yajl,
+					"\"/usr/local/include/yajl\"/**",
+					$SDKROOT/usr/include/libxml2,
+					"\"$SDKROOT/usr/include/libxml2\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PROVISIONING_PROFILE = "CF33796F-90BB-4441-B448-29B21E07608A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CF33796F-90BB-4441-B448-29B21E07608A";
 				SDKROOT = iphoneos;
 			};
 			name = Release;

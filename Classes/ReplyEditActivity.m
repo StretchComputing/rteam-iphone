@@ -379,7 +379,7 @@
         
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         picker.mediaTypes =  
-        [NSArray arrayWithObject:(NSString *)kUTTypeMovie];
+        @[(NSString *)kUTTypeMovie];
         picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModeVideo;
         picker.videoMaximumDuration = 30;
         picker.videoQuality = UIImagePickerControllerQualityTypeLow;
@@ -407,7 +407,7 @@
         self.isSendVideo = true;
         [picker dismissModalViewControllerAnimated:YES];	
         
-        NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        NSURL *videoURL = info[UIImagePickerControllerMediaURL];
         self.videoDataToSend = [NSData dataWithContentsOfURL:videoURL];
         
         MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL: videoURL];
@@ -428,7 +428,7 @@
         self.isSendVideo = false;
         [picker dismissModalViewControllerAnimated:YES];	
         
-        UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        UIImage *tmpImage = info[UIImagePickerControllerOriginalImage];
         
         float xVal;
         float yVal;

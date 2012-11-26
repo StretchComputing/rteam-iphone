@@ -30,12 +30,12 @@
         
         NSString *theName = @"";
         
-        if ([[self.recipientObjects objectAtIndex:i] class] == [Fan class]) {
-            Fan *tmpFan = [self.recipientObjects objectAtIndex:i];
+        if ([(self.recipientObjects)[i] class] == [Fan class]) {
+            Fan *tmpFan = (self.recipientObjects)[i];
             theName = tmpFan.firstName;
             [self.recipients addObject:tmpFan.memberId];
-        }else if ([[self.recipientObjects objectAtIndex:i] class] == [Player class]){
-            Player *tmpPlayer = [self.recipientObjects objectAtIndex:i];
+        }else if ([(self.recipientObjects)[i] class] == [Player class]){
+            Player *tmpPlayer = (self.recipientObjects)[i];
             theName = tmpPlayer.firstName;
             [self.recipients addObject:tmpPlayer.memberId];
         }
@@ -117,11 +117,11 @@
             token = mainDelegate.token;
         } 
         
-        NSDictionary *response = [NSDictionary dictionary];
+        NSDictionary *response = @{};
         
         if (![token isEqualToString:@""]){	
             
-            response = [ServerAPI createMessageThread:token teamId:self.teamId subject:@"(no subject)" body:self.theMessageText type:@"confirm" eventId:@"" eventType:@"" isAlert:@"true" pollChoices:[NSArray array] recipients:self.recipients displayResults:@"" includeFans:@"true" coordinatorsOnly:@""];
+            response = [ServerAPI createMessageThread:token teamId:self.teamId subject:@"(no subject)" body:self.theMessageText type:@"confirm" eventId:@"" eventType:@"" isAlert:@"true" pollChoices:@[] recipients:self.recipients displayResults:@"" includeFans:@"true" coordinatorsOnly:@""];
             
             NSString *status = [response valueForKey:@"status"];
             

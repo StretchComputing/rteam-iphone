@@ -56,7 +56,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
         
         for (int i = 0; i < [self.allEvents count]; i++) {
             
-            CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+            CalendarEventObject *tmp = (self.allEvents)[i];
             
             if ([tmp.eventType isEqualToString:@"game"]){
                 [self.allGames addObject:tmp];
@@ -227,7 +227,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
         NSString *tempDateToday = [dateFormat stringFromDate:todaysDate];
         
         
-        if ([todaysDate isEqualToDate:[todaysDate earlierDate:self.dateSelected]] || [tempDateToday isEqualToString:stringDate]) {
+        //if ([todaysDate isEqualToDate:[todaysDate earlierDate:self.dateSelected]] || [tempDateToday isEqualToString:stringDate]) {
             
             self.dateSelected = formatedDate;
             
@@ -238,7 +238,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             NSString *timeEventToday = @"";
             for (int i = 0; i < [self.allEvents count]; i++){
                 
-                CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+                CalendarEventObject *tmp = (self.allEvents)[i];
                 
                 if ([tmp.eventDate isEqualToDate:formatedDate]){
                     //There is an event today
@@ -281,7 +281,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             
             
             
-        }
+        //}
 
     }
     @catch (NSException *exception) {
@@ -353,7 +353,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
                 for (int i = 0; i < [self.allEvents count]; i++){
                     
-                    CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+                    CalendarEventObject *tmp = (self.allEvents)[i];
                     
                     if ([tmp.eventDate isEqualToDate:self.dateSelected]){
                         //found the event today
@@ -366,7 +366,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 CalendarEventObject *newObject = [[CalendarEventObject alloc] init];
                 newObject.eventDate = tmpDate;
                 newObject.eventTime = tmpTime;
-                [self.allEvents replaceObjectAtIndex:eventIndex withObject:newObject];
+                (self.allEvents)[eventIndex] = newObject;
                 
             }else {
                 
@@ -452,7 +452,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
         
         for (int i = 0; i < [self.allEvents count]; i++){
             
-            CalendarEventObject *tmp = [self.allEvents objectAtIndex:i];
+            CalendarEventObject *tmp = (self.allEvents)[i];
             
             if ([tmp.eventDate isEqualToDate:self.dateSelected]){
                 //found the event today
@@ -519,7 +519,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
 		
 		for (int i = 0; i < [self.allEvents count]; i++){
 			
-			CalendarEventObject *tmpEvent = [self.allEvents objectAtIndex:i];
+			CalendarEventObject *tmpEvent = (self.allEvents)[i];
             
 			NSDate *tmpEventDate = tmpEvent.eventDate;
             
@@ -627,7 +627,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
             NSMutableArray *tmpGameArray = [NSMutableArray array];
-            NSArray *gameArray = [NSArray array];
+            NSArray *gameArray = @[];
             
             //Not using lat/long right now
             NSString *theDescription = @"No description entered...";
@@ -641,7 +641,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
                 NSString *startDateString = @"";
                 
-                CalendarEventObject *tmpGameObject = [self.allGames objectAtIndex:i];
+                CalendarEventObject *tmpGameObject = (self.allGames)[i];
                 
                 NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
                 
@@ -649,8 +649,8 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                     theOpponent = tmpGameObject.infoText;
                 }
                 
-                [tmpGame setObject:theDescription forKey:@"description"];
-                [tmpGame setObject:theOpponent forKey:@"opponent"];
+                tmpGame[@"description"] = theDescription;
+                tmpGame[@"opponent"] = theOpponent;
                 
                 
                 NSDateFormatter *tmpFormatter = [[NSDateFormatter alloc] init];
@@ -663,7 +663,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
                 startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
                 
-                [tmpGame setObject:startDateString forKey:@"startDate"];
+                tmpGame[@"startDate"] = startDateString;
                 
                 NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
                 
@@ -778,7 +778,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 }
                 
                 [self.navigationController dismissModalViewControllerAnimated:YES];
-            }else if (([views count] == 2) && ([[views objectAtIndex:0] class] == [SelectTeamCal class])){
+            }else if (([views count] == 2) && ([views[0] class] == [SelectTeamCal class])){
             
                 //From Gameday
                 [self.navigationController dismissModalViewControllerAnimated:YES];
@@ -786,7 +786,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             
             }else{
                 
-                if ([[views objectAtIndex:[views count] - 2] class] == [CurrentTeamTabs class]) {
+                if ([views[[views count] - 2] class] == [CurrentTeamTabs class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Event List"
@@ -794,12 +794,12 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 2];
+                    CurrentTeamTabs *tmp = views[[views count] - 2];
                     tmp.selectedIndex = 3;
                     
                     [self.navigationController popToViewController:tmp animated:NO];
                     
-                }else if ([[views objectAtIndex:[views count] - 2] class] == [AllEventsCalendar class]) {
+                }else if ([views[[views count] - 2] class] == [AllEventsCalendar class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Calendar"
@@ -807,10 +807,10 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 2];
+                    AllEventsCalendar *tmp = views[[views count] - 2];
                     tmp.createdEvent = true;
                     [self.navigationController popToViewController:tmp animated:NO];
-                }else if ([[views objectAtIndex:[views count] - 3] class] == [AllEventsCalendar class]) {
+                }else if ([views[[views count] - 3] class] == [AllEventsCalendar class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Calendar"
@@ -818,7 +818,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 3];
+                    AllEventsCalendar *tmp = views[[views count] - 3];
                     tmp.createdEvent = true;
                     [self.navigationController popToViewController:tmp animated:NO];
                 }
@@ -851,7 +851,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
             NSMutableArray *tmpGameArray = [NSMutableArray array];
-            NSArray *gameArray = [NSArray array];
+            NSArray *gameArray = @[];
             
             //Not using lat/long right now
             NSString *theDescription = @"No description entered...";
@@ -865,7 +865,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
                 NSString *startDateString = @"";
                 
-                CalendarEventObject *tmpGameObject = [self.allPractices objectAtIndex:i];
+                CalendarEventObject *tmpGameObject = (self.allPractices)[i];
                 
                 if (![tmpGameObject.infoText isEqualToString:@""]) {
                     theLocation = tmpGameObject.infoText;
@@ -873,9 +873,9 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
                 NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
                 
-                [tmpGame setObject:theDescription forKey:@"description"];
-                [tmpGame setObject:theLocation forKey:@"opponent"];
-                [tmpGame setObject:@"practice" forKey:@"eventType"];
+                tmpGame[@"description"] = theDescription;
+                tmpGame[@"opponent"] = theLocation;
+                tmpGame[@"eventType"] = @"practice";
                 
                 
                 
@@ -889,7 +889,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
                 startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
                 
-                [tmpGame setObject:startDateString forKey:@"startDate"];
+                tmpGame[@"startDate"] = startDateString;
                 
                 NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];		
                 [tmpGameArray addObject:tmpGame1];
@@ -999,7 +999,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 }
                 
                 [self.navigationController dismissModalViewControllerAnimated:YES];
-            }else if (([views count] == 2) && ([[views objectAtIndex:0] class] == [SelectTeamCal class])){
+            }else if (([views count] == 2) && ([views[0] class] == [SelectTeamCal class])){
                 
                 
                 [self.navigationController dismissModalViewControllerAnimated:YES];
@@ -1007,7 +1007,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
             }else{
                 
-                if ([[views objectAtIndex:[views count] - 2] class] == [CurrentTeamTabs class]) {
+                if ([views[[views count] - 2] class] == [CurrentTeamTabs class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Event List"
@@ -1015,12 +1015,12 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 2];
+                    CurrentTeamTabs *tmp = views[[views count] - 2];
                     tmp.selectedIndex = 3;
                     
                     [self.navigationController popToViewController:tmp animated:NO];
                     
-                }else if ([[views objectAtIndex:[views count] - 2] class] == [AllEventsCalendar class]) {
+                }else if ([views[[views count] - 2] class] == [AllEventsCalendar class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Calendar"
@@ -1028,10 +1028,10 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 2];
+                    AllEventsCalendar *tmp = views[[views count] - 2];
                     tmp.createdEvent = true;
                     [self.navigationController popToViewController:tmp animated:NO];
-                }else if ([[views objectAtIndex:[views count] - 3] class] == [AllEventsCalendar class]) {
+                }else if ([views[[views count] - 3] class] == [AllEventsCalendar class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Calendar"
@@ -1039,7 +1039,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 3];
+                    AllEventsCalendar *tmp = views[[views count] - 3];
                     tmp.createdEvent = true;
                     [self.navigationController popToViewController:tmp animated:NO];
                 }
@@ -1072,7 +1072,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             
             NSMutableArray *tmpGameArray = [NSMutableArray array];
-            NSArray *gameArray = [NSArray array];
+            NSArray *gameArray = @[];
             
             //Not using lat/long right now
             NSString *theDescription = @"No description entered...";
@@ -1086,14 +1086,14 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
                 NSString *startDateString = @"";
                 
-                CalendarEventObject *tmpGameObject = [self.allGenerics objectAtIndex:i];
+                CalendarEventObject *tmpGameObject = (self.allGenerics)[i];
                 
                 NSMutableDictionary *tmpGame = [[NSMutableDictionary alloc] init];
                 
-                [tmpGame setObject:theDescription forKey:@"description"];
-                [tmpGame setObject:theLocation forKey:@"opponent"];
-                [tmpGame setObject:@"generic" forKey:@"eventType"];
-                [tmpGame setObject:tmpGameObject.infoText forKey:@"eventName"];
+                tmpGame[@"description"] = theDescription;
+                tmpGame[@"opponent"] = theLocation;
+                tmpGame[@"eventType"] = @"generic";
+                tmpGame[@"eventName"] = tmpGameObject.infoText;
                 
                 
                 
@@ -1107,7 +1107,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 
                 startDateString = [NSString stringWithFormat:@"%@ %@", dateString, timeString];
                 
-                [tmpGame setObject:startDateString forKey:@"startDate"];
+                tmpGame[@"startDate"] = startDateString;
                 
                 NSDictionary *tmpGame1 = [NSDictionary dictionaryWithDictionary:tmpGame];
                 
@@ -1222,7 +1222,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                 [self.navigationController dismissModalViewControllerAnimated:YES];
             }else{
                 
-                if ([[views objectAtIndex:[views count] - 2] class] == [CurrentTeamTabs class]) {
+                if ([views[[views count] - 2] class] == [CurrentTeamTabs class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Event List"
@@ -1230,18 +1230,18 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    CurrentTeamTabs *tmp = [views objectAtIndex:[views count] - 2];
+                    CurrentTeamTabs *tmp = views[[views count] - 2];
                     tmp.selectedIndex = 3;
                     
                     [self.navigationController popToViewController:tmp animated:NO];
                     
-                }else if (([views count] == 2) && ([[views objectAtIndex:0] class] == [SelectTeamCal class])){
+                }else if (([views count] == 2) && ([views[0] class] == [SelectTeamCal class])){
                     
                     
                     [self.navigationController dismissModalViewControllerAnimated:YES];
                     
                     
-                }else if ([[views objectAtIndex:[views count] - 2] class] == [AllEventsCalendar class]) {
+                }else if ([views[[views count] - 2] class] == [AllEventsCalendar class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Calendar"
@@ -1249,10 +1249,10 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 2];
+                    AllEventsCalendar *tmp = views[[views count] - 2];
                     tmp.createdEvent = true;
                     [self.navigationController popToViewController:tmp animated:NO];
-                }else if ([[views objectAtIndex:[views count] - 3] class] == [AllEventsCalendar class]) {
+                }else if ([views[[views count] - 3] class] == [AllEventsCalendar class]) {
                     rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
                     if (![[GANTracker sharedTracker] trackEvent:@"action"
                                                          action:@"Create Multiple Games - Calendar"
@@ -1260,7 +1260,7 @@ timePicker, cancelTimeButton, okTimeButton, explainPickerView, explainPickerLabe
                                                           value:-1
                                                       withError:nil]) {
                     }
-                    AllEventsCalendar *tmp = [views objectAtIndex:[views count] - 3];
+                    AllEventsCalendar *tmp = views[[views count] - 3];
                     tmp.createdEvent = true;
                     [self.navigationController popToViewController:tmp animated:NO];
                 }

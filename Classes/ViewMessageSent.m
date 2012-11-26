@@ -84,7 +84,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 
 				self.currentMessageNumber--;
 				
-				MessageThreadOutbox *message = [self.messageArray objectAtIndex:self.currentMessageNumber];
+				MessageThreadOutbox *message = (self.messageArray)[self.currentMessageNumber];
 				
 				self.subject = message.subject;
 				self.body = message.body;
@@ -126,7 +126,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 
 				self.currentMessageNumber++;
 				
-				MessageThreadOutbox *message = [self.messageArray objectAtIndex:self.currentMessageNumber];
+				MessageThreadOutbox *message = (self.messageArray)[self.currentMessageNumber];
 				
 				self.subject = message.subject;
 				self.body = message.body;
@@ -201,7 +201,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
         }
         
         
-        NSDictionary *response = [NSDictionary dictionary];
+        NSDictionary *response = @{};
         if (![token isEqualToString:@""]){
             
             if (self.teamId == nil) {
@@ -214,7 +214,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
             
             if ([status isEqualToString:@"100"]){
                 
-                self.messageInfo = [NSDictionary dictionary];
+                self.messageInfo = @{};
                 
                 self.messageInfo = [response valueForKey:@"messageThreadInfo"];
                 
@@ -267,7 +267,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 	self.displayDate.hidden = NO;
 	self.teamNameLabel.hidden = NO;
 	
-	NSArray *recip = [NSArray array];
+	NSArray *recip = @[];
 
 	recip = [self.messageInfo valueForKey:@"members"];
 	
@@ -297,7 +297,7 @@ teamName, teamNameLabel, origTeamId, messageInfo, loadingActivity, loadingLabel,
 	NSString *recipNames = @"";
 	
 	for (int i = 0; i < [recip count]; i++) {
-		NSDictionary *tmp = [recip objectAtIndex:i];
+		NSDictionary *tmp = recip[i];
 		
 		NSString *name = [tmp valueForKey:@"memberName"];
 		

@@ -164,7 +164,7 @@
         
         nameLabel.textAlignment = UITextAlignmentLeft;
         
-        Activity *result = [arrayToUse objectAtIndex:row];
+        Activity *result = arrayToUse[row];
                     
         //Profile Image
         profileImageView.frame = CGRectMake(5, 5, 40, 40);
@@ -370,7 +370,7 @@
                     
                 }else{
                     
-                    Activity *theReply = [resultReplies objectAtIndex:i];
+                    Activity *theReply = resultReplies[i];
                     
                     NSString *currentReplyText = [NSString stringWithFormat:@"%@", theReply.activityText];
                                         
@@ -665,7 +665,7 @@
     
     if ([arrayToUse count] > 0){
         
-        Activity *result = [arrayToUse objectAtIndex:row];
+        Activity *result = arrayToUse[row];
         
         NSString *lengthMessage = result.activityText;
         
@@ -708,7 +708,7 @@
             for (int i = 0; i < totalLoopCount; i++) {
                 int replyImgAdjust = 0;
                 
-                Activity *theReply = [resultReplies objectAtIndex:i];
+                Activity *theReply = resultReplies[i];
                 
                 NSString *replyString = theReply.activityText;
                 int subHeight = [TableDisplayUtil findHeightForString13:replyString withWidth:260];
@@ -871,10 +871,10 @@
         bool isMessage;
         bool isInbox;
         
-        if ([[arrayToUse objectAtIndex:row] class] == [MessageThreadInbox class]) {
+        if ([arrayToUse[row] class] == [MessageThreadInbox class]) {
             //inbox
         
-            MessageThreadInbox *tmpInbox = [arrayToUse objectAtIndex:row];
+            MessageThreadInbox *tmpInbox = arrayToUse[row];
             senderName = tmpInbox.senderName;
             sentDate = tmpInbox.createdDate;
             sentTeam = tmpInbox.teamName;
@@ -888,7 +888,7 @@
         }else{
             //MessageThreadOutbox
             
-            MessageThreadOutbox *tmpOutbox = [arrayToUse objectAtIndex:row];
+            MessageThreadOutbox *tmpOutbox = arrayToUse[row];
             
             sentDate = tmpOutbox.createdDate;
             sentTeam = tmpOutbox.teamName;
@@ -1031,10 +1031,10 @@
         bool isMessage;
         bool isInbox;
         
-        if ([[arrayToUse objectAtIndex:row] class] == [MessageThreadInbox class]) {
+        if ([arrayToUse[row] class] == [MessageThreadInbox class]) {
             //inbox
             
-            MessageThreadInbox *tmpInbox = [arrayToUse objectAtIndex:row];
+            MessageThreadInbox *tmpInbox = arrayToUse[row];
        
             sentMessage = tmpInbox.body;
             isInbox = true;
@@ -1046,7 +1046,7 @@
         }else{
             //MessageThreadOutbox
             
-            MessageThreadOutbox *tmpOutbox = [arrayToUse objectAtIndex:row];
+            MessageThreadOutbox *tmpOutbox = arrayToUse[row];
         
             sentMessage = tmpOutbox.body;
             isInbox = false;

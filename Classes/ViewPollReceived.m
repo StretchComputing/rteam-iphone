@@ -95,7 +95,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 				self.currentPollNumber--;
 				
-				MessageThreadInbox *newMessage = [self.pollArray objectAtIndex:self.currentPollNumber];
+				MessageThreadInbox *newMessage = (self.pollArray)[self.currentPollNumber];
 				
 				self.wasViewed = newMessage.wasViewed;
 				self.threadId = newMessage.threadId;
@@ -135,7 +135,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 				self.currentPollNumber++;
 				
-				MessageThreadInbox *newMessage = [self.pollArray objectAtIndex:self.currentPollNumber];
+				MessageThreadInbox *newMessage = (self.pollArray)[self.currentPollNumber];
 				
 				self.wasViewed = newMessage.wasViewed;
 				self.threadId = newMessage.threadId;
@@ -178,7 +178,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 -(void)initPollInfo{
 	
-	self.individualReplies = [NSArray array];
+	self.individualReplies = @[];
 	[self.ownReply setHidden:YES];
 	self.displayResults = true;
 	self.finalizedMessage.delegate = self;
@@ -217,10 +217,10 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	
 	self.displayFrom.text = [@"Poll From: " stringByAppendingString:self.from];
 
-	[self.buttonOption1 setTitle:[self.pollChoices objectAtIndex:0] forState:UIControlStateNormal];
+	[self.buttonOption1 setTitle:(self.pollChoices)[0] forState:UIControlStateNormal];
 	self.buttonOption1.titleLabel.textAlignment = UITextAlignmentCenter;
 	self.buttonOption1.hidden = NO;
-	[self.buttonOption2 setTitle:[self.pollChoices objectAtIndex:1] forState:UIControlStateNormal];
+	[self.buttonOption2 setTitle:(self.pollChoices)[1] forState:UIControlStateNormal];
 	self.buttonOption2.titleLabel.textAlignment = UITextAlignmentCenter;
 	self.buttonOption2.hidden = NO;
 	
@@ -228,7 +228,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	self.howToRespondMessage.frame = CGRectMake(13, 307, 300, 51);
 
 	if (numChoices > 2) {
-		[self.buttonOption3 setTitle:[self.pollChoices objectAtIndex:2] forState:UIControlStateNormal];
+		[self.buttonOption3 setTitle:(self.pollChoices)[2] forState:UIControlStateNormal];
 		self.buttonOption3.titleLabel.textAlignment = UITextAlignmentCenter;
 		self.buttonOption3.hidden = NO;
 	}else {
@@ -236,7 +236,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	}
 	
 	if (numChoices > 3) {
-		[self.buttonOption4 setTitle:[self.pollChoices objectAtIndex:3] forState:UIControlStateNormal];
+		[self.buttonOption4 setTitle:(self.pollChoices)[3] forState:UIControlStateNormal];
 		self.buttonOption4.titleLabel.textAlignment = UITextAlignmentCenter;
 		self.buttonOption4.hidden = NO;
 		self.howToRespondMessage.frame = CGRectMake(13, 332, 300, 51);
@@ -246,7 +246,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	}
 	
 	if (numChoices > 4) {
-		[self.buttonOption5 setTitle:[self.pollChoices objectAtIndex:4] forState:UIControlStateNormal];
+		[self.buttonOption5 setTitle:(self.pollChoices)[4] forState:UIControlStateNormal];
 		self.buttonOption5.titleLabel.textAlignment = UITextAlignmentCenter;
 		self.buttonOption5.hidden = NO;
 		self.howToRespondMessage.frame = CGRectMake(13, 375, 300, 51);
@@ -307,7 +307,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
             
             if ([status1 isEqualToString:@"100"]){
                 
-                self.messageThreadInfo = [NSDictionary dictionary];
+                self.messageThreadInfo = @{};
                 
                 self.messageThreadInfo = [response valueForKey:@"messageThreadInfo"];
                 
@@ -396,19 +396,19 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	for (int i = 0; i < [pollOptions count]; i++) {
 		
 		if (i == 0) {
-			self.myPollResultsView.o1 = [[pollOptions objectAtIndex:i] stringByAppendingString:@": "];
+			self.myPollResultsView.o1 = [pollOptions[i] stringByAppendingString:@": "];
 		}
 		if (i == 1) {
-			self.myPollResultsView.o2 = [[pollOptions objectAtIndex:i] stringByAppendingString:@": "];
+			self.myPollResultsView.o2 = [pollOptions[i] stringByAppendingString:@": "];
 		}
 		if (i == 2) {
-			self.myPollResultsView.o3 = [[pollOptions objectAtIndex:i] stringByAppendingString:@": "];
+			self.myPollResultsView.o3 = [pollOptions[i] stringByAppendingString:@": "];
 		}
 		if (i == 3) {
-			self.myPollResultsView.o4 = [[pollOptions objectAtIndex:i] stringByAppendingString:@": "];
+			self.myPollResultsView.o4 = [pollOptions[i] stringByAppendingString:@": "];
 		}
 		if (i == 4) {
-			self.myPollResultsView.o5 = [[pollOptions objectAtIndex:i] stringByAppendingString:@": "];
+			self.myPollResultsView.o5 = [pollOptions[i] stringByAppendingString:@": "];
 		}
 	}
 	
@@ -418,7 +418,7 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	self.individualReplies = recip;
 	NSMutableArray *pollCounts = [NSMutableArray arrayWithObjects:@"0", @"0", @"0", @"0", @"0", nil];
 	for (int i = 0; i < [recip count]; i++) {
-		NSDictionary *memberReplyInfo = [recip objectAtIndex:i];
+		NSDictionary *memberReplyInfo = recip[i];
 		
 		NSString *thisUser = [[memberReplyInfo valueForKey:@"belongsToUser"] stringValue];
 		
@@ -461,14 +461,14 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 			
 			
 			for (int j = 0; j < [pollOptions count]; j++) {
-				NSString *tmpOption = [pollOptions objectAtIndex:j];
+				NSString *tmpOption = pollOptions[j];
 				if ([tmpOption isEqualToString:reply]) {
 					
-					NSString *tmpCount = [pollCounts objectAtIndex:j];
+					NSString *tmpCount = pollCounts[j];
 					int x = [tmpCount intValue];
 					x++;
 					NSString *newValue = [NSString stringWithFormat:@"%d", x];
-					[pollCounts replaceObjectAtIndex:j withObject:newValue];
+					pollCounts[j] = newValue;
 					
 				}
 			}
@@ -482,11 +482,11 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 	self.myPollResultsView.no4 = @"";
 	self.myPollResultsView.no5 = @"";
 	
-	self.myPollResultsView.no1 = [pollCounts objectAtIndex:0];
-	self.myPollResultsView.no2 = [pollCounts objectAtIndex:1];
-	self.myPollResultsView.no3 = [pollCounts objectAtIndex:2];
-	self.myPollResultsView.no4 = [pollCounts objectAtIndex:3];
-	self.myPollResultsView.no5 = [pollCounts objectAtIndex:4];
+	self.myPollResultsView.no1 = pollCounts[0];
+	self.myPollResultsView.no2 = pollCounts[1];
+	self.myPollResultsView.no3 = pollCounts[2];
+	self.myPollResultsView.no4 = pollCounts[3];
+	self.myPollResultsView.no5 = pollCounts[4];
 	
 	
 	self.myPollResultsView.view.hidden = NO;
@@ -598,23 +598,23 @@ loadingActivity, loadingLabel, messageThreadInfo, deleteButton, errorLabel, erro
 
 -(void)replyOption1{
 	
-	[self finalReply:[self.pollChoices objectAtIndex:0]];
+	[self finalReply:(self.pollChoices)[0]];
 }
 
 -(void)replyOption2{
-	[self finalReply:[self.pollChoices objectAtIndex:1]];
+	[self finalReply:(self.pollChoices)[1]];
 }
 
 -(void)replyOption3{
-	[self finalReply:[self.pollChoices objectAtIndex:2]];
+	[self finalReply:(self.pollChoices)[2]];
 }
 
 -(void)replyOption4{
-	[self finalReply:[self.pollChoices objectAtIndex:3]];
+	[self finalReply:(self.pollChoices)[3]];
 }
 
 -(void)replyOption5{
-	[self finalReply:[self.pollChoices objectAtIndex:4]];
+	[self finalReply:(self.pollChoices)[4]];
 }
 
 -(void)finalReply:(NSString *)reply{

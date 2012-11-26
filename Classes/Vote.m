@@ -86,7 +86,7 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
                     
                     for (int i = 0; i < [memberTallies count]; i++) {
                         
-                        NSDictionary *tmpDictionary = [memberTallies objectAtIndex:i];
+                        NSDictionary *tmpDictionary = memberTallies[i];
                         VoteMemberObject *tmpMember = [[VoteMemberObject alloc] init];
                         
                         tmpMember.memberId = [tmpDictionary valueForKey:@"memberId"];
@@ -246,7 +246,7 @@ gameId, votingActivity, isOpen, updateSuccess, gameInfoSuccess, updateStatus;
 		
 
 		
-		VoteMemberObject *tmp = [self.memberArray objectAtIndex:row];
+		VoteMemberObject *tmp = (self.memberArray)[row];
 		
 		dateLabel.textColor = [UIColor blackColor];
 		dateLabel.textAlignment = UITextAlignmentLeft;
@@ -291,7 +291,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         NSUInteger row = [indexPath row];
         
         if (self.isOpen) {
-            VoteMemberObject *tmpMember = [self.memberArray objectAtIndex:row];
+            VoteMemberObject *tmpMember = (self.memberArray)[row];
             
             rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
             if (![[GANTracker sharedTracker] trackEvent:@"action"
@@ -479,7 +479,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     @autoreleasepool {
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        NSDictionary *response = [NSDictionary dictionary];
+        NSDictionary *response = @{};
         if (![mainDelegate.token isEqualToString:@""]){	
             response = [ServerAPI updateGame:mainDelegate.token :self.teamId :self.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false" :self.updateStatus :@""];
             

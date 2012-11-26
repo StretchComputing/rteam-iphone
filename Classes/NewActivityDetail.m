@@ -89,10 +89,10 @@
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
     if (self.isCurrentUser) {
-        self.myToolbar.items = [NSArray arrayWithObjects:self.replyButton, flexibleSpace, self.editButton, flexibleSpace, self.deleteButton, nil];
+        self.myToolbar.items = @[self.replyButton, flexibleSpace, self.editButton, flexibleSpace, self.deleteButton];
 
     }else{
-        self.myToolbar.items = [NSArray arrayWithObjects:self.replyButton, flexibleSpace, nil];
+        self.myToolbar.items = @[self.replyButton, flexibleSpace];
     }
     
     [self loadScrollView];
@@ -229,7 +229,7 @@
         ImageButton *insideImageView = [ImageButton buttonWithType:UIButtonTypeCustom];
         
         
-        NSData *profileData = [postImageArray objectAtIndex:0];
+        NSData *profileData = postImageArray[0];
         insideImageView.hidden = NO;
         insideImageView.messageId = self.messageId;
         
@@ -307,7 +307,7 @@
                 
         for (int i = 0; i < [replyArray count]; i++) {
             
-            Activity *theReply = [replyArray objectAtIndex:i];
+            Activity *theReply = replyArray[i];
             
             
             NSString *currentReplyText = [NSString stringWithFormat:@"%@", theReply.activityText];
@@ -618,7 +618,7 @@
     NSArray *replyArray = [mainDelegate.replyDictionary valueForKey:self.messageId];
     
     for (int i = 0; i < [replyArray count]; i++) {
-        Activity *tmp = [replyArray objectAtIndex:i];
+        Activity *tmp = replyArray[i];
         
         if ([tmp.activityId isEqualToString:msgId]) {
             newDisplay.teamId = tmp.teamId;
@@ -646,7 +646,7 @@
     NSArray *replyArray = [mainDelegate.replyDictionary valueForKey:self.messageId];
     
     for (int i = 0; i < [replyArray count]; i++) {
-        Activity *tmp = [replyArray objectAtIndex:i];
+        Activity *tmp = replyArray[i];
         
         if ([tmp.activityId isEqualToString:msgId]) {
             newDisplay.teamId = tmp.teamId;
@@ -870,7 +870,7 @@
     tmp.displayClass = self;
     
     if ([self.postImageArray count] > 0) {        
-        tmp.previewImageData = [NSData dataWithData:[self.postImageArray objectAtIndex:0]];
+        tmp.previewImageData = [NSData dataWithData:(self.postImageArray)[0]];
         
         if (self.isVideo) {
             tmp.isSendVideo = true;
@@ -984,7 +984,7 @@
             
             if ([theReplies count] > 0) {
                 for (int i = 0; i < [theReplies count]; i++) {
-                    Activity *tmp = [theReplies objectAtIndex:i];
+                    Activity *tmp = theReplies[i];
                     
                     [mainDelegate.replyDictionary setValue:nil forKey:tmp.activityId];
                     [mainDelegate.messageImageDictionary setValue:nil forKey:tmp.activityId];
@@ -1053,11 +1053,11 @@
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        NSDictionary *response = [ServerAPI getActivityDetails:mainDelegate.token activityIds:[NSArray arrayWithObject:self.messageId]];
+        NSDictionary *response = [ServerAPI getActivityDetails:mainDelegate.token activityIds:@[self.messageId]];
         
         NSString *status = [response valueForKey:@"status"];
                 
-        NSArray *details = [NSArray array];
+        NSArray *details = @[];
         if ([status isEqualToString:@"100"]){
             
             details = [response valueForKey:@"activities"];
@@ -1095,7 +1095,7 @@
     
     if ([details count] > 0) {
         
-        NSDictionary *tmpDictionary = [details objectAtIndex:0];
+        NSDictionary *tmpDictionary = details[0];
         
         NSString *activityId = [tmpDictionary valueForKey:@"activityId"];
         NSString *thumbnail = [tmpDictionary valueForKey:@"thumbNail"];
@@ -1112,7 +1112,7 @@
                         
             for (int k = 0; k < [newReplies count]; k++) {
                 
-                NSDictionary *tmpDict = [newReplies objectAtIndex:k];
+                NSDictionary *tmpDict = newReplies[k];
                 
                 Activity *tmpReply = [[Activity alloc] init];
                 
@@ -1134,7 +1134,7 @@
                 tmpReply.isCurrentUser = [[tmpDict valueForKey:@"isCurrentUser"] boolValue];
                 
                 tmpReply.vote = [tmpDict valueForKey:@"vote"];
-                tmpReply.replies = [NSArray array];
+                tmpReply.replies = @[];
                 
                 if ([tmpDict valueForKey:@"thumbNail"] != nil) {
                     tmpReply.thumbnail = [tmpDict valueForKey:@"thumbNail"];
@@ -1147,7 +1147,7 @@
             }
             
             NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
-            [mutableReplyArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+            [mutableReplyArray sortUsingDescriptors:@[dateSort]];
             
             [mainDelegate.replyDictionary setValue:mutableReplyArray forKey:activityId];
             
@@ -1173,7 +1173,7 @@
                 
         for (int i = 0; i < [repliesArray count]; i++) {
             
-            NSDictionary *tmpDict = [repliesArray objectAtIndex:i];            
+            NSDictionary *tmpDict = repliesArray[i];            
             NSString *activityId = [tmpDict valueForKey:@"activityId"];
             
             if ((activityId != nil) && ![activityId isEqualToString:@""]) {
@@ -1185,7 +1185,7 @@
         
         NSString *status = [response valueForKey:@"status"];
                 
-        NSArray *details = [NSArray array];
+        NSArray *details = @[];
         if ([status isEqualToString:@"100"]){
             
             details = [response valueForKey:@"activities"];
@@ -1223,7 +1223,7 @@
         
         for (int i = 0; i < [details count]; i++) {
             
-            NSDictionary *tmpDictionary = [details objectAtIndex:i];
+            NSDictionary *tmpDictionary = details[i];
             
             NSString *activityId = [tmpDictionary valueForKey:@"activityId"];
             NSString *thumbnail = [tmpDictionary valueForKey:@"thumbNail"];

@@ -129,7 +129,7 @@ fromHome, myAd, alertOne, alertTwo, isDelete, deleteActivity;
 	if (self.haveTeamList) {
 		for (int i = 0; i < [self.homeTeamList count]; i++) {
 			
-			Team *tmpTeam = [self.homeTeamList objectAtIndex:i];
+			Team *tmpTeam = (self.homeTeamList)[i];
 			
 			if ([tmpTeam.userRole isEqualToString:@"fan"]) {
 				[self.fanTeams addObject:tmpTeam];
@@ -238,7 +238,7 @@ fromHome, myAd, alertOne, alertTwo, isDelete, deleteActivity;
                 
                 for (int i = 0; i < [allteams count]; i++) {
                     
-                    Team *tmpTeam = [allteams objectAtIndex:i];
+                    Team *tmpTeam = allteams[i];
                     
                     if ([tmpTeam.userRole isEqualToString:@"fan"]) {
                         [self.fanTeams addObject:tmpTeam];
@@ -353,7 +353,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 					
 					NSString *numberToCall = @"";
 					
-					NSString *tmpPhone = [self.phoneOnlyArray objectAtIndex:i];
+					NSString *tmpPhone = (self.phoneOnlyArray)[i];
 					
 					if ([tmpPhone length] == 16) {
 						call = true;
@@ -416,7 +416,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 						}
 					}else {
 						
-						NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+						NSString *url = [@"sms://" stringByAppendingString:numbersToCall[0]];
 						[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 					}
 					
@@ -510,7 +510,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 			cell.editingAccessoryType = UITableViewCellAccessoryNone;
 		}else {
 			cell.editingAccessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-			Team *team = [self.memberTeams objectAtIndex:row];
+			Team *team = (self.memberTeams)[row];
 			cell.textLabel.textAlignment = UITextAlignmentLeft;
 			cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
 			cell.textLabel.text = team.name;
@@ -562,7 +562,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 			cell.editingAccessoryType = UITableViewCellAccessoryNone;
 		}else {
 			cell.editingAccessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-			Team *team = [self.fanTeams objectAtIndex:row];
+			Team *team = (self.fanTeams)[row];
 			cell.textLabel.textAlignment = UITextAlignmentLeft;
 			cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
 			cell.textLabel.text = team.name;
@@ -641,7 +641,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([self.memberTeams count] > 0) {
                 
                 
-                Team *coachTeam = [self.memberTeams objectAtIndex:row];
+                Team *coachTeam = (self.memberTeams)[row];
                 
                 /*
                  TeamNavigation *tmp = [[TeamNavigation alloc] init];
@@ -665,7 +665,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 tmp.title = coachTeam.name;
                 tmp.sport = coachTeam.sport;
                 
-                TeamHome *home = [viewControllers objectAtIndex:0];
+                TeamHome *home = viewControllers[0];
                 home.teamId = coachTeam.teamId;
                 
                 home.userRole = coachTeam.userRole;
@@ -678,12 +678,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 //activity.teamId = coachTeam.teamId;
                 //activity.userRole = coachTeam.userRole;
                 
-                Players *people = [viewControllers objectAtIndex:1];
+                Players *people = viewControllers[1];
                 people.teamId = coachTeam.teamId;
                 people.userRole = coachTeam.userRole;
                 people.teamName = coachTeam.name;
                 
-                EventList *events = [viewControllers objectAtIndex:2];
+                EventList *events = viewControllers[2];
                 events.teamId = coachTeam.teamId;
                 events.userRole = coachTeam.userRole;
                 events.sport = coachTeam.sport;
@@ -707,7 +707,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             if ([self.fanTeams count] > 0) {
                 
                 
-                Team *coachTeam = [self.fanTeams objectAtIndex:row];
+                Team *coachTeam = (self.fanTeams)[row];
                 
                 /*
                  TeamNavigation *tmp = [[TeamNavigation alloc] init];
@@ -730,7 +730,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 tmp.title = coachTeam.name;
                 tmp.sport = coachTeam.sport;
                 
-                TeamHome *home = [viewControllers objectAtIndex:0];
+                TeamHome *home = viewControllers[0];
                 home.teamId = coachTeam.teamId;
                 home.userRole = coachTeam.userRole;
                 home.teamSport = coachTeam.sport;
@@ -741,12 +741,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 ///activity.teamId = coachTeam.teamId;
                 //activity.userRole = coachTeam.userRole;
                 
-                Players *people = [viewControllers objectAtIndex:1];
+                Players *people = viewControllers[1];
                 people.teamId = coachTeam.teamId;
                 people.userRole = coachTeam.userRole;
                 people.teamName = coachTeam.name;
                 
-                EventList *events = [viewControllers objectAtIndex:2];
+                EventList *events = viewControllers[2];
                 events.teamId = coachTeam.teamId;
                 events.userRole = coachTeam.userRole;
                 events.sport = coachTeam.sport;
@@ -787,7 +787,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSUInteger section = [indexPath section];
 	
 	if (section == 0) {
-		Team *tmpTeam = [self.memberTeams objectAtIndex:row];
+		Team *tmpTeam = (self.memberTeams)[row];
 		
 		TeamEdit *tmp = [[TeamEdit alloc] init];
 		tmp.teamId = tmpTeam.teamId;
@@ -965,10 +965,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         NSString *deleteTeamId = @"";
         
         if (self.deleteMember) {
-            Team *tmp = [self.memberTeams objectAtIndex:self.deleteRow];
+            Team *tmp = (self.memberTeams)[self.deleteRow];
             deleteTeamId = tmp.teamId;
         }else if (self.deleteFan) {
-            Team *tmp = [self.fanTeams objectAtIndex:self.deleteRow];;
+            Team *tmp = (self.fanTeams)[self.deleteRow];;
             deleteTeamId = tmp.teamId;
         }
         
@@ -1015,7 +1015,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 if (self.deleteMember) {
                     for (int i = 0; i < [self.memberTeams count]; i++) {
-                        Team *tmp = [self.memberTeams objectAtIndex:i];
+                        Team *tmp = (self.memberTeams)[i];
                         
                         if ([tmp.teamId isEqualToString:deleteTeamId]) {
                             [self.memberTeams removeObjectAtIndex:i];
@@ -1026,7 +1026,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 if (self.deleteFan) {
                     for (int i = 0; i < [self.fanTeams count]; i++) {
-                        Team *tmp = [self.fanTeams objectAtIndex:i];
+                        Team *tmp = (self.fanTeams)[i];
                         
                         if ([tmp.teamId isEqualToString:deleteTeamId]) {
                             [self.fanTeams removeObjectAtIndex:i];

@@ -49,9 +49,9 @@ static NSString *versionNumber = @"3.1";
         NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
         NSDictionary *loginDict = [[NSDictionary alloc] init];
         
-        [tempDictionary setObject:summary forKey:@"summary"];
-        [tempDictionary setObject:userName forKey:@"userName"];
-        [tempDictionary setObject:versionNumber forKey:@"version"];
+        tempDictionary[@"summary"] = summary;
+        tempDictionary[@"userName"] = userName;
+        tempDictionary[@"version"] = versionNumber;
 
         
         NSDate *today = [NSDate date];
@@ -60,14 +60,14 @@ static NSString *versionNumber = @"3.1";
         [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         NSString *dateString = [dateFormat stringFromDate:today];
         
-        [tempDictionary setObject:dateString forKey:@"date"];
+        tempDictionary[@"date"] = dateString;
 
         
         
         if(stackData) {
             // stackData is hex and needs to be base64 encoded before packaged inside JSON
             NSString *encodedStackData = [ServerAPI encodeBase64data:stackData];
-            [tempDictionary setObject:encodedStackData forKey:@"stackData"];
+            tempDictionary[@"stackData"] = encodedStackData;
         }
             
         //Adding the last 20 actions
@@ -79,20 +79,20 @@ static NSString *versionNumber = @"3.1";
         for (int i = 0; i < [appActions count]; i++) {
             NSMutableDictionary *actDictionary = [NSMutableDictionary dictionary];
             
-            [actDictionary setObject:[appActions objectAtIndex:i] forKey:@"description"];
+            actDictionary[@"description"] = appActions[i];
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
             [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-            NSString *dateString = [dateFormat stringFromDate:[appTimestamps objectAtIndex:i]];
+            NSString *dateString = [dateFormat stringFromDate:appTimestamps[i]];
             
-            [actDictionary setObject:dateString forKey:@"timestamp"];
+            actDictionary[@"timestamp"] = dateString;
             
             [finalArray addObject:actDictionary];
             
         }
         
-        [tempDictionary setObject:finalArray forKey:@"appActions"];
+        tempDictionary[@"appActions"] = finalArray;
         
         loginDict = tempDictionary;
         NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
@@ -171,9 +171,9 @@ static NSString *versionNumber = @"3.1";
         
         NSString *encodedRecordedData = [ServerAPI encodeBase64data:recordedData];
         
-        [tempDictionary setObject:encodedRecordedData forKey:@"voice"];
-        [tempDictionary setObject:recordedUserName forKey:@"userName"];
-        [tempDictionary setObject:versionNumber forKey:@"version"];
+        tempDictionary[@"voice"] = encodedRecordedData;
+        tempDictionary[@"userName"] = recordedUserName;
+        tempDictionary[@"version"] = versionNumber;
 
         //[tempDictionary setObject:instanceUrl forKey:@"instanceUrl"];
         
@@ -183,7 +183,7 @@ static NSString *versionNumber = @"3.1";
         [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         NSString *dateString = [dateFormat stringFromDate:today];
         
-        [tempDictionary setObject:dateString forKey:@"date"];
+        tempDictionary[@"date"] = dateString;
 
         loginDict = tempDictionary;
         NSString *requestString = [NSString stringWithFormat:@"%@", [loginDict JSONFragment], nil];
@@ -240,24 +240,24 @@ static NSString *versionNumber = @"3.1";
         NSDictionary *loginDict = [[NSDictionary alloc] init];
         
         //Fill parameter dictionary from input method parameters
-        [tempDictionary setObject:logName  forKey:@"logName"];
-        [tempDictionary setObject:logLevel forKey:@"logLevel"];
-        [tempDictionary setObject:logMessage forKey:@"message"];
+        tempDictionary[@"logName"] = logName;
+        tempDictionary[@"logLevel"] = logLevel;
+        tempDictionary[@"message"] = logMessage;
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         NSString *username = [NSString stringWithFormat:@"%@ %@, %@, %@", mainDelegate.firstName, mainDelegate.lastName, mainDelegate.emailAddress, mainDelegate.phoneNumber];
 
-        [tempDictionary setObject:username forKey:@"userName"];
-        [tempDictionary setObject:mainDelegate.token forKey:@"userId"];
+        tempDictionary[@"userName"] = username;
+        tempDictionary[@"userId"] = mainDelegate.token;
 
         //HardCoded at top of page
-        [tempDictionary setObject:versionNumber forKey:@"version"];
+        tempDictionary[@"version"] = versionNumber;
 
         //Get the device and platform information, and add to a summary string
         float version = [[[UIDevice currentDevice] systemVersion] floatValue]; 
         NSString *platform = [[UIDevice currentDevice] platformString];
         NSString *summaryString = [NSString stringWithFormat:@"iOS Version: %f, Device: %@, App Version: %@", version, platform, versionNumber];
-        [tempDictionary setObject:summaryString forKey:@"summary"];
+        tempDictionary[@"summary"] = summaryString;
         
         //Send in the current date
         NSDate *today = [NSDate date];
@@ -266,7 +266,7 @@ static NSString *versionNumber = @"3.1";
         [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         NSString *dateString = [dateFormat stringFromDate:today];
         
-        [tempDictionary setObject:dateString forKey:@"date"];
+        tempDictionary[@"date"] = dateString;
         
         //If its an exception, send in the stackBackTrace in an array
         if (exception != nil) {
@@ -280,7 +280,7 @@ static NSString *versionNumber = @"3.1";
                 }
             }
             
-            [tempDictionary setObject:stackTraceArray  forKey:@"stackBackTrace"];
+            tempDictionary[@"stackBackTrace"] = stackTraceArray;
         }
         
         
@@ -294,22 +294,22 @@ static NSString *versionNumber = @"3.1";
         for (int i = 0; i < [appActions count]; i++) {
             NSMutableDictionary *actDictionary = [NSMutableDictionary dictionary];
             
-            [actDictionary setObject:[appActions objectAtIndex:i] forKey:@"description"];
+            actDictionary[@"description"] = appActions[i];
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
             [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-            NSString *dateString = [dateFormat stringFromDate:[appTimestamps objectAtIndex:i]];
+            NSString *dateString = [dateFormat stringFromDate:appTimestamps[i]];
             
             
-            [actDictionary setObject:dateString forKey:@"timestamp"];
+            actDictionary[@"timestamp"] = dateString;
             
             
             [finalArray addObject:actDictionary];
             
         }
         
-        [tempDictionary setObject:finalArray forKey:@"appActions"];        
+        tempDictionary[@"appActions"] = finalArray;        
         loginDict = tempDictionary;
         
         //Make the call to the server
@@ -347,7 +347,7 @@ static NSString *versionNumber = @"3.1";
         //If the log is b
         if ([logStatus isEqualToString:@"inactive"]) {
             
-            [logChecklist setObject:@"off" forKey:logName];
+            logChecklist[logName] = @"off";
             [standardUserDefaults setObject:logChecklist forKey:@"logChecklist"];
             
             
@@ -511,9 +511,9 @@ static NSString *versionNumber = @"3.1";
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-        [tempDictionary setObject:mainDelegate.token forKey:@"userName"];
-        [tempDictionary setObject:@"rTeam" forKey:@"application"];
-        [tempDictionary setObject:versionNumber forKey:@"version"];
+        tempDictionary[@"userName"] = mainDelegate.token;
+        tempDictionary[@"application"] = @"rTeam";
+        tempDictionary[@"version"] = versionNumber;
         
     
       

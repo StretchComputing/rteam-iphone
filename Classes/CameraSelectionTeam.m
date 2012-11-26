@@ -47,7 +47,7 @@
 	
 	[picker dismissModalViewControllerAnimated:YES];	
 	
-	UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+	UIImage *tmpImage = info[UIImagePickerControllerOriginalImage];
 	
     float xVal;
     float yVal;
@@ -88,9 +88,9 @@
     bool shouldRun = true;
     
     if (num >= 0) {
-        if ([CurrentTeamTabs class] == [[temp objectAtIndex:num] class]) {
+        if ([CurrentTeamTabs class] == [temp[num] class]) {
             shouldRun = false;
-            CurrentTeamTabs *cont = [temp objectAtIndex:num];
+            CurrentTeamTabs *cont = temp[num];
             
             
             //NSArray *tabs = [cont viewControllers];
@@ -108,9 +108,9 @@
     if (shouldRun){
         if (num >= 0) {
             
-            if ([CurrentTeamTabs class] == [[temp objectAtIndex:num] class]){
+            if ([CurrentTeamTabs class] == [temp[num] class]){
                 
-                CurrentTeamTabs *cont = [temp objectAtIndex:num];
+                CurrentTeamTabs *cont = temp[num];
                 
                 
                // NSArray *tabs = [cont viewControllers];
@@ -138,9 +138,9 @@
     bool shouldRun = true;
     
     if (num >= 0) {
-        if ([CurrentTeamTabs class] == [[temp objectAtIndex:num] class]) {
+        if ([CurrentTeamTabs class] == [temp[num] class]) {
             shouldRun = false;
-            CurrentTeamTabs *cont = [temp objectAtIndex:num];
+            CurrentTeamTabs *cont = temp[num];
             
             [self.navigationController popToViewController:cont animated:NO];
             
@@ -153,9 +153,9 @@
     if (shouldRun){
         if (num >= 0) {
             
-            if ([CurrentTeamTabs class] == [[temp objectAtIndex:num] class]){
+            if ([CurrentTeamTabs class] == [temp[num] class]){
                 
-                CurrentTeamTabs *cont = [temp objectAtIndex:num];
+                CurrentTeamTabs *cont = temp[num];
                 
                 
                 [self.navigationController popToViewController:cont animated:NO];

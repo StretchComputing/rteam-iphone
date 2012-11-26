@@ -112,7 +112,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
     
     
     self.initPhone = @"";
-	self.playerInfo = [NSDictionary dictionary];
+	self.playerInfo = @{};
     self.phoneOnlyArray = [NSMutableArray array];
 	
 	self.switchFanLabel.hidden = YES;
@@ -322,179 +322,204 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 	
 }
 -(void)getMemberInformation{
-	[self.loadingActivity stopAnimating];
-	[self.loadingLabel setHidden:YES];
 	
-	if ([self.errorString isEqualToString:@""]) {
-		
-	if ([self.playerInfo valueForKey:@"guardians"] != nil) {
-		
-		self.guardiansArray = [playerInfo valueForKey:@"guardians"];
-		
-		if ([self.guardiansArray count] > 0) {
-			//[self.editGuardianInfoButton setHidden:NO];
-            [self.editGuardianInfoButton setTitle:@"Edit Parent/Guardian Info" forState:UIControlStateNormal];
-
-		}else {
-			//[self.editGuardianInfoButton setHidden:NO];
-            [self.editGuardianInfoButton setTitle:@"+ Add Parent/Guardian Info" forState:UIControlStateNormal];
-		}
-		
-	}else {
-		//[self.editGuardianInfoButton setHidden:YES];
-        [self.editGuardianInfoButton setTitle:@"+ Add Parent/Guardian Info" forState:UIControlStateNormal];
-
-	}
-	
-	NSString *jerseyNumber = [playerInfo valueForKey:@"jerseyNumber"];
-	self.firstName = [playerInfo valueForKey:@"firstName"];
-	self.lastName = [playerInfo valueForKey:@"lastName"];
+    @try {
+        [self.loadingActivity stopAnimating];
+        [self.loadingLabel setHidden:YES];
         
-     
-		
-	self.nameLabel.text = @"";
-		
-		if (self.firstName != nil) {
-			
-			if (self.lastName != nil) {
-				self.nameLabel.text = [[self.firstName stringByAppendingFormat:@" "] stringByAppendingString:self.lastName];
-			}else {
-				self.nameLabel.text = self.firstName;
-			}
-
-		}
-	
-        if (self.firstName == nil) {
-            self.firstName = @"";
-        }
-        if (self.lastName == nil) {
-            self.lastName = @"";
-        }
-	
-	
-        self.playerEmailString = [playerInfo valueForKey:@"emailAddress"];
-	self.emailLabel.text = [playerInfo valueForKey:@"emailAddress"];
-	
-	if (jerseyNumber == nil || [jerseyNumber isEqualToString:@""] || [jerseyNumber isEqualToString:@"Jersey #"]) {
-		self.jerseyLabel.text = @"";
-	}else {
-		self.jerseyLabel.text = [@"#" stringByAppendingString:jerseyNumber];
-		self.jersey = jerseyNumber;
-	}
-	
-	if ([playerInfo valueForKey:@"phoneNumber"] != nil) {
-		self.phone = [playerInfo valueForKey:@"phoneNumber"];
-        
-        NSString *myLocale = @"";
-        self.initPhone = [myPhoneNumberFormatter format:self.phone withLocale:myLocale];
-        
-		
-        if (![self.phone isEqualToString:@""]) {
-            [self.callNumberButton setTitle:@"Call/Text" forState:UIControlStateNormal]; 
-            [self.callNumberButton setHidden:NO];
-        }else if (([self.guard1Phone length] > 0) || ([self.guard2Phone length] > 0)) {
-            [self.callNumberButton setTitle:@"Call/Text" forState:UIControlStateNormal]; 
-            [self.callNumberButton setHidden:NO];
-        }
-        
-		
-	}else {
-       
-        if (([self.guard1Phone length] > 0) || ([self.guard2Phone length] > 0)) {
-            [self.callNumberButton setTitle:@"Call/Text" forState:UIControlStateNormal]; 
-            [self.callNumberButton setHidden:NO];
-        }else{
-            self.phone = @"";
-            [self.callNumberButton setHidden:YES];
-        }
-		
-	}
-	
-		
-		if (self.fromCameraSelect) {
-			self.fromCameraSelect = false;
-			self.profileImage.image = self.selectedImage;
-        
+        if ([self.errorString isEqualToString:@""]) {
             
-			self.newImage = self.selectedImage;
-			self.compressImage = self.selectedData;
-			[self.activity startAnimating];
-			self.isEditing = false;
-            
-		    self.theFirstEdit = [NSString stringWithString:self.firstEdit.text];
-            self.theLastEdit = [NSString stringWithString:self.lastEdit.text];
-            self.theJerseyEdit = [NSString stringWithString:self.jerseyEdit.text];
-            self.theEmailEdit = [NSString stringWithString:self.emailEdit.text];
-            self.theMobileEdit = [NSString stringWithString:self.mobileEdit.text];
-            
-			[self performSelectorInBackground:@selector(runRequest2) withObject:nil];
-		}else {
-			NSString *profile = [playerInfo valueForKey:@"photo"];
-			
-			if ((profile == nil)  || ([profile isEqualToString:@""])){
-				
-				
-				NSString *thumbNail = [playerInfo valueForKey:@"thumbNail"];
-				
-				if ((thumbNail == nil) || ([thumbNail isEqualToString:@""])) {
-					
-					self.profileImage.image = [UIImage imageNamed:@"profileNew.png"];
-
-				}else {
-					
-					NSData *thumbnailData = [Base64 decode:thumbNail];
-					self.compressImage = thumbnailData;
-					self.origCompressImage = thumbnailData;
-					self.profileImage.image = [UIImage imageWithData:thumbnailData];
-
-					self.profilePhotoButton.enabled = YES;
-				}
-
-				
-				
-			}else {
-				
-				NSData *profileData = [Base64 decode:profile];
-              
-                if (!justChose) {
-                    self.compressImage = profileData;
-                    self.origCompressImage = profileData;
-                }else{
-                    justChose = false;
+            if ([self.playerInfo valueForKey:@"guardians"] != nil) {
+                
+                self.guardiansArray = [playerInfo valueForKey:@"guardians"];
+                
+                if ([self.guardiansArray count] > 0) {
+                    //[self.editGuardianInfoButton setHidden:NO];
+                    [self.editGuardianInfoButton setTitle:@"Edit Parent/Guardian Info" forState:UIControlStateNormal];
+                    
+                }else {
+                    //[self.editGuardianInfoButton setHidden:NO];
+                    [self.editGuardianInfoButton setTitle:@"+ Add Parent/Guardian Info" forState:UIControlStateNormal];
                 }
-				
-				self.profileImage.image = [UIImage imageWithData:profileData];
-				self.profilePhotoButton.enabled = YES;
-			}
-			
-		}
+                
+            }else {
+                //[self.editGuardianInfoButton setHidden:YES];
+                [self.editGuardianInfoButton setTitle:@"+ Add Parent/Guardian Info" forState:UIControlStateNormal];
+                
+            }
+            
+            NSString *jerseyNumber = [playerInfo valueForKey:@"jerseyNumber"];
+            self.firstName = [playerInfo valueForKey:@"firstName"];
+            self.lastName = [playerInfo valueForKey:@"lastName"];
+            
+            
+            
+            self.nameLabel.text = @"";
+            
+            if (self.firstName != nil) {
+                
+                if (self.lastName != nil) {
+                    self.nameLabel.text = [[self.firstName stringByAppendingFormat:@" "] stringByAppendingString:self.lastName];
+                }else {
+                    self.nameLabel.text = self.firstName;
+                }
+                
+            }
+            
+            if (self.firstName == nil) {
+                self.firstName = @"";
+            }
+            if (self.lastName == nil) {
+                self.lastName = @"";
+            }
+            
+            
+            self.playerEmailString = [playerInfo valueForKey:@"emailAddress"];
+            self.emailLabel.text = [playerInfo valueForKey:@"emailAddress"];
+            
+            if (jerseyNumber == nil || [jerseyNumber isEqualToString:@""] || [jerseyNumber isEqualToString:@"Jersey #"]) {
+                self.jerseyLabel.text = @"";
+            }else {
+                self.jerseyLabel.text = [@"#" stringByAppendingString:jerseyNumber];
+                self.jersey = jerseyNumber;
+            }
+            
+            if ([playerInfo valueForKey:@"phoneNumber"] != nil) {
+                self.phone = [playerInfo valueForKey:@"phoneNumber"];
+                
+                NSString *myLocale = @"";
+                self.initPhone = [myPhoneNumberFormatter format:self.phone withLocale:myLocale];
+                
+                
+                if (![self.phone isEqualToString:@""]) {
+                    [self.callNumberButton setTitle:@"Call/Text" forState:UIControlStateNormal];
+                    [self.callNumberButton setHidden:NO];
+                }else if (([self.guard1Phone length] > 0) || ([self.guard2Phone length] > 0)) {
+                    [self.callNumberButton setTitle:@"Call/Text" forState:UIControlStateNormal];
+                    [self.callNumberButton setHidden:NO];
+                }
+                
+                
+            }else {
+                
+                if (([self.guard1Phone length] > 0) || ([self.guard2Phone length] > 0)) {
+                    [self.callNumberButton setTitle:@"Call/Text" forState:UIControlStateNormal];
+                    [self.callNumberButton setHidden:NO];
+                }else{
+                    self.phone = @"";
+                    [self.callNumberButton setHidden:YES];
+                }
+                
+            }
+            
+            
+            if (self.fromCameraSelect) {
+                self.fromCameraSelect = false;
+                self.profileImage.image = self.selectedImage;
+                
+                
+                self.newImage = self.selectedImage;
+                self.compressImage = self.selectedData;
+                [self.activity startAnimating];
+                self.isEditing = false;
+                
+                if (!self.firstEdit.text) {
+                    self.firstEdit.text = @"";
+                }
+                
+                if (!self.lastEdit.text) {
+                    self.lastEdit.text = @"";
+                }
+                if (!self.mobileEdit.text) {
+                    self.mobileEdit.text = @"";
+                }
+                if (!self.jerseyEdit.text) {
+                    self.jerseyEdit.text = @"";
+                }
+                if (!self.emailEdit.text) {
+                    self.emailEdit.text = @"";
+                }
 
-        
-        if (self.profileImage.image.size.height > self.profileImage.image.size.width) {
-            //Portrait
-            self.profileImage.frame = CGRectMake(26, 5, 61, 81);
-            self.profilePhotoButton.frame = CGRectMake(26, 5, 61, 81);
+                
+                self.theFirstEdit = [NSString stringWithString:self.firstEdit.text];
+                self.theLastEdit = [NSString stringWithString:self.lastEdit.text];
+                self.theJerseyEdit = [NSString stringWithString:self.jerseyEdit.text];
+                self.theEmailEdit = [NSString stringWithString:self.emailEdit.text];
+                self.theMobileEdit = [NSString stringWithString:self.mobileEdit.text];
+                
+                [self performSelectorInBackground:@selector(runRequest2) withObject:nil];
+            }else {
+                NSString *profile = [playerInfo valueForKey:@"photo"];
+                
+                if ((profile == nil)  || ([profile isEqualToString:@""])){
+                    
+                    
+                    NSString *thumbNail = [playerInfo valueForKey:@"thumbNail"];
+                    
+                    if ((thumbNail == nil) || ([thumbNail isEqualToString:@""])) {
+                        
+                        self.profileImage.image = [UIImage imageNamed:@"profileNew.png"];
+                        
+                    }else {
+                        
+                        NSData *thumbnailData = [Base64 decode:thumbNail];
+                        self.compressImage = thumbnailData;
+                        self.origCompressImage = thumbnailData;
+                        self.profileImage.image = [UIImage imageWithData:thumbnailData];
+                        
+                        self.profilePhotoButton.enabled = YES;
+                    }
+                    
+                    
+                    
+                }else {
+                    
+                    NSData *profileData = [Base64 decode:profile];
+                    
+                    if (!justChose) {
+                        self.compressImage = profileData;
+                        self.origCompressImage = profileData;
+                    }else{
+                        justChose = false;
+                    }
+                    
+                    self.profileImage.image = [UIImage imageWithData:profileData];
+                    self.profilePhotoButton.enabled = YES;
+                }
+                
+            }
             
-        }else{
             
-            self.profileImage.frame = CGRectMake(16, 25, 81, 61);
-            self.profilePhotoButton.frame = CGRectMake(16, 25, 81, 61);
+            if (self.profileImage.image.size.height > self.profileImage.image.size.width) {
+                //Portrait
+                self.profileImage.frame = CGRectMake(26, 5, 61, 81);
+                self.profilePhotoButton.frame = CGRectMake(26, 5, 61, 81);
+                
+            }else{
+                
+                self.profileImage.frame = CGRectMake(16, 25, 81, 61);
+                self.profilePhotoButton.frame = CGRectMake(16, 25, 81, 61);
+                
+            }
             
+            
+            self.nameLabel.hidden = NO;
+            self.emailLabel.hidden = NO;
+            self.addContactButton.hidden = NO;
+            
+            
+            [self.memberEmailTable reloadData];
+            [self.memberPhoneTable reloadData];
+            
+        }else {
+            self.errorLabel.text = self.errorString;
+            [self.errorLabel setHidden:NO];
         }
-    
-        
-	self.nameLabel.hidden = NO;
-	self.emailLabel.hidden = NO;
-    self.addContactButton.hidden = NO;
-        
-       
-        [self.memberEmailTable reloadData];
-        [self.memberPhoneTable reloadData];
-	
-	}else {
-		self.errorLabel.text = self.errorString;
-		[self.errorLabel setHidden:NO];
-	}
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@", exception);
+    }
+
 
 	
 }
@@ -777,7 +802,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                     
                     NSString *numberToCall = @"";
                     
-                    NSString *tmpPhone = [self.phoneOnlyArray objectAtIndex:i];
+                    NSString *tmpPhone = (self.phoneOnlyArray)[i];
                     
                     if ([tmpPhone length] == 16) {
                         call = true;
@@ -842,8 +867,8 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                         }
                     }else {
                         
-                        if ([numbersToCall objectAtIndex:0] != nil) {
-                            NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+                        if (numbersToCall[0] != nil) {
+                            NSString *url = [@"sms://" stringByAppendingString:numbersToCall[0]];
                             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
                         }
                       
@@ -1006,7 +1031,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         }
         
         NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :first :last
-                                                        :jers :rRoles :[NSArray array] :mainDelegate.token :profile :newEmail :newRole :newMobile :orientation];
+                                                        :jers :rRoles :@[] :mainDelegate.token :profile :newEmail :newRole :newMobile :orientation];
         
         NSString *status = [response valueForKey:@"status"];
         
@@ -1076,7 +1101,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         
         
         NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@""
-                                                        :@"" :rRoles :[NSArray array] :mainDelegate.token :[NSData data] :@"" :newRole :@"" :@""];
+                                                        :@"" :rRoles :@[] :mainDelegate.token :[NSData data] :@"" :newRole :@"" :@""];
         
         NSString *status = [response valueForKey:@"status"];
         
@@ -1250,7 +1275,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         }
         
         NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :first :last
-                                                        :jers :rRoles :[NSArray array] :mainDelegate.token :profile :newEmail :newRole :newMobile :orientation];
+                                                        :jers :rRoles :@[] :mainDelegate.token :profile :newEmail :newRole :newMobile :orientation];
         
         NSString *status = [response valueForKey:@"status"];
 		
@@ -1390,8 +1415,8 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 		int num = [temp count];
 		num = num-2;
 		
-		if ([[temp objectAtIndex:num] class] == [CurrentTeamTabs class]) {
-			CurrentTeamTabs *cont = [temp objectAtIndex:num];
+		if ([temp[num] class] == [CurrentTeamTabs class]) {
+			CurrentTeamTabs *cont = temp[num];
 			[self.navigationController popToViewController:cont animated:YES];
 		}else {
 			[self.activity stopAnimating];
@@ -1477,63 +1502,88 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-	[picker dismissModalViewControllerAnimated:YES];	
 	
-	UIImageView *tmpView = [[UIImageView alloc] initWithImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
-	
-    float xVal;
-    float yVal;
-    
-    if (tmpView.image.size.height > tmpView.image.size.width) {
-        //Portrait
-        xVal = 210.0;
-        yVal = 280.0;
-        self.portrait = true;
-    }else{
-        //Landscape
-        xVal = 280.0;
-        yVal = 210.0;
-        self.portrait = false;
-    }
-    
-	NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
-	
-	
-	UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
-
-	UIGraphicsBeginImageContext(CGSizeMake(xVal, yVal));
-	
-	[myThumbNail drawInRect:CGRectMake(0.0, 0.0, xVal, yVal)];
-	
-	UIImage *newImage1    = UIGraphicsGetImageFromCurrentImageContext();
-	
-	UIGraphicsEndImageContext();
-	 
-	
-	self.compressImage = UIImageJPEGRepresentation(newImage1, 1.0);
-	
+    @try {
+        [picker dismissModalViewControllerAnimated:YES];
+        
+        UIImageView *tmpView = [[UIImageView alloc] initWithImage:info[UIImagePickerControllerOriginalImage]];
+        
+        float xVal;
+        float yVal;
+        
+        if (tmpView.image.size.height > tmpView.image.size.width) {
+            //Portrait
+            xVal = 210.0;
+            yVal = 280.0;
+            self.portrait = true;
+        }else{
+            //Landscape
+            xVal = 280.0;
+            yVal = 210.0;
+            self.portrait = false;
+        }
+        
+        NSData *jpegImage = UIImageJPEGRepresentation(tmpView.image, 1.0);
+        
+        
+        UIImage *myThumbNail    = [[UIImage alloc] initWithData:jpegImage];
+        
+        UIGraphicsBeginImageContext(CGSizeMake(xVal, yVal));
+        
+        [myThumbNail drawInRect:CGRectMake(0.0, 0.0, xVal, yVal)];
+        
+        UIImage *newImage1    = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+        
+        
+        self.compressImage = UIImageJPEGRepresentation(newImage1, 1.0);
+        
 		
-	//self.profileImage.image = [UIImage imageWithData:self.compressImage];
-	self.newImage = [UIImage imageWithData:self.compressImage];
-	
-	[self.activity startAnimating];
-	self.isEditing = false;
+        //self.profileImage.image = [UIImage imageWithData:self.compressImage];
+        self.newImage = [UIImage imageWithData:self.compressImage];
+        
+        [self.activity startAnimating];
+        self.isEditing = false;
+        
+        self.profilePhotoButton.enabled = YES;
+        self.profilePhotoButton.hidden = NO;
+        [self.nameLabel setHidden:NO];
+        [self.emailLabel setHidden:NO];
+        [self.jerseyLabel setHidden:NO];
+        justChose = true;
+     
+        if (!self.firstEdit.text) {
+            self.firstEdit.text = @"";
+        }
+        
+        if (!self.lastEdit.text) {
+            self.lastEdit.text = @"";
+        }
+        if (!self.mobileEdit.text) {
+            self.mobileEdit.text = @"";
+        }
+        if (!self.jerseyEdit.text) {
+            self.jerseyEdit.text = @"";
+        }
+        if (!self.emailEdit.text) {
+            self.emailEdit.text = @"";
+        }
+        
+        self.theFirstEdit = [NSString stringWithString:self.firstEdit.text];
+        self.theLastEdit = [NSString stringWithString:self.lastEdit.text];
+        self.theJerseyEdit = [NSString stringWithString:self.jerseyEdit.text];
+        self.theEmailEdit = [NSString stringWithString:self.emailEdit.text];
+        self.theMobileEdit = [NSString stringWithString:self.mobileEdit.text];
+        
+        [self performSelectorInBackground:@selector(runRequest2) withObject:nil];
 
-    self.profilePhotoButton.enabled = YES;
-    self.profilePhotoButton.hidden = NO;
-	[self.nameLabel setHidden:NO];
-	[self.emailLabel setHidden:NO];
-	[self.jerseyLabel setHidden:NO];
-    justChose = true;
-    
-    self.theFirstEdit = [NSString stringWithString:self.firstEdit.text];
-    self.theLastEdit = [NSString stringWithString:self.lastEdit.text];
-    self.theJerseyEdit = [NSString stringWithString:self.jerseyEdit.text];
-    self.theEmailEdit = [NSString stringWithString:self.emailEdit.text];
-    self.theMobileEdit = [NSString stringWithString:self.mobileEdit.text];
-    
-	[self performSelectorInBackground:@selector(runRequest2) withObject:nil];
-
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@", exception);
+    }
+   
+  
 	
 } 
 
@@ -2077,7 +2127,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
                         
                         MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
                         messageViewController.messageComposeDelegate = self;
-                        [messageViewController setRecipients:[NSArray arrayWithObject:numberToCall]];
+                        [messageViewController setRecipients:@[numberToCall]];
                         [self presentModalViewController:messageViewController animated:YES];
                         
                     }
@@ -2153,7 +2203,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         
-        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :[NSArray array] :mainDelegate.token 
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :@[] :@[] :mainDelegate.token 
                                                         :[NSData data] :@"" :@"fan" :@"" :@""];
         
         NSString *status = [response valueForKey:@"status"];
@@ -2701,7 +2751,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         
         if (row == 0) {
             
-            self.coordinatorSegment = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Yes", @"No", nil]];
+            self.coordinatorSegment = [[UISegmentedControl alloc] initWithItems:@[@"Yes", @"No"]];
             self.coordinatorSegment.frame = CGRectMake(105, 5, 182, 30);
             self.coordinatorSegment.segmentedControlStyle = UISegmentedControlStyleBar;
             
@@ -2725,7 +2775,7 @@ changeProfilePicAction, newImage, fromCameraSelect, selectedImage, selectedData,
         }else{
             typeLabel.text = @"role";
 
-            self.memberFanSegment = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Member", @"Fan", nil]];
+            self.memberFanSegment = [[UISegmentedControl alloc] initWithItems:@[@"Member", @"Fan"]];
             self.memberFanSegment.frame = CGRectMake(105, 5, 182, 30);
             self.memberFanSegment.segmentedControlStyle = UISegmentedControlStyleBar;
             self.memberFanSegment.selectedSegmentIndex = 0;
@@ -2785,7 +2835,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
             mailViewController.mailComposeDelegate = self;
-            [mailViewController setToRecipients:[NSArray arrayWithObject:emailString]];
+            [mailViewController setToRecipients:@[emailString]];
             
             [self presentModalViewController:mailViewController animated:YES];
             

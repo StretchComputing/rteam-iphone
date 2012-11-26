@@ -92,7 +92,7 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
             token = mainDelegate.token;
         } 
         
-        NSArray *choices = [NSArray arrayWithObjects:self.theOption1, self.theOption2, nil];
+        NSArray *choices = @[self.theOption1, self.theOption2];
         NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:choices];
         
         if (![self.theOption3 isEqualToString:@""]) {
@@ -117,18 +117,18 @@ eventId, eventType, pollSubject, origLoc, userRole, recipients, toTeam, displayR
         NSMutableArray *recipIds = [NSMutableArray array];
         for (int i = 0; i < [self.recipients count]; i++) {
             
-            if ([[self.recipients objectAtIndex:i] class] == [Fan class]) {
-                Fan *tmpFan = [self.recipients objectAtIndex:i];
+            if ([(self.recipients)[i] class] == [Fan class]) {
+                Fan *tmpFan = (self.recipients)[i];
                 [recipIds addObject:tmpFan.memberId];
-            }else if ([[self.recipients objectAtIndex:i] class] == [Player class]) {
-                Player *tmpPlayer = [self.recipients objectAtIndex:i];
+            }else if ([(self.recipients)[i] class] == [Player class]) {
+                Player *tmpPlayer = (self.recipients)[i];
                 [recipIds addObject:tmpPlayer.memberId];
             }
         }
         
         NSArray *recip = [NSArray arrayWithArray:recipIds];
         
-        NSDictionary *response = [NSDictionary dictionary];
+        NSDictionary *response = @{};
         if (![token isEqualToString:@""]){	
       
             

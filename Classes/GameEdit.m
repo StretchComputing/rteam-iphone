@@ -194,7 +194,7 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
             notify = @"false";
         }
         
-        NSDictionary *response = [NSDictionary dictionary];
+        NSDictionary *response = @{};
         if (![token isEqualToString:@""]){	
             response = [ServerAPI updateGame:token :self.teamId :self.gameId :startDate :@"" :[[NSTimeZone systemTimeZone] name] :self.theGameDescription :@"" :@"" :self.theGameOpponent :@"" :@"" :@"" :@"" :notify :@"" :@""];
             
@@ -249,7 +249,7 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 		int num = [temp count];
 		num = num - 2;
 		
-		GameTabs *cont = [temp objectAtIndex:num];
+		GameTabs *cont = temp[num];
 		cont.selectedIndex = 0;
 		
 			
@@ -464,24 +464,24 @@ fromDateChange, gameDateObject, createSuccess, errorMessage, notifyTeam, errorSt
 			
 			int num = [viewControllers count];
 			
-			if ([AllEventCalList class] == [[viewControllers objectAtIndex:num - 3] class]) {
+			if ([AllEventCalList class] == [viewControllers[num - 3] class]) {
 				
-				AllEventCalList *tmp = [viewControllers objectAtIndex:num - 3];
-				AllEventsCalendar *tmp1 = [viewControllers objectAtIndex:num - 4];
+				AllEventCalList *tmp = viewControllers[num - 3];
+				AllEventsCalendar *tmp1 = viewControllers[num - 4];
 				tmp1.createdEvent = true;
 				tmp.gameIdCanceled = self.gameId;
 				tmp.isCancel = isCancel;
 				[self.navigationController popToViewController:tmp animated:NO];
 				
-			}else if ([AllEventsCalendar class] == [[viewControllers objectAtIndex:num - 3] class]) {
+			}else if ([AllEventsCalendar class] == [viewControllers[num - 3] class]) {
 				
-				AllEventsCalendar *tmp = [viewControllers objectAtIndex:num - 3];
+				AllEventsCalendar *tmp = viewControllers[num - 3];
 				tmp.createdEvent = true;
 				[self.navigationController popToViewController:tmp animated:NO];
 				
-			}else if ([CurrentTeamTabs class] == [[viewControllers objectAtIndex:num - 3] class]) {
+			}else if ([CurrentTeamTabs class] == [viewControllers[num - 3] class]) {
 				
-				CurrentTeamTabs *tmp = [viewControllers objectAtIndex:num - 3];
+				CurrentTeamTabs *tmp = viewControllers[num - 3];
 				[self.navigationController popToViewController:tmp animated:NO];
 				
 			}else {

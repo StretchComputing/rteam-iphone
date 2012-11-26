@@ -186,7 +186,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
 
 				self.currentMessageNumber--;
 				
-				MessageThreadInbox *newMessage = [self.messageArray objectAtIndex:self.currentMessageNumber];
+				MessageThreadInbox *newMessage = (self.messageArray)[self.currentMessageNumber];
 				
 				self.wasViewed = newMessage.wasViewed;
 				self.threadId = newMessage.threadId;
@@ -230,7 +230,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
 
 				self.currentMessageNumber++;
 				
-				MessageThreadInbox *newMessage = [self.messageArray objectAtIndex:self.currentMessageNumber];
+				MessageThreadInbox *newMessage = (self.messageArray)[self.currentMessageNumber];
 				
 				self.wasViewed = newMessage.wasViewed;
 				self.threadId = newMessage.threadId;
@@ -296,7 +296,7 @@ currentMessageNumber, teamLabel, teamName, origTeamId, isAlert, fromClass;
     newPlayer.firstName = self.senderName;
     newPlayer.memberId = self.senderId;
     
-    NSArray *tmpArray = [NSArray arrayWithObject:newPlayer];
+    NSArray *tmpArray = @[newPlayer];
     
     tmp.recipientObjects = [NSArray arrayWithArray:tmpArray];
     

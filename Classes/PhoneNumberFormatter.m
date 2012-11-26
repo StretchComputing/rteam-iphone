@@ -6,37 +6,32 @@
 @implementation PhoneNumberFormatter
 
 - (id)init {
-	NSArray *usPhoneFormats = [NSArray arrayWithObjects:
-							   @"+1 (###) ###-####",
+	NSArray *usPhoneFormats = @[@"+1 (###) ###-####",
 							   @"1 (###) ###-####",
 							   @"011 $",
 							   @"###-####",
-							   @"(###) ###-####", nil];
+							   @"(###) ###-####"];
 	
-	NSArray *ukPhoneFormats = [NSArray arrayWithObjects:
-							   @"+44 ##########",
+	NSArray *ukPhoneFormats = @[@"+44 ##########",
 							   @"00 $",
 							   @"0### - ### ####",
 							   @"0## - #### ####",
-							   @"0#### - ######", nil];
+							   @"0#### - ######"];
 	
-	NSArray *jpPhoneFormats = [NSArray arrayWithObjects:
-							   @"+81 ############",
+	NSArray *jpPhoneFormats = @[@"+81 ############",
 							   @"001 $",
 							   @"(0#) #######",
-							   @"(0#) #### ####", nil];
+							   @"(0#) #### ####"];
 	
-	predefinedFormats = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 usPhoneFormats, @"us",
-						 ukPhoneFormats, @"uk",
-						 jpPhoneFormats, @"jp",
-						 nil];
+	predefinedFormats = @{@"us": usPhoneFormats,
+						 @"uk": ukPhoneFormats,
+						 @"jp": jpPhoneFormats};
 	return self;
 }
 
 - (NSString *)format:(NSString *)phoneNumber withLocale:(NSString *)locale {
 	locale = @"us";
-	NSArray *localeFormats = [predefinedFormats objectForKey:locale];
+	NSArray *localeFormats = predefinedFormats[locale];
 	if(localeFormats == nil) return phoneNumber;
 	NSString *input = [self strip:phoneNumber];
 	NSString *res = nil;

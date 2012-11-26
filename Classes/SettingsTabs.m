@@ -481,7 +481,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
                 mailViewController.mailComposeDelegate = self;
-                [mailViewController setToRecipients:[NSArray arrayWithObject:@"info@rteam.com"]];
+                [mailViewController setToRecipients:@[@"info@rteam.com"]];
                 [mailViewController setSubject:@"rTeam Problem"];
                 [mailViewController setMessageBody:@"Enter your problem or question here:" isHTML:NO];
                 
@@ -669,7 +669,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
                 MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
                 mailViewController.mailComposeDelegate = self;
-                [mailViewController setToRecipients:[NSArray arrayWithObject:@"feedback@rteam.com"]];
+                [mailViewController setToRecipients:@[@"feedback@rteam.com"]];
                 [mailViewController setSubject:@"rTeam FeedBack"];
                 
                 [self presentModalViewController:mailViewController animated:YES];
@@ -716,7 +716,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)getGames{
 	
 	@autoreleasepool {
-        NSArray *games = [NSArray array];
+        NSArray *games = @[];
         NSString *token = @"";
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -772,7 +772,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)getEvents {
 
 	@autoreleasepool {
-        NSArray *practices = [NSArray array];
+        NSArray *practices = @[];
         NSString *token = @"";
         
         rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -836,7 +836,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         for (int i= 0; i < [self.allGames count]; i++) {
             
-            Game *tmpGame = [self.allGames objectAtIndex:i];
+            Game *tmpGame = (self.allGames)[i];
             
             [self.gamesAndEvents addObject:tmpGame];
         }
@@ -860,231 +860,454 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
  
     @autoreleasepool {
         
-        NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-        [self.gamesAndEvents sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
-        NSString *startingDate;
-        NSString *endingDate;
-        
-        //Get the date of first event
-        if ([Game class] == [[self.gamesAndEvents objectAtIndex:0] class]) {
-            Game *firstEvent = [self.gamesAndEvents objectAtIndex:0];
-            startingDate = firstEvent.startDate;
+        @try {
+            NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
+            [self.gamesAndEvents sortUsingDescriptors:@[lastNameSorter]];
+            NSString *startingDate;
+            NSString *endingDate;
             
-        }else if ([Practice class] == [[self.gamesAndEvents objectAtIndex:0] class]){
-            
-            Practice *firstEvent = [self.gamesAndEvents objectAtIndex:0];
-            startingDate = firstEvent.startDate;
-            
-        }else{
-            
-            Event *firstEvent = [self.gamesAndEvents objectAtIndex:0];
-            startingDate = firstEvent.startDate;
-        }
-        
-        //Get the date of last event
-        int count = [self.gamesAndEvents count];
-        count--;
-        
-        if ([Game class] == [[self.gamesAndEvents objectAtIndex:count] class]) {
-            Game *firstEvent = [self.gamesAndEvents objectAtIndex:count];
-            endingDate = firstEvent.startDate;
-            
-        }else if ([Practice class] == [[self.gamesAndEvents objectAtIndex:count] class]){
-            
-            Practice *firstEvent = [self.gamesAndEvents objectAtIndex:count];
-            endingDate = firstEvent.startDate;
-            
-        }else{
-            
-            Event *firstEvent = [self.gamesAndEvents objectAtIndex:count];
-            endingDate = firstEvent.startDate;
-        }
-        
-        EKEventStore *eventStore = [[EKEventStore alloc] init];
-        
-        EKCalendar *defaultCalendar = [eventStore defaultCalendarForNewEvents];
-        
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init]; 
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
-        NSDate *searchStartDate = [dateFormat dateFromString:startingDate];
-        NSDate *searchEndDate = [dateFormat dateFromString:endingDate];
-        
-        searchStartDate = [searchStartDate dateByAddingTimeInterval:-86400];
-        searchEndDate = [searchEndDate dateByAddingTimeInterval:86400];
-        
-        NSArray *calendarArray = [NSArray arrayWithObject:defaultCalendar];
-        NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:searchStartDate endDate:searchEndDate calendars:calendarArray];
-        
-        NSArray *eventsFromCalendar = [eventStore eventsMatchingPredicate:predicate];
-        
-        self.didSynch = false;
-        self.synchSuccess = false;
-        
-        for (int i = 0; i < [self.gamesAndEvents count]; i++) {
-            
-            if ([Game class] == [[self.gamesAndEvents objectAtIndex:i] class]) {
-                Game *firstEvent = [self.gamesAndEvents objectAtIndex:i];
+            //Get the date of first event
+            if ([Game class] == [(self.gamesAndEvents)[0] class]) {
+                Game *firstEvent = (self.gamesAndEvents)[0];
+                startingDate = firstEvent.startDate;
                 
-                NSString *titleString = [NSString stringWithFormat:@"%@ Game", firstEvent.teamName];
+            }else if ([Practice class] == [(self.gamesAndEvents)[0] class]){
                 
-                //If this event is already in the calendar, dont add it agian
-                bool shouldAdd = true;
-                for (int  j= 0; j < [eventsFromCalendar count]; j++) {
-                    
-                    EKEvent *tmpEKEvent = [eventsFromCalendar objectAtIndex:j];
-                    if ([tmpEKEvent.title isEqualToString:titleString]) {
-                        
-                        NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
-                        
-                        if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
-                            shouldAdd = false;
-                        }
-                    }
-                }
-                
-                if (shouldAdd){
-                    
-                    self.didSynch = true;
-                    EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
-                    event.title     = titleString;
-                    
-                    NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
-                    event.startDate = tmpStart;
-                    
-                    NSString *notesString = @"";
-                    if ((firstEvent.opponent != nil) && ![firstEvent.opponent isEqualToString:@""]){
-                        notesString = [NSString stringWithFormat:@"Opponent: %@", firstEvent.opponent];
-                    }
-                    
-                    if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
-                        notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
-                    }
-                    event.notes = notesString;
-                    event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
-                    
-                    [event setCalendar:defaultCalendar];
-                    NSError *err;
-                    [eventStore saveEvent:event span:EKSpanThisEvent error:&err]; 
-                    
-                    if (err == nil){
-                        self.synchSuccess = true;
-                    }
-                    
-                }
-                
-                
-            }else if ([Practice class] == [[self.gamesAndEvents objectAtIndex:i] class]){
-                
-                Practice *firstEvent = [self.gamesAndEvents objectAtIndex:i];
-                NSString *titleString = [NSString stringWithFormat:@"%@ Practice", firstEvent.teamName];
-                
-                //If this event is already in the calendar, dont add it agian
-                bool shouldAdd = true;
-                
-                for (int  j= 0; j < [eventsFromCalendar count]; j++) {
-                    
-                    EKEvent *tmpEKEvent = [eventsFromCalendar objectAtIndex:j];
-                    if ([tmpEKEvent.title isEqualToString:titleString]) {
-                        
-                        NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
-                        
-                        if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
-                            shouldAdd = false;
-                        }
-                    }
-                }
-                
-                if (shouldAdd){
-                    
-                    self.didSynch = true;
-                    EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
-                    event.title     = titleString;
-                    
-                    NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
-                    event.startDate = tmpStart;
-                    
-                    NSString *notesString = @"";
-                    if ((firstEvent.location != nil) && ![firstEvent.location isEqualToString:@""]){
-                        notesString = [NSString stringWithFormat:@"Location: %@", firstEvent.location];
-                    }
-                    
-                    if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
-                        notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
-                    }
-                    event.notes = notesString;
-                    event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
-                    
-                    [event setCalendar:defaultCalendar];
-                    NSError *err;
-                    [eventStore saveEvent:event span:EKSpanThisEvent error:&err]; 
-                    
-                    if (err == nil){
-                        self.synchSuccess = true;
-                    }
-                    
-                }
-                
+                Practice *firstEvent = (self.gamesAndEvents)[0];
+                startingDate = firstEvent.startDate;
                 
             }else{
                 
-                Event *firstEvent = [self.gamesAndEvents objectAtIndex:i];
-                NSString *titleString = [NSString stringWithFormat:@"%@", firstEvent.eventName];
-                
-                //If this event is already in the calendar, dont add it agian
-                bool shouldAdd = true;
-                
-                for (int  j= 0; j < [eventsFromCalendar count]; j++) {
-                    
-                    EKEvent *tmpEKEvent = [eventsFromCalendar objectAtIndex:j];
-                    if ([tmpEKEvent.title isEqualToString:titleString]) {
-                        
-                        NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
-                        
-                        if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
-                            shouldAdd = false;
-                        }
-                    }
-                }
-                
-                if (shouldAdd){
-                    
-                    self.didSynch = true;
-                    EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
-                    event.title     = titleString;
-                    
-                    NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
-                    event.startDate = tmpStart;
-                    
-                    NSString *notesString = @"";
-                    if ((firstEvent.teamName != nil) && ![firstEvent.teamName isEqualToString:@""]){
-                        notesString = [NSString stringWithFormat:@"Team Name: %@", firstEvent.teamName];
-                    }
-                    
-                    if ((firstEvent.location != nil) && ![firstEvent.location isEqualToString:@""]) {
-                        notesString = [notesString stringByAppendingFormat:@"; Location: %@", firstEvent.location];
-                    }
-                    
-                    if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
-                        notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
-                    }
-                    event.notes = notesString;
-                    event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
-                    
-                    [event setCalendar:defaultCalendar];
-                    NSError *err;
-                    [eventStore saveEvent:event span:EKSpanThisEvent error:&err]; 
-                    if (err == nil){
-                        self.synchSuccess = true;
-                    }
-                    
-                }
-                
+                Event *firstEvent = (self.gamesAndEvents)[0];
+                startingDate = firstEvent.startDate;
             }
             
+            //Get the date of last event
+            int count = [self.gamesAndEvents count];
+            count--;
+            
+            if ([Game class] == [(self.gamesAndEvents)[count] class]) {
+                Game *firstEvent = (self.gamesAndEvents)[count];
+                endingDate = firstEvent.startDate;
+                
+            }else if ([Practice class] == [(self.gamesAndEvents)[count] class]){
+                
+                Practice *firstEvent = (self.gamesAndEvents)[count];
+                endingDate = firstEvent.startDate;
+                
+            }else{
+                
+                Event *firstEvent = (self.gamesAndEvents)[count];
+                endingDate = firstEvent.startDate;
+            }
+            
+            EKEventStore *eventStore = [[EKEventStore alloc] init];
+            
+            if([self checkIsDeviceVersionHigherThanRequiredVersion:@"6.0"]) {
+                
+                [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+                    
+                    @try {
+                        if (granted){
+                            //---- codes here when user allow your app to access theirs' calendar.
+                            EKCalendar *defaultCalendar = [eventStore defaultCalendarForNewEvents];
+                            
+                            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                            [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
+                            NSDate *searchStartDate = [dateFormat dateFromString:startingDate];
+                            NSDate *searchEndDate = [dateFormat dateFromString:endingDate];
+                            
+                            searchStartDate = [searchStartDate dateByAddingTimeInterval:-86400];
+                            searchEndDate = [searchEndDate dateByAddingTimeInterval:86400];
+                            
+                            NSArray *calendarArray = [NSArray arrayWithObject:defaultCalendar];
+                            
+                            NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:searchStartDate endDate:searchEndDate calendars:calendarArray];
+                            
+                            NSArray *eventsFromCalendar = [eventStore eventsMatchingPredicate:predicate];
+                            
+                            self.didSynch = false;
+                            self.synchSuccess = false;
+                            
+                            for (int i = 0; i < [self.gamesAndEvents count]; i++) {
+                                
+                                if ([Game class] == [(self.gamesAndEvents)[i] class]) {
+                                    Game *firstEvent = (self.gamesAndEvents)[i];
+                                    
+                                    NSString *titleString = [NSString stringWithFormat:@"%@ Game", firstEvent.teamName];
+                                    
+                                    //If this event is already in the calendar, dont add it agian
+                                    bool shouldAdd = true;
+                                    for (int  j= 0; j < [eventsFromCalendar count]; j++) {
+                                        
+                                        EKEvent *tmpEKEvent = eventsFromCalendar[j];
+                                        if ([tmpEKEvent.title isEqualToString:titleString]) {
+                                            
+                                            NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
+                                            
+                                            if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
+                                                shouldAdd = false;
+                                            }
+                                        }
+                                    }
+                                    
+                                    if (shouldAdd){
+                                        
+                                        self.didSynch = true;
+                                        EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                                        event.title     = titleString;
+                                        
+                                        NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
+                                        event.startDate = tmpStart;
+                                        
+                                        NSString *notesString = @"";
+                                        if ((firstEvent.opponent != nil) && ![firstEvent.opponent isEqualToString:@""]){
+                                            notesString = [NSString stringWithFormat:@"Opponent: %@", firstEvent.opponent];
+                                        }
+                                        
+                                        if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
+                                            notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
+                                        }
+                                        event.notes = notesString;
+                                        event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
+                                        
+                                        [event setCalendar:defaultCalendar];
+                                        NSError *err;
+                                        [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                                        
+                                        if (err == nil){
+                                            self.synchSuccess = true;
+                                        }
+                                        
+                                    }
+                                    
+                                    
+                                }else if ([Practice class] == [(self.gamesAndEvents)[i] class]){
+                                    
+                                    Practice *firstEvent = (self.gamesAndEvents)[i];
+                                    NSString *titleString = [NSString stringWithFormat:@"%@ Practice", firstEvent.teamName];
+                                    
+                                    //If this event is already in the calendar, dont add it agian
+                                    bool shouldAdd = true;
+                                    
+                                    for (int  j= 0; j < [eventsFromCalendar count]; j++) {
+                                        
+                                        EKEvent *tmpEKEvent = eventsFromCalendar[j];
+                                        if ([tmpEKEvent.title isEqualToString:titleString]) {
+                                            
+                                            NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
+                                            
+                                            if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
+                                                shouldAdd = false;
+                                            }
+                                        }
+                                    }
+                                    
+                                    if (shouldAdd){
+                                        
+                                        self.didSynch = true;
+                                        EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                                        event.title     = titleString;
+                                        
+                                        NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
+                                        event.startDate = tmpStart;
+                                        
+                                        NSString *notesString = @"";
+                                        if ((firstEvent.location != nil) && ![firstEvent.location isEqualToString:@""]){
+                                            notesString = [NSString stringWithFormat:@"Location: %@", firstEvent.location];
+                                        }
+                                        
+                                        if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
+                                            notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
+                                        }
+                                        event.notes = notesString;
+                                        event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
+                                        
+                                        [event setCalendar:defaultCalendar];
+                                        NSError *err;
+                                        [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                                        
+                                        if (err == nil){
+                                            self.synchSuccess = true;
+                                        }
+                                        
+                                    }
+                                    
+                                    
+                                }else{
+                                    
+                                    Event *firstEvent = (self.gamesAndEvents)[i];
+                                    NSString *titleString = [NSString stringWithFormat:@"%@", firstEvent.eventName];
+                                    
+                                    //If this event is already in the calendar, dont add it agian
+                                    bool shouldAdd = true;
+                                    
+                                    for (int  j= 0; j < [eventsFromCalendar count]; j++) {
+                                        
+                                        EKEvent *tmpEKEvent = eventsFromCalendar[j];
+                                        if ([tmpEKEvent.title isEqualToString:titleString]) {
+                                            
+                                            NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
+                                            
+                                            if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
+                                                shouldAdd = false;
+                                            }
+                                        }
+                                    }
+                                    
+                                    if (shouldAdd){
+                                        
+                                        self.didSynch = true;
+                                        EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                                        event.title     = titleString;
+                                        
+                                        NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
+                                        event.startDate = tmpStart;
+                                        
+                                        NSString *notesString = @"";
+                                        if ((firstEvent.teamName != nil) && ![firstEvent.teamName isEqualToString:@""]){
+                                            notesString = [NSString stringWithFormat:@"Team Name: %@", firstEvent.teamName];
+                                        }
+                                        
+                                        if ((firstEvent.location != nil) && ![firstEvent.location isEqualToString:@""]) {
+                                            notesString = [notesString stringByAppendingFormat:@"; Location: %@", firstEvent.location];
+                                        }
+                                        
+                                        if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
+                                            notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
+                                        }
+                                        event.notes = notesString;
+                                        event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
+                                        
+                                        [event setCalendar:defaultCalendar];
+                                        NSError *err;
+                                        [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                                        if (err == nil){
+                                            self.synchSuccess = true;
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                            
+                            [self performSelectorOnMainThread:@selector(doneSynch) withObject:nil waitUntilDone:NO];
+                            
+                            
+                        }else
+                        {
+                            
+                            NSLog(@"Test");
+                        }
+                    }
+                    @catch (NSException *exception) {
+                        
+                    }
+                    
+                    
+                }];
+                
+            }else{
+                
+                EKCalendar *defaultCalendar = [eventStore defaultCalendarForNewEvents];
+                
+                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
+                NSDate *searchStartDate = [dateFormat dateFromString:startingDate];
+                NSDate *searchEndDate = [dateFormat dateFromString:endingDate];
+                
+                searchStartDate = [searchStartDate dateByAddingTimeInterval:-86400];
+                searchEndDate = [searchEndDate dateByAddingTimeInterval:86400];
+                
+                NSArray *calendarArray = [NSArray arrayWithObject:defaultCalendar];
+                
+                NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:searchStartDate endDate:searchEndDate calendars:calendarArray];
+                
+                NSArray *eventsFromCalendar = [eventStore eventsMatchingPredicate:predicate];
+                
+                self.didSynch = false;
+                self.synchSuccess = false;
+                
+                for (int i = 0; i < [self.gamesAndEvents count]; i++) {
+                    
+                    if ([Game class] == [(self.gamesAndEvents)[i] class]) {
+                        Game *firstEvent = (self.gamesAndEvents)[i];
+                        
+                        NSString *titleString = [NSString stringWithFormat:@"%@ Game", firstEvent.teamName];
+                        
+                        //If this event is already in the calendar, dont add it agian
+                        bool shouldAdd = true;
+                        for (int  j= 0; j < [eventsFromCalendar count]; j++) {
+                            
+                            EKEvent *tmpEKEvent = eventsFromCalendar[j];
+                            if ([tmpEKEvent.title isEqualToString:titleString]) {
+                                
+                                NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
+                                
+                                if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
+                                    shouldAdd = false;
+                                }
+                            }
+                        }
+                        
+                        if (shouldAdd){
+                            
+                            self.didSynch = true;
+                            EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                            event.title     = titleString;
+                            
+                            NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
+                            event.startDate = tmpStart;
+                            
+                            NSString *notesString = @"";
+                            if ((firstEvent.opponent != nil) && ![firstEvent.opponent isEqualToString:@""]){
+                                notesString = [NSString stringWithFormat:@"Opponent: %@", firstEvent.opponent];
+                            }
+                            
+                            if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
+                                notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
+                            }
+                            event.notes = notesString;
+                            event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
+                            
+                            [event setCalendar:defaultCalendar];
+                            NSError *err;
+                            [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                            
+                            if (err == nil){
+                                self.synchSuccess = true;
+                            }
+                            
+                        }
+                        
+                        
+                    }else if ([Practice class] == [(self.gamesAndEvents)[i] class]){
+                        
+                        Practice *firstEvent = (self.gamesAndEvents)[i];
+                        NSString *titleString = [NSString stringWithFormat:@"%@ Practice", firstEvent.teamName];
+                        
+                        //If this event is already in the calendar, dont add it agian
+                        bool shouldAdd = true;
+                        
+                        for (int  j= 0; j < [eventsFromCalendar count]; j++) {
+                            
+                            EKEvent *tmpEKEvent = eventsFromCalendar[j];
+                            if ([tmpEKEvent.title isEqualToString:titleString]) {
+                                
+                                NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
+                                
+                                if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
+                                    shouldAdd = false;
+                                }
+                            }
+                        }
+                        
+                        if (shouldAdd){
+                            
+                            self.didSynch = true;
+                            EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                            event.title     = titleString;
+                            
+                            NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
+                            event.startDate = tmpStart;
+                            
+                            NSString *notesString = @"";
+                            if ((firstEvent.location != nil) && ![firstEvent.location isEqualToString:@""]){
+                                notesString = [NSString stringWithFormat:@"Location: %@", firstEvent.location];
+                            }
+                            
+                            if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
+                                notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
+                            }
+                            event.notes = notesString;
+                            event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
+                            
+                            [event setCalendar:defaultCalendar];
+                            NSError *err;
+                            [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                            
+                            if (err == nil){
+                                self.synchSuccess = true;
+                            }
+                            
+                        }
+                        
+                        
+                    }else{
+                        
+                        Event *firstEvent = (self.gamesAndEvents)[i];
+                        NSString *titleString = [NSString stringWithFormat:@"%@", firstEvent.eventName];
+                        
+                        //If this event is already in the calendar, dont add it agian
+                        bool shouldAdd = true;
+                        
+                        for (int  j= 0; j < [eventsFromCalendar count]; j++) {
+                            
+                            EKEvent *tmpEKEvent = eventsFromCalendar[j];
+                            if ([tmpEKEvent.title isEqualToString:titleString]) {
+                                
+                                NSDate *newDate = [dateFormat dateFromString:firstEvent.startDate];
+                                
+                                if ([tmpEKEvent.startDate isEqualToDate:newDate]) {
+                                    shouldAdd = false;
+                                }
+                            }
+                        }
+                        
+                        if (shouldAdd){
+                            
+                            self.didSynch = true;
+                            EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                            event.title     = titleString;
+                            
+                            NSDate *tmpStart = [dateFormat dateFromString:firstEvent.startDate];
+                            event.startDate = tmpStart;
+                            
+                            NSString *notesString = @"";
+                            if ((firstEvent.teamName != nil) && ![firstEvent.teamName isEqualToString:@""]){
+                                notesString = [NSString stringWithFormat:@"Team Name: %@", firstEvent.teamName];
+                            }
+                            
+                            if ((firstEvent.location != nil) && ![firstEvent.location isEqualToString:@""]) {
+                                notesString = [notesString stringByAppendingFormat:@"; Location: %@", firstEvent.location];
+                            }
+                            
+                            if ((firstEvent.description != nil) && ![firstEvent.description isEqualToString:@""]) {
+                                notesString = [notesString stringByAppendingFormat:@"; Description: %@", firstEvent.description];
+                            }
+                            event.notes = notesString;
+                            event.endDate   = [[NSDate alloc] initWithTimeInterval:9000 sinceDate:event.startDate];
+                            
+                            [event setCalendar:defaultCalendar];
+                            NSError *err;
+                            [eventStore saveEvent:event span:EKSpanThisEvent error:&err]; 
+                            if (err == nil){
+                                self.synchSuccess = true;
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                
+                [self performSelectorOnMainThread:@selector(doneSynch) withObject:nil waitUntilDone:NO];
+                
+                
+            }
+
         }
-        
-        
-        [self performSelectorOnMainThread:@selector(doneSynch) withObject:nil waitUntilDone:NO];
+        @catch (NSException *exception) {
+            
+            self.didSynch = true;
+            self.synchSuccess = false;
+            [self performSelectorOnMainThread:@selector(doneSynch) withObject:nil waitUntilDone:NO];
+
+        }
+      
 
         
     }
@@ -1120,6 +1343,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
+- (BOOL)checkIsDeviceVersionHigherThanRequiredVersion:(NSString *)requiredVersion
+{
+    NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
+    
+    if ([currSysVer compare:requiredVersion options:NSNumericSearch] != NSOrderedAscending)
+    {
+        return YES;
+    }
+    
+    return NO;
+}
 
 
 -(void)viewDidUnload{

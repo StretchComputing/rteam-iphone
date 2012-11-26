@@ -49,7 +49,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
 	
 	if ([self.guardianArray count] > 0) {
 				
-		NSDictionary *guardOneInfo = [self.guardianArray objectAtIndex:0];
+		NSDictionary *guardOneInfo = (self.guardianArray)[0];
         
         self.oneFirstName.text = [guardOneInfo valueForKey:@"firstName"];
         self.oneLastName.text = [guardOneInfo valueForKey:@"lastName"];
@@ -70,7 +70,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
     
 	if ([self.guardianArray count] > 1) {
 		
-		NSDictionary *guardTwoInfo = [self.guardianArray objectAtIndex:1];
+		NSDictionary *guardTwoInfo = (self.guardianArray)[1];
 		
 		self.twoFirstName.text = [guardTwoInfo valueForKey:@"firstName"];
 		self.twoLastName.text = [guardTwoInfo valueForKey:@"lastName"];
@@ -315,13 +315,13 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
         
         if (![self.theOneFirstName isEqualToString:@""]) {
             
-            NSDictionary *tmpDictionary = [NSDictionary dictionary];
-            [guardianOne setObject:self.theOneFirstName forKey:@"firstName"];
-            [guardianOne setObject:self.theOneLastName forKey:@"lastName"];
-            [guardianOne setObject:self.theOneEmail forKey:@"emailAddress"];
-            [guardianOne setObject:self.theOnePhone forKey:@"phoneNumber"];
+            NSDictionary *tmpDictionary = @{};
+            guardianOne[@"firstName"] = self.theOneFirstName;
+            guardianOne[@"lastName"] = self.theOneLastName;
+            guardianOne[@"emailAddress"] = self.theOneEmail;
+            guardianOne[@"phoneNumber"] = self.theOnePhone;
             if (self.oneKey != nil) {
-                [guardianOne setObject:self.oneKey forKey:@"key"];
+                guardianOne[@"key"] = self.oneKey;
                 
             }
             
@@ -331,14 +331,14 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
         
         if (![self.theTwoFirstName isEqualToString:@""]) {
             
-            NSDictionary *tmpDictionary = [NSDictionary dictionary];
-            [guardianTwo setObject:self.theTwoFirstName forKey:@"firstName"];
-            [guardianTwo setObject:self.theTwoLastName forKey:@"lastName"];
-            [guardianTwo setObject:self.theTwoEmail forKey:@"emailAddress"];
-            [guardianTwo setObject:self.theTwoPhone forKey:@"phoneNumber"];
+            NSDictionary *tmpDictionary = @{};
+            guardianTwo[@"firstName"] = self.theTwoFirstName;
+            guardianTwo[@"lastName"] = self.theTwoLastName;
+            guardianTwo[@"emailAddress"] = self.theTwoEmail;
+            guardianTwo[@"phoneNumber"] = self.theTwoPhone;
             
             if (self.twoKey != nil) {
-                [guardianTwo setObject:self.twoKey forKey:@"key"];
+                guardianTwo[@"key"] = self.twoKey;
             }
             
             tmpDictionary = guardianTwo;
@@ -361,7 +361,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
         }
         
 		
-        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :@[] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
         
         
         NSString *status = [response valueForKey:@"status"];
@@ -420,7 +420,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
         self.initGuard1Phone = self.onePhone.text;
         self.initGuard2Phone = self.twoPhone.text;
         
-        Player *tmpController = [views objectAtIndex:num];
+        Player *tmpController = views[num];
         tmpController.guard1Phone = self.initGuard1Phone;
         tmpController.guard2Phone = self.initGuard2Phone;
         
@@ -503,13 +503,13 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
         
         if (![self.oneKey isEqualToString:@""] && (self.oneKey != nil)) {
             
-            NSDictionary *tmpDictionary = [NSDictionary dictionary];
-            [guardianOne setObject:@"" forKey:@"firstName"];
-            [guardianOne setObject:@"" forKey:@"lastName"];
-            [guardianOne setObject:@"" forKey:@"emailAddress"];
-            [guardianOne setObject:@"" forKey:@"phoneNumber"];
+            NSDictionary *tmpDictionary = @{};
+            guardianOne[@"firstName"] = @"";
+            guardianOne[@"lastName"] = @"";
+            guardianOne[@"emailAddress"] = @"";
+            guardianOne[@"phoneNumber"] = @"";
             if (self.oneKey != nil) {
-                [guardianOne setObject:self.oneKey forKey:@"key"];
+                guardianOne[@"key"] = self.oneKey;
                 
             }
             
@@ -519,14 +519,14 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
         
         if (![self.twoKey isEqualToString:@""] && (self.twoKey != nil)) {
             
-            NSDictionary *tmpDictionary = [NSDictionary dictionary];
-            [guardianTwo setObject:@"" forKey:@"firstName"];
-            [guardianTwo setObject:@"" forKey:@"lastName"];
-            [guardianTwo setObject:@"" forKey:@"emailAddress"];
-            [guardianTwo setObject:@"" forKey:@"phoneNumber"];
+            NSDictionary *tmpDictionary = @{};
+            guardianTwo[@"firstName"] = @"";
+            guardianTwo[@"lastName"] = @"";
+            guardianTwo[@"emailAddress"] = @"";
+            guardianTwo[@"phoneNumber"] = @"";
             
             if (self.twoKey != nil) {
-                [guardianTwo setObject:self.twoKey forKey:@"key"];
+                guardianTwo[@"key"] = self.twoKey;
             }
             
             tmpDictionary = guardianTwo;
@@ -535,7 +535,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
         NSArray *guardians = tmpGuardians;
         
         
-        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :[NSArray array] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
+        NSDictionary *response = [ServerAPI updateMember:self.memberId :self.teamId :@"" :@"" :@"" :@[] :guardians :mainDelegate.token :[NSData data] :@"" :@"" :@"" :@""];
         
         
         NSString *status = [response valueForKey:@"status"];
@@ -667,7 +667,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
                 
                 NSString *numberToCall = @"";
                 
-                NSString *tmpPhone = [self.phoneOnlyArray objectAtIndex:i];
+                NSString *tmpPhone = (self.phoneOnlyArray)[i];
                 
                 if ([tmpPhone length] == 16) {
                     call = true;
@@ -730,7 +730,7 @@ confirmedLabel, initGuard1Phone, initGuard2Phone, teamName, guard1SmsConfirmed, 
                     }
                 }else {
                     
-                    NSString *url = [@"sms://" stringByAppendingString:[numbersToCall objectAtIndex:0]];
+                    NSString *url = [@"sms://" stringByAppendingString:numbersToCall[0]];
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
                 }
                 

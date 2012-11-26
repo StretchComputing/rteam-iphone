@@ -63,6 +63,10 @@
   
   
 }
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.myTimer invalidate];
+}
 - (void)viewDidLoad
 {
     [[NSNotificationCenter defaultCenter] addObserver:self 
@@ -235,7 +239,7 @@
             token = mainDelegate.token;
         }
         
-        NSDictionary *gameInfo = [NSDictionary dictionary];
+        NSDictionary *gameInfo = @{};
         //If there is a token, do a DB lookup to find the game info 
         if (![token isEqualToString:@""]){
             
@@ -436,7 +440,7 @@
             currentGameTab.userRole = tmpUserRole;
             currentGameTab.teamName = self.teamName;
             
-            Gameday *currentNotes = [tmpViews objectAtIndex:0];
+            Gameday *currentNotes = tmpViews[0];
             currentNotes.gameId = self.eventId;
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
@@ -445,12 +449,12 @@
             currentNotes.startDate = self.eventStringDate;
             currentNotes.opponentString = @"";
             
-            GameAttendance *currentAttendance = [tmpViews objectAtIndex:1];
+            GameAttendance *currentAttendance = tmpViews[1];
             currentAttendance.gameId = self.eventId;
             currentAttendance.teamId = tmpTeamId;
             currentAttendance.startDate = self.eventStringDate;
             
-            Vote *fans = [tmpViews objectAtIndex:2];
+            Vote *fans = tmpViews[2];
             fans.teamId = self.teamId;
             fans.userRole = self.participantRole;
             fans.gameId = self.eventId;
@@ -472,7 +476,7 @@
             currentGameTab.userRole = tmpUserRole;
             currentGameTab.teamName = self.teamName;
             
-            Gameday *currentNotes = [tmpViews objectAtIndex:0];
+            Gameday *currentNotes = tmpViews[0];
             currentNotes.gameId = self.eventId;
             currentNotes.teamId = tmpTeamId;
             currentNotes.userRole = tmpUserRole;
@@ -481,7 +485,7 @@
             currentNotes.startDate = self.eventStringDate;
             currentNotes.opponentString = @"";
             
-            Vote *fans = [tmpViews objectAtIndex:1];
+            Vote *fans = tmpViews[1];
             fans.teamId = self.teamId;
             fans.userRole = self.participantRole;
             fans.gameId = self.eventId;
@@ -601,7 +605,11 @@
 	
 	rTeamAppDelegate *mainDelegate = (rTeamAppDelegate *)[[UIApplication sharedApplication] delegate];
 	token = mainDelegate.token;
-        
+    
+    if ([self.interval isEqualToString:@"0"]) {
+        self.interval = @"1";
+    }
+    
 	NSDictionary *response = [ServerAPI updateGame:token :self.teamId :self.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :self.scoreUs 
 												  :self.scoreThem :self.interval :@"" :@"" :@""];
 	
@@ -792,7 +800,7 @@
 	
     [picker dismissModalViewControllerAnimated:YES];	
     
-    UIImage *tmpImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *tmpImage = info[UIImagePickerControllerOriginalImage];
     
     float xVal;
     float yVal;
@@ -953,7 +961,7 @@
             self.gameImageArray = [NSMutableArray arrayWithArray:activityArray];
             
             NSSortDescriptor *dateSort = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
-            [self.gameImageArray sortUsingDescriptors:[NSArray arrayWithObject:dateSort]];
+            [self.gameImageArray sortUsingDescriptors:@[dateSort]];
             
             self.leftButton.enabled = NO;
             if ([activityArray count] > 1) {
@@ -962,7 +970,7 @@
                 self.rightButton.enabled = NO;
             }
             
-            Activity *tmpActivity = [self.gameImageArray objectAtIndex:0];
+            Activity *tmpActivity = (self.gameImageArray)[0];
             NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
             
             UIImage *tmpImage = [UIImage imageWithData:profileData];
@@ -997,7 +1005,7 @@
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     
-    Activity *tmpActivity = [self.gameImageArray objectAtIndex:self.currentImageDisplayCell];
+    Activity *tmpActivity = (self.gameImageArray)[self.currentImageDisplayCell];
 
     ImageDisplayMultiple *newDisplay = [[ImageDisplayMultiple alloc] init];
     newDisplay.activityId = tmpActivity.activityId;
@@ -1020,7 +1028,7 @@
     
     self.currentImageDisplayCell++;
     
-    Activity *tmpActivity = [self.gameImageArray objectAtIndex:self.currentImageDisplayCell];
+    Activity *tmpActivity = (self.gameImageArray)[self.currentImageDisplayCell];
     NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
     
     UIImage *tmpImage = [UIImage imageWithData:profileData];
@@ -1049,7 +1057,7 @@
     
     self.currentImageDisplayCell--;
     
-    Activity *tmpActivity = [self.gameImageArray objectAtIndex:self.currentImageDisplayCell];
+    Activity *tmpActivity = (self.gameImageArray)[self.currentImageDisplayCell];
     NSData *profileData = [Base64 decode:tmpActivity.thumbnail];
     
     UIImage *tmpImage = [UIImage imageWithData:profileData];

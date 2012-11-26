@@ -51,33 +51,33 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
         
-		[ tempDictionary setObject:firstName forKey:@"firstName"];
-		[ tempDictionary setObject:lastName forKey:@"lastName"];
-		[ tempDictionary setObject:email forKey:@"emailAddress"];
-		[ tempDictionary setObject:password forKey:@"password"];
+		tempDictionary[@"firstName"] = firstName;
+		tempDictionary[@"lastName"] = lastName;
+		tempDictionary[@"emailAddress"] = email;
+		tempDictionary[@"password"] = password;
         
 		if (![latitude isEqualToString:@""]) {
-			[ tempDictionary setObject:latitude forKey:@"latitude"];
+			tempDictionary[@"latitude"] = latitude;
 		}
 		
 		if (![longitude isEqualToString:@""]) {
-			[ tempDictionary setObject:longitude forKey:@"longitude"];
+			tempDictionary[@"longitude"] = longitude;
 		}
         
         if (![phoneNumber isEqualToString:@""]) {
-			[ tempDictionary setObject:phoneNumber forKey:@"phoneNumber"];
+			tempDictionary[@"phoneNumber"] = phoneNumber;
 		}
         if (![carrierCode isEqualToString:@""]) {
-			[ tempDictionary setObject:carrierCode forKey:@"mobileCarrierCode"];
+			tempDictionary[@"mobileCarrierCode"] = carrierCode;
 		}
 		
 		
 		if (![alreadyMember isEqualToString:@""]) {
-			[ tempDictionary setObject:alreadyMember forKey:@"alreadyMember"];
+			tempDictionary[@"alreadyMember"] = alreadyMember;
 		}
         
         if (![location isEqualToString:@""]) {
-			[ tempDictionary setObject:location forKey:@"location"];
+			tempDictionary[@"location"] = location;
 		}
         
 		loginDict = tempDictionary;
@@ -137,7 +137,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             }
         }else{
             
-            [logChecklist setObject:@"on" forKey:methodName];
+            logChecklist[methodName] = @"on";
             [standardUserDefaults setObject:logChecklist forKey:@"logChecklist"];
         }
         
@@ -160,7 +160,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSDictionary *userInfo = [NSDictionary dictionary];
+	NSDictionary *userInfo = @{};
 	
 	if ((token == nil) || (includePhoto == nil)) {
 		statusReturn = @"0";
@@ -322,7 +322,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             }
         }else{
             
-            [logChecklist setObject:@"on" forKey:methodName];
+            logChecklist[methodName] = @"on";
             [standardUserDefaults setObject:logChecklist forKey:@"logChecklist"];
         }
         
@@ -359,10 +359,10 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSMutableDictionary *tempDictionary = [[NSMutableDictionary alloc] init];
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
         
-		[ tempDictionary setObject:@"" forKey:@"isPasswordReset"];
+		tempDictionary[@"isPasswordReset"] = @"";
         
 		if (![resetPasswordAnswer isEqualToString:@""]) {
-			[tempDictionary setObject:resetPasswordAnswer forKey:@"passwordResetAnswer"];
+			tempDictionary[@"passwordResetAnswer"] = resetPasswordAnswer;
 		}
 		
 		loginDict = tempDictionary;
@@ -435,10 +435,10 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *profile = [ServerAPI encodeBase64data:profileImage];
 		
 		if ([addRemove isEqualToString:@"remove"]) {
-			[tempDictionary setObject:@"" forKey:@"photo"];
+			tempDictionary[@"photo"] = @"";
 		}else {
 			if (![profile isEqualToString:@""]) {
-				[ tempDictionary setObject:profile forKey:@"photo"];
+				tempDictionary[@"photo"] = profile;
 			}
 		}
         
@@ -452,54 +452,54 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             }else{
                 isPortrait = [NSNumber numberWithBool:0];
             }
-            [tempDictionary setObject:isPortrait forKey:@"isPortrait"];
+            tempDictionary[@"isPortrait"] = isPortrait;
         }
         
-		[ tempDictionary setObject:password forKey:@"password"];
+		tempDictionary[@"password"] = password;
         
 		//Set optional fields
 		if (![firstName isEqualToString:@""]){
-			[ tempDictionary setObject:firstName forKey:@"firstName"];
+			tempDictionary[@"firstName"] = firstName;
 		}
 		if (![lastName isEqualToString:@""]){
-			[ tempDictionary setObject:lastName forKey:@"lastName"];
+			tempDictionary[@"lastName"] = lastName;
 		}
 		if (![alertToken isEqualToString:@""]){
-			[ tempDictionary setObject:alertToken forKey:@"alertToken"];
+			tempDictionary[@"alertToken"] = alertToken;
 		}
 		
         
 		if (![resetPasswordAnswer isEqualToString:@""]){
-			[ tempDictionary setObject:resetPasswordAnswer forKey:@"passwordResetAnswer"];
+			tempDictionary[@"passwordResetAnswer"] = resetPasswordAnswer;
 		}
 		
 		if (![resetPasswordQuestion isEqualToString:@""]){
-			[ tempDictionary setObject:resetPasswordQuestion forKey:@"passwordResetQuestion"];
+			tempDictionary[@"passwordResetQuestion"] = resetPasswordQuestion;
 		}
 		
 		
 		if (![userIconOneId isEqualToString:@""]){
-			[ tempDictionary setObject:userIconOneId forKey:@"userIconOneId"];
+			tempDictionary[@"userIconOneId"] = userIconOneId;
 		}
 		
 		if (![userIconOneAlias isEqualToString:@""]){
-			[ tempDictionary setObject:userIconOneAlias forKey:@"userIconOneAlias"];
+			tempDictionary[@"userIconOneAlias"] = userIconOneAlias;
 		}
 		
 		if (![userIconTwoId isEqualToString:@""]){
-			[ tempDictionary setObject:userIconTwoId forKey:@"userIconTwoId"];
+			tempDictionary[@"userIconTwoId"] = userIconTwoId;
 		}
 		
 		if (![userIconTwoAlias isEqualToString:@""]){
-			[ tempDictionary setObject:userIconTwoAlias forKey:@"userIconTwoAlias"];
+			tempDictionary[@"userIconTwoAlias"] = userIconTwoAlias;
 		}
 		
 		if (![userIconOneImage isEqualToString:@""]){
-			[ tempDictionary setObject:userIconOneImage forKey:@"userIconOneImage"];
+			tempDictionary[@"userIconOneImage"] = userIconOneImage;
 		}
 		
 		if (![userIconTwoImage isEqualToString:@""]){
-			[ tempDictionary setObject:userIconTwoImage forKey:@"userIconTwoImage"];
+			tempDictionary[@"userIconTwoImage"] = userIconTwoImage;
 		}
         
 		if (![autoArchiveDayCount isEqualToString:@""]){
@@ -509,25 +509,25 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			[f setNumberStyle:NSNumberFormatterDecimalStyle];
 			NSNumber * myNumber = [f numberFromString:autoArchiveDayCount];
 			
-			[ tempDictionary setObject:myNumber forKey:@"autoArchiveDayCount"];
+			tempDictionary[@"autoArchiveDayCount"] = myNumber;
 		}
         
         
         if (![phoneNumber isEqualToString:@""]){
-			[ tempDictionary setObject:phoneNumber forKey:@"phoneNumber"];
+			tempDictionary[@"phoneNumber"] = phoneNumber;
 		}
         if (![phoneCarrierCode isEqualToString:@""]){
-			[ tempDictionary setObject:phoneCarrierCode forKey:@"mobileCarrierCode"];
+			tempDictionary[@"mobileCarrierCode"] = phoneCarrierCode;
 		}
         if (![confirmationCode isEqualToString:@""]){
-			[ tempDictionary setObject:confirmationCode forKey:@"confirmationCode"];
+			tempDictionary[@"confirmationCode"] = confirmationCode;
 		}
         if (![sendConfirmation isEqualToString:@""]){
             
             if ([sendConfirmation isEqualToString:@"true"]){
                 
                 NSNumber *confirm = [NSNumber numberWithBool:1];
-                [tempDictionary setObject:confirm forKey:@"sendConfirmation"];
+                tempDictionary[@"sendConfirmation"] = confirm;
                 
             }
 		}
@@ -598,8 +598,8 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
         
         
-		[ tempDictionary setObject:teamName forKey:@"teamName"];
-		[ tempDictionary setObject:description forKey:@"description"];
+		tempDictionary[@"teamName"] = teamName;
+		tempDictionary[@"description"] = description;
         
 		//Set optional fields
 		if (![useTwitter isEqualToString:@""]){
@@ -612,15 +612,15 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                 
 			}
             
-			[tempDictionary setObject:twitter forKey:@"useTwitter"];
+			tempDictionary[@"useTwitter"] = twitter;
 		}
         
 		
 		if (![leagueName isEqualToString:@""]){
-			[ tempDictionary setObject:leagueName forKey:@"leagueName"];
+			tempDictionary[@"leagueName"] = leagueName;
 		}
 		if (![sport isEqualToString:@""]) {
-			[ tempDictionary setObject:sport forKey:@"sport"];
+			tempDictionary[@"sport"] = sport;
 		}
         
 		loginDict = tempDictionary;
@@ -729,7 +729,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                 
 				Team *tmpTeam = [[Team alloc] init];
                 
-				NSDictionary *thisTeam = [teamsJsonObjects objectAtIndex:i];
+				NSDictionary *thisTeam = teamsJsonObjects[i];
                 
               
 				tmpTeam.name = [thisTeam valueForKey:@"teamName"];
@@ -772,7 +772,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSDictionary *teamInfo = [NSDictionary dictionary];
+	NSDictionary *teamInfo = @{};
 	
 	if ((token == nil) || (teamId == nil) || (includePhoto == nil)) {
 		statusReturn = @"0";
@@ -856,18 +856,18 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		
         
 		if (![profile isEqualToString:@""]) {
-			[ tempDictionary setObject:profile forKey:@"photo"];
+			tempDictionary[@"photo"] = profile;
 		}
 		
 		
 		if (![teamName isEqualToString:@""]) {
-			[ tempDictionary setObject:teamName forKey:@"teamName"];
+			tempDictionary[@"teamName"] = teamName;
 		}
 		if (![description isEqualToString:@""]) {
-			[ tempDictionary setObject:description forKey:@"description"];
+			tempDictionary[@"description"] = description;
 		}
 		if (![leagueName isEqualToString:@""]) {
-			[ tempDictionary setObject:leagueName forKey:@"leagueName"];
+			tempDictionary[@"leagueName"] = leagueName;
 		}
 		if (![useTwitter isEqualToString:@""]) {
 			
@@ -880,14 +880,14 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 				
 			}
 			
-			[tempDictionary setObject:twitter forKey:@"useTwitter"];
+			tempDictionary[@"useTwitter"] = twitter;
 			
 		}
         
 		
 		
 		if (![sport isEqualToString:@""]) {
-			[ tempDictionary setObject:sport forKey:@"sport"];
+			tempDictionary[@"sport"] = sport;
 		}
 		
         
@@ -899,7 +899,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             }else{
                 isPortrait = [NSNumber numberWithBool:0];
             }
-            [tempDictionary setObject:isPortrait forKey:@"isPortrait"];
+            tempDictionary[@"isPortrait"] = isPortrait;
         }
         
 		loginDict = tempDictionary;
@@ -1025,32 +1025,32 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
         
         
-		[ tempDictionary setObject:firstName forKey:@"firstName"];
-		[ tempDictionary setObject:lastName forKey:@"lastName"];
+		tempDictionary[@"firstName"] = firstName;
+		tempDictionary[@"lastName"] = lastName;
         
 		//Handle optional fields
         
 		if (![emailAddress isEqualToString:@""]){
-			[ tempDictionary setObject:emailAddress forKey:@"emailAddress"];
+			tempDictionary[@"emailAddress"] = emailAddress;
 		}
 		if (![jerseyNumber isEqualToString:@""]){
-			[ tempDictionary setObject:jerseyNumber forKey:@"jerseyNumber"];
+			tempDictionary[@"jerseyNumber"] = jerseyNumber;
 		}
 		if (![roles count] > 0){
-			[ tempDictionary setObject:roles forKey:@"roles"];
+			tempDictionary[@"roles"] = roles;
 		}
 		if ([guardianEmails count] > 0){
-			[ tempDictionary setObject:guardianEmails forKey:@"guardians"];
+			tempDictionary[@"guardians"] = guardianEmails;
 		}
         
 		if ([userRole isEqualToString:@""]) {
-			[ tempDictionary setObject:@"member" forKey:@"participantRole"];
+			tempDictionary[@"participantRole"] = @"member";
 		}else {
-			[ tempDictionary setObject:userRole forKey:@"participantRole"];
+			tempDictionary[@"participantRole"] = userRole;
 		}
 		
 		if (![phoneNumber isEqualToString:@""]) {
-			[ tempDictionary setObject:phoneNumber forKey:@"phoneNumber"];
+			tempDictionary[@"phoneNumber"] = phoneNumber;
 		}
         
 		loginDict = tempDictionary;
@@ -1125,7 +1125,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
 		
-		[tempDictionary setObject:members forKey:@"members"];
+		tempDictionary[@"members"] = members;
         
 		loginDict = tempDictionary;
 		
@@ -1225,7 +1225,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             
 			for (int i = 0; i < size; i++){
                 
-				NSDictionary *thisMember = [memberJsonObjects objectAtIndex:i];
+				NSDictionary *thisMember = memberJsonObjects[i];
 				NSString *currentRole = [thisMember valueForKey:@"participantRole"];
 				
 				if ([currentRole isEqualToString:@"fan"]) {
@@ -1330,7 +1330,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                         
                         if ([guardArray count] > 0){
                             
-                            NSDictionary *tmp1 = [guardArray objectAtIndex:0];
+                            NSDictionary *tmp1 = guardArray[0];
                             
                             
                             if ([tmp1 valueForKey:@"emailAddress"] != nil) {
@@ -1367,7 +1367,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                         
                         
                         if ([guardArray count] > 1) {
-                            NSDictionary *tmp2 = [guardArray objectAtIndex:1];
+                            NSDictionary *tmp2 = guardArray[1];
                             
                             if ([tmp2 valueForKey:@"emailAddress"] != nil) {
                                 tmpPlayer.guard2Email = [tmp2 valueForKey:@"emailAddress"];
@@ -1478,7 +1478,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             
 			//Sort list of players alphabetically (right now by first name)
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES];
-			[members sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+			[members sortUsingDescriptors:@[lastNameSorter]];
 			
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -1505,7 +1505,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSDictionary *memberInfo = [NSDictionary dictionary];
+	NSDictionary *memberInfo = @{};
 	
 	
 	if ((token == nil) || (memberId == nil) || (teamId == nil)) {
@@ -1649,55 +1649,55 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *profile = [ServerAPI encodeBase64data:profileImage];
 		
         if (![firstName isEqualToString:@""]) {
-            [ tempDictionary setObject:firstName forKey:@"firstName"];
+            tempDictionary[@"firstName"] = firstName;
         }
         
         if (![lastName isEqualToString:@""]) {
-            [ tempDictionary setObject:lastName forKey:@"lastName"];
+            tempDictionary[@"lastName"] = lastName;
         }
         
         if (![jerseyNumber isEqualToString:@""]) {
-            [ tempDictionary setObject:jerseyNumber forKey:@"jerseyNumber"];
+            tempDictionary[@"jerseyNumber"] = jerseyNumber;
             
         }
 		
         if ([roles count] > 0){
-            [ tempDictionary setObject:roles forKey:@"roles"];
+            tempDictionary[@"roles"] = roles;
 		}
         
 		if ([guardianEmails count] > 0){
             
             if ([guardianEmails count] > 2) {
-                [tempDictionary setObject:[NSArray array] forKey:@"guardians"];
+                tempDictionary[@"guardians"] = @[];
             }else{
-                [ tempDictionary setObject:guardianEmails forKey:@"guardians"];
+                tempDictionary[@"guardians"] = guardianEmails;
                 
             }
 		}
 		
 		if (![profile isEqualToString:@""]) {
-			[ tempDictionary setObject:profile forKey:@"photo"];
+			tempDictionary[@"photo"] = profile;
 		}
         
         
 		
 		if (![email isEqualToString:@""]) {
 			if ([email isEqualToString:@"remove"]) {
-                [tempDictionary setObject:@"" forKey:@"emailAddress"];
+                tempDictionary[@"emailAddress"] = @"";
             }else{
-                [ tempDictionary setObject:email forKey:@"emailAddress"];
+                tempDictionary[@"emailAddress"] = email;
                 
             }
 		}
 		if (![userRole isEqualToString:@""]) {
-			[ tempDictionary setObject:userRole forKey:@"participantRole"];
+			tempDictionary[@"participantRole"] = userRole;
 		}
         
 		if (![phoneNumber isEqualToString:@""]) {
             if ([phoneNumber isEqualToString:@"remove"]) {
-                [tempDictionary setObject:@"" forKey:@"phoneNumber"];
+                tempDictionary[@"phoneNumber"] = @"";
             }else{
-                [ tempDictionary setObject:phoneNumber forKey:@"phoneNumber"];
+                tempDictionary[@"phoneNumber"] = phoneNumber;
                 
             }
 		}
@@ -1710,7 +1710,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             }else{
                 isPortrait = [NSNumber numberWithBool:0];
             }
-            [tempDictionary setObject:isPortrait forKey:@"isPortrait"];
+            tempDictionary[@"isPortrait"] = isPortrait;
         }
         
 		loginDict = tempDictionary;
@@ -1858,22 +1858,22 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
         
         
-		[ tempDictionary setObject:startDate forKey:@"startDate"];
-		[ tempDictionary setObject:timeZone forKey:@"timeZone"];
-		[ tempDictionary setObject:description forKey:@"description"];
+		tempDictionary[@"startDate"] = startDate;
+		tempDictionary[@"timeZone"] = timeZone;
+		tempDictionary[@"description"] = description;
         
         
 		if (![endDate isEqualToString:@""]){
-			[ tempDictionary setObject:endDate forKey:@"endDate"];
+			tempDictionary[@"endDate"] = endDate;
 		}
 		if (![opponent isEqualToString:@""]){
-			[ tempDictionary setObject:opponent forKey:@"opponent"];
+			tempDictionary[@"opponent"] = opponent;
 		}
 		if (![latitude isEqualToString:@""]){
-			[ tempDictionary setObject:latitude forKey:@"latitude"];
+			tempDictionary[@"latitude"] = latitude;
 		}
 		if (![longitude isEqualToString:@""]){
-			[ tempDictionary setObject:longitude forKey:@"longitude"];
+			tempDictionary[@"longitude"] = longitude;
 		}
         
         
@@ -1953,9 +1953,9 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 		NSString *timeZone = [tmp1 name];
 		
-		[tempDictionary setObject:timeZone forKey:@"timeZone"];
-		[tempDictionary setObject:notificationType forKey:@"notificationType"];
-		[tempDictionary setObject:games forKey:@"games"];
+		tempDictionary[@"timeZone"] = timeZone;
+		tempDictionary[@"notificationType"] = notificationType;
+		tempDictionary[@"games"] = games;
 		
 		
 		
@@ -2075,7 +2075,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 				
 				Game *tmpGame = [[Game alloc] init];
                 
-				NSDictionary *thisGame = [gameJsonObjects objectAtIndex:i];
+				NSDictionary *thisGame = gameJsonObjects[i];
                 
 				tmpGame.description = [thisGame valueForKey:@"description"];
 				tmpGame.startDate = [thisGame valueForKey:@"startDate"];
@@ -2130,7 +2130,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			//Sort games by date
 			//Sort list of players alphabetically (right now by first name)
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-			[games sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+			[games sortUsingDescriptors:@[lastNameSorter]];
             
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -2158,7 +2158,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSDictionary *gameInfo = [NSDictionary dictionary];
+	NSDictionary *gameInfo = @{};
 	
 	
 	if ((token == nil) || (teamId == nil) || (gameId == nil)) {
@@ -2246,48 +2246,48 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
 		
 		if (![startDate isEqualToString:@""]){
-			[ tempDictionary setObject:startDate forKey:@"startDate"];
+			tempDictionary[@"startDate"] = startDate;
 		}
 		if (![endDate isEqualToString:@""]){
-			[ tempDictionary setObject:endDate forKey:@"endDate"];
+			tempDictionary[@"endDate"] = endDate;
 		}
 		if (![timeZone isEqualToString:@""]){
-			[ tempDictionary setObject:timeZone forKey:@"timeZone"];
+			tempDictionary[@"timeZone"] = timeZone;
 		}
 		if (![description isEqualToString:@""]){
-			[ tempDictionary setObject:description forKey:@"description"];
+			tempDictionary[@"description"] = description;
 		}
 		if (![latitude isEqualToString:@""]){
-			[ tempDictionary setObject:latitude forKey:@"latitude"];
+			tempDictionary[@"latitude"] = latitude;
 		}
 		if (![longitude isEqualToString:@""]){
-			[ tempDictionary setObject:longitude forKey:@"longitude"];
+			tempDictionary[@"longitude"] = longitude;
 		}
 		if (![opponent isEqualToString:@""]){
-			[ tempDictionary setObject:opponent forKey:@"opponent"];
+			tempDictionary[@"opponent"] = opponent;
 		}
 		if (![location isEqualToString:@""]){
-			[ tempDictionary setObject:location forKey:@"location"];
+			tempDictionary[@"location"] = location;
 		}
 		
 		if (![scoreUs isEqualToString:@""]) {
-			[ tempDictionary setObject:scoreUs forKey:@"scoreUs"];
+			tempDictionary[@"scoreUs"] = scoreUs;
 		}
 		
 		if (![scoreThem isEqualToString:@""]) {
-			[ tempDictionary setObject:scoreThem forKey:@"scoreThem"];
+			tempDictionary[@"scoreThem"] = scoreThem;
 		}
 		
 		if (![interval isEqualToString:@""]) {
-			[ tempDictionary setObject:interval forKey:@"interval"];
+			tempDictionary[@"interval"] = interval;
 		}
 		
 		if (![notifyTeam isEqualToString:@""]) {
 			
 			if ([notifyTeam isEqualToString:@"true"]) {
-				[tempDictionary setObject:@"plain" forKey:@"notificationType"];
+				tempDictionary[@"notificationType"] = @"plain";
 			}else {
-				[tempDictionary setObject:@"none" forKey:@"notificationType"];
+				tempDictionary[@"notificationType"] = @"none";
                 
 			}
             
@@ -2299,17 +2299,17 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         
         if ([updateAll isEqualToString:@"true"]) {
             upAll = [NSNumber numberWithBool:1];
-            [tempDictionary setObject:upAll forKey:@"updateAll"];
+            tempDictionary[@"updateAll"] = upAll;
         }else {
             upAll = [NSNumber numberWithBool:0];
-            [tempDictionary setObject:upAll forKey:@"updateAll"];
+            tempDictionary[@"updateAll"] = upAll;
         }
         
 		//}
         
         
 		if (![pollStatus isEqualToString:@""]) {
-			[ tempDictionary setObject:pollStatus forKey:@"pollStatus"];
+			tempDictionary[@"pollStatus"] = pollStatus;
 		}
 		
 		loginDict = tempDictionary;
@@ -2380,7 +2380,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
 		
 		if (![memberId isEqualToString:@""]){
-			[ tempDictionary setObject:memberId forKey:@"memberId"];
+			tempDictionary[@"memberId"] = memberId;
 		}
 		
 		
@@ -2472,7 +2472,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *apiStatus = [response valueForKey:@"apiStatus"];
 		
 		NSString *votedFor = @"";
-		NSArray *memberTallies = [NSArray array];
+		NSArray *memberTallies = @[];
 		
 		if ([apiStatus isEqualToString:@"100"]) {
 			
@@ -2527,27 +2527,27 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
         
         
-		[tempDictionary setObject:startDate forKey:@"startDate"];
-		[tempDictionary setObject:timeZone forKey:@"timeZone"];
-		[tempDictionary setObject:description forKey:@"description"];
+		tempDictionary[@"startDate"] = startDate;
+		tempDictionary[@"timeZone"] = timeZone;
+		tempDictionary[@"description"] = description;
 		[tempDictionary setValue:eventType forKey:@"eventType"];
         
 		
 		if (![endDate isEqualToString:@""]){
-			[ tempDictionary setObject:endDate forKey:@"endDate"];
+			tempDictionary[@"endDate"] = endDate;
 		}
 		if (![location isEqualToString:@""]){
-            [ tempDictionary setObject:location forKey:@"opponent"];
+            tempDictionary[@"opponent"] = location;
 		}
 		if (![latitude isEqualToString:@""]){
-			[ tempDictionary setObject:latitude forKey:@"latitude"];
+			tempDictionary[@"latitude"] = latitude;
 		}
 		if (![longitude isEqualToString:@""]){
-			[ tempDictionary setObject:longitude forKey:@"longitude"];
+			tempDictionary[@"longitude"] = longitude;
 		}
 		
 		if (![eventName isEqualToString:@""]) {
-			[tempDictionary setObject:eventName forKey:@"eventName"];
+			tempDictionary[@"eventName"] = eventName;
 		}
 		
         
@@ -2627,9 +2627,9 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 		NSString *timeZone = [tmp1 name];
 		
-		[tempDictionary setObject:timeZone forKey:@"timeZone"];
-		[tempDictionary setObject:notificationType forKey:@"notificationType"];
-		[tempDictionary setObject:events forKey:@"practices"];
+		tempDictionary[@"timeZone"] = timeZone;
+		tempDictionary[@"notificationType"] = notificationType;
+		tempDictionary[@"practices"] = events;
 		
 		
 		
@@ -2748,13 +2748,13 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             
 			for (int i = 0; i < size; i++){
                 
-                NSDictionary *thisEvent = [eventJsonObjects objectAtIndex:i];
+                NSDictionary *thisEvent = eventJsonObjects[i];
                 
                 if ([[thisEvent valueForKey:@"eventType"] isEqualToString:@"practice"]) {
                     
                     Practice *tmpPractice = [[Practice alloc] init];
                     
-                    NSDictionary *thisPractice = [eventJsonObjects objectAtIndex:i];
+                    NSDictionary *thisPractice = eventJsonObjects[i];
                     
                     tmpPractice.description = [thisPractice valueForKey:@"description"];
                     tmpPractice.startDate = [thisPractice valueForKey:@"startDate"];
@@ -2834,7 +2834,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			}
             
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-			[events sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+			[events sortUsingDescriptors:@[lastNameSorter]];
             
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -2919,13 +2919,13 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             
 			for (int i = 0; i < size; i++){
                 
-                NSDictionary *thisEvent = [eventJsonObjects objectAtIndex:i];
+                NSDictionary *thisEvent = eventJsonObjects[i];
                 
                 if ([[thisEvent valueForKey:@"eventType"] isEqualToString:@"practice"]) {
                     
                     Practice *tmpPractice = [[Practice alloc] init];
                     
-                    NSDictionary *thisPractice = [eventJsonObjects objectAtIndex:i];
+                    NSDictionary *thisPractice = eventJsonObjects[i];
                     
                     tmpPractice.description = [thisPractice valueForKey:@"description"];
                     tmpPractice.startDate = [thisPractice valueForKey:@"startDate"];
@@ -3058,7 +3058,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			}
             
 			NSSortDescriptor *lastNameSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:YES];
-			[events sortUsingDescriptors:[NSArray arrayWithObject:lastNameSorter]];
+			[events sortUsingDescriptors:@[lastNameSorter]];
             
 			statusReturn = apiStatus;
 			[returnDictionary setValue:statusReturn forKey:@"status"];
@@ -3140,7 +3140,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 				
 				for (int i = 0; i < [today count]; i++) {
 					
-					NSDictionary *todaysEvent = [today objectAtIndex:i];
+					NSDictionary *todaysEvent = today[i];
 					
 					CurrentEvent *tmpEvent = [[CurrentEvent alloc] init];
 					
@@ -3189,7 +3189,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                     }
                     
                     for (int i =0; i < [attendees count]; i++) {
-                        NSDictionary *tmpDictionary = [attendees objectAtIndex:i];
+                        NSDictionary *tmpDictionary = attendees[i];
                         
                         NSString *reply = [tmpDictionary valueForKey:@"preGameStatus"];
                         
@@ -3225,7 +3225,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                 
 				for (int i = 0; i < [tomorrow count]; i++) {
 					
-					NSDictionary *tomorrowsEvent = [tomorrow objectAtIndex:i];
+					NSDictionary *tomorrowsEvent = tomorrow[i];
 					
 					CurrentEvent *tmpEvent = [[CurrentEvent alloc] init];
 					
@@ -3273,7 +3273,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                     tmpEvent.no = 0;
                     tmpEvent.maybe = 0;
                     for (int i =0; i < [attendees count]; i++) {
-                        NSDictionary *tmpDictionary = [attendees objectAtIndex:i];
+                        NSDictionary *tmpDictionary = attendees[i];
                         
                         NSString *reply = [tmpDictionary valueForKey:@"preGameStatus"];
                         
@@ -3304,8 +3304,8 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			
 			
 			NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"eventDate" ascending:YES];
-			[eventsToday sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
-			[eventsTomorrow sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
+			[eventsToday sortUsingDescriptors:@[dateSorter]];
+			[eventsTomorrow sortUsingDescriptors:@[dateSorter]];
 			
 			statusReturn = apiStatus;
             
@@ -3334,7 +3334,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSDictionary *eventInfo = [NSDictionary dictionary];
+	NSDictionary *eventInfo = @{};
 	
 	
 	if ((token == nil) || (teamId == nil) || (eventId == nil)) {
@@ -3423,37 +3423,37 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
         
 		if (![startDate isEqualToString:@""]){
-			[ tempDictionary setObject:startDate forKey:@"startDate"];
+			tempDictionary[@"startDate"] = startDate;
 		}
 		if (![endDate isEqualToString:@""]){
-			[ tempDictionary setObject:endDate forKey:@"endDate"];
+			tempDictionary[@"endDate"] = endDate;
 		}
 		if (![timeZone isEqualToString:@""]){
-			[ tempDictionary setObject:timeZone forKey:@"timeZone"];
+			tempDictionary[@"timeZone"] = timeZone;
 		}
 		if (![description isEqualToString:@""]){
-			[ tempDictionary setObject:description forKey:@"description"];
+			tempDictionary[@"description"] = description;
 		}
 		if (![latitude isEqualToString:@""]){
-			[ tempDictionary setObject:latitude forKey:@"latitude"];
+			tempDictionary[@"latitude"] = latitude;
 		}
 		if (![longitude isEqualToString:@""]){
-			[ tempDictionary setObject:longitude forKey:@"longitude"];
+			tempDictionary[@"longitude"] = longitude;
 		}
 		if (![location isEqualToString:@""]){
-			[ tempDictionary setObject:location forKey:@"opponent"];
+			tempDictionary[@"opponent"] = location;
 		}
         
 		if (![eventName isEqualToString:@""]){
-			[ tempDictionary setObject:eventName forKey:@"eventName"];
+			tempDictionary[@"eventName"] = eventName;
 		}
 		
 		if (![notifyTeam isEqualToString:@""]) {
 			
 			if ([notifyTeam isEqualToString:@"true"]) {
-				[tempDictionary setObject:@"plain" forKey:@"notificationType"];
+				tempDictionary[@"notificationType"] = @"plain";
 			}else {
-				[tempDictionary setObject:@"none" forKey:@"notificationType"];
+				tempDictionary[@"notificationType"] = @"none";
 				
 			}
 			
@@ -3463,20 +3463,20 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		
 		if ([isCanceled isEqualToString:@"true"]) {
 			cancel = [NSNumber numberWithBool:1];
-			[tempDictionary setObject:cancel forKey:@"isCanceled"];
+			tempDictionary[@"isCanceled"] = cancel;
 		}else {
 			cancel = [NSNumber numberWithBool:0];
-			[tempDictionary setObject:cancel forKey:@"isCanceled"];
+			tempDictionary[@"isCanceled"] = cancel;
 		}
 		
 		NSNumber *upAll;
 		
 		if ([updateAll isEqualToString:@"true"]) {
 			upAll = [NSNumber numberWithBool:1];
-			[tempDictionary setObject:upAll forKey:@"updateAll"];
+			tempDictionary[@"updateAll"] = upAll;
 		}else {
 			upAll = [NSNumber numberWithBool:0];
-			[tempDictionary setObject:upAll forKey:@"updateAll"];
+			tempDictionary[@"updateAll"] = upAll;
 		}
 		
 		loginDict = tempDictionary;
@@ -3546,11 +3546,11 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
         
-		[ tempDictionary setObject:teamId forKey:@"teamId"];
-		[ tempDictionary setObject:eventId forKey:@"eventId"];
-		[ tempDictionary setObject:eventType forKey:@"eventType"];
-		[ tempDictionary setObject:attList forKey:@"attendees"];
-		[ tempDictionary setObject:startDate forKey:@"eventDate"];
+		tempDictionary[@"teamId"] = teamId;
+		tempDictionary[@"eventId"] = eventId;
+		tempDictionary[@"eventType"] = eventType;
+		tempDictionary[@"attendees"] = attList;
+		tempDictionary[@"eventDate"] = startDate;
         
 		loginDict = tempDictionary;
         
@@ -3596,7 +3596,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSDictionary *attendance = [NSDictionary dictionary];
+	NSDictionary *attendance = @{};
 	
 	if ((token == nil) || (teamId == nil) || (eventId == nil) || (eventType	== nil)) {
 		
@@ -3658,7 +3658,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSDictionary *attendance = [NSDictionary dictionary];
+	NSDictionary *attendance = @{};
 	
 	if ((token == nil) || (teamId == nil) || (memberId == nil) || (eventType == nil) || (startDate == nil) || (endDate == nil)) {
 		
@@ -3868,31 +3868,31 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *authentication = [ServerAPI encodeBase64:stringToEncode];
         
         
-		[ tempDictionary setObject:subject forKey:@"subject"];
-		[ tempDictionary setObject:body forKey:@"body"];
-		[ tempDictionary setObject:type forKey:@"type"];
+		tempDictionary[@"subject"] = subject;
+		tempDictionary[@"body"] = body;
+		tempDictionary[@"type"] = type;
         
         
 		if (![eventId isEqualToString:@""]){
-			[ tempDictionary setObject:eventId forKey:@"eventId"];
-			[ tempDictionary setObject:eventType forKey:@"eventType"];
+			tempDictionary[@"eventId"] = eventId;
+			tempDictionary[@"eventType"] = eventType;
             
 		}
 		if ([pollChoices count] > 0){
-			[ tempDictionary setObject:pollChoices forKey:@"pollChoices"];
+			tempDictionary[@"pollChoices"] = pollChoices;
 		}
 		if ([recipients count] > 0){
-			[ tempDictionary setObject:recipients forKey:@"recipients"];
+			tempDictionary[@"recipients"] = recipients;
 		}
 		if (![isAlert isEqualToString:@""]){
-			[ tempDictionary setObject:isAlert forKey:@"isAlert"];
+			tempDictionary[@"isAlert"] = isAlert;
 		}
 		if (![displayResults isEqualToString:@""]){
-			[ tempDictionary setObject:displayResults forKey:@"isPublic"];
+			tempDictionary[@"isPublic"] = displayResults;
 		}
 		
 		if (![includeFans isEqualToString:@""]){
-			[ tempDictionary setObject:includeFans forKey:@"includeFans"];
+			tempDictionary[@"includeFans"] = includeFans;
 		}
         
 		
@@ -3902,7 +3902,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			
 			if ([coordinatorsOnly isEqualToString:@"true"]) {
 				coordOnly = [NSNumber numberWithBool:1];
-				[tempDictionary setObject:coordOnly forKey:@"coordinatorsOnly"];
+				tempDictionary[@"coordinatorsOnly"] = coordOnly;
 			}
 		}
         
@@ -3958,7 +3958,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSDictionary *messageThreadInfo = [NSDictionary dictionary];
+	NSDictionary *messageThreadInfo = @{};
 	
 	
 	if ((token == nil) || (teamId == nil) || (messageThreadId == nil)) {
@@ -4023,7 +4023,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 	
 	NSMutableDictionary *returnDictionary = [NSMutableDictionary dictionary];
 	NSString *statusReturn = @"";
-	NSArray *messageArray = [NSArray array];
+	NSArray *messageArray = @[];
 
 	if ((token == nil) || (teamId == nil) || (messageGroup == nil) || (eventId == nil) || (eventType == nil)
 		|| (pollOrMsg == nil) || (status == nil)) {
@@ -4129,7 +4129,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                 
                 
 				for (int i = 0; i < [inbox count]; i++) {
-					NSDictionary *message = [inbox objectAtIndex:i];
+					NSDictionary *message = inbox[i];
                     
 					if (([message valueForKey:@"gameId"] == nil) && ([message valueForKey:@"practiceId"] == nil)) {
 						
@@ -4197,7 +4197,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 						
 						for (int j = 0; j < [messages count]; j++) {
 							
-							NSDictionary *tmpDictionary = [messages objectAtIndex:j];
+							NSDictionary *tmpDictionary = messages[j];
 							
 							NSString *tmpDateString = [tmpDictionary valueForKey:@"receivedDate"];
 							
@@ -4267,7 +4267,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 						NSMutableArray *subIds = [NSMutableArray array];
 						for (int j = 0; j < [messages count]; j++) {
 							
-							NSDictionary *tmpDictionary = [messages objectAtIndex:j];
+							NSDictionary *tmpDictionary = messages[j];
 							
 							NSString *tmpDateString = [tmpDictionary valueForKey:@"receivedDate"];
 							
@@ -4330,7 +4330,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 				NSArray *outbox = [response valueForKey:@"outbox"];
                                 
 				for (int i = 0; i < [outbox count]; i++) {
-					NSDictionary *message = [outbox objectAtIndex:i];
+					NSDictionary *message = outbox[i];
                     
 					if (([message valueForKey:@"gameId"] == nil) && ([message valueForKey:@"practiceId"] == nil)) {
                         
@@ -4388,7 +4388,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 						NSMutableArray *subIds = [NSMutableArray array];
 						for (int j = 0; j < [messages count]; j++) {
 							
-							NSDictionary *tmpDictionary = [messages objectAtIndex:j];
+							NSDictionary *tmpDictionary = messages[j];
 							
 							NSString *tmpDateString = [tmpDictionary valueForKey:@"createdDate"];
 							
@@ -4455,7 +4455,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 						NSMutableArray *subIds = [NSMutableArray array];
 						for (int j = 0; j < [messages count]; j++) {
 							
-							NSDictionary *tmpDictionary = [messages objectAtIndex:j];
+							NSDictionary *tmpDictionary = messages[j];
 							
 							NSString *tmpDateString = [tmpDictionary valueForKey:@"createdDate"];
 							
@@ -4564,20 +4564,20 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         
         
 		if (![reply isEqualToString:@""]) {
-			[ tempDictionary setObject:reply forKey:@"reply"];
+			tempDictionary[@"reply"] = reply;
 		}
 		if (![wasViewed isEqualToString:@""]) {
-			[ tempDictionary setObject:wasViewed forKey:@"wasViewed"];
+			tempDictionary[@"wasViewed"] = wasViewed;
 		}
 		if (![followUpMessage isEqualToString:@""]) {
-			[ tempDictionary setObject:followUpMessage forKey:@"followupMessage"];
+			tempDictionary[@"followupMessage"] = followUpMessage;
 		}
 		if (![status isEqualToString:@""]) {
-			[ tempDictionary setObject:status forKey:@"status"];
+			tempDictionary[@"status"] = status;
 		}
         
         if (![sendReminder isEqualToString:@""]) {
-			[ tempDictionary setObject:[NSArray array] forKey:@"sendReminder"];
+			tempDictionary[@"sendReminder"] = @[];
 		}
         
 		loginDict = tempDictionary;
@@ -4647,12 +4647,12 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		
 		
 		if ([threadIds count] > 0) {
-			[ tempDictionary setObject:threadIds forKey:@"messageThreadIds"];
+			tempDictionary[@"messageThreadIds"] = threadIds;
 		}
 		if (![location isEqualToString:@""]) {
-			[tempDictionary setObject:location forKey:@"messageLocation"];
+			tempDictionary[@"messageLocation"] = location;
 		}
-		[tempDictionary setObject:@"archived" forKey:@"status"];
+		tempDictionary[@"status"] = @"archived";
 		
 		loginDict = tempDictionary;
 		
@@ -4952,7 +4952,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			NSArray *returnActivites = [response valueForKey:@"activities"];
             
 			for (int i = 0; i < [returnActivites count]; i++) {
-				NSDictionary *tmpDict = [returnActivites objectAtIndex:i];
+				NSDictionary *tmpDict = returnActivites[i];
 				Activity *tmpActivity = [[Activity alloc] init];
                 				
 				tmpActivity.activityText = [tmpDict valueForKey:@"text"];
@@ -4975,7 +4975,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                 tmpActivity.isCurrentUser = [[tmpDict valueForKey:@"isCurrentUser"] boolValue];
                 
                 tmpActivity.vote = [tmpDict valueForKey:@"vote"];
-				tmpActivity.replies = [NSArray array];
+				tmpActivity.replies = @[];
                 
 				if ([tmpDict valueForKey:@"thumbNail"] != nil) {
 					tmpActivity.thumbnail = [tmpDict valueForKey:@"thumbNail"];
@@ -5146,7 +5146,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 			NSArray *returnActivites = [response valueForKey:@"activities"];
             
 			for (int i = 0; i < [returnActivites count]; i++) {
-				NSDictionary *tmpDict = [returnActivites objectAtIndex:i];
+				NSDictionary *tmpDict = returnActivites[i];
 				Activity *tmpActivity = [[Activity alloc] init];
                 
 				tmpActivity.activityText = [tmpDict valueForKey:@"text"];
@@ -5169,7 +5169,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                 tmpActivity.isCurrentUser = [[tmpDict valueForKey:@"isCurrentUser"] boolValue];
                 
                 tmpActivity.vote = [tmpDict valueForKey:@"vote"];
-				tmpActivity.replies = [NSArray array];
+				tmpActivity.replies = @[];
                 
                 bool add = false;
                 
@@ -5245,9 +5245,9 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             for (int i = 0; i < [activityIds count]; i++) {
                 
                 if (i == [activityIds count] - 1) {
-                    activityString = [activityString stringByAppendingFormat:@"%@", [activityIds objectAtIndex:i]];
+                    activityString = [activityString stringByAppendingFormat:@"%@", activityIds[i]];
                 }else{
-                    activityString = [activityString stringByAppendingFormat:@"%@,", [activityIds objectAtIndex:i]];
+                    activityString = [activityString stringByAppendingFormat:@"%@,", activityIds[i]];
 
                 }
             }
@@ -5317,29 +5317,29 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSString *videoString = [Base64 encode:video];
 		
 		if (![statusUpdate isEqualToString:@""]) {
-			[ tempDictionary setObject:statusUpdate forKey:@"statusUpdate"];
+			tempDictionary[@"statusUpdate"] = statusUpdate;
 		}
         
 		if (![photoString isEqualToString:@""]) {
-			[tempDictionary setObject:photoString forKey:@"photo"];
+			tempDictionary[@"photo"] = photoString;
 		}
 		
 		if (![videoString isEqualToString:@""]) {
-			[tempDictionary setObject:videoString forKey:@"video"];
+			tempDictionary[@"video"] = videoString;
 		}
         
         if (![replyToId isEqualToString:@""]) {
-			[tempDictionary setObject:replyToId forKey:@"parentActivityId"];
+			tempDictionary[@"parentActivityId"] = replyToId;
 		}
         
         if (![gameday isEqualToString:@""]) {
-			[tempDictionary setObject:gameday forKey:@"gameDay"];
+			tempDictionary[@"gameDay"] = gameday;
 		}
         
         
         if (![eventId isEqualToString:@""]) {
-			[tempDictionary setObject:eventId forKey:@"eventId"];
-            [tempDictionary setObject:@"game" forKey:@"eventType"];
+			tempDictionary[@"eventId"] = eventId;
+            tempDictionary[@"eventType"] = @"game";
 
 		}
         
@@ -5351,13 +5351,13 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             }else{
                 isPortrait = [NSNumber numberWithBool:0];
             }
-            [tempDictionary setObject:isPortrait forKey:@"isPortrait"];
+            tempDictionary[@"isPortrait"] = isPortrait;
         }
 		
         NSTimeZone *tmp1 = [NSTimeZone systemTimeZone];
 		NSString *timeZone = [tmp1 name];
 		
-		[tempDictionary setObject:timeZone forKey:@"timeZone"];
+		tempDictionary[@"timeZone"] = timeZone;
         
 		loginDict = tempDictionary;
 		
@@ -5422,11 +5422,11 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 		NSDictionary *loginDict = [[NSDictionary alloc] init];
 		
         if (![likeDislike isEqualToString:@""]) {
-            [tempDictionary setObject:likeDislike forKey:@"vote"];
+            tempDictionary[@"vote"] = likeDislike;
         }
         
         if (![statusUpdate isEqualToString:@""]) {
-            [tempDictionary setObject:statusUpdate forKey:@"statusUpdate"];
+            tempDictionary[@"statusUpdate"] = statusUpdate;
         }
 		
         NSString *photoString = [ServerAPI encodeBase64data:photo];
@@ -5436,15 +5436,15 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 
         
 		if (![photoString isEqualToString:@""]) {
-			[tempDictionary setObject:photoString forKey:@"photo"];
+			tempDictionary[@"photo"] = photoString;
 		}
 		
 		if (![videoString isEqualToString:@""]) {
-			[tempDictionary setObject:videoString forKey:@"video"];
+			tempDictionary[@"video"] = videoString;
 		}
         
         if (([photoString length] > 0) && ([videoString length] == 0)) {
-            [tempDictionary setObject:@"" forKey:@"video"];
+            tempDictionary[@"video"] = @"";
         }
         
         if (![orientation isEqualToString:@""]){
@@ -5455,7 +5455,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             }else{
                 isPortrait = [NSNumber numberWithBool:0];
             }
-            [tempDictionary setObject:isPortrait forKey:@"isPortrait"];
+            tempDictionary[@"isPortrait"] = isPortrait;
         }		
 		
         
@@ -5463,8 +5463,8 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
             if (([photo length] > 0) || ([video length] > 0)) {
                 
             }else{
-                [tempDictionary setObject:@"" forKey:@"video"];
-                [tempDictionary setObject:@"" forKey:@"photo"];
+                tempDictionary[@"video"] = @"";
+                tempDictionary[@"photo"] = @"";
 
 
             }
@@ -5611,13 +5611,13 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
 				
 				NSMutableDictionary *tmpDictionary1 = [[NSMutableDictionary alloc] init];
 				
-				[tmpDictionary1 setValue:[activityIdArray objectAtIndex:i] forKey:@"activityId"];
+				[tmpDictionary1 setValue:activityIdArray[i] forKey:@"activityId"];
 				
 				[finalActivityArray addObject:tmpDictionary1];
 				
 			}
 			
-			[ tempDictionary setObject:finalActivityArray forKey:@"activities"];
+			tempDictionary[@"activities"] = finalActivityArray;
 		}
       
         
@@ -5827,7 +5827,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
                 
 				MobileCarrier *tmpTeam = [[MobileCarrier alloc] init];
                 
-				NSDictionary *thisTeam = [teamsJsonObjects objectAtIndex:i];
+				NSDictionary *thisTeam = teamsJsonObjects[i];
                 
 				tmpTeam.name = [thisTeam valueForKey:@"name"];
                 
@@ -5878,7 +5878,7 @@ static NSString *baseUrl = @"http://v3-1.latest.rteamtest.appspot.com";
         }
     }else{
         
-        [logChecklist setObject:@"on" forKey:methodName];
+        logChecklist[methodName] = @"on";
         [standardUserDefaults setObject:logChecklist forKey:@"logChecklist"];
     }
     

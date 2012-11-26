@@ -50,13 +50,13 @@ static NSMutableArray *traceTimeStamps;
     for (int i = 0; i < [traceSession count]; i++) {
         
         if (i == ([traceSession count] - 1)) {
-            tmpTrace = [tmpTrace stringByAppendingFormat:@"%@", [traceSession objectAtIndex:i]];
+            tmpTrace = [tmpTrace stringByAppendingFormat:@"%@", traceSession[i]];
             
-            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@", [dateFormatter stringFromDate:[traceTimeStamps objectAtIndex:i]]];
+            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@", [dateFormatter stringFromDate:traceTimeStamps[i]]];
 
         }else{
-            tmpTrace = [tmpTrace stringByAppendingFormat:@"%@,", [traceSession objectAtIndex:i]];
-            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@,", [dateFormatter stringFromDate:[traceTimeStamps objectAtIndex:i]]];
+            tmpTrace = [tmpTrace stringByAppendingFormat:@"%@,", traceSession[i]];
+            tmpTraceTime = [tmpTraceTime stringByAppendingFormat:@"%@,", [dateFormatter stringFromDate:traceTimeStamps[i]]];
 
         }
     }
@@ -90,9 +90,9 @@ static NSMutableArray *traceTimeStamps;
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss.SSS"];
-        NSString *dateString = [dateFormatter stringFromDate:[traceTimeStamps objectAtIndex:i]];
+        NSString *dateString = [dateFormatter stringFromDate:traceTimeStamps[i]];
                 
-        NSLog(@"%d: %@ - %@", i, [traceSession objectAtIndex:i], dateString);
+        NSLog(@"%d: %@ - %@", i, traceSession[i], dateString);
     }
      
 }

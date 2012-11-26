@@ -63,13 +63,13 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		NSMutableArray *gamesMutable = [NSMutableArray arrayWithArray:self.allGames];
 		for (int i = 0; i < [gamesMutable count]; i++) {
 			
-			Game *tmpGame = [gamesMutable objectAtIndex:i];
+			Game *tmpGame = gamesMutable[i];
 			if ([tmpGame.gameId isEqualToString:self.gameIdCanceled]) {
 				
 				if (self.isCancel) {
 					tmpGame.interval = @"-4";
 					
-					[gamesMutable replaceObjectAtIndex:i withObject:tmpGame];
+					gamesMutable[i] = tmpGame;
 				}else {
 					[gamesMutable removeObjectAtIndex:i];
 				}
@@ -82,15 +82,15 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		NSMutableArray *eventsMutable = [NSMutableArray arrayWithArray:self.allEvents];
 		for (int i = 0; i < [eventsMutable count]; i++) {
 			
-			if ([Game class] == [[eventsMutable objectAtIndex:i] class]) {
+			if ([Game class] == [eventsMutable[i] class]) {
 				
-				Game *tmpGame = [eventsMutable objectAtIndex:i];
+				Game *tmpGame = eventsMutable[i];
 				if ([tmpGame.gameId isEqualToString:self.gameIdCanceled]) {
 					
 					if (self.isCancel) {
 						tmpGame.interval = @"-4";
 						
-						[eventsMutable replaceObjectAtIndex:i withObject:tmpGame];
+						eventsMutable[i] = tmpGame;
 					}else {
 						[eventsMutable removeObjectAtIndex:i];
 					}
@@ -124,13 +124,13 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		NSMutableArray *practicesMutable = [NSMutableArray arrayWithArray:self.allPractices];
 		for (int i = 0; i < [practicesMutable count]; i++) {
 			
-			Practice *tmpPractice = [practicesMutable objectAtIndex:i];
+			Practice *tmpPractice = practicesMutable[i];
 			if ([tmpPractice.practiceId isEqualToString:self.practiceIdCanceled]) {
 				
 				if (self.isCancel) {
 					tmpPractice.isCanceled = true;
 					
-					[practicesMutable replaceObjectAtIndex:i withObject:tmpPractice];
+					practicesMutable[i] = tmpPractice;
 				}else {
 					[practicesMutable removeObjectAtIndex:i];
 				}
@@ -143,15 +143,15 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		NSMutableArray *eventsMutable = [NSMutableArray arrayWithArray:self.allEvents];
 		for (int i = 0; i < [eventsMutable count]; i++) {
 			
-			if ([Practice class] == [[eventsMutable objectAtIndex:i] class]) {
+			if ([Practice class] == [eventsMutable[i] class]) {
 				
-				Practice *tmpPractice = [eventsMutable objectAtIndex:i];
+				Practice *tmpPractice = eventsMutable[i];
 				if ([tmpPractice.practiceId isEqualToString:self.practiceIdCanceled]) {
 					
 					if (self.isCancel) {
 						tmpPractice.isCanceled = true;
 						
-						[eventsMutable replaceObjectAtIndex:i withObject:tmpPractice];
+						eventsMutable[i] = tmpPractice;
 					}else {
 						[eventsMutable removeObjectAtIndex:i];
 					}
@@ -185,15 +185,15 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		NSMutableArray *eventsMutable = [NSMutableArray arrayWithArray:self.allEvents];
 		for (int i = 0; i < [eventsMutable count]; i++) {
 			
-			if ([Event class] == [[eventsMutable objectAtIndex:i] class]) {
+			if ([Event class] == [eventsMutable[i] class]) {
 				
-				Event *tmpEvent = [eventsMutable objectAtIndex:i];
+				Event *tmpEvent = eventsMutable[i];
 				if ([tmpEvent.eventId isEqualToString:self.eventIdCanceled]) {
 					
 					if (self.isCancel) {
 						tmpEvent.isCanceled = true;
 						
-						[eventsMutable replaceObjectAtIndex:i withObject:tmpEvent];
+						eventsMutable[i] = tmpEvent;
 					}else {
 						[eventsMutable removeObjectAtIndex:i];
 					}
@@ -227,7 +227,7 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	num = num - 3;
 	[self.bottomBar removeFromSuperview];
 
-	Home *cont = [temp objectAtIndex:num];
+	Home *cont = temp[num];
 	[self.navigationController popToViewController:cont animated:YES];
 	
 	
@@ -262,7 +262,7 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	
 	UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 	
-	NSArray *segments = [NSArray arrayWithObjects:@"Games", @"Practices", @"All", nil];
+	NSArray *segments = @[@"Games", @"Practices", @"All"];
 	
 	self.segmentedControl = [[UISegmentedControl alloc] initWithItems:segments];
 	self.segmentedControl.frame = CGRectMake(25, 3, 250, 30);
@@ -274,7 +274,7 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	
 	
 	
-	NSArray *items1 = [NSArray arrayWithObjects:flexibleSpace, tmp, flexibleSpace, nil];
+	NSArray *items1 = @[flexibleSpace, tmp, flexibleSpace];
 	self.bottomBar.items = items1;
 	
 	[self.navigationController.view addSubview:self.bottomBar];
@@ -339,19 +339,19 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	for (int i = 0; i < [self.dateArray count]; i++) {
 		
         anyDates = true;
-		NSArray *tmpArray = [self.dateArray objectAtIndex:i];
+		NSArray *tmpArray = (self.dateArray)[i];
 		
 		NSString *cellDate = @"";
 
 		
-		if ([[tmpArray objectAtIndex:0] class] == [Game class]) {
-			Game *tmpGame = [tmpArray objectAtIndex:0];
+		if ([tmpArray[0] class] == [Game class]) {
+			Game *tmpGame = tmpArray[0];
 			cellDate = tmpGame.startDate;
-		}else if ([[tmpArray objectAtIndex:0] class] == [Practice class]) {
-			Practice *tmpGame = [tmpArray objectAtIndex:0];
+		}else if ([tmpArray[0] class] == [Practice class]) {
+			Practice *tmpGame = tmpArray[0];
 			cellDate = tmpGame.startDate;
-		}else if ([[tmpArray objectAtIndex:0] class] == [Event class]) {
-			Event *tmpGame = [tmpArray objectAtIndex:0];
+		}else if ([tmpArray[0] class] == [Event class]) {
+			Event *tmpGame = tmpArray[0];
 			cellDate = tmpGame.startDate;
 		}
 		
@@ -585,16 +585,16 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 	NSUInteger section = [indexPath section];
 	NSUInteger row = [indexPath row];
 		
-	NSMutableArray *cellArray = [self.dateArray objectAtIndex:section];
+	NSMutableArray *cellArray = (self.dateArray)[section];
 	
 	teamLabel.text = @"";
 	
     scoreView.hidden = YES;
     
-	if ([[cellArray objectAtIndex:row] class] == [Game class]) {
+	if ([cellArray[row] class] == [Game class]) {
 		
 		gameLabel.text = @"Game";
-		Game *theGame = [cellArray objectAtIndex:row];
+		Game *theGame = cellArray[row];
 		
 		//team label
 		teamLabel.text = theGame.teamName;
@@ -712,11 +712,11 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 		
         [scoreLabel setHidden:YES];
 
-	}else if ([[cellArray objectAtIndex:row] class] == [Practice class]){
+	}else if ([cellArray[row] class] == [Practice class]){
 		
 		[scoreLabel setHidden:YES];
 		gameLabel.text = @"Practice";
-		Practice *theGame = [cellArray objectAtIndex:row];
+		Practice *theGame = cellArray[row];
 		
 		teamLabel.text = theGame.teamName;
 
@@ -748,11 +748,11 @@ canceledAction, cancelRow, deleteActivity, cancelSection, gameIdCanceled, practi
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 		}
-	}else if ([[cellArray objectAtIndex:row] class] == [Event class]){
+	}else if ([cellArray[row] class] == [Event class]){
 		
 		[scoreLabel setHidden:YES];
 		gameLabel.text = @"Event";
-		Event *theGame = [cellArray objectAtIndex:row];
+		Event *theGame = cellArray[row];
 		
 		teamLabel.text = theGame.teamName;
 
@@ -824,11 +824,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         NSUInteger row = [indexPath row];
         
         
-        NSMutableArray *cellArray = [self.dateArray objectAtIndex:section];
+        NSMutableArray *cellArray = (self.dateArray)[section];
         
-        if ([[cellArray objectAtIndex:row] class] == [Game class]) {
+        if ([cellArray[row] class] == [Game class]) {
             
-            Game *currentGame = [cellArray objectAtIndex:row];
+            Game *currentGame = cellArray[row];
             
             NSString *userRole = @"";
             NSString *teamId = @"";
@@ -848,7 +848,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     currentGameTab.userRole = userRole;
                     currentGameTab.teamName = currentGame.teamName;
                     
-                    Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                    Gameday *currentNotes = viewControllers[0];
                     currentNotes.gameId = currentGame.gameId;
                     currentNotes.teamId = teamId;
                     currentNotes.userRole = userRole;
@@ -863,7 +863,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                      activity.userRole = userRole;
                      */
                     
-                    GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                    GameAttendance *currentAttendance = viewControllers[1];
                     currentAttendance.gameId = currentGame.gameId;
                     currentAttendance.teamId = teamId;
                     currentAttendance.startDate = currentGame.startDate;
@@ -876,7 +876,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                      messages.startDate = currentGame.startDate;
                      */
                     
-                    Vote *fans = [viewControllers objectAtIndex:2];
+                    Vote *fans = viewControllers[2];
                     fans.teamId = teamId;
                     fans.userRole = userRole;
                     fans.gameId = currentGame.gameId;
@@ -898,7 +898,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                      activity.userRole = userRole;
                      */
                     
-                    Gameday *currentNotes = [viewControllers objectAtIndex:0];
+                    Gameday *currentNotes = viewControllers[0];
                     currentNotes.gameId = currentGame.gameId;
                     currentNotes.teamId = teamId;
                     currentNotes.userRole = userRole;
@@ -912,7 +912,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                      messages.startDate = currentGame.startDate;
                      */
                     
-                    Vote *fans = [viewControllers objectAtIndex:1];
+                    Vote *fans = viewControllers[1];
                     fans.teamId = teamId;
                     fans.userRole = userRole;
                     fans.gameId = currentGame.gameId;
@@ -939,12 +939,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             
             
-        }else if ([[cellArray objectAtIndex:row] class] == [Practice class]){
+        }else if ([cellArray[row] class] == [Practice class]){
             
             PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
             
             
-            Practice *currentPractice = [cellArray objectAtIndex:row];
+            Practice *currentPractice = cellArray[row];
             
             NSString *userRole = @"";
             NSString *teamId = @"";
@@ -972,12 +972,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 currentPracticeTab.practiceId = currentPractice.practiceId;
                 currentPracticeTab.userRole = userRole;
                 
-                PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+                PracticeNotes *currentNotes = viewControllers[0];
                 currentNotes.practiceId = currentPractice.practiceId;
                 currentNotes.teamId = teamId;
                 currentNotes.userRole = userRole;
                 
-                PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                PracticeAttendance *currentAttendance = viewControllers[1];
                 currentAttendance.practiceId = currentPractice.practiceId;
                 currentAttendance.teamId = teamId;
                 currentAttendance.userRole = userRole;
@@ -1006,12 +1006,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
             
             
-        }else if ([[cellArray objectAtIndex:row] class] == [Event class]){
+        }else if ([cellArray[row] class] == [Event class]){
             
             EventTabs *currentEventTab = [[EventTabs alloc] init];
             
             
-            Event *currentEvent =  [cellArray objectAtIndex:row];
+            Event *currentEvent =  cellArray[row];
             
             NSString *userRole = @"";
             NSString *teamId = @"";
@@ -1041,13 +1041,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 currentEventTab.eventId = currentEvent.eventId;
                 currentEventTab.userRole = userRole;
                 
-                EventNotes *currentNotes = [viewControllers objectAtIndex:0];
+                EventNotes *currentNotes = viewControllers[0];
                 currentNotes.eventId = currentEvent.eventId;
                 currentNotes.teamId = teamId;
                 currentNotes.userRole = userRole;
                 
                 
-                EventAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+                EventAttendance *currentAttendance = viewControllers[1];
                 currentAttendance.eventId = currentEvent.eventId;
                 currentAttendance.teamId = teamId;
                 currentAttendance.userRole = userRole;
@@ -1084,9 +1084,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];
     NSUInteger section = [indexPath section];
     
-    NSMutableArray *cellArray = [self.dateArray objectAtIndex:section];
+    NSMutableArray *cellArray = (self.dateArray)[section];
     
-	if ([[cellArray objectAtIndex:row] class] == [Game class]) {
+	if ([cellArray[row] class] == [Game class]) {
         return 75;
     }
     return 55;
@@ -1098,18 +1098,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 
-	NSMutableArray *tmpMutable = (NSMutableArray *)[self.dateArray objectAtIndex:section];
+	NSMutableArray *tmpMutable = (NSMutableArray *)(self.dateArray)[section];
 	return [tmpMutable count];
 	
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
 	
-	NSMutableArray *cellArray = [self.dateArray objectAtIndex:section];
+	NSMutableArray *cellArray = (self.dateArray)[section];
 		
-	if ([[cellArray objectAtIndex:0] class] == [Game class]) {
+	if ([cellArray[0] class] == [Game class]) {
 
-	  Game *theGame = [cellArray objectAtIndex:0];
+	  Game *theGame = cellArray[0];
 	
 	  //format the start date (coming back as YYYY-MM-DD hh:mm)
 	  NSString *date = theGame.startDate;
@@ -1125,9 +1125,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	  NSString *startDateString = [format stringFromDate:formatedDate];
 	
 	  return startDateString;
-	}else if ([[cellArray objectAtIndex:0] class] == [Practice class]){
+	}else if ([cellArray[0] class] == [Practice class]){
 			
-		Practice *theGame = [cellArray objectAtIndex:0];
+		Practice *theGame = cellArray[0];
 		
 		//format the start date (coming back as YYYY-MM-DD hh:mm)
 		NSString *date = theGame.startDate;
@@ -1141,9 +1141,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 		NSString *startDateString = [format stringFromDate:formatedDate];
 		return startDateString;
-	}else if ([[cellArray objectAtIndex:0] class] == [Event class]){
+	}else if ([cellArray[0] class] == [Event class]){
 		
-		Event *theEvent = [cellArray objectAtIndex:0];
+		Event *theEvent = cellArray[0];
 		
 		//format the start date (coming back as YYYY-MM-DD hh:mm)
 		NSString *date = theEvent.startDate;
@@ -1173,26 +1173,26 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		NSMutableArray *tmpCellArray = [NSMutableArray array];
 		
 		if (i == 0) {
-			[tmpCellArray addObject:[self.events objectAtIndex:i]];
+			[tmpCellArray addObject:(self.events)[i]];
 			[self.dateArray addObject:tmpCellArray];
 		}else {
 			//Get the date of object at "i" and "i-1" and compare
 			
-			NSString *currentCellDate = [self getDateForObject:[self.events objectAtIndex:i]];
-			NSString *prevCellDate = [self getDateForObject:[self.events objectAtIndex:i-1]];
+			NSString *currentCellDate = [self getDateForObject:(self.events)[i]];
+			NSString *prevCellDate = [self getDateForObject:(self.events)[i-1]];
 			
 			
 			if ([currentCellDate isEqualToString:prevCellDate]) {
 				//If they are equal, add this event to the previous cells array in dateArray
 				int currentCell = [self.dateArray count] - 1;
 				
-				NSMutableArray *prevArray = (NSMutableArray *)[self.dateArray objectAtIndex:currentCell];
-				[prevArray addObject:[self.events objectAtIndex:i]];
-				[self.dateArray replaceObjectAtIndex:currentCell withObject:prevArray];
+				NSMutableArray *prevArray = (NSMutableArray *)(self.dateArray)[currentCell];
+				[prevArray addObject:(self.events)[i]];
+				(self.dateArray)[currentCell] = prevArray;
 				
 			}else {
 				
-				[tmpCellArray addObject:[self.events objectAtIndex:i]];
+				[tmpCellArray addObject:(self.events)[i]];
 				[self.dateArray addObject:tmpCellArray];
 			}
 
@@ -1280,12 +1280,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             token = mainDelegate.token;
         }
         
-        NSMutableArray *cellArray = [self.dateArray objectAtIndex:self.cancelSection];
+        NSMutableArray *cellArray = (self.dateArray)[self.cancelSection];
         
         
-        if ([[cellArray objectAtIndex:self.cancelRow] class] == [Game class]) {
+        if ([cellArray[self.cancelRow] class] == [Game class]) {
             
-            Game *gameToDelete = [cellArray objectAtIndex:self.cancelRow];
+            Game *gameToDelete = cellArray[self.cancelRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI deleteGame:token :gameToDelete.teamId :gameToDelete.gameId];
                 
@@ -1294,7 +1294,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if ([status isEqualToString:@"100"]){
                     
                     [cellArray removeObjectAtIndex:self.cancelRow];
-                    [self.dateArray replaceObjectAtIndex:self.cancelSection withObject:cellArray];
+                    (self.dateArray)[self.cancelSection] = cellArray;
                 }else{
                     
                     //Server hit failed...get status code out and display error accordingly
@@ -1319,9 +1319,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
             }
             
-        }else if ([[cellArray objectAtIndex:self.cancelRow] class] == [Practice class]) {
+        }else if ([cellArray[self.cancelRow] class] == [Practice class]) {
             
-            Practice *practiceToDelete = [cellArray objectAtIndex:self.cancelRow];
+            Practice *practiceToDelete = cellArray[self.cancelRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI deleteEvent:token :practiceToDelete.ppteamId :practiceToDelete.practiceId];
                 NSString *status = [response valueForKey:@"status"];
@@ -1329,7 +1329,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if ([status isEqualToString:@"100"]){
                     
                     [cellArray removeObjectAtIndex:self.cancelRow];
-                    [self.dateArray replaceObjectAtIndex:self.cancelSection withObject:cellArray];
+                    (self.dateArray)[self.cancelSection] = cellArray;
                 }else{
                     
                     //Server hit failed...get status code out and display error accordingly
@@ -1353,14 +1353,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }
         }else {
             
-            Event *practiceToDelete = [cellArray objectAtIndex:self.cancelRow];
+            Event *practiceToDelete = cellArray[self.cancelRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI deleteEvent:token :practiceToDelete.teamId :practiceToDelete.eventId];
                 NSString *status = [response valueForKey:@"status"];
                 
                 if ([status isEqualToString:@"100"]){
                     [cellArray removeObjectAtIndex:self.cancelRow];
-                    [self.dateArray replaceObjectAtIndex:self.cancelSection withObject:cellArray];
+                    (self.dateArray)[self.cancelSection] = cellArray;
                     
                 }else{
                     
@@ -1406,11 +1406,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             token = mainDelegate.token;
         }
         
-        NSMutableArray *cellArray = [self.dateArray objectAtIndex:self.cancelSection];
+        NSMutableArray *cellArray = (self.dateArray)[self.cancelSection];
         
-        if ([[cellArray objectAtIndex:self.cancelRow] class] == [Game class]) {
+        if ([cellArray[self.cancelRow] class] == [Game class]) {
             
-            Game *gameToDelete = [cellArray objectAtIndex:self.cancelRow];
+            Game *gameToDelete = cellArray[self.cancelRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateGame:token :gameToDelete.teamId :gameToDelete.gameId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"0" :@"" :@"" :@""];
                 
@@ -1421,8 +1421,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 if ([status isEqualToString:@"100"]){
                     
                     gameToDelete.interval = @"0";
-                    [cellArray replaceObjectAtIndex:self.cancelRow withObject:gameToDelete];
-                    [self.dateArray replaceObjectAtIndex:self.cancelSection withObject:cellArray];
+                    cellArray[self.cancelRow] = gameToDelete;
+                    (self.dateArray)[self.cancelSection] = cellArray;
                     
                 }else{
                     
@@ -1448,9 +1448,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                 
             }
             
-        }else if ([[cellArray objectAtIndex:self.cancelRow] class] == [Practice class]) {
+        }else if ([cellArray[self.cancelRow] class] == [Practice class]) {
             
-            Practice *practiceToDelete = [cellArray objectAtIndex:self.cancelRow];
+            Practice *practiceToDelete = cellArray[self.cancelRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateEvent:token :practiceToDelete.ppteamId :practiceToDelete.practiceId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false"];
                 NSString *status = [response valueForKey:@"status"];
@@ -1459,8 +1459,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                     
                     practiceToDelete.isCanceled = false;
-                    [cellArray replaceObjectAtIndex:self.cancelRow withObject:practiceToDelete];
-                    [self.dateArray replaceObjectAtIndex:self.cancelSection withObject:cellArray];
+                    cellArray[self.cancelRow] = practiceToDelete;
+                    (self.dateArray)[self.cancelSection] = cellArray;
                     
                 }else{
                     
@@ -1485,7 +1485,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             }
         }else {
             
-            Event *practiceToDelete = [cellArray objectAtIndex:self.cancelRow];
+            Event *practiceToDelete = cellArray[self.cancelRow];
             if (![token isEqualToString:@""]){
                 NSDictionary *response = [ServerAPI updateEvent:token :practiceToDelete.teamId :practiceToDelete.eventId :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"" :@"false"];
                 NSString *status = [response valueForKey:@"status"];
@@ -1494,8 +1494,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
                     
                     
                     practiceToDelete.isCanceled = false;
-                    [cellArray replaceObjectAtIndex:self.cancelRow withObject:practiceToDelete];
-                    [self.dateArray replaceObjectAtIndex:self.cancelSection withObject:cellArray];
+                    cellArray[self.cancelRow] = practiceToDelete;
+                    (self.dateArray)[self.cancelSection] = cellArray;
                     
                     
                 }else{

@@ -104,7 +104,7 @@ errorString, dayString, timeString;
             token = mainDelegate.token;
         }
         
-        NSDictionary *practiceInfo = [NSDictionary dictionary];
+        NSDictionary *practiceInfo = @{};
         
         //If there is a token, do a DB lookup to find the game info 
         if (![token isEqualToString:@""]){

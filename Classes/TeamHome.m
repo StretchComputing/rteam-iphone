@@ -34,6 +34,7 @@
 #import "TraceSession.h"
 #import "TeamEditFan.h"
 #import "GoogleAppEngine.h"
+#import "SelectCalendarEvent.h"
 
 @implementation TeamHome
 @synthesize teamId, userRole, teamSport, teamName, nextGameInfoLabel, topRight, topLeft, recentGamesTable, allScoresButton, nextGameButton, teamNameLabel, gamesArray, pastGamesArray, errorLabel, gameSuccess, nextGameArray, teamUrl, allScoresButtonUnderline, nextEventInfoLabel, nextEventButton, eventSuccess, eventsArray,
@@ -237,7 +238,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                 
                 for (int i = 0; i < [self.gamesArrayTemp count]; i++) {
                     
-                    Game *tmpGame = [self.gamesArrayTemp objectAtIndex:i];
+                    Game *tmpGame = (self.gamesArrayTemp)[i];
                     
                     if ([tmpGame.interval isEqualToString:@"-4"]) {
                         [self.gamesArrayTemp removeObjectAtIndex:i];
@@ -320,7 +321,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                 self.pastGamesArrayTemp = [NSMutableArray array];
                 for (int i = 0; i < [self.gamesArray count]; i++){
                     
-                    Game *tmp = [self.gamesArray objectAtIndex:i];
+                    Game *tmp = (self.gamesArray)[i];
                     
                     NSDate *gameDate = [format dateFromString:tmp.startDate];
                     
@@ -344,7 +345,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                 }
                 
                 NSSortDescriptor *dateSorter = [[NSSortDescriptor alloc] initWithKey:@"startDate" ascending:NO];
-                [self.pastGamesArrayTemp sortUsingDescriptors:[NSArray arrayWithObject:dateSorter]];
+                [self.pastGamesArrayTemp sortUsingDescriptors:@[dateSorter]];
                 
                 
                 if ([self.pastGamesArrayTemp count] > 0) {
@@ -357,7 +358,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                     
                     [newDateFormat setDateFormat:@"yyyy-MM-dd HH:mm"]; 
                     
-                    Game *tmpGame = [self.pastGamesArrayTemp objectAtIndex:0];
+                    Game *tmpGame = (self.pastGamesArrayTemp)[0];
                     NSDate *checkGame = [newDateFormat dateFromString:tmpGame.startDate];
                     
                     NSTimeInterval timeInterval = [checkToday timeIntervalSinceDate:checkGame];
@@ -393,7 +394,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                 
                 if (futureGame1) {
                     //There is a future Game
-                    Game *tmpGame = [self.nextGameArray objectAtIndex:0];
+                    Game *tmpGame = (self.nextGameArray)[0];
                     
                     self.futureGame = [[BoxScoreViewViewController alloc] init];
                     self.futureGame.view.frame = CGRectMake(15, 130, 290, 65);
@@ -470,7 +471,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
                 if ([self.pastGamesArrayTemp count] > 0) {
                     //There is a most recent game at index 0
                     
-                    Game *tmpGame = [self.pastGamesArrayTemp objectAtIndex:0];
+                    Game *tmpGame = (self.pastGamesArrayTemp)[0];
                     
                     self.pastGame = [[BoxScoreViewViewController alloc] init];
                     self.pastGame.view.frame = CGRectMake(35, 260, 250, 60);
@@ -646,22 +647,22 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 -(void)nextEvent{
 	
     if ([self.nextEventArray count] > 0) {
-        if ([[self.nextEventArray objectAtIndex:0] class] == [Practice class]) {
+        if ([(self.nextEventArray)[0] class] == [Practice class]) {
             PracticeTabs *currentPracticeTab = [[PracticeTabs alloc] init];
             
             
-            Practice *currentPractice = [self.futureEventsArray objectAtIndex:0];
+            Practice *currentPractice = (self.futureEventsArray)[0];
             NSArray *viewControllers = currentPracticeTab.viewControllers;
             currentPracticeTab.teamId = self.teamId;
             currentPracticeTab.practiceId = currentPractice.practiceId;
             currentPracticeTab.userRole = self.userRole;
             
-            PracticeNotes *currentNotes = [viewControllers objectAtIndex:0];
+            PracticeNotes *currentNotes = viewControllers[0];
             currentNotes.practiceId = currentPractice.practiceId;
             currentNotes.teamId = self.teamId;
             currentNotes.userRole = self.userRole;
             
-            PracticeAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+            PracticeAttendance *currentAttendance = viewControllers[1];
             currentAttendance.practiceId = currentPractice.practiceId;
             currentAttendance.teamId = self.teamId;
             currentAttendance.startDate = currentPractice.startDate;
@@ -675,18 +676,18 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             EventTabs *currentPracticeTab = [[EventTabs alloc] init];
             
             
-            Event *currentEvent = [self.nextEventArray objectAtIndex:0];
+            Event *currentEvent = (self.nextEventArray)[0];
             NSArray *viewControllers = currentPracticeTab.viewControllers;
             currentPracticeTab.teamId = self.teamId;
             currentPracticeTab.eventId = currentEvent.eventId;
             currentPracticeTab.userRole = self.userRole;
             
-            EventNotes *currentNotes = [viewControllers objectAtIndex:0];
+            EventNotes *currentNotes = viewControllers[0];
             currentNotes.eventId = currentEvent.eventId;
             currentNotes.teamId = self.teamId;
             currentNotes.userRole = self.userRole;
             
-            EventAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+            EventAttendance *currentAttendance = viewControllers[1];
             currentAttendance.eventId = currentEvent.eventId;
             currentAttendance.teamId = self.teamId;
             currentAttendance.startDate = currentEvent.startDate;
@@ -705,7 +706,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 -(void)previousGame{
     
     if ([self.pastGamesArrayTemp count] > 0) {
-        Game *currentGame = [self.pastGamesArrayTemp objectAtIndex:0];
+        Game *currentGame = (self.pastGamesArrayTemp)[0];
         
         if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
             GameTabs *currentGameTab = [[GameTabs alloc] init];
@@ -715,7 +716,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             currentGameTab.userRole = self.userRole;
             currentGameTab.teamName = self.teamName;
             
-            Gameday *currentNotes = [viewControllers objectAtIndex:0];
+            Gameday *currentNotes = viewControllers[0];
             currentNotes.gameId = currentGame.gameId;
             currentNotes.teamId = self.teamId;
             currentNotes.userRole = self.userRole;
@@ -724,7 +725,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             currentNotes.startDate = currentGame.startDate;
             currentNotes.opponentString = currentGame.opponent;
             
-            GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+            GameAttendance *currentAttendance = viewControllers[1];
             currentAttendance.gameId = currentGame.gameId;
             currentAttendance.teamId = self.teamId;
             currentAttendance.startDate = currentGame.startDate;
@@ -732,7 +733,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             
             
             
-            Vote *fans = [viewControllers objectAtIndex:2];
+            Vote *fans = viewControllers[2];
             fans.teamId = self.teamId;
             fans.userRole = self.userRole;
             fans.gameId = currentGame.gameId;
@@ -754,7 +755,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
              activity.userRole = self.userRole;
              */
             
-            Gameday *currentNotes = [viewControllers objectAtIndex:0];
+            Gameday *currentNotes = viewControllers[0];
             currentNotes.gameId = currentGame.gameId;
             currentNotes.teamId = self.teamId;
             currentNotes.userRole = self.userRole;
@@ -765,7 +766,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             
             
             
-            Vote *fans = [viewControllers objectAtIndex:1];
+            Vote *fans = viewControllers[1];
             fans.teamId = self.teamId;
             fans.userRole = self.userRole;
             fans.gameId = currentGame.gameId;
@@ -781,17 +782,20 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 -(void)nextGame{
 	
 	if ([self.nextGameArray count] > 0) {
-        Game *currentGame = [self.nextGameArray objectAtIndex:0];
+        Game *currentGame = (self.nextGameArray)[0];
         
         if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
+            
+            
             GameTabs *currentGameTab = [[GameTabs alloc] init];
+            
             NSArray *viewControllers = currentGameTab.viewControllers;
             currentGameTab.teamId = self.teamId;
             currentGameTab.gameId = currentGame.gameId;
             currentGameTab.userRole = self.userRole;
             currentGameTab.teamName = self.teamName;
             
-            Gameday *currentNotes = [viewControllers objectAtIndex:0];
+            Gameday *currentNotes = viewControllers[0];
             currentNotes.gameId = currentGame.gameId;
             currentNotes.teamId = self.teamId;
             currentNotes.userRole = self.userRole;
@@ -800,7 +804,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             currentNotes.startDate = currentGame.startDate;
             currentNotes.opponentString = currentGame.opponent;
             
-            GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+            GameAttendance *currentAttendance = viewControllers[1];
             currentAttendance.gameId = currentGame.gameId;
             currentAttendance.teamId = self.teamId;
             currentAttendance.startDate = currentGame.startDate;
@@ -808,7 +812,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             
             
             
-            Vote *fans = [viewControllers objectAtIndex:2];
+            Vote *fans = viewControllers[2];
             fans.teamId = self.teamId;
             fans.userRole = self.userRole;
             fans.gameId = currentGame.gameId;
@@ -830,7 +834,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
              activity.userRole = self.userRole;
              */
             
-            Gameday *currentNotes = [viewControllers objectAtIndex:0];
+            Gameday *currentNotes = viewControllers[0];
             currentNotes.gameId = currentGame.gameId;
             currentNotes.teamId = self.teamId;
             currentNotes.userRole = self.userRole;
@@ -841,7 +845,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
             
             
             
-            Vote *fans = [viewControllers objectAtIndex:1];
+            Vote *fans = viewControllers[1];
             fans.teamId = self.teamId;
             fans.userRole = self.userRole;
             fans.gameId = currentGame.gameId;
@@ -953,7 +957,7 @@ displayWarning, myAd, displayPhoto, editButton, fromHome, addMembersButton, addE
 		mvpNameLabel.hidden = NO;
 		fansLabel.hidden = YES;
 		
-		Game *theGame = [self.pastGamesArray objectAtIndex:row];
+		Game *theGame = (self.pastGamesArray)[row];
 		
 		mvpNameLabel.text = theGame.mvp;
 		
@@ -1080,7 +1084,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	int row = [indexPath row];
 
 	if ([self.pastGamesArray count] > 0) {
-		Game *currentGame = [self.pastGamesArray objectAtIndex:row];
+		Game *currentGame = (self.pastGamesArray)[row];
 		
 		if ([self.userRole isEqualToString:@"creator"] || [self.userRole isEqualToString:@"coordinator"]) {
 			GameTabs *currentGameTab = [[GameTabs alloc] init];
@@ -1090,7 +1094,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			currentGameTab.userRole = self.userRole;
 			currentGameTab.teamName = self.teamName;
 			
-			Gameday *currentNotes = [viewControllers objectAtIndex:0];
+			Gameday *currentNotes = viewControllers[0];
 			currentNotes.gameId = currentGame.gameId;
 			currentNotes.teamId = self.teamId;
 			currentNotes.userRole = self.userRole;
@@ -1100,7 +1104,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			currentNotes.opponentString = currentGame.opponent;
 			
 		
-			GameAttendance *currentAttendance = [viewControllers objectAtIndex:1];
+			GameAttendance *currentAttendance = viewControllers[1];
 			currentAttendance.gameId = currentGame.gameId;
 			currentAttendance.teamId = self.teamId;
 			currentAttendance.startDate = currentGame.startDate;
@@ -1108,7 +1112,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 		
 
 			
-			Vote *fans = [viewControllers objectAtIndex:2];
+			Vote *fans = viewControllers[2];
 			fans.teamId = self.teamId;
 			fans.userRole = self.userRole;
 			fans.gameId = currentGame.gameId;
@@ -1126,7 +1130,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 			
 	
 			
-			Gameday *currentNotes = [viewControllers objectAtIndex:0];
+			Gameday *currentNotes = viewControllers[0];
 			currentNotes.gameId = currentGame.gameId;
 			currentNotes.teamId = self.teamId;
 			currentNotes.userRole = self.userRole;
@@ -1138,7 +1142,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 
 			
-			Vote *fans = [viewControllers objectAtIndex:1];
+			Vote *fans = viewControllers[1];
 			fans.teamId = self.teamId;
 			fans.userRole = self.userRole;
 			fans.gameId = currentGame.gameId;
@@ -1183,7 +1187,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     @autoreleasepool {
         for (int i = 0; i < [self.pastGamesArray count]; i++) {
             
-            Game *tmpGame = [self.pastGamesArray objectAtIndex:i];
+            Game *tmpGame = (self.pastGamesArray)[i];
             
             if ([tmpGame.mvp isEqualToString:@""]) {
                 
@@ -1228,7 +1232,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	for (int i = 0; i < [memberTallies count]; i++) {
 		
-		NSDictionary *tmp = [memberTallies objectAtIndex:i];
+		NSDictionary *tmp = memberTallies[i];
 		
 		int tmpCount = [[tmp valueForKey:@"voteCount"] intValue];
 		
@@ -1433,6 +1437,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     nextController.teamId = self.teamId;
     nextController.userRole = self.userRole;
     [self.navigationController pushViewController:nextController animated:YES];
+    
+}
+
+-(void)addEvents{
+    
+    SelectCalendarEvent *tmp = [[SelectCalendarEvent alloc] init];
+	tmp.teamId = self.teamId;
+	[self.navigationController pushViewController:tmp animated:YES];
     
 }
 
